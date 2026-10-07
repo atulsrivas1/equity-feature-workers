@@ -1,3 +1,17 @@
+## EQ062 renewed corrected compute-mode qualification - October 7, 2026
+
+[Exact corrected comparison receipt](EQ062_MODE_COMPARISON.json), UTF8 LF SHA256 `e7d2fd808e8d6be287515bdad0743c0b714f9e739262b2acec6336a4ca41f76a`, binds committed corrected source `0f73fbc31396a25a86694dd857ead538d026d1c8`, all scoped bytes, actual versions/runtime/CPU, three repeats and27 configurations/81 samples. Every sequential/thread/spawn-process configuration1/2/4/8 passes full result/row-ledger parity, exact observed counts and independent literals. No CPU skip on this96-logical-CPU Windows Python3.12.10 AMD64 host. All117 development tests/strict10 passed before freeze. Both reviewer P2s and author process-reservation correction are included; previous successful4ce4f63 receipt is preserved as historical superseded evidence.
+
+| Workload |Sequential1 ms|Best measured thread ms|Best measured process ms|
+|---|---:|---:|---:|
+|small (4 tasks/8 rows)|73.613|76.861 (2 workers)|701.876 (1 workers)|
+|large (32 tasks/8192 rows)|713.521|723.025 (1 workers)|1273.267 (4 workers)|
+|skew (32 tasks/3040 rows)|603.756|617.021 (1 workers)|1239.493 (4 workers)|
+
+Sequential1 has the lowest median in every corrected workload. Retain sequential1 as the conservative bounded default for these prepared synthetic bars. Explicit consumer modes need their own measured qualification; three repeats on a non-isolated host do not establish a universal best mode. Process first-task plus shutdown median range605.924-641.667ms uses one lazy ping, not all workers. Acquisitions occur once per workload; identical bounded inputs are reused for timed samples. Receipt records exact input pickle/roundtrip/result codec bytes and corrected logical reservations, with no physical source-to-sink/RSS/child-peak/private throughput claim. Native compute backend threads0, declared coordinator allowance1. Earlier hardware snapshot is historical, not current availability/reservation evidence. Physical end-to-end/peak-job-memory/month/annual/source/PIT/privacy gates remain EQ066.
+
+Runtime/fixtures/probe/builder remain exact measured bytes; packaged README is the explicitly documented non-executable carry-forward difference. Renew separate final-head review, native/fresh installed forms, committed repeat/source artifact receipt and actual-main release/readback. EQ062 remains active; EQ063-066 stay Backlog. Finish bounded R5 then stop before R6.
+
 ## EQ062 ownership/resource rework - October 7, 2026
 
 EQ062 returns Code review -> In progress at [6048512238](https://github.com/atulsrivas1/equity-features/issues/70#issuecomment-6048512238). Separate reviewer /root/r5_review [worker](https://github.com/atulsrivas1/equity-feature-workers/pull/14#issuecomment-6048541114)/[canonical](https://github.com/atulsrivas1/equity-features/pull/323#issuecomment-6048541310) reproduced two P2s at23087e38/abcf3716: empty directory collision cleanup lacked proven acquired ownership; foreign-terminal-thread publisher ownership was checked only after computation. Corrections gate cleanup on successful exclusive directory creation and admit actual publisher Thread-object ownership before callbacks. Regression cases preserve the foreign directory and reject the publisher before any calculation. Local automated review, not human/hosted approval.
