@@ -1,0 +1,7 @@
+# EQ057 delivery evidence — in progress
+
+[Canonical65](https://github.com/atulsrivas1/equity-features/issues/65), [worker PR4](https://github.com/atulsrivas1/equity-feature-workers/pull/4), [canonical PR304](https://github.com/atulsrivas1/equity-features/pull/304). See [pre-code plan](EQ057_PLAN.md) and [public API](MANIFESTS.md).
+
+Implemented immutable supplied manifests, closed task serialization and hashes, claim identity separate from receipt, output admission through existing SDK. Initial eight development tests passed; strict typing first found an incorrectly labeled ignore annotation, corrected to explicit tuple cast. The independently handwritten config vector then rejected because its oracle used nonexistent adjustment fields policy_id/anchor_session_id; corrected to canonical policy_version/anchor. This was a fixture error, not a numerical/production defect. Renewed tests, committed builds/fresh installs/native checks, independent final-head review and actual-main release/readback remain pending. No release/acceptance claimed.
+
+Conservative implementation choice: one session per task with governed context; range execution uses ordered task dependencies. Mathematical merge is unsupported in version1; cross-instrument execution remains supported. Existing ConfigSpec serialization/timing and I/O output codecs/receipts remain unchanged. Full entity/result readback belongs to commands/publication coordination; descriptor-only admission cannot authenticate instrument arrays. No private generation or provider/source cleanup.

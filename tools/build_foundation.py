@@ -17,8 +17,8 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 EPOCH = 1700000000
-CORE_COMMIT = "7a6db8c2317de1ee9dd9116e0897cbf6445e359e"
-IO_COMMIT = "395beba80b3bcb2e9db344c6a9d2bcab085be1a6"
+CORE_COMMIT = "20c08c7370581d03c8a0404579667f68d67ac88b"
+IO_COMMIT = "4603c6e50331a5e8a82b13b62a0cdd5ffaa0e4bf"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
 EXPECTED = {
     "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],
@@ -132,6 +132,7 @@ def qualify(dependencies, artifacts, form, packages, probe):
         install(py, other + artifacts)
         run(py, "-m", "pip", "check")
         run(py, "-I", probe, *packages, cwd=location)
+        run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_manifests.py", cwd=location)
         after = fingerprint(py, location)
         assert before == after, "Companion install/import changed canonical core"
         for name in packages:
