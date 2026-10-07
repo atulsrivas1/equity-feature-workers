@@ -37,6 +37,15 @@ def git(root, *args):
     return subprocess.check_output(["git", *args], cwd=root, text=True).strip()
 
 
+def snapshot(repository, commit, destination, paths=("packages",)):
+    """Materialize only committed paths; caller working trees cannot enter builds."""
+    destination.mkdir(parents=True, exist_ok=False)
+    data = subprocess.check_output(["git", "archive", "--format=tar", commit, *paths], cwd=repository)
+    with tarfile.open(fileobj=io.BytesIO(data), mode="r:") as archive:
+        archive.extractall(destination, filter="data")
+    return destination
+
+
 def normalize(path):
     data = io.BytesIO()
     with tarfile.open(path, "r:gz") as source, tarfile.open(fileobj=data, mode="w", format=tarfile.PAX_FORMAT) as target:
@@ -136,26 +145,29 @@ def main():
     args = parser.parse_args()
     core = args.core_root.resolve()
     assert git(core, "rev-parse", CORE_COMMIT) == CORE_COMMIT
-    assert not git(core, "diff", CORE_COMMIT, "--", "packages/contracts", "packages/features"), "Core prerequisite sources changed"
     assert not git(ROOT, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt"), "Freeze source before qualification"
     output = ROOT / "dist"
     output.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="build-", dir=ROOT / "work") as temp:
         stage = Path(temp)
         dependencies = stage / "dependencies"
+        core_source = snapshot(core, CORE_COMMIT, stage / "core-source", ("packages/contracts", "packages/features"))
+        component_commit = git(ROOT, "rev-parse", "HEAD")
+        component_source = snapshot(ROOT, component_commit, stage / "component-source")
         for folder in ("contracts", "features"):
-            build(core / "packages" / folder, dependencies)
+            build(core_source / "packages" / folder, dependencies)
         dependency_commit = {"equity-features": CORE_COMMIT}
         if args.io_root:
             io_root = args.io_root.resolve()
             assert not git(io_root, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt")
             dependency_commit["equity-feature-io"] = git(io_root, "rev-parse", "HEAD")
+            io_source = snapshot(io_root, dependency_commit["equity-feature-io"], stage / "io-source")
             for folder in ("io-contracts", "io-sdk"):
-                build(io_root / "packages" / folder, dependencies)
-        packages = [tomllib.loads((p / "pyproject.toml").read_text(encoding="utf-8"))["project"]["name"] for p in sorted((ROOT / "packages").iterdir())]
+                build(io_source / "packages" / folder, dependencies)
+        packages = [tomllib.loads((p / "pyproject.toml").read_text(encoding="utf-8"))["project"]["name"] for p in sorted((component_source / "packages").iterdir())]
         first, repeat = stage / "first", stage / "repeat"
         for target in (first, repeat):
-            for source in sorted((ROOT / "packages").iterdir()):
+            for source in sorted((component_source / "packages").iterdir()):
                 build(source, target)
         artifacts = sorted(first.iterdir())
         assert len(artifacts) == 2 * len(packages)

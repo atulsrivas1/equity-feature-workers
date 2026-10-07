@@ -1,3 +1,5 @@
 # Current execution continuity
 
 EQ121 foundation implementation starts under [canonical issue278](https://github.com/atulsrivas1/equity-features/issues/278) and the published pre-code plan in [PR291](https://github.com/atulsrivas1/equity-features/pull/291). Buildable workers skeleton only; no commands, scheduler, claims or historical generation. Final-head separate review, native Windows/Linux CI, fresh actual form qualification, main publication and downloaded artifact readback remain mandatory before canonical Done. No release acceptance yet. Next: freeze component head, review, resolve findings, CI/test, main artifacts/readback; then EQ122 after EQ121 Done.
+
+Separate initial review found P2 untracked core source provenance and P3 missing-local mandatory governance references. Corrected dependencies/components to committed Git archive materialization, with independent modified/untracked synthetic regression; preparation references now explicit canonical links. Initial builds/CI retained but superseded for corrected builder. New final-head review/currentCI/actual corrected forms remain required.

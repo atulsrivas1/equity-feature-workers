@@ -23,12 +23,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-feature-io
-          ref: 8461ee52a2631ac8aa1be52f6cf222ac7a14b87b
+          ref: 241631d71b9232db998746ddfef72f192eaf7772
           path: io
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements-dev.txt
+        working-directory: component
+      - run: python -m unittest discover -s tests -p test_*.py
         working-directory: component
       - run: python tools/build_foundation.py --core-root ../core --io-root ../io
         working-directory: component

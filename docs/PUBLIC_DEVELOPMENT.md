@@ -1,12 +1,12 @@
 # Public development workflow
 
-Status: human-agreed workflow, 2026-10-04. Repository: atulsrivas1/equity-features. Issues, milestones and the public Project are linked in DASHBOARD.md. That dated preparation status is historical; current implementation and acceptance are recorded in the live Project and release receipts. Work agreements are in ../AGENTS.md and continuity in SESSION_HANDOFF.md.
+Status: human-agreed workflow, 2026-10-04. Repository: atulsrivas1/equity-features. Issues, milestones and the public Project are linked in canonical equity-features docs/DASHBOARD.md. That dated preparation status is historical; current implementation and acceptance are recorded in the live Project and release receipts. Work agreements are in ../AGENTS.md and continuity in SESSION_HANDOFF.md.
 
 ## Planning and progress
 
 Use [release-based continuous pull](https://github.com/atulsrivas1/equity-features/blob/main/docs/DELIVERY_POLICY.md), with one active story initially and weekly progress review. No mandatory sprints; milestones and readiness gates guide delivery. Target dates are forecasts set when evidence supports them.
 
-Keep docs/BACKLOG.md as the versioned scope/dependency baseline. Create one GitHub Issue per story, retaining existing IDs and retaining active EQ-001 through EQ-093 plus EQ-095 through EQ-130 and never reusing retired IDs. Epic tracking issues link their child stories. Use GitHub milestones for the release map, including inserted R4.1 before R5; milestones represent readiness outcomes rather than promised dates. Track Backlog, Ready, In progress, Code review, Test, Ready to release, Released and Done. Represent blocked work with an explicit linked dependency/reason, not an unsupported percentage-complete claim.
+Keep canonical equity-features docs/BACKLOG.md as the versioned scope/dependency baseline. Create one GitHub Issue per story, retaining existing IDs and retaining active EQ-001 through EQ-093 plus EQ-095 through EQ-130 and never reusing retired IDs. Epic tracking issues link their child stories. Use GitHub milestones for the release map, including inserted R4.1 before R5; milestones represent readiness outcomes rather than promised dates. Track Backlog, Ready, In progress, Code review, Test, Ready to release, Released and Done. Represent blocked work with an explicit linked dependency/reason, not an unsupported percentage-complete claim.
 
 Issue title: [EQ-001] Freeze v1 feature scope. Issue body: problem/user value, included/excluded scope, acceptance checklist, prerequisites, release, validation and related design links. Labels identify epic and work type (design, feature, test, docs, performance); Project fields track status and release. Avoid maintaining different status lists in markdown and GitHub. GitHub is the work-status authority once set up; backlog markdown remains scope/version history and records deliberate scope changes.
 
@@ -49,7 +49,7 @@ Use release notes for delivered behavior, compatibility changes and known limita
 
 ## First work item: EQ-001
 
-Start with the feature scope, not code generation. Deliver docs/features/V1_SCOPE.md as a reviewable proposal that maps feature IDs to families, initial windows, input kinds, batch/incremental support, exact versus approximate measures and excluded strategies/labels. Scope completion requires explicit formula-story links and no undocumented promised feature. EQ-002 through EQ-006 settle formulas/timing; contracts and implementation follow those decisions.
+Start with the feature scope, not code generation. Historical EQ001 delivered canonical equity-features docs/features/V1_SCOPE.md as a reviewable proposal that maps feature IDs to families, initial windows, input kinds, batch/incremental support, exact versus approximate measures and excluded strategies/labels. Scope completion requires explicit formula-story links and no undocumented promised feature. EQ-002 through EQ-006 settle formulas/timing; contracts and implementation follow those decisions.
 
 Until GitHub setup finishes, store reviewable drafts here and clearly report local-only status. After the repository is available, migrate the documents without overwriting setup work, create/link the first issue and PR, and preserve the numbered backlog. Repository/profile administration stays in the setup conversation; design and implementation stay in this conversation.
 

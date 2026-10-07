@@ -6,7 +6,7 @@ Owner direction on October 5, 2026 resumes GOV-005: require a separate completed
 
 These are the human owner's agreed project rules. Read this file, docs/PROJECT_KNOWLEDGE.md, docs/PUBLIC_DEVELOPMENT.md, docs/SESSION_HANDOFF.md and the current issue/Project status before starting work. Keep durable project memory in these tracked documents rather than assuming chat memory persists. Read the relevant linked decisions, lessons and source specifications before choosing or changing work.
 
-1. Work publicly through numbered GitHub stories, epic links, release milestones and linked pull requests. GitHub Project status is the current work-status authority; docs/BACKLOG.md records versioned scope and dependencies.
+1. Work publicly through numbered GitHub stories, epic links, release milestones and linked pull requests. GitHub Project status is the current work-status authority; The canonical docs/BACKLOG.md in equity-features records versioned scope and dependencies.
 2. Follow the backlog. Satisfy acceptance criteria and release gates before declaring completion. Record changes in scope and consequential decisions explicitly.
 3. Keep calculation packages source-independent. No fetching, database/file access, credentials, job scheduling or output publication inside calculations. Adapters and workers remain separate.
 4. Define mathematics first: formulas, units, timing, initialization, coverage and edge cases before implementing a feature.
@@ -21,9 +21,9 @@ These are the human owner's agreed project rules. Read this file, docs/PROJECT_K
 
 Use short-lived codex/ branches when this agent creates branches. A human approval is required only where the user or applicable review policy requires it; do not invent an approval requirement. Record actual reviewer identity and limitations. Numerical tests and release gates remain mandatory even when work is autonomous.
 
-Delivery uses release-based planning and continuous pulling, not mandatory sprints. Read docs/DELIVERY_POLICY.md. Start the highest-priority dependency-satisfied Ready story, initially one active story at a time. Review progress weekly during active work; release dates are evidence-based forecasts, with no invented deadlines or automated reminders.
+Delivery uses release-based planning and continuous pulling, not mandatory sprints. Read the canonical delivery policy at https://github.com/atulsrivas1/equity-features/blob/main/docs/DELIVERY_POLICY.md. Start the highest-priority dependency-satisfied Ready story, initially one active story at a time. Review progress weekly during active work; release dates are evidence-based forecasts, with no invented deadlines or automated reminders.
 
-Maintain knowledge using docs/knowledge/BACKLOG_WORKFLOW.md. After a meaningful result or correction, update the relevant evidence-linked lesson, preserve superseded decisions, update the handoff, and reconcile affected issue/dependency records. Do not copy raw private chats into public documentation or turn historical status into current execution authority. Knowledge preparation does not take ownership from an active release session.
+Maintain knowledge using https://github.com/atulsrivas1/equity-features/blob/main/docs/knowledge/BACKLOG_WORKFLOW.md. After a meaningful result or correction, update the relevant evidence-linked lesson, preserve superseded decisions, update the handoff, and reconcile affected issue/dependency records. Do not copy raw private chats into public documentation or turn historical status into current execution authority. Knowledge preparation does not take ownership from an active release session.
 ## Code Review Rules
 
 Review the changed behavior and its affected callers against the linked story, accepted mathematical specifications and package design. Report concrete actionable defects with file/line evidence, triggering inputs and consequences. Identify severity accurately; do not invent findings, benchmark results or reviewer independence. Documentation/design PRs need semantic and contract review as well as links.
