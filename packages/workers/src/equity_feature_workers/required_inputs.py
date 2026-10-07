@@ -98,6 +98,9 @@ class RequiredCommandSpec:
             for value in (self.symbol, self.market, self.sector):
                 if value is not None and type(value) is not ReturnReference:
                     _fail(CommandErrorCode.CONFIG)
+                if value is not None and tuple(IntervalSpec(s.session_id, s.open_ns, s.close_ns)
+                                               for s in value.context.sessions) != self.governed_sessions:
+                    _fail(CommandErrorCode.CONFIG)
             if self.membership is not None and type(self.membership) is not ClassificationAdmission:
                 _fail(CommandErrorCode.CONFIG)
             if "relative.market_return" not in self.feature_ids and self.market is not None:

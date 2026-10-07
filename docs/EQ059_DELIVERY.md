@@ -1,3 +1,7 @@
+## EQ059 P2 review rework — October 7, 2026
+
+Reviewer /root/r5_review independently passed42 tests/strict5 on worker86473d2/canonicalbeda43b, then reproduced contradictory task/reference prior-session bounds in relative_returns. Unlike direct context families, that branch had omitted the owned ReturnReference grid comparison. Reject every supplied selected return witness whose full interval grid differs from governed_sessions before callbacks; regression changes S1 close100 to99. Numeric oracle unchanged. Previous review does not cover corrected runtime. Freeze/review/repeat/native qualification again; no release/Done claimed. Issue67 returned Code review -> In progress for actual correction.
+
 # EQ059 qualification and delivery
 
 October 7, 2026. [Canonical story #67](https://github.com/atulsrivas1/equity-features/issues/67), E08 #64/R5; linked [worker PR8](https://github.com/atulsrivas1/equity-feature-workers/pull/8) and [canonical PR308](https://github.com/atulsrivas1/equity-features/pull/308). Source candidate0.1.0a4, not yet delivered or accepted. EQ058 actually Done precedes this sole active story; pre-code plans c55a81e/1f4db44 and literal fixtures 6f1ac16/45c204e were published before runtime changes.

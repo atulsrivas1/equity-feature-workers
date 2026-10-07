@@ -92,6 +92,8 @@ class RequiredInputs(unittest.TestCase):
         self.assertEqual({i.role for i in out.command.output.task.inputs if i.state=='missing'}, {'absent.sector','absent.membership'})
         market_only=replace(s,feature_ids=('relative.market_return',))
         self.assertFalse(any(i.state=='missing' for i in execute(market_only).command.output.task.inputs))
+        self.rejected(CommandErrorCode.CONFIG,lambda:replace(market_only,
+            governed_sessions=(IntervalSpec('S1',0,99),)+GRID[1:]))
         self.rejected(CommandErrorCode.CONFIG,lambda:replace(market_only,feature_ids=('relative.sector_return',)))
 
     def test_explicit_raw_absence_missing_empty_partial_distinct(self):
