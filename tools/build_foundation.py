@@ -140,6 +140,7 @@ def qualify(dependencies, artifacts, form, packages, probe):
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_publication.py", cwd=location)
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_supervisor.py", cwd=location)
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_claims.py", cwd=location)
+        run(py, "-I", probe.parent / "claims_example.py", cwd=location)
         executable = py.parent / ("equity-feature-worker.exe" if os.name == "nt" else "equity-feature-worker")
         run(executable, "--demo", "both", cwd=location)
         after = fingerprint(py, location)
@@ -150,7 +151,7 @@ def qualify(dependencies, artifacts, form, packages, probe):
         backend_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;print(json.dumps({n:version(n) for n in ('duckdb','pyarrow','equity-feature-parquet','equity-feature-duckdb-sink')}))"], cwd=location, text=True, encoding="utf-8"))
         assert backend_versions == {"duckdb": "1.5.6", "pyarrow": "20.0.0", "equity-feature-parquet": "0.1.0a1", "equity-feature-duckdb-sink": "0.1.0a0"}
-        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
+        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
 
 
 def main():

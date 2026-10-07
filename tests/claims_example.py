@@ -1,6 +1,10 @@
 """Installed synthetic claim, compute and verified receipt replay example."""
 from pathlib import Path
 import tempfile
+import sys
+
+# Only synthetic fixture helpers are loaded here; worker/core packages stay installed.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from equity_feature_workers import ClaimLimits, ClaimStore
 from equity_feature_example_extensions.sink import LIMITS

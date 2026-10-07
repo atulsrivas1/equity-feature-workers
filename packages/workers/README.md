@@ -1,6 +1,6 @@
-## EQ063 current development - worker0.1.0a8
+## EQ063 development snapshot before qualification - worker0.1.0a8
 
-Local task claims retain OS ownership through publication, bound durable attempts and cancellation, and verify actual sink receipts before restart retry. [Claim API](https://github.com/atulsrivas1/equity-feature-workers/blob/codex/eq063-claims/docs/CLAIMS.md) and pre-code contract document exact timing/quota/fault limits. Numerical formulas/core/I/O schemas and mandatory dependencies unchanged. Source/installed/native/review/release qualification pending. Earlier snapshots below preserve historical evidence.
+Local task claims retain OS ownership through publication, bound durable attempts and cancellation, and verify actual sink receipts before restart retry. [Claim API](https://github.com/atulsrivas1/equity-feature-workers/blob/codex/eq063-claims/docs/CLAIMS.md) and pre-code contract document exact timing/quota/fault limits. Numerical formulas/core/I/O schemas and mandatory dependencies unchanged. This frozen development snapshot precedes corrected source/native/release qualification; current receipts and delivery status are maintained in the repository docs/EQ063_DELIVERY.md. Earlier snapshots below preserve historical evidence.
 
 ## EQ062 current corrected supervisor candidate - October 7, 2026
 

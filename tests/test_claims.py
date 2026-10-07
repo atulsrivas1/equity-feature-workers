@@ -317,4 +317,78 @@ class Claims(unittest.TestCase):
                 with patch('equity_feature_workers.claims.os.scandir',side_effect=OSError('secret')):
                     self.rejected(SinkErrorCode.UNAVAILABLE,h._record)
 
+    def test_failed_handle_close_redacts_fences_and_allows_explicit_cleanup_retry(self):
+        task=work()[0].output.task
+        with tempfile.TemporaryDirectory() as root:
+            s=store(root);h=acquire(s,task)
+            with patch.object(h._lock,'close',side_effect=OSError('secret release detail')):
+                self.rejected(SinkErrorCode.UNAVAILABLE,h.close)
+                self.rejected(SinkErrorCode.INVALID_SESSION,h._record)
+                self.rejected(SinkErrorCode.BUSY,lambda:acquire(store(root),task,'B'))
+            h.close();h.close()
+            with acquire(store(root),task,'B'):pass
+
+    def test_metadata_release_failure_after_durable_cancel_is_redacted_and_recoverable(self):
+        from equity_feature_workers.generations import _StoreLock
+        task=work()[0].output.task
+        with tempfile.TemporaryDirectory() as root:
+            s=store(root)
+            with acquire(s,task) as h:
+                original=_StoreLock.close;faults=[]
+                def fail_once(lock):
+                    # fdopen gives an integer name: identify the metadata lock by the live task lock object.
+                    is_metadata=lock is not h._lock
+                    original(lock)
+                    if is_metadata and not faults:faults.append(1);raise OSError('secret release detail')
+                with patch.object(_StoreLock,'close',fail_once):
+                    self.rejected(SinkErrorCode.UNAVAILABLE,lambda:s.request_cancel(task))
+                self.assertEqual(faults,[1]);self.assertTrue(h._record()['cancelled'])
+
+    def test_owned_task_cleanup_failure_still_releases_metadata_writer_lock(self):
+        from equity_feature_workers.generations import _StoreLock
+        task=work()[0].output.task
+        with tempfile.TemporaryDirectory() as root:
+            s=store(root);original=_StoreLock.close;released=[]
+            def fail_first(lock):
+                original(lock);released.append(1)
+                if len(released)==1:raise OSError('secret owned close')
+            with patch.object(s,'_read',side_effect=SinkError(SinkErrorCode.CORRUPTION)),patch.object(_StoreLock,'close',fail_first):
+                self.rejected(SinkErrorCode.UNAVAILABLE,lambda:acquire(s,task))
+            self.assertEqual(len(released),2)
+            with acquire(store(root),task,'B'):pass
+
+    def test_committed_metadata_release_failure_recovers_without_callback_or_begin(self):
+        from equity_feature_workers.generations import _StoreLock
+        command=work()[0]
+        for kind in ('parquet','duckdb'):
+            with self.subTest(kind=kind),tempfile.TemporaryDirectory() as root,sink_for(kind,Path(root)) as inner:
+                s=store(root);original=_StoreLock.close;faults=[]
+                with acquire(s,command.output.task) as h:
+                    def fail_committed_once(lock):
+                        is_metadata=lock is not h._lock
+                        original(lock)
+                        record=s._read(command.output.task)
+                        if is_metadata and record['state']=='COMMITTED' and not faults:
+                            faults.append(1);raise OSError('secret after committed metadata')
+                    with patch.object(_StoreLock,'close',fail_committed_once):
+                        outcome=h.run(lambda:command.results,inner,now_ns=101)
+                    self.assertEqual(faults,[1]);self.assertFalse(outcome.committed)
+                    self.assertEqual(outcome.reason,'UNAVAILABLE');self.assertEqual(outcome.results,command.results)
+                with acquire(store(root),command.output.task,'B') as h:
+                    calls=[];proxy=Proxy(inner);outcome=h.run(lambda:calls.append(1),proxy,now_ns=101)
+                    self.assertTrue(outcome.committed);self.assertEqual(calls,[]);self.assertEqual(proxy.begins,0)
+
+    def test_successful_acquisition_final_release_failure_does_not_strand_task_lock(self):
+        from equity_feature_workers.generations import _StoreLock
+        task=work()[0].output.task
+        with tempfile.TemporaryDirectory() as root:
+            s=store(root);original=_StoreLock.close;released=[]
+            def fail_first(lock):
+                original(lock);released.append(1)
+                if len(released)==1:raise OSError('secret after successful acquisition')
+            with patch.object(_StoreLock,'close',fail_first):
+                self.rejected(SinkErrorCode.UNAVAILABLE,lambda:acquire(s,task))
+            self.assertEqual(len(released),2)
+            with acquire(store(root),task,'B') as h:self.assertEqual(h._record()['attempts'],0)
+
 if __name__=='__main__':unittest.main()

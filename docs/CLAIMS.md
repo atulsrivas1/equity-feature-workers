@@ -1,3 +1,7 @@
+## Release-error and explicit cleanup behavior
+
+All OS-lock release failures raise fixed/redacted SinkError UNAVAILABLE, including after a durable write succeeded. A failed handle close fences further run/record operations and retains any still-open descriptor for caller close retry; it never grants another owner a live lock. Acquisition-return cleanup failure explicitly releases an unreturned task handle. Owned-task cleanup failure still attempts metadata writer release. Do not infer rollback from a final cleanup error: committed intent/readback resolves actual storage before retry. These boundaries have exact release/fencing/cleanup/durable-cancel/committed-result recovery regressions. Initial reviewer P2 is corrected; renewed final source/installed/native/release gates remain pending.
+
 # Experimental local claims - worker0.1.0a8
 
 EQ063#71. [Frozen pre-code contract](CLAIMS_PLAN.md) is authority for limits, timing and independent oracle. ClaimLimits(max_tasks=64,max_total_bytes=8388608,max_record_bytes=1048576,max_attempts=3) bounds active operational records and started calculations. Interrupted temporary bytes and native/interpreter RSS remain outside these logical limits. Task and all result/publication schemas unchanged; no mandatory dependency change.
