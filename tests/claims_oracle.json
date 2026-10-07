@@ -1,0 +1,28 @@
+{
+  "allowed_compute_attempts": [
+    1,
+    2,
+    3
+  ],
+  "cancel_before_begin_count": 0,
+  "cancel_before_callback_count": 0,
+  "closed_owner_mutation_allowed": false,
+  "committed_recovery_additional_begin_count": 0,
+  "committed_recovery_callback_count": 0,
+  "live_duplicate_times": [
+    199,
+    200
+  ],
+  "live_lock_expiry_takeover": false,
+  "owner_a": [
+    100,
+    200
+  ],
+  "owner_b_after_release": [
+    201,
+    300
+  ],
+  "protocol": "eq063-independent-oracle1",
+  "rejected_compute_attempt": 4,
+  "time_unit": "UTC int64 ns"
+}
