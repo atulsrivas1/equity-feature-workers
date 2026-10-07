@@ -1,3 +1,11 @@
+## EQ060 barrier candidate — October 7, 2026
+
+EQ059 is accepted Closed/Project Done. EQ060#68 is the sole active story, workerPR10/canonicalPR319. Experimental worker0.1.0a5 implements declared dependency readiness, caller-owned feature assembly and declared-universe breadth publication. Actual SDK lookup, committed receipt verification and logical readback establish completion; declared missing dependencies leave unrelated roots runnable. Required universe/shard coverage is exact; optional absence follows an explicit policy. Mathematical eligibility and owned exact witnesses remain canonical.
+
+Development62 tests and strict typing of7 source files pass, including20 barrier methods, pre-code independent universe goldens and near2^53 exact comparison. Source/core/IO/math/schema unchanged. Committed repeat/native installed-form qualification, separate final-head review and actual-main delivery/readback remain pending. Earlier candidate/pending snapshots below are historical. EQ061 remains Backlog until EQ060 acceptance; complete bounded R5 then stop before R6.
+
+[Barrier API, policies, example and limits](BARRIERS.md); [qualification and delivery](EQ060_DELIVERY.md).
+
 ## EQ059 accepted; EQ060 pre-code barrier preparation — October 7, 2026
 
 EQ059 actually Closed/ProjectDone acceptance6046430294 after workerPR8/9/canonicalPR308/310/317, separate source/correctedP2/nativeartifact/metadata/actualrelease/finaldocs reviews and allcurrentPR/main checks. Finalworker5cbc82f04c829fc903c9c1e74679acac3fa53695 push37683083328 and canonical4bf43473cbb997281dd4ba34ce64512c3c1031b0 native37683268183/docs37683268287 successful. Published fulltrees equal revieweddb87fab/4a05b0e; publicLF actualrelease receipt02a00bc46968ae52b76dc6aade36e006748141d5336f6556cdfb4d267420880e exactbothrepo readback; finalactual2ZIP14archive16files/source/archive equality to originaldeliveredec1d0c3/correctedqualified5dbc391 passes. Development42/strict5 and4freshforms16required/14commands/11manifest/console/coreindependentgoldens/invariance allpass. Original releaseLinux3.12.15 vs sourceLinux3.12.14 separated accurately, Windows3.12.10. IO/core/schema/math unchanged. Previous source/candidate/pending snapshots remain historical.

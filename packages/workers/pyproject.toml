@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-workers"
-version = "0.1.0a4"
-description = "Typed bounded equity worker manifests and session commands"
+version = "0.1.0a5"
+description = "Bounded equity worker commands, dependency and universe barriers"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"

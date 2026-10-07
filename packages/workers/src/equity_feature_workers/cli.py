@@ -5,11 +5,15 @@ import json
 from equity_feature_contracts import AvailabilitySpec, ConfigSpec, EntityKey, Parameter, PriceUnit, SessionSpec, WindowSpec
 from equity_feature_contracts.adapters import HistoricalAdapter
 from equity_feature_contracts.specs import IntervalSpec
+from equity_feature_contracts.composition import CompositionSpec, FamilyResult
+from equity_feature_contracts.breadth import MemberFeatures
 from equity_feature_io_contracts import ResultSink, SinkRequirements
 from equity_feature_io_sdk import SinkRegistry, SourceRegistry, descriptor, encode_result
 from equity_features.session import compute_bars
 from .commands import CommandError, CommandOutcome, SessionCommandSpec, run_registered, run_session
 from .required_inputs import RequiredCommandSpec, run_required
+from .barriers import BarrierLimits, Dependency, run_assembly
+from .breadth_commands import BreadthCommandSpec, run_breadth
 
 
 class NoCredentials:
@@ -51,9 +55,11 @@ def _record(outcome: CommandOutcome, mode: str, *, in_memory: bool = False) -> d
             "result": encode_result(outcome.results[0]).decode("ascii")}
 
 
-def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | RequiredCommandSpec | None = None,
+def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | RequiredCommandSpec | BreadthCommandSpec | CompositionSpec | None = None,
          source: HistoricalAdapter | None = None, sink: ResultSink | None = None,
-         requirements: SinkRequirements | None = None) -> int:
+         requirements: SinkRequirements | None = None, dependencies: tuple[Dependency, ...] | None = None,
+         components: tuple[FamilyResult, ...] | None = None, members: tuple[MemberFeatures, ...] | None = None,
+         barrier_limits: BarrierLimits | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     choices = parser.add_mutually_exclusive_group(required=True)
     choices.add_argument("--demo", choices=("direct", "factory", "both"),
@@ -63,6 +69,9 @@ def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | RequiredCo
     choices.add_argument("--required", choices=("history", "sma_reference", "daily_baseline", "interval_baseline",
                         "relative_volume", "interval_relative_volume", "relative_returns"),
                         help="requires caller-injected required-input spec, sink and requirements; explicit source or absence")
+    choices.add_argument("--assembly", action="store_true", help="requires explicit owned composition/dependencies/components/limits")
+    choices.add_argument("--breadth", choices=("direction_counts", "above_sma_fraction"),
+                        help="requires explicit owned universe/shards/dependencies/member proofs/sink/limits")
     args = parser.parse_args(argv)
     try:
         if args.session is not None:
@@ -80,6 +89,32 @@ def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | RequiredCo
             record["owned_witness_type"] = type(witness).__name__ if witness is not None else None
             record["witness_persistence"] = "caller-owned; replay qualified inputs for reconstruction"
             records = [record]
+        elif args.assembly:
+            if (type(spec) is not CompositionSpec or dependencies is None or components is None
+                or barrier_limits is None or requirements is None or source is not None or sink is not None):
+                parser.exit(2, "Assembly components required: use an explicit caller wrapper\n")
+            assembly = run_assembly(spec, dependencies, components, limits=barrier_limits, requirements=requirements)
+            record = {"ready": assembly.barrier.ready, "waiting": [
+                {"instance_id": w.instance_id, "task_sha256": w.task_sha256, "reason": w.reason} for w in assembly.barrier.waiting]}
+            if assembly.bundle is not None:
+                record.update({"components_verified_readback": True, "bundle_identity": assembly.bundle.identity_digest,
+                               "missing_instances": assembly.bundle.missing_instances,
+                               "results": [encode_result(c.result).decode("ascii") for c in assembly.bundle.components],
+                               "bundle_persistence": "caller-owned collection; no generation/catalog acceptance"})
+            records = [record]
+        elif args.breadth is not None:
+            if (type(spec) is not BreadthCommandSpec or spec.family != args.breadth or dependencies is None or members is None
+                or sink is None or requirements is None or barrier_limits is None or source is not None):
+                parser.exit(2, "Breadth components required: use an explicit caller wrapper\n")
+            breadth = run_breadth(spec, dependencies, members, sink, limits=barrier_limits, requirements=requirements)
+            if breadth.command is None:
+                records = [{"ready": False, "waiting": [
+                    {"instance_id": w.instance_id, "task_sha256": w.task_sha256, "reason": w.reason} for w in breadth.barrier.waiting]}]
+            else:
+                record = _record(breadth.command, "injected")
+                assert breadth.breadth is not None
+                record.update({"ready": True, "owned_witness_type": "BreadthResult", "exclusion_count": len(breadth.breadth.exclusions)})
+                records = [record]
         else:
             records = [run_demo(factory=f) for f in ((False, True) if args.demo == "both" else (args.demo == "factory",))]
     except ImportError:

@@ -1,3 +1,11 @@
+## EQ060 barrier candidate — October 7, 2026
+
+EQ059 is accepted Closed/Project Done. EQ060#68 is the sole active story, workerPR10/canonicalPR319. Experimental worker0.1.0a5 implements declared dependency readiness, caller-owned feature assembly and declared-universe breadth publication. Actual SDK lookup, committed receipt verification and logical readback establish completion; declared missing dependencies leave unrelated roots runnable. Required universe/shard coverage is exact; optional absence follows an explicit policy. Mathematical eligibility and owned exact witnesses remain canonical.
+
+Development62 tests and strict typing of7 source files pass, including20 barrier methods, pre-code independent universe goldens and near2^53 exact comparison. Source/core/IO/math/schema unchanged. Committed repeat/native installed-form qualification, separate final-head review and actual-main delivery/readback remain pending. Earlier candidate/pending snapshots below are historical. EQ061 remains Backlog until EQ060 acceptance; complete bounded R5 then stop before R6.
+
+[Barrier API, policies, example and limits](BARRIERS.md); [qualification and delivery](EQ060_DELIVERY.md).
+
 ## EQ059 actual experimental delivery — October 7, 2026
 
 Worker0.1.0a4 delivered at actualmainec1d0c36f5f0efae330bc2f72ad19956276e8627, successfulpush37682081506. Canonical source-receipt actualmain92ea7895e47ec0cacf13fc507ae4870f092e73aa passed docs37682101891 and native37682101892. Published full trees equal reviewed finalheads2dcb009/9974212. Canonical initial documentationPR308 was externally merged byatulsrivas1 intoe9b0526 at20:19:04UTC; published tree equals reviewed0017f10/all3actualmain checks passed. PR310 carried the actualsource receipt on that published baseline; guarded workerPR8/canonicalPR310 merges followed final4worker/6canonical check successes and separate source/artifact/metadata reviews.
