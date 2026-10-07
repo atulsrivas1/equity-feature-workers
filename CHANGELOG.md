@@ -1,4 +1,4 @@
-## 0.1.0a5 — EQ060 candidate, unreleased
+## 0.1.0a5 — EQ060 experimental main delivered October 7, 2026
 
 Adds bounded declared dependency readiness, actual committed receipt/readback barriers, owned FeatureBundle assembly and complete declared-universe direction/above-SMA commands. Optional absence is explicit; dependency faults remain scoped. Reuses canonical exact proofs, SDK publication and codecs. No core/IO/math/schema changes. See docs/BARRIERS.md and docs/EQ060_DELIVERY.md for evidence and pending gates.
 
