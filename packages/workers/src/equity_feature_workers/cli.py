@@ -9,6 +9,7 @@ from equity_feature_io_contracts import ResultSink, SinkRequirements
 from equity_feature_io_sdk import SinkRegistry, SourceRegistry, descriptor, encode_result
 from equity_features.session import compute_bars
 from .commands import CommandError, CommandOutcome, SessionCommandSpec, run_registered, run_session
+from .required_inputs import RequiredCommandSpec, run_required
 
 
 class NoCredentials:
@@ -50,7 +51,7 @@ def _record(outcome: CommandOutcome, mode: str, *, in_memory: bool = False) -> d
             "result": encode_result(outcome.results[0]).decode("ascii")}
 
 
-def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | None = None,
+def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | RequiredCommandSpec | None = None,
          source: HistoricalAdapter | None = None, sink: ResultSink | None = None,
          requirements: SinkRequirements | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -59,12 +60,26 @@ def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | None = Non
                         help="requires separately installed equity-feature-example-extensions0.1.0a0")
     choices.add_argument("--session", choices=("bars", "trades", "quotes"),
                          help="requires caller-injected spec, source, sink and requirements")
+    choices.add_argument("--required", choices=("history", "sma_reference", "daily_baseline", "interval_baseline",
+                        "relative_volume", "interval_relative_volume", "relative_returns"),
+                        help="requires caller-injected required-input spec, sink and requirements; explicit source or absence")
     args = parser.parse_args(argv)
     try:
         if args.session is not None:
-            if spec is None or source is None or sink is None or requirements is None or spec.family != args.session:
+            if type(spec) is not SessionCommandSpec or source is None or sink is None or requirements is None or spec.family != args.session:
                 parser.exit(2, "Session components required: use an explicit caller wrapper\n")
             records = [_record(run_session(spec, source, sink, requirements=requirements), "injected")]
+        elif args.required is not None:
+            if type(spec) is not RequiredCommandSpec or sink is None or requirements is None or spec.family != args.required:
+                parser.exit(2, "Required-input components required: use an explicit caller wrapper\n")
+            outcome = run_required(spec, source, sink, requirements=requirements)
+            record = _record(outcome.command, "injected")
+            witness = outcome.witness
+            # Diagnostics only: the existing owned witness is returned by the Python API.
+            # This is deliberately not a witness reconstruction or persistence format.
+            record["owned_witness_type"] = type(witness).__name__ if witness is not None else None
+            record["witness_persistence"] = "caller-owned; replay qualified inputs for reconstruction"
+            records = [record]
         else:
             records = [run_demo(factory=f) for f in ((False, True) if args.demo == "both" else (args.demo == "factory",))]
     except ImportError:

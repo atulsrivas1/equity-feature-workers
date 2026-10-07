@@ -140,8 +140,7 @@ def _delivery_record(delivery: AdapterBatch, *, content: bool = False) -> dict[s
     return record
 
 
-def _collect(spec: SessionCommandSpec, source: HistoricalAdapter, cancellation: Cancellation) -> tuple[CanonicalBatch | None, str]:
-    request = spec.request
+def _collect(request: AcquisitionRequest, max_input_bytes: int, source: HistoricalAdapter, cancellation: Cancellation) -> tuple[CanonicalBatch | None, str]:
     deliveries: list[AdapterBatch] = []
     used = 0
     rows = 0
@@ -161,7 +160,7 @@ def _collect(spec: SessionCommandSpec, source: HistoricalAdapter, cancellation: 
                 rows += batch.row_count
                 if batch.row_count > request.max_batch_rows or rows > request.max_rows:
                     _fail(CommandErrorCode.LIMIT)
-            _, size = _record_hash(_delivery_record(delivery, content=True), b"", spec.max_input_bytes - used)
+            _, size = _record_hash(_delivery_record(delivery, content=True), b"", max_input_bytes - used)
             used += size
             deliveries.append(delivery)
             if delivery.final:
@@ -179,7 +178,7 @@ def _collect(spec: SessionCommandSpec, source: HistoricalAdapter, cancellation: 
     validate_delivery(request, source.capabilities(), tuple(deliveries))
     acquisition, _ = _record_hash({"request": asdict(request), "deliveries": [
         _delivery_record(d) for d in deliveries
-    ]}, b"efworker-acquisition1\0", spec.max_input_bytes + 1048576)
+    ]}, b"efworker-acquisition1\0", max_input_bytes + 1048576)
     batches = tuple(d.batch for d in deliveries if d.batch is not None)
     if not batches:
         return None, acquisition
@@ -188,7 +187,7 @@ def _collect(spec: SessionCommandSpec, source: HistoricalAdapter, cancellation: 
         _fail(CommandErrorCode.SOURCE)
     if len(batches) == 1:
         return first, acquisition
-    aggregate, _ = _record_hash([b.metadata.source.input_id for b in batches], b"efworker-chunks1\0", spec.max_input_bytes)
+    aggregate, _ = _record_hash([b.metadata.source.input_id for b in batches], b"efworker-chunks1\0", max_input_bytes)
     metadata = replace(first.metadata, source=replace(first.metadata.source, input_id="worker-chunks-" + aggregate))
     columns = tuple(Column(c.name, tuple(v for b in batches for v in b.columns[index].values))
                     for index, c in enumerate(first.columns))
@@ -210,7 +209,7 @@ def run_session(spec: SessionCommandSpec, source: HistoricalAdapter, sink: Resul
     except Exception:
         _fail(CommandErrorCode.CONFIG)
     try:
-        batch, acquisition = _collect(spec, source, token)
+        batch, acquisition = _collect(spec.request, spec.max_input_bytes, source, token)
     except CommandError:
         raise
     except Exception:
@@ -229,6 +228,12 @@ def run_session(spec: SessionCommandSpec, source: HistoricalAdapter, sink: Resul
     if any(c.entities != (spec.entity,) for c in result.values) or descriptor(result).features != task.features:
         _fail(CommandErrorCode.RESULT)
     results = (result,)
+    return _publish_verified(task, results, sink, requirements, token)
+
+
+def _publish_verified(task: TaskManifest, results: tuple[FeatureResult, ...], sink: ResultSink,
+                      requirements: SinkRequirements, token: Cancellation) -> CommandOutcome:
+    """Shared existing-SDK publication and readback, never a second sink protocol."""
     try:
         limits = replace(requirements, visibility=None, writer_mode=None, reservation_retention_ns=1)
         envelope = prepare_publication(results, destination_scope=task.destination_scope, generation_id=task.generation_id,
