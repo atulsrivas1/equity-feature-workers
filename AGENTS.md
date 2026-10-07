@@ -1,3 +1,6 @@
+## Owner-authorized R5 local review — October 7, 2026
+
+The owner authorized separate local Codex reviewers for PR303 and all R5 stories in canonical AGENTS.md and docs/CODE_REVIEW.md. This supersedes earlier bounded R4.1-only and pending-R5 boilerplate. Require completed independent review of every final changed head, actual reviewer identity/checks/findings/disposition/limitations and renewed coverage after relevant changes. Local automated review is neither hosted activation nor human review. Author self-review/CI alone remain insufficient; numerical/documentation/installed/native/main publication/readback gates remain mandatory. This dedicated session is authorized to execute R5 and stops after verified acceptance, before R6.
 # Work agreements
 
 All commits must use Atul Srivastava <102820540+atulsrivas1@users.noreply.github.com> as author and locally created committer. Do not use Codex attribution or Codex co-author trailers. Verify published attribution.
