@@ -1,3 +1,7 @@
+## EQ057 current build inputs
+
+Worker candidate0.1.0a2 builds exact committed source with canonical20c08c7370581d03c8a0404579667f68d67ac88b and accepted IO4603c6e50331a5e8a82b13b62a0cdd5ffaa0e4bf. Both fresh wheel/sdist forms execute manifest tests, public API/PEP561 checks and independent core oracle with unchanged core fingerprints. This replaces version-only foundation qualification for the candidate; historical receipts below retain scope. Actual-main Windows/Linux bundles with finite verified expiry remain the release channel; no registry fallback. [Manifest API](MANIFESTS.md) and [delivery](EQ057_DELIVERY.md).
+
 ## EQ130 release audit under qualification
 
 EQ121–129 are accepted; EQ130 is the sole active docs/audit story. [canonical R4.1 audit](https://github.com/atulsrivas1/equity-features/blob/main/docs/R4_1_ACCEPTANCE.md) and [canonical R5 resume](https://github.com/atulsrivas1/equity-features/blob/main/docs/R5_AUTONOMOUS_HANDOFF.md) bind actual accepted versions/heads/receipts, separate automated reviews, source/backend/composed evidence and preserved rights/limits. Final current head review/CI/artifact/publication/readback and canonical287Done precede epic/milestone closure and EQ057#65 Ready. R5 is prepared only; this chat stops before its implementation. No runtime/test/workflow/package/math/private execution change. Live Project/issue evidence is authority; earlier snapshots below preserve history.

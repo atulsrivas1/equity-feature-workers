@@ -1,3 +1,6 @@
+## Owner-authorized R5 local review — October 7, 2026
+
+The owner authorized separate local Codex reviewers for PR303 and all R5 stories in canonical AGENTS.md and docs/CODE_REVIEW.md. This supersedes earlier bounded R4.1-only and pending-R5 boilerplate. Require completed independent review of every final changed head, actual reviewer identity/checks/findings/disposition/limitations and renewed coverage after relevant changes. Local automated review is neither hosted activation nor human review. Author self-review/CI alone remain insufficient; numerical/documentation/installed/native/main publication/readback gates remain mandatory. This dedicated session is authorized to execute R5 and stops after verified acceptance, before R6.
 # Codex PR review workflow
 
 Status: repository guidance prepared; hosted activation and first review response are not yet verified. Setup: [GOV-005](https://github.com/atulsrivas1/equity-features/issues/119).

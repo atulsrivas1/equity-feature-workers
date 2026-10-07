@@ -35,9 +35,9 @@ expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'e
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == ('0.1.0a1' if name=='equity-feature-workers' else '0.1.0a2')
+    assert module.__version__ == ('0.1.0a2' if name=='equity-feature-workers' else '0.1.0a2')
     if name=='equity-feature-workers':
-        assert module.__all__ == ['__version__']
+        assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task'} <= set(module.__all__)
     else:
         assert {'ResultSink','SinkRequirements'} <= set(module.__all__) if name=='equity-feature-io-contracts' else {'publish','prepare_publication','SourceRegistry','SinkRegistry'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)

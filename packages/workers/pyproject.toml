@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-workers"
-version = "0.1.0a1"
-description = "Typed experimental equity component foundation"
+version = "0.1.0a2"
+description = "Typed bounded equity worker manifests"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"
