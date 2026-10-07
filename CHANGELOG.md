@@ -1,3 +1,7 @@
+## 0.1.0a7 — EQ062 candidate, unreleased
+
+Adds separated sealed session preparation, exact bounded input reuse, whole-task partitioning, sequential/thread/spawn-process supervision, combined logical resource budgets and isolated result-codec spill. Coordinator-only publisher integration retains cancelled/faulted work and preserves original sources/unrelated files. Core/I/O/math/task/result/receipt codecs and mandatory dependencies unchanged. See docs/SUPERVISOR.md and docs/EQ062_DELIVERY.md; measured/native/review/release gates pending.
+
 ## 0.1.0a6 — EQ061 experimental main delivered October 7, 2026
 
 Adds bounded owner-thread serialized publication and immutable completion-last local operational generations. Real Parquet/DuckDB ownership remains in accepted sinks; live lookup/readback gates every completion and uncertain retry. Core/IO/math/task/result/receipt codecs and mandatory runtime dependencies unchanged. See docs/PUBLICATION_GENERATIONS.md and docs/EQ061_DELIVERY.md for qualification and limits.

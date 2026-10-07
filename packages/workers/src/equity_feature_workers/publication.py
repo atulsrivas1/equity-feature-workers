@@ -72,6 +72,14 @@ class SerialPublisher:
         self._lock = threading.Lock()
         self._pending: dict[str, _Pending] = {}
 
+    @property
+    def limits(self) -> PublicationLimits:
+        return self._limits
+
+    @property
+    def destination_scope(self) -> str:
+        return self._scope
+
     def _bounds(self, count: int | None = None, size: int | None = None) -> BarrierLimits:
         return BarrierLimits(self._limits.max_pending_tasks if count is None else count,
                              self._limits.max_pending_bytes if size is None else size)
