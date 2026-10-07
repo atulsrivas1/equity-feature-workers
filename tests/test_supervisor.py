@@ -366,7 +366,7 @@ class Supervisor(unittest.TestCase):
         out=BoundedSupervisor(mode='process',budget=limits).run(items)
         partitions=partition_tasks(items,1)
         additional=2*len(pickle.dumps(partitions[0],protocol=5))
-        additional+=2*(len(items)*limits.max_task_transport_bytes+len(pickle.dumps((None,)*len(items),protocol=5)))
+        additional+=3*(len(items)*limits.max_task_transport_bytes+len(pickle.dumps((None,)*len(items),protocol=5)))
         self.assertEqual(out.reserved_resident_bytes-seq.reserved_resident_bytes,additional)
         counted_items=all_work(counted)
         counted_bound=BoundedSupervisor(mode='process',budget=limits).run(counted_items).reserved_resident_bytes

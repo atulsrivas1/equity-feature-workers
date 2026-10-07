@@ -416,10 +416,10 @@ class BoundedSupervisor:
                        for reason in tuple(code.value for code in SinkErrorCode) + tuple(code.value for code in CommandErrorCode))
                    > budget.max_task_transport_bytes for i in items):
                 _fail(SinkErrorCode.RESOURCE_LIMIT)
-            # Serialized + child-owned inputs; all-shard child/IPC/returned metadata.
+            # Serialized + child-owned inputs; all-shard child/IPC/parent records.
             # Per-record transport bounds are enforced before child results are returned.
             copies = 2 * sum(sorted((_size(p) for p in partitions), reverse=True)[:budget.max_in_flight])
-            copies += 2 * (len(items) * budget.max_task_transport_bytes + _size((None,) * len(items)))
+            copies += 3 * (len(items) * budget.max_task_transport_bytes + _size((None,) * len(items)))
         pending = publisher.limits.max_pending_bytes if publisher is not None else 0
         resident = input_bytes + copies + result_reservation + pending + budget.max_task_result_bytes + max(len(encode_task(i.task)) for i in items)
         if resident > budget.max_resident_bytes:
