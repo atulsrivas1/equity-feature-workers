@@ -1,3 +1,8 @@
+## EQ057 review rework — October 7, 2026
+
+Separate local reviewer /root/r5_review independently passed nine manifest tests/strict2 at a454323 and reproduced P2: nested ConfigSpec identity/parameter strings could contain newline/lone surrogates while task encoding/decoding preserved them, bypassing the documented policy. Fix preflights a static canonical config closure before unchanged ConfigSpec serialization, rejects controls/surrogates/DEL and applies bounded string/sequence/config allocation admission. New independent regressions cover identity, parameter names/values, timezone and oversized inputs. Eleven development checks (ten manifests plus provenance) and strict2 pass. Code review returns to In progress for actual repair; renewed frozen-head review/current CI/native fresh-form qualification remains required.
+
+Original candidate a454323 local repeat build and all four native push/PR checks passed, including both clean wheel/sdist forms and core invariance. This remains historical source qualification, not corrected release acceptance. It is superseded by the runtime admission change, not claimed failed. No published release, numerical/private/source/sink change. Next freeze corrected source, renew independent review, requalify fresh artifacts, then guarded main publication/readback before Done.
 # EQ057 delivery evidence — in progress
 
 [Canonical65](https://github.com/atulsrivas1/equity-features/issues/65), [worker PR4](https://github.com/atulsrivas1/equity-feature-workers/pull/4), [canonical PR304](https://github.com/atulsrivas1/equity-features/pull/304). See [pre-code plan](EQ057_PLAN.md) and [public API](MANIFESTS.md).

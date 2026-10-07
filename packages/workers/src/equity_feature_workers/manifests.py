@@ -5,6 +5,7 @@ from dataclasses import dataclass, fields
 from enum import StrEnum
 import hashlib
 import json
+import math
 import re
 from typing import Any, NoReturn, cast
 
@@ -35,6 +36,8 @@ def fail(code: ManifestErrorCode = ManifestErrorCode.INVALID) -> NoReturn:
 def label(value: object) -> None:
     if type(value) is not str or not value.strip() or any(ord(c) < 32 or ord(c) == 127 or 0xD800 <= ord(c) <= 0xDFFF for c in value):
         fail()
+    if len(value) > 4096:
+        fail(ManifestErrorCode.LIMIT)
 
 
 def digest(value: object) -> None:
@@ -50,6 +53,54 @@ def integer(value: object, minimum: int = i.I64_MIN) -> None:
 def sequence(value: object, cls: type[Any], *, nonempty: bool = False) -> None:
     if type(value) is not tuple or (nonempty and not value) or any(type(v) is not cls for v in value):
         fail()
+    if len(value) > 4096:
+        fail(ManifestErrorCode.LIMIT)
+
+
+def _safe_config(config: s.ConfigSpec) -> None:
+    """Preflight a fixed canonical closure before its unchanged JSON serializer."""
+    records = (s.ConfigSpec, s.Parameter, s.SessionSpec, s.WindowSpec, s.AvailabilitySpec,
+               s.IntervalSpec, i.AdjustmentSpec, i.PriceUnit)
+    remaining = MAX_MANIFEST_BYTES
+
+    def visit(value: object) -> None:
+        nonlocal remaining
+        cls = type(value)
+        if value is None or cls is bool:
+            remaining -= 5
+        elif cls is str:
+            assert isinstance(value, str)
+            if any(ord(c) < 32 or ord(c) == 127 or 0xD800 <= ord(c) <= 0xDFFF for c in value):
+                fail()
+            if len(value) > 4096:
+                fail(ManifestErrorCode.LIMIT)
+            remaining -= 12 * len(value) + 2
+        elif cls is int:
+            assert isinstance(value, int)
+            if value.bit_length() > 4096:
+                fail(ManifestErrorCode.LIMIT)
+            remaining -= 1300
+        elif cls is float:
+            assert isinstance(value, float)
+            if not math.isfinite(value):
+                fail()
+            remaining -= 64
+        elif cls is tuple:
+            items = cast(tuple[object, ...], value)
+            if len(items) > 4096:
+                fail(ManifestErrorCode.LIMIT)
+            for item in items:
+                visit(item)
+        elif cls in records:
+            for f in fields(value):  # type: ignore[arg-type]
+                remaining -= len(f.name) + 4
+                visit(getattr(value, f.name))
+        else:
+            fail()
+        if remaining < 0:
+            fail(ManifestErrorCode.LIMIT)
+
+    visit(config)
 
 
 @dataclass(frozen=True)
@@ -252,6 +303,7 @@ def _wire(value: object) -> Any:
     if cls is tuple:
         return [_wire(v) for v in cast(tuple[object, ...], value)]
     if cls is s.ConfigSpec:
+        _safe_config(cast(s.ConfigSpec, value))
         return {"config": value.to_json()}  # type: ignore[attr-defined]
     if cls in _RECORDS.values():
         return {"record": cls.__name__, "fields": {f.name: _wire(getattr(value, f.name)) for f in fields(value)}}  # type: ignore[arg-type]

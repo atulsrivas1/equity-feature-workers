@@ -3,7 +3,7 @@ import hashlib
 import json
 import unittest
 from pathlib import Path
-from equity_feature_contracts import Coverage, AvailabilitySpec
+from equity_feature_contracts import Coverage, AvailabilitySpec, Parameter
 from equity_feature_contracts.specs import IntervalSpec
 from equity_feature_io_contracts.publication import CompletionReceipt
 from equity_feature_io_sdk import idempotency_key, verify_content
@@ -88,6 +88,17 @@ class Manifests(unittest.TestCase):
         for low,high in ((True,100),(100,100),(0,2**63)):
             with self.assertRaises(ManifestError):
                 ClaimIdentity('a'*64,'owner','attempt',low,high)
+
+    def test_nested_config_strings_and_preallocation_limits(self):
+        for text in ('bad\nname','\ud800','\x7f'):
+            for config in (replace(self.task.config,identity=text),
+                replace(self.task.config,parameters=(Parameter(text,1),)),
+                replace(self.task.config,parameters=(Parameter('value',text),)),
+                replace(self.task.config,session=replace(self.task.config.session,timezone_label=text))):
+                self.rejected(config=config)
+        self.rejected(job_id='x'*4097)
+        self.rejected(config=replace(self.task.config,parameters=(Parameter('large','x'*4097),)))
+        self.rejected(config=replace(self.task.config,parameters=(Parameter('large',1<<4097),)))
 
     def test_closed_canonical_decoder(self):
         data=encode_task(self.task)
