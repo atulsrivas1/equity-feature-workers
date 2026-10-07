@@ -1,3 +1,21 @@
+## EQ062 measured compute-mode selection — October 7, 2026
+
+[Exact comparison receipt](EQ062_MODE_COMPARISON.json), UTF8 LF SHA256 `a93362f4ea48baebd7458238b3819a8aae983b083eac611c1958333662038976`, binds committed runtime source `4ce4f6364b52c9d5097ad97cd8c2d2cbf6936110`, every scoped source hash, actual versions/runtime/hardware, three repeats and all27 tested configurations. Sequential/thread/spawn-process results and task-row ledgers agree in all81 samples, with independent per-instrument volume/notional/weightedclose expectations and the frozen four-instrument/eight-row oracle. Thread/process configurations1/2/4/8 all fit declared CPU/logical budgets on this host; no capacity skip was required.
+
+Median executor elapsed milliseconds (best measured parallel configuration shown; receipt retains every sample):
+
+| Workload |Sequential1|Thread|Spawn process|
+|---|---:|---:|---:|
+|small (4 tasks/8 rows)|67.554|78.297 (4 workers)|717.304 (1 workers)|
+|large (32 tasks/8192 rows)|711.018|725.660 (1 workers)|1227.019 (4 workers)|
+|skew (32 tasks/3040 rows)|608.922|622.796 (1 workers)|1196.559 (4 workers)|
+
+Select sequential1 as the bounded default for this qualified synthetic compute workload: no measured parallel mode improves its median. Explicit thread/process modes remain supported with declared admission and consumer-specific qualification. Spawn first-task plus shutdown medians635.860–646.036ms dominate these workloads; the ping starts one lazy worker, not every configured worker. Exact input pickle sizes/roundtrip times and whole-pool executor startup/shutdown are recorded. This is a compute-mode comparison on prepared immutable inputs, not physical source-to-sink throughput. Preparation/acquisition is timed once per workload, then the same bounded batches are reused for all mode samples; no repeated source reads. Actual native engine compute threads are0, with a conservative coordinator/backend allowance1.
+
+Actual Windows Python3.12.10, AMD64, os.cpu_count96. Separate post-comparison local hardware snapshot: two Intel Xeon Platinum8160 CPUs at2.10GHz,24 cores/48 logical processors each; total visible memory266992920KiB and observed free234220440KiB. This snapshot is not a reservation or per-job peak. Host affinity/load was not isolated; three-repeat variance is preserved in the receipt. Memory evidence here is logical preflight/transport/result codec reservations, not sampled RSS/child peak or hard OS enforcement. Representative physical end-to-end/peak-job-memory/private-source/PIT/warm-up/privacy/month/annual gates remain EQ066.
+
+All112 development tests/strict10 passed before the frozen comparison. Numerical core/I/O/math/task/result/receipt schemas remain unchanged; scoped runtime/fixtures/probe/builder bytes still equal the measured commit after this metadata-only update. Separate final-head review, native/fresh installed forms, committed repeat/source receipt and actual-main release/readback remain pending. EQ062 stays active; complete bounded R5 then stop before R6.
+
 ## EQ062 supervisor candidate — October 7, 2026
 
 EQ061 is accepted6048044214; EQ062#70 is the sole active story, workerPR14/canonicalPR323. Pre-code worker0fa45314/canonical38219955 published the resource/partition/reuse/spill contract and frozen eight-row/four-instrument oracle before implementation. Experimental worker0.1.0a7 now separates observed session preparation from pure calculation, implements bounded owner-thread exact input reuse, whole-task connected-instrument partitioning, sequential/thread/spawn-process execution, combined logical resource admission, isolated existing-codec result spill and serialized publisher coordination with retained fault/cancelled work. [API/resources/limits](SUPERVISOR.md). Core/I/O/math/task/result/receipt schemas and mandatory runtime dependencies remain unchanged; only immutable publisher limit/scope properties are added for admission.

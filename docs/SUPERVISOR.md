@@ -38,7 +38,7 @@ Compute/backend thread declarations are caller contracts. Built-in pure calculat
 
 ## Results, backpressure and cancellation
 
-`BoundedSupervisor(budget=ResourceBudget(),mode='sequential').run(items, cancellation=...,spill=...,publisher=...)` is owned by its creating Thread object and cannot reenter. Invalid inventory, CPU/input/transport/resident/result/queue admission fails before callbacks. Ordered outputs are stable task-digest order, independent of completion order. Sequential is provisional until published mode comparison qualifies its selection.
+`BoundedSupervisor(budget=ResourceBudget(),mode='sequential').run(items, cancellation=...,spill=...,publisher=...)` is owned by its creating Thread object and cannot reenter. Invalid inventory, CPU/input/transport/resident/result/queue admission fails before callbacks. Ordered outputs are stable task-digest order, independent of completion order. Sequential1 is selected from [three-repeat frozen comparison](EQ062_MODE_COMPARISON.json): every tested thread/process configuration had a higher median for these prepared small/large/skewed synthetic bars. Other workloads require their own measurement; no universal speedup or best-mode guarantee.
 
 TaskExecution(task,results,spill,output,reason) distinguishes computed local results/spill from verified sink output. OutputNone and reasonNone can mean successful computation with no publisher requested; it is not committed generation or catalog acceptance. Mathematical missing values remain inside FeatureResult, not worker failure. Callback/serialization/fault diagnoses are fixed codes without private exception text. Completed but unpublished results remain returned or referenced even when publication waits/fails.
 
