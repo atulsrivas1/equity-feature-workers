@@ -301,7 +301,10 @@ def _wire(value: object) -> Any:
     if cls in _ENUMS.values():
         return {"enum": cls.__name__, "value": value.value}  # type: ignore[attr-defined]
     if cls is tuple:
-        return [_wire(v) for v in cast(tuple[object, ...], value)]
+        items = cast(tuple[object, ...], value)
+        if len(items) > 4096:
+            fail(ManifestErrorCode.LIMIT)
+        return [_wire(v) for v in items]
     if cls is s.ConfigSpec:
         _safe_config(cast(s.ConfigSpec, value))
         return {"config": value.to_json()}  # type: ignore[attr-defined]
@@ -330,6 +333,8 @@ def _decode(value: Any) -> Any:
         label(value)
         return value
     if type(value) is list:
+        if len(value) > 4096:
+            fail(ManifestErrorCode.LIMIT)
         return tuple(_decode(v) for v in value)
     if type(value) is not dict:
         fail()

@@ -138,7 +138,7 @@ def qualify(dependencies, artifacts, form, packages, probe):
         for name in packages:
             run(py, "-I", "-m", "mypy", "--strict", "-p", name.replace("-", "_"), cwd=location)
         fp = hashlib.sha256(json.dumps(before, sort_keys=True).encode()).hexdigest()
-        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True}
+        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True}
 
 
 def main():

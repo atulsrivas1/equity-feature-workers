@@ -4,6 +4,7 @@ import json
 import unittest
 from pathlib import Path
 from equity_feature_contracts import Coverage, AvailabilitySpec, Parameter
+from equity_feature_contracts.inputs import IntervalCoverage
 from equity_feature_contracts.specs import IntervalSpec
 from equity_feature_io_contracts.publication import CompletionReceipt
 from equity_feature_io_sdk import idempotency_key, verify_content
@@ -99,6 +100,13 @@ class Manifests(unittest.TestCase):
         self.rejected(job_id='x'*4097)
         self.rejected(config=replace(self.task.config,parameters=(Parameter('large','x'*4097),)))
         self.rejected(config=replace(self.task.config,parameters=(Parameter('large',1<<4097),)))
+
+    def test_nested_sequence_limit_precedes_wire_materialization(self):
+        original=self.task.inputs[0]
+        rows=tuple(IntervalCoverage(str(n),100,101,Coverage(0,0,True)) for n in range(4097))
+        binding=replace(original.binding,metadata=replace(original.binding.metadata,interval_coverage=rows))
+        with self.assertRaises(ManifestError):
+            replace(original,binding=binding)
 
     def test_closed_canonical_decoder(self):
         data=encode_task(self.task)
