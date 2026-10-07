@@ -1,0 +1,28 @@
+{
+  "both_committed_complete": true,
+  "closes": {
+    "A": [
+      100,
+      110,
+      120
+    ],
+    "B": [
+      100,
+      90,
+      80
+    ]
+  },
+  "license": "synthetic Apache-2.0",
+  "one_committed_complete": false,
+  "ordered_members": [
+    "A",
+    "B"
+  ],
+  "original_sources_changed": false,
+  "returns": {
+    "A": 0.2,
+    "B": -0.2
+  },
+  "schema": "eq061-literal-oracle1",
+  "staging_complete": false
+}
