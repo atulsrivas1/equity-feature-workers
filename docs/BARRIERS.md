@@ -1,3 +1,5 @@
+Actual resolved receipt/output wire replaces the declared wire within the shared budget before result read; readiness reserves graph-node bytes. A dependency exceeding the remaining quota yields a scoped RESOURCE_LIMIT wait.
+
 # Declared dependencies and universe barriers (experimental 0.1.0a5)
 
 [EQ060 #68](https://github.com/atulsrivas1/equity-features/issues/68), [pre-code plan](EQ060_PLAN.md), [delivery](EQ060_DELIVERY.md). Retains the [required-input commands](REQUIRED_INPUT_COMMANDS.md), [session commands](COMMANDS.md) and existing [task protocol](MANIFESTS.md). No core mathematics, schema, codec or IO change.

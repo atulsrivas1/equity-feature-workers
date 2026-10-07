@@ -1,3 +1,9 @@
+## EQ060 P2 rework — October 7, 2026
+
+Separate reviewer /root/r5_review independently passed62tests/strict7 at worker2479c66/canonicale1082f1, then reproduced a live committed receipt replacing a staged candidate with300large artifact references beyond the byte quota. Initial static declarations were bounded, but resolved receipt wire was not. Admission now checks actual resolved OutputManifest before result read and accounts for its replacement delta against the shared barrier budget, reserving graph-node bytes in readiness. Oversized live dependencies remain scoped RESOURCE_LIMIT waits; unrelated roots can proceed. Regression covers both single oversized live metadata and two individually bounded receipts exceeding the shared cap.
+
+Issue68 returned Code review -> In progress6046980421. Earlier native2479 checks passed but are superseded for corrected runtime. Local build of2479 reached final dirty-source guard during rework and failed; it is not qualification evidence. Two regression fixture errors were corrected: tutorial sink's original receipt readback needed an explicit logical-readback wrapper for changed artifact declarations; callback counter required reset after intentional successful lookup. Frozen numerical oracle unchanged. Corrected62 tests/strict7 pass; freeze and renew independent review/repeat/current-native qualification before release. No source/core/IO/math/schema changes.
+
 # EQ060 qualification and delivery
 
 October7,2026. [Canonical EQ060#68](https://github.com/atulsrivas1/equity-features/issues/68), E08/R5, workerPR10/canonicalPR319. Pre-code plan and literal3member source/oracle/proofs published worker7bd1ab3/canonicale862dde before runtime. Ready6046497228 -> In progress6046501400,8 provisional complexity points. EQ059 actually Done acceptance6046430294; earlier pending dependency snapshots are historical.

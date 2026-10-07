@@ -205,6 +205,23 @@ class Barriers(unittest.TestCase):
         self.rejected(CommandErrorCode.LIMIT,lambda:inspect_barrier((replace(d,output=oversized),),
             limits=BarrierLimits(1,8388608),requirements=LIMITS))
         self.assertEqual(sink.calls,0)
+        class Resolved(StatusSink):
+            def __init__(self,original,receipt):super().__init__(original);self.receipt=receipt
+            def lookup(self,key):return PublicationStatus(PublicationState.COMMITTED,self.receipt)
+            def read(self,receipt):return self.original.read(self.original.lookup(receipt.idempotency_key).receipt)
+        staged=replace(d.output,receipt=None)
+        resolved=replace(d,output=staged,sink=Resolved(d.sink,oversized.receipt))
+        barrier=inspect_barrier((resolved,),limits=BarrierLimits(1,8388608),requirements=LIMITS)
+        self.assertFalse(barrier.ready);self.assertEqual(barrier.waiting[0].reason,CommandErrorCode.LIMIT.value)
+        # Individually bounded resolved receipts must also share the whole barrier budget.
+        _,_,second,_=produce('B');declared=(d,second)
+        expanded=tuple(replace(dep,output=replace(dep.output,receipt=None),sink=Resolved(dep.sink,
+            replace(dep.output.receipt,artifacts=artifacts[:40]))) for dep in declared)
+        barrier=inspect_barrier(expanded,limits=BarrierLimits(2,250000),requirements=LIMITS)
+        self.assertEqual(tuple(v.instance_id for v in barrier.verified),('A',))
+        self.assertEqual(tuple(w.instance_id for w in barrier.waiting),('B',))
+        self.assertEqual(barrier.waiting[0].reason,CommandErrorCode.LIMIT.value)
+        sink.calls=0
         token=type('Cancelled',(),{'is_cancelled':lambda self:True})()
         self.rejected(CommandErrorCode.CANCELLED,lambda:inspect_barrier((d,),limits=BOUNDS,requirements=LIMITS,cancellation=token))
         self.assertEqual(sink.calls,0)

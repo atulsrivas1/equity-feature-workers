@@ -120,7 +120,8 @@ def _admit_entities(task: TaskManifest, results: tuple[FeatureResult, ...]) -> N
         _fail(CommandErrorCode.RESULT)
 
 
-def _read_dependency(d: Dependency, requirements: SinkRequirements, token: Cancellation) -> VerifiedDependency | str:
+def _read_dependency(d: Dependency, requirements: SinkRequirements, token: Cancellation,
+                     max_output_bytes: int) -> VerifiedDependency | str:
     if d.output is None:
         return "EXPLICIT_ABSENCE"
     assert d.sink is not None
@@ -134,6 +135,9 @@ def _read_dependency(d: Dependency, requirements: SinkRequirements, token: Cance
         if status.state is not PublicationState.COMMITTED:
             return status.state.value
         assert status.receipt is not None
+        output = OutputManifest(d.task, d.output.envelope, status.receipt)
+        if _wire_size(output) > max_output_bytes:
+            _fail(CommandErrorCode.LIMIT)
         if d.output.receipt is not None and d.output.receipt != status.receipt:
             _fail(CommandErrorCode.READBACK)
         verify_receipt(status.receipt, d.output.envelope)
@@ -143,7 +147,6 @@ def _read_dependency(d: Dependency, requirements: SinkRequirements, token: Cance
         if any(len(encode_result(r)) > requirements.max_chunk_bytes for r in results):
             _fail(CommandErrorCode.LIMIT)
         _admit_entities(d.task, results)
-        output = OutputManifest(d.task, d.output.envelope, status.receipt)
         return VerifiedDependency(d.instance_id, CommandOutcome(output, results))
     except CommandError:
         raise
@@ -154,21 +157,23 @@ def _read_dependency(d: Dependency, requirements: SinkRequirements, token: Cance
 def inspect_barrier(dependencies: tuple[Dependency, ...], *, limits: BarrierLimits,
                     requirements: SinkRequirements, cancellation: Cancellation | None = None) -> BarrierOutcome:
     """No staged/structural receipt establishes completion without live readback."""
-    _admit_dependencies(dependencies, limits, requirements)
+    size = _admit_dependencies(dependencies, limits, requirements)
     token = cancellation if cancellation is not None else NeverCancelled()
     verified: list[VerifiedDependency] = []
     waiting: list[WaitingDependency] = []
     omitted: list[str] = []
     for d in dependencies:
         _cancel(token)
+        declared_bytes = _wire_size(d.task if d.output is None else d.output)
         try:
-            observed = _read_dependency(d, requirements, token)
+            observed = _read_dependency(d, requirements, token, limits.max_bytes - size + declared_bytes)
         except CommandError as error:
             if error.code is CommandErrorCode.CANCELLED:
                 raise
             # A fault remains a scoped waiting/fault reason; unrelated ready work continues.
             observed = error.code.value
         if isinstance(observed, VerifiedDependency):
+            size += _wire_size(observed.command.output) - declared_bytes
             verified.append(observed)
             continue
         reason = observed
@@ -236,7 +241,9 @@ def evaluate_readiness(nodes: tuple[TaskNode, ...], dependencies: tuple[Dependen
         if not roots:
             _fail(CommandErrorCode.CONFIG)
         remaining -= roots
-    barrier = inspect_barrier(dependencies, limits=limits, requirements=requirements, cancellation=cancellation)
+    barrier = inspect_barrier(dependencies,
+        limits=BarrierLimits(limits.max_dependencies, max(1, limits.max_bytes - node_bytes)),
+        requirements=requirements, cancellation=cancellation)
     committed = {v.command.output.task.task_sha256 for v in barrier.verified}
     omitted = {d.task.task_sha256 for d in dependencies if d.instance_id in barrier.omitted}
     ready = tuple(n.task for n in nodes if n.task.task_sha256 not in committed and set(n.required) <= committed
