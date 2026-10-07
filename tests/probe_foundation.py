@@ -31,18 +31,21 @@ def core_check():
     finally: sys.meta_path.remove(deny)
 
 core_check()
-expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a2'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a2']}
+expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a2'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a2','equity-features==0.0.4a4']}
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == ('0.1.0a2' if name=='equity-feature-workers' else '0.1.0a2')
+    assert module.__version__ == ('0.1.0a3' if name=='equity-feature-workers' else '0.1.0a2')
     if name=='equity-feature-workers':
-        assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task'} <= set(module.__all__)
+        assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task', 'SessionCommandSpec', 'run_session', 'run_registered'} <= set(module.__all__)
     else:
         assert {'ResultSink','SinkRequirements'} <= set(module.__all__) if name=='equity-feature-io-contracts' else {'publish','prepare_publication','SourceRegistry','SinkRegistry'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)
     assert 'site-packages' in Path(module.__file__).resolve().parts
     assert sorted(distribution(name).requires or []) == sorted(expected[name])
-    assert not distribution(name).entry_points
+    entries = list(distribution(name).entry_points)
+    if name == 'equity-feature-workers':
+        assert [(e.group,e.name,e.value) for e in entries] == [('console_scripts','equity-feature-worker','equity_feature_workers.cli:main')]
+    else: assert not entries
 assert not any(name.split('.')[0] in {'duckdb','pyarrow','numpy'} for name in sys.modules)
-print('Installed versions/PEP561 metadata/no-commands/core isolation/independent500/51200/102.6 goldens PASS')
+print('Installed versions/PEP561 metadata/explicit-command/core isolation/independent500/51200/102.6 goldens PASS')

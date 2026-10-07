@@ -1,3 +1,9 @@
+## EQ058 session command candidate — October 7, 2026
+
+EQ057 is actually Closed/Project Done after postrelease review/readback (canonical65 acceptance6044529814); earlier pending snapshots below remain historical. EQ058 is the sole In progress story, workerPR6/canonicalPR306, published pre-code plansddc3442/d7aeb74. Experimental worker0.1.0a3 adds bounded public bars/trades/event-weighted quotes composition and explicit direct/factory/CLI invocation; [API](COMMANDS.md), [delivery](EQ058_DELIVERY.md). Development26checks/strict4 pass; source-injected CLI corrected structured quote serialization to the existing SDK codec. Source/IO/core unchanged; package directly pins purefeatures0.0.4a4 plusSDK0.1.0a2.
+
+Next freeze reviewed source, qualify actual current native Windows/Linux four fresh installed forms with14command/11manifest methods, console/public APIs, core invariance and independent goldens. Separate local final-head review, current CI, actual-main artifact/source/probe/report/expiry/attribution/readback and documented release acceptance remain required. No Done/private/pilot/physical-durability/resource/speed claim. EQ059 stays Backlog until actual058Done; bounded R5 then stop beforeR6.
+
 ## EQ057 current build inputs
 
 Worker candidate0.1.0a2 builds exact committed source with canonical20c08c7370581d03c8a0404579667f68d67ac88b and accepted IO4603c6e50331a5e8a82b13b62a0cdd5ffaa0e4bf. Both fresh wheel/sdist forms execute manifest tests, public API/PEP561 checks and independent core oracle with unchanged core fingerprints. This replaces version-only foundation qualification for the candidate; historical receipts below retain scope. Actual-main Windows/Linux bundles with finite verified expiry remain the release channel; no registry fallback. [Manifest API](MANIFESTS.md) and [delivery](EQ057_DELIVERY.md).

@@ -4,14 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-workers"
-version = "0.1.0a2"
-description = "Typed bounded equity worker manifests"
+version = "0.1.0a3"
+description = "Typed bounded equity worker manifests and session commands"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{name = "Equity Features contributors"}]
-dependencies = ["equity-feature-io-sdk==0.1.0a2"]
+dependencies = ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a4"]
+
+[project.scripts]
+equity-feature-worker = "equity_feature_workers.cli:main"
 
 [project.urls]
 Repository = "https://github.com/atulsrivas1/equity-feature-workers"

@@ -23,7 +23,7 @@ SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflo
 EXPECTED = {
     "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],
     "equity-feature-io-sdk": ["equity-feature-io-contracts==0.1.0a2"],
-    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2"],
+    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a4"],
 }
 
 
@@ -87,7 +87,8 @@ def inspect(path, name):
     assert b"License-Expression: Apache-2.0" in metadata
     requirements = sorted(line.removeprefix("Requires-Dist: ").strip() for line in metadata.decode().splitlines() if line.startswith("Requires-Dist: "))
     assert requirements == sorted(EXPECTED[name]), (name, requirements)
-    assert not any(p.endswith("/entry_points.txt") for p in files)
+    entries = [v.decode() for p, v in files.items() if p.endswith("/entry_points.txt")]
+    assert len(entries) == 1 and "equity-feature-worker = equity_feature_workers.cli:main" in entries[0]
 
 
 def build(source, output):
@@ -133,12 +134,15 @@ def qualify(dependencies, artifacts, form, packages, probe):
         run(py, "-m", "pip", "check")
         run(py, "-I", probe, *packages, cwd=location)
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_manifests.py", cwd=location)
+        run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_commands.py", cwd=location)
+        executable = py.parent / ("equity-feature-worker.exe" if os.name == "nt" else "equity-feature-worker")
+        run(executable, "--demo", "both", cwd=location)
         after = fingerprint(py, location)
         assert before == after, "Companion install/import changed canonical core"
         for name in packages:
             run(py, "-I", "-m", "mypy", "--strict", "-p", name.replace("-", "_"), cwd=location)
         fp = hashlib.sha256(json.dumps(before, sort_keys=True).encode()).hexdigest()
-        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True}
+        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_console_demo_passed": True}
 
 
 def main():
@@ -166,9 +170,10 @@ def main():
             assert not git(io_root, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt")
             assert git(io_root, "rev-parse", "HEAD") == IO_COMMIT, "Use fixed accepted I/O source"
             dependency_commit["equity-feature-io"] = IO_COMMIT
-            io_source = snapshot(io_root, dependency_commit["equity-feature-io"], stage / "io-source")
+            io_source = snapshot(io_root, dependency_commit["equity-feature-io"], stage / "io-source", ("packages", "examples/third_party"))
             for folder in ("io-contracts", "io-sdk"):
                 build(io_source / "packages" / folder, dependencies)
+            build(io_source / "examples" / "third_party", dependencies)
         packages = [tomllib.loads((p / "pyproject.toml").read_text(encoding="utf-8"))["project"]["name"] for p in sorted((component_source / "packages").iterdir())]
         first, repeat = stage / "first", stage / "repeat"
         for target in (first, repeat):
