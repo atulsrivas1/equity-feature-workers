@@ -1,3 +1,9 @@
+## EQ061 owner lifetime correction — October 7, 2026
+
+Author follow-up after the clean f6914cc/e6ad12a separate source review: installed CPython threading.get_ident documentation explicitly permits identifier reuse after thread exit. Publisher ownership now stores the actual creating Thread object, rather than a recyclable integer. A terminal-owner/foreign-successor regression accompanies the existing wrong-thread test. Local Windows two-thread probe did not reproduce numeric reuse; no such repro or reviewer finding is claimed. Source/version/math/schema scope remains unchanged otherwise.
+
+Issue69 Test -> In progress6047634097 for this routine correctness correction. Original f691 committed repeat/fresh wheel/sdist/physical suites passed before modification; these are historical candidate evidence, not changed-head qualification. Strict9 and renewed82 development tests pass; corrected final-head review/native/repeat/source artifacts remain required. Preserve first f691 dist, freeze and renew source gates before publication. No release/Done claim.
+
 # EQ061 qualification and delivery
 
 October7,2026. [EQ061#69](https://github.com/atulsrivas1/equity-features/issues/69), E08/R5, workerPR12/canonicalPR321. Pre-code plan and frozen two-member oracle published before runtime at workerefcaa91/canonicalded4c5d. Independent pure prerequisite A+0.2/B-0.2 source fixtures passed. Ready6047327725 -> In progress6047328308;13 provisional complexity points. EQ060 actually accepted6047302265.

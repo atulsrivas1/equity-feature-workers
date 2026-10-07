@@ -129,6 +129,16 @@ class Publication(unittest.TestCase):
             t=threading.Thread(target=foreign);t.start();t.join(5)
             self.assertEqual(errors,[SinkErrorCode.INVALID_SESSION])
             self.assertTrue(all(o.committed for o in publisher.drain()))
+            # A publisher cannot transfer to a successor after its creating thread exits.
+            holder={}
+            def create():holder['publisher']=SerialPublisher(sink,SCOPE,limits=PublicationLimits(),requirements=LIMITS)
+            creator=threading.Thread(target=create);creator.start();creator.join(5)
+            self.assertFalse(creator.is_alive())
+            def successor():
+                try:holder['publisher'].drain()
+                except SinkError as error:errors.append(error.code)
+            other=threading.Thread(target=successor);other.start();other.join(5)
+            self.assertFalse(other.is_alive());self.assertEqual(errors,[SinkErrorCode.INVALID_SESSION]*2)
 
     def test_same_root_parquet_distinct_partitions_still_contend(self):
         a,b=work()

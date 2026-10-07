@@ -1,3 +1,9 @@
+## EQ061 owner lifetime correction — October 7, 2026
+
+Author follow-up after the clean f6914cc/e6ad12a separate source review: installed CPython threading.get_ident documentation explicitly permits identifier reuse after thread exit. Publisher ownership now stores the actual creating Thread object, rather than a recyclable integer. A terminal-owner/foreign-successor regression accompanies the existing wrong-thread test. Local Windows two-thread probe did not reproduce numeric reuse; no such repro or reviewer finding is claimed. Source/version/math/schema scope remains unchanged otherwise.
+
+Issue69 Test -> In progress6047634097 for this routine correctness correction. Original f691 committed repeat/fresh wheel/sdist/physical suites passed before modification; these are historical candidate evidence, not changed-head qualification. Strict9 and renewed82 development tests pass; corrected final-head review/native/repeat/source artifacts remain required. Preserve first f691 dist, freeze and renew source gates before publication. No release/Done claim.
+
 ## EQ061 publisher/generation candidate — October 7, 2026
 
 EQ060 is actually Done acceptance6047302265. EQ061#69 is sole active story, workerPR12/canonicalPR321, pre-code workerefcaa91/canonicalded4c5d. Experimental worker0.1.0a6 implements bounded owner-thread serialized publication through accepted SDK/sinks and immutable private-stage/completion-last operational GenerationStore with actual expected-task/readback barriers. Full82 development tests and strict9 files pass, including20 new physical/operational methods on accepted Parquet0.1.0a1/PyArrow20.0.0 and DuckDBsink0.1.0a0/DuckDB1.5.6. No core/IO/math/task/result/receipt schema or mandatory worker dependency change. Initial cancellation write-signature/negative evidence fixture errors corrected without changing the frozen oracle; namespace access typing fixed before runtime tests.

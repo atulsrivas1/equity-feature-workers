@@ -68,7 +68,7 @@ class SerialPublisher:
             raise SinkError(SinkErrorCode.INVALID_CONFIG) from None
         self._sink, self._scope = sink, destination_scope
         self._limits, self._requirements = limits, requirements
-        self._owner = threading.get_ident()
+        self._owner = threading.current_thread()
         self._lock = threading.Lock()
         self._pending: dict[str, _Pending] = {}
 
@@ -139,7 +139,7 @@ class SerialPublisher:
 
     def drain(self, *, cancellation: Cancellation | None = None) -> tuple[PublicationProgress, ...]:
         """One bounded pass, retaining cancellation/faults; no hidden retry or scheduler."""
-        if threading.get_ident() != self._owner:
+        if threading.current_thread() is not self._owner:
             raise SinkError(SinkErrorCode.INVALID_SESSION)
         if not self._lock.acquire(blocking=False):
             raise SinkError(SinkErrorCode.BUSY)
