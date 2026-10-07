@@ -1,3 +1,7 @@
+## 0.1.0a4 — EQ059 candidate, unreleased
+
+Adds required raw daily/whole-bucket history/baseline/SMA-reference and supplied-witness relative commands, exact owned witnesses, canonical missing/optional states and caller-injected CLI/factory invocation. Reuses SDK acquisition/publication/readback. Source-independent core/IO/math/schema unchanged. See docs/REQUIRED_INPUT_COMMANDS.md and docs/EQ059_DELIVERY.md for qualification and limitations.
+
 # Changelog
 
 ## 0.1.0a3 — EQ058 experimental main delivered October 7, 2026
