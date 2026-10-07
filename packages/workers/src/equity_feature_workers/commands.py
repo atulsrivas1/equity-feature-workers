@@ -194,6 +194,53 @@ def _collect(request: AcquisitionRequest, max_input_bytes: int, source: Historic
     return CanonicalBatch(first.kind, columns, metadata), acquisition
 
 
+@dataclass(frozen=True)
+class PreparedSession:
+    """Observed sealed inputs; no sink or adapter handle is retained."""
+    task: TaskManifest
+    batch: CanonicalBatch | None
+
+
+def prepare_session(spec: SessionCommandSpec, source: HistoricalAdapter, *,
+                    cancellation: Cancellation | None = None) -> PreparedSession:
+    if type(spec) is not SessionCommandSpec:
+        _fail(CommandErrorCode.CONFIG)
+    token = cancellation if cancellation is not None else NeverCancelled()
+    try:
+        _cancel(token)
+        admit_source(source, spec.request)
+        batch, acquisition = _collect(spec.request, spec.max_input_bytes, source, token)
+    except CommandError:
+        raise
+    except Exception:
+        _fail(CommandErrorCode.SOURCE)
+    binding = InputBinding(spec.family, _KINDS[spec.family], batch.metadata) if batch is not None else None
+    coverage = batch.metadata.coverage if batch is not None else None
+    state = "missing" if coverage is None else "partial" if not coverage.complete else "empty" if coverage.observed == 0 else "complete"
+    return PreparedSession(spec.task((InputManifest(spec.family, acquisition, spec.revision_id, state, binding),)), batch)
+
+
+def compute_session_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) -> tuple[FeatureResult, ...]:
+    """Pure public calculation invocation on complete caller-owned inputs."""
+    if (type(task) is not TaskManifest or task.family not in _CALCULATORS or len(task.instruments) != 1
+            or type(batches) is not tuple or len(batches) > 1 or any(type(b) is not CanonicalBatch for b in batches)):
+        _fail(CommandErrorCode.CONFIG)
+    batch = batches[0] if batches else None
+    bindings = tuple(i.binding for i in task.inputs if i.binding is not None)
+    if batch is None and bindings or batch is not None and (len(bindings) != 1 or
+            (bindings[0].role, bindings[0].kind, bindings[0].metadata) != (task.family, batch.kind, batch.metadata)):
+        _fail(CommandErrorCode.RESULT)
+    if batch is not None:
+        _record_hash(asdict(batch), b"", task.max_input_bytes)
+    try:
+        result = _CALCULATORS[task.family](batch, task.config, entity=EntityKey(task.instruments[0], task.config.session.session_id))
+    except Exception:
+        _fail(CommandErrorCode.CALCULATION)
+    if descriptor(result).features != task.features:
+        _fail(CommandErrorCode.RESULT)
+    return (result,)
+
+
 def run_session(spec: SessionCommandSpec, source: HistoricalAdapter, sink: ResultSink, *,
                 requirements: SinkRequirements, cancellation: Cancellation | None = None) -> CommandOutcome:
     """Return success only after actual entity admission, commit and verified readback."""
@@ -208,26 +255,12 @@ def run_session(spec: SessionCommandSpec, source: HistoricalAdapter, sink: Resul
         raise
     except Exception:
         _fail(CommandErrorCode.CONFIG)
-    try:
-        batch, acquisition = _collect(spec.request, spec.max_input_bytes, source, token)
-    except CommandError:
-        raise
-    except Exception:
-        _fail(CommandErrorCode.SOURCE)
-    try:
-        _cancel(token)
-        binding = InputBinding(spec.family, _KINDS[spec.family], batch.metadata) if batch is not None else None
-        coverage = batch.metadata.coverage if batch is not None else None
-        state = "missing" if coverage is None else "partial" if not coverage.complete else "empty" if coverage.observed == 0 else "complete"
-        task = spec.task((InputManifest(spec.family, acquisition, spec.revision_id, state, binding),))
-        result = _CALCULATORS[spec.family](batch, spec.config, entity=spec.entity)
-    except CommandError:
-        raise
-    except Exception:
-        _fail(CommandErrorCode.CALCULATION)
-    if any(c.entities != (spec.entity,) for c in result.values) or descriptor(result).features != task.features:
+    prepared = prepare_session(spec, source, cancellation=token)
+    _cancel(token)
+    task = prepared.task
+    results = compute_session_inputs(task, (prepared.batch,) if prepared.batch is not None else ())
+    if any(c.entities != (spec.entity,) for c in results[0].values):
         _fail(CommandErrorCode.RESULT)
-    results = (result,)
     return _publish_verified(task, results, sink, requirements, token)
 
 

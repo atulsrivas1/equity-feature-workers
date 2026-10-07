@@ -1,0 +1,1069 @@
+{
+  "cache_state": "same bounded caller-owned canonical batches reused across mode samples; no backend I/O in timed execution",
+  "head": "4ce4f6364b52c9d5097ad97cd8c2d2cbf6936110",
+  "logical_cpu_count": 96,
+  "machine": "AMD64",
+  "memory_method": "logical preflight reservations and exact pickle/result codec bytes; RSS and child peak memory not measured here",
+  "repeats": 3,
+  "runtime": "3.12.10",
+  "samples": [
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        67665000,
+        67554400,
+        67230400
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        133118500,
+        133007900,
+        132683900
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 67554400,
+      "mode": "sequential",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1331292,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 1,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        75076100,
+        79234600,
+        80923000
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        140529600,
+        144688100,
+        146376500
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 79234600,
+      "mode": "thread",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1331292,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 1,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        82044700,
+        81583100,
+        75068100
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        147498200,
+        147036600,
+        140521600
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 81583100,
+      "mode": "thread",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1331292,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 2,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        78296600,
+        75018500,
+        78413900
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        143750100,
+        140472000,
+        143867400
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 78296600,
+      "mode": "thread",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1331292,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 4,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        76203500,
+        81050300,
+        80075400
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        141657000,
+        146503800,
+        145528900
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 80075400,
+      "mode": "thread",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1331292,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 8,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        673463900,
+        719719300,
+        717303600
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        738917400,
+        785172800,
+        782757100
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 717303600,
+      "mode": "process",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1338165,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 1,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        697974000,
+        748077000,
+        726778500
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        763427500,
+        813530500,
+        792232000
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 726778500,
+      "mode": "process",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1341080,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 2,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        815660300,
+        806443500,
+        795531400
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        881113800,
+        871897000,
+        860984900
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 806443500,
+      "mode": "process",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1346912,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 4,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 4,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        795431100,
+        807634900,
+        805913100
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        860884600,
+        873088400,
+        871366600
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "2ef5a1948aa68a0a413a9c011a62805c998c9bd0a503874974fc1537f0b94ba8",
+      "median_executor_ns": 805913100,
+      "mode": "process",
+      "pickle_bytes": 6775,
+      "pickle_roundtrip_ns": [
+        417900,
+        436200,
+        364400
+      ],
+      "preparation_and_acquisition_once_ns": 65453500,
+      "reserved_logical_resident_bytes": 1346912,
+      "result_codec_bytes": 37236,
+      "rows": 8,
+      "single_worker_parity": true,
+      "tasks": 4,
+      "workers": 8,
+      "workload": "small"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        711017600,
+        711213400,
+        710695300
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1364912400,
+        1365108200,
+        1364590100
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 711017600,
+      "mode": "sequential",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 8972532,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 1,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        729499600,
+        725659700,
+        719984100
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1383394400,
+        1379554500,
+        1373878900
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 725659700,
+      "mode": "thread",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 8972532,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 1,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        732239900,
+        745013900,
+        750320700
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1386134700,
+        1398908700,
+        1404215500
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 745013900,
+      "mode": "thread",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 8972532,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 2,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        766652200,
+        755302100,
+        765997900
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1420547000,
+        1409196900,
+        1419892700
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 765997900,
+      "mode": "thread",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 8972532,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 4,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        773110000,
+        771124800,
+        764817200
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1427004800,
+        1425019600,
+        1418712000
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 771124800,
+      "mode": "thread",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 8972532,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 8,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1467848900,
+        1443644400,
+        1396014000
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        2121743700,
+        2097539200,
+        2049908800
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 1443644400,
+      "mode": "process",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 9223898,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 1,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1275727000,
+        1290345800,
+        1317542300
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1929621800,
+        1944240600,
+        1971437100
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 1290345800,
+      "mode": "process",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 9226044,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 2,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1219583000,
+        1251631500,
+        1227019200
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1873477800,
+        1905526300,
+        1880914000
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 1227019200,
+      "mode": "process",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 9230336,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 4,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1341529700,
+        1328430400,
+        1333962700
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1995424500,
+        1982325200,
+        1987857500
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "c2e93aee7f4a0a41bae7f54c2fff3a511afa430337fb2d34131084a2ccecea14",
+      "median_executor_ns": 1333962700,
+      "mode": "process",
+      "pickle_bytes": 250764,
+      "pickle_roundtrip_ns": [
+        5946800,
+        6321300,
+        6492800
+      ],
+      "preparation_and_acquisition_once_ns": 653894800,
+      "reserved_logical_resident_bytes": 9238956,
+      "result_codec_bytes": 299680,
+      "rows": 8192,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 8,
+      "workload": "large"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        614404100,
+        608149700,
+        608921900
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1156903100,
+        1150648700,
+        1151420900
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 608921900,
+      "mode": "sequential",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8852386,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 1,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        611949400,
+        624957800,
+        622795900
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1154448400,
+        1167456800,
+        1165294900
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 622795900,
+      "mode": "thread",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8852386,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 1,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        624613400,
+        633394600,
+        627094400
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1167112400,
+        1175893600,
+        1169593400
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 627094400,
+      "mode": "thread",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8852386,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 2,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        633798500,
+        682927700,
+        640682200
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1176297500,
+        1225426700,
+        1183181200
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 640682200,
+      "mode": "thread",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8852386,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 4,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        647139100,
+        669269200,
+        672672800
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1189638100,
+        1211768200,
+        1215171800
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 669269200,
+      "mode": "thread",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8852386,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 8,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1241922800,
+        1290770400,
+        1334799300
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1784421800,
+        1833269400,
+        1877298300
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 1290770400,
+      "mode": "process",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8962748,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 1,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1311607700,
+        1305430800,
+        1312076500
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1854106700,
+        1847929800,
+        1854575500
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 1311607700,
+      "mode": "process",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8965565,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 2,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1192652600,
+        1196558600,
+        1206711900
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1735151600,
+        1739057600,
+        1749210900
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 1196558600,
+      "mode": "process",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8971219,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 4,
+      "workload": "skew"
+    },
+    {
+      "acquisitions": 32,
+      "actual_native_backend_compute_threads": 0,
+      "backend_thread_allowance": 1,
+      "compute_threads": 1,
+      "elapsed_executor_ns": [
+        1315449200,
+        1336733500,
+        1293050100
+      ],
+      "elapsed_with_one_preparation_estimate_ns": [
+        1857948200,
+        1879232500,
+        1835549100
+      ],
+      "independent_small_oracle": true,
+      "logical_result_sha256": "34d1aceff19f4caef7bbfe88b61b3938ddabfdcacc37a5bdbfefb95d117867b2",
+      "median_executor_ns": 1315449200,
+      "mode": "process",
+      "pickle_bytes": 109760,
+      "pickle_roundtrip_ns": [
+        4754400,
+        3997900,
+        3369500
+      ],
+      "preparation_and_acquisition_once_ns": 542499000,
+      "reserved_logical_resident_bytes": 8982527,
+      "result_codec_bytes": 298844,
+      "rows": 3040,
+      "single_worker_parity": true,
+      "tasks": 32,
+      "workers": 8,
+      "workload": "skew"
+    }
+  ],
+  "schema": "efworker-supervisor-comparison1",
+  "scope": "synthetic compute-mode microcomparison; acquisition preparation timed once, no sink/network/private pilot throughput claim",
+  "source_sha256": {
+    ".github/workflows/foundation.yml": "1d7d381ec51bcd4302bf7b2a3db6561e4f870f77fcee58b036dab241d74a95fd",
+    "packages/workers/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "packages/workers/README.md": "a0fe5db385802d82c3e3540efbc52878044e4d78a3e8d5f9eda7fabdec326b7f",
+    "packages/workers/pyproject.toml": "19f8517f00fbca310f1dd4c5cf4917906407b8783983bec69579d634d0abfb3d",
+    "packages/workers/src/equity_feature_workers/__init__.py": "dedb117a71366ba0a4d225024e9df08f45bd753165b396ddfc9654b41cc682b5",
+    "packages/workers/src/equity_feature_workers/barriers.py": "78960b523c6d0c1d3c261079cc0a5a94bac8c8bff5687069131c7acc5414ada6",
+    "packages/workers/src/equity_feature_workers/breadth_commands.py": "0b055f8e53e8de84574617583677c4c175a22dc9669ab12de1b2aabb785d9648",
+    "packages/workers/src/equity_feature_workers/cli.py": "ba71e82c33e3634338201ce223d51738341356b5bf5a303bfd1d2b1f3b943a58",
+    "packages/workers/src/equity_feature_workers/commands.py": "f38ac24009afbdada86103970365681bb22d5348dc89121fef0861dfd391c717",
+    "packages/workers/src/equity_feature_workers/generations.py": "d1ea63a0f4f4ea5979ed959cf043f5b7b8fa73edda900cd006b17ec879826294",
+    "packages/workers/src/equity_feature_workers/manifests.py": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+    "packages/workers/src/equity_feature_workers/publication.py": "75fcba30a14ab6cd6535697ea5b6f897e881639444a23939f0e781a3a2bbd4cd",
+    "packages/workers/src/equity_feature_workers/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "packages/workers/src/equity_feature_workers/required_inputs.py": "a7423f1ca2c619210a8fb5b462b436bec3825ec9532ddec1654cd96b2bac9116",
+    "packages/workers/src/equity_feature_workers/supervisor.py": "17d30eb6c36d35d50f7b60b7697fdce158db0e72356ab65cd930eb7ad6637dcc",
+    "requirements-dev.txt": "242087179fdf4c698b403edeaa77e344071bc6d3e059b16be0928f7ea466bc80",
+    "tests/barrier_fixture.py": "9dd77c2ec9469d0caf948e3a652a622d1ae8e05605cfb3d90d1bcf8c81f7e22b",
+    "tests/barrier_oracle.json": "e3dddf9b07b54280124eebe1ef5db97b6b851ab836534b71dcc898bfaf850a75",
+    "tests/make_manifest_oracle.py": "5fa02096255ad1244eba7251f1da3eaf4b614172fba91de420dcdc256b5f6d87",
+    "tests/manifest_example.py": "bf88eb1d618d5b1b876c01d59ce3a2abe8e6262a366aa464932bc5b7fb0349c7",
+    "tests/manifest_fixture.py": "1bceaf0c329b8f4e447a33ee16940c95c2671f6ce96468301820bd7d236de5d1",
+    "tests/manifest_golden.json": "8d4c28a152c1884b16137fde4064cf6434b73ede9331e568c8b0aabccb6cb232",
+    "tests/probe_foundation.py": "6136732b45a7cb5f912eb44f3404bc6f0c07f3cd1bd03a528bd7879e087251a4",
+    "tests/publication_fixture.py": "3ebdb52b3f523c5941b7a8f2af39cc30a3c7d69478f0b94f46c9f37680894255",
+    "tests/publication_oracle.json": "99a920394fb47c12a5d43f264b87ad7179ef7a192735752e858850114f5cde31",
+    "tests/required_fixture.py": "cf56a4760beda18de52491cc35000cbba94b03d34542b699fd86a345c55c00cd",
+    "tests/required_oracle.json": "565d94bd1ba5127a16acc7d9d07a7082d2308eb2888def98e0dce40340ff2b60",
+    "tests/supervisor_fixture.py": "efe8db41324cc7afc37d3abeba19de8ac9961131b123d29791bc28141cdc1610",
+    "tests/supervisor_oracle.json": "00d5e92ed5d7fd99e90fecc11d71b5dc78ace4c05f0920776f3db7d0c69338ba",
+    "tests/test_barriers.py": "74f46761a3d6d25d600f45093cf529ca4952f56be8dcb905262e7b63621a8ce6",
+    "tests/test_commands.py": "2e45f5654e3fc7f66ef38490e6f9a1c05a42676c46ec3a6f8a7c117fa02c5ac5",
+    "tests/test_manifests.py": "c03fa655ccea1cc0d94b40e80129851d25624831143b0d38cb338c7a5fcb951c",
+    "tests/test_provenance.py": "7565f51e70db63b79d6594b12f44b89f714fb7f758fcfee81e29c8aca2866d77",
+    "tests/test_publication.py": "bff765ce6fd85eb295a708a8911cbe0312e3553cfbce99841b8295e0ffcafb10",
+    "tests/test_required_inputs.py": "d33034bdef9d101a12ee6dde06231bf272b72d93c9f0bf85f6feb4a9e197faa5",
+    "tests/test_supervisor.py": "5f13914b5fd62395a5875815a3284735d4597183bbc8331f8823f31da6b2beaa",
+    "tools/benchmark_supervisor.py": "5d196a373d39389bc55cf0c5184bc210e178f0e9b60c6de7a56e09e48f94a2e9",
+    "tools/build_foundation.py": "3a07bcf5005cda571dc3ea7a3901b7d02cb72b1d6877b9db6f6b2ed93f583a12"
+  },
+  "startups": [
+    {
+      "first_task_and_pool_shutdown_ns": [
+        2900,
+        1700,
+        400
+      ],
+      "mode": "sequential",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 1
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        1663800,
+        609000,
+        512100
+      ],
+      "mode": "thread",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 1
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        424300,
+        391700,
+        532800
+      ],
+      "mode": "thread",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 2
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        409500,
+        588800,
+        416900
+      ],
+      "mode": "thread",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 4
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        564800,
+        509300,
+        537500
+      ],
+      "mode": "thread",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 8
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        704403500,
+        646036400,
+        593178500
+      ],
+      "mode": "process",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 1
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        635859600,
+        676424100,
+        595020300
+      ],
+      "mode": "process",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 2
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        642422800,
+        637406800,
+        636160900
+      ],
+      "mode": "process",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 4
+    },
+    {
+      "first_task_and_pool_shutdown_ns": [
+        642407300,
+        645137200,
+        596563100
+      ],
+      "mode": "process",
+      "note": "one ping; lazy pools need not start all configured workers here",
+      "workers": 8
+    }
+  ],
+  "system": "Windows",
+  "versions": {
+    "equity-feature-io-sdk": "0.1.0a2",
+    "equity-feature-workers": "0.1.0a7",
+    "equity-features": "0.0.4a4"
+  }
+}
