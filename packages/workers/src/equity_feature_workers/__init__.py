@@ -16,7 +16,8 @@ from .publication import PublicationLimits, PublicationProgress, SerialPublisher
 from .generations import GenerationSpec, GenerationOutcome, GenerationStore
 from .supervisor import (WorkItem, InputReuseCache, ResourceBudget, Partition, partition_tasks,
                          SpillReference, ResultSpill, TaskExecution, SupervisorOutcome, BoundedSupervisor)
-__version__ = "0.1.0a7"
+from .claims import ClaimLimits, ClaimProgress, ClaimStore, TaskClaim
+__version__ = "0.1.0a8"
 __all__ = ['__version__', 'ClaimIdentity', 'InputManifest', 'ManifestError', 'ManifestErrorCode',
            'OutputManifest', 'TaskManifest', 'decode_output', 'decode_task', 'encode_output', 'encode_task',
            'CommandError', 'CommandErrorCode', 'CommandOutcome', 'SessionCommandSpec', 'run_registered', 'run_session',
@@ -26,4 +27,4 @@ __all__ = ['__version__', 'ClaimIdentity', 'InputManifest', 'ManifestError', 'Ma
            'BreadthCommandSpec', 'BreadthOutcome', 'UniverseShard', 'run_breadth',
            'PublicationLimits', 'PublicationProgress', 'SerialPublisher', 'GenerationSpec', 'GenerationOutcome', 'GenerationStore',
            'PreparedSession', 'prepare_session', 'compute_session_inputs', 'WorkItem', 'InputReuseCache', 'ResourceBudget',
-           'Partition', 'partition_tasks', 'SpillReference', 'ResultSpill', 'TaskExecution', 'SupervisorOutcome', 'BoundedSupervisor']
+           'Partition', 'partition_tasks', 'SpillReference', 'ResultSpill', 'TaskExecution', 'SupervisorOutcome', 'BoundedSupervisor', 'ClaimLimits', 'ClaimProgress', 'ClaimStore', 'TaskClaim']
