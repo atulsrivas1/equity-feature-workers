@@ -1,0 +1,42 @@
+name: Typed foundation checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  foundation:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: component
+      - uses: actions/checkout@v4
+        with:
+          repository: atulsrivas1/equity-features
+          ref: 7a6db8c2317de1ee9dd9116e0897cbf6445e359e
+          path: core
+      - uses: actions/checkout@v4
+        with:
+          repository: atulsrivas1/equity-feature-io
+          ref: 241631d71b9232db998746ddfef72f192eaf7772
+          path: io
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-dev.txt
+        working-directory: component
+      - run: python -m unittest discover -s tests -p test_*.py
+        working-directory: component
+      - run: python tools/build_foundation.py --core-root ../core --io-root ../io
+        working-directory: component
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foundation-${{ github.sha }}-${{ matrix.os }}
+          path: component/dist/
+          retention-days: 30
+          if-no-files-found: error
