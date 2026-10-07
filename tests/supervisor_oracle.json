@@ -1,0 +1,1 @@
+{"instruments":["A","B","C","D"],"row_ledger":[["A",0],["A",1],["B",0],["B",1],["C",0],["C",1],["D",0],["D",1]],"distinct_rows":8,"per_instrument":{"session.bar.volume":500,"session.bar.notional":51200,"session.bar.close_weighted_price":102.6}}
