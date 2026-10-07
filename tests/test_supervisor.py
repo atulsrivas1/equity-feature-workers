@@ -3,6 +3,7 @@ from dataclasses import replace
 import hashlib
 import multiprocessing
 import os
+import pickle
 from pathlib import Path
 import tempfile
 import threading
@@ -329,6 +330,60 @@ class Supervisor(unittest.TestCase):
             self.assertEqual(out.tasks[0].reason,'UNAVAILABLE');self.assertIsNotNone(out.tasks[0].results)
             spill.close(remove=True)
             self.assertEqual(foreign.read_bytes(),b'preserve unrelated collision')
+
+    def test_spill_empty_directory_collision_preserved_after_failed_creation(self):
+        with tempfile.TemporaryDirectory() as root:
+            spill=ResultSpill(Path(root)/'spill')
+            spill.directory.mkdir(parents=True)
+            out=BoundedSupervisor().run((work()[0],),spill=spill)
+            self.assertEqual(out.tasks[0].reason,'UNAVAILABLE')
+            self.assertIsNotNone(out.tasks[0].results)
+            self.assertFalse(spill._created);self.assertEqual(spill._owned,{})
+            spill.close(remove=True)
+            self.assertTrue(spill.directory.is_dir())
+            self.assertEqual(list(spill.directory.iterdir()),[])
+
+    def test_terminal_foreign_publisher_owner_rejected_before_calculation(self):
+        with tempfile.TemporaryDirectory() as root,sink_for('parquet',Path(root)) as sink:
+            holders=[]
+            def create():
+                holders.append(SerialPublisher(sink,'synthetic-conformance',limits=PublicationLimits(),requirements=LIMITS))
+            owner=threading.Thread(target=create);owner.start();owner.join()
+            publisher=holders[0]
+            self.rejected(SinkErrorCode.INVALID_SESSION,
+                lambda:BoundedSupervisor().run((work(calculator=counted)[0],),publisher=publisher))
+            self.assertEqual(CALLS,[]);self.assertEqual(publisher.pending,())
+
+    def test_process_transport_task_metadata_admitted_before_callbacks(self):
+        item,_=work(calculator=counted)
+        self.rejected(SinkErrorCode.RESOURCE_LIMIT,
+            lambda:BoundedSupervisor(mode='process',budget=budget(max_task_transport_bytes=1)).run((item,)))
+        self.assertEqual(CALLS,[])
+
+    def test_process_known_copy_reservations_and_resident_boundary(self):
+        items=all_work();limits=budget()
+        seq=BoundedSupervisor(budget=limits).run(items)
+        out=BoundedSupervisor(mode='process',budget=limits).run(items)
+        partitions=partition_tasks(items,1)
+        additional=2*len(pickle.dumps(partitions[0],protocol=5))
+        additional+=2*(len(items)*limits.max_task_transport_bytes+len(pickle.dumps((None,)*len(items),protocol=5)))
+        self.assertEqual(out.reserved_resident_bytes-seq.reserved_resident_bytes,additional)
+        counted_items=all_work(counted)
+        counted_bound=BoundedSupervisor(mode='process',budget=limits).run(counted_items).reserved_resident_bytes
+        self.rejected(SinkErrorCode.RESOURCE_LIMIT,lambda:BoundedSupervisor(mode='process',
+            budget=budget(max_resident_bytes=counted_bound-1)).run(counted_items))
+        self.assertEqual(CALLS,[])
+
+    def test_process_result_transport_bound_enforced_in_child(self):
+        from equity_feature_workers.supervisor import TaskExecution
+        from equity_feature_workers.commands import CommandErrorCode
+        item,_=work()
+        empty=max(len(pickle.dumps(TaskExecution(item.task,None,None,None,r),protocol=5))
+                  for r in tuple(code.value for code in SinkErrorCode)+tuple(code.value for code in CommandErrorCode))
+        results=compute_session_inputs(item.task,item.batches)
+        self.assertGreater(len(pickle.dumps(TaskExecution(item.task,results,None,None,None),protocol=5)),empty)
+        out=BoundedSupervisor(mode='process',budget=budget(max_task_transport_bytes=empty)).run((item,))
+        self.assertEqual(out.tasks[0].reason,'RESOURCE_LIMIT');self.assertIsNone(out.tasks[0].results)
 
     def test_physical_publisher_both_sinks_owner_and_exact_wire(self):
         items=all_work()

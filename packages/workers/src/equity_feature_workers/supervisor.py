@@ -17,7 +17,7 @@ from equity_feature_contracts import CanonicalBatch, FeatureResult
 from equity_feature_io_contracts import SinkError, SinkErrorCode, SinkRequirements
 from equity_feature_io_sdk import Cancellation, decode_result, encode_result, prepare_publication
 from .barriers import _admit_entities
-from .commands import CommandError, NeverCancelled, _cancel, compute_session_inputs
+from .commands import CommandError, CommandErrorCode, NeverCancelled, _cancel, compute_session_inputs
 from .manifests import OutputManifest, TaskManifest, decode_task, encode_output, encode_task, integer
 from .publication import SerialPublisher
 
@@ -121,6 +121,7 @@ class ResourceBudget:
     max_input_bytes: int = 16777216
     max_resident_bytes: int = 67108864
     max_task_result_bytes: int = 262144
+    max_task_transport_bytes: int = 1048576
     max_total_result_bytes: int = 16777216
     max_result_cells: int = 100000
     max_evidence_rows: int = 10000
@@ -310,7 +311,7 @@ class ResultSpill:
         if type(remove) is not bool:
             _fail(SinkErrorCode.INVALID_CONFIG)
         try:
-            if remove and self.directory.exists():
+            if remove and self._created and self.directory.exists():
                 # No recursive delete; preserve unexpected/unrelated entries.
                 for name in self._owned:
                     path = self.directory / name
@@ -353,13 +354,16 @@ def _reason(error: Exception) -> str:
     return 'CALCULATION_FAILED'
 
 
-def _compute_partition(partition: Partition, budget: ResourceBudget) -> tuple[TaskExecution, ...]:
+def _compute_partition(partition: Partition, budget: ResourceBudget, process_transport: bool = False) -> tuple[TaskExecution, ...]:
     outcomes = []
     for item in partition.items:
         try:
             results = item.calculate(item.task, item.batches)
             _validate_results(item.task, results, budget)
-            outcomes.append(TaskExecution(item.task, results, None, None, None))
+            execution = TaskExecution(item.task, results, None, None, None)
+            if process_transport and _size(execution) > budget.max_task_transport_bytes:
+                _fail(SinkErrorCode.RESOURCE_LIMIT)
+            outcomes.append(execution)
         except Exception as error:
             outcomes.append(TaskExecution(item.task, None, None, None, _reason(error)))
     return tuple(outcomes)
@@ -386,6 +390,8 @@ class BoundedSupervisor:
         if spill is not None and type(spill) is not ResultSpill or publisher is not None and type(publisher) is not SerialPublisher:
             _fail(SinkErrorCode.INVALID_CONFIG)
         budget = self.budget
+        if publisher is not None:
+            publisher.admit_owner()
         reused_inputs: dict[str, tuple[CanonicalBatch, ...]] = {}
         for item in items:
             key = item.task.reuse_sha256
@@ -403,7 +409,17 @@ class BoundedSupervisor:
         if input_bytes > budget.max_input_bytes or result_reservation > budget.max_total_result_bytes:
             _fail(SinkErrorCode.RESOURCE_LIMIT)
         # Pool results return a whole coarse shard, so reserve every shard's full result population.
-        copies = sum(sorted((_size(p) for p in partitions), reverse=True)[:budget.max_in_flight]) if self.mode == 'process' else 0
+        copies = 0
+        if self.mode == 'process':
+            # Failure records also cross IPC; reject oversized task metadata before callbacks.
+            if any(max(_size(TaskExecution(i.task, None, None, None, reason))
+                       for reason in tuple(code.value for code in SinkErrorCode) + tuple(code.value for code in CommandErrorCode))
+                   > budget.max_task_transport_bytes for i in items):
+                _fail(SinkErrorCode.RESOURCE_LIMIT)
+            # Serialized + child-owned inputs; all-shard child/IPC/returned metadata.
+            # Per-record transport bounds are enforced before child results are returned.
+            copies = 2 * sum(sorted((_size(p) for p in partitions), reverse=True)[:budget.max_in_flight])
+            copies += 2 * (len(items) * budget.max_task_transport_bytes + _size((None,) * len(items)))
         pending = publisher.limits.max_pending_bytes if publisher is not None else 0
         resident = input_bytes + copies + result_reservation + pending + budget.max_task_result_bytes + max(len(encode_task(i.task)) for i in items)
         if resident > budget.max_resident_bytes:
@@ -443,7 +459,7 @@ class BoundedSupervisor:
                             partition = next(iterator, None)
                             if partition is None:
                                 exhausted = True; break
-                            futures[pool.submit(_compute_partition, partition, budget)] = partition
+                            futures[pool.submit(_compute_partition, partition, budget, self.mode == 'process')] = partition
                         if cancelled:
                             exhausted = True
                             for future in futures:

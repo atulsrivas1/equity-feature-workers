@@ -80,6 +80,11 @@ class SerialPublisher:
     def destination_scope(self) -> str:
         return self._scope
 
+    def admit_owner(self) -> None:
+        """Check coordinator ownership without calculation, queue mutation or I/O."""
+        if threading.current_thread() is not self._owner:
+            raise SinkError(SinkErrorCode.INVALID_SESSION)
+
     def _bounds(self, count: int | None = None, size: int | None = None) -> BarrierLimits:
         return BarrierLimits(self._limits.max_pending_tasks if count is None else count,
                              self._limits.max_pending_bytes if size is None else size)
@@ -147,8 +152,7 @@ class SerialPublisher:
 
     def drain(self, *, cancellation: Cancellation | None = None) -> tuple[PublicationProgress, ...]:
         """One bounded pass, retaining cancellation/faults; no hidden retry or scheduler."""
-        if threading.current_thread() is not self._owner:
-            raise SinkError(SinkErrorCode.INVALID_SESSION)
+        self.admit_owner()
         if not self._lock.acquire(blocking=False):
             raise SinkError(SinkErrorCode.BUSY)
         token = cancellation if cancellation is not None else NeverCancelled()
