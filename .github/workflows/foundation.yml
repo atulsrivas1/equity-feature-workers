@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-feature-io
-          ref: 241631d71b9232db998746ddfef72f192eaf7772
+          ref: 395beba80b3bcb2e9db344c6a9d2bcab085be1a6
           path: io
       - uses: actions/setup-python@v5
         with:

@@ -7,7 +7,7 @@ import sys
 
 class Deny(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
-        if fullname.startswith(('equity_feature_io', 'equity_feature_workers', 'equity_feature_duckdb')) or fullname.split('.')[0] in {'duckdb','pyarrow','numpy','requests','httpx'}:
+        if fullname.startswith(('equity_feature_io', 'equity_feature_workers', 'equity_feature_duckdb', 'equity_feature_parquet', 'equity_feature_example_extensions', 'equity_feature_factory_fixture')) or fullname.split('.')[0] in {'duckdb','pyarrow','numpy','pandas','requests','httpx'}:
             raise AssertionError('Core imported forbidden dependency: ' + fullname)
 
 def core_check():
@@ -31,12 +31,16 @@ def core_check():
     finally: sys.meta_path.remove(deny)
 
 core_check()
-expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a0'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a0']}
+expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a2'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a2']}
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == '0.1.0a0'
-    assert module.__all__ == ['__version__']
+    assert module.__version__ == ('0.1.0a1' if name=='equity-feature-workers' else '0.1.0a2')
+    if name=='equity-feature-workers':
+        assert module.__all__ == ['__version__']
+    else:
+        assert {'ResultSink','SinkRequirements'} <= set(module.__all__) if name=='equity-feature-io-contracts' else {'publish','prepare_publication','SourceRegistry','SinkRegistry'} <= set(module.__all__)
+        assert all(hasattr(module, item) for item in module.__all__)
     assert 'site-packages' in Path(module.__file__).resolve().parts
     assert sorted(distribution(name).requires or []) == sorted(expected[name])
     assert not distribution(name).entry_points

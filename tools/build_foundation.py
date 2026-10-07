@@ -18,10 +18,12 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 EPOCH = 1700000000
 CORE_COMMIT = "7a6db8c2317de1ee9dd9116e0897cbf6445e359e"
+IO_COMMIT = "395beba80b3bcb2e9db344c6a9d2bcab085be1a6"
+SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
 EXPECTED = {
     "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],
-    "equity-feature-io-sdk": ["equity-feature-io-contracts==0.1.0a0"],
-    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a0"],
+    "equity-feature-io-sdk": ["equity-feature-io-contracts==0.1.0a2"],
+    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2"],
 }
 
 
@@ -34,7 +36,7 @@ def sha(path):
 
 
 def git(root, *args):
-    return subprocess.check_output(["git", *args], cwd=root, text=True).strip()
+    return subprocess.check_output(["git", *args], cwd=root, text=True, encoding="utf-8").strip()
 
 
 def snapshot(repository, commit, destination, paths=("packages",)):
@@ -113,7 +115,7 @@ for name in ('equity-feature-contracts','equity-features'):
             result[str(relative)]=hashlib.sha256(path.read_bytes()).hexdigest()
 print(json.dumps(result,sort_keys=True))
 """
-    return json.loads(subprocess.check_output([str(py), "-I", "-c", code], cwd=cwd, text=True))
+    return json.loads(subprocess.check_output([str(py), "-I", "-c", code], cwd=cwd, text=True, encoding="utf-8"))
 
 
 def qualify(dependencies, artifacts, form, packages, probe):
@@ -141,11 +143,12 @@ def qualify(dependencies, artifacts, form, packages, probe):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--core-root", required=True, type=Path)
-    parser.add_argument("--io-root", type=Path)
+    parser.add_argument("--io-root", required=True, type=Path)
     args = parser.parse_args()
     core = args.core_root.resolve()
     assert git(core, "rev-parse", CORE_COMMIT) == CORE_COMMIT
-    assert not git(ROOT, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt"), "Freeze source before qualification"
+    assert not git(ROOT, "status", "--porcelain", "--", *SCOPED), "Freeze source before qualification"
+    tracked = {p: sha(ROOT / p) for p in git(ROOT, "ls-files", *SCOPED).splitlines()}
     output = ROOT / "dist"
     output.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="build-", dir=ROOT / "work") as temp:
@@ -153,14 +156,15 @@ def main():
         dependencies = stage / "dependencies"
         core_source = snapshot(core, CORE_COMMIT, stage / "core-source", ("packages/contracts", "packages/features"))
         component_commit = git(ROOT, "rev-parse", "HEAD")
-        component_source = snapshot(ROOT, component_commit, stage / "component-source")
+        component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages", "tests"))
         for folder in ("contracts", "features"):
             build(core_source / "packages" / folder, dependencies)
         dependency_commit = {"equity-features": CORE_COMMIT}
         if args.io_root:
             io_root = args.io_root.resolve()
             assert not git(io_root, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt")
-            dependency_commit["equity-feature-io"] = git(io_root, "rev-parse", "HEAD")
+            assert git(io_root, "rev-parse", "HEAD") == IO_COMMIT, "Use fixed accepted I/O source"
+            dependency_commit["equity-feature-io"] = IO_COMMIT
             io_source = snapshot(io_root, dependency_commit["equity-feature-io"], stage / "io-source")
             for folder in ("io-contracts", "io-sdk"):
                 build(io_source / "packages" / folder, dependencies)
@@ -179,12 +183,17 @@ def main():
         reports = []
         for form in ("wheel", "sdist"):
             selected = [p for p in artifacts if (p.suffix == ".whl") == (form == "wheel")]
-            reports.append(qualify(deps, selected, form, packages, ROOT / "tests/probe_foundation.py"))
+            reports.append(qualify(deps, selected, form, packages, component_source / "tests/probe_foundation.py"))
+        assert git(ROOT, "rev-parse", "HEAD") == component_commit
+        assert not git(ROOT, "status", "--porcelain", "--", *SCOPED)
+        assert all(sha(ROOT / p) == digest for p, digest in tracked.items())
+        assert git(io_root, "rev-parse", "HEAD") == IO_COMMIT
+        assert not git(io_root, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt")
         import shutil
         assert not list(output.glob("*.whl")) and not list(output.glob("*.tar.gz")), "Use a fresh dist directory"
         for path in artifacts + deps:
             shutil.copy2(path, output / path.name)
-        record = {"schema": "foundation1", "commit": git(ROOT, "rev-parse", "HEAD"), "epoch": EPOCH, "python": platform.python_version(), "system": platform.system(), "machine": platform.machine(), "dependency_commits": dependency_commit, "artifacts": {p.name: sha(p) for p in artifacts}, "dependency_artifacts": {p.name: sha(p) for p in deps}, "probe_sha256": sha(ROOT / "tests/probe_foundation.py"), "builder_sha256": sha(Path(__file__)), "forms": reports}
+        record = {"schema": "foundation1", "commit": component_commit, "source_sha256": tracked, "epoch": EPOCH, "python": platform.python_version(), "system": platform.system(), "machine": platform.machine(), "dependency_commits": dependency_commit, "artifacts": {p.name: sha(p) for p in artifacts}, "dependency_artifacts": {p.name: sha(p) for p in deps}, "probe_sha256": sha(component_source / "tests/probe_foundation.py"), "builder_sha256": sha(Path(__file__)), "forms": reports}
         (output / "manifest.json").write_text(json.dumps(record, sort_keys=True, indent=2) + "\n", encoding="utf-8")
     print("Actual repeat artifacts, both fresh forms, inward graph and independent goldens PASS")
 
