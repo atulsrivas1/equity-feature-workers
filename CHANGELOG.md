@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0a3 — EQ058 candidate, unreleased
+## 0.1.0a3 — EQ058 experimental main delivered October 7, 2026
 
 Bounded single-entity bars/trades/event-weighted quote commands, explicit direct/factory/CLI composition, observed task sealing, actual entity/header admission and existing SDK verified publication/readback. Input budgets and cancellation do not preempt trusted callbacks. No core/math/IO changes. See docs/EQ058_DELIVERY.md for current evidence and remaining gates.
 
