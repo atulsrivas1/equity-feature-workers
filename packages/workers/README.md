@@ -1,3 +1,7 @@
+## EQ063 current development - worker0.1.0a8
+
+Local task claims retain OS ownership through publication, bound durable attempts and cancellation, and verify actual sink receipts before restart retry. [Claim API](https://github.com/atulsrivas1/equity-feature-workers/blob/codex/eq063-claims/docs/CLAIMS.md) and pre-code contract document exact timing/quota/fault limits. Numerical formulas/core/I/O schemas and mandatory dependencies unchanged. Source/installed/native/review/release qualification pending. Earlier snapshots below preserve historical evidence.
+
 ## EQ062 current corrected supervisor candidate - October 7, 2026
 
 Experimental worker0.1.0a7 provides bounded sequential/thread/spawn-process whole-task execution, exact caller-owned input reuse, isolated existing-codec result spill and coordinator-owned publication. All117 development tests/strict10 pass, including35 supervisor methods. Corrected source0f73fbc passes27 configurations/81 samples with independent numerical/result/row parity; sequential1 has the lowest median for prepared small/large/skew synthetic bars. This is compute-mode evidence, not physical end-to-end/RSS/private admission. Both reviewer P2 ownership defects are fixed; process bounds separately reserve child, IPC and returned parent records.
