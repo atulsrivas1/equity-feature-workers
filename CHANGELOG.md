@@ -1,3 +1,7 @@
+## 0.1.0a6 — EQ061 candidate, unreleased
+
+Adds bounded owner-thread serialized publication and immutable completion-last local operational generations. Real Parquet/DuckDB ownership remains in accepted sinks; live lookup/readback gates every completion and uncertain retry. Core/IO/math/task/result/receipt codecs and mandatory runtime dependencies unchanged. See docs/PUBLICATION_GENERATIONS.md and docs/EQ061_DELIVERY.md for qualification and limits.
+
 ## 0.1.0a5 — EQ060 experimental main delivered October 7, 2026
 
 Adds bounded declared dependency readiness, actual committed receipt/readback barriers, owned FeatureBundle assembly and complete declared-universe direction/above-SMA commands. Optional absence is explicit; dependency faults remain scoped. Reuses canonical exact proofs, SDK publication and codecs. No core/IO/math/schema changes. See docs/BARRIERS.md and docs/EQ060_DELIVERY.md for evidence and pending gates.
