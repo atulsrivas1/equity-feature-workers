@@ -1,3 +1,19 @@
+## EQ060 corrected source qualification — October 7, 2026
+
+Corrected worker source02fb4f9509f6c7f63b73950dfff78ff362c0ca94, push37688221136, has successful current Windows/Linux native qualification. [Source receipt](EQ060_SOURCE_RECEIPT.json) UTF8LF SHA885c8ff034b393e304b5ee9fa9b4150a4451f92a25e597027e5b94cda8887f5f binds2server ZIPs,14archive files/all16files (including repeated platform dependency wheels), source/probe/builder/form reports, fixed dependency commits, actual runtime, Atul author/committer and finite expiry. Windows Python3.12.10 expiry2026-11-06T21:18:35Z; Linux Python3.12.15 expiry2026-11-06T21:17:35Z. Four fresh installed wheel/sdist forms each pass20barrier/16required-input/14session-command/11manifest methods, console/publicAPI/strict7/core fingerprints and independent500/51200/102.6 goldens. Development62 methods pass. Clean committed local repeat/fresh forms pass with full source/archive equality to actual Windows CI. Earlier2479 localbuild failed final dirtyguard during P2 rework and is not qualification evidence.
+
+Separate corrected source review by /root/r5_review [worker6047037333](https://github.com/atulsrivas1/equity-feature-workers/pull/10#issuecomment-6047037333) and [canonical6047037609](https://github.com/atulsrivas1/equity-features/pull/319#issuecomment-6047037609) independently passed62tests/strict7, original oversized-live-receipt case, shared quota and graph reservation. P2 resolved, no unresolved source finding. Artifact review is recorded separately when completed. These are local automated reviews, not human/hosted approval. Pure core/IO/math/schema unchanged; exact proofs remain caller-owned, no physical/private/hardRSS/performance claim.
+
+Source-qualified metadata needs separate final-head review/current checks before Ready to release. Actual-main artifacts, published full-tree/source/receipt readback and same-story acceptance remain pending. EQ061 stays Backlog until EQ060 acceptance; complete bounded R5 then stop before R6.
+
+## EQ060 barrier candidate — October 7, 2026
+
+EQ059 is accepted Closed/Project Done. EQ060#68 is the sole active story, workerPR10/canonicalPR319. Experimental worker0.1.0a5 implements declared dependency readiness, caller-owned feature assembly and declared-universe breadth publication. Actual SDK lookup, committed receipt verification and logical readback establish completion; declared missing dependencies leave unrelated roots runnable. Required universe/shard coverage is exact; optional absence follows an explicit policy. Mathematical eligibility and owned exact witnesses remain canonical.
+
+Development62 tests and strict typing of7 source files pass, including20 barrier methods, pre-code independent universe goldens and near2^53 exact comparison. Source/core/IO/math/schema unchanged. Committed repeat/native installed-form qualification, separate final-head review and actual-main delivery/readback remain pending. Earlier candidate/pending snapshots below are historical. EQ061 remains Backlog until EQ060 acceptance; complete bounded R5 then stop before R6.
+
+[Barrier API, policies, example and limits](BARRIERS.md); [qualification and delivery](EQ060_DELIVERY.md).
+
 ## EQ059 actual experimental delivery — October 7, 2026
 
 Worker0.1.0a4 delivered at actualmainec1d0c36f5f0efae330bc2f72ad19956276e8627, successfulpush37682081506. Canonical source-receipt actualmain92ea7895e47ec0cacf13fc507ae4870f092e73aa passed docs37682101891 and native37682101892. Published full trees equal reviewed finalheads2dcb009/9974212. Canonical initial documentationPR308 was externally merged byatulsrivas1 intoe9b0526 at20:19:04UTC; published tree equals reviewed0017f10/all3actualmain checks passed. PR310 carried the actualsource receipt on that published baseline; guarded workerPR8/canonicalPR310 merges followed final4worker/6canonical check successes and separate source/artifact/metadata reviews.

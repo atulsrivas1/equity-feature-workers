@@ -1,0 +1,9 @@
+{
+  "source": "synthetic three-member complete declared universe on governed S1/S2/S3; USD scale0",
+  "closes": {"A": [100, 110, 120], "B": [100, 90, 80], "C": [100, 100, 100]},
+  "period": 2,
+  "returns": {"A": 0.2, "B": -0.2, "C": 0.0},
+  "sma_operands": {"A": [230, 2], "B": [170, 2], "C": [200, 2]},
+  "direction_counts": {"expected": 3, "eligible": 3, "advancing": 1, "declining": 1, "unchanged": 1},
+  "above_sma_fraction": {"expected": 3, "eligible": 3, "above": 1, "numerator": 1, "denominator": 3}
+}

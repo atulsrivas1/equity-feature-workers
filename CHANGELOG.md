@@ -1,3 +1,7 @@
+## 0.1.0a5 — EQ060 candidate, unreleased
+
+Adds bounded declared dependency readiness, actual committed receipt/readback barriers, owned FeatureBundle assembly and complete declared-universe direction/above-SMA commands. Optional absence is explicit; dependency faults remain scoped. Reuses canonical exact proofs, SDK publication and codecs. No core/IO/math/schema changes. See docs/BARRIERS.md and docs/EQ060_DELIVERY.md for evidence and pending gates.
+
 ## 0.1.0a4 — EQ059 experimental main delivered October 7, 2026
 
 Adds required raw daily/whole-bucket history/baseline/SMA-reference and supplied-witness relative commands, exact owned witnesses, canonical missing/optional states and caller-injected CLI/factory invocation. Reuses SDK acquisition/publication/readback. Source-independent core/IO/math/schema unchanged. See docs/REQUIRED_INPUT_COMMANDS.md and docs/EQ059_DELIVERY.md for qualification and limitations.
