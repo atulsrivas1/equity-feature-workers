@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from contextlib import nullcontext
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass, replace
 from enum import StrEnum
 import hashlib
@@ -11,7 +12,7 @@ from typing import Callable, NoReturn
 from equity_feature_contracts import CanonicalBatch, Column, ConfigSpec, DataKind, EntityKey, FeatureResult, InputBinding
 from equity_feature_contracts.adapters import AcquisitionRequest, AdapterBatch, HistoricalAdapter, validate_delivery
 from equity_feature_contracts.specs import IntervalSpec
-from equity_feature_io_contracts import CredentialProvider, FeatureHeader, PublicConfig, PublicationEnvelope, ResultSink, SinkRequirements
+from equity_feature_io_contracts import ConfigValue, CredentialProvider, FeatureHeader, PublicConfig, PublicationEnvelope, ResultSink, SinkRequirements
 from equity_feature_io_sdk import (
     Cancellation, SinkRegistry, SourceRegistry, admit_sink, admit_source, descriptor,
     encode_result, prepare_publication, publish, verify_content, verify_receipt,
@@ -125,6 +126,19 @@ def _record_hash(value: object, prefix: bytes, budget: int) -> tuple[str, int]:
             _fail(CommandErrorCode.LIMIT)
         hasher.update(fragment.encode("ascii"))
     return hasher.hexdigest(), count
+
+
+def _copy_public_config(config: PublicConfig) -> dict[str, ConfigValue]:
+    """Copy caller mappings once; the existing registry still owns validation."""
+    if not isinstance(config, Mapping):
+        _fail(CommandErrorCode.CONFIG)
+    copied: dict[str, ConfigValue] = {}
+    for key, value in config.items():
+        if (type(key) is not str or key in copied
+                or type(value) not in (str, int, float, bool, type(None))):
+            _fail(CommandErrorCode.CONFIG)
+        copied[key] = value
+    return copied
 
 
 def _delivery_record(delivery: AdapterBatch, *, content: bool = False) -> dict[str, object]:
@@ -347,11 +361,19 @@ def run_registered(spec: SessionCommandSpec, *, sources: SourceRegistry[Historic
         if type(progress) is not ProgressRecorder or type(spec) is not SessionCommandSpec or _observation is not None:
             _fail(CommandErrorCode.CONFIG)
         progress._own()
-        intent, _ = _record_hash({'spec': asdict(spec), 'source_id': source_id, 'source_config': dict(source_config),
-            'sink_id': sink_id, 'sink_config': dict(sink_config)}, b'efworker-registered-intent1\0', 16777216)
+        if type(source_id) is not str or type(sink_id) is not str:
+            _fail(CommandErrorCode.CONFIG)
+        admission = {'spec': asdict(spec), 'source_id': source_id, 'sink_id': sink_id}
+        intent, _ = _record_hash(admission, b'efworker-registered-admission1\0', 16777216)
         with progress.attempt(intent, spec.family, spec.partition_id, spans=5) as observation:
+            try:
+                source_copy, sink_copy = _copy_public_config(source_config), _copy_public_config(sink_config)
+                observation.intent, _ = _record_hash(admission | {'source_config': source_copy,
+                    'sink_config': sink_copy}, b'efworker-registered-intent1\0', 16777216)
+            except Exception:
+                _fail(CommandErrorCode.CONFIG)
             return run_registered(spec, sources=sources, sinks=sinks, source_id=source_id,
-                source_config=source_config, sink_id=sink_id, sink_config=sink_config,
+                source_config=source_copy, sink_id=sink_id, sink_config=sink_copy,
                 credentials=credentials, requirements=requirements, cancellation=cancellation, _observation=observation)
     try:
         token = cancellation if cancellation is not None else NeverCancelled()

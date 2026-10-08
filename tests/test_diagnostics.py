@@ -1,5 +1,6 @@
 """Frozen literal arithmetic, bounded reporting and real end-to-end faults."""
 from dataclasses import FrozenInstanceError, replace
+from collections.abc import Mapping
 import json
 import os
 import pickle
@@ -652,5 +653,66 @@ class Diagnostics(unittest.TestCase):
                 self.assertGreater(recorder.reserved_bytes, prior)
                 self.assertEqual(recorder.snapshot().tasks[-1].reason, 'RESOURCE_LIMIT')
 
+
+    def test_registered_config_faults_are_redacted_unsealed_and_before_factories(self):
+        class Broken(Mapping):
+            def __iter__(self): raise ValueError('secret private config path')
+            def __len__(self): return 1
+            def __getitem__(self, key): return 'unused'
+        spec, _, _ = inputs()
+        sources, sinks = SourceRegistry(), SinkRegistry()
+        for field in ('source_config', 'sink_config'):
+            for bad in (Broken(), None, {'namespace': object()}, {'namespace': float('nan')}):
+                recorder = ProgressRecorder()
+                kwargs = dict(sources=sources, sinks=sinks, source_id='custom.source', source_config={'namespace': 'demo'},
+                    sink_id='custom.sink', sink_config={'destination_scope': 'synthetic-conformance'},
+                    credentials=NoCredentials(), requirements=LIMITS, progress=recorder)
+                kwargs[field] = bad
+                with patch.object(sources, 'resolve') as source, patch.object(sinks, 'resolve') as sink:
+                    with self.assertRaises(CommandError) as caught: run_registered(spec, **kwargs)
+                    source.assert_not_called(); sink.assert_not_called()
+                self.assertEqual(caught.exception.code.value, 'INVALID_COMMAND')
+                self.assertNotIn('secret', str(caught.exception))
+                row = recorder.snapshot().tasks[0]
+                self.assertEqual((row.status, row.reason, row.task_sha256), (D.FAILED, 'INVALID_COMMAND', None))
+                self.assertNotIn(b'secret', recorder.snapshot().encode())
+
+    def test_registered_mapping_admission_reentry_and_stable_single_copy(self):
+        spec, _, _ = inputs()
+        sources, sinks = SourceRegistry(), SinkRegistry()
+        sources.register('custom.source', SourceFactory()); sinks.register('custom.sink', SinkFactory())
+        recorder = ProgressRecorder(); visits = []
+        kwargs = dict(sources=sources, sinks=sinks, source_id='custom.source', source_config={'namespace': 'demo'},
+            sink_id='custom.sink', sink_config={'destination_scope': 'synthetic-conformance'},
+            credentials=NoCredentials(), requirements=LIMITS, progress=recorder)
+        case = self
+        class Config(Mapping):
+            def __init__(self, values): self.values = values
+            def __len__(self): return len(self.values)
+            def __getitem__(self, key): return self.values[key]
+            def __iter__(self):
+                visits.append(tuple(self.values))
+                with case.assertRaises(SinkError) as caught: run_registered(spec, **kwargs)
+                case.assertEqual(caught.exception.code, SinkErrorCode.INVALID_SESSION)
+                if len(visits) > 2: raise ValueError('secret changing config')
+                return iter(self.values)
+        kwargs['source_config'] = Config({'namespace': 'demo'})
+        kwargs['sink_config'] = Config({'destination_scope': 'synthetic-conformance'})
+        for bound in (ProgressRecorder(max_spans=4), ProgressRecorder(max_bytes=512)):
+            kwargs['progress'] = bound
+            with patch('equity_feature_workers.diagnostics.time.perf_counter_ns') as clock, patch.object(sources, 'resolve') as factory:
+                with self.assertRaises(SinkError): run_registered(spec, **kwargs)
+                clock.assert_not_called(); factory.assert_not_called()
+            self.assertEqual(visits, [])
+        kwargs['progress'] = recorder
+        result = run_registered(spec, **kwargs)
+        self.assertIsNotNone(result.output.receipt)
+        self.assertEqual(len(visits), 2)
+        first = recorder.snapshot().tasks[0]
+        kwargs['source_config'] = {'namespace': 'demo'}
+        kwargs['sink_config'] = {'destination_scope': 'synthetic-conformance'}
+        run_registered(spec, **kwargs)
+        second = recorder.snapshot().tasks[1]
+        self.assertEqual((first.intent_sha256, first.task_sha256), (second.intent_sha256, second.task_sha256))
 
 if __name__ == '__main__': unittest.main()
