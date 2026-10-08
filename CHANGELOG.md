@@ -1,3 +1,9 @@
+## 0.1.0a8 — EQ063 experimental task claims
+
+Add trusted-local OS ownership through publication, bounded durable computation attempts, durable cooperative cancellation and receipt-first restart. Live expiry cannot steal ownership. Original committed results recover without callback/new begin, including cancelled or exhausted work. Caller supplies UTC time and protected source paths; no hidden scheduler or watchdog. Existing task/result/receipt codecs, sink locking and mandatory dependencies unchanged.
+
+Separate source/artifact reviews, 141 development tests/strict11, native Windows/Linux/four fresh installed forms, local committed repeat and actual-main artifact equality verified. Five OS-release cleanup/fencing regressions resolve reviewed P2 failures. Controlled parent termination covers real commit before claim metadata; failed Windows native selfexit fixture and unknown root cause preserved, not accepted as success. [Delivery evidence](docs/EQ063_DELIVERY.md), [source receipt](docs/EQ063_SOURCE_RECEIPT.json), [actual release receipt](docs/EQ063_RELEASE_RECEIPT.json). Final documentation review/current checks/publication readback remain before story Done.
+
 ## 0.1.0a8 - EQ063 under qualification
 
 Add local durable task claims, bounded attempts/cancellation and receipt-first restart recovery. Preserve Task/Output/Result/Receipt protocols, calculations and existing sink ownership. No mandatory dependencies added. Platform/native/installed/review/release gates pending; not accepted yet.
