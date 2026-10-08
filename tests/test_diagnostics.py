@@ -604,5 +604,53 @@ class Diagnostics(unittest.TestCase):
             self.assertIsNotNone(publisher.drain()[0].output)
             self.assertEqual(sink.begins, 2)
 
+    def test_clock_metadata_properties_are_copied_once_before_admission(self):
+        class ClockName(str): pass
+        class Changing:
+            def __init__(self): self.reads = {'implementation': 0, 'monotonic': 0, 'resolution': 0}
+            @property
+            def implementation(self):
+                self.reads['implementation'] += 1
+                return 'QueryPerformanceCounter()' if self.reads['implementation'] == 1 else ClockName('QueryPerformanceCounter()')
+            @property
+            def monotonic(self):
+                self.reads['monotonic'] += 1
+                return True if self.reads['monotonic'] == 1 else 'secret malformed monotonic'
+            @property
+            def resolution(self):
+                self.reads['resolution'] += 1
+                return 1e-9 if self.reads['resolution'] == 1 else float('nan')
+        info = Changing(); spec, _, source = inputs(); recorder = ProgressRecorder()
+        with patch('equity_feature_workers.diagnostics.time.get_clock_info', return_value=info):
+            command = run_session(spec, source, ExampleSink(), requirements=LIMITS, progress=recorder)
+        self.assertEqual(info.reads, {'implementation': 1, 'monotonic': 1, 'resolution': 1})
+        self.assertTrue(command.output.committed)
+        self.assertEqual((recorder.snapshot().clock, recorder.snapshot().resolution_ns), ('QueryPerformanceCounter()', 1))
+        self.assertEqual(recorder.snapshot().tasks[0].status, D.VERIFIED)
+        self.assertNotIn(b'secret', recorder.snapshot().encode())
+
+    def test_retained_report_history_is_in_combined_resident_gate_before_work(self):
+        for mode in ('sequential', 'process'):
+            with self.subTest(mode=mode):
+                item, _ = work('A', counted)
+                fresh = BoundedSupervisor(mode=mode).run((item,), progress=ProgressRecorder())
+                recorder = ProgressRecorder()
+                for index in range(20):
+                    with recorder.attempt(f'{index:064x}', 'bars', 'P', spans=1) as observation:
+                        observation.add(StageTiming(S.CALCULATION, 1))
+                        observation.finish(D.COMPUTED)
+                prior = recorder.reserved_bytes
+                self.assertGreater(prior, 512)
+                CALLS.clear()
+                supervisor = BoundedSupervisor(mode=mode, budget=budget(max_resident_bytes=fresh.reserved_resident_bytes))
+                with patch('equity_feature_workers.supervisor.ProcessPoolExecutor', side_effect=AssertionError('pool started before retained report admission')) as pool:
+                    with self.assertRaises(SinkError) as caught:
+                        supervisor.run((item,), progress=recorder)
+                    self.assertEqual(caught.exception.code, SinkErrorCode.RESOURCE_LIMIT)
+                    pool.assert_not_called()
+                self.assertEqual(CALLS, [])
+                self.assertGreater(recorder.reserved_bytes, prior)
+                self.assertEqual(recorder.snapshot().tasks[-1].reason, 'RESOURCE_LIMIT')
+
 
 if __name__ == '__main__': unittest.main()

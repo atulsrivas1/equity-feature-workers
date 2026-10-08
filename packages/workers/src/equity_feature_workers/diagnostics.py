@@ -247,23 +247,30 @@ class ProgressRecorder:
     def _clock_metadata(self) -> None:
         try:
             info = time.get_clock_info('perf_counter')
-            if (type(info.implementation) is not str or info.implementation not in _CLOCKS[1:]
-                    or type(info.monotonic) is not bool or not info.monotonic
-                    or type(info.resolution) not in (int, float) or not math.isfinite(info.resolution)
-                    or info.resolution <= 0):
+            implementation, monotonic, resolution = info.implementation, info.monotonic, info.resolution
+            if (type(implementation) is not str or implementation not in _CLOCKS[1:]
+                    or type(monotonic) is not bool or not monotonic
+                    or type(resolution) not in (int, float) or not math.isfinite(resolution)
+                    or resolution <= 0):
                 self._clock, self._resolution = 'unavailable', None
                 return
-            resolution = math.ceil(info.resolution * 1_000_000_000)
-            if not 0 < resolution <= _MAX:
+            resolution_ns = math.ceil(resolution * 1_000_000_000)
+            if not 0 < resolution_ns <= _MAX:
                 self._clock, self._resolution = 'unavailable', None
                 return
-            self._clock, self._resolution = info.implementation, resolution
+            self._clock, self._resolution = implementation, resolution_ns
         except BaseException:
             self._clock, self._resolution = 'unavailable', None
 
     def snapshot(self) -> DiagnosticSnapshot:
         self._own()
         return DiagnosticSnapshot(tuple(self._tasks), self._clock, self._resolution)
+
+    @property
+    def reserved_bytes(self) -> int:
+        """Entire retained report reservation, including the current group."""
+        self._own(active=self._active)
+        return self._bytes
 
     @contextmanager
     def group(self, tasks: tuple[TaskManifest, ...], *, spans: int, intent_sha256: str | None = None) -> Iterator[dict[str, _Attempt]]:

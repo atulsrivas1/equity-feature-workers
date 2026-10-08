@@ -475,7 +475,7 @@ class BoundedSupervisor:
         if _observations:
             # Report wire reservations coexist with returned results in the coordinator.
             # Python/container overhead remains outside this logical (not hard RSS) bound.
-            resident += 512 + sum(2048 + 256 * o.capacity for o in _observations.values())
+            resident += next(iter(_observations.values())).recorder.reserved_bytes
         if resident > budget.max_resident_bytes:
             _fail(SinkErrorCode.RESOURCE_LIMIT)
         if spill is not None:
