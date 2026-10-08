@@ -28,7 +28,11 @@ class OwnedProcess:
             ('SetInformationJobObject',[w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD],w.BOOL),
             ('AssignProcessToJobObject',[w.HANDLE,w.HANDLE],w.BOOL),
             ('IsProcessInJob',[w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)],w.BOOL),
-            ('TerminateProcess',[w.HANDLE,w.UINT],w.BOOL)):
+            ('TerminateProcess',[w.HANDLE,w.UINT],w.BOOL),
+            ('OpenThread',[w.DWORD,w.BOOL,w.DWORD],w.HANDLE),
+            ('GetProcessIdOfThread',[w.HANDLE],w.DWORD),
+            ('GetExitCodeProcess',[w.HANDLE,ctypes.POINTER(w.DWORD)],w.BOOL),
+            ('ResumeThread',[w.HANDLE],w.DWORD)):
             fn=getattr(self.kernel,name);fn.argtypes=args;fn.restype=restype
         self.job=self.kernel.CreateJobObjectW(None,None)  # null security: noninheritable
         if not self.job: raise OSError('owned job creation failed')
@@ -62,21 +66,37 @@ class OwnedProcess:
         if not self.kernel.IsProcessInJob(handle,self.job,ctypes.byref(present)) or not present.value:
             raise OSError('owned job membership unverified')
 
-    def _capture_windows(self):
-        # Root handle is retained. Trusted sample cannot spawn a pool before stdin.
-        inventory=self.native.inventory();pending=dict(inventory)
-        while True:
-            added=False
-            for pid,(parent,_) in list(pending.items()):
-                if pid in self.handles or parent not in self.identities:continue
-                try:
-                    handle=self._hold(pid)
-                    if self.identities[pid]<self.identities[parent]:
-                        self.kernel.CloseHandle(handle);del self.handles[pid];del self.identities[pid]
-                        continue  # reused snapshot parent PID is not owned ancestry
-                except OSError:continue  # exited before obtaining a held identity
-                added=True;pending.pop(pid)
-            if not added:break
+    def _resume_windows(self):
+        from ctypes import wintypes as w
+        class ThreadEntry(ctypes.Structure):
+            _fields_=[('size',w.DWORD),('usage',w.DWORD),('tid',w.DWORD),
+                ('owner',w.DWORD),('base_priority',w.LONG),('delta_priority',w.LONG),('flags',w.DWORD)]
+        for name in ('Thread32First','Thread32Next'):
+            fn=getattr(self.kernel,name);fn.argtypes=[w.HANDLE,ctypes.POINTER(ThreadEntry)];fn.restype=w.BOOL
+        snapshot=self.kernel.CreateToolhelp32Snapshot(4,0)
+        if snapshot==ctypes.c_void_p(-1).value:raise OSError('owned primary thread inventory unavailable')
+        tids=[]
+        try:
+            entry=ThreadEntry();entry.size=ctypes.sizeof(entry)
+            present=self.kernel.Thread32First(snapshot,ctypes.byref(entry))
+            while present:
+                if entry.owner==self.process.pid:tids.append(int(entry.tid))
+                present=self.kernel.Thread32Next(snapshot,ctypes.byref(entry))
+            if ctypes.get_last_error()!=18:raise OSError('owned primary thread inventory incomplete')
+        finally:
+            if not self.kernel.CloseHandle(snapshot):raise OSError('owned thread snapshot close failed')
+        if len(tids)!=1:raise OSError('owned single suspended primary thread unavailable')
+        thread=self.kernel.OpenThread(0x802,False,tids[0])  # suspend/resume plus query limited
+        if not thread:raise OSError('owned primary thread handle unavailable')
+        try:
+            live=w.DWORD()
+            if self.kernel.GetProcessIdOfThread(thread)!=self.process.pid:
+                raise OSError('owned primary thread identity changed')
+            if not self.kernel.GetExitCodeProcess(self.handles[self.process.pid],ctypes.byref(live)) or live.value!=259:
+                raise OSError('original suspended process no longer live')
+            if self.kernel.ResumeThread(thread)!=1:raise OSError('owned primary thread resume failed')
+        finally:
+            if not self.kernel.CloseHandle(thread):raise OSError('owned primary thread close failed')
 
     @staticmethod
     def _linux_row(pid):
@@ -85,12 +105,12 @@ class OwnedProcess:
 
     def start(self,command,**kwargs):
         try:
+            if os.name=='nt':kwargs['creationflags']=kwargs.get('creationflags',0)|4  # CREATE_SUSPENDED
             self.process=subprocess.Popen(command,**kwargs,start_new_session=os.name!='nt')
             if os.name=='nt':
                 root=self._hold(self.process.pid)
-                try:self._assign(root)
-                finally:self._capture_windows()  # hold preexisting launcher children even if assignment rejects
-                for handle in self.handles.values():self._assign(handle)
+                self._assign(root)
+                self._resume_windows()  # no launcher/helper can run before verified job membership
             else:
                 creation,group,session=self._linux_row(self.process.pid)
                 if group!=self.process.pid or session!=self.process.pid:raise OSError('owned session unavailable')
@@ -103,19 +123,30 @@ class OwnedProcess:
 
     def close(self,failed=False,sampler=None):
         if os.name=='nt':
+            errors=[]
             if self.job:
-                job=self.job;self.job=None
-                if not self.kernel.CloseHandle(job):raise OSError('owned job close failed')
-            # Held identity handles also cover rejected assignment, never arbitrary reused PIDs.
-            for handle in self.handles.values():
-                self.kernel.TerminateProcess(handle,1)
-                self.kernel.CloseHandle(handle)
-            self.handles.clear()
+                if self.kernel.CloseHandle(self.job):self.job=None
+                else:errors.append('owned job close failed')  # retain identity for bounded retry
+            # Every retained process identity gets fallback cleanup even if job close failed.
+            for pid,handle in list(self.handles.items()):
+                try:self.kernel.TerminateProcess(handle,1)
+                except Exception:errors.append('held process termination failed')
+                try:
+                    if self.kernel.CloseHandle(handle):del self.handles[pid]
+                    else:errors.append('held process handle close failed')
+                except Exception:errors.append('held process handle close failed')
+            if self.job:
+                if self.kernel.CloseHandle(self.job):self.job=None
+                else:errors.append('owned job close retry failed')
+            if self.process is not None and (failed or errors):
+                try:self.process.terminate()  # Popen retains its original Windows process handle
+                except Exception:errors.append('original process handle cleanup failed')
+            if errors:raise OSError('; '.join(errors))
             return
         if not failed or self.process is None:return
         known=dict(self.identities)
         if sampler is not None:
-            known.update({p['pid']:p['creation'] for p in sampler.peaks.values()})
+            known.update({p['pid']:p['creation'] for p in list(sampler.peaks.values())})
         anchored=False
         for pid,creation in known.items():
             try:
@@ -144,21 +175,28 @@ def communicate_owned(command,settings,timeout=180,sampler_factory=None,**kwargs
     except BaseException as error:
         failure=error;raise
     finally:
+        process=process or owner.process  # startup rejection still owns its pipes
+        cleanup_errors=[]
+        def finalize_sampler():
+            if sampler is None:return
+            try:
+                sampler.stop_event.set()
+                if sampler.thread.ident is not None:sampler.thread.join(5)
+                if sampler.thread.is_alive():cleanup_errors.append('owned sampler did not stop within five seconds')
+            except Exception as error:cleanup_errors.append('sampler finalization failed: '+type(error).__name__)
+        finalize_sampler()  # stop mutation before copying Linux retained identities
+        try:owner.close(failed=failure is not None,sampler=sampler)
+        except Exception as error:cleanup_errors.append('owned cleanup failed: '+str(error))
         try:
-            owner.close(failed=failure is not None,sampler=sampler)
             if failure is not None and process is not None:
                 try:process.communicate(timeout=5)
                 except subprocess.TimeoutExpired:
-                    for stream in (process.stdin,process.stdout,process.stderr):
-                        if stream is not None:stream.close()
-                    failure.add_note('owned pipe drain exceeded five seconds')
-        except Exception as cleanup:
-            if failure is None:raise
-            failure.add_note('owned cleanup failed: '+type(cleanup).__name__)
-        finally:
-            if sampler is not None:
-                sampler.stop_event.set()
-                if sampler.thread.ident is not None:sampler.thread.join(5)
-                if sampler.thread.is_alive():
-                    if failure is None:raise RuntimeError('owned sampler did not stop')
-                    failure.add_note('owned sampler did not stop within five seconds')
+                    # Closing buffered output under a blocked reader can itself block.
+                    # Do not pretend unavailable inherited pipes were drained.
+                    cleanup_errors.append('owned pipe drain exceeded five seconds')
+        except Exception as error:cleanup_errors.append('owned pipe drain failed: '+type(error).__name__)
+        finally:finalize_sampler()
+        if cleanup_errors:
+            if failure is not None:
+                for note in cleanup_errors:failure.add_note(note)
+            else:raise RuntimeError('; '.join(cleanup_errors))

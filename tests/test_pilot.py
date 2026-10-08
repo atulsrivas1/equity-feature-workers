@@ -119,6 +119,63 @@ print('after '+str(os.getpid()),flush=True);sys.stdin.readline()
                 for sampler in samplers:
                     self.assertTrue(sampler.stop_event.is_set());self.assertFalse(sampler.thread.is_alive())
 
+    @unittest.skipUnless(os.name=='nt','Windows job API fault paths; Linux session/group covered by other cases')
+    def test_windows_prelaunch_rejection_and_failed_job_close(self):
+        flags=subprocess.CREATE_NO_WINDOW
+        with tempfile.TemporaryDirectory() as temporary:
+            marker=Path(temporary)/'actual.json'
+            code="import os,sys,json;from pathlib import Path;Path("+repr(str(marker))+").write_text(json.dumps({'pid':os.getpid()}));sys.stdin.read()"
+            # Ownership/query/primary-thread failures occur before any child instruction.
+            for phase in ('hold','assign','thread_open','thread_identity','root_liveness','resume_zero','resume_suspended','resume_failure'):
+                with self.subTest(phase=phase):
+                    owner=OwnedProcess()
+                    if phase in ('hold','assign'):
+                        target=owner;method={'hold':'_hold','assign':'_assign'}[phase]
+                        fault=dict(side_effect=OSError('controlled prelaunch '+phase));message='controlled prelaunch '+phase
+                    else:
+                        target=owner.kernel
+                        method={'thread_open':'OpenThread','thread_identity':'GetProcessIdOfThread','root_liveness':'GetExitCodeProcess',
+                            'resume_zero':'ResumeThread','resume_suspended':'ResumeThread','resume_failure':'ResumeThread'}[phase]
+                        value={'resume_suspended':2,'resume_failure':0xffffffff}.get(phase,0)
+                        fault=dict(return_value=value);message='owned primary thread|original suspended process'
+                    try:
+                        with patch.object(target,method,**fault):
+                            with self.assertRaisesRegex(OSError,message):
+                                owner.start([sys.executable,'-I','-c',code],stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,stderr=subprocess.PIPE,creationflags=flags)
+                        self.assertFalse(marker.exists(),'unowned child ran before verified initialization')
+                        self.assertIsNone(owner.job)
+                        owner.process.communicate(timeout=5)
+                        self.assertIsNotNone(owner.process.returncode)
+                    finally:
+                        owner.close(failed=True)
+                        if owner.process is not None:owner.process.communicate(timeout=5)
+            owner=OwnedProcess()
+            process=owner.start([sys.executable,'-I','-c',code],stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,stderr=subprocess.PIPE,creationflags=flags)
+            deadline=time.monotonic()+10
+            while not marker.exists() and time.monotonic()<deadline:time.sleep(.01)
+            self.assertTrue(marker.exists())
+            actual=json.loads(marker.read_text(encoding='utf-8'))['pid']
+            original_close=owner.kernel.CloseHandle;original_terminate=owner.kernel.TerminateProcess
+            retained=set(owner.handles.values());terminated=[];job=owner.job;failed=False
+            def close_once(handle):
+                nonlocal failed
+                if handle==job and not failed:failed=True;return False
+                return original_close(handle)
+            def terminate(handle,code):
+                terminated.append(handle);return original_terminate(handle,code)
+            try:
+                with patch.object(owner.kernel,'CloseHandle',side_effect=close_once), patch.object(owner.kernel,'TerminateProcess',side_effect=terminate):
+                    with self.assertRaisesRegex(OSError,'owned job close failed'):owner.close(failed=True)
+                self.assertTrue(failed);self.assertIsNone(owner.job);self.assertFalse(owner.handles)
+                self.assertTrue(retained<=set(terminated),'held fallback was bypassed')
+                process.communicate(timeout=5)
+                self.assertNotIn(actual,NativeMemory().inventory(),'fallback/retry left interpreter alive')
+            finally:
+                owner.close(failed=True)
+                process.communicate(timeout=5)
+
     def test_existing_report_and_overlapping_paths_preserve_evidence(self):
         spec=importlib.util.spec_from_file_location('benchmark_pipeline',Path(__file__).parents[1]/'tools'/'benchmark_pipeline.py')
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
