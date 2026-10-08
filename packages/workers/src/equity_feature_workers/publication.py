@@ -200,12 +200,13 @@ class SerialPublisher:
         return PublicationProgress(dependency.task.task_sha256, None, barrier.waiting[0].reason)
 
     def drain(self, *, cancellation: Cancellation | None = None, progress: ProgressRecorder | None = None,
-              _observations: dict[str, _Attempt] | None = None) -> tuple[PublicationProgress, ...]:
+              _observations: dict[str, _Attempt] | None = None,
+              _task_ids: frozenset[str] | None = None) -> tuple[PublicationProgress, ...]:
         """One bounded pass; telemetry cannot reenter through default operations."""
         self.admit_owner()
         self._admit_operation()
         if progress is None and _observations is None:
-            return self._drain(cancellation=cancellation)
+            return self._drain(cancellation=cancellation, _task_ids=_task_ids)
         if progress is not None and (type(progress) is not ProgressRecorder or _observations is not None):
             raise SinkError(SinkErrorCode.INVALID_CONFIG)
         self._observing = True
@@ -219,15 +220,17 @@ class SerialPublisher:
                     if not tasks:
                         return ()
                     with progress.group(tasks, spans=3) as observations:
-                        return self._drain(cancellation=cancellation, _observations=observations, _locked=True)
+                        return self._drain(cancellation=cancellation, _observations=observations,
+                                           _task_ids=_task_ids, _locked=True)
                 finally:
                     self._lock.release()
-            return self._drain(cancellation=cancellation, _observations=_observations)
+            return self._drain(cancellation=cancellation, _observations=_observations, _task_ids=_task_ids)
         finally:
             self._observing = False
 
     def _drain(self, *, cancellation: Cancellation | None = None,
                _observations: dict[str, _Attempt] | None = None,
+               _task_ids: frozenset[str] | None = None,
                _locked: bool = False) -> tuple[PublicationProgress, ...]:
         if not _locked and not self._lock.acquire(blocking=False):
             raise SinkError(SinkErrorCode.BUSY)
@@ -237,9 +240,11 @@ class SerialPublisher:
             outcomes: list[PublicationProgress] = []
             completed: list[str] = []
             for key, entry in self._pending.items():
-                # A supervised observed pass can spend only its reserved task
-                # population. Foreign producers retain their entries for an
-                # explicit caller drain; never consume unreserved work here.
+                # Ownership is independent of optional diagnostic reservations.
+                # Skip foreign entries before publication and queue removal;
+                # they still count toward pending-byte resource admission.
+                if _task_ids is not None and key not in _task_ids:
+                    continue
                 if _observations is not None and key not in _observations:
                     continue
                 available = self._limits.max_pending_bytes - used + entry.size

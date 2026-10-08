@@ -550,6 +550,7 @@ class BoundedSupervisor:
         # Publication is always coordinator-owned, after pure worker completion.
         total_results = 0
         output_metadata = 0
+        publication_task_ids = frozenset(item.task.task_sha256 for item in items)
         for item in sorted(items, key=lambda i: i.task.task_sha256):
             identity = item.task.task_sha256
             execution = executions.get(identity)
@@ -573,10 +574,11 @@ class BoundedSupervisor:
                     observation = _observations[identity] if _observations else None
                     if observation is not None:
                         publisher._submit(item.task, results, _observation=observation)
-                        publication_progress = publisher._drain(cancellation=token, _observations=_observations)
+                        publication_progress = publisher._drain(cancellation=token, _observations=_observations,
+                                                                _task_ids=publication_task_ids)
                     else:
                         publisher.submit(item.task, results)
-                        publication_progress = publisher.drain(cancellation=token)
+                        publication_progress = publisher.drain(cancellation=token, _task_ids=publication_task_ids)
                     for p in publication_progress:
                         prior = executions[p.task_sha256]
                         accepted = p.output; diagnosis = p.reason
