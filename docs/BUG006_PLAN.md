@@ -1,0 +1,9 @@
+## Owner-selected BUG006 corrective work — October 8, 2026
+
+The owner requested the fix and explicitly authorized separate local review for BUG006. Select bounded R5.1 milestone17, experimental workers0.1.0a12, with BUG006 as its sole repair story. Original R5 acceptance/closed milestone remain historical; no R6 or private/historical generation is admitted. Three provisional complexity points, not a time estimate. Atul Srivastava is the recorded owner; one active repair, no displaced active story or open component PR found.
+
+Scope/first actions: independent synchronized both-sink no-reporter regression; prove existing failure; separate publisher ownership task set from diagnostic reservations; scoped supervisor draining under existing publisher lock; keep explicit caller full drain, retained same-run retries, foreign queue bytes, cancellation/owner/reentry fences. Documentation must correct the earlier exclusive-producer wording. No formula, numerical algorithm, core/I/O implementation, schema/identity, mandatory dependency or public signature change. Existing versions/pins and historical receipts preserved; worker distribution advances a11 to a12.
+
+Acceptance: original issue checklist applies; reporter/no-reporter real Parquet/DuckDB readback parity; relevant/full tests and strict typing; separate final-head code/contract review; Windows/Linux native repeat builds and wheel/sdist clean installs; actual published artifacts/source/attribution readback; evidence and continuity then Released/Done. No speedup or private-capacity claim and no repeat of unrelated performance experiment. No open technical design decision remains; actual gates remain pending.
+
+Ready prerequisites established (reproducer, exact scope, sink fixtures, fixed source/dependencies and bounded corrective release). Ready -> In progress on codex/bug006-scoped-drain (component) and codex/bug006-corrective-delivery (canonical). Implementation not yet released.

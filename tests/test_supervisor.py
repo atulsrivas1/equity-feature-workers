@@ -26,6 +26,14 @@ from test_publication import sink_for, Proxy
 
 CALLS=[]
 STARTED=threading.Event()
+FOREIGN_SUBMIT_HOOK=None
+
+def foreign_calculation(task,batches):
+    thread=threading.Thread(target=FOREIGN_SUBMIT_HOOK)
+    thread.start();thread.join(5)
+    if thread.is_alive():
+        raise AssertionError('foreign producer did not finish')
+    return compute_session_inputs(task,batches)
 
 def counted(task,batches):
     CALLS.append(task.task_sha256)
@@ -70,6 +78,54 @@ def budget(workers=1,**changes):
 
 class Supervisor(unittest.TestCase):
     def setUp(self):CALLS.clear();STARTED.clear()
+
+    def test_foreign_producer_preserved_without_reporter_both_sinks(self):
+        self._foreign_producer_preserved()
+
+    def test_foreign_producer_preserved_with_reporter_both_sinks(self):
+        from equity_feature_workers import ProgressRecorder
+        self._foreign_producer_preserved(progress=ProgressRecorder)
+
+    def _foreign_producer_preserved(self, progress=None):
+        for kind in ('parquet', 'duckdb'):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as directory, sink_for(kind, Path(directory)) as inner:
+                sink = Proxy(inner)
+                first, _ = work('A'); second, _ = work('B')
+                expected_a = compute_session_inputs(first.task, first.batches)
+                expected_b = compute_session_inputs(second.task, second.batches)
+                publisher = SerialPublisher(sink, first.task.destination_scope,
+                    limits=PublicationLimits(), requirements=LIMITS)
+                errors = []; submitted = []
+
+                def foreign():
+                    try:
+                        submitted.append(publisher.submit(second.task, expected_b))
+                    except Exception as error:
+                        errors.append(error)
+
+                self.assertEqual(publisher.pending, ())
+                with patch(__name__ + '.FOREIGN_SUBMIT_HOOK', foreign):
+                    outcome = BoundedSupervisor().run((replace(first, calculate=foreign_calculation),),
+                        publisher=publisher, progress=progress() if progress else None)
+                self.assertEqual(errors, [])
+                self.assertEqual(submitted, [second.task.task_sha256])
+                execution = outcome.tasks[0]
+                self.assertIsNone(execution.reason)
+                self.assertIsNotNone(execution.output)
+                self.assertEqual(tuple(map(encode_result, execution.results)), tuple(map(encode_result, expected_a)))
+                self.assertEqual(tuple(map(encode_result, sink.read(execution.output.receipt))), tuple(map(encode_result, expected_a)))
+                self.assertEqual(sink.begins, 1)
+                self.assertEqual(publisher.pending, (second.task.task_sha256,))
+                drained = publisher.drain()
+                self.assertEqual(len(drained), 1)
+                self.assertEqual(drained[0].task_sha256, second.task.task_sha256)
+                self.assertIsNone(drained[0].reason)
+                self.assertIsNotNone(drained[0].output)
+                self.assertEqual(tuple(map(encode_result, sink.read(drained[0].output.receipt))), tuple(map(encode_result, expected_b)))
+                self.assertEqual(sink.begins, 2)
+                self.assertEqual(publisher.pending, ())
+                self.assertEqual(publisher.drain(), ())
+
     def rejected(self,code,call):
         with self.assertRaises(SinkError) as caught:call()
         self.assertEqual(caught.exception.code,code)

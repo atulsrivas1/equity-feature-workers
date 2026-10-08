@@ -107,7 +107,7 @@ def run_pipeline(root, output, workload, backend, mode, workers, require_install
         ResourceBudget, ProgressRecorder, SerialPublisher, PublicationLimits, Dependency,
         GenerationSpec, GenerationStore, BarrierLimits, CatalogStore, CatalogLimits)
     versions = {n:version(n) for n in VERSIONS}; assert versions == VERSIONS
-    assert worker_package.__version__ == '0.1.0a11'
+    assert worker_package.__version__ == '0.1.0a12'
     if require_installed:
         assert 'site-packages' in Path(worker_package.__file__).resolve().parts
     root = root.resolve(); output = output.resolve(); output.mkdir(parents=True, exist_ok=False)

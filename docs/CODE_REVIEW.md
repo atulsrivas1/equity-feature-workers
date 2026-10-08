@@ -1,3 +1,7 @@
+## BUG006 authorized local review — October 8, 2026
+
+The owner explicitly requested the BUG006 fix and answered "Authorize local review for BUG006". Separate local Codex reviewers may inspect its final component/canonical patch and corrective release evidence. Record identity, exact heads, checks, findings/disposition and limitations; relevant changes require renewed final-head coverage. This is local automated review, not human review or hosted activation. Numerical/documentation/native/installed/publication/readback gates remain required. The authorization is bounded to BUG006, not R6 or private generation.
+
 ## Owner-authorized R5 local review — October 7, 2026
 
 The owner authorized separate local Codex reviewers for PR303 and all R5 stories in canonical AGENTS.md and docs/CODE_REVIEW.md. This supersedes earlier bounded R4.1-only and pending-R5 boilerplate. Require completed independent review of every final changed head, actual reviewer identity/checks/findings/disposition/limitations and renewed coverage after relevant changes. Local automated review is neither hosted activation nor human review. Author self-review/CI alone remain insufficient; numerical/documentation/installed/native/main publication/readback gates remain mandatory. This dedicated session is authorized to execute R5 and stops after verified acceptance, before R6.
