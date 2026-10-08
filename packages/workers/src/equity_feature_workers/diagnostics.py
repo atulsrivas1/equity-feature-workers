@@ -247,9 +247,17 @@ class ProgressRecorder:
     def _clock_metadata(self) -> None:
         try:
             info = time.get_clock_info('perf_counter')
-            self._clock = info.implementation if info.monotonic and info.implementation in _CLOCKS else 'unavailable'
+            if (type(info.implementation) is not str or info.implementation not in _CLOCKS[1:]
+                    or type(info.monotonic) is not bool or not info.monotonic
+                    or type(info.resolution) not in (int, float) or not math.isfinite(info.resolution)
+                    or info.resolution <= 0):
+                self._clock, self._resolution = 'unavailable', None
+                return
             resolution = math.ceil(info.resolution * 1_000_000_000)
-            self._resolution = resolution if 0 < resolution <= _MAX else None
+            if not 0 < resolution <= _MAX:
+                self._clock, self._resolution = 'unavailable', None
+                return
+            self._clock, self._resolution = info.implementation, resolution
         except BaseException:
             self._clock, self._resolution = 'unavailable', None
 

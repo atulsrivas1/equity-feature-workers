@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor, wait, FIRST_COMPLETED
+from contextlib import nullcontext
 from dataclasses import dataclass, replace
 import hashlib
 import multiprocessing
@@ -412,18 +413,21 @@ class BoundedSupervisor:
             if type(progress) is not ProgressRecorder:
                 _fail(SinkErrorCode.INVALID_CONFIG)
             spans = 5 + 3 * len(items) if publisher is not None else 3
-            with progress.group(tuple(i.task for i in items), spans=spans) as observations:
-                outcome = self._run(items, cancellation=cancellation, spill=spill, publisher=publisher,
-                                    _observations=observations)
-                for execution in outcome.tasks:
-                    observation = observations[execution.task.task_sha256]
-                    for timing in execution.timings:
-                        observation.add(timing)
-                    status = (DiagnosticStatus.VERIFIED if execution.output is not None else
-                              DiagnosticStatus.CANCELLED if execution.reason == 'CANCELLED' else
-                              DiagnosticStatus.FAILED if execution.reason is not None else DiagnosticStatus.COMPUTED)
-                    observation.finish(status, fixed_reason(execution.reason) if execution.reason is not None else None)
-                return outcome
+            if publisher is not None and type(publisher) is not SerialPublisher:
+                _fail(SinkErrorCode.INVALID_CONFIG)
+            with publisher._observation_scope() if publisher is not None else nullcontext():
+                with progress.group(tuple(i.task for i in items), spans=spans) as observations:
+                    outcome = self._run(items, cancellation=cancellation, spill=spill, publisher=publisher,
+                                        _observations=observations)
+                    for execution in outcome.tasks:
+                        observation = observations[execution.task.task_sha256]
+                        for timing in execution.timings:
+                            observation.add(timing)
+                        status = (DiagnosticStatus.VERIFIED if execution.output is not None else
+                                  DiagnosticStatus.CANCELLED if execution.reason == 'CANCELLED' else
+                                  DiagnosticStatus.FAILED if execution.reason is not None else DiagnosticStatus.COMPUTED)
+                        observation.finish(status, fixed_reason(execution.reason) if execution.reason is not None else None)
+                    return outcome
         finally:
             self._running = False
 
@@ -567,8 +571,12 @@ class BoundedSupervisor:
             if publisher is not None and check():
                 try:
                     observation = _observations[identity] if _observations else None
-                    publisher.submit(item.task, results, _observation=observation)
-                    publication_progress = publisher.drain(cancellation=token, _observations=_observations)
+                    if observation is not None:
+                        publisher._submit(item.task, results, _observation=observation)
+                        publication_progress = publisher._drain(cancellation=token, _observations=_observations)
+                    else:
+                        publisher.submit(item.task, results)
+                        publication_progress = publisher.drain(cancellation=token)
                     for p in publication_progress:
                         prior = executions[p.task_sha256]
                         accepted = p.output; diagnosis = p.reason

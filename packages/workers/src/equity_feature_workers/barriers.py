@@ -222,6 +222,7 @@ def evaluate_readiness(nodes: tuple[TaskNode, ...], dependencies: tuple[Dependen
     if progress is not None:
         if type(progress) is not ProgressRecorder or type(nodes) is not tuple or any(type(n) is not TaskNode for n in nodes):
             _fail(CommandErrorCode.CONFIG)
+        progress._own()
         if not nodes:
             return evaluate_readiness(nodes, dependencies, limits=limits, requirements=requirements,
                                       cancellation=cancellation)

@@ -8,6 +8,7 @@ import tempfile
 import threading
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 from equity_feature_example_extensions import ExampleSink, SourceFactory, SinkFactory
 from equity_feature_example_extensions.sink import LIMITS
@@ -453,6 +454,155 @@ class Diagnostics(unittest.TestCase):
             limits=BarrierLimits(), requirements=LIMITS, progress=recorder)
         self.assertEqual(outcome.ready_tasks, ())
         self.assertEqual((recorder.snapshot().tasks[0].status, recorder.snapshot().tasks[0].reason), (D.VERIFIED, None))
+
+    def test_publisher_fence_blocks_default_operations_through_all_clock_hooks(self):
+        for operation in ('submit', 'drain'):
+            with self.subTest(operation=operation), tempfile.TemporaryDirectory() as directory, sink_for('parquet', Path(directory)) as inner:
+                sink = Proxy(inner); first, _ = work('A'); second, _ = work('B')
+                results = BoundedSupervisor().run((first, second)).tasks
+                bykey = {e.task.task_sha256: e.results for e in results}
+                publisher = SerialPublisher(sink, first.task.destination_scope, limits=PublicationLimits(), requirements=LIMITS)
+                publisher.submit(first.task, bykey[first.task.task_sha256])
+                recorder = ProgressRecorder(); rejected = []
+                def clock():
+                    for call in (lambda: publisher.drain(), lambda: publisher.submit(second.task, bykey[second.task.task_sha256])):
+                        with self.assertRaises(SinkError) as caught: call()
+                        rejected.append(caught.exception.code)
+                    return len(rejected)
+                with patch('equity_feature_workers.diagnostics.time.perf_counter_ns', clock):
+                    if operation == 'submit':
+                        publisher.submit(second.task, bykey[second.task.task_sha256], progress=recorder)
+                        self.assertEqual(sink.begins, 0)
+                        self.assertEqual(set(publisher.pending), {first.task.task_sha256, second.task.task_sha256})
+                    else:
+                        outcomes = publisher.drain(progress=recorder)
+                        self.assertEqual(len(outcomes), 1)
+                        self.assertIsNotNone(outcomes[0].output)
+                        self.assertEqual(sink.begins, 1)
+                self.assertGreaterEqual(len(rejected), 4)
+                self.assertTrue(all(reason is SinkErrorCode.BUSY for reason in rejected))
+                self.assertFalse(publisher._observing)
+                publisher.drain()
+
+    def test_foreign_default_producer_remains_allowed_during_observed_submit(self):
+        with tempfile.TemporaryDirectory() as directory, sink_for('parquet', Path(directory)) as sink:
+            first, _ = work('A'); second, _ = work('B')
+            bykey = {e.task.task_sha256: e.results for e in BoundedSupervisor().run((first, second)).tasks}
+            publisher = SerialPublisher(sink, first.task.destination_scope, limits=PublicationLimits(), requirements=LIMITS)
+            called = []; returned = []; errors = []
+            def foreign():
+                try: returned.append(publisher.submit(second.task, bykey[second.task.task_sha256]))
+                except Exception as error: errors.append(error)
+            def clock():
+                if not called:
+                    called.append(True)
+                    thread = threading.Thread(target=foreign); thread.start(); thread.join(5)
+                    self.assertFalse(thread.is_alive())
+                return 1
+            with patch('equity_feature_workers.diagnostics.time.perf_counter_ns', clock):
+                publisher.submit(first.task, bykey[first.task.task_sha256], progress=ProgressRecorder())
+            self.assertEqual(errors, [])
+            self.assertEqual(returned, [second.task.task_sha256])
+            self.assertEqual(len(publisher.drain()), 2)
+
+    def test_supervisor_publisher_fence_precedes_initial_and_final_clocks(self):
+        with tempfile.TemporaryDirectory() as directory, sink_for('parquet', Path(directory)) as inner:
+            sink = Proxy(inner); first, _ = work('A'); second, _ = work('B')
+            result = BoundedSupervisor().run((first,)).tasks[0].results
+            publisher = SerialPublisher(sink, first.task.destination_scope, limits=PublicationLimits(), requirements=LIMITS)
+            publisher.submit(first.task, result)
+            rejected = []
+            def clock():
+                with self.assertRaises(SinkError) as caught: publisher.drain()
+                rejected.append(caught.exception.code)
+                return len(rejected)
+            with patch('equity_feature_workers.diagnostics.time.perf_counter_ns', clock):
+                with self.assertRaises(SinkError) as caught:
+                    BoundedSupervisor().run((second,), publisher=publisher, progress=ProgressRecorder())
+            self.assertEqual(caught.exception.code, SinkErrorCode.BUSY)
+            self.assertEqual(sink.begins, 0)
+            self.assertEqual(publisher.pending, (first.task.task_sha256,))
+            self.assertTrue(rejected)
+            self.assertTrue(all(code is SinkErrorCode.BUSY for code in rejected))
+            self.assertFalse(publisher._observing)
+            self.assertIsNotNone(publisher.drain()[0].output)
+
+    def test_empty_readiness_owner_and_active_preflight_before_dependency_hooks(self):
+        with tempfile.TemporaryDirectory() as directory, sink_for('parquet', Path(directory)) as inner:
+            class Reads(Proxy):
+                reads = 0
+                def read(self, receipt):
+                    self.reads += 1
+                    return self.inner.read(receipt)
+            sink = Reads(inner); spec, _, source = inputs()
+            command = run_session(spec, source, sink, requirements=LIMITS)
+            dependency = Dependency(command.output.task.task_sha256, command.output.task, command.output, sink)
+            recorder = ProgressRecorder(); polls = []; errors = []
+            token = type('Token', (), {'is_cancelled': lambda self: polls.append(1) or False})()
+            def call():
+                return evaluate_readiness((), (dependency,), limits=BarrierLimits(), requirements=LIMITS,
+                                          cancellation=token, progress=recorder)
+            def foreign():
+                try: call()
+                except SinkError as error: errors.append(error.code)
+            baseline = sink.reads
+            thread = threading.Thread(target=foreign); thread.start(); thread.join(5)
+            self.assertFalse(thread.is_alive())
+            self.assertEqual(errors, [SinkErrorCode.INVALID_SESSION])
+            self.assertEqual((polls, sink.reads), ([], baseline))
+            with recorder.attempt('f' * 64, 'bars', 'P', spans=1):
+                with self.assertRaises(SinkError) as caught: call()
+                self.assertEqual(caught.exception.code, SinkErrorCode.INVALID_SESSION)
+                self.assertEqual((polls, sink.reads), ([], baseline))
+            self.assertTrue(call().barrier.ready)
+            self.assertGreater(sink.reads, baseline)
+
+    def test_malformed_clock_metadata_is_unavailable_and_snapshot_valid(self):
+        class ClockName(str): pass
+        infos = (
+            SimpleNamespace(implementation=ClockName('QueryPerformanceCounter()'), monotonic=True, resolution=1e-9),
+            SimpleNamespace(implementation='QueryPerformanceCounter()', monotonic=1, resolution=1e-9),
+            SimpleNamespace(implementation='QueryPerformanceCounter()', monotonic=True, resolution=True),
+            SimpleNamespace(implementation='QueryPerformanceCounter()', monotonic=True, resolution=float('nan')),
+            SimpleNamespace(implementation='QueryPerformanceCounter()', monotonic=True, resolution=-1),
+            SimpleNamespace(implementation='secret private implementation', monotonic=True, resolution=1e-9),
+        )
+        spec, batch, _ = inputs()
+        for info in infos:
+            recorder = ProgressRecorder()
+            with patch('equity_feature_workers.diagnostics.time.get_clock_info', return_value=info):
+                command = run_session(spec, Source(batch, spec.request), ExampleSink(), requirements=LIMITS, progress=recorder)
+            snapshot = recorder.snapshot()
+            self.assertEqual((snapshot.clock, snapshot.resolution_ns), ('unavailable', None))
+            self.assertTrue(command.output.committed)
+            self.assertEqual(snapshot.tasks[0].status, D.VERIFIED)
+            self.assertNotIn(b'secret', snapshot.encode())
+
+    def test_observed_supervisor_retains_foreign_queued_work_for_explicit_drain(self):
+        from equity_feature_workers.supervisor import _compute_partition
+        with tempfile.TemporaryDirectory() as directory, sink_for('parquet', Path(directory)) as inner:
+            sink = Proxy(inner); item, _ = work('A'); foreign, _ = work('B')
+            result = BoundedSupervisor().run((foreign,)).tasks[0].results
+            publisher = SerialPublisher(sink, item.task.destination_scope, limits=PublicationLimits(), requirements=LIMITS)
+            submitted = []; errors = []
+            def producer():
+                try: submitted.append(publisher.submit(foreign.task, result))
+                except Exception as error: errors.append(error)
+            def calculating(*args, **kwargs):
+                thread = threading.Thread(target=producer); thread.start(); thread.join(5)
+                self.assertFalse(thread.is_alive())
+                return _compute_partition(*args, **kwargs)
+            recorder = ProgressRecorder()
+            with patch('equity_feature_workers.supervisor._compute_partition', calculating):
+                outcome = BoundedSupervisor().run((item,), publisher=publisher, progress=recorder)
+            self.assertEqual(errors, [])
+            self.assertEqual(submitted, [foreign.task.task_sha256])
+            self.assertIsNotNone(outcome.tasks[0].output)
+            self.assertEqual(publisher.pending, (foreign.task.task_sha256,))
+            self.assertEqual(sink.begins, 1)
+            self.assertEqual([t.task_sha256 for t in recorder.snapshot().tasks], [item.task.task_sha256])
+            self.assertIsNotNone(publisher.drain()[0].output)
+            self.assertEqual(sink.begins, 2)
 
 
 if __name__ == '__main__': unittest.main()
