@@ -1,3 +1,7 @@
+## EQ065 final documentation correction
+
+Separate local reviewer /root/r5_review found a P3 encoding defect on canonical e84f3cf: a private helper decoded existing UTF8 backlog history using the Windows default code page and rewrote unrelated punctuation. Canonical22e9b25 restores the exact original committed historical payload and prepends only intentional UTF8 notes; existing historical defects are preserved without broad cleanup. Public release comment/PR bodies were also restored from explicitly decoded UTF8. Package/scoped source/archive/runtime qualification is unchanged. Corrected final-head review and current CI remain mandatory before acceptance; this is not a failed numerical/runtime test.
+
 ## EQ065 release qualification — October 7, 2026
 
 Experimental workers0.1.0a10: worker `79b30068713333fb52ba7d58bb57f695bf3016b4` native push37722749975; canonical `8c1887da241610350441c9ff7dc7b3422b4ebf13` native37722756094/docs37722756100, all successful. [Exact release receipt](EQ065_RELEASE_RECEIPT.json), UTF8 LF SHA256 `fc689f5f99dcc92ee5538a58d21908751968291c6eca3180d70f4647fa5bf2dd`, binds two actual server ZIPs/18 archives/20 files, all50 scoped source/probe/builder hashes, fixed core20c08c/IO4603c6 pins and four fresh installed forms. Windows Python3.12.10 expires2026-11-07T03:36:59Z; Linux Python3.12.14 expires2026-11-07T03:32:02Z. Actual release scoped source and all per-platform archives match qualified source.
