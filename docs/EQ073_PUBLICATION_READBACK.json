@@ -1,0 +1,82 @@
+[
+  {
+    "repository": "equity-feature-workers",
+    "head": "270d4b7efb6fc794cadbfa516bb995f62505076b",
+    "reviewed_head": "4b19863d3d772d3c32fd803487e17c6a60855a34",
+    "tree": "516fc7dee2333b1ddfbfbebf476db37c12e47568",
+    "author": {
+      "name": "Atul Srivastava",
+      "email": "102820540+atulsrivas1@users.noreply.github.com",
+      "date": "2026-10-08T18:08:22Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-10-08T18:08:22Z"
+    },
+    "blobs": [
+      {
+        "path": "docs/EQ073_SOURCE_RECEIPT.json",
+        "sha256": "59536d28da94f1f2ff4863ff6b4b835a20574eb919d156489a5ffb66f0442dfa"
+      },
+      {
+        "path": "docs/EQ073_DELIVERY.md",
+        "sha256": "513045a7895a7dd82d1bd03d17136b0c277de089dc9572de3b1c5cd2161eb6ba"
+      },
+      {
+        "path": "docs/api/ACQUISITION_PLANNING.md",
+        "sha256": "c741656b16afd0d7a64e7d1950efd84781c07eb4457b59e45690f89d5e1daa3d"
+      },
+      {
+        "path": "packages/workers/pyproject.toml",
+        "sha256": "5db341c048458a36ae2c08267824216d5ff36a8218a6b950b774b593d5769ae8"
+      },
+      {
+        "path": "packages/workers/src/equity_feature_workers/acquisition.py",
+        "sha256": "6ae242f908ad65daf8e52027411371cd3d4d5443f37cba953eda5d8d5a8d3332"
+      },
+      {
+        "path": "packages/workers/src/equity_feature_workers/acquisition_demo.py",
+        "sha256": "ec68280e9134e9cca2382ccbc907e640229efa69b3b3c237a4e0a83601567786"
+      }
+    ]
+  },
+  {
+    "repository": "equity-features",
+    "head": "c130f3087a7f546e623237b59af1a92be794bd16",
+    "reviewed_head": "f30441bd9f810373edf89e829b4b255b022a0c1c",
+    "tree": "76a28f9a5a59b795e5e503920daf497f88b96cba",
+    "author": {
+      "name": "Atul Srivastava",
+      "email": "102820540+atulsrivas1@users.noreply.github.com",
+      "date": "2026-10-08T18:08:28Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-10-08T18:08:28Z"
+    },
+    "blobs": [
+      {
+        "path": "docs/stories/EQ-073_SOURCE_RECEIPT.json",
+        "sha256": "59536d28da94f1f2ff4863ff6b4b835a20574eb919d156489a5ffb66f0442dfa"
+      },
+      {
+        "path": "docs/stories/EQ-073_CORE_SOURCE_RECEIPT.json",
+        "sha256": "7d4e8a4e1b36017eaf105132f1b33a3cf9a721cc13b5c9a923fc143f44e85fd7"
+      },
+      {
+        "path": "docs/stories/EQ-073_DELIVERY.md",
+        "sha256": "513045a7895a7dd82d1bd03d17136b0c277de089dc9572de3b1c5cd2161eb6ba"
+      },
+      {
+        "path": "docs/api/ACQUISITION_PLANNING.md",
+        "sha256": "c741656b16afd0d7a64e7d1950efd84781c07eb4457b59e45690f89d5e1daa3d"
+      },
+      {
+        "path": "docs/knowledge/LESSONS.md",
+        "sha256": "d9c8b99a4975e23db82b79ae5081c85d632fef94e8fcc396044ceeb4073c63ec"
+      }
+    ]
+  }
+]
