@@ -1,0 +1,136 @@
+{
+  "schema": "eq066-independent-pipeline-oracle1",
+  "source_rights": "owned synthetic fixture only",
+  "unit": {
+    "price_scale": 0,
+    "currency": "USD",
+    "quantity": "shares"
+  },
+  "pair": [
+    {
+      "price": 100,
+      "size": 2
+    },
+    {
+      "price": 102,
+      "size": 3
+    }
+  ],
+  "per_pair": {
+    "count": 2,
+    "volume": 5,
+    "notional": 506,
+    "vwap_numerator": 506,
+    "vwap_denominator": 5,
+    "mean_size_numerator": 5,
+    "mean_size_denominator": 2,
+    "largest_size": 3
+  },
+  "workloads": {
+    "small": {
+      "instruments": 4,
+      "rows_each": 4,
+      "total_rows": 16
+    },
+    "large": {
+      "instruments": 16,
+      "rows_each": 256,
+      "total_rows": 4096
+    },
+    "skew": {
+      "instruments": 16,
+      "first_rows": 2048,
+      "other_rows": 32,
+      "total_rows": 2528
+    }
+  },
+  "source_ledger": {
+    "namespace": "synthetic-pilot",
+    "instruments": "B0000 onward",
+    "session": "S",
+    "start_ns": 0,
+    "end_ns": 1000000000,
+    "prior_session": "P",
+    "prior_start_ns": -1000000000,
+    "market_cutoff_ns": 1000000000,
+    "knowledge_cutoff_ns": 1000000010,
+    "evaluation_ns": 1000000010,
+    "event_and_known_at_ns": "100 + per-instrument original row ordinal",
+    "unique_occurrences": true,
+    "complete_coverage": true,
+    "partition_date": "1970-01-01",
+    "partition_session_mapping": [
+      [
+        "1970-01-01",
+        "S"
+      ]
+    ]
+  },
+  "per_instrument_totals": {
+    "small": {
+      "count": 4,
+      "volume": 10,
+      "notional": 1012
+    },
+    "large": {
+      "count": 256,
+      "volume": 640,
+      "notional": 64768
+    },
+    "skew_first": {
+      "count": 2048,
+      "volume": 5120,
+      "notional": 518144
+    },
+    "skew_other": {
+      "count": 32,
+      "volume": 80,
+      "notional": 8096
+    }
+  },
+  "ordering": {
+    "seed": 766,
+    "configurations_per_workload": 18,
+    "repeat_rotation": [
+      0,
+      6,
+      12
+    ],
+    "reference_runs_timed": false
+  },
+  "quantile_fixture": {
+    "values": [
+      10,
+      20,
+      30,
+      40
+    ],
+    "p50": 25,
+    "p95": 38.5
+  },
+  "simultaneous_memory_fixture": {
+    "frames": [
+      {
+        "a": 100,
+        "b": 50
+      },
+      {
+        "a": 80,
+        "b": 100
+      }
+    ],
+    "job_peak": 180,
+    "sum_separate_peaks": 200
+  },
+  "private_pilot": "NOT_ADMITTED",
+  "corrected_month": "NOT_ADMITTED",
+  "annual_generation": "NOT_ADMITTED",
+  "reporter_population": {
+    "attempts_per_task": 4,
+    "maximum_tasks_in_workload": 16,
+    "reserved_attempts": 64,
+    "reserved_spans": 896,
+    "reserved_bytes": 360960,
+    "fresh_per_sample": true
+  }
+}
