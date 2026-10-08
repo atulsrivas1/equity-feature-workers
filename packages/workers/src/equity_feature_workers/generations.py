@@ -15,6 +15,7 @@ from equity_feature_io_contracts import SinkError, SinkErrorCode, SinkRequiremen
 from equity_feature_io_sdk import Cancellation
 
 from .barriers import BarrierLimits, BarrierOutcome, Dependency, _admit_dependencies, inspect_barrier
+from .diagnostics import ProgressRecorder, DiagnosticStage, DiagnosticStatus, counter, interval
 from .commands import CommandError, CommandErrorCode, NeverCancelled, _cancel
 from .manifests import ManifestError, ManifestErrorCode, OutputManifest, TaskManifest, decode_output, encode_output, label, _pairs
 
@@ -209,7 +210,21 @@ class GenerationStore:
         return GenerationOutcome(True, barrier, outputs)
 
     def publish(self, spec: GenerationSpec, dependencies: tuple[Dependency, ...], *,
-                cancellation: Cancellation | None = None) -> GenerationOutcome:
+                cancellation: Cancellation | None = None, progress: ProgressRecorder | None = None) -> GenerationOutcome:
+        if progress is not None:
+            if type(progress) is not ProgressRecorder or type(spec) is not GenerationSpec:
+                raise SinkError(SinkErrorCode.INVALID_CONFIG)
+            with progress.group(spec.tasks, spans=1, intent_sha256=spec.identity) as observations:
+                start = counter()
+                try:
+                    outcome = self.publish(spec, dependencies, cancellation=cancellation)
+                finally:
+                    timing = interval(DiagnosticStage.GENERATION, start, counter())
+                    for observation in observations.values():
+                        observation.add(timing)
+                for observation in observations.values():
+                    observation.finish(DiagnosticStatus.GENERATION_COMPLETE if outcome.complete else DiagnosticStatus.WAITING)
+                return outcome
         ordered = self._dependencies(spec, dependencies)
         token = cancellation if cancellation is not None else NeverCancelled()
         _check_cancel(token)

@@ -1,5 +1,6 @@
 """Bounded public commands and declared dependency barriers."""
 
+from .diagnostics import (DiagnosticStage, DiagnosticStatus, StageTiming, TaskDiagnostic, DiagnosticSnapshot, ProgressRecorder)
 from .manifests import (
     ClaimIdentity, InputManifest, ManifestError, ManifestErrorCode, OutputManifest,
     TaskManifest, decode_output, decode_task, encode_output, encode_task,
@@ -18,8 +19,8 @@ from .supervisor import (WorkItem, InputReuseCache, ResourceBudget, Partition, p
                          SpillReference, ResultSpill, TaskExecution, SupervisorOutcome, BoundedSupervisor)
 from .claims import ClaimLimits, ClaimProgress, ClaimStore, TaskClaim
 from .catalog import CatalogLimits, CatalogEntry, CatalogSnapshot, CatalogOutcome, CatalogStore
-__version__ = "0.1.0a9"
-__all__ = ['__version__', 'ClaimIdentity', 'InputManifest', 'ManifestError', 'ManifestErrorCode',
+__version__ = "0.1.0a10"
+__all__ = ['DiagnosticStage', 'DiagnosticStatus', 'StageTiming', 'TaskDiagnostic', 'DiagnosticSnapshot', 'ProgressRecorder', '__version__', 'ClaimIdentity', 'InputManifest', 'ManifestError', 'ManifestErrorCode',
            'OutputManifest', 'TaskManifest', 'decode_output', 'decode_task', 'encode_output', 'encode_task',
            'CommandError', 'CommandErrorCode', 'CommandOutcome', 'SessionCommandSpec', 'run_registered', 'run_session',
            'RequiredCommandSpec', 'RequiredOutcome', 'run_required', 'run_required_registered',

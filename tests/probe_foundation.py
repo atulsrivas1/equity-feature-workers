@@ -35,13 +35,14 @@ expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'e
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == ('0.1.0a9' if name=='equity-feature-workers' else '0.1.0a2')
+    assert module.__version__ == ('0.1.0a10' if name=='equity-feature-workers' else '0.1.0a2')
     if name=='equity-feature-workers':
         assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task', 'SessionCommandSpec', 'run_session', 'run_registered', 'RequiredCommandSpec', 'RequiredOutcome', 'run_required', 'run_required_registered', 'BarrierLimits', 'Dependency', 'TaskNode', 'evaluate_readiness', 'inspect_barrier', 'run_assembly', 'UniverseShard', 'BreadthCommandSpec', 'run_breadth', 'PublicationLimits', 'PublicationProgress', 'SerialPublisher', 'GenerationSpec', 'GenerationOutcome', 'GenerationStore'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)
         assert {'PreparedSession','prepare_session','compute_session_inputs','WorkItem','InputReuseCache','ResourceBudget',
                 'Partition','partition_tasks','SpillReference','ResultSpill','TaskExecution','SupervisorOutcome','BoundedSupervisor'} <= set(module.__all__)
         assert {'ClaimLimits','ClaimProgress','ClaimStore','TaskClaim','CatalogLimits','CatalogEntry','CatalogSnapshot','CatalogOutcome','CatalogStore'} <= set(module.__all__)
+        assert {'DiagnosticStage','DiagnosticStatus','StageTiming','TaskDiagnostic','DiagnosticSnapshot','ProgressRecorder'} <= set(module.__all__)
     else:
         assert {'ResultSink','SinkRequirements'} <= set(module.__all__) if name=='equity-feature-io-contracts' else {'publish','prepare_publication','SourceRegistry','SinkRegistry'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)

@@ -1,6 +1,7 @@
 """Bounded single-entity session composition through public contracts only."""
 from __future__ import annotations
 
+from contextlib import nullcontext
 from dataclasses import asdict, dataclass, replace
 from enum import StrEnum
 import hashlib
@@ -10,12 +11,13 @@ from typing import Callable, NoReturn
 from equity_feature_contracts import CanonicalBatch, Column, ConfigSpec, DataKind, EntityKey, FeatureResult, InputBinding
 from equity_feature_contracts.adapters import AcquisitionRequest, AdapterBatch, HistoricalAdapter, validate_delivery
 from equity_feature_contracts.specs import IntervalSpec
-from equity_feature_io_contracts import CredentialProvider, FeatureHeader, PublicConfig, ResultSink, SinkRequirements
+from equity_feature_io_contracts import CredentialProvider, FeatureHeader, PublicConfig, PublicationEnvelope, ResultSink, SinkRequirements
 from equity_feature_io_sdk import (
     Cancellation, SinkRegistry, SourceRegistry, admit_sink, admit_source, descriptor,
     encode_result, prepare_publication, publish, verify_content, verify_receipt,
 )
 from equity_features.session import compute_bars, compute_quotes, compute_trades
+from .diagnostics import ProgressRecorder, DiagnosticStage, DiagnosticStatus, _Attempt
 from .manifests import InputManifest, OutputManifest, TaskManifest, integer, label
 
 
@@ -202,9 +204,20 @@ class PreparedSession:
 
 
 def prepare_session(spec: SessionCommandSpec, source: HistoricalAdapter, *,
-                    cancellation: Cancellation | None = None) -> PreparedSession:
+                    cancellation: Cancellation | None = None, progress: ProgressRecorder | None = None) -> PreparedSession:
     if type(spec) is not SessionCommandSpec:
         _fail(CommandErrorCode.CONFIG)
+    if progress is not None:
+        if type(progress) is not ProgressRecorder:
+            _fail(CommandErrorCode.CONFIG)
+        progress._own()
+        intent, _ = _record_hash(asdict(spec), b'efworker-command-intent1\0', 16777216)
+        with progress.attempt(intent, spec.family, spec.partition_id, spans=1) as observation:
+            with observation.stage(DiagnosticStage.ACQUISITION):
+                prepared = prepare_session(spec, source, cancellation=cancellation)
+            observation.bind(prepared.task)
+            observation.finish(DiagnosticStatus.READY)
+            return prepared
     token = cancellation if cancellation is not None else NeverCancelled()
     try:
         _cancel(token)
@@ -242,38 +255,69 @@ def compute_session_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, ..
 
 
 def run_session(spec: SessionCommandSpec, source: HistoricalAdapter, sink: ResultSink, *,
-                requirements: SinkRequirements, cancellation: Cancellation | None = None) -> CommandOutcome:
+                requirements: SinkRequirements, cancellation: Cancellation | None = None,
+                progress: ProgressRecorder | None = None, _observation: _Attempt | None = None) -> CommandOutcome:
     """Return success only after actual entity admission, commit and verified readback."""
     if type(spec) is not SessionCommandSpec or type(requirements) is not SinkRequirements:
         _fail(CommandErrorCode.CONFIG)
+    if progress is not None:
+        if type(progress) is not ProgressRecorder or _observation is not None:
+            _fail(CommandErrorCode.CONFIG)
+        progress._own()
+        intent, _ = _record_hash(asdict(spec), b'efworker-command-intent1\0', 16777216)
+        with progress.attempt(intent, spec.family, spec.partition_id, spans=4) as observation:
+            return run_session(spec, source, sink, requirements=requirements,
+                               cancellation=cancellation, _observation=observation)
     token = cancellation if cancellation is not None else NeverCancelled()
-    try:
-        _cancel(token)
-        admit_source(source, spec.request)
-        admit_sink(sink, requirements)
-    except CommandError:
-        raise
-    except Exception:
-        _fail(CommandErrorCode.CONFIG)
-    prepared = prepare_session(spec, source, cancellation=token)
+    with _observation.stage(DiagnosticStage.ACQUISITION) if _observation else nullcontext():
+        try:
+            _cancel(token)
+            admit_source(source, spec.request)
+            admit_sink(sink, requirements)
+        except CommandError:
+            raise
+        except Exception:
+            _fail(CommandErrorCode.CONFIG)
+        prepared = prepare_session(spec, source, cancellation=token)
+    if _observation:
+        _observation.bind(prepared.task)
     _cancel(token)
     task = prepared.task
-    results = compute_session_inputs(task, (prepared.batch,) if prepared.batch is not None else ())
+    with _observation.stage(DiagnosticStage.CALCULATION) if _observation else nullcontext():
+        results = compute_session_inputs(task, (prepared.batch,) if prepared.batch is not None else ())
+    if _observation:
+        _observation.finish(DiagnosticStatus.COMPUTED)
     if any(c.entities != (spec.entity,) for c in results[0].values):
         _fail(CommandErrorCode.RESULT)
-    return _publish_verified(task, results, sink, requirements, token)
+    outcome = _publish_verified(task, results, sink, requirements, token, observation=_observation)
+    if _observation:
+        _observation.finish(DiagnosticStatus.VERIFIED)
+    return outcome
 
 
 def _publish_verified(task: TaskManifest, results: tuple[FeatureResult, ...], sink: ResultSink,
-                      requirements: SinkRequirements, token: Cancellation) -> CommandOutcome:
+                      requirements: SinkRequirements, token: Cancellation, *, observation: _Attempt | None = None) -> CommandOutcome:
     """Shared existing-SDK publication and readback, never a second sink protocol."""
     try:
-        limits = replace(requirements, visibility=None, writer_mode=None, reservation_retention_ns=1)
-        envelope = prepare_publication(results, destination_scope=task.destination_scope, generation_id=task.generation_id,
-                                       job_id=task.job_id, partition_id=task.partition_id, limits=limits)
-        OutputManifest(task, envelope)
-        verify_content(envelope, results)
+        with observation.stage(DiagnosticStage.SERIALIZATION) if observation else nullcontext():
+            limits = replace(requirements, visibility=None, writer_mode=None, reservation_retention_ns=1)
+            envelope = prepare_publication(results, destination_scope=task.destination_scope, generation_id=task.generation_id,
+                                           job_id=task.job_id, partition_id=task.partition_id, limits=limits)
+            OutputManifest(task, envelope)
+            verify_content(envelope, results)
         _cancel(token)
+        with observation.stage(DiagnosticStage.PUBLICATION) if observation else nullcontext():
+            return _commit_readback(task, results, sink, requirements, token, envelope)
+    except CommandError:
+        raise
+    except Exception:
+        _fail(CommandErrorCode.SINK)
+
+
+def _commit_readback(task: TaskManifest, results: tuple[FeatureResult, ...], sink: ResultSink,
+                     requirements: SinkRequirements, token: Cancellation,
+                     envelope: PublicationEnvelope) -> CommandOutcome:
+    try:
         receipt = publish(sink, envelope, results, requirements=requirements, cancellation=token)
         verify_receipt(receipt, envelope, results)
     except CommandError:
@@ -296,15 +340,27 @@ def _publish_verified(task: TaskManifest, results: tuple[FeatureResult, ...], si
 def run_registered(spec: SessionCommandSpec, *, sources: SourceRegistry[HistoricalAdapter], sinks: SinkRegistry[ResultSink],
                    source_id: str, source_config: PublicConfig, sink_id: str, sink_config: PublicConfig,
                    credentials: CredentialProvider, requirements: SinkRequirements,
-                   cancellation: Cancellation | None = None) -> CommandOutcome:
+                   cancellation: Cancellation | None = None, progress: ProgressRecorder | None = None,
+                   _observation: _Attempt | None = None) -> CommandOutcome:
     """Use only caller-supplied explicit registries; credentials stay outside manifests."""
+    if progress is not None:
+        if type(progress) is not ProgressRecorder or type(spec) is not SessionCommandSpec or _observation is not None:
+            _fail(CommandErrorCode.CONFIG)
+        progress._own()
+        intent, _ = _record_hash({'spec': asdict(spec), 'source_id': source_id, 'source_config': dict(source_config),
+            'sink_id': sink_id, 'sink_config': dict(sink_config)}, b'efworker-registered-intent1\0', 16777216)
+        with progress.attempt(intent, spec.family, spec.partition_id, spans=5) as observation:
+            return run_registered(spec, sources=sources, sinks=sinks, source_id=source_id,
+                source_config=source_config, sink_id=sink_id, sink_config=sink_config,
+                credentials=credentials, requirements=requirements, cancellation=cancellation, _observation=observation)
     try:
         token = cancellation if cancellation is not None else NeverCancelled()
         _cancel(token)
-        source = sources.resolve(source_id, source_config, credentials, spec.request)
-        sink = sinks.resolve(sink_id, sink_config, credentials, requirements)
+        with _observation.stage(DiagnosticStage.FACTORY) if _observation else nullcontext():
+            source = sources.resolve(source_id, source_config, credentials, spec.request)
+            sink = sinks.resolve(sink_id, sink_config, credentials, requirements)
     except CommandError:
         raise
     except Exception:
         _fail(CommandErrorCode.CONFIG)
-    return run_session(spec, source, sink, requirements=requirements, cancellation=token)
+    return run_session(spec, source, sink, requirements=requirements, cancellation=token, _observation=_observation)

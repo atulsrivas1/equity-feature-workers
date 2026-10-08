@@ -1,6 +1,7 @@
 """Bounded serialized publication through the accepted SDK and caller-owned sinks."""
 from __future__ import annotations
 
+from contextlib import nullcontext
 from dataclasses import dataclass, replace
 import threading
 
@@ -10,6 +11,8 @@ from equity_feature_io_sdk import Cancellation, admit_sink, prepare_publication,
 
 from .barriers import BarrierLimits, Dependency, _admit_dependencies, _admit_entities, inspect_barrier
 from .commands import CommandError, NeverCancelled
+from .diagnostics import (ProgressRecorder, DiagnosticStage, DiagnosticStatus, _Attempt,
+                          counter, interval, fixed_reason)
 from .manifests import OutputManifest, TaskManifest, integer, label
 
 
@@ -43,6 +46,7 @@ class _Pending:
     declaration: OutputManifest
     results: tuple[FeatureResult, ...]
     size: int
+    queued_ns: int | None = None
 
 
 class SerialPublisher:
@@ -93,19 +97,32 @@ class SerialPublisher:
         value = entry.declaration if output is None else output
         return Dependency(value.task.task_sha256, value.task, value, self._sink)
 
-    def submit(self, task: TaskManifest, results: tuple[FeatureResult, ...]) -> str:
+    def submit(self, task: TaskManifest, results: tuple[FeatureResult, ...], *,
+               progress: ProgressRecorder | None = None, _observation: _Attempt | None = None) -> str:
         """Admit supplied immutable results; do not acquire sources or calculate here."""
         if type(task) is not TaskManifest or task.destination_scope != self._scope:
             raise SinkError(SinkErrorCode.INVALID_CONFIG)
+        if progress is not None:
+            self.admit_owner()
+            if type(progress) is not ProgressRecorder or _observation is not None:
+                raise SinkError(SinkErrorCode.INVALID_CONFIG)
+            with progress.attempt(task.task_sha256, task.family, task.partition_id, spans=2) as observation:
+                observation.bind(task)
+                key = self.submit(task, results, _observation=observation)
+                observation.finish(DiagnosticStatus.WAITING)
+                return key
         requirements = replace(self._requirements, visibility=None, writer_mode=None, reservation_retention_ns=1)
-        envelope = prepare_publication(results, destination_scope=self._scope, generation_id=task.generation_id,
-                                       job_id=task.job_id, partition_id=task.partition_id, limits=requirements)
-        _admit_entities(task, results)
-        declaration = OutputManifest(task, envelope)
-        provisional = _Pending(declaration, results, 0)
-        size = _admit_dependencies((self._dependency(provisional),), self._bounds(), self._requirements)
-        entry = _Pending(declaration, results, size)
-        if not self._lock.acquire(blocking=False):
+        with _observation.stage(DiagnosticStage.SERIALIZATION) if _observation else nullcontext():
+            envelope = prepare_publication(results, destination_scope=self._scope, generation_id=task.generation_id,
+                                           job_id=task.job_id, partition_id=task.partition_id, limits=requirements)
+            _admit_entities(task, results)
+            declaration = OutputManifest(task, envelope)
+            provisional = _Pending(declaration, results, 0)
+            size = _admit_dependencies((self._dependency(provisional),), self._bounds(), self._requirements)
+            entry = _Pending(declaration, results, size, counter() if _observation else None)
+        with _observation.stage(DiagnosticStage.QUEUE_PROBE, probes=1) if _observation else nullcontext():
+            acquired = self._lock.acquire(blocking=False)
+        if not acquired:
             raise SinkError(SinkErrorCode.BUSY)
         try:
             key = task.task_sha256
@@ -150,10 +167,25 @@ class SerialPublisher:
             return PublicationProgress(dependency.task.task_sha256, barrier.verified[0].command.output, None)
         return PublicationProgress(dependency.task.task_sha256, None, barrier.waiting[0].reason)
 
-    def drain(self, *, cancellation: Cancellation | None = None) -> tuple[PublicationProgress, ...]:
+    def drain(self, *, cancellation: Cancellation | None = None, progress: ProgressRecorder | None = None,
+              _observations: dict[str, _Attempt] | None = None, _locked: bool = False) -> tuple[PublicationProgress, ...]:
         """One bounded pass, retaining cancellation/faults; no hidden retry or scheduler."""
         self.admit_owner()
-        if not self._lock.acquire(blocking=False):
+        if progress is not None:
+            if type(progress) is not ProgressRecorder or _observations is not None or _locked:
+                raise SinkError(SinkErrorCode.INVALID_CONFIG)
+            progress._own()
+            if not self._lock.acquire(blocking=False):
+                raise SinkError(SinkErrorCode.BUSY)
+            try:
+                tasks = tuple(p.declaration.task for p in self._pending.values())
+                if not tasks:
+                    return ()
+                with progress.group(tasks, spans=3) as observations:
+                    return self.drain(cancellation=cancellation, _observations=observations, _locked=True)
+            finally:
+                self._lock.release()
+        if not _locked and not self._lock.acquire(blocking=False):
             raise SinkError(SinkErrorCode.BUSY)
         token = cancellation if cancellation is not None else NeverCancelled()
         try:
@@ -162,6 +194,10 @@ class SerialPublisher:
             completed: list[str] = []
             for key, entry in self._pending.items():
                 available = self._limits.max_pending_bytes - used + entry.size
+                observation = _observations[key] if _observations else None
+                started = counter() if observation else None
+                if observation:
+                    observation.add(interval(DiagnosticStage.QUEUE_WAIT, entry.queued_ns, started))
                 try:
                     outcome = self._one(entry, available, token)
                 except SinkError as error:
@@ -170,6 +206,16 @@ class SerialPublisher:
                     outcome = PublicationProgress(key, None, error.code.value)
                 except Exception:
                     outcome = PublicationProgress(key, None, SinkErrorCode.UNAVAILABLE.value)
+                if observation:
+                    timing = interval(DiagnosticStage.PUBLICATION, started, counter())
+                    observation.add(timing)
+                    if outcome.reason == SinkErrorCode.BUSY.value:
+                        # The actual backend/barrier call returned BUSY. This combined
+                        # probe includes lookup/conversion; it is not OS lock wait.
+                        observation.add(interval(DiagnosticStage.BACKEND_PROBE, 0, timing.elapsed_ns, probes=1))
+                    observation.finish(DiagnosticStatus.VERIFIED if outcome.output is not None else
+                        DiagnosticStatus.CANCELLED if outcome.reason == 'CANCELLED' else DiagnosticStatus.WAITING,
+                        fixed_reason(outcome.reason) if outcome.reason is not None else None)
                 if outcome.output is not None:
                     size = _admit_dependencies((self._dependency(entry, outcome.output),),
                                               self._bounds(1, available), self._requirements)
@@ -180,4 +226,5 @@ class SerialPublisher:
                 del self._pending[key]
             return tuple(outcomes)
         finally:
-            self._lock.release()
+            if not _locked:
+                self._lock.release()

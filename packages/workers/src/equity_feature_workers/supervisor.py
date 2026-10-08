@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor, wait, FIRST_COMPLETED
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import hashlib
 import multiprocessing
 import os
@@ -16,6 +16,8 @@ import uuid
 from equity_feature_contracts import CanonicalBatch, FeatureResult
 from equity_feature_io_contracts import SinkError, SinkErrorCode, SinkRequirements
 from equity_feature_io_sdk import Cancellation, decode_result, encode_result, prepare_publication
+from .diagnostics import (ProgressRecorder, DiagnosticStage, DiagnosticStatus, StageTiming,
+                          _Attempt, counter, interval, fixed_reason)
 from .barriers import _admit_entities
 from .commands import CommandError, CommandErrorCode, NeverCancelled, _cancel, compute_session_inputs
 from .manifests import OutputManifest, TaskManifest, decode_task, encode_output, encode_task, integer
@@ -334,6 +336,7 @@ class TaskExecution:
     spill: SpillReference | None
     output: OutputManifest | None
     reason: str | None
+    timings: tuple[StageTiming, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -349,23 +352,37 @@ class SupervisorOutcome:
 
 
 def _reason(error: Exception) -> str:
-    if isinstance(error, (SinkError, CommandError)):
+    if isinstance(error, (SinkError, CommandError)) and type(error) in (SinkError, CommandError) and type(error.code) in (SinkErrorCode, CommandErrorCode):
         return error.code.value
     return 'CALCULATION_FAILED'
 
 
-def _compute_partition(partition: Partition, budget: ResourceBudget, process_transport: bool = False) -> tuple[TaskExecution, ...]:
+def _compute_partition(partition: Partition, budget: ResourceBudget, process_transport: bool = False,
+                       telemetry: bool = False, submitted_ns: int | None = None) -> tuple[TaskExecution, ...]:
     outcomes = []
     for item in partition.items:
+        timings: list[StageTiming] = []
+        started = counter() if telemetry else None
+        if telemetry:
+            timings.append(interval(DiagnosticStage.QUEUE_WAIT, submitted_ns, started))
         try:
-            results = item.calculate(item.task, item.batches)
-            _validate_results(item.task, results, budget)
-            execution = TaskExecution(item.task, results, None, None, None)
+            try:
+                results = item.calculate(item.task, item.batches)
+            finally:
+                if telemetry:
+                    timings.append(interval(DiagnosticStage.CALCULATION, started, counter()))
+            validation = counter() if telemetry else None
+            try:
+                _validate_results(item.task, results, budget)
+            finally:
+                if telemetry:
+                    timings.append(interval(DiagnosticStage.SERIALIZATION, validation, counter()))
+            execution = TaskExecution(item.task, results, None, None, None, tuple(timings))
             if process_transport and _size(execution) > budget.max_task_transport_bytes:
                 _fail(SinkErrorCode.RESOURCE_LIMIT)
             outcomes.append(execution)
         except Exception as error:
-            outcomes.append(TaskExecution(item.task, None, None, None, _reason(error)))
+            outcomes.append(TaskExecution(item.task, None, None, None, _reason(error), tuple(timings)))
     return tuple(outcomes)
 
 
@@ -382,11 +399,37 @@ class BoundedSupervisor:
         self._running = False
 
     def run(self, items: tuple[WorkItem, ...], *, cancellation: Cancellation | None = None,
-            spill: ResultSpill | None = None, publisher: SerialPublisher | None = None) -> SupervisorOutcome:
+            spill: ResultSpill | None = None, publisher: SerialPublisher | None = None,
+            progress: ProgressRecorder | None = None) -> SupervisorOutcome:
         if threading.current_thread() is not self._owner or self._running:
             _fail(SinkErrorCode.INVALID_SESSION)
         if type(items) is not tuple or not items or len(items) > self.budget.max_tasks or any(type(i) is not WorkItem for i in items):
             _fail(SinkErrorCode.RESOURCE_LIMIT)
+        self._running = True
+        try:
+            if progress is None:
+                return self._run(items, cancellation=cancellation, spill=spill, publisher=publisher)
+            if type(progress) is not ProgressRecorder:
+                _fail(SinkErrorCode.INVALID_CONFIG)
+            spans = 5 + 3 * len(items) if publisher is not None else 3
+            with progress.group(tuple(i.task for i in items), spans=spans) as observations:
+                outcome = self._run(items, cancellation=cancellation, spill=spill, publisher=publisher,
+                                    _observations=observations)
+                for execution in outcome.tasks:
+                    observation = observations[execution.task.task_sha256]
+                    for timing in execution.timings:
+                        observation.add(timing)
+                    status = (DiagnosticStatus.VERIFIED if execution.output is not None else
+                              DiagnosticStatus.CANCELLED if execution.reason == 'CANCELLED' else
+                              DiagnosticStatus.FAILED if execution.reason is not None else DiagnosticStatus.COMPUTED)
+                    observation.finish(status, fixed_reason(execution.reason) if execution.reason is not None else None)
+                return outcome
+        finally:
+            self._running = False
+
+    def _run(self, items: tuple[WorkItem, ...], *, cancellation: Cancellation | None = None,
+             spill: ResultSpill | None = None, publisher: SerialPublisher | None = None,
+             _observations: dict[str, _Attempt] | None = None) -> SupervisorOutcome:
         if spill is not None and type(spill) is not ResultSpill or publisher is not None and type(publisher) is not SerialPublisher:
             _fail(SinkErrorCode.INVALID_CONFIG)
         budget = self.budget
@@ -412,7 +455,10 @@ class BoundedSupervisor:
         copies = 0
         if self.mode == 'process':
             # Failure records also cross IPC; reject oversized task metadata before callbacks.
-            if any(max(_size(TaskExecution(i.task, None, None, None, reason))
+            if any(max(_size(TaskExecution(i.task, None, None, None, reason,
+                           (StageTiming(DiagnosticStage.QUEUE_WAIT, (1 << 63) - 1),
+                            StageTiming(DiagnosticStage.CALCULATION, (1 << 63) - 1),
+                            StageTiming(DiagnosticStage.SERIALIZATION, (1 << 63) - 1)) if _observations else ()))
                        for reason in tuple(code.value for code in SinkErrorCode) + tuple(code.value for code in CommandErrorCode))
                    > budget.max_task_transport_bytes for i in items):
                 _fail(SinkErrorCode.RESOURCE_LIMIT)
@@ -422,6 +468,10 @@ class BoundedSupervisor:
             copies += 3 * (len(items) * budget.max_task_transport_bytes + _size((None,) * len(items)))
         pending = publisher.limits.max_pending_bytes if publisher is not None else 0
         resident = input_bytes + copies + result_reservation + pending + budget.max_task_result_bytes + max(len(encode_task(i.task)) for i in items)
+        if _observations:
+            # Report wire reservations coexist with returned results in the coordinator.
+            # Python/container overhead remains outside this logical (not hard RSS) bound.
+            resident += 512 + sum(2048 + 256 * o.capacity for o in _observations.values())
         if resident > budget.max_resident_bytes:
             _fail(SinkErrorCode.RESOURCE_LIMIT)
         if spill is not None:
@@ -439,93 +489,107 @@ class BoundedSupervisor:
                     cancelled = True; return False
                 _fail(SinkErrorCode.INVALID_CONFIG)
         executions: dict[str, TaskExecution] = {}
-        self._running = True
-        try:
-            if self.mode == 'sequential':
-                for item in partitions[0].items:
-                    if not check():
+        if self.mode == 'sequential':
+            for item in partitions[0].items:
+                if not check():
+                    break
+                produced_one = _compute_partition(Partition(0, (item,)), budget, telemetry=_observations is not None,
+                    submitted_ns=counter() if _observations else None)[0]
+                executions[item.task.task_sha256] = produced_one
+        else:
+            pool = ThreadPoolExecutor(max_workers=budget.workers) if self.mode == 'thread' else ProcessPoolExecutor(
+                max_workers=budget.workers, mp_context=multiprocessing.get_context('spawn'))
+            futures: dict[Future[tuple[TaskExecution, ...]], Partition] = {}
+            iterator = iter(partitions)
+            exhausted = False
+            try:
+                while futures or not exhausted:
+                    while not exhausted and len(futures) < budget.max_in_flight and check():
+                        partition = next(iterator, None)
+                        if partition is None:
+                            exhausted = True; break
+                        futures[pool.submit(_compute_partition, partition, budget, self.mode == 'process',
+                            _observations is not None, counter() if _observations else None)] = partition
+                    if cancelled:
+                        exhausted = True
+                        for future in futures:
+                            future.cancel()
+                    if not futures:
                         break
-                    produced_one = _compute_partition(Partition(0, (item,)), budget)[0]
-                    executions[item.task.task_sha256] = produced_one
-            else:
-                pool = ThreadPoolExecutor(max_workers=budget.workers) if self.mode == 'thread' else ProcessPoolExecutor(
-                    max_workers=budget.workers, mp_context=multiprocessing.get_context('spawn'))
-                futures: dict[Future[tuple[TaskExecution, ...]], Partition] = {}
-                iterator = iter(partitions)
-                exhausted = False
+                    completed, _ = wait(futures, timeout=0.05, return_when=FIRST_COMPLETED)
+                    for future in completed:
+                        partition = futures.pop(future)
+                        if future.cancelled():
+                            continue
+                        try:
+                            produced = future.result()
+                        except Exception:
+                            produced = tuple(TaskExecution(i.task, None, None, None, 'CALCULATION_FAILED') for i in partition.items)
+                        executions.update((e.task.task_sha256, e) for e in produced)
+            finally:
+                pool.shutdown(wait=True, cancel_futures=True)
+        if _observations:
+            for identity, sidecar_execution in tuple(executions.items()):
                 try:
-                    while futures or not exhausted:
-                        while not exhausted and len(futures) < budget.max_in_flight and check():
-                            partition = next(iterator, None)
-                            if partition is None:
-                                exhausted = True; break
-                            futures[pool.submit(_compute_partition, partition, budget, self.mode == 'process')] = partition
-                        if cancelled:
-                            exhausted = True
-                            for future in futures:
-                                future.cancel()
-                        if not futures:
-                            break
-                        completed, _ = wait(futures, timeout=0.05, return_when=FIRST_COMPLETED)
-                        for future in completed:
-                            partition = futures.pop(future)
-                            if future.cancelled():
-                                continue
-                            try:
-                                produced = future.result()
-                            except Exception:
-                                produced = tuple(TaskExecution(i.task, None, None, None, 'CALCULATION_FAILED') for i in partition.items)
-                            executions.update((e.task.task_sha256, e) for e in produced)
-                finally:
-                    pool.shutdown(wait=True, cancel_futures=True)
-            # Publication is always coordinator-owned, after pure worker completion.
-            total_results = 0
-            output_metadata = 0
-            for item in sorted(items, key=lambda i: i.task.task_sha256):
-                identity = item.task.task_sha256
-                execution = executions.get(identity)
-                if execution is None:
-                    executions[identity] = TaskExecution(item.task, None, None, None, 'CANCELLED' if cancelled else 'CALCULATION_FAILED')
+                    if (type(sidecar_execution.timings) is not tuple or len(sidecar_execution.timings) > 3
+                            or any(type(t) is not StageTiming for t in sidecar_execution.timings)
+                            or tuple(t.stage for t in sidecar_execution.timings) not in (
+                                (DiagnosticStage.QUEUE_WAIT, DiagnosticStage.CALCULATION),
+                                (DiagnosticStage.QUEUE_WAIT, DiagnosticStage.CALCULATION, DiagnosticStage.SERIALIZATION))):
+                        raise ValueError
+                    copied = tuple(StageTiming(t.stage, t.elapsed_ns, t.probes) for t in sidecar_execution.timings)
+                except Exception:
+                    copied = (StageTiming(DiagnosticStage.QUEUE_WAIT, None),
+                              StageTiming(DiagnosticStage.CALCULATION, None),
+                              StageTiming(DiagnosticStage.SERIALIZATION, None))
+                executions[identity] = replace(sidecar_execution, timings=copied)
+        # Publication is always coordinator-owned, after pure worker completion.
+        total_results = 0
+        output_metadata = 0
+        for item in sorted(items, key=lambda i: i.task.task_sha256):
+            identity = item.task.task_sha256
+            execution = executions.get(identity)
+            if execution is None:
+                executions[identity] = TaskExecution(item.task, None, None, None, 'CANCELLED' if cancelled else 'CALCULATION_FAILED')
+                continue
+            if execution.results is None:
+                continue
+            results = execution.results
+            total_results += _validate_results(item.task, results, budget)
+            reference = None
+            if spill is not None:
+                try:
+                    reference = spill.write(item.task, results, budget=budget)
+                except SinkError as error:
+                    executions[identity] = replace(execution, results=results, spill=None, output=None, reason=error.code.value)
                     continue
-                if execution.results is None:
-                    continue
-                results = execution.results
-                total_results += _validate_results(item.task, results, budget)
-                reference = None
-                if spill is not None:
-                    try:
-                        reference = spill.write(item.task, results, budget=budget)
-                    except SinkError as error:
-                        executions[identity] = TaskExecution(item.task, results, None, None, error.code.value)
-                        continue
-                output = None; reason = execution.reason
-                if publisher is not None and check():
-                    try:
-                        publisher.submit(item.task, results)
-                        progress = publisher.drain(cancellation=token)
-                        for p in progress:
-                            prior = executions[p.task_sha256]
-                            accepted = p.output; diagnosis = p.reason
-                            if accepted is not None:
-                                size = len(encode_output(accepted))
-                                if resident + output_metadata + size > budget.max_resident_bytes:
-                                    accepted = None; diagnosis = SinkErrorCode.RESOURCE_LIMIT.value
-                                else:
-                                    output_metadata += size
-                            if p.task_sha256 == identity:
-                                output, reason = accepted, diagnosis
+            output = None; reason = execution.reason
+            if publisher is not None and check():
+                try:
+                    observation = _observations[identity] if _observations else None
+                    publisher.submit(item.task, results, _observation=observation)
+                    publication_progress = publisher.drain(cancellation=token, _observations=_observations)
+                    for p in publication_progress:
+                        prior = executions[p.task_sha256]
+                        accepted = p.output; diagnosis = p.reason
+                        if accepted is not None:
+                            size = len(encode_output(accepted))
+                            if resident + output_metadata + size > budget.max_resident_bytes:
+                                accepted = None; diagnosis = SinkErrorCode.RESOURCE_LIMIT.value
                             else:
-                                executions[p.task_sha256] = TaskExecution(prior.task, prior.results, prior.spill, accepted, diagnosis)
-                    except Exception as error:
-                        reason = _reason(error)
-                elif not check():
-                    reason = 'CANCELLED'
-                executions[identity] = TaskExecution(item.task, None if reference is not None else results, reference, output, reason)
-            ordered = tuple(executions[i.task.task_sha256] for i in sorted(items, key=lambda i: i.task.task_sha256))
-            reused: dict[str, int] = {}
-            for item in items:
-                reused.setdefault(item.task.reuse_sha256, item.rows)
-            return SupervisorOutcome(ordered, tuple((i.task.task_sha256, i.rows) for i in sorted(items, key=lambda i: i.task.task_sha256)),
-                sum(reused.values()), input_bytes, resident, total_results, self.mode, cancelled)
-        finally:
-            self._running = False
+                                output_metadata += size
+                        if p.task_sha256 == identity:
+                            output, reason = accepted, diagnosis
+                        else:
+                            executions[p.task_sha256] = replace(prior, output=accepted, reason=diagnosis)
+                except Exception as error:
+                    reason = _reason(error)
+            elif not check():
+                reason = 'CANCELLED'
+            executions[identity] = replace(execution, results=None if reference is not None else results, spill=reference, output=output, reason=reason)
+        ordered = tuple(executions[i.task.task_sha256] for i in sorted(items, key=lambda i: i.task.task_sha256))
+        reused: dict[str, int] = {}
+        for item in items:
+            reused.setdefault(item.task.reuse_sha256, item.rows)
+        return SupervisorOutcome(ordered, tuple((i.task.task_sha256, i.rows) for i in sorted(items, key=lambda i: i.task.task_sha256)),
+            sum(reused.values()), input_bytes, resident, total_results, self.mode, cancelled)
