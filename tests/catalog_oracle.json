@@ -1,0 +1,63 @@
+{
+  "protocol": "eq064-independent-oracle1",
+  "transitions": [
+    {
+      "action": "select A",
+      "expected_sequence": 0,
+      "history": [
+        "A"
+      ],
+      "sequence": 1
+    },
+    {
+      "action": "replay A",
+      "expected_sequence": 0,
+      "history": [
+        "A"
+      ],
+      "sequence": 1
+    },
+    {
+      "action": "select B",
+      "expected_sequence": 1,
+      "history": [
+        "A",
+        "B"
+      ],
+      "sequence": 2
+    },
+    {
+      "action": "stale A",
+      "expected_sequence": 0,
+      "error": "CONFLICT"
+    },
+    {
+      "action": "historical A",
+      "expected_sequence": 2,
+      "error": "CONFLICT"
+    }
+  ],
+  "unchanged_before_replace": [
+    "incomplete",
+    "unknown",
+    "corrupt",
+    "cancelled",
+    "readback_fault"
+  ],
+  "old_reader_history": [
+    "A"
+  ],
+  "new_reader_history": [
+    "A",
+    "B"
+  ],
+  "independent_returns": [
+    0.2,
+    -0.2,
+    0.0
+  ],
+  "windows_open_reader_error": "BUSY",
+  "linux_open_reader_bytes": "old",
+  "callback_count": 0,
+  "sink_begin_count": 0
+}
