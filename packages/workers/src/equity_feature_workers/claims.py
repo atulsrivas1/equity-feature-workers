@@ -22,6 +22,14 @@ from .manifests import (ClaimIdentity, OutputManifest, TaskManifest, decode_outp
                         encode_output, encode_task, integer, _pairs)
 
 
+def _safe_close(lock: _StoreLock) -> None:
+    """Release errors stay fixed/redacted, including after a durable write."""
+    try:
+        lock.close()
+    except Exception:
+        raise SinkError(SinkErrorCode.UNAVAILABLE) from None
+
+
 def _json(value: object) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False).encode("ascii")
 
@@ -230,6 +238,7 @@ class ClaimStore:
             raise SinkError(SinkErrorCode.INVALID_CONFIG) from None
         lock = self._lock()
         owned: _StoreLock | None = None
+        handle: TaskClaim | None = None
         try:
             keys, _ = self._inventory()
             if task.task_sha256 not in keys and len(keys) >= self._limits.max_tasks:
@@ -255,9 +264,18 @@ class ClaimStore:
         except Exception:
             raise SinkError(SinkErrorCode.UNAVAILABLE) from None
         finally:
-            if owned is not None:
-                owned.close()
-            lock.close()
+            try:
+                if owned is not None:
+                    _safe_close(owned)
+            finally:
+                try:
+                    _safe_close(lock)
+                except SinkError:
+                    # A failed final release masks return: do not strand the
+                    # transferred task lock in an unreturned handle.
+                    if handle is not None:
+                        handle.close()
+                    raise
 
     def request_cancel(self, task: TaskManifest) -> None:
         """Durable cooperative flag, independent of a currently held task lock."""
@@ -272,7 +290,7 @@ class ClaimStore:
             record["cancelled"] = True
             self._write(task, record)
         finally:
-            lock.close()
+            _safe_close(lock)
 
 
 class _ClaimCancellation:
@@ -314,7 +332,7 @@ class TaskClaim:
                 raise SinkError(SinkErrorCode.INVALID_SESSION)
             return record
         finally:
-            lock.close()
+            _safe_close(lock)
 
     def _update(self, **changes: Any) -> dict[str, Any]:
         self._admit()
@@ -327,7 +345,7 @@ class TaskClaim:
             self._store._write(self.task, record)
             return record
         finally:
-            lock.close()
+            _safe_close(lock)
 
     def _progress(self, record: dict[str, Any], reason: str | None,
                   output: OutputManifest | None = None,
@@ -409,9 +427,11 @@ class TaskClaim:
         self._store._admit_owner()
         if self._running:
             raise SinkError(SinkErrorCode.BUSY)
-        if not self._closed:
-            self._lock.close()
-            self._closed = True
+        # Fence public operations even if releasing ownership fails. A still-open
+        # descriptor remains available for an explicit close retry; never steal it.
+        self._closed = True
+        if self._lock.file is not None:
+            _safe_close(self._lock)
 
     def __enter__(self) -> TaskClaim:
         self._admit()
