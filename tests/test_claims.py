@@ -2,6 +2,7 @@
 from dataclasses import replace
 import json
 import multiprocessing
+import signal
 from pathlib import Path
 import tempfile
 import threading
@@ -32,12 +33,15 @@ def quota_child(root,task,ready,results):
     except SinkError as error:results.put(error.code.value)
 
 def committed_child(root,kind,ready):
-    import os
     command=work()[0]
     with acquire(store(root),command.output.task) as handle,sink_for(kind,Path(root)) as inner:
         class Crash(Proxy):
             def commit(self,session):
-                self.inner.commit(session);ready.set();os._exit(23)
+                self.inner.commit(session);ready.set()
+                # Parent terminates a still-live owner before worker metadata.
+                # A private wait avoids abandoning a shared release-event lock.
+                threading.Event().wait(30)
+                raise AssertionError('parent did not terminate paused committed owner')
         handle.run(lambda:command.results,Crash(inner),now_ns=101)
         raise AssertionError('crash was not exercised')
 
@@ -80,9 +84,14 @@ class Claims(unittest.TestCase):
         ctx=multiprocessing.get_context('spawn');command=work()[0]
         for kind in ('parquet','duckdb'):
             with self.subTest(kind=kind),tempfile.TemporaryDirectory() as root:
-                ready=ctx.Event();p=ctx.Process(target=committed_child,args=(root,kind,ready));p.start();p.join(20)
-                if p.is_alive():p.terminate();p.join(10)
-                self.assertEqual(p.exitcode,23);self.assertTrue(ready.is_set())
+                ready=ctx.Event();p=ctx.Process(target=committed_child,args=(root,kind,ready));p.start()
+                try:
+                    self.assertTrue(ready.wait(20));self.assertTrue(p.is_alive())
+                    self.rejected(SinkErrorCode.BUSY,lambda:acquire(store(root),command.output.task,'B',201,300))
+                    p.terminate();p.join(10)
+                    self.assertFalse(p.is_alive());self.assertEqual(p.exitcode,-signal.SIGTERM)
+                finally:
+                    if p.is_alive():p.terminate();p.join(10)
                 s=store(root);s.request_cancel(command.output.task)
                 with acquire(s,command.output.task,'B',201,300) as handle,sink_for(kind,Path(root)) as inner:
                     proxy=Proxy(inner);calls=[]
