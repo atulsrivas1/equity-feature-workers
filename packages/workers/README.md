@@ -1,3 +1,7 @@
+## BUG006 experimental a12 candidate — October 8, 2026
+
+Bounded R5.1 repair preserves foreign producer entries during supervisor drains, independent of optional diagnostics. Core/I/O/math/schema/mandatory dependencies remain unchanged. Native/installed/review/publication qualification is pending; a11 receipts below remain historical. Follow canonical [BUG006](https://github.com/atulsrivas1/equity-features/issues/337); no R6 or private generation is admitted.
+
 ## EQ066 readiness development snapshot — workers0.1.0a11
 
 Experimental tooling candidate, not yet a qualified release. Numerical algorithms, public worker API and mandatory dependency graph are unchanged. Frozen pre-code plan/oracle cover actual accepted DuckDB source and both sinks,54 configs/162 samples where capacity permits, full content parity, latency and external sampled process-tree RSS. Optional source0.1.0a8/NumPy2.2.6 are explicit qualification components. Full source/review/benchmark/repeat/fresh installed/native/artifact/actualmain/acceptance gates remain pending; no speedup or private pilot/month/annual admission claimed. Earlier EQ065 development snapshot below is historical. Source imports and native connections never enter numerical callbacks or child IPC.

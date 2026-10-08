@@ -1,3 +1,7 @@
+## BUG006 experimental a12 candidate — October 8, 2026
+
+Bounded R5.1 repair preserves foreign producer entries during supervisor drains, independent of optional diagnostics. Core/I/O/math/schema/mandatory dependencies remain unchanged. Native/installed/review/publication qualification is pending; a11 receipts below remain historical. Follow canonical [BUG006](https://github.com/atulsrivas1/equity-features/issues/337); no R6 or private generation is admitted.
+
 ## EQ066 release qualification — October 8, 2026
 
 Experimental workers0.1.0a11: worker `848515c5517160e15fe07248737b0bf191f300a2` native push37739626724; canonical `dc5527b91f4f72eee5e7d4a08fd38cdd2104a274` native37739642374/docs37739642361, all SUCCESS. [Exact release receipt](EQ066_RELEASE_RECEIPT.json), UTF8 LF SHA256 `e7846f2812af06b310fc0625c09a539df0034ad26a2cb16ddf7e9c7674e5b1f7`, binds two actual server ZIPs/20 archives/22 files, all56 scoped source/probe/builder hashes, fixed core20c08c/IO4603c6 pins and four fresh installed forms. Linux Python3.12.14 expires2026-11-07T06:54:53Z; Windows Python3.12.10 expires2026-11-07T07:00:59Z. Actual release scoped source and all per-platform archives match qualified source.
