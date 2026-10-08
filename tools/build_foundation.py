@@ -124,7 +124,7 @@ def qualify(dependencies, artifacts, form, packages, probe):
         location = Path(temporary)
         run(sys.executable, "-m", "venv", location)
         py = location / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
-        run(py, "-m", "pip", "install", "--no-deps", "setuptools==80.9.0", "mypy==1.15.0", "mypy_extensions==1.1.0", "typing_extensions==4.16.0", "duckdb==1.5.6", "pyarrow==20.0.0")
+        run(py, "-m", "pip", "install", "--no-deps", "setuptools==80.9.0", "mypy==1.15.0", "mypy_extensions==1.1.0", "typing_extensions==4.16.0", "duckdb==1.5.6", "pyarrow==20.0.0", "numpy==2.2.6")
         core = [p for p in dependencies if p.name.startswith(("equity_feature_contracts-", "equity_features-"))]
         install(py, core)
         before = fingerprint(py, location)
@@ -145,6 +145,8 @@ def qualify(dependencies, artifacts, form, packages, probe):
         run(py, "-I", probe.parent / "catalog_example.py", cwd=location)
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_diagnostics.py", cwd=location)
         run(py, "-I", probe.parent / "diagnostics_example.py", cwd=location)
+        run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_pilot.py", cwd=location)
+        run(py, "-I", probe.parent / "pilot_fixture.py", "--installed-smoke", cwd=location)
         executable = py.parent / ("equity-feature-worker.exe" if os.name == "nt" else "equity-feature-worker")
         run(executable, "--demo", "both", cwd=location)
         after = fingerprint(py, location)
@@ -155,7 +157,10 @@ def qualify(dependencies, artifacts, form, packages, probe):
         backend_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;print(json.dumps({n:version(n) for n in ('duckdb','pyarrow','equity-feature-parquet','equity-feature-duckdb-sink')}))"], cwd=location, text=True, encoding="utf-8"))
         assert backend_versions == {"duckdb": "1.5.6", "pyarrow": "20.0.0", "equity-feature-parquet": "0.1.0a1", "equity-feature-duckdb-sink": "0.1.0a0"}
-        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
+        source_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
+            "import json;from importlib.metadata import version;import equity_feature_duckdb as source;from pathlib import Path;assert 'site-packages' in Path(source.__file__).resolve().parts;print(json.dumps({n:version(n) for n in ('equity-feature-duckdb','numpy')}))"], cwd=location, text=True, encoding="utf-8"))
+        assert source_versions == {"equity-feature-duckdb":"0.1.0a8", "numpy":"2.2.6"}
+        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
 
 
 def main():
@@ -184,7 +189,7 @@ def main():
             assert git(io_root, "rev-parse", "HEAD") == IO_COMMIT, "Use fixed accepted I/O source"
             dependency_commit["equity-feature-io"] = IO_COMMIT
             io_source = snapshot(io_root, dependency_commit["equity-feature-io"], stage / "io-source", ("packages", "examples/third_party"))
-            for folder in ("io-contracts", "io-sdk", "parquet", "duckdb-sink"):
+            for folder in ("io-contracts", "io-sdk", "duckdb", "parquet", "duckdb-sink"):
                 build(io_source / "packages" / folder, dependencies)
             build(io_source / "examples" / "third_party", dependencies)
         packages = [tomllib.loads((p / "pyproject.toml").read_text(encoding="utf-8"))["project"]["name"] for p in sorted((component_source / "packages").iterdir())]

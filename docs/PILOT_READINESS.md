@@ -1,0 +1,33 @@
+# Physical pipeline benchmark and readiness
+
+Experimental workers0.1.0a11 tooling, EQ066. Calculations and public worker API are unchanged. The optional actual source is equity-feature-duckdb0.1.0a8/NumPy2.2.6/DuckDB1.5.6; both physical sinks use the fixed accepted I/O4603c6e baseline. These are explicit qualification dependencies, not mandatory worker dependencies. Public examples contain owned synthetic rows only.
+
+## Reproduce
+
+Use CPython3.12, requirements-dev.txt, fixed core20c08c and I/O4603c6e wheels/packages including optional duckdb source; install workers. From a clean committed checkout, run:
+
+```powershell
+python tools/benchmark_pipeline.py --out work/pilot-report.json --fixture-root work/pilot-fixtures --output-root work/pilot-outputs
+```
+
+All three locations must be new explicit owned locations (the output report parent may exist). The runner never overwrites a dataset/output root or deletes prior results. It checks exact committed scoped raw bytes before/after. Use source PYTHONPATH explicitly for author source experiments; that is distinct from fresh installed qualification. tools/build_foundation.py additionally runs installed four-case pilot tests and a both-sink smoke in each isolated wheel/sdist environment with the source distribution. Full54-configuration scaling is local hardware evidence; CI's minimal tests are not full scaling qualification.
+
+The [pre-code plan](EQ066_PLAN.md) and independent tests/pilot_oracle.json freeze pair100/2+102/3, exact integer totals, rational506/5 VWAP and5/2 mean size, three workloads16/4096/2528 rows,54 configs/162 repeated samples, seed766/rotations and fixed identities before implementation. Actual request batch limit=min(256,instrument rows), satisfying the existing request contract; source batch cap256 and max_batches=ceil(rows/256). Record each effective request limit. No largest-trade feature is added.
+
+## Interpretation
+
+Source files/catalog are created outside timing and retained unchanged across configurations. Six reference runs establish full encoded result/status/quality/evidence/input identity parity and warm input files; they are excluded from measured comparisons. Raw diagnostic reference timings may still be recorded. Ratios compare the three measured sequential1 repeats. Fresh processes/outputs do not imply cold disk; OS page cache, background load and temperature remain uncontrolled. CPU admission requires workers+one coordinator/backend slot within observed affinity/logical capacity. RAM admission uses the explicitly reported initial available-memory snapshot and conservative1GiB+workers*256MiB heuristic; unavailable RAM is unavailable admission. Actual logical supervisor preflight remains authoritative and separate from observed RSS.
+
+Pipeline elapsed starts before physical source/sink construction/acquisition and ends after successful immutable generation/catalog/full content/golden verification and sink close. Isolated process wall also includes imports, preparation/report/identity checks and external sampling overhead. Per-task latency starts before its source setup, ends at its first successful full sink-read return, and enters distributions only after original receipt verification, final parity and unchanged-input assertions. containing-group diagnostic elapsed is not substituted. Overlapping stage arrays/probe counts are not job elapsed or isolated backend lock-blocking time. Generation publication and catalog selection plus verification are separately timed; extra direct verification uses no recorder attempt. One prepare/supervisor/generation/catalog observation per task uses64 attempts/896 spans/360960 reserved bytes at16 tasks, with a fresh recorder and no extra observed retries/factories.
+
+Input original/optimized/catalog file lengths, canonical pickle bytes, result codec bytes and final closed output file lengths are reported separately; none is physical bytes read, peak disk growth or allocation-block accounting. Five literal trade goldens plus full encode_result parity preserve unavailable/status/quality/evidence/input metadata. Existing independent bar500/51200/102.6 and history.2/-.2/0 suites remain separate acceptance evidence.
+
+## Memory observation
+
+An external sampler observes the spawned coordinator's process tree at nominal10ms, reports actual intervals/scan windows/error counts, per-process PID+creation identities, native per-process high waters and peak sampled sum of live resident counters. Windows virtualenv python.exe may be a launcher: include launcher/helpers and require the actual coordinator PID reported by the trusted child to have positive observed samples. The independent allocation test reads the actual allocator PID, not its constant-size launcher, and touches64MiB before verifying an independently observed resident increase. Literal simultaneous frames verify180 versus the incorrect sum-of-separate-peaks200.
+
+Windows [PROCESS_MEMORY_COUNTERS_EX](https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex) supplies WorkingSetSize/PeakWorkingSetSize (PrivateUsage is commit, not RSS); [PROCESSENTRY32W](https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/ns-tlhelp32-processentry32w) supplies snapshot ancestry. Linux [/proc](https://www.kernel.org/doc/html/v6.8/filesystems/proc.html) supplies VmRSS/VmHWM and stat parent/start identity. Sequential scans only approximate simultaneous memory; shared pages can be double counted, short peaks/children and ancestry races missed. Preserve unavailable counters, never impute zero. Cap sampler bookkeeping at20000 frames/256 identities and reject truncated/fatal/unavailable-root qualification. The external sampler is excluded from process-tree RSS but can affect CPU timing. Neither logical wire reservation nor observed RSS is a hard process/job RSS limit.
+
+## Historical readiness
+
+Synthetic configured engineering pipeline: qualification pending measured/source/review/installed/native/release/readback gates. Private pilot: NOT_ADMITTED until source-specific rights/privacy, identity/retained truth, PIT/known-at/adjustments, calendar and required warm-up/math evidence are accepted. Corrected month: NOT_ADMITTED until that pilot plus independent correction/coverage/cancellation/restart and measured bounded capacity. Annual: NOT_ADMITTED until accepted corrected month plus worst-case CPU/memory/disk/retention capacity. Do not extrapolate synthetic throughput into proprietary generation approval. Package completion without proprietary production admission follows PUBLIC_DEVELOPMENT.md. No private jobs/providers/scheduler/new acceleration or R6 scope here.

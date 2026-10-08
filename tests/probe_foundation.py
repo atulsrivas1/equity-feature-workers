@@ -35,7 +35,7 @@ expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'e
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == ('0.1.0a10' if name=='equity-feature-workers' else '0.1.0a2')
+    assert module.__version__ == ('0.1.0a11' if name=='equity-feature-workers' else '0.1.0a2')
     if name=='equity-feature-workers':
         assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task', 'SessionCommandSpec', 'run_session', 'run_registered', 'RequiredCommandSpec', 'RequiredOutcome', 'run_required', 'run_required_registered', 'BarrierLimits', 'Dependency', 'TaskNode', 'evaluate_readiness', 'inspect_barrier', 'run_assembly', 'UniverseShard', 'BreadthCommandSpec', 'run_breadth', 'PublicationLimits', 'PublicationProgress', 'SerialPublisher', 'GenerationSpec', 'GenerationOutcome', 'GenerationStore'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)
