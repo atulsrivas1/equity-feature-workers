@@ -17,7 +17,8 @@ from .generations import GenerationSpec, GenerationOutcome, GenerationStore
 from .supervisor import (WorkItem, InputReuseCache, ResourceBudget, Partition, partition_tasks,
                          SpillReference, ResultSpill, TaskExecution, SupervisorOutcome, BoundedSupervisor)
 from .claims import ClaimLimits, ClaimProgress, ClaimStore, TaskClaim
-__version__ = "0.1.0a8"
+from .catalog import CatalogLimits, CatalogEntry, CatalogSnapshot, CatalogOutcome, CatalogStore
+__version__ = "0.1.0a9"
 __all__ = ['__version__', 'ClaimIdentity', 'InputManifest', 'ManifestError', 'ManifestErrorCode',
            'OutputManifest', 'TaskManifest', 'decode_output', 'decode_task', 'encode_output', 'encode_task',
            'CommandError', 'CommandErrorCode', 'CommandOutcome', 'SessionCommandSpec', 'run_registered', 'run_session',
@@ -27,4 +28,4 @@ __all__ = ['__version__', 'ClaimIdentity', 'InputManifest', 'ManifestError', 'Ma
            'BreadthCommandSpec', 'BreadthOutcome', 'UniverseShard', 'run_breadth',
            'PublicationLimits', 'PublicationProgress', 'SerialPublisher', 'GenerationSpec', 'GenerationOutcome', 'GenerationStore',
            'PreparedSession', 'prepare_session', 'compute_session_inputs', 'WorkItem', 'InputReuseCache', 'ResourceBudget',
-           'Partition', 'partition_tasks', 'SpillReference', 'ResultSpill', 'TaskExecution', 'SupervisorOutcome', 'BoundedSupervisor', 'ClaimLimits', 'ClaimProgress', 'ClaimStore', 'TaskClaim']
+           'Partition', 'partition_tasks', 'SpillReference', 'ResultSpill', 'TaskExecution', 'SupervisorOutcome', 'BoundedSupervisor', 'ClaimLimits', 'ClaimProgress', 'ClaimStore', 'TaskClaim', 'CatalogLimits', 'CatalogEntry', 'CatalogSnapshot', 'CatalogOutcome', 'CatalogStore']
