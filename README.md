@@ -1,3 +1,7 @@
+## Installed acquisition planning — experimental workers0.1.0a13
+
+Explicit feature requirements select caller-registered source capabilities; exact source/sink/config/command plan identity and scoped execution consent precede factory/credential access. Default deny, selected factories only, existing worker calculations/publication/readback and source-independent pure libraries. No new mandatory dependencies. Optional owned CSV example: equity-feature-worker --acquisition-demo --approve-owned-fixture. This consent is for the generated synthetic fixture only, never provider downloads or charges. [API](https://github.com/atulsrivas1/equity-feature-workers/blob/codex/eq073-acquisition-planning/docs/api/ACQUISITION_PLANNING.md) and [current story/delivery evidence](https://github.com/atulsrivas1/equity-features/issues/82) record supported flows and limitations. Earlier candidate/delivery statements below are historical captures; they do not supersede the live issue/Project.
+
 ## BUG006 experimental a12 candidate — October 8, 2026
 
 Bounded R5.1 repair preserves foreign producer entries during supervisor drains, independent of optional diagnostics. Core/I/O/math/schema/mandatory dependencies remain unchanged. Native/installed/review/publication qualification is pending; a11 receipts below remain historical. Follow canonical [BUG006](https://github.com/atulsrivas1/equity-features/issues/337); no R6 or private generation is admitted.

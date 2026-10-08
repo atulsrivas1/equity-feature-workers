@@ -72,9 +72,20 @@ def main(argv: list[str] | None = None, *, spec: SessionCommandSpec | RequiredCo
     choices.add_argument("--assembly", action="store_true", help="requires explicit owned composition/dependencies/components/limits")
     choices.add_argument("--breadth", choices=("direction_counts", "above_sma_fraction"),
                         help="requires explicit owned universe/shards/dependencies/member proofs/sink/limits")
+    choices.add_argument("--acquisition-demo", action="store_true", help="owned local CSV planning; requires explicit --approve-owned-fixture")
+    parser.add_argument("--approve-owned-fixture", action="store_true", help="authorize this generated synthetic local fixture only; no provider/billing consent")
     args = parser.parse_args(argv)
+    if args.approve_owned_fixture and not args.acquisition_demo:
+        parser.exit(2, "Owned-fixture approval requires --acquisition-demo\n")
     try:
-        if args.session is not None:
+        if args.acquisition_demo:
+            from .acquisition_demo import run_owned_acquisition
+            from .acquisition import PlanningError
+            try:
+                records = [run_owned_acquisition(approved=args.approve_owned_fixture)]
+            except PlanningError as error:
+                parser.exit(1, str(error) + "\n")
+        elif args.session is not None:
             if type(spec) is not SessionCommandSpec or source is None or sink is None or requirements is None or spec.family != args.session:
                 parser.exit(2, "Session components required: use an explicit caller wrapper\n")
             records = [_record(run_session(spec, source, sink, requirements=requirements), "injected")]
