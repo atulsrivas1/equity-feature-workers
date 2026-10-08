@@ -1,3 +1,7 @@
+## Qualified experimental engineering delivery
+
+[Source/repeat/native receipt](EQ066_SOURCE_RECEIPT.json) and [actual runtime release receipt](EQ066_RELEASE_RECEIPT.json) bind the completed measured protocol, installed/native forms, exact source/archive parity and supported versions. Final issue/publication acceptance remains the authority in EQ066#74. Private pilot/corrected month/annual NOT_ADMITTED.
+
 ## Completed physical measurement — October 8, 2026
 
 The full frozen protocol passed:54 configurations,162 measured samples,three repeats each,zero skipped and six excluded warm references. All three owned synthetic populations retained original file/catalog identities, five independent trade goldens and full encoded numerical/status/quality/evidence/input parity across both sinks and every execution configuration. The [raw report](EQ066_BENCHMARK.json) binds exact source 0fad00d8d928165833cf2e87316455fb2750c406 and56 scoped hashes; public UTF8 LF SHA256 `51141ad524d47c72574e5d304d31c5bd5196fdb955d22125ccd899a17e486c99`. This is configured synthetic engineering qualification; installed/native/release/actual-main acceptance is separately recorded in the linked receipts.
@@ -79,7 +83,7 @@ Each row has three verified samples. Range/median is pipeline seconds; throughpu
 
 | Scope | Status | Remaining admission |
 | --- | --- | --- |
-| Owned synthetic configured pipeline | Full measured protocol passed; release acceptance recorded separately | Final installed/native/artifact/review/publication/readback gates in delivery receipts |
+| Owned synthetic configured pipeline | QUALIFIED experimental engineering delivery | Actual source/repeat/native/runtime release receipts passed; final documentation/publication/issue acceptance recorded in EQ066#74 |
 | Private pilot | NOT_ADMITTED | Individually accepted rights/privacy, retained source truth/identity, PIT/known-at/adjustment policy, governed calendar, required warm-up/math fixtures |
 | Corrected month | NOT_ADMITTED | Accepted private pilot plus coverage/correction/cancellation/restart and independently measured bounded capacity |
 | Annual | NOT_ADMITTED | Accepted corrected month plus independent worst-case CPU/memory/disk/retention capacity |
