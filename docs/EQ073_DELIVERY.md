@@ -1,5 +1,14 @@
 # EQ073 source qualification and delivery
 
+## Verified source release; final evidence publication
+
+EQ073 is Released and remains open until this same-story evidence change passes final publication/readback. Worker main `270d4b7efb6fc794cadbfa516bb995f62505076b` and canonical main `c130f3087a7f546e623237b59af1a92be794bd16` equal the separately reviewed full trees at `4b19863d3d772d3c32fd803487e17c6a60855a34` / `f30441bd9f810373edf89e829b4b255b022a0c1c`. Actual public source/API/version/receipt bytes and Atul author/GitHub squash committer attribution are verified. All ten final source checks and all five actual-main checks succeed. Separate automated reviewer /root/r6_review independently verifies actual main evidence with no findings; this is not a human review or independent reinstall.
+
+Actual worker main native run `37821975557` has two server ZIPs, 24 archives across Windows/Linux, four fresh wheel/sdist light/full forms, 61 committed inputs unchanged from qualified `fdd1e5e32e8143ff4bb70c0afaf5f711e2aeb0ff`, the owned CSV command and verified receipt, 25 acquisition methods plus retained installed suites, two negative public typing calls, strict typing, and invariant core fingerprints. Public LF release receipt SHA256 `672645e606e0c6162475ab790a0871d687c6343db51961d9222b51f2510b0d88`. Core main run `37821986778` preserves twelve pure archives across two ZIPs/four 43-case installed consumer forms and qualified per-platform parity; LF receipt SHA256 `350062b32ee1eecd555e675dd0cb06b1d09a72edc11c4961b3658a72cf603e55`. Artifact IDs, ZIP digests and finite server expiry are in the immutable receipts. Original source receipts remain unchanged.
+
+This change adds actual release/readback/check records and continuity only. Runtime, versions, mandatory dependencies and all 61 worker build inputs remain unchanged. Exact final metadata review, current checks/native archive parity and actual final-main publication/readback remain required before Done. No registry or stable package publication. EQ069/070 lack authorized provider inputs and actual proof; EQ072 cross-provider and EQ074 aggregate remain unqualified. E09/milestone7/R6 stay open. Explicit owner permission covers free qualification downloads only; provider requests/downloads and any charges require separate explicit user approval.
+
+## Historical source qualification snapshot
 Canonical [EQ073 #82](https://github.com/atulsrivas1/equity-features/issues/82), [workerPR27](https://github.com/atulsrivas1/equity-feature-workers/pull/27), [canonicalPR347](https://github.com/atulsrivas1/equity-features/pull/347). Live Project is Test; no release/Done/R6/provider acceptance claimed. Optional owned local CSV is actual local-file proof, not provider integration. Default dependencies unchanged, workers0.1.0a13; core/contracts.a4, SDK/contracts.a2 and all backend versions unchanged.
 
 ## Exact source and independent review
