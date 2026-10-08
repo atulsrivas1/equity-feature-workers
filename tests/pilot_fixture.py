@@ -14,7 +14,8 @@ from importlib.metadata import version
 
 # Fixture modules only; installed qualification never adds package source roots.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pilot_memory import MemorySampler, summary
+from pilot_memory import summary
+from pilot_process import communicate_owned
 
 ORACLE = json.loads(Path(__file__).with_name('pilot_oracle.json').read_text(encoding='utf-8'))
 VERSIONS = {'equity-feature-contracts':'0.0.4a4','equity-features':'0.0.4a4',
@@ -202,18 +203,9 @@ def isolated_sample(fixture, output, workload, backend, mode, workers, require_i
     command=[sys.executable]+(['-I'] if require_installed else [])+[str(Path(__file__).resolve()),'--sample']
     environment=dict(os.environ,OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',NUMEXPR_NUM_THREADS='1')
     start=time.perf_counter_ns()
-    process=subprocess.Popen(command,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
-        text=True,encoding='utf-8',env=environment,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
-    sampler=MemorySampler(process).start()
-    try:
-        stdout,stderr=process.communicate(json.dumps(settings),timeout=180)
-        memory=sampler.stop()
-    except BaseException:
-        if process.poll() is None:
-            process.terminate(); process.communicate(timeout=15)
-        sampler.stop_event.set(); sampler.thread.join(5)
-        raise
-    if process.returncode:
+    stdout,stderr,memory,returncode=communicate_owned(command,json.dumps(settings),env=environment,
+        creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
+    if returncode:
         # Private developer logs may inspect the exception; no raw paths/text enter public reports.
         raise RuntimeError('isolated synthetic pipeline failed: '+stderr)
     result=json.loads(stdout); result['isolated_process_wall_ns']=time.perf_counter_ns()-start

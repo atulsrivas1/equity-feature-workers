@@ -8,10 +8,14 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
+import importlib.util
+from unittest.mock import patch
 import unittest
 
 from pilot_fixture import ORACLE, counts, make_fixture, isolated_sample
-from pilot_memory import NativeMemory, admission, quantile, simultaneous_peak
+from pilot_memory import NativeMemory, MemorySampler, admission, quantile, simultaneous_peak
+from pilot_process import OwnedProcess, communicate_owned
 
 
 class Pilot(unittest.TestCase):
@@ -41,7 +45,8 @@ resident=bytearray(64*1024*1024)
 for offset in range(0,len(resident),4096):resident[offset]=1
 print('after '+str(os.getpid()),flush=True);sys.stdin.readline()
 """
-        child=subprocess.Popen([sys.executable,'-I','-c',code],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
+        owner=OwnedProcess()
+        child=owner.start([sys.executable,'-I','-c',code],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,text=True,encoding='utf-8',creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
         try:
             replies=queue.Queue()
@@ -60,7 +65,72 @@ print('after '+str(os.getpid()),flush=True);sys.stdin.readline()
             child.stdin.write('exit\n');child.stdin.flush();child.communicate(timeout=15)
             self.assertEqual(child.returncode,0)
         finally:
-            if child.poll() is None:child.terminate();child.communicate(timeout=15)
+            owner.close(failed=child.poll() is None)
+            child.communicate(timeout=5)
+
+    def test_owned_timeout_and_terminal_root_cleanup_preserves_unrelated(self):
+        flags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0
+        sentinel_owner=OwnedProcess()
+        sentinel=sentinel_owner.start([sys.executable,'-I','-c','import sys;sys.stdin.read()'],
+            stdin=subprocess.PIPE,creationflags=flags)
+        try:
+            for terminal_root in (False,True):
+                with self.subTest(terminal_root=terminal_root), tempfile.TemporaryDirectory() as temporary:
+                    marker=Path(temporary)/'child.json'
+                    child_code="import os,time,json;from pathlib import Path;Path("+repr(str(marker))+ ").write_text(json.dumps({'pid':os.getpid()}));time.sleep(60)"
+                    root_code="import sys,subprocess,time;sys.stdin.read();subprocess.Popen([sys.executable,'-I','-c',"+repr(child_code)+"]);"+('time.sleep(.4)' if terminal_root else 'time.sleep(60)')
+                    samplers=[]
+                    def factory(process):
+                        sampler=MemorySampler(process);samplers.append(sampler);return sampler
+                    with self.assertRaises(subprocess.TimeoutExpired):
+                        communicate_owned([sys.executable,'-I','-c',root_code],'go',timeout=2,
+                            sampler_factory=factory,creationflags=flags)
+                    self.assertTrue(marker.exists(),'owned child handshake did not execute')
+                    descendant=json.loads(marker.read_text(encoding='utf-8'))['pid']
+                    deadline=time.monotonic()+5
+                    while descendant in NativeMemory().inventory() and time.monotonic()<deadline:time.sleep(.02)
+                    self.assertNotIn(descendant,NativeMemory().inventory(),'owned child survived cleanup')
+                    self.assertTrue(samplers[0].stop_event.is_set());self.assertFalse(samplers[0].thread.is_alive())
+                    self.assertIsNone(sentinel.poll(),'unrelated process was terminated')
+        finally:
+            sentinel_owner.close(failed=True);sentinel.communicate(timeout=5)
+
+    def test_owned_sampler_initialization_and_start_failures(self):
+        flags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0
+        for phase in ('constructor','start','interrupt'):
+            at_start=phase!='constructor'
+            with self.subTest(phase=phase):
+                processes=[];samplers=[]
+                class Failure(RuntimeError):pass
+                def factory(process):
+                    processes.append(process)
+                    if not at_start:raise Failure('constructor failure')
+                    sampler=MemorySampler(process);samplers.append(sampler)
+                    def fail():
+                        if phase=='interrupt':
+                            sampler.thread.start();raise KeyboardInterrupt('interrupted initialization')
+                        raise Failure('start failure')
+                    sampler.start=fail;return sampler
+                expected=KeyboardInterrupt if phase=='interrupt' else Failure
+                with self.assertRaisesRegex(expected,'interrupted initialization' if phase=='interrupt' else ('start failure' if at_start else 'constructor failure')):
+                    communicate_owned([sys.executable,'-I','-c','import sys;sys.stdin.read()'],'go',
+                        timeout=2,sampler_factory=factory,creationflags=flags)
+                self.assertIsNotNone(processes[0].returncode)
+                for sampler in samplers:
+                    self.assertTrue(sampler.stop_event.is_set());self.assertFalse(sampler.thread.is_alive())
+
+    def test_existing_report_and_overlapping_paths_preserve_evidence(self):
+        spec=importlib.util.spec_from_file_location('benchmark_pipeline',Path(__file__).parents[1]/'tools'/'benchmark_pipeline.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);report=root/'retained.json';report.write_bytes(b'retained evidence')
+            with self.assertRaisesRegex(ValueError,'must be new'):
+                module.evidence_locations(root/'fixture',root/'output',report)
+            self.assertEqual(report.read_bytes(),b'retained evidence');self.assertFalse((root/'fixture').exists())
+            with self.assertRaisesRegex(ValueError,'separate'):
+                module.evidence_locations(root/'fixture',root/'fixture'/'outputs',root/'new.json')
+            with self.assertRaisesRegex(ValueError,'tracked/source'):
+                module.evidence_locations(root/'fixture',root/'outputs',Path(__file__).parents[1]/'tests'/'new-report.json')
 
     def test_actual_source_both_sinks_all_modes_full_encoded_parity(self):
         import equity_feature_workers

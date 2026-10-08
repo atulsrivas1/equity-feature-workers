@@ -28,13 +28,25 @@ def frozen():
     return head,hashes
 
 
+def evidence_locations(fixture_root,output_root,out):
+    fixtures=fixture_root.resolve();outputs=output_root.resolve();report_path=out.resolve()
+    paths=(fixtures,outputs,report_path)
+    if any(path.exists() for path in paths):raise ValueError('all three evidence locations must be new')
+    if any(a==b or a in b.parents or b in a.parents for i,a in enumerate(paths) for b in paths[i+1:]):
+        raise ValueError('evidence locations must be separate')
+    protected=[ROOT/name for name in SCOPED]+[ROOT/'docs',ROOT/'.git']
+    if any(a==b or a in b.parents or b in a.parents for a in paths for b in protected):
+        raise ValueError('evidence locations overlap tracked/source roots')
+    return fixtures,outputs,report_path
+
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--out',required=True,type=Path)
     parser.add_argument('--fixture-root',required=True,type=Path)
     parser.add_argument('--output-root',required=True,type=Path)
     args=parser.parse_args();head,hashes=frozen()
-    fixtures=args.fixture_root.resolve();outputs=args.output_root.resolve()
+    fixtures,outputs,report_path=evidence_locations(args.fixture_root,args.output_root,args.out)
     # New explicit owned roots only. Never replace or delete an existing dataset/output.
     assert not fixtures.exists() and not outputs.exists()
     fixtures.mkdir(parents=True);outputs.mkdir(parents=True)
@@ -89,6 +101,7 @@ def main():
             samples=[r for r in records if (r['workload'],r['backend'],r['mode'],r['workers'])==(workload,backend,mode,workers) and 'skipped' not in r]
             if not samples:continue
             reference=[r for r in records if (r['workload'],r['backend'],r['mode'],r['workers'])==(workload,backend,'sequential',1) and 'skipped' not in r]
+            if not reference:raise RuntimeError('measured sequential baseline unavailable; qualification incomplete')
             median=statistics.median(r['pipeline_elapsed_ns'] for r in samples)
             groups.append(dict(workload=workload,backend=backend,mode=mode,workers=workers,samples=len(samples),
                 elapsed_ns=summary([r['pipeline_elapsed_ns'] for r in samples]),
