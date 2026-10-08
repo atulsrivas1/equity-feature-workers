@@ -1,0 +1,25 @@
+{
+  "schema": "owned-acquisition-oracle1",
+  "instrument_id": "A",
+  "session_id": "S",
+  "range_ns": [100, 200],
+  "event_ns": [110, 130, 160],
+  "order_key": [1, 2, 3],
+  "price_ticks": [100, 102, 101],
+  "size": [2, 3, 5],
+  "known_at_ns": [110, 130, 210],
+  "price_scale": 0,
+  "currency": "USD",
+  "coverage": [3, 3, true],
+  "reconstruction": {
+    "C": 200,
+    "K": 210,
+    "E": 210,
+    "count": 3,
+    "volume": 10,
+    "notional_tick_shares": 1011,
+    "vwap": 101.1,
+    "mean_size_fraction": [10, 3]
+  },
+  "rights": "Owned synthetic literal fixture; no market truth or provider qualification"
+}
