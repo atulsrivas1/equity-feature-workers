@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-workers"
-version = "0.1.0a12"
+version = "0.1.0a13"
 description = "Bounded equity worker commands, dependency and universe barriers"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"

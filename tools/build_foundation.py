@@ -18,7 +18,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 EPOCH = 1700000000
 CORE_COMMIT = "20c08c7370581d03c8a0404579667f68d67ac88b"
-IO_COMMIT = "4603c6e50331a5e8a82b13b62a0cdd5ffaa0e4bf"
+IO_COMMIT = "19aa266b9debb92a6c5eb707baafeb9ae7a82942"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
 EXPECTED = {
     "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],
@@ -130,9 +130,14 @@ def qualify(dependencies, artifacts, form, packages, probe):
         before = fingerprint(py, location)
         run(py, "-I", probe, "core", cwd=location)
         other = [p for p in dependencies if p not in core]
-        install(py, other + artifacts)
+        base = [p for p in other if p.name.startswith(("equity_feature_io_contracts-", "equity_feature_io_sdk-"))]
+        install(py, base + artifacts)
+        light = json.loads(subprocess.check_output([str(py), "-I", str(probe.parent / "acquisition_probe.py"), "light"], cwd=location, text=True, encoding="utf-8"))
+        install(py, other)
         run(py, "-m", "pip", "check")
         run(py, "-I", probe, *packages, cwd=location)
+        run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_acquisition.py", cwd=location)
+        acquisition = json.loads(subprocess.check_output([str(py), "-I", str(probe.parent / "acquisition_probe.py"), "full"], cwd=location, text=True, encoding="utf-8"))
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_manifests.py", cwd=location)
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_commands.py", cwd=location)
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_required_inputs.py", cwd=location)
@@ -160,7 +165,7 @@ def qualify(dependencies, artifacts, form, packages, probe):
         source_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;import equity_feature_duckdb as source;from pathlib import Path;assert 'site-packages' in Path(source.__file__).resolve().parts;print(json.dumps({n:version(n) for n in ('equity-feature-duckdb','numpy')}))"], cwd=location, text=True, encoding="utf-8"))
         assert source_versions == {"equity-feature-duckdb":"0.1.0a8", "numpy":"2.2.6"}
-        return {"form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
+        return {"acquisition_light": light, "acquisition_full": acquisition, "acquisition_tests_sha256": sha(probe.parent / "test_acquisition.py"), "acquisition_oracle_sha256": sha(probe.parent / "acquisition_oracle.json"), "form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
 
 
 def main():
@@ -189,7 +194,7 @@ def main():
             assert git(io_root, "rev-parse", "HEAD") == IO_COMMIT, "Use fixed accepted I/O source"
             dependency_commit["equity-feature-io"] = IO_COMMIT
             io_source = snapshot(io_root, dependency_commit["equity-feature-io"], stage / "io-source", ("packages", "examples/third_party"))
-            for folder in ("io-contracts", "io-sdk", "duckdb", "parquet", "duckdb-sink"):
+            for folder in ("io-contracts", "io-sdk", "duckdb", "parquet", "duckdb-sink", "acquisition", "files"):
                 build(io_source / "packages" / folder, dependencies)
             build(io_source / "examples" / "third_party", dependencies)
         packages = [tomllib.loads((p / "pyproject.toml").read_text(encoding="utf-8"))["project"]["name"] for p in sorted((component_source / "packages").iterdir())]
