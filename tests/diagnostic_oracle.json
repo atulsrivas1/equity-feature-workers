@@ -1,0 +1,47 @@
+{
+  "bar_goldens": {
+    "close_weighted_price": 102.6,
+    "notional": 51200,
+    "volume": 500
+  },
+  "durations_ns": {
+    "acquisition": [
+      17,
+      17
+    ],
+    "calculation": [
+      29,
+      29
+    ],
+    "publication": [
+      31,
+      31
+    ],
+    "queue_wait": [
+      1,
+      4
+    ],
+    "serialization": [
+      7,
+      7
+    ]
+  },
+  "history_returns": [
+    0.2,
+    -0.2,
+    0.0
+  ],
+  "invariants": {
+    "committed_recovery_new_begin_count": 0,
+    "computed_does_not_imply_verified": true,
+    "credentials_paths_config_repr_absent": true,
+    "generation_complete_does_not_imply_catalog_accepted": true,
+    "raw_exception_text_absent": true,
+    "unknown_or_corrupt_readback_accepted": false,
+    "unrelated_ready_work_progresses": true
+  },
+  "job_elapsed_ns": 136,
+  "protocol": "independent-eq065-oracle1",
+  "sum_is_not_wall": true,
+  "sum_stage_ns": 173
+}

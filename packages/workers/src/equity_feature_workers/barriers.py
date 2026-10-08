@@ -10,6 +10,7 @@ from equity_feature_io_contracts import PublicationState, PublicationStatus, Res
 from equity_feature_io_sdk import Cancellation, admit_sink, descriptor, encode_result, idempotency_key, verify_receipt
 from equity_features.composition import compose_features
 
+from .diagnostics import ProgressRecorder, DiagnosticStage, DiagnosticStatus, counter, interval
 from .commands import CommandError, CommandErrorCode, CommandOutcome, NeverCancelled, _cancel, _fail, _record_hash
 from .manifests import ManifestError, ManifestErrorCode, OutputManifest, TaskManifest, encode_output, encode_task, integer, label, sequence
 
@@ -216,8 +217,31 @@ class ReadinessOutcome:
 
 def evaluate_readiness(nodes: tuple[TaskNode, ...], dependencies: tuple[Dependency, ...], *,
                        limits: BarrierLimits, requirements: SinkRequirements,
-                       cancellation: Cancellation | None = None) -> ReadinessOutcome:
+                       cancellation: Cancellation | None = None, progress: ProgressRecorder | None = None) -> ReadinessOutcome:
     """A waiting dependency blocks only its declared consumers, not unrelated roots."""
+    if progress is not None:
+        if type(progress) is not ProgressRecorder or type(nodes) is not tuple or any(type(n) is not TaskNode for n in nodes):
+            _fail(CommandErrorCode.CONFIG)
+        progress._own()
+        if not nodes:
+            return evaluate_readiness(nodes, dependencies, limits=limits, requirements=requirements,
+                                      cancellation=cancellation)
+        with progress.group(tuple(n.task for n in nodes), spans=1) as observations:
+            start = counter()
+            try:
+                outcome = evaluate_readiness(nodes, dependencies, limits=limits, requirements=requirements,
+                                             cancellation=cancellation)
+            finally:
+                timing = interval(DiagnosticStage.DEPENDENCY, start, counter())
+                for observation in observations.values():
+                    observation.add(timing)
+            ready_identities = {t.task_sha256 for t in outcome.ready_tasks}
+            verified_identities = {v.command.output.task.task_sha256 for v in outcome.barrier.verified}
+            for identity, observation in observations.items():
+                observation.finish(DiagnosticStatus.VERIFIED if identity in verified_identities else
+                                   DiagnosticStatus.READY if identity in ready_identities else DiagnosticStatus.WAITING,
+                                   None if identity in ready_identities | verified_identities else 'WAITING_DEPENDENCY')
+            return outcome
     dependency_bytes = _admit_dependencies(dependencies, limits, requirements)
     if type(nodes) is not tuple or any(type(n) is not TaskNode for n in nodes):
         _fail(CommandErrorCode.CONFIG)

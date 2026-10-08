@@ -14,6 +14,7 @@ import uuid
 from equity_feature_io_contracts import SinkError, SinkErrorCode, SinkRequirements
 from equity_feature_io_sdk import Cancellation
 
+from .diagnostics import ProgressRecorder, DiagnosticStage, DiagnosticStatus, counter, interval
 from .barriers import Dependency
 from .commands import CommandError, CommandErrorCode, NeverCancelled
 from .generations import GenerationSpec, GenerationStore, GenerationOutcome, _StoreLock
@@ -181,6 +182,7 @@ class CatalogStore:
         self._limits, self._requirements = limits, requirements
         self._owner = threading.current_thread()
         self._entered = False
+        self._observing = False
 
     def _inventory(self) -> tuple[int, int]:
         count = total = 0
@@ -304,7 +306,38 @@ class CatalogStore:
 
     def select(self, spec: GenerationSpec, generations: GenerationStore,
                dependencies: tuple[Dependency, ...], *, expected_sequence: int,
-               cancellation: Cancellation | None = None) -> CatalogOutcome:
+               cancellation: Cancellation | None = None, progress: ProgressRecorder | None = None) -> CatalogOutcome:
+        if threading.current_thread() is not self._owner:
+            raise SinkError(SinkErrorCode.INVALID_SESSION)
+        if self._entered or self._observing:
+            raise SinkError(SinkErrorCode.BUSY)
+        if progress is None:
+            return self._select(spec, generations, dependencies, expected_sequence=expected_sequence,
+                                cancellation=cancellation)
+        self._observing = True
+        try:
+            if type(progress) is not ProgressRecorder or type(spec) is not GenerationSpec:
+                raise SinkError(SinkErrorCode.INVALID_CONFIG)
+            integer(expected_sequence, 0)
+            intent = hashlib.sha256(b'efworker-catalog-attempt1\0' + _json([spec.identity, expected_sequence])).hexdigest()
+            with progress.group(spec.tasks, spans=1, intent_sha256=intent) as observations:
+                start = counter()
+                try:
+                    outcome = self._select(spec, generations, dependencies, expected_sequence=expected_sequence,
+                                          cancellation=cancellation)
+                finally:
+                    timing = interval(DiagnosticStage.CATALOG, start, counter())
+                    for observation in observations.values():
+                        observation.add(timing)
+                for observation in observations.values():
+                    observation.finish(DiagnosticStatus.CATALOG_ACCEPTED if outcome.accepted else DiagnosticStatus.WAITING)
+                return outcome
+        finally:
+            self._observing = False
+
+    def _select(self, spec: GenerationSpec, generations: GenerationStore,
+                dependencies: tuple[Dependency, ...], *, expected_sequence: int,
+                cancellation: Cancellation | None = None) -> CatalogOutcome:
         if threading.current_thread() is not self._owner:
             raise SinkError(SinkErrorCode.INVALID_SESSION)
         if self._entered:
