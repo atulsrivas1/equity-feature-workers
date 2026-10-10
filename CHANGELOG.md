@@ -1,3 +1,7 @@
+## EQ080 remaining cache qualification candidate
+
+Add warm-key revocation/expiry, real forged cache, no-poll duplicate-byte cleanup, full runtime source identity drift and observed retained-encoder-fault admission fixtures;16cache development methods pass. Explicitly advertise only qualified ExampleSink owned service entries; persistent sink reporterless foundation proof remains separate. Runtime/mathematics unchanged; final current review/artifacts/release pending.
+
 ## EQ080 frozen owned entry candidate
 
 Implement immutable synthetic source profiles and isolated complete startup frame/EOF-before-ACK, exact frozen-source execution and setup cleanup through actual exit; fourteen owned tests/strict12 development pass, current review/installed/full-map/release pending. Physical/mathematical/rights boundaries unchanged.

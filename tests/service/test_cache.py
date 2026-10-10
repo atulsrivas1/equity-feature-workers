@@ -5,6 +5,10 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
 import unittest
+import threading
+import time
+from unittest.mock import patch
+import equity_feature_service.jobs as job_runtime
 from equity_feature_service._audit import OwnedAudit
 
 from equity_feature_service._cache import ResultCache, canonical_record, fingerprint, identity_key
@@ -199,5 +203,134 @@ class Cache(unittest.TestCase):
         sequences=[r['sequence'] for r in snapshot['records']]
         self.assertEqual(sequences,list(range(len(sequences))))
 
+
+    def test_key_construction_revoke_or_exact_expiry_denies_warm_hit(self):
+        for action in ('revoke','expiry'):
+            with self.subTest(action=action):
+                scheduler,service,tokens,clock,facts,job=self.make()
+                self.assertEqual(call(service,self.request(job.result_id),tokens[0])[0],200)
+                self.assertGreater(scheduler.cache.total,0)
+                actual=job_runtime.identity_key
+                def change_then_key(record):
+                    if action=='revoke':service.ledger.revoke('grant-A')
+                    else:clock.n=job.expires_ns
+                    return actual(record)
+                with patch.object(job_runtime,'identity_key',side_effect=change_then_key):
+                    status,body,*_=call(service,self.request(job.result_id),tokens[0])
+                self.assertEqual(status,403,body)
+                self.assertEqual(scheduler.cache.total,0)
+                self.assertEqual(facts['reads'],1)
+                self.assertEqual(service.ledger._reserved,0)
+
+    def test_forged_actual_cache_payload_is_replaced_by_full_verified_native_original(self):
+        scheduler,service,tokens,clock,facts,job=self.make()
+        status,original,*_=call(service,self.request(job.result_id),tokens[0])
+        self.assertEqual(status,200)
+        key=next(iter(scheduler.cache.entries))
+        entry=scheduler.cache.entries[key]
+        scheduler.cache.entries[key]=replace(entry,payload=b'{"values":"forged"}')
+        status,body,*_=call(service,self.request(job.result_id),tokens[0])
+        self.assertEqual(status,200,body)
+        self.assertEqual(body['payload'],original['payload'])
+        self.assertEqual(scheduler.cache.entries[key].payload,entry.payload)
+        self.assertEqual(scheduler.cache.total,len(entry.payload))
+        self.assertEqual(facts['reads'],1)
+
+    def test_no_poll_cached_duplicate_bytes_expire_while_native_owner_is_blocked(self):
+        gate=threading.Event();gate.set()
+        scheduler,service,tokens,clock,facts,job=self.make(gate=gate,cooperative=False)
+        self.addCleanup(gate.set)
+        self.assertEqual(call(service,self.request(job.result_id),tokens[0])[0],200)
+        self.assertGreater(scheduler.cache.total,0)
+        gate.clear();facts['entered'].clear()
+        running=native_helpers.Jobs().submit(service,tokens[0],key='blocked-with-warm-cache')
+        self.assertTrue(facts['entered'].wait(1))
+        clock.n=job.expires_ns
+        deadline=time.monotonic()+1
+        # Observe counters only; no API call/result sweep triggers maintenance.
+        while (job.held or scheduler.cache.total) and time.monotonic()<deadline:time.sleep(.01)
+        self.assertEqual(job.held,0)
+        self.assertEqual(scheduler.cache.total,0)
+        self.assertEqual(len(scheduler.cache.entries),0)
+        self.assertEqual(scheduler.jobs[running].state,'running')
+        self.assertEqual(scheduler.total_retained,scheduler.jobs[running].held)
+        self.assertEqual(facts['reads'],2)
+        gate.set()
+
+    def test_runtime_warm_scope_policy_revision_and_full_source_identity_drift_denied(self):
+        for dimension in ('grant_scope','policy','revision','snapshot_id','mapping_version','source_id','input_id','registry'):
+            with self.subTest(dimension=dimension):
+                scheduler,service,tokens,clock,facts,job=self.make()
+                self.assertEqual(call(service,self.request(job.result_id),tokens[0])[0],200)
+                dataset=service.ledger.datasets[job.dataset_id]
+                if dimension=='grant_scope':
+                    service.ledger.grants=tuple(replace(g,scope=replace(g.scope,end_ns=g.scope.end_ns-1)) if g.principal=='A' else g
+                        for g in service.ledger.grants)
+                elif dimension=='policy':service.ledger.policy_revision='changed-policy'
+                elif dimension=='registry':service.ledger.registry_snapshot='changed-registry'
+                else:dataset.identity=replace(dataset.identity,**{dimension:'changed-'+dimension})
+                status,body,*_=call(service,self.request(job.result_id),tokens[0])
+                self.assertEqual(status,403,body)
+                self.assertEqual(facts['reads'],1)
+                self.assertEqual(service.ledger._reserved,0)
+
+
+    def test_real_native_retained_forms_and_warm_cache_count_before_new_job_admission(self):
+        gate=threading.Event();gate.set()
+        self.addCleanup(gate.set)
+        original_result,original_envelope=job_runtime.encode_result,job_runtime.encode_envelope
+        def padded_result(value):
+            encoded=original_result(value)
+            self.assertLessEqual(len(encoded),65536)
+            return encoded+b' '*(65536-len(encoded))
+        def padded_envelope(value):
+            encoded=original_envelope(value)
+            self.assertLessEqual(len(encoded),28000)
+            return encoded+b' '*(28000-len(encoded))
+        # Retention-encoder fault adds noncanonical JSON whitespace. Original
+        # native sink publication/receipt succeeds, but SDK delivery must deny
+        # these retained forms. They still consume actual physical byte budget;
+        # one separately verified original result has a genuine warm cache.
+        scheduler,service,tokens,clock,facts,first=self.make(gate=gate,cooperative=False)
+        self.assertEqual(call(service,self.request(first.result_id),tokens[0])[0],200)
+        with patch.object(job_runtime,'encode_result',side_effect=padded_result),patch.object(job_runtime,'encode_envelope',side_effect=padded_envelope):
+            helper=native_helpers.Jobs()
+            results=[first]
+            for n in range(5):
+                results.append(helper.wait_terminal(scheduler,helper.submit(service,tokens[0],'shared-forms-'+str(n))))
+            for job in results[1:]:
+                self.assertEqual(job.state,'succeeded')
+                status,body,*_=call(service,self.request(job.result_id),tokens[0])
+                self.assertEqual(status,403,body)
+            self.assertEqual(len(scheduler.cache.entries),1)
+            self.assertEqual(scheduler.retained['A'],sum(j.held for j in results))
+            self.assertGreater(scheduler.cache.total,0)
+            gate.clear();facts['entered'].clear()
+            running=helper.submit(service,tokens[0],'shared-running')
+            self.assertTrue(facts['entered'].wait(1))
+            before=scheduler.retained['A']+scheduler.cache.principal_bytes('A')
+            self.assertLessEqual(before,1_048_576)
+            self.assertGreater(before+262144,1_048_576)
+            self.assertEqual(len(scheduler.jobs),7)
+            self.assertEqual(len(scheduler.queue),0)
+            registration=next(iter(scheduler.registrations.values()))
+            payload=json.loads(registration.payload_bytes)
+            payload.update(command_digest=registration.command_digest,idempotency_key='shared-denied')
+            request=helper.request('calculate');request['payload']=payload
+            status,body,*_=call(service,request,tokens[0])
+            self.assertEqual(status,429,body)
+            self.assertEqual(len(scheduler.jobs),7)
+            self.assertEqual(facts['reads'],7)
+            self.assertEqual(scheduler.retained['A']+scheduler.cache.principal_bytes('A'),before)
+            # Original half-open expiry frees forms AND duplicate cache bytes;
+            # the real blocked owner still holds its native reservation.
+            clock.n=first.expires_ns
+            status,body,*_=call(service,request,tokens[0])
+            self.assertEqual(status,200,body)
+            self.assertEqual(scheduler.cache.total,0)
+            self.assertTrue(all(j.held==0 for j in results))
+            self.assertEqual(scheduler.jobs[running].state,'running')
+            gate.set()
+            helper.wait_terminal(scheduler,body['payload']['job_id'])
 
 if __name__ == '__main__':unittest.main()
