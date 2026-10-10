@@ -137,7 +137,7 @@ class Ledger:
 
     def invalidate(self, record: Record) -> None:
         for token, linked in tuple(self._records.items()):
-            if linked.profile_id == record.profile_id and linked.job_id == record.job_id:
+            if linked.job_id == record.job_id:
                 self._records[token] = replace(linked, state='tombstone')
 
     def commit(self, reservation: Reservation, command_digest: str, job_id: str,
@@ -157,7 +157,7 @@ class Ledger:
             previous = self._records.get(reservation.token)
             if previous is not None and previous.job_id != job_id:
                 raise ReferenceError('profile_invalid')
-            if any(r.state == 'tombstone' for r in linked):
+            if any(r.job_id == job_id and r.state == 'tombstone' for r in self._records.values()):
                 raise ReferenceError('reference_expired')
             mode = 'job' if origin is None else 'artifact'
             if origin is not None:
@@ -168,7 +168,7 @@ class Ledger:
                 if existing.mode == mode:
                     if result_id is not None and existing.result_id not in (None, result_id):
                         raise ReferenceError('profile_invalid')
-                    return existing
+                    return self.set_result(existing, result_id) if result_id is not None else existing
             record = Record(reservation.token, self._nonce, self.profile.owner_context_id,
                             reservation.profile_id, self.profile.snapshot_sha256, command_digest,
                             job_id, result_id, mode, 'tombstone' if now >= reservation.expires_ns else 'live', reservation.stable_key_sha256,
@@ -188,6 +188,8 @@ class Ledger:
         current = self.lookup(record.reference)
         if current is not record or type(result_id) is not str or re.fullmatch(r'[A-Za-z0-9_.:-]{1,128}', result_id) is None or record.result_id not in (None, result_id):
             raise ReferenceError('profile_invalid')
+        if record.result_id == result_id:
+            return record
         updated = replace(record, result_id=result_id)
         self._records[record.reference] = updated
         return updated

@@ -104,6 +104,28 @@ class References(unittest.TestCase):
             self.ledger.commit(slot, self.producer.command_digest, 'different-job')
         self.assertIs(self.ledger.lookup(record.reference), record)
 
+    def test_tombstoned_native_job_cannot_reenter_through_profile_alias(self):
+        profile = MCPProfile('owner', (), (CommandRegistration('A', self.producer), CommandRegistration('B', self.producer)), 1)
+        ledger = Ledger(profile, lambda: self.now)
+        a = ledger.commit(ledger.reserve('A', 'key'), self.producer.command_digest, 'same-job')
+        b = ledger.commit(ledger.reserve('B', 'other'), self.producer.command_digest, 'same-job')
+        ledger.invalidate(a)
+        with self.assertRaisesRegex(ReferenceError, 'reference_expired'):
+            ledger.lookup(b.reference)
+        with self.assertRaisesRegex(ReferenceError, 'reference_expired'):
+            ledger.commit(ledger.reserve('B', 'new-key'), self.producer.command_digest, 'same-job')
+        self.assertEqual(len(ledger._records), 2)
+
+    def test_repeated_calculate_can_observe_result_without_refresh(self):
+        record = self.ledger.commit(self.ledger.reserve('cmd', 'key'), self.producer.command_digest, 'job')
+        self.assertIsNone(record.result_id)
+        self.now = 100
+        updated = self.ledger.commit(self.ledger.reserve('cmd', 'key'), self.producer.command_digest, 'job', 'result')
+        self.assertEqual(updated.result_id, 'result')
+        for field in ('reference', 'created_ns', 'expires_ns', 'stable_key_sha256'):
+            self.assertEqual(getattr(updated, field), getattr(record, field))
+        self.assertEqual(len(self.ledger._records), 1)
+
 
 if __name__ == '__main__':
     unittest.main()
