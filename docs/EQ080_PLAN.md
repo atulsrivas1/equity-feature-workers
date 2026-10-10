@@ -55,7 +55,7 @@ The following expected outcomes are pre-code requirements, not executed EQ080 te
 | Q19 | Hit accounting | Every hit repeats authority and exact frame transfer reservation/settlement; emitted allowance not refunded |
 | Q20 | Original TTL | Cache expires no later than original result/grant boundary; hit/new token cannot refresh or resurrect |
 | Q21 | Emission race | Revocation/expiry/retirement after cache lookup or expensive encoding denies before first visible chunk |
-| Q22 | Integrity | Tampered native/wire/receipt/cache representation denies with no native source/sink calls on HTTP thread |
+| Q22 | Integrity | Tampered native/wire/envelope/receipt forms deny403; corrupted cache bytes are discarded and may be replaced by the fully verified original through ordinary authorized delivery. No native source/sink calls on HTTP thread |
 | Q23 | No-poll cleanup | Expired cached service forms and accounting clear while native callback blocked; tombstones remain original semantics |
 | Q24 | Cache concurrency | Shared ledger linearizes insertion/hit/clear/revoke and avoids duplicate reservations/finalizer double release |
 | Q25 | Audit redaction | Token/header/body/request strings/private path/exception message/rows cannot appear in records; fixed codes and opaque digests only |
@@ -94,3 +94,7 @@ Initial exact-head planning review found threeP2: ambiguous circular preReady ph
 ## Final pre-code corrective candidate
 
 Renewed review independently verified exact key fingerprints, audit worst-case497bytes and actual954 twoOS capability runs. Correct actual backend_id/backend_version literals and explicit queried CPU limit;33 cache identity negatives cover32 requirements. Windows selected bootstrap now uses atomic job-list assignment at creation (suspended) to avoid an unassigned orphan window; Linux queries parent-death signal and checks original parent. Local corrected Windows atomic probe passes. Current twoOS probe and renewed exact-head planning approval remain pending; no Service/runtime admission or native containment claim. See matching concrete decisions.
+
+## Final-review Q22 clarification and historical scope
+
+The original pre-code Q22 wording was "Tampered native/wire/receipt/cache representation denies with no native source/sink calls on HTTP thread". This stronger cache-denial wording is superseded: corrupt cached bytes never become visible, but eviction/replacement followed by fully verified original200 is allowed under unchanged current rights, original TTL, transfer and audit limits. Native/wire/envelope/receipt corruption still denies403. The actual forged-cache regression and separate review distinguish these outcomes; no runtime or rights change follows this documentation correction. The opening Backlog/unassigned/no-runtime paragraph is the preserved pre-code capture, not current execution authority. Current status is in the [live Project](https://github.com/users/atulsrivas1/projects/2); [Code review admission](https://github.com/atulsrivas1/equity-features/issues/90#issuecomment-6098905732) follows the completed implementation.
