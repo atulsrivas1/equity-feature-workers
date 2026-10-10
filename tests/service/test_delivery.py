@@ -172,6 +172,8 @@ class Delivery(unittest.TestCase):
             self.assertEqual(codec.cell(value,decimal=True),{'type':'decimal128','coefficient':str(value),'scale':0})
         for bits in ['0000000000000000','8000000000000000','0000000000000001','7fefffffffffffff','ffefffffffffffff']:
             self.assertEqual(codec.cell(struct.unpack('>d',bytes.fromhex(bits))[0]),{'type':'float64','bits':bits})
+        for value,decimal in [(2**63,False),(-(2**63)-1,False),(10**38,True),(-(10**38),True),(float('inf'),False),(float('nan'),False)]:
+            with self.assertRaises(codec.WireError):codec.cell(value,decimal=decimal)
     def test_token_and_grant_exact_expiry_distinct(self):
         for kind,status in [('credential',401),('grant',403)]:
             scheduler,service,tokens,clock,audit,job=self.make()
@@ -307,5 +309,17 @@ class Delivery(unittest.TestCase):
         self.assertTrue(observed[0][0].startswith('400'))
         self.assertFalse(any(h[0]=='Content-Disposition' for h in observed[0][1]))
         self.assertEqual(audit['reads'],1)
+    def test_original_grant_end_caps_retained_payload_ttl(self):
+        scheduler,service,tokens,clock,audit=native_helpers.setup(actions=ACTIONS)
+        self.addCleanup(lambda:scheduler.close(2))
+        service.ledger.grants=tuple(replace(g,expires_at_ns=200) for g in service.ledger.grants)
+        job=native_helpers.Jobs().wait_terminal(scheduler,native_helpers.Jobs().submit(service,tokens[0]))
+        self.assertEqual(job.state,'succeeded')
+        self.assertEqual((job.grant_expires_ns,job.expires_ns),(200,200))
+        result_id=job.result_id;clock.n=199
+        self.assertEqual(call(service,self.request(result_id),tokens[0])[0],200)
+        clock.n=200
+        self.assertEqual(call(service,self.request(result_id),tokens[0])[0],403)
+        self.assertEqual(job.held,0)
 
 if __name__=='__main__':unittest.main()
