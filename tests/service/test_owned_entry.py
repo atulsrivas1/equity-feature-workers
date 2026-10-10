@@ -23,6 +23,16 @@ def profile(source=b'print("native-started",flush=True)', profile_id='owned', ar
     return OwnedEntryProfile(profile_id,source,hashlib.sha256(source).hexdigest(),arguments,True)
 
 
+def linux_process_exited(pid):
+    try:
+        state=(Path('/proc')/str(pid)/'stat').read_text()
+    except OSError as error:
+        if error.errno in (errno.ENOENT, errno.ESRCH):
+            return True
+        raise
+    return state.split(') ',1)[1].split()[0]=='Z'
+
+
 class OwnedEntry(unittest.TestCase):
     def supervisor(self, source=b'print("native-started",flush=True)'):
         return OwnedEpochSupervisor(OwnedEntryInventory((profile(source),)))
@@ -212,6 +222,14 @@ class OwnedEntry(unittest.TestCase):
             self.assertEqual(self.supervisor().run_admitted('owned').exit_code,0)
 
     def test_parent_death_before_ack_prevents_program_or_factory(self):
+        for code in (errno.ENOENT, errno.ESRCH):
+            with patch.object(Path,'read_text',side_effect=OSError(code,'process disappeared')):
+                self.assertTrue(linux_process_exited(123))
+        with patch.object(Path,'read_text',side_effect=PermissionError(errno.EACCES,'not an exit')):
+            with self.assertRaises(PermissionError):linux_process_exited(123)
+        for state,expected in (('Z',True),('S',False)):
+            with patch.object(Path,'read_text',return_value='123 (python) '+state+' 1 2'):
+                self.assertEqual(linux_process_exited(123),expected)
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)
             marker,factory,parent=root/'child-pid',root/'factory',root/'parent.py'
@@ -254,8 +272,7 @@ class OwnedEntry(unittest.TestCase):
                 else:
                     deadline=time.monotonic()+3
                     while time.monotonic()<deadline:
-                        stat=Path('/proc')/str(child_pid)/'stat'
-                        if not stat.exists() or stat.read_text().split(') ',1)[1].split()[0]=='Z':break
+                        if linux_process_exited(child_pid):break
                         time.sleep(.01)
                     else:self.fail('child alive after original parent death')
                 self.assertFalse(factory.exists())
