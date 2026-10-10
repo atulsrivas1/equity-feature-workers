@@ -25,6 +25,7 @@ from equity_feature_workers import (SessionCommandSpec, SourceOffer, ExecutionAp
 
 from . import codec
 from ._audit import AuditReservation, AuditDenied
+from ._cache import ResultCache, fingerprint, identity_key
 from .datasets import DatasetIdentity, FeatureDataset, RawDataset, Scope, _batch_bytes
 from .service import Credential, Ledger, _Prepared, _error
 
@@ -201,6 +202,7 @@ class JobScheduler:
         self.queue: deque[str] = deque()
         self.retained: dict[str,int] = {}
         self.total_retained = 0
+        self.cache = ResultCache()
         self._running: str | None = None
         self._last_mono = 0
         self._last_wall = ledger.now()
@@ -263,6 +265,8 @@ class JobScheduler:
         self.retained[job.principal] -= amount
 
     def _clear(self, job: _Job) -> None:
+        if job.result_id is not None:
+            self.cache.purge(0,job.result_id)
         job.native = job.envelope = job.receipt = job.wire = b''
         if job.held:
             self._release(job,job.held)
@@ -285,6 +289,7 @@ class JobScheduler:
 
     def _sweep(self) -> None:
         n = self._now()
+        self.cache.purge(n)
         if self.ledger.audit is not None:
             self.ledger.audit.purge(n)
         for job in tuple(self.jobs.values()):
@@ -366,8 +371,38 @@ class JobScheduler:
             _, body = dataset.produce(dataset.columns,'1.1')
             if codec.canonical(body) != job.wire:
                 raise codec.WireError('not_permitted')
+            # Only original producer representation is cached. Native content,
+            # receipt and complete reconstructed wire were verified above on
+            # every lookup; final authority and transfer remain controller work.
+            producer_payload = codec.canonical(body['feature_result'])
+            original_grant = next(g for g in self.ledger.grants if g.grant_id == job.grant_id)
+            current_dataset = self.ledger.datasets[job.dataset_id]
+            try:
+                self._result_job(credential,result_id,operation)
+                key = identity_key({'schema':'cache.identity.v1','principal':job.principal,
+                    'original_credential_digest':job.credential_digest,
+                    'grant_sha256':fingerprint(asdict(original_grant)),
+                    'job_grant_sha256':fingerprint(asdict(self.grants[job.grant_id])),
+                    'rights_sha256':fingerprint({'rights_owner':current_dataset.rights_owner,
+                        'rights_evidence':current_dataset.rights_evidence,'valid_from_ns':current_dataset.valid_from_ns,
+                        'expires_at_ns':current_dataset.expires_at_ns,'rights':current_dataset.rights}),
+                    'dataset_identity':current_dataset.identity.wire(),
+                    'acquisition_commitment':{'content_sha256':registration.acquisition_commitment[0],
+                        'receipt_sha256':registration.acquisition_commitment[1]},
+                    'context_sha256':hashlib.sha256(registration.context_bytes).hexdigest(),
+                    'registration_sha256':registration.registration_digest,'result_id':result_id,'epoch':self.epoch,
+                    'native_content_sha256':hashlib.sha256(job.native).hexdigest(),
+                    'committed_receipt_sha256':job.committed_receipt_sha256,
+                    'producer_wire_sha256':hashlib.sha256(job.wire).hexdigest(),
+                    'operation':operation,'projection':list(dataset.columns),'transport_version':version})
+                producer_payload = self.cache.representation(key,job.principal,result_id,producer_payload,
+                    job.expires_ns,self._now(),self.retained.get(job.principal,0),self.total_retained)
+            except ValueError:
+                # Complete oversized server records are never truncated. Cache
+                # refusal preserves ordinary independently verified delivery.
+                pass
             return {'schema':'equity.remote','version':version,'kind':'result','request_id':rid,
-                    'payload':body['feature_result']}
+                    'payload':json.loads(producer_payload)}
 
     def prepare_result(self, credential: Credential, request: codec.Json) -> _Prepared:
         version,rid,payload = request['version'],request['request_id'],request['payload']
@@ -430,7 +465,8 @@ class JobScheduler:
                 else:
                     if (len(self.jobs) >= 16 or sum(j.principal == credential.principal for j in self.jobs.values()) >= 8
                             or len(self.queue) >= 2 or any(self.jobs[j].principal == credential.principal for j in self.queue)
-                            or self.total_retained+262_144 > 2_097_152 or self.retained.get(credential.principal,0)+262_144 > 1_048_576):
+                            or self.total_retained+self.cache.total+262_144 > 2_097_152
+                            or self.retained.get(credential.principal,0)+self.cache.principal_bytes(credential.principal)+262_144 > 1_048_576):
                         return _error(429,'quota','quota_exceeded',version,rid)
                     job = _Job(self.epoch+'-'+secrets.token_hex(16),credential.principal,credential.digest,grant_id,registration.identity.dataset_id,key,identity,payload['command_digest'],
                         next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == grant_id))

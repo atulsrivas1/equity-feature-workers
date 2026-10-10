@@ -1,3 +1,7 @@
+## EQ080 verified result cache candidate
+
+Implement full entitlement/context/content/receipt/wire/owner/epoch/operation key, finite original producer representation cache and shared job/cache byte reservations. Every hit retains full pure native verification/current rights/late visibility/new transfer checks. Seven new cache methods/all33 literal negatives/full166development pass; new final review/installed artifacts/inventory/all32/release pending. Frozen previous checkpoint source+service+foundation approved separately; no current-source equivalence claim.
+
 ## EQ080 header staging correction candidate
 
 Renew authority/current interval after header staging and fresh audit encoding; abort protected body on late failure; reject reentrant header request/iterator emission and settle current audit sequence/totals.27audit/full159 development/strict9bothplatform declarations pass; separate current source/installed/artifact/cache/inventory/all32/release pending. Preserve original header findings and superseded154fresh builder.

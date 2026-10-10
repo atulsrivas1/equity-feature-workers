@@ -143,7 +143,7 @@ class Ledger:
         scheduler = getattr(self,'_job_scheduler',None)
         return dict(request_used=min(2**63-1,self._requests),transfer_used=self._transfer,
                     transfer_reserved=self._reserved,retained_used=scheduler.total_retained if scheduler else 0,
-                    cache_used=0)
+                    cache_used=scheduler.cache.total if scheduler else 0)
 
     def audit_finish(self, reservation: AuditReservation, stage: str, decision: str, *, exited: bool) -> None:
         if self.audit is None:
