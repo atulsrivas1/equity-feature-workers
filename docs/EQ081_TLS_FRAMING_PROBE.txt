@@ -1,0 +1,81 @@
+"""Owned pre-code TLS/framing fixtures, no client runtime or external endpoint."""
+from pathlib import Path
+import hashlib,json,socket,ssl,subprocess,tempfile,threading
+P=Path(__file__).resolve().parent
+OPENSSL=Path('C:/Program Files/Git/usr/bin/openssl.exe')
+def bounded_eof(sock):
+ data=bytearray()
+ while True:
+  chunk=sock.recv(min(4096,270337-len(data)))
+  if not chunk:return bytes(data)
+  data.extend(chunk)
+  if len(data)>270336:raise ValueError('bounds')
+def classify(data):
+ head,body=data.split(b'\r\n\r\n',1)
+ if len(head)+4>8192:raise ValueError('headers')
+ lines=head.split(b'\r\n');headers={}
+ for line in lines[1:]:
+  key,value=line.split(b':',1);key=key.lower()
+  if key in headers:raise ValueError('duplicate_header')
+  headers[key]=value.strip()
+ if headers.get(b'transfer-encoding') or headers.get(b'content-encoding'):raise ValueError('unsupported_encoding')
+ size=headers.get(b'content-length',b'')
+ if not size.isdigit() or len(size)>6:raise ValueError('length')
+ if int(size)>262144 or len(body)>262144:raise ValueError('bounds')
+ if len(body)!=int(size):raise ValueError('length')
+ if headers.get(b'content-type')!=b'application/json' or headers.get(b'cache-control')!=b'no-store' or headers.get(b'x-content-type-options')!=b'nosniff':raise ValueError('headers')
+ return body
+def main():
+ assert OPENSSL.is_file()
+ with tempfile.TemporaryDirectory(prefix='eq081-owned-tls-') as directory:
+  cert=Path(directory)/'owned-cert.pem';key=Path(directory)/'owned-key.pem'
+  subprocess.run([str(OPENSSL),'req','-x509','-newkey','rsa:2048','-nodes','-keyout',str(key),'-out',str(cert),'-days','1','-subj','/CN=owned-loopback','-addext','subjectAltName=IP:127.0.0.1'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+  server_context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);server_context.load_cert_chain(str(cert),str(key))
+  trust=ssl.create_default_context(cafile=str(cert));assert trust.verify_mode==ssl.CERT_REQUIRED and trust.check_hostname
+  # Load the Windows trust store before opening a socket or starting accept deadlines.
+  untrusted=ssl.create_default_context()
+  listener=socket.socket();listener.bind(('127.0.0.1',0));listener.listen(1);listener.settimeout(5);port=listener.getsockname()[1]
+  payload=b'{"schema":"equity.remote","version":"1.0","kind":"error","request_id":null,"payload":{"category":"authentication","code":"unauthenticated","retryable":false}}'
+  header=b'HTTP/1.0 401 Unauthorized\r\nContent-Type: application/json\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\nContent-Length: '+str(len(payload)).encode()+b'\r\n\r\n'
+  frames=[header+payload,header+payload+b'x',header+payload[:-1],header.replace(b'Content-Length:',b'Content-Length: 1\r\nContent-Length:')+payload]
+  errors=[];peer_errors=[]
+  def serve():
+   try:
+    for index in range(6):
+     raw,_=listener.accept();raw.settimeout(3)
+     try:
+      with server_context.wrap_socket(raw,server_side=True) as stream:
+       request=stream.recv(4096)
+       assert request.startswith(b'POST /v1/request HTTP/1.0\r\n'),request
+       stream.sendall(frames[index-2])
+     except (ssl.SSLError,ConnectionResetError):
+      if index not in (0,1):raise
+      peer_errors.append('untrusted_or_hostname')
+     finally:raw.close()
+   except BaseException as error:errors.append(type(error).__name__+':'+str(error))
+   finally:listener.close()
+  thread=threading.Thread(target=serve);thread.start()
+  results=[]
+  try:
+   for mode in ('untrusted','hostname','valid','extra','truncated','duplicate'):
+    raw=socket.create_connection(('127.0.0.1',port),timeout=3)
+    context=untrusted if mode=='untrusted' else trust
+    try:
+     with context.wrap_socket(raw,server_hostname='127.0.0.2' if mode=='hostname' else '127.0.0.1') as stream:
+      stream.sendall(b'POST /v1/request HTTP/1.0\r\nHost: 127.0.0.1\r\nContent-Length: 2\r\nContent-Type: application/json\r\nConnection: close\r\n\r\n{}')
+      wire=bounded_eof(stream)
+      try:body=classify(wire);outcome='valid'
+      except ValueError as error:outcome=str(error)
+      expected={'valid':'valid','extra':'length','truncated':'length','duplicate':'duplicate_header'}[mode]
+      assert outcome==expected,(mode,outcome)
+      results.append({'case':mode,'expected':outcome,'wire_bytes':len(wire),'wire_sha256':hashlib.sha256(wire).hexdigest()})
+    except ssl.SSLCertVerificationError:
+     assert mode in ('untrusted','hostname');results.append({'case':mode,'expected':'certificate_verification_failed'})
+    finally:raw.close()
+  finally:
+   thread.join(6)
+   if errors:print('owned TLS fixture server failure',errors)
+  assert not thread.is_alive() and not errors and len(peer_errors)==2,(errors,peer_errors)
+  record={'scope':'Windows development owned TLS/protocol pre-code feasibility only; no installed/client/nativeTLS/Linux qualification','tls_verified':True,'no_verification_bypass':True,'transport_frame':'HTTP/1.0 Connection:close read bounded raw TLS socket until actual EOF, then exact Content-Length/body compare','headers_cap':8192,'body_cap':262144,'total_cap':270336,'cases':results,'server_thread_closed':True,'client_sockets_closed':True,'credential_or_private_key_published':False}
+  (P/'eq081-tls-framing-feasibility.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8');print(json.dumps(record))
+if __name__=='__main__':main()

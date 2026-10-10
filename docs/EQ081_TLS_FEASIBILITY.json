@@ -1,0 +1,46 @@
+{
+  "scope": "Windows development owned TLS/protocol pre-code feasibility only; no installed/client/nativeTLS/Linux qualification",
+  "tls_verified": true,
+  "no_verification_bypass": true,
+  "transport_frame": "HTTP/1.0 Connection:close read bounded raw TLS socket until actual EOF, then exact Content-Length/body compare",
+  "headers_cap": 8192,
+  "body_cap": 262144,
+  "total_cap": 270336,
+  "cases": [
+    {
+      "case": "untrusted",
+      "expected": "certificate_verification_failed"
+    },
+    {
+      "case": "hostname",
+      "expected": "certificate_verification_failed"
+    },
+    {
+      "case": "valid",
+      "expected": "valid",
+      "wire_bytes": 298,
+      "wire_sha256": "0378d9bc9bc673b23042d071d804eef39c6e27783ed39b0c5db30638007d36b4"
+    },
+    {
+      "case": "extra",
+      "expected": "length",
+      "wire_bytes": 299,
+      "wire_sha256": "9b2dda0969b9b5cc63f414f4310b5e7d053b04b81c2d9f27911ae9c80b905cc5"
+    },
+    {
+      "case": "truncated",
+      "expected": "length",
+      "wire_bytes": 297,
+      "wire_sha256": "04ccb9771fa466aa4d184d904dbf21ebeef5af5010de714920e832b6980590a0"
+    },
+    {
+      "case": "duplicate",
+      "expected": "duplicate_header",
+      "wire_bytes": 317,
+      "wire_sha256": "37149c0e2a960746e6368ab699940317693f5891fe37769d6db48ae7879884ef"
+    }
+  ],
+  "server_thread_closed": true,
+  "client_sockets_closed": true,
+  "credential_or_private_key_published": false
+}
