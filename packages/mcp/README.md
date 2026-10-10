@@ -7,9 +7,11 @@ The trusted owner supplies an existing RemoteClient and MCPProfile, then calls
 server.run_stdio(input_binary, output_binary) once on the creating thread.
 EOF or output failure closes the owned client; no automatic replacement/replay.
 
-Current evidence is Windows development only. Independent source review, actual
-product/reference/native interoperability, installed forms and release gates
-remain pending. Local references are not remote publication receipts or rights.
+Independent Windows/Linux installed checkpoint evidence includes actual
+product/reference/native interoperability. Current source and artifact evidence,
+remaining qualification and release status are linked below; a checkpoint does
+not constitute release acceptance. Local references are not remote publication
+receipts or rights.
 The owner supplies fixed origin/token and complete public source/scope/producer
 expectations. Callers do not choose paths, credentials, code or adapters.
 Calculation packages remain independent; public source grants no hosted rights.
