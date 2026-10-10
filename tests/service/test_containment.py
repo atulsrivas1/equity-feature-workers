@@ -1,6 +1,7 @@
 """Actual owned Service/native execution and noncooperative epoch limits."""
 import ctypes
 import errno
+import hashlib
 import os
 from pathlib import Path
 import sys
@@ -13,6 +14,7 @@ from unittest.mock import patch
 
 from equity_feature_service import _containment
 from equity_feature_service._containment import OwnedEpochSupervisor
+from equity_feature_service._entry import OwnedEntryInventory, OwnedEntryProfile, startup_frame
 
 
 class Containment(unittest.TestCase):
@@ -33,10 +35,9 @@ class Containment(unittest.TestCase):
             'assert scheduler.close(2)\n')
 
     def launch(self, code, **kwargs):
-        with tempfile.TemporaryDirectory() as temporary:
-            entry = Path(temporary)/'owned.py'
-            entry.write_text(code,encoding='utf-8')
-            return OwnedEpochSupervisor().run(entry,**kwargs)
+        source = code.encode('utf-8')
+        profile = OwnedEntryProfile('native-fixture',source,hashlib.sha256(source).hexdigest(),(),True)
+        return OwnedEpochSupervisor(OwnedEntryInventory((profile,))).run_admitted('native-fixture',**kwargs)
 
     def test_actual_service_native_three_families_and_owner_thread_goldens(self):
         # The trusted qualification entry is a frozen source file, not an HTTP
@@ -54,7 +55,9 @@ class Containment(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             entry = Path(temporary)/'owned.py'
             entry.write_text(self.native_entry(' os.write(1,b"native-callback-entered\\n")\n while True: pass'),encoding='utf-8')
-            result = supervisor.run(entry,wall_seconds=3)
+            source=entry.read_bytes()
+            registered=OwnedEpochSupervisor(OwnedEntryInventory((OwnedEntryProfile('wall-native',source,hashlib.sha256(source).hexdigest(),(),True),)))
+            result = registered.run_admitted('wall-native',wall_seconds=3)
             self.assertEqual(result.reason,'deadline')
             self.assertNotEqual(result.exit_code,0)
             self.assertIn(b'native-callback-entered',result.output)
@@ -63,10 +66,13 @@ class Containment(unittest.TestCase):
             self.assertEqual(supervisor.run(entry).output,b'next-epoch-explicit\n')
 
     def test_combined_capture_has_exact_inclusive_boundary(self):
-        result = self.launch('import os\nos.write(1,b"a"*32768)\nos.write(2,b"b"*32768)')
-        self.assertEqual((result.reason,len(result.output)),('exited',65536))
-        result = self.launch('import os\nos.write(1,b"a"*65536)\nos.write(2,b"b")\nwhile True: pass')
-        self.assertEqual((result.reason,len(result.output)),('output_limit',65536))
+        profile = OwnedEntryProfile('native-fixture',b'pass',hashlib.sha256(b'pass').hexdigest(),(),True)
+        startup_bytes = len(startup_frame('a'*32,'a'*32,profile))
+        maximum = 65536-startup_bytes
+        result = self.launch('import os\nos.write(1,b"a"*'+str(maximum-1)+')\nos.write(2,b"b")')
+        self.assertEqual((result.reason,len(result.output)),('exited',maximum))
+        result = self.launch('import os\nos.write(1,b"a"*'+str(maximum)+')\nos.write(2,b"b")\nwhile True: pass')
+        self.assertEqual((result.reason,len(result.output)),('output_limit',maximum))
 
     def test_process_creation_denied_but_threads_work(self):
         code = self.native_entry(' import subprocess,threading\n t=threading.Thread(target=lambda:None)\n t.start();t.join()\n'

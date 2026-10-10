@@ -1,3 +1,7 @@
+## EQ080 frozen owned entry candidate
+
+Implement immutable synthetic source profiles and isolated complete startup frame/EOF-before-ACK, exact frozen-source execution and setup cleanup through actual exit; fourteen owned tests/strict12 development pass, current review/installed/full-map/release pending. Physical/mathematical/rights boundaries unchanged.
+
 ## EQ080 expanded native/cache qualification candidate
 
 Test actual native callbacks under unchanged physical OS limits, preserve a returned native commit receipt witness across hard death without a visible result/replay, and exercise real owner/cache entry caps plus concurrent audited hits/revoke/emit/close. Expanded171Windows development pass; new exact-head/native/docs/artifacts pending. Add truthful32-vector coverage and pre-code frozen owned inventory proposal; no runtime/package/math/schema change.
