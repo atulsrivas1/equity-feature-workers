@@ -14,9 +14,11 @@ from typing import Any
 from equity_feature_contracts import CanonicalBatch
 from equity_feature_contracts.adapters import AdapterBatch, HistoricalAdapter
 from equity_feature_io_contracts import CredentialProvider, ResultSink, SinkRequirements
-from equity_feature_io_contracts.publication import SinkError, SinkErrorCode
+from equity_feature_io_contracts.publication import (SinkError, SinkErrorCode, CompletionReceipt,
+    ArtifactReference, PublicationState)
 from equity_feature_io_sdk import (SourceRegistry, SinkRegistry, encode_result, encode_envelope, encode_receipt)
-from equity_feature_workers import SessionCommandSpec, SourceOffer, ExecutionApproval, CommandOutcome, plan_acquisition, execute_plan
+from equity_feature_workers import (SessionCommandSpec, SourceOffer, ExecutionApproval, CommandOutcome,
+    PlanningError, PlanningErrorCode, plan_acquisition, execute_plan)
 
 from . import codec
 from .datasets import DatasetIdentity, FeatureDataset, Scope
@@ -42,13 +44,25 @@ class JobGrant:
     features: frozenset[tuple[str, str]]
 
 
+@dataclass(frozen=True)
+class OwnedReceiptProfile:
+    """Operator attestation: one artifact, printable ASCII ID at most128 chars."""
+    profile: str = 'owned-one-artifact-ascii128-v1'
+
+    def __post_init__(self) -> None:
+        if self.profile != 'owned-one-artifact-ascii128-v1':
+            raise ValueError('unadmitted_receipt_profile')
+
+
 class JobRegistration:
     """Freeze native request/config and a complete observed owned delivery."""
     def __init__(self, request: codec.Json, spec: SessionCommandSpec, delivery: AdapterBatch, *,
                  sources: SourceRegistry[HistoricalAdapter], source: SourceOffer,
                  sinks: SinkRegistry[ResultSink], sink_id: str, sink_config: dict[str, Any],
-                 credentials: CredentialProvider) -> None:
+                 credentials: CredentialProvider, receipt_profile: OwnedReceiptProfile) -> None:
         codec.validate(request)
+        if type(receipt_profile) is not OwnedReceiptProfile:
+            raise ValueError('unadmitted_receipt_profile')
         if (request['kind'] != 'request' or request['payload']['operation'] != 'calculate'
                 or type(spec) is not SessionCommandSpec or spec.family not in ('trades', 'bars', 'quotes')
                 or spec.request.max_batches != 1 or spec.request.max_rows > 100
@@ -87,13 +101,15 @@ class JobRegistration:
         self.spec, self.sources, self.source = spec, sources, source
         self.sinks, self.sink_id, self.credentials = sinks, sink_id, credentials
         self.sink_config = json.loads(_bounded(sink_config, 8192))
+        self.receipt_profile = receipt_profile
         self.columns = tuple(column.name for column in batch.columns)
         self.execution_features = frozenset((f.feature_id,f.algorithm_version) for f in spec.features)
         self.command_digest = actual_digest
         self.requirements = SinkRequirements(max_results=1,max_chunk_bytes=65_536,max_total_bytes=65_536,
                                              max_result_cells=3900,max_evidence_rows=100)
         self.registration_digest = hashlib.sha256(_bounded({'spec':asdict(spec),'delivery':self.delivery_hash,
-            'context':context,'source':asdict(source),'sink_id':sink_id,'sink_config':self.sink_config}, 65_536)).hexdigest()
+            'context':context,'source':asdict(source),'sink_id':sink_id,'sink_config':self.sink_config,
+            'receipt_profile':asdict(receipt_profile)}, 65_536)).hexdigest()
 
 
 @dataclass
@@ -117,6 +133,8 @@ class _Job:
     envelope: bytes = field(default=b'', repr=False)
     receipt: bytes = field(default=b'', repr=False)
     wire: bytes = field(default=b'', repr=False)
+    committed_receipt_sha256: str | None = None
+    receipt_profile_failed: bool = False
 
 
 class JobScheduler:
@@ -152,6 +170,7 @@ class JobScheduler:
         self.total_retained = 0
         self._running: str | None = None
         self._last_mono = 0
+        self._last_wall = ledger.now()
         self._closed = False
         self.epoch = secrets.token_hex(16)
         self._mono()
@@ -170,8 +189,12 @@ class JobScheduler:
         self._last_mono = n
         return n
 
+    def _now(self) -> int:
+        self._last_wall = self.ledger.now()
+        return self._last_wall
+
     def _authorized(self, credential: Credential, registration: JobRegistration, grant_id: str, action: str) -> bool:
-        grant = self.ledger.authorized(credential,self.ledger.datasets[registration.identity.dataset_id],registration.columns,action,self.ledger.now())
+        grant = self.ledger.authorized(credential,self.ledger.datasets[registration.identity.dataset_id],registration.columns,action,self._now())
         rule = self.grants.get(grant_id)
         return (grant is not None and grant.grant_id == grant_id and rule is not None
                 and rule.config_digest == registration.spec.config.digest and registration.execution_features <= rule.features)
@@ -200,7 +223,7 @@ class JobScheduler:
             self._release(job,job.held)
 
     def _sweep(self) -> None:
-        n = self.ledger.now()
+        n = self._now()
         for job in tuple(self.jobs.values()):
             grant = next(g for g in self.ledger.grants if g.grant_id == job.grant_id)
             if job.state == 'queued':
@@ -292,7 +315,7 @@ class JobScheduler:
                     if job.state == 'queued':
                         self.queue.remove(job.job_id)
                         job.state = 'cancelled'
-                        job.expires_ns = min(self.ledger.now()+300_000_000_000,next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == job.grant_id))
+                        job.expires_ns = min(self._now()+300_000_000_000,next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == job.grant_id))
                         self._clear(job)
                     else:
                         job.state = 'cancel_requested'
@@ -303,10 +326,15 @@ class JobScheduler:
     def _run(self) -> None:
         while True:
             with self.condition:
-                self._sweep()
-                while not self.queue and not self._closed:
-                    self.condition.wait(0.1)
+                try:
                     self._sweep()
+                except ValueError:
+                    # Fail closed without losing the one process-owned executor.
+                    self.condition.wait(0.1)
+                    continue
+                if not self.queue and not self._closed:
+                    self.condition.wait(0.1)
+                    continue
                 if self._closed and not self.queue:
                     return
                 job = self.jobs[self.queue.popleft()]
@@ -318,7 +346,7 @@ class JobScheduler:
                 with self.ledger.lock:
                     self._check(job)
                     job.state,job.result_id = 'succeeded',self.epoch+'-'+secrets.token_hex(16)
-            except Exception:
+            except Exception as execution_error:
                 with self.ledger.lock:
                     try:
                         self._check(job)
@@ -326,11 +354,21 @@ class JobScheduler:
                     except Exception:
                         cancelled = True
                     job.state = 'cancelled' if cancelled else 'failed'
-                    job.error = None if cancelled else {'category':'internal','code':'internal_error','retryable':False}
+                    bounded_failure = (job.receipt_profile_failed
+                        or isinstance(execution_error,SinkError) and execution_error.code is SinkErrorCode.RESOURCE_LIMIT
+                        or isinstance(execution_error,PlanningError) and execution_error.code is PlanningErrorCode.LIMIT)
+                    job.error = None if cancelled else ({'category':'contract','code':'bounds','retryable':False}
+                        if bounded_failure else {'category':'internal','code':'internal_error','retryable':False})
             finally:
                 with self.condition:
                     grant = next(g for g in self.ledger.grants if g.grant_id == job.grant_id)
-                    job.expires_ns = min(self.ledger.now()+300_000_000_000,grant.expires_at_ns)
+                    try:
+                        completed_ns = self._now()
+                    except ValueError:
+                        completed_ns = self._last_wall
+                    job.expires_ns = min(completed_ns+300_000_000_000,grant.expires_at_ns)
+                    if job.state in ('failed','cancelled') and not job.receipt:
+                        self._clear(job)
                     actual = len(job.native)+len(job.wire)+len(job.envelope)+len(job.receipt)
                     self._release(job,job.held-actual)
                     self._running = None
@@ -372,6 +410,17 @@ class JobScheduler:
             def __init__(self, original: ResultSink) -> None:
                 self.original = original
                 self.owner = threading.current_thread()
+            def capture(self, receipt: Any) -> None:
+                data = encode_receipt(receipt)
+                job.committed_receipt_sha256 = hashlib.sha256(data).hexdigest()
+                valid = (type(receipt) is CompletionReceipt and len(receipt.artifacts) == 1
+                         and len(receipt.artifacts[0].artifact_id) <= 128
+                         and all(32 <= ord(c) < 127 for c in receipt.artifacts[0].artifact_id)
+                         and len(job.envelope)+len(data) <= 32_768)
+                if not valid:
+                    job.receipt_profile_failed = True
+                    raise SinkError(SinkErrorCode.RESOURCE_LIMIT)
+                job.receipt = data
             def check(self, *, cleanup: bool = False) -> None:
                 if self.owner is not threading.current_thread():
                     raise SinkError(SinkErrorCode.INVALID_SESSION)
@@ -383,10 +432,14 @@ class JobScheduler:
                 with scheduler.ledger.lock:
                     self.check()
                     data = encode_envelope(envelope)
-                    if len(data) > 32_768:
+                    worst = CompletionReceipt(envelope.identity,'f'*64,'f'*64,1,2**63-1,2**63-1,
+                        2**63-1,(ArtifactReference('x'*128,'f'*64,2**63-1),),-2**63)
+                    if len(data)+len(encode_receipt(worst)) > 32_768:
                         raise SinkError(SinkErrorCode.RESOURCE_LIMIT)
-                    session = self.original.begin(envelope)
                     job.envelope = data
+                    session = self.original.begin(envelope)
+                    if type(session) is CompletionReceipt:
+                        self.capture(session)
                     return session
             def write(self, session: Any, ordinal: int, result: Any) -> None:
                 with scheduler.ledger.lock:
@@ -400,10 +453,7 @@ class JobScheduler:
                 with scheduler.ledger.lock:
                     self.check()
                     receipt = self.original.commit(session)
-                    data = encode_receipt(receipt)
-                    if len(job.envelope)+len(data) > 32_768:
-                        raise SinkError(SinkErrorCode.RESOURCE_LIMIT)
-                    job.receipt = data
+                    self.capture(receipt)
                     return receipt
             def read(self, receipt: Any) -> Any:
                 with scheduler.ledger.lock:
@@ -412,11 +462,17 @@ class JobScheduler:
             def lookup(self, key: str) -> Any:
                 with scheduler.ledger.lock:
                     self.check()
-                    return self.original.lookup(key)
+                    status = self.original.lookup(key)
+                    if status.state is PublicationState.COMMITTED:
+                        self.capture(status.receipt)
+                    return status
             def abort(self, session: Any) -> Any:
                 with scheduler.ledger.lock:
                     self.check(cleanup=True)
-                    return self.original.abort(session)
+                    status = self.original.abort(session)
+                    if status.state is PublicationState.COMMITTED:
+                        self.capture(status.receipt)
+                    return status
         class Factory:
             protocol_version = '1'
             def __init__(self, kind: str) -> None:
@@ -446,6 +502,9 @@ class JobScheduler:
                                authorize=approve,cancellation=Cancellation())
         if type(outcome) is not CommandOutcome:
             raise codec.WireError('inconsistent_identity')
+        if (outcome.output.receipt is None or job.receipt_profile_failed or job.envelope != encode_envelope(outcome.output.envelope)
+                or job.receipt != encode_receipt(outcome.output.receipt)):
+            raise SinkError(SinkErrorCode.RESOURCE_LIMIT)
         self._check(job)
         dataset = FeatureDataset(registration.identity,registration.scope,outcome.results[0],context,registration.command_digest,
                                  rights=frozenset(('retain','derived_read')),rights_owner='owned-job',rights_evidence='server-approved-job',
@@ -466,7 +525,16 @@ class JobScheduler:
             for job in self.jobs.values():
                 if job.state in ('queued','running','cancel_requested'):
                     job.cancelled = True
-            self._sweep()
+                if job.state == 'queued':
+                    self.queue.remove(job.job_id)
+                    job.state = 'cancelled'
+                    job.expires_ns = min(self._last_wall+300_000_000_000,
+                        next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == job.grant_id))
+                    self._clear(job)
+            try:
+                self._sweep()
+            except ValueError:
+                pass
             self.condition.notify_all()
         self.thread.join(timeout)
         return not self.thread.is_alive()

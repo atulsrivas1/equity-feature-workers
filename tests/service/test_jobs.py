@@ -19,7 +19,7 @@ from equity_feature_io_sdk import SourceRegistry, SinkRegistry, decode_result
 from equity_feature_example_extensions import ExampleSink
 from equity_feature_workers import SessionCommandSpec, SourceOffer
 from equity_feature_service import Credential, Grant, Ledger, Limits, Service, RawDataset, RawRead, Scope
-from equity_feature_service.jobs import JobRegistration, JobGrant, JobScheduler
+from equity_feature_service.jobs import JobRegistration, JobGrant, JobScheduler, OwnedReceiptProfile
 from equity_feature_service.loopback import qualification_server
 from equity_feature_service import codec
 from test_service import Clock, call
@@ -77,7 +77,7 @@ def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda
         return sink_create()
     sinks.register('owned.sink',Factory(construct_sink))
     registration = JobRegistration(TRADE['request'],spec,delivery,sources=sources,source=SourceOffer('owned.source',capabilities,{}),
-                                    sinks=sinks,sink_id='owned.sink',sink_config={},credentials=Credentials())
+                                    sinks=sinks,sink_id='owned.sink',sink_config={},credentials=Credentials(),receipt_profile=OwnedReceiptProfile())
     clock = Clock()
     scope = Scope('A','S',100,200)
     columns = tuple(facts)
@@ -401,6 +401,79 @@ class Jobs(unittest.TestCase):
         self.assertEqual(call(service,request,tokens[0])[0],429)
         self.assertEqual(self.submit(service,tokens[0],'record-0'),ids[0])
         self.assertEqual(audit['reads'],8)
+
+    def test_invalid_idle_wall_clock_preserves_executor_and_future_admission(self):
+        scheduler,service,tokens,clock,audit = self.make()
+        observed = threading.Event()
+        def faulty_clock():
+            if threading.current_thread() is scheduler.thread and clock.n < 0:
+                observed.set()
+            return clock.n
+        scheduler.ledger.clock = faulty_clock
+        clock.n = -1
+        self.assertTrue(observed.wait(2),'scheduler did not observe invalid trusted time')
+        with scheduler.condition:
+            clock.n = 100
+        job_id = self.submit(service,tokens[0])
+        self.assertEqual(self.wait_terminal(scheduler,job_id).state,'succeeded')
+        self.assertTrue(scheduler.thread.is_alive())
+
+    def test_invalid_wall_clock_during_native_exit_releases_uncommitted_forms(self):
+        gate = threading.Event()
+        scheduler,service,tokens,clock,audit = self.make(gate=gate)
+        job_id = self.submit(service,tokens[0])
+        self.assertTrue(audit['entered'].wait(2))
+        clock.n = -1
+        gate.set()
+        job = self.wait_terminal(scheduler,job_id)
+        self.assertEqual(job.state,'cancelled')
+        self.assertEqual(job.held,0)
+        self.assertTrue(scheduler.thread.is_alive())
+        clock.n = 100
+
+    def test_failure_before_native_commit_clears_staged_payload_and_reservation(self):
+        class NeverCommit(ExampleSink):
+            def commit(self, session): raise SinkError(SinkErrorCode.UNAVAILABLE)
+        scheduler,service,tokens,clock,audit = self.make(sink_create=NeverCommit)
+        job_id = self.submit(service,tokens[0])
+        job = self.wait_terminal(scheduler,job_id)
+        self.assertEqual(job.state,'failed')
+        self.assertFalse(job.native or job.envelope or job.receipt or job.wire)
+        self.assertEqual((job.held,scheduler.total_retained),(0,0))
+        self.assertEqual(self.submit(service,tokens[0]),job_id)
+        self.assertEqual(audit['reads'],1)
+
+    def test_commit_unknown_recovery_retains_exact_receipt_before_success(self):
+        class CommitUnknown(ExampleSink):
+            def commit(self, session):
+                super().commit(session)
+                raise SinkError(SinkErrorCode.COMMIT_UNKNOWN)
+        scheduler,service,tokens,clock,audit = self.make(sink_create=CommitUnknown)
+        job_id = self.submit(service,tokens[0])
+        job = self.wait_terminal(scheduler,job_id)
+        self.assertEqual(job.state,'succeeded',job.error)
+        self.assertTrue(job.native and job.envelope and job.receipt and job.wire)
+        self.assertIsNotNone(job.committed_receipt_sha256)
+        self.assertEqual(self.submit(service,tokens[0]),job_id)
+        self.assertEqual(audit['reads'],1)
+
+    def test_out_of_profile_committed_receipt_denies_success_and_records_fact(self):
+        class OversizedReceipt(ExampleSink):
+            def commit(self, session):
+                receipt = super().commit(session)
+                return replace(receipt,artifacts=(replace(receipt.artifacts[0],artifact_id='x'*65000),))
+        scheduler,service,tokens,clock,audit = self.make(sink_create=OversizedReceipt)
+        job_id = self.submit(service,tokens[0])
+        job = self.wait_terminal(scheduler,job_id)
+        self.assertEqual(job.state,'failed')
+        self.assertIsNone(job.result_id)
+        self.assertTrue(job.receipt_profile_failed)
+        self.assertEqual(job.error,{'category':'contract','code':'bounds','retryable':False})
+        self.assertIsNotNone(job.committed_receipt_sha256)
+        self.assertLessEqual(job.held,262144)
+        self.assertLessEqual(len(job.receipt)+len(job.envelope),32768)
+        self.assertEqual(self.submit(service,tokens[0]),job_id)
+        self.assertEqual(audit['reads'],1)
 
 
 if __name__ == '__main__': unittest.main()

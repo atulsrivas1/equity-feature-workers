@@ -94,7 +94,7 @@ def main():
     output.mkdir(parents=True)
     with tempfile.TemporaryDirectory(prefix='service-build-', dir=ROOT / 'work') as tmp:
         temp = Path(tmp)
-        committed = snapshot(ROOT, commit, temp / 'component', ('packages/service','tests/service','tools','examples/service_owned.py'))
+        committed = snapshot(ROOT, commit, temp / 'component', ('packages/service','tests/service','tools','examples/service_owned.py','.github/workflows/service.yml'))
         core = snapshot(args.core_root.resolve(), CORE_COMMIT, temp / 'core')
         io = snapshot(args.io_root.resolve(), IO_COMMIT, temp / 'io', ('packages','examples/third_party'))
         workers = snapshot(ROOT, WORKER_COMMIT, temp / 'workers', ('packages/workers',))
