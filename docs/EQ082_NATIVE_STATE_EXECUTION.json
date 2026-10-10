@@ -1,0 +1,48 @@
+{
+  "entry_sha256": "8f7e757277b684f689cb32a8188adff257fa5b3d569ca2c4519ceff7004a8168",
+  "files": {
+    "tests/mcp/test_native_states.py": {
+      "bytes": 7065,
+      "sha256": "8a7272b98b6b8bb8f905fbac916beb0460ead39d6c43ab84629769b68b673e51"
+    },
+    "tests/mcp/test_protocol_boundary.py": {
+      "bytes": 16652,
+      "sha256": "5ebb5b8f5c9ca050bd66aae07736510846ccab6b41419d20e06e735dfe4a2f88"
+    },
+    "tests/mcp/test_tls_boundary.py": {
+      "bytes": 6677,
+      "sha256": "37127d595d8a04c01a2d75f796dcb5f198ae448b186ad703022c6833fbf3cd19"
+    },
+    "tools/build_mcp.py": {
+      "bytes": 13459,
+      "sha256": "10790320bb5ab930c3ba20c004a78137daec12035b48b916c5dae3dfdbedb4bc"
+    }
+  },
+  "full_run_seconds": 26.969,
+  "logs": {
+    "eq082-boundary10-author.log": {
+      "bytes": 1994,
+      "sha256": "5bacc2014c68a33fc8b9a78d43d176727a7334780d674efbe928e7a6b54af711"
+    },
+    "eq082-native-fault-current45.log": {
+      "bytes": 7369,
+      "sha256": "736be4c052bdf703ed0d58f676de2348330ffdcb0b7898e9a174175179d530d4"
+    },
+    "eq082-native-state-author.log": {
+      "bytes": 447,
+      "sha256": "a125f6a45f617a223de9fcfcb4466a4c08664eca7c445cfce7618e55148a9a67"
+    },
+    "eq082-native-state-noexport.log": {
+      "bytes": 447,
+      "sha256": "1b3a55276894df9c298678377289579cbc5591f3f14f848753b098a4d0e58f8b"
+    },
+    "eq082-tls-mcp-author.log": {
+      "bytes": 268,
+      "sha256": "f0b8daf53107cb06cbe169e2759118f1ef3a38c61089a684891186da5e51e636"
+    }
+  },
+  "methods": 45,
+  "review_before_execution": "https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6103381781",
+  "schema": "eq082.native-state-execution.v1",
+  "scope": "Windows development public MCP/native states and TLS/output faults; no current installed/Linux/release approval"
+}

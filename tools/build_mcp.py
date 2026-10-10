@@ -5,7 +5,7 @@ from build_foundation import build,fingerprint,git,run,sha,snapshot,CORE_COMMIT,
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 ROOT=Path(__file__).resolve().parents[1]
 CLIENT_COMMIT='4365fe90aa5125662b222782873bf106bd49b778'
-INPUTS=('packages/mcp','tests/mcp','tests/qualification/test_mcp_records.py','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','.github/workflows/mcp.yml')
+INPUTS=('packages/mcp','tests/mcp','tests/qualification/test_mcp_records.py','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt','.github/workflows/mcp.yml')
 CLIENT_INPUTS=('packages/client','tests/client','docs/EQ081_CLIENT_FIXTURES.json','docs/EQ081_OWNED_HTTP_ENTRY.txt','docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 
 def reference_record(path):
@@ -86,7 +86,7 @@ def qualify(artifact,deps,reference,committed,client,service):
         (harness/'docs').mkdir()
         for name in ('EQ081_CLIENT_FIXTURES.json','EQ081_OWNED_HTTP_ENTRY.txt','EQ081_AUTHORITY_HTTP_ENTRY.txt'):
             shutil.copy2(client/'docs'/name,harness/'docs'/name)
-        for name in ('EQ082_PRODUCT_REFERENCE_ENTRY.txt','EQ082_PRODUCT_REFERENCE_PROBE.txt','EQ082_NATIVE_FAMILY_ENTRY.txt'):
+        for name in ('EQ082_PRODUCT_REFERENCE_ENTRY.txt','EQ082_PRODUCT_REFERENCE_PROBE.txt','EQ082_NATIVE_FAMILY_ENTRY.txt','EQ082_NATIVE_STATE_ENTRY.txt'):
             shutil.copy2(committed/'docs'/name,harness/'docs'/name)
         assert not (harness/'packages').exists()
         run(py,'-I','-c',"from pathlib import Path;import equity_feature_client as c;import equity_feature_mcp as m;assert all('site-packages' in Path(v.__file__).resolve().parts for v in (c,m));assert c.native_available()",cwd=location)

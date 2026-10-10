@@ -178,3 +178,51 @@ class ProtocolBoundary(unittest.TestCase):
             with fixtures.Peer(lambda r,_:(200,fixtures.envelope('feature_slice',sent,r['request_id'],r['version']),b'')) as peer:
                 self.run_dialogue(RemoteClient(peer.origin,lambda:'A'*43),commands)
                 self.assertEqual(len(peer.requests),1)
+
+    def test_cancel_postsend_ambiguity_has_no_replay_and_only_explicit_followup(self):
+        calls=[];operations=[]
+        def handler(request,index):
+            operations.append(request['payload']['operation'])
+            if index==1:return None
+            job=dict(job_id='owned-job',command_digest=self.expected.command_digest,state='queued' if index==0 else 'cancelled',result_id=None,error=None)
+            return 200,fixtures.envelope('job',job,request['request_id'],request['version']),b''
+        def commands(responses):
+            yield from self.start();yield self.tool('equity_calculate',profile='cmd',idempotency_key='manual-stable-key')
+            admitted=self.value(responses);self.assertTrue(admitted['ok'],admitted);reference=admitted['payload']['reference']
+            yield self.tool('equity_job_cancel',reference=reference)
+            uncertain=self.value(responses);self.assertFalse(uncertain['ok']);self.assertEqual(uncertain['failure']['code'],'outcome_unknown')
+            self.assertEqual(operations,['calculate','job_cancel']);self.assertEqual(len(calls),2)
+            yield self.tool('equity_job_status',reference=reference)
+            followed=self.value(responses);self.assertTrue(followed['ok'],followed);self.assertEqual(followed['payload']['data']['state'],'cancelled')
+        with fixtures.Peer(handler,connections=3) as peer:
+            self.run_dialogue(RemoteClient(peer.origin,lambda:calls.append(1) or 'A'*43,attempts=3),commands)
+            self.assertEqual(operations,['calculate','job_cancel','job_status']);self.assertEqual(len(peer.requests),3)
+
+    def test_closed_output_after_mutation_drops_reference_without_replacement_or_replay(self):
+        entered=threading.Event();release=threading.Event();state={};errors=[];calls=[]
+        input_read,input_write=os.pipe();output_read,output_write=os.pipe()
+        def provider():
+            calls.append(1);entered.set()
+            if not release.wait(2):raise AssertionError('owned output release timeout')
+            return 'A'*43
+        job=dict(job_id='owned-job',command_digest=self.expected.command_digest,state='queued',result_id=None,error=None)
+        with fixtures.Peer(lambda r,_:(200,fixtures.envelope('job',job,r['request_id'],r['version']),b'')) as peer:
+            def owner():
+                try:
+                    client=RemoteClient(peer.origin,provider,attempts=3);server=StdioServer(client,self.profile);state.update(client=client,server=server)
+                    with os.fdopen(input_read,'rb',buffering=0) as incoming,os.fdopen(output_write,'wb',buffering=0) as outgoing:server.run_stdio(incoming,outgoing)
+                except BaseException as error:errors.append(type(error).__name__)
+            thread=threading.Thread(target=owner);thread.start()
+            try:
+                with os.fdopen(input_write,'wb',buffering=0) as incoming:
+                    incoming.write(b''.join(_wire.encode_frame(v) for v in [*self.start(),self.tool('equity_calculate',profile='cmd',idempotency_key='manual-stable-key')]))
+                    self.assertTrue(entered.wait(1))
+                with os.fdopen(output_read,'rb',buffering=0) as outgoing:
+                    initial=b''
+                    while not initial.endswith(b'\n'):initial+=outgoing.read(1)
+                    self.assertEqual(json.loads(initial)['result']['protocolVersion'],'2025-11-25')
+            finally:release.set();thread.join(3)
+            self.assertFalse(thread.is_alive());self.assertEqual(errors,[]);self.assertEqual(len(calls),1);self.assertEqual(len(peer.requests),1)
+            self.assertEqual(peer.requests[0][0].count(b'manual-stable-key'),1)
+            self.assertTrue(state['server']._closed);self.assertTrue(state['client']._closed)
+            self.assertEqual(state['server']._ledger._records,{});self.assertEqual(state['server']._ledger._reservations,{})
