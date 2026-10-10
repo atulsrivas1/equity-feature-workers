@@ -134,8 +134,27 @@ def exchange(origin: Origin, encoded: bytes, token: str, *, timeout: float,
             if context is None:
                 context = ssl.create_default_context()
             validate_context(context)
-        owned = socket.create_connection((origin.host, origin.port), timeout=remaining(deadline, timeout))
-        active(owned)
+        # Own/register every allocated socket before any blocking connect.
+        # socket.create_connection only cleans OSError, so it cannot provide
+        # our explicit cleanup guarantee for SystemInterrupt during setup.
+        addresses = socket.getaddrinfo(origin.host, origin.port, type=socket.SOCK_STREAM)
+        connected = False
+        for family, socktype, protocol, _, address in addresses[:8]:
+            owned = socket.socket(family, socktype, protocol)
+            active(owned)
+            try:
+                owned.settimeout(remaining(deadline, timeout))
+                owned.connect(address)
+            except OSError:
+                owned.close()
+                owned = None
+                active(None)
+                continue
+            connected = True
+            break
+        if not connected:
+            raise ExchangeError('disconnected', phase)
+        assert owned is not None
         if origin.secure:
             assert context is not None
             owned.settimeout(remaining(deadline, timeout))

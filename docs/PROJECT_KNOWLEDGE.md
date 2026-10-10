@@ -1,3 +1,17 @@
+## EQ081 connect ownership correction and real TLS candidate - October10,2026 UTC
+
+[Actual independent finding/corrective disposition](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100472148).
+
+Separate local automated reviewer /root/r7_policy_review inspected exact canonical1d18efe790867639ceb634b778095750b8c3d11b / worker004728523f227218c511a6d236e0d59f3f2c3deb. Independently16 methods PASS0.756s/strict4, original model P2s resolved, accepted service/worker/tools/workflows/examples invariance/diff/cleanhead verified. One new P2: socket.create_connection allocates a real socket but only returns ownership after blocking connect; actual stdlib cleanup catches OSError, not BaseException. Reviewer interrupted actual OS socket subclass connect with KeyboardInterrupt; descriptor remained open and active callback observed onlyNone. Reviewer explicitly closed its test descriptor, no public/network-client release approval.
+
+Corrected internal transport owns/registers every per-address socket before timeout/connect, at most8 address attempts under current cooperative deadline. OSError failed attempts close immediately; interrupt/setup failure closes owned socket in outerfinally and clearsactive. No hidden threads/hardDNS/OSdeadline claim; deadline can expire during DNS and cannot guarantee its interruption. Regression allocates real OS socket, verifies callback ownership before injected KeyboardInterrupt, finaldescriptor -1 and activeNone.
+
+Author Windows current18 methods PASS1.097s/strict4. New real TLS test creates only ephemeral owned key/cert in TemporaryDirectory through availableopenssl: verified trusted127.0.0.1 success, default untrustedCA and trustedCA wrongIP127.0.0.2 failverification, actualTLS extra/truncatedbytes deny; allthreads/sockets closed and cert/key deleted. First hostname fixture used localhost resolution/IPv6 fallback and hit2s cooperative timeout before target TLS; listener teardown OSError was failed qualification evidence, not a pass. Corrected literal127.0.0.2 isolates actual hostname mismatch without DNS; full18 passed. This is Windows development internaltransport qualification, not Linux/installed/publicclient/nativeTLS release acceptance.
+
+Current correction requires renewed separate exacthead review. EQ081 remains sole In progress; public RemoteClient/helper/views/native conversion/full32/clientbuilder and bothOS installed/publictyping/archive-source-RECORD/dependency/core/artifact/main gates remain unfinished. Internal ExchangeError remains internal; future operational public boundary must return inertFailure without original exception graphs and maintain mutation outcome_unknown/noautomaticreplay. Six R7 stories accepted/fourremaining, no new operations rights or acceptedpackagebytes/schema changes.
+
+Exact resume: inspect renewed reviewer response/currentCI, record actual review scope; implement public RemoteClient/immutableviews/helpers/response expectations/nullerrorstatus policy, then optionalpublicnativeconversion and mappedC01-C32/currentcommittedclientbothOS qualification. Client root exposes models only; no public RemoteClient yet. Olderpending captures below are history.
+
 ## EQ081 corrected models and EOF transport candidate - October10,2026 UTC
 
 [Separate model findings and correction disposition](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100439263).

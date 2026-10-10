@@ -1,10 +1,14 @@
 import hashlib
 import socket
 import ssl
+import shutil
+import subprocess
 import sys
+import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -17,6 +21,64 @@ def wire(body=b'{}', *, length=None, extras=b'', prefix=b'HTTP/1.0 200 OK'):
 
 
 class Transport(unittest.TestCase):
+    def test_actual_tls_trust_hostname_and_eof_faults(self):
+        openssl=shutil.which('openssl') or ('C:/Program Files/Git/usr/bin/openssl.exe' if Path('C:/Program Files/Git/usr/bin/openssl.exe').is_file() else None)
+        self.assertIsNotNone(openssl,'Owned TLS fixture requires openssl')
+        with tempfile.TemporaryDirectory() as directory:
+            cert=Path(directory)/'owned-cert.pem';key=Path(directory)/'owned-key.pem'
+            subprocess.run([openssl,'req','-x509','-newkey','rsa:2048','-nodes','-days','1','-subj','/CN=owned.invalid','-addext','subjectAltName=IP:127.0.0.1','-keyout',str(key),'-out',str(cert)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+            server_context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);server_context.load_cert_chain(cert,key)
+            for case in ('trusted','untrusted','hostname','extra','truncated'):
+                with self.subTest(case=case):
+                    host='127.0.0.2' if case=='hostname' else '127.0.0.1'
+                    listener=socket.socket();listener.bind((host,0));listener.listen(1);listener.settimeout(3)
+                    client_context=ssl.create_default_context(cafile=str(cert)) if case!='untrusted' else ssl.create_default_context()
+                    origin=Origin.parse('https://'+host+':'+str(listener.getsockname()[1]))
+                    errors=[];observed=[]
+                    def serve():
+                        try:
+                            connection,_=listener.accept()
+                            with connection:
+                                connection.settimeout(3)
+                                try:
+                                    with server_context.wrap_socket(connection,server_side=True) as secured:
+                                        data=b''
+                                        while b'\r\n\r\n' not in data:data+=secured.recv(4096)
+                                        response=wire(b'{}x',length=2) if case=='extra' else wire(b'{',length=2) if case=='truncated' else wire()
+                                        secured.sendall(response)
+                                except (ssl.SSLError,ConnectionResetError):
+                                    if case not in ('hostname','untrusted'):raise
+                        except BaseException as error:errors.append(type(error).__name__)
+                    thread=threading.Thread(target=serve);thread.start()
+                    try:
+                        if case=='trusted':
+                            self.assertEqual(exchange(origin,b'{}','A'*43,timeout=2,deadline=time.monotonic()+2,context=client_context,active=observed.append).body,b'{}')
+                        else:
+                            with self.assertRaisesRegex(ExchangeError,'tls_verification_failed' if case in ('hostname','untrusted') else 'invalid_response'):
+                                exchange(origin,b'{}','A'*43,timeout=2,deadline=time.monotonic()+2,context=client_context,active=observed.append)
+                    finally:
+                        listener.close();thread.join(4)
+                        self.assertFalse(thread.is_alive());self.assertEqual(errors,[])
+                        self.assertTrue(all(connection.fileno()==-1 for connection in observed if connection is not None))
+            self.assertTrue(cert.is_file() and key.is_file())
+        self.assertFalse(cert.exists() or key.exists())
+
+    def test_real_connect_interrupt_closes_registered_socket(self):
+        allocated=[];registered=[]
+        original=socket.socket
+        class InterruptedSocket(original):
+            def __init__(self,*args,**kwargs):
+                super().__init__(*args,**kwargs);allocated.append(self)
+            def connect(self,address):
+                self.was_active = bool(registered and registered[-1] is self)
+                raise KeyboardInterrupt
+        with patch('socket.socket',InterruptedSocket),self.assertRaises(KeyboardInterrupt):
+            exchange(Origin.parse('http://127.0.0.1:9'),b'{}','A'*43,timeout=.1,deadline=time.monotonic()+.1,context=None,active=registered.append)
+        self.assertEqual(len(allocated),1)
+        self.assertTrue(allocated[0].was_active)
+        self.assertEqual(allocated[0].fileno(),-1)
+        self.assertIsNone(registered[-1])
+
     def real_exchange(self, response, *, stall=False, timeout=.4):
         listener=socket.socket();listener.bind(('127.0.0.1',0));listener.listen(1);listener.settimeout(2)
         origin=Origin.parse('http://127.0.0.1:'+str(listener.getsockname()[1]))
