@@ -1,3 +1,7 @@
+## Qualified optional service0.1.0a0
+
+Authenticated bounded slice/discovery is independently reviewed and qualified on actual-main Windows/Linux using owned synthetic native source/result fixtures. The service is optional, preserves native identities/metadata/quality and keeps calculations, workers.a13 and I/O runtime packages unchanged. [API/install/evidence](docs/EQ077_SERVICE.md) and [owned loopback HTTP example](examples/service_owned.py) describe the experimental source/30-day Actions artifact channel and exact limits. This does not expose a public service or grant hosted/private/provider data rights. Earlier captures below are history; the live canonical story/Project owns lifecycle.
+
 ## Optional EQ077 service under qualification
 
 The separate experimental equity-feature-service0.1.0a0 package supplies authenticated bounded synthetic slice/discovery over explicit operator datasets and grants. It preserves native identities, metadata and quality; calculations, workers.a13 and I/O runtime packages remain unchanged. [Service API/install/limits](docs/EQ077_SERVICE.md), [owned HTTP example](examples/service_owned.py) and [canonical story87](https://github.com/atulsrivas1/equity-features/issues/87) record actual evidence and pending final review/release gates. No public deployment, hosted dataset rights or registry/stable release is claimed.
