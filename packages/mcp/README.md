@@ -2,7 +2,7 @@
 
 Experimental optional local stdio tools over the accepted public remote client.
 This development checkpoint implements immutable owner registrations and profile
-snapshots only. The stdio server, protocol dispatch, reference ledger, installed
+snapshots plus internal bounded binary framing. The stdio server, protocol dispatch, reference ledger, installed
 interoperability and release qualification remain unfinished.
 
 The owner supplies the fixed origin, token provider and complete public source,
