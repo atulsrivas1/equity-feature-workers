@@ -1,3 +1,7 @@
+## Complete EQ078 development qualification
+
+All30 frozen decisions now map to55 owned native job methods; full90 development tests and strict7 pass. Current exact committed source/installed perOS artifacts and separate final source/security/native/docs review remain mandatory. Maximum Unicode256 principal/grant IDs and ASCII128 dataset IDs fit complete terminal metadata8192; exact1MiB/2MiB retained reservation and16live-record bounds tested. Native foreign completion persists; closed busy execution keeps capacity until actual exit. See [handoff](SESSION_HANDOFF.md) and linked coverage map for actual historical artifact/source proof and failures. No current async release acceptance.
+
 ## Retiring live identities
 
 An admitted job pins its original grant expiry for payload TTL and idempotency tombstone cleanup. Removing a current grant or credential denies further native work and retention; terminal payloads clear independently of polling. Cleanup, cancellation, finalization and shutdown use the pinned lifetime even after live authorization records disappear. Running capacity remains charged until native execution really exits. This candidate has44 job tests/full79 development tests passing; current artifact qualification and separate final review remain pending.

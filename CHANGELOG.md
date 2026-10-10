@@ -1,3 +1,7 @@
+## EQ078 complete development vectors
+
+Qualify all30 frozen native job decisions with55 owned job methods/full90 development methods. Current installed/perOS source/artifact/final review gates remain pending. Accepted runtime dependencies and numerical/transport semantics unchanged.
+
 ## EQ078 retirement correction
 
 Pin original grant lifetime per job and clear terminal payloads after live grant or credential retirement without stopping shared scheduler threads.44 job/full79 development tests and strict7 pass; current release gates remain pending. See [review disposition](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6095258027).

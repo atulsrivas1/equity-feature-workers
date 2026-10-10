@@ -1,5 +1,5 @@
 """Actual native worker jobs with independent owned arithmetic and barriers."""
-from dataclasses import replace
+from dataclasses import replace, asdict
 import json
 import http.client
 import hashlib
@@ -45,7 +45,7 @@ class Credentials:
 
 def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda value:value, monotonic=time.monotonic_ns,
           family='trades', registered_batch_transform=lambda value:value, audit_out=None, rows=None,
-          max_input_bytes=None, ns_offset=0, adjacent=False):
+          max_input_bytes=None, ns_offset=0, adjacent=False, raw_receipt='a'*64, principals=('A','B'), dataset_label=None, grant_label=None):
     fixture = json.loads(json.dumps(next(f for f in FROZEN['fixtures'] if f['family'] == family)))
     if ns_offset:
         def shift(value):
@@ -55,6 +55,8 @@ def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda
             if type(value) is list: return [shift(v) for v in value]
             return value
         fixture = shift(fixture)
+    if dataset_label is not None:
+        fixture['request']['payload']['context']['dataset']['dataset_id'] = dataset_label
     native = fixture['native_spec']
     if rows is not None:
         if family != 'trades': raise ValueError('owned row fixture is trades')
@@ -63,7 +65,7 @@ def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda
     if max_input_bytes is not None:
         native['max_input_bytes'] = max_input_bytes
     config = ConfigSpec.from_json(json.dumps(native['config']))
-    if rows is not None or ns_offset:
+    if rows is not None or ns_offset or dataset_label is not None:
         payload = fixture['request']['payload']
         payload['context']['config']['digest'] = config.digest
         payload['command_digest'] = hashlib.sha256(json.dumps({k:v for k,v in payload.items() if k not in ('command_digest','idempotency_key')},
@@ -130,12 +132,12 @@ def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda
     scope = Scope('A','S',request.start_ns,request.end_ns)
     columns = tuple(facts)
     rights = frozenset(('calculate','job_manage','retain','discover'))
-    dataset_id = 'owned.'+family
-    dataset = RawDataset(dataset_id,'owned-v1',scope,RawRead(admitted_batch,'a'*64),lambda cancellation:RawRead(admitted_batch,'a'*64),
+    dataset_id = fixture['request']['payload']['context']['dataset']['dataset_id']
+    dataset = RawDataset(dataset_id,'owned-v1',scope,RawRead(admitted_batch,raw_receipt),lambda cancellation:RawRead(admitted_batch,raw_receipt),
                          columns=columns,rights=rights,rights_owner='owned-test',rights_evidence='owned-native-fixture',valid_from_ns=0,expires_at_ns=3_600_000_000_000)
-    tokens = (secrets.token_urlsafe(32),secrets.token_urlsafe(32))
-    credentials = tuple(Credential.provision(p,t,0,3_600_000_000_000) for p,t in zip(('A','B'),tokens))
-    grants = tuple(Grant('grant-'+p,p,dataset_id,'owned-v1','policy-v1',scope,frozenset(columns),rights,0,3_600_000_000_000) for p in ('A','B'))
+    tokens = tuple(secrets.token_urlsafe(32) for _ in principals)
+    credentials = tuple(Credential.provision(p,t,0,3_600_000_000_000) for p,t in zip(principals,tokens))
+    grants = tuple(Grant(grant_label if grant_label is not None else 'grant-'+p,p,dataset_id,'owned-v1','policy-v1',scope,frozenset(columns),rights,0,3_600_000_000_000) for p in principals)
     ledger = Ledger(clock=clock,limits=Limits(60,1_048_576,2_097_152,60_000_000_000),credentials=credentials,grants=grants,datasets=(dataset,),
                     policy_revision='policy-v1',registry_snapshot=fixture['request']['payload']['context']['registry_snapshot'])
     scheduler = JobScheduler(ledger,(registration,),tuple(JobGrant(g.grant_id,config.digest,registration.execution_features) for g in grants),monotonic=monotonic)
@@ -880,5 +882,172 @@ class Jobs(unittest.TestCase):
                 self.assertEqual(job.error,{'category':'contract','code':'bounds','retryable':False})
                 self.assertTrue(job.receipt,'authorized exact historical receipt remains')
             self.assertEqual(job.held,sum(map(len,(job.native,job.wire,job.envelope,job.receipt))))
+
+    def test_shared_exact_sixty_request_budget_then_next_fixed_window(self):
+        scheduler,service,tokens,clock,audit = self.make()
+        job_id = self.submit(service,tokens[0])
+        self.wait_terminal(scheduler,job_id)
+        for n in range(59):
+            request = self.request('job_status',job_id=job_id)
+            self.assertEqual(call(service,request,tokens[0])[0],200)
+        self.assertEqual(call(service,self.request('job_status',job_id=job_id),tokens[1])[0],429)
+        self.assertEqual(audit['reads'],1)
+        clock.n = 60_000_000_000
+        self.assertEqual(call(service,self.request('job_status',job_id=job_id),tokens[0])[0],200)
+        self.assertEqual(self.submit(service,tokens[0]),job_id)
+        self.assertEqual(audit['reads'],1)
+
+    def test_job_closed_wire_sql_path_versions_reject_without_native_io(self):
+        for field,value in (('sql','select * from private'),('path','C:/private/data.parquet'),
+                            ('code','import os'),('operation','unsupported')):
+            with self.subTest(field=field):
+                scheduler,service,tokens,clock,audit = self.make()
+                request = json.loads(json.dumps(TRADE['request']))
+                request['payload'][field] = value
+                self.assertEqual(call(service,request,tokens[0])[0],400)
+                self.assertEqual((audit['reads'],len(scheduler.jobs)),(0,0))
+        scheduler,service,tokens,clock,audit = self.make()
+        for version in ('1.2','2.0'):
+            request = json.loads(json.dumps(TRADE['request']))
+            request['version'] = version
+            self.assertEqual(call(service,request,tokens[0])[0],400)
+        self.assertEqual((audit['reads'],len(scheduler.jobs)),(0,0))
+
+    def test_explicit_unsupported_feature_and_algorithm_pair_denied_before_io(self):
+        for feature,algorithm in (('unregistered.feature','v1'),('trade_count','unsupported')):
+            scheduler,service,tokens,clock,audit = self.make()
+            request = json.loads(json.dumps(TRADE['request']))
+            request['payload']['context']['features'][0] = {'feature_id':feature,'algorithm_version':algorithm}
+            self.assertEqual(call(service,request,tokens[0])[0],422)
+            self.assertEqual((audit['reads'],len(scheduler.jobs)),(0,0))
+
+    def test_same_full_content_different_admitted_receipt_denied_before_io(self):
+        audit = {}
+        with self.assertRaisesRegex(ValueError,'unadmitted_job_dataset'):
+            setup(raw_receipt='b'*64,audit_out=audit)
+        self.assertEqual(audit['reads'],0)
+        self.assertFalse(audit['source_threads'])
+        self.assertFalse(audit['sink_threads'])
+
+    def test_global_sixteen_tombstones_deny_other_owner_without_eviction(self):
+        scheduler,service,tokens,clock,audit = self.make(principals=('A','B','C'))
+        ids = []
+        for token in tokens[:2]:
+            for n in range(8):
+                job_id = self.submit(service,token,'global-record-'+str(n))
+                self.wait_terminal(scheduler,job_id)
+                ids.append(job_id)
+        request = json.loads(json.dumps(TRADE['request']))
+        request['payload']['idempotency_key'] = 'third-owner'
+        self.assertEqual(call(service,request,tokens[2])[0],429)
+        self.assertEqual(audit['reads'],16)
+        self.assertEqual(set(scheduler.jobs),set(ids))
+        clock.n += 300_000_000_000
+        with scheduler.condition: scheduler._sweep()
+        self.assertEqual(scheduler.total_retained,0)
+        self.assertEqual(call(service,request,tokens[2])[0],429)
+        self.assertEqual(set(scheduler.jobs),set(ids))
+        clock.n = 3_600_000_000_000
+        with scheduler.condition: scheduler._sweep()
+        self.assertFalse(scheduler.jobs)
+        self.assertFalse(scheduler.keys)
+
+    def test_actual_retained_reservation_exact_principal_and_global_caps(self):
+        from equity_feature_service import jobs
+        original_native,original_envelope,original_receipt,original_wire = jobs.encode_result,jobs.encode_envelope,jobs.encode_receipt,codec.canonical
+        def pad(raw,size):
+            self.assertLessEqual(len(raw),size)
+            return raw+b' '*(size-len(raw))
+        for held,allocation,denied_owner,expected in ((196608,(5,0,0),0,1048576),(229376,(4,4,1),2,2097152)):
+            with self.subTest(held=held):
+                scheduler,service,tokens,clock,audit = self.make(principals=('A','B','C'))
+                reserved = []
+                original_execute = scheduler._execute
+                def execute(job):
+                    reserved.append((scheduler.total_retained,scheduler.retained[job.principal]))
+                    original_execute(job)
+                scheduler._execute = execute
+                def wire(value):
+                    raw = original_wire(value)
+                    return pad(raw,held-65536-32768) if type(value) is dict and 'feature_result' in value else raw
+                with patch.object(jobs,'encode_result',lambda value:pad(original_native(value),65536)),                      patch.object(jobs,'encode_envelope',lambda value:pad(original_envelope(value),27768)),                      patch.object(jobs,'encode_receipt',lambda value:pad(original_receipt(value),5000)),                      patch.object(codec,'canonical',wire):
+                    for owner,count in enumerate(allocation):
+                        for n in range(count):
+                            job = self.wait_terminal(scheduler,self.submit(service,tokens[owner],'retained-'+str(n)))
+                            self.assertEqual(job.state,'succeeded',job.error)
+                            self.assertEqual(job.held,held)
+                    self.assertIn(expected,[r[1 if held==196608 else 0] for r in reserved])
+                    request = json.loads(json.dumps(TRADE['request']))
+                    request['payload']['idempotency_key'] = 'one-over-reservation'
+                    self.assertEqual(call(service,request,tokens[denied_owner])[0],429)
+                self.assertEqual(audit['reads'],sum(allocation))
+                self.assertEqual(scheduler.total_retained,held*sum(allocation))
+                clock.n += 300_000_000_000
+                with scheduler.condition: scheduler._sweep()
+                self.assertEqual(scheduler.total_retained,0)
+                self.assertTrue(all(j.held==0 for j in scheduler.jobs.values()))
+
+    def test_native_job_preserves_foreign_committed_record_without_reporter(self):
+        baseline,controller,tokens,_,_ = self.make()
+        first = self.wait_terminal(baseline,self.submit(controller,tokens[0]))
+        foreign_envelope = decode_envelope(first.envelope)
+        foreign_result = decode_result(first.native)
+        evidence = []
+        class SeededSink(ExampleSink):
+            def __init__(self):
+                super().__init__()
+                session = self.begin(foreign_envelope)
+                self.write(session,0,foreign_result)
+                self.foreign_receipt = self.commit(session)
+                self.foreign_before = (encode_receipt(self.foreign_receipt),self.read(self.foreign_receipt))
+            def read(self,receipt):
+                result = super().read(receipt)
+                if hasattr(self,'foreign_before') and receipt.idempotency_key != self.foreign_receipt.idempotency_key:
+                    evidence.append((encode_receipt(self.foreign_receipt),super().read(self.foreign_receipt)))
+                return result
+        scheduler,service,owned,_,_ = self.make(sink_create=SeededSink)
+        current = self.wait_terminal(scheduler,self.submit(service,owned[0]))
+        self.assertEqual(current.state,'succeeded',current.error)
+        self.assertTrue(evidence)
+        for receipt,results in evidence:
+            self.assertEqual(results,(foreign_result,))
+            self.assertEqual(decode_envelope(first.envelope).identity,foreign_envelope.identity)
+            self.assertEqual(receipt,first.receipt)
+        self.assertNotEqual(current.job_id,first.job_id)
+        self.assertEqual(first.state,'succeeded')
+
+    def test_complete_maximum_admitted_unicode_metadata_stays_within_budget(self):
+        scheduler,service,tokens,clock,audit = self.make(principals=('\U0001f600'*256,),
+            grant_label='\U0001f600'*256,dataset_label='x'*128)
+        job = self.wait_terminal(scheduler,self.submit(service,tokens[0]))
+        self.assertEqual(job.state,'succeeded',job.error)
+        metadata = {k:v for k,v in asdict(job).items() if k not in ('native','wire','envelope','receipt')}
+        metadata.update(state='cancel_requested',error={'category':'internal','code':'internal_error','retryable':False},
+            deadline_ns=2**63-1,expires_ns=2**63-1,grant_expires_ns=2**63-1)
+        encoded = json.dumps(metadata,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+        self.assertGreater(len(encoded),6144,'complete escaped principal and grant must be counted')
+        self.assertLessEqual(len(encoded),8192)
+        self.assertEqual(audit['reads'],1)
+
+    def test_active_grant_revocation_during_blocked_native_source_denies_publication(self):
+        gate = threading.Event()
+        begins = []
+        class CountBegin(ExampleSink):
+            def begin(self,value):
+                begins.append(value)
+                return super().begin(value)
+        scheduler,service,tokens,clock,audit = self.make(gate=gate,cooperative=False,sink_create=CountBegin)
+        self.addCleanup(gate.set)
+        job_id = self.submit(service,tokens[0])
+        self.assertTrue(audit['entered'].wait(1))
+        scheduler.ledger.revoke('grant-A')
+        self.assertEqual(scheduler.jobs[job_id].held,262144)
+        gate.set()
+        job = self.wait_terminal(scheduler,job_id)
+        self.assertEqual(job.state,'cancelled')
+        self.assertEqual(job.held,0)
+        self.assertFalse(begins)
+        self.assertFalse(job.committed_receipt_sha256)
+        self.assertEqual(call(service,self.request('job_status',job_id=job_id),tokens[0])[0],403)
 
 if __name__ == '__main__': unittest.main()
