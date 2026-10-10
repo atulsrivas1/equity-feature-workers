@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 WORKER_COMMIT = '7d86deb94b6c338be9cc893c729352c59517e28f'
 SERVICE_COMMIT = 'bafc86a0305621fdb0206fb89753475186954ac3'
 INPUTS = ('packages/client', 'tests/client', 'tools', 'docs/EQ081_CLIENT_FIXTURES.json',
-          'docs/EQ081_OWNED_HTTP_ENTRY.txt', '.github/workflows/client.yml')
+          'docs/EQ081_OWNED_HTTP_ENTRY.txt', 'docs/EQ081_AUTHORITY_HTTP_ENTRY.txt', '.github/workflows/client.yml')
 
 
 def audit_client(artifact, source):
@@ -101,7 +101,7 @@ def qualify(artifact, deps, committed, service):
         shutil.copytree(committed / 'tests/client', harness / 'tests/client')
         shutil.copytree(service / 'tests/service', harness / 'tests/service')
         (harness / 'docs').mkdir()
-        for name in ('EQ081_CLIENT_FIXTURES.json', 'EQ081_OWNED_HTTP_ENTRY.txt'):
+        for name in ('EQ081_CLIENT_FIXTURES.json', 'EQ081_OWNED_HTTP_ENTRY.txt', 'EQ081_AUTHORITY_HTTP_ENTRY.txt'):
             shutil.copy2(committed / 'docs' / name, harness / 'docs' / name)
         assert not (harness / 'packages').exists()
         run(py, '-I', '-c', "from pathlib import Path;import equity_feature_client as c;assert 'site-packages' in Path(c.__file__).resolve().parts;assert c.native_available()", cwd=location)

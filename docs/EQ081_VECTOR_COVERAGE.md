@@ -1,3 +1,11 @@
+## EQ081 actual owned authority/epoch development checkpoint - October10,2026 UTC
+
+Separate local automated /root/r7_policy_review approved corrective pre-code canonical6efbbad30ac4ac0a4db214a84f5a0621c8367d0d / worker2a31d135cfd81c642d1cd4c2e009b1a59d8d8c71: mirrored UTF8/compile/SHA3685bytes6a2c1017277fd6586a3fcd9ea85602543a1828455a50befedd231fe0733eb956/diff passed, both bounded close paths require exact True before replacement/ACK/final success. No remaining planning findings. Reviewer withdrew diagnostic audit-permit concern after actual accepted reserve/settle path inspection and independently replayed audited-Service original TTL200-before/403-exact/source1/closeTrue. Proposed entry was not executed by reviewer; approval allowed author executing frozen owned qualification only. [P2 fixture exit confirmation disposition](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100952278).
+
+Author now executed four admitted real native HTTP authority methods PASS7.536s and full46 client methods PASS13.773s/strict7. Two valid principals: B discovery succeeds before same403 for A and unknown result/artifact/status/cancel, provider exactlyonce/no automatic retries. A original result TTL-1 succeeds/exact denies with expired status/same-key same tombstone/source1; credential retirement maintenance clears held payload, restored original credential cannot resurrect result; grant1000 caps result despite token valid3600s; confirmed old scheduler exit precedes fresh epoch, old IDs deny, only explicit same-key calculate yields new IDs/result. Exact existing native producer fixtures and mandatory audit/OS containment used, all child success/capture/socket/thread cleanup checked. No durable recovery/rollback/automatic replay or data rights inferred.
+
+New test_authority_http.py and explicit builder source/harness selector for frozen authority entry are qualification-only changes. Client/service/worker/core/I/O packages and schemas unchanged; existing public42 source6100785051 and installed WinLinux42 checkpoint6100835319 remain scoped historical evidence, cannot qualify changed46. Current independent final source/native/security/docs review, fresh current WindowsLinux wheel/sdist/lightnative/typing/RECORD/dependency/core/public source/serverZIP artifacts/all26 candidate checks/main gates remain pending. C24/C26/C27 actual development gaps now covered; no lifecycle advance or story acceptance. EQ081 sole In progress,13points, sixDone/fourremaining; do not start92. Previous failures and pending captures preserved below as history.
+
 ## EQ081 public TLS and readiness qualification correction - October10,2026 UTC
 
 [Actual correction review and current evidence](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100765406).
@@ -51,10 +59,10 @@ Development coverage only. A mapped case is not installed or release acceptance.
 | C21 | Structured quality/evidence | Complete native4 bytes; test_complete_producer_coverage_source_and_evidence_denials |
 | C22 | Projection versus full producer | test_job_digest_attachment_and_projection; reviewer full-native conversion refusal for FeatureSliceView |
 | C23 | Actual state/explicit polling | Owned native calculate/status/cancel operations, explicit bounded test polling |
-| C24 | Idempotency/epoch | Stable calculate key and no replay; explicit epoch/restart response cases pending |
+| C24 | Idempotency/epoch | Stable calculate key/manual same expired tombstone; test_epoch_retirement_has_no_hidden_resubmit confirms old scheduler exit/new epoch old IDs denied/explicit manual new IDs only |
 | C25 | Cancel semantics | Owned cancel on succeeded job returns actual succeeded state; no timeout rollback or automatic cancel |
-| C26 | Retention/rights | Client has no cache/TTL refresh; actual authenticated revoke/expiry/no-resurrection qualification pending |
-| C27 | Foreign owner | Current owned HTTP test is invalid credential401, not authenticated foreign-owner qualification; pending |
+| C26 | Retention/rights | Actual test_retired_credential_restore_cannot_resurrect_payload; original TTL-1/exact and grant1000/token3600 test; no cache/refresh/resurrection |
+| C27 | Foreign owner | test_authenticated_foreign_owner_and_original_half_open_ttl: valid B discovery then A/unknown IDs same403 for result/artifact/status/cancel, provider once |
 | C28 | Controlled attachment | test_job_digest_attachment_and_projection; actual artifact SHA filename; no automatic writes |
 | C29 | Data-only/calculation boundaries | Fixed constructors/closed schema, no service import in runtimeclient; accepted calculations unchanged |
 | C30 | Resource/failure cleanup | Provider weakref privacy; real connect interrupt/TLS cleanup; new actual blocked read close and late decode close |
