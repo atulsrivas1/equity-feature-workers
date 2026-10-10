@@ -1,5 +1,5 @@
 """Committed bounded MCP archives and fresh isolated reference/native qualification."""
-import argparse,hashlib,json,os,platform,shutil,subprocess,sys,tempfile,tarfile,tomllib,zipfile
+import argparse,base64,csv,hashlib,io,json,os,platform,shutil,subprocess,sys,tempfile,tarfile,tomllib,zipfile
 from pathlib import Path
 from build_foundation import build,fingerprint,git,run,sha,snapshot,CORE_COMMIT,IO_COMMIT
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
@@ -7,6 +7,22 @@ ROOT=Path(__file__).resolve().parents[1]
 CLIENT_COMMIT='4365fe90aa5125662b222782873bf106bd49b778'
 INPUTS=('packages/mcp','tests/mcp','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','.github/workflows/mcp.yml')
 CLIENT_INPUTS=('packages/client','tests/client','docs/EQ081_CLIENT_FIXTURES.json','docs/EQ081_OWNED_HTTP_ENTRY.txt','docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
+
+def reference_record(path):
+    """Official wheel archives may include directory entries, which are not files."""
+    with zipfile.ZipFile(path) as archive:
+        names={item.filename for item in archive.infolist() if not item.is_dir()}
+        assert all(not name.startswith(('/', '\\')) and '\\' not in name and '..' not in Path(name).parts for name in archive.namelist())
+        records=[n for n in names if n.endswith('.dist-info/RECORD')];assert len(records)==1
+        record=records[0]
+        rows=list(csv.reader(io.StringIO(archive.read(record).decode('utf-8'))))
+        assert len({r[0] for r in rows})==len(rows) and {r[0] for r in rows}==names
+        for name,digest,size in rows:
+            if name==record:assert digest==size==''
+            else:
+                data=archive.read(name)
+                assert digest=='sha256='+base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b'=').decode('ascii')
+                assert size==str(len(data))
 def audit_mcp(artifact, source):
     if artifact.suffix == '.whl':
         with zipfile.ZipFile(artifact) as archive:
@@ -122,8 +138,10 @@ def main():
             audit_mcp(artifact,repeat/'packages/mcp')
             if artifact.suffix=='.whl':wheel_record(artifact)
             forms.append(qualify(artifact,deps,reference,committed,client,service));shutil.copy2(artifact,output/artifact.name)
-        for artifact in deps+reference:
+        for artifact in deps:
             wheel_record(artifact);shutil.copy2(artifact,output/artifact.name)
+        for artifact in reference:
+            reference_record(artifact);shutil.copy2(artifact,output/artifact.name)
         receipt=dict(schema='mcp1',commit=commit,core_commit=CORE_COMMIT,io_commit=IO_COMMIT,worker_commit=WORKER_COMMIT,
             service_commit=SERVICE_COMMIT,client_commit=CLIENT_COMMIT,source_inputs=provenance(committed),
             client_source_inputs=provenance(client),service_source_inputs=provenance(service),worker_source_inputs=provenance(workers),
