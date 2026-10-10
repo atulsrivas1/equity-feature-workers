@@ -96,7 +96,7 @@ def main():
         temp = Path(tmp)
         committed = snapshot(ROOT, commit, temp / 'component', ('packages/service','tests/service','tools','examples/service_owned.py'))
         core = snapshot(args.core_root.resolve(), CORE_COMMIT, temp / 'core')
-        io = snapshot(args.io_root.resolve(), IO_COMMIT, temp / 'io')
+        io = snapshot(args.io_root.resolve(), IO_COMMIT, temp / 'io', ('packages','examples/third_party'))
         workers = snapshot(ROOT, WORKER_COMMIT, temp / 'workers', ('packages/workers',))
         for relative in DEPENDENCIES:
             repo = core if relative in DEPENDENCIES[:2] else io
@@ -120,7 +120,8 @@ def main():
         for artifact in deps: (output / artifact.name).write_bytes(artifact.read_bytes())
         inputs = {p.relative_to(committed).as_posix():sha(p) for p in committed.rglob('*') if p.is_file() and '__pycache__' not in p.parts and 'build' not in p.parts and not any(part.endswith('.egg-info') for part in p.parts)}
         worker_inputs = {p.relative_to(workers).as_posix():sha(p) for p in workers.rglob('*') if p.is_file() and '__pycache__' not in p.parts and 'build' not in p.parts and not any(part.endswith('.egg-info') for part in p.parts)}
-        receipt = {'schema':'service1','commit':commit,'core_commit':CORE_COMMIT,'io_commit':IO_COMMIT,'worker_commit':WORKER_COMMIT,'worker_source_inputs':worker_inputs,'python':platform.python_version(),'system':platform.system(),'machine':platform.machine(),'epoch':1700000000,'repeat_artifacts':first,'dependencies':{p.name:sha(p) for p in deps},'source_inputs':inputs,'forms':forms}
+        example_inputs = {p.relative_to(io).as_posix():sha(p) for p in (io/'examples/third_party').rglob('*') if p.is_file() and '__pycache__' not in p.parts and 'build' not in p.parts and not any(part.endswith('.egg-info') for part in p.parts)}
+        receipt = {'schema':'service1','commit':commit,'core_commit':CORE_COMMIT,'io_commit':IO_COMMIT,'worker_commit':WORKER_COMMIT,'worker_source_inputs':worker_inputs,'example_source_inputs':example_inputs,'python':platform.python_version(),'system':platform.system(),'machine':platform.machine(),'epoch':1700000000,'repeat_artifacts':first,'dependencies':{p.name:sha(p) for p in deps},'source_inputs':inputs,'forms':forms}
         (output / 'service-receipt.json').write_text(json.dumps(receipt, sort_keys=True, indent=2) + '\n', encoding='utf-8', newline='\n')
     print('Committed repeat archives, fresh wheel/sdist, native HTTP/source fixtures and installed boundaries PASS')
 
