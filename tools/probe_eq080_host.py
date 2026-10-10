@@ -22,6 +22,12 @@ def linux():
     library = ctypes.CDLL(None, use_errno=True)
     library.prctl.restype = ctypes.c_int
     library.syscall.restype = ctypes.c_long
+    parent = os.getppid()
+    assert parent > 1
+    assert library.prctl(1,9,0,0,0) == 0, ctypes.get_errno()
+    death_signal = ctypes.c_int()
+    assert library.prctl(2,ctypes.byref(death_signal),0,0,0) == 0 and death_signal.value == 9
+    assert os.getppid() == parent
     class Instruction(ctypes.Structure):
         _fields_ = [('code',ctypes.c_ushort),('jt',ctypes.c_ubyte),('jf',ctypes.c_ubyte),('k',ctypes.c_uint)]
     class Program(ctypes.Structure):
@@ -68,7 +74,8 @@ def linux():
     assert not raised
     return {'os':'linux','architecture':'x86_64','hard_address_space_bytes':4294967296,
         'hard_cpu_seconds':10,'no_new_privs':True,'seccomp_mode':2,'thread_clone_works':True,
-        'initial_and_thread_process_creation_denied':True,'clone3_enosys':True,'hard_limit_raise_denied':True}
+        'initial_and_thread_process_creation_denied':True,'clone3_enosys':True,'hard_limit_raise_denied':True,
+        'parent_death_signal_api':True,'parent_death_exit_qualified':False}
 
 
 def windows():
@@ -91,6 +98,8 @@ def windows():
             ('stdin',w.HANDLE),('stdout',w.HANDLE),('stderr',w.HANDLE)]
     class Process(ctypes.Structure):
         _fields_ = [('process',w.HANDLE),('thread',w.HANDLE),('pid',w.DWORD),('tid',w.DWORD)]
+    class StartupExtended(ctypes.Structure):
+        _fields_ = [('startup',Startup),('attributes',ctypes.c_void_p)]
     kernel.CreateJobObjectW.argtypes = [ctypes.c_void_p,w.LPCWSTR]
     kernel.CreateJobObjectW.restype = w.HANDLE
     kernel.SetInformationJobObject.argtypes = [w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD]
@@ -102,6 +111,11 @@ def windows():
     kernel.CreateProcessW.restype = w.BOOL
     kernel.AssignProcessToJobObject.argtypes = [w.HANDLE,w.HANDLE]
     kernel.AssignProcessToJobObject.restype = w.BOOL
+    kernel.InitializeProcThreadAttributeList.argtypes = [ctypes.c_void_p,w.DWORD,w.DWORD,ctypes.POINTER(ctypes.c_size_t)]
+    kernel.InitializeProcThreadAttributeList.restype = w.BOOL
+    kernel.UpdateProcThreadAttribute.argtypes = [ctypes.c_void_p,w.DWORD,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p]
+    kernel.UpdateProcThreadAttribute.restype = w.BOOL
+    kernel.DeleteProcThreadAttributeList.argtypes = [ctypes.c_void_p]
     kernel.IsProcessInJob.argtypes = [w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)]
     kernel.IsProcessInJob.restype = w.BOOL
     kernel.ResumeThread.argtypes = [w.HANDLE]
@@ -115,6 +129,8 @@ def windows():
     job = kernel.CreateJobObjectW(None,None)
     assert job, ctypes.get_last_error()
     child = Process()
+    attributes = None
+    attributes_initialized = False
     try:
         limits = Extended()
         limits.basic.flags = 0x4 | 0x8 | 0x200 | 0x2000
@@ -124,17 +140,25 @@ def windows():
         assert kernel.SetInformationJobObject(job,9,ctypes.byref(limits),ctypes.sizeof(limits)),ctypes.get_last_error()
         queried = Extended()
         assert kernel.QueryInformationJobObject(job,9,ctypes.byref(queried),ctypes.sizeof(queried),None)
-        assert queried.basic.flags == limits.basic.flags and queried.job_memory == limits.job_memory and queried.basic.active == 1
-        startup = Startup()
-        startup.cb = ctypes.sizeof(startup)
+        assert (queried.basic.flags == limits.basic.flags and queried.job_memory == limits.job_memory
+            and queried.basic.active == 1 and queried.basic.job_time == limits.basic.job_time)
+        size = ctypes.c_size_t()
+        assert not kernel.InitializeProcThreadAttributeList(None,1,0,ctypes.byref(size)) and size.value > 0
+        attributes = ctypes.create_string_buffer(size.value)
+        assert kernel.InitializeProcThreadAttributeList(attributes,1,0,ctypes.byref(size))
+        attributes_initialized = True
+        jobs = (w.HANDLE * 1)(job)
+        assert kernel.UpdateProcThreadAttribute(attributes,0,0x2000d,jobs,ctypes.sizeof(jobs),None,None),ctypes.get_last_error()
+        startup = StartupExtended()
+        startup.startup.cb = ctypes.sizeof(startup)
+        startup.attributes = ctypes.cast(attributes,ctypes.c_void_p)
         code = 'import os; import threading; t=threading.Thread(target=lambda: None); t.start(); t.join(); print("owned-bootstrap-probe-pass")'
         # Windows venv python.exe is a redirector and creates a second process.
         # The owned bootstrap invokes the actual interpreter, not that launcher.
         interpreter = str(Path(sys.base_prefix)/'python.exe')
         assert Path(interpreter).is_file()
         command = ctypes.create_unicode_buffer(subprocess.list2cmdline([interpreter,'-I','-c',code]))
-        assert kernel.CreateProcessW(interpreter,command,None,None,False,4,None,None,ctypes.byref(startup),ctypes.byref(child)),ctypes.get_last_error()
-        assert kernel.AssignProcessToJobObject(job,child.process),ctypes.get_last_error()
+        assert kernel.CreateProcessW(interpreter,command,None,None,False,4|0x80000,None,None,ctypes.byref(startup.startup),ctypes.byref(child)),ctypes.get_last_error()
         contained = w.BOOL()
         assert kernel.IsProcessInJob(child.process,job,ctypes.byref(contained)) and contained.value
         assert kernel.ResumeThread(child.thread) != 0xffffffff
@@ -143,6 +167,7 @@ def windows():
         assert kernel.GetExitCodeProcess(child.process,ctypes.byref(exit_code)) and exit_code.value == 0
         return {'os':'windows','architecture':'64bit','aggregate_commit_bytes':1073741824,
             'job_user_cpu_seconds':10,'active_processes':1,'suspended_assigned_before_resume':True,
+            'atomic_job_list_creation':True,
             'queried_limits_match':True,'owned_bootstrap_thread_works':True,'actual_exit_observed':True}
     finally:
         kernel.TerminateJobObject(job,99)
@@ -151,6 +176,8 @@ def windows():
             kernel.CloseHandle(child.process)
         if child.thread:
             kernel.CloseHandle(child.thread)
+        if attributes_initialized:
+            kernel.DeleteProcThreadAttributeList(attributes)
         kernel.CloseHandle(job)
 
 

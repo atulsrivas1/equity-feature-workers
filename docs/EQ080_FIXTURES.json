@@ -83,7 +83,8 @@
     "epoch",
     "operation",
     "projection",
-    "version"
+    "version",
+    "backend_version"
   ],
   "never_stored_canaries": [
     "secret-token-canary",
@@ -356,7 +357,7 @@
     },
     {
       "dimension": "backend",
-      "path": "native.metadata.backend",
+      "path": "native.metadata.backend_id",
       "replacement": "owned-other-backend",
       "expected": "different key or denial before result visibility; never hit unchanged partition"
     },
@@ -414,6 +415,12 @@
       "dimension": "version",
       "path": "key.transport_version",
       "replacement": "1.0",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "backend_version",
+      "path": "native.metadata.backend_version",
+      "replacement": "owned-backend-v2",
       "expected": "different key or denial before result visibility; never hit unchanged partition"
     }
   ],

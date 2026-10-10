@@ -90,3 +90,7 @@ Primary references: [Windows Job Objects](https://learn.microsoft.com/en-us/wind
 ## Renewed concrete prerequisite disposition
 
 Initial exact-head planning review found threeP2: ambiguous circular preReady physical gate, unfrozen audit stages/reader/overflow, and dimension-list cache identity without exact canonical records. Matching decisions and expanded literals resolve the design gaps; disposable tools/probe_eq080_host.py plus twoOS feasibility CI must actually pass before Ready. First Windows venv redirector probe failed active-process1; corrected actual interpreter suspended/assigned/queried/bootstrap/thread/exit probe passed locally. Linux probe and renewed exact-head separate review remain pending. No new Service enforcement or installed isolation claim.
+
+## Final pre-code corrective candidate
+
+Renewed review independently verified exact key fingerprints, audit worst-case497bytes and actual954 twoOS capability runs. Correct actual backend_id/backend_version literals and explicit queried CPU limit;33 cache identity negatives cover32 requirements. Windows selected bootstrap now uses atomic job-list assignment at creation (suspended) to avoid an unassigned orphan window; Linux queries parent-death signal and checks original parent. Local corrected Windows atomic probe passes. Current twoOS probe and renewed exact-head planning approval remain pending; no Service/runtime admission or native containment claim. See matching concrete decisions.
