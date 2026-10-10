@@ -1,3 +1,15 @@
+## EQ081 public TLS and readiness qualification correction - October10,2026 UTC
+
+[Actual correction review and current evidence](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100765406).
+
+Separate local automated reviewer /root/r7_policy_review APPROVED exact canonicalf222adca6a87fa57d02248fc9e2776088976935a / workerc2b60a811b71831ba5fdbc663cc8c6a07069bfaa corrective qualification source: independently immutable40 methods PASS6.034s/strict7; installed-resource schema path and deterministic retry boundary resolved. Reviewer reproduced package-free harness schema test. Initial outside reviewer harness compared Windows short/long paths and stopped before targeted check; corrected resolve comparison then actual targeted pass, no productfinding. Approval is source/corrective harness only, not builder/artifacts/all32/release.
+
+Actual c2 client push38075460325 FAILED Windows owned nativeHTTP readiness JSONDecodeError: child ready.write_text creates file before complete bytes, parent existence-only wait then loads empty bytes. Raw eq081-client-c2-ci-failed.log preserved; no failed producer qualifies artifacts. Corrected qualification reader reads at most65 bytes, refuses>64, waits missing/empty/partial JSON under existing10s deadline and live-child check, admits only exact port object/int1..65535 before client operations. Frozen admitted entry source/SHA unchanged. Deterministic partial-write readiness regression and bounds/schema denials added. This is a fixture race, no service/client runtime change. Local c2 committed build session25535/log eq081-client-c2b60a8-build.log currently still running; its installed40 wheel suite/strict8/consumer/pip/core stages passed at capture, but no full builder success inferred.
+
+New actual public RemoteClient TLS test uses ephemeral owned cert/key and complete raw TLS EOF through seven cases: trusted success, untrusted CA, wrong literal IP hostname, trailing bytes, truncated bytes, duplicate length and definitive403. Nonretryable faults evaluate provider exactly once, no successful view, no exception graph, socket None, all listener/peer threads closed and temp keys deleted. Actual development42 methods PASS5.973s; runtime/client package/build/workflow bytes unchanged from approvedeced/currentc2. Renew exact current test/docs review, current WindowsLinux fresh42 packageforms/source-archive/RECORD/typing/consumer/core/artifacts required. Remaining authenticated foreign-owner/revoke/expiry/no-resurrection and epoch vectors remain explicit pending in all32 map. Story91 remains In progress, no release acceptance.
+
+Resume renewed independent exact tests/docs review/current committed client builder and actualWindowsLinux results; preserve all failed logs and partial source receipts. Do not accept changed42 tests from older40 installed proof. No builder/artifact downloads assigned.
+
 ## EQ081 installed harness qualification rework - October10,2026 UTC
 
 [Actual findings/correction disposition](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100731455).

@@ -7,13 +7,42 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import Mock, patch
+import io
 
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'packages/client/src'))
 from equity_feature_client import DatasetKey, FeatureRef, JobExpectation, ProducerExpectation, RawExpectation, RemoteClient, ScopeKey
 
 
+def read_ready(path,thread,errors):
+    deadline=time.monotonic()+10
+    while True:
+        if not thread.is_alive():raise AssertionError(errors)
+        if time.monotonic()>=deadline:raise AssertionError('owned readiness deadline')
+        try:
+            with path.open('rb') as stream:data=stream.read(65)
+        except FileNotFoundError:data=b''
+        if len(data)>64:raise AssertionError('owned readiness bounds')
+        try:value=json.loads(data)
+        except json.JSONDecodeError:value=None
+        if value is not None:
+            if type(value) is not dict or set(value)!={'port'} or type(value['port']) is not int or not 1<=value['port']<=65535:
+                raise AssertionError('owned readiness schema')
+            return value['port']
+        # The frozen child writes a short file; its existence precedes its
+        # completed JSON bytes. Do not mistake an empty/partial write for ready.
+        time.sleep(.02)
+
+
 class OwnedHTTP(unittest.TestCase):
+    def test_readiness_waits_for_complete_bounded_owned_json(self):
+        thread=Mock();thread.is_alive.return_value=True
+        with patch.object(Path,'open',side_effect=[io.BytesIO(b''),io.BytesIO(b'{"port":'),io.BytesIO(b'{"port":12345}')]),patch('time.sleep'):
+            self.assertEqual(read_ready(Path('unused-owned-ready'),thread,[]),12345)
+        for data in (b'x'*65,b'{"port":true}',b'{"port":0}',b'{"port":12345,"extra":1}'):
+            with patch.object(Path,'open',return_value=io.BytesIO(data)),self.assertRaises(AssertionError):
+                read_ready(Path('unused-owned-ready'),thread,[])
     def test_admitted_audited_native_client_operations(self):
         from equity_feature_service._containment import OwnedEpochSupervisor
         from equity_feature_service._entry import OwnedEntryInventory,OwnedEntryProfile
@@ -33,11 +62,7 @@ class OwnedHTTP(unittest.TestCase):
                 except BaseException as error:errors.append(type(error).__name__)
             thread=threading.Thread(target=launch);thread.start()
             try:
-                deadline=time.monotonic()+10
-                while not ready.exists():
-                    self.assertTrue(thread.is_alive(),errors);self.assertLess(time.monotonic(),deadline);time.sleep(.02)
-                data=ready.read_bytes();self.assertLessEqual(len(data),64)
-                port=json.loads(data)['port'];self.assertIs(type(port),int)
+                port=read_ready(ready,thread,errors)
                 with RemoteClient('http://127.0.0.1:'+str(port),lambda:'A'*43) as client:
                     discovery=client.discover(request_id='native-discover');self.assertTrue(discovery.ok,discovery.failure)
                     job=client.calculate(expected,'client-owned-stable',request_id='native-calculate',version='1.0');self.assertTrue(job.ok,job.failure)
