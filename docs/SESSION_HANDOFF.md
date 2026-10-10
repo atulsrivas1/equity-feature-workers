@@ -1,3 +1,7 @@
+## EQ081 exact helper/native/operational-failure API freeze
+
+Matching API docs and existing publicconstructor/failurevalue probe freeze preciseexpectations/helpers, explicitoptionalnativeconversionmodule, immutableOutcome/Failure values without originalexceptiongraph, and bounded synchronoussocketSSL EOFtransport. Publicraw5/native4 constructors/digests/signedzero/chainedprovidererrorcollection feasibility PASSWindows; no clientruntimeorinstalledproof. Initialproposedhttp.client/raise-error/nativeviewmethod surface markedhistorysuperseded. CurrentReadyinputreview pending; still91Backlog/unassigned. LatestTLS/adjacent e2/f ae review approvedscopedfeasibility in separateagent, publicationofactualreviewpending.
+
 ## EQ081 exact1ns precision correction and TLS EOF framing freeze
 
 Raw5 fixture adds literal9000000000000000110/111/112; original4native unchanged. Windows actual TLS cert-trust/hostname + valid/extra/truncated/duplicate-header6cases PASS after expected peer-reset fixture repair; no client/Linux/installed/nativeTLS qualification. Future transport chooses bounded rawsocket EOF framing with HTTP/1.0 Connection:close, exactContent-Length vsactualbody and no pooling/privateHTTPResponse workaround. Native dependency pins and fixed public record/enum mapping recorded. Precise helper/expectation signatures and pure constructor/config/exceptiongraph/deadline cleanup feasibility + separate planning review remain beforeReady; stillBacklog/unassigned/no client code.
