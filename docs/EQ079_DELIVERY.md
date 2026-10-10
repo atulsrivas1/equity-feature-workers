@@ -1,3 +1,7 @@
+## EQ079 preliminary review corrections — October10,2026 UTC
+
+Separate reviewer found threeP2 atda8/570: old admission policy/revision drift, expiry during expensive finalization, ignored HTTPRange. All corrected in current candidate with original admission/current exact dataset scope/registry checks, lightweight post-encoding authority/TTL/credential visibility check and Range rejection.29delivery/full119service development PASS/strict7. Renewed exact-head review/current installed fresh WinLinux/artifacts remain pending; earlierda8buildsuperseded. [Findings and disposition](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6096345050). Nativeforms/completeproducer/SDKverification preserved; no nativeHTTPI/O/physicalstorage claim. Sole story89Inprogress/owner13points; draftPR362/33. Existing all30precode requirements need final mapped coverage/security/installed qualification. R7 fouraccepted/sixremaining; provider/private/publichosting/registry/cost gates separate. Older captures belowhistory.
+
 # EQ079 scoped retained result delivery — development candidate
 
 Story89 is In progress after separately approved concrete plan and guarded admission https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6096252224 . Optional service0.1.0a2 candidate; no release acceptance.

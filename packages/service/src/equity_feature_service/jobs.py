@@ -299,9 +299,8 @@ class JobScheduler:
                 raise codec.WireError('not_permitted')
             return self._snapshot(job,version,rid)
 
-    def result_visible(self, credential: Credential, result_id: str, version: str, rid: str,
-                       operation: str) -> codec.Json:
-        """Pure retained-form verification; never accesses native source/sink objects."""
+    def _result_job(self, credential: Credential, result_id: str, operation: str) -> _Job:
+        """Lightweight current authorization/expiry for preparation and final visibility."""
         with self.ledger.lock:
             self._sweep()
             job = next((j for j in self.jobs.values() if j.result_id == result_id), None)
@@ -309,9 +308,28 @@ class JobScheduler:
                     or credential not in self.ledger.credentials or not self._retention_allowed(job)):
                 raise codec.WireError('not_permitted')
             registration = self.registrations[job.dataset_id]
+            dataset_now = self.ledger.datasets.get(job.dataset_id)
+            admission = hashlib.sha256(_bounded({'principal':job.principal,'grant':job.grant_id,
+                'policy':self.ledger.policy_revision,'registration':registration.registration_digest},8192)).hexdigest()
+            if (admission != job.identity_digest or dataset_now is None
+                    or dataset_now.identity != registration.identity or dataset_now.scope != registration.scope
+                    or self.ledger.registry_snapshot != json.loads(registration.context_bytes)['registry_snapshot']):
+                raise codec.WireError('not_permitted')
             actions = ('derived_read','retain','export') if operation == 'artifact_read' else ('derived_read','retain')
             if not all(self._authorized(credential,registration,job.grant_id,a) for a in actions):
                 raise codec.WireError('not_permitted')
+            return job
+
+    def result_current(self, credential: Credential, result_id: str, operation: str) -> None:
+        self._result_job(credential,result_id,operation)
+
+    def result_visible(self, credential: Credential, result_id: str, version: str, rid: str,
+                       operation: str) -> codec.Json:
+        """Pure retained-form verification; never accesses native source/sink objects."""
+        with self.ledger.lock:
+            job = self._result_job(credential,result_id,operation)
+            registration = self.registrations[job.dataset_id]
+            actions = ('derived_read','retain','export') if operation == 'artifact_read' else ('derived_read','retain')
             if (len(job.native) > 65_536 or len(job.wire) > 131_072
                     or len(job.envelope)+len(job.receipt) > 32_768
                     or len(job.native)+len(job.wire)+len(job.envelope)+len(job.receipt) != job.held
@@ -349,7 +367,8 @@ class JobScheduler:
             attachment = ('result-'+hashlib.sha256(result_id.encode('ascii')).hexdigest()+'.json'
                           if operation == 'artifact_read' else None)
             return _Prepared(200,placeholder,credential,action=operation,reserved_bytes=amount,
-                finalize=lambda: self.result_visible(credential,result_id,version,rid,operation),attachment=attachment)
+                finalize=lambda: self.result_visible(credential,result_id,version,rid,operation),attachment=attachment,
+                before_emit=lambda: self.result_current(credential,result_id,operation))
 
     def discovery_features(self, credential: Credential) -> set[tuple[str,str]]:
         with self.ledger.lock:
