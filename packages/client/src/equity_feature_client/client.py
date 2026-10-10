@@ -27,7 +27,7 @@ class RemoteClient:
         if not callable(token_provider) or type(attempts) is not int or not 1 <= attempts <= 3:
             raise ValueError('invalid_configuration')
         for value, lower, upper in ((timeout, 0, 5), (budget, 0, 15), (retry_delay, -1, 5)):
-            if type(value) not in (int, float) or not math.isfinite(value) or not lower < value <= upper:
+            if type(value) not in (int, float) or not lower < value <= upper or not math.isfinite(value):
                 raise ValueError('invalid_configuration')
         if retry_delay < 0:
             raise ValueError('invalid_configuration')
@@ -144,14 +144,14 @@ class RemoteClient:
             try:
                 result = response(frame, request, expected, selected)
             except BaseException:
-                return Outcome(failure=Failure('protocol', 'invalid_response', 'decode', frame.status))
+                return Outcome(failure=Failure('unknown' if mutation else 'protocol', 'outcome_unknown' if mutation else 'invalid_response', 'decode', frame.status))
             denial = self._current(deadline)
             if denial is not None:
                 return Outcome(failure=Failure('unknown', 'outcome_unknown', 'decode') if mutation else denial)
             if type(result) is Failure:
                 return Outcome(failure=result)
             if type(result) is not view_type:
-                return Outcome(failure=Failure('protocol', 'invalid_response', 'decode', frame.status))
+                return Outcome(failure=Failure('unknown' if mutation else 'protocol', 'outcome_unknown' if mutation else 'invalid_response', 'decode', frame.status))
             return Outcome(view=cast(V, result))
         return Outcome(failure=Failure('transport', 'timeout', 'read'))
 

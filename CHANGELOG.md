@@ -1,3 +1,7 @@
+## EQ081 native conversion candidate (unreleased)
+
+Pure optional public contract/SDK conversion added; complete producer quality/source/evidence validation and post-send mutation ambiguity corrected. Windows36 development methods/strict7 pass, renewed review and full Windows/Linux installed/artifact/main gates pending. No release acceptance or calculation changes.
+
 ## EQ081 client candidate (unreleased)
 
 Optional RemoteClient/helpers/immutableviews/closedFailure and boundedEOF/TLS transport implemented; Windows29development methods/strict6/currentpublicreview pending. Nativeconversion/bothOSinstalled/artifact/mainreleasegates unfinished, no release acceptance or acceptedcalculation changes.

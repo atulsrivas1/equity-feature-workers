@@ -145,22 +145,29 @@ def check_producer(payload: dict[str, Any], expected: ProducerExpectation,
         else:
             _identity(_cell(availability, name, 'int64' if name.endswith('_ns') else 'string') == value)
     inputs = metadata['fields']['inputs']
-    _identity(inputs.get('type') == 'list' and bool(inputs['items']))
-    matching_source = False
+    # Initial admitted service inventory is one SessionCommandSpec source.
+    # The frozen expectation pins exactly that source, never extra provenance.
+    _identity(inputs.get('type') == 'list' and len(inputs['items']) == 1)
     for binding in inputs['items']:
         _identity(binding.get('name') == 'InputBinding')
         md = binding['fields']['metadata']
         _scope(md, expected)
-        matching_source = matching_source or _source(md, context['dataset'])
-    _identity(matching_source)
+        _identity(_source(md, context['dataset']))
+        _identity(_cell(md, 'namespace', 'string') == context['namespace'])
     _columns(payload['columns'], raw=False, expected=expected)
     feature_ids = {f.feature_id for f in wanted}
     quality_keys = [(q['feature_id'], q['entity']['instrument_id'], q['entity']['session_id']) for q in payload['quality']]
     _identity(len(quality_keys) == len(set(quality_keys)))
+    expected_quality = {(c['feature_id'], e['instrument_id'], e['session_id']) for c in payload['columns'] for e in c['entities']}
+    _identity(set(quality_keys) == expected_quality)
     _identity(all(f in feature_ids and instrument == expected.scope.instrument_id and session == expected.scope.session_id for f, instrument, session in quality_keys))
     for evidence in payload['evidence']:
         _identity(evidence.get('name') == 'EvidenceRow')
         _identity(_cell(evidence, 'feature_id', 'string') in feature_ids)
+        entity = evidence['fields']['entity']
+        _identity(entity.get('name') == 'EntityKey')
+        _identity(_cell(entity, 'instrument_id', 'string') == expected.scope.instrument_id and _cell(entity, 'session_id', 'string') == expected.scope.session_id)
+        _identity(_cell(evidence, 'input_id', 'string') == context['dataset']['input_id'])
 
 
 _NULL_ERRORS = frozenset(((401, 'authentication', 'unauthenticated'), (403, 'authorization', 'not_permitted'),

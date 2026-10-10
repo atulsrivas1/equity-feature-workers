@@ -61,6 +61,33 @@ class Peer:
 
 
 class Client(unittest.TestCase):
+    def test_extreme_configuration_has_closed_validation_errors(self):
+        for name in ('timeout','budget','retry_delay'):
+            for value in (10**1000, -(10**1000), float('nan'), float('inf'), True):
+                with self.subTest(name=name),self.assertRaisesRegex(ValueError,'^invalid_configuration$'):
+                    RemoteClient('http://127.0.0.1:9',lambda:'A'*43,**{name:value})
+    def test_complete_producer_coverage_source_and_evidence_denials(self):
+        cases=[]
+        payload,expected=producer(FIXTURES['native_cases'][0])
+        missing=copy.deepcopy(payload);missing['quality']=[];cases.append((missing,expected))
+        foreign=copy.deepcopy(payload);extra=copy.deepcopy(foreign['metadata']['fields']['inputs']['items'][0]);extra['fields']['metadata']['fields']['source']['fields']['input_id']['value']='foreign-input';foreign['metadata']['fields']['inputs']['items'].append(extra);cases.append((foreign,expected))
+        quotes,quote_expected=producer(next(c for c in FIXTURES['native_cases'] if c['family']=='quotes'))
+        self.assertTrue(quotes['evidence'])
+        wrong=copy.deepcopy(quotes);wrong['evidence'][0]['fields']['entity']['fields']['instrument_id']['value']='FOREIGN';cases.append((wrong,quote_expected))
+        wrong_input=copy.deepcopy(quotes);wrong_input['evidence'][0]['fields']['input_id']['value']='foreign-input';cases.append((wrong_input,quote_expected))
+        for changed,pinned in cases:
+            with Peer(lambda r,_:(200,envelope('result',changed,r['request_id']),b'')) as peer:
+                outcome=RemoteClient(peer.origin,lambda:'A'*43).result_read('owned-result',pinned,request_id='owned')
+                self.assertEqual(outcome.failure.code,'invalid_response')
+
+    def test_unverifiable_mutation_reply_is_unknown_without_replay(self):
+        _,expected=producer(FIXTURES['native_cases'][0]);job={'job_id':'owned-job','command_digest':'0'*64,'state':'queued','result_id':None,'error':None}
+        for method in ('calculate','job_cancel'):
+            with Peer(lambda r,_:(200,envelope('job',job,r['request_id']),b'')) as peer:
+                client=RemoteClient(peer.origin,lambda:'A'*43,attempts=3)
+                result=client.calculate(expected,'owned-key',request_id='owned') if method=='calculate' else client.job_cancel(JobExpectation('owned-job',expected.command_digest),request_id='owned')
+                self.assertEqual(result.failure.code,'outcome_unknown');self.assertEqual(len(peer.requests),1)
+
     def test_discovery_correlated_immutable_and_closed(self):
         payload={'transport_versions':['1.0'],'registry_snapshot':'0'*64,'features':[]}
         with Peer(lambda request,_:(200,envelope('discovery',payload,request['request_id'],request['version']),b'')) as peer:
