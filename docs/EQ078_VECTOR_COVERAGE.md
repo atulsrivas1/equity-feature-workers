@@ -1,6 +1,6 @@
 # EQ078 frozen vector evidence — development checkpoint
 
-Story88 remains In progress. This map records actual tests in companion tests/service/test_jobs.py (44 methods), not final acceptance. Frozen plans contain30 requirements. Current Windows editable development source is under renewed review; committed fresh current wheel/sdist and twoOS artifact audit remain mandatory. Literal full native family records come from the independently frozen pre-code fixtures, not recomputed expected values from the scheduler.
+Story88 remains In progress. This map records actual tests in companion tests/service/test_jobs.py (46 methods), not final acceptance. Frozen plans contain30 requirements. Current Windows editable development source is under renewed review; committed fresh current wheel/sdist and twoOS artifact audit remain mandatory. Literal full native family records come from the independently frozen pre-code fixtures, not recomputed expected values from the scheduler.
 
 | Vector | Actual evidence or remaining requirement |
 | --- | --- |
@@ -24,7 +24,7 @@ Story88 remains In progress. This map records actual tests in companion tests/se
 | J18 | exact_queue_caps_and_queued_cancel_release_once, two owners and actual serialized reads |
 | J19 | same queue method proves excess/global/per-principal denial |
 | J20 | second_controller_shares_exact_scheduler; immutable registration mappings |
-| J21 | native_hundred_row_allow_and_hundred_one_deny; declared_native_input_limit_one_mebibyte_inclusive; actual native/wire/output subcap and complete metadata/aggregate boundary fixtures remain |
+| J21 | actual_native_serialization_65536_inclusive_denies_before_write; actual_wire_serialization_131072_inclusive_and_postcommit_denial; valid JSON whitespace expansion of actual native/wire encoding, actual receipt/retained accounting. Subcaps imply aggregate229376 <=262144; complete metadata bound still to qualify. |
 | J22 | deadline_cancels_without_releasing_blocked_native_slot; rejected monotonic/wall clocks |
 | J23 | native_source_binding_mutation_fails_before_publication; same_identity_different_admitted_content_denied_before_factory; explicit receipt mismatch startup still to add |
 | J24 | bars native unavailable overnight gap remains unavailable and full family SHA matches |

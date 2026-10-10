@@ -829,4 +829,56 @@ class Jobs(unittest.TestCase):
                     self.assertNotIn(job_id,scheduler.jobs)
                     self.assertNotIn((job.principal,job.key_digest),scheduler.keys)
 
+    def test_actual_native_serialization_65536_inclusive_denies_before_write(self):
+        from equity_feature_service import jobs
+        original = jobs.encode_result
+        for size,expected in ((65536,'succeeded'),(65537,'failed')):
+            writes,commits = [],[]
+            class CountSink(ExampleSink):
+                def write(self,*args):
+                    writes.append(args)
+                    return super().write(*args)
+                def commit(self,*args):
+                    commits.append(args)
+                    return super().commit(*args)
+            scheduler,service,tokens,_,_ = self.make(sink_create=CountSink)
+            def encoded(value):
+                raw = original(value)
+                self.assertLess(len(raw),size)
+                return raw+b' '*(size-len(raw))
+            with patch.object(jobs,'encode_result',encoded):
+                job = self.wait_terminal(scheduler,self.submit(service,tokens[0]))
+            self.assertEqual(job.state,expected)
+            self.assertEqual(len(writes),1 if size==65536 else 0)
+            self.assertEqual(len(commits),1 if size==65536 else 0)
+            if size==65536:
+                self.assertEqual(len(job.native),65536)
+                self.assertEqual(job.held,sum(map(len,(job.native,job.wire,job.envelope,job.receipt))))
+            else:
+                self.assertEqual(job.held,0)
+                self.assertFalse(job.committed_receipt_sha256)
+
+    def test_actual_wire_serialization_131072_inclusive_and_postcommit_denial(self):
+        original = codec.canonical
+        for size,expected in ((131072,'succeeded'),(131073,'failed')):
+            scheduler,service,tokens,_,_ = self.make()
+            def encoded(value):
+                raw = original(value)
+                if type(value) is dict and 'feature_result' in value:
+                    self.assertLess(len(raw),size)
+                    return raw+b' '*(size-len(raw))
+                return raw
+            with patch.object(codec,'canonical',encoded):
+                job = self.wait_terminal(scheduler,self.submit(service,tokens[0]))
+            self.assertEqual(job.state,expected)
+            self.assertTrue(job.committed_receipt_sha256,'native commit preceded wire serialization')
+            if size==131072:
+                self.assertEqual(len(job.wire),size)
+                self.assertLessEqual(job.held,229376)
+            else:
+                self.assertFalse(job.wire)
+                self.assertEqual(job.error,{'category':'contract','code':'bounds','retryable':False})
+                self.assertTrue(job.receipt,'authorized exact historical receipt remains')
+            self.assertEqual(job.held,sum(map(len,(job.native,job.wire,job.envelope,job.receipt))))
+
 if __name__ == '__main__': unittest.main()
