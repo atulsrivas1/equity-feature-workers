@@ -1,0 +1,1335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/atulsrivas1/equity-features/blob/main/docs/schemas/remote-v1.1.schema.json",
+  "title": "EQ077 optional native feature-slice transport1.1",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "equity.remote"
+        },
+        "version": {
+          "const": "1.1"
+        },
+        "kind": {
+          "const": "request"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "payload": {
+          "$ref": "#/$defs/request"
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "request_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "equity.remote"
+        },
+        "version": {
+          "const": "1.1"
+        },
+        "kind": {
+          "const": "result"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "payload": {
+          "$ref": "#/$defs/result"
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "request_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "equity.remote"
+        },
+        "version": {
+          "const": "1.1"
+        },
+        "kind": {
+          "const": "slice"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "payload": {
+          "$ref": "#/$defs/slice"
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "request_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "equity.remote"
+        },
+        "version": {
+          "const": "1.1"
+        },
+        "kind": {
+          "const": "job"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "payload": {
+          "$ref": "#/$defs/job"
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "request_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "equity.remote"
+        },
+        "version": {
+          "const": "1.1"
+        },
+        "kind": {
+          "const": "error"
+        },
+        "request_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "payload": {
+          "$ref": "#/$defs/error"
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "request_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "equity.remote"
+        },
+        "version": {
+          "const": "1.1"
+        },
+        "kind": {
+          "const": "discovery"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "payload": {
+          "$ref": "#/$defs/discovery"
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "request_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "equity.remote"
+        },
+        "version": {
+          "const": "1.1"
+        },
+        "kind": {
+          "const": "feature_slice"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "payload": {
+          "$ref": "#/$defs/feature_slice"
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "request_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+    },
+    "i64": {
+      "type": "string",
+      "pattern": "^(0|-?[1-9][0-9]{0,18})(?![\\s\\S])"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "cell": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "int64"
+            },
+            "value": {
+              "$ref": "#/$defs/i64"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "float64"
+            },
+            "bits": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{16}(?![\\s\\S])",
+              "minLength": 16,
+              "maxLength": 16
+            }
+          },
+          "required": [
+            "type",
+            "bits"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "decimal128"
+            },
+            "coefficient": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]{0,37})(?![\\s\\S])"
+            },
+            "scale": {
+              "type": "integer",
+              "minimum": -38,
+              "maximum": 38
+            }
+          },
+          "required": [
+            "type",
+            "coefficient",
+            "scale"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "string"
+            },
+            "value": {
+              "type": "string",
+              "maxLength": 4096
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "bool"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "record"
+            },
+            "name": {
+              "enum": [
+                "EntityKey",
+                "BreadthCounts",
+                "BreadthFraction",
+                "IntervalOHLCVRow",
+                "IntervalVolumeShareRow",
+                "IntervalOHLCV",
+                "IntervalVolumeShares",
+                "TopKTradeRow",
+                "TopKTrades",
+                "QuoteStateCounts",
+                "QuoteObservation",
+                "SampledSpread",
+                "QuoteDurations",
+                "TimeWeightedSpread",
+                "InputBinding",
+                "ResultMetadata",
+                "EvidenceRow",
+                "PriceUnit",
+                "SourceBinding",
+                "Coverage",
+                "AdjustmentSpec",
+                "InputScope",
+                "IntervalCoverage",
+                "BatchMetadata",
+                "IntervalSpec",
+                "AvailabilitySpec"
+              ]
+            },
+            "fields": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/cell"
+              },
+              "maxProperties": 64
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "fields"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "list"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/cell"
+              },
+              "maxItems": 100
+            }
+          },
+          "required": [
+            "type",
+            "items"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "dataset": {
+      "type": "object",
+      "properties": {
+        "dataset_id": {
+          "$ref": "#/$defs/id"
+        },
+        "revision": {
+          "$ref": "#/$defs/label"
+        },
+        "snapshot_id": {
+          "$ref": "#/$defs/label"
+        },
+        "mapping_version": {
+          "$ref": "#/$defs/label"
+        },
+        "source_id": {
+          "$ref": "#/$defs/label"
+        },
+        "input_id": {
+          "$ref": "#/$defs/label"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "revision",
+        "snapshot_id",
+        "mapping_version",
+        "source_id",
+        "input_id"
+      ],
+      "additionalProperties": false
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "config_id": {
+          "$ref": "#/$defs/id"
+        },
+        "revision": {
+          "$ref": "#/$defs/label"
+        },
+        "schema_version": {
+          "const": "1"
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "algorithm_version": {
+          "$ref": "#/$defs/label"
+        }
+      },
+      "required": [
+        "config_id",
+        "revision",
+        "schema_version",
+        "digest",
+        "algorithm_version"
+      ],
+      "additionalProperties": false
+    },
+    "feature": {
+      "type": "object",
+      "properties": {
+        "feature_id": {
+          "$ref": "#/$defs/label"
+        },
+        "algorithm_version": {
+          "$ref": "#/$defs/label"
+        }
+      },
+      "required": [
+        "feature_id",
+        "algorithm_version"
+      ],
+      "additionalProperties": false
+    },
+    "entity": {
+      "type": "object",
+      "properties": {
+        "instrument_id": {
+          "$ref": "#/$defs/label"
+        },
+        "session_id": {
+          "$ref": "#/$defs/label"
+        }
+      },
+      "required": [
+        "instrument_id",
+        "session_id"
+      ],
+      "additionalProperties": false
+    },
+    "availability": {
+      "type": "object",
+      "properties": {
+        "market_cutoff_ns": {
+          "$ref": "#/$defs/i64"
+        },
+        "knowledge_cutoff_ns": {
+          "$ref": "#/$defs/i64"
+        },
+        "evaluation_ns": {
+          "$ref": "#/$defs/i64"
+        },
+        "mode": {
+          "enum": [
+            "known_at",
+            "reconstruction"
+          ]
+        },
+        "reconstruction_reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/label"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "market_cutoff_ns",
+        "knowledge_cutoff_ns",
+        "evaluation_ns",
+        "mode",
+        "reconstruction_reason"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "$ref": "#/$defs/label"
+        },
+        "dataset": {
+          "$ref": "#/$defs/dataset"
+        },
+        "config": {
+          "$ref": "#/$defs/config"
+        },
+        "registry_snapshot": {
+          "$ref": "#/$defs/digest"
+        },
+        "math_policy_version": {
+          "$ref": "#/$defs/label"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/feature"
+          },
+          "minItems": 1,
+          "maxItems": 39,
+          "uniqueItems": true
+        },
+        "availability": {
+          "$ref": "#/$defs/availability"
+        }
+      },
+      "required": [
+        "namespace",
+        "dataset",
+        "config",
+        "registry_snapshot",
+        "math_policy_version",
+        "features",
+        "availability"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "instrument_id": {
+          "$ref": "#/$defs/label"
+        },
+        "session_id": {
+          "$ref": "#/$defs/label"
+        },
+        "start_ns": {
+          "$ref": "#/$defs/i64"
+        },
+        "end_ns": {
+          "$ref": "#/$defs/i64"
+        }
+      },
+      "required": [
+        "instrument_id",
+        "session_id",
+        "start_ns",
+        "end_ns"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "discover"
+            }
+          },
+          "required": [
+            "operation"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "slice"
+            },
+            "dataset": {
+              "$ref": "#/$defs/dataset"
+            },
+            "scope": {
+              "$ref": "#/$defs/scope"
+            },
+            "columns": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/label"
+              },
+              "minItems": 1,
+              "maxItems": 64,
+              "uniqueItems": true
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "operation",
+            "dataset",
+            "scope",
+            "columns",
+            "cursor"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "calculate"
+            },
+            "context": {
+              "$ref": "#/$defs/context"
+            },
+            "scope": {
+              "$ref": "#/$defs/scope"
+            },
+            "idempotency_key": {
+              "$ref": "#/$defs/id"
+            },
+            "command_digest": {
+              "$ref": "#/$defs/digest"
+            }
+          },
+          "required": [
+            "operation",
+            "context",
+            "scope",
+            "idempotency_key",
+            "command_digest"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "enum": [
+                "job_status",
+                "job_cancel"
+              ]
+            },
+            "job_id": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "operation",
+            "job_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "enum": [
+                "result_read",
+                "artifact_read"
+              ]
+            },
+            "result_id": {
+              "$ref": "#/$defs/id"
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "operation",
+            "result_id",
+            "cursor"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/entity"
+        },
+        "feature_id": {
+          "$ref": "#/$defs/label"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "insufficient_history",
+            "missing_input",
+            "incomplete_coverage",
+            "not_applicable"
+          ]
+        },
+        "expected": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/i64"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed": {
+          "$ref": "#/$defs/i64"
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "absent_input",
+              "null_field",
+              "observed_empty",
+              "no_eligible_observations",
+              "missing_action_evidence",
+              "insufficient_history",
+              "governed_gap",
+              "unknown_availability",
+              "future_knowledge",
+              "partial_universe",
+              "zero_denominator",
+              "empty_universe",
+              "ineligible",
+              "future_market"
+            ]
+          },
+          "uniqueItems": true,
+          "maxItems": 14
+        }
+      },
+      "required": [
+        "entity",
+        "feature_id",
+        "status",
+        "expected",
+        "observed",
+        "reasons"
+      ],
+      "additionalProperties": false
+    },
+    "column": {
+      "type": "object",
+      "properties": {
+        "feature_id": {
+          "$ref": "#/$defs/label"
+        },
+        "algorithm_version": {
+          "$ref": "#/$defs/label"
+        },
+        "schema_version": {
+          "const": "1"
+        },
+        "dtype": {
+          "enum": [
+            "int64",
+            "decimal128",
+            "float64",
+            "string",
+            "bool",
+            "breadth_counts",
+            "breadth_fraction",
+            "time_weighted_spread",
+            "quote_state_counts",
+            "sampled_spread",
+            "top_k_trades",
+            "interval_ohlcv",
+            "interval_volume_shares"
+          ]
+        },
+        "unit": {
+          "$ref": "#/$defs/label"
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity"
+          },
+          "maxItems": 100
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cell"
+          },
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "feature_id",
+        "algorithm_version",
+        "schema_version",
+        "dtype",
+        "unit",
+        "entities",
+        "values"
+      ],
+      "additionalProperties": false
+    },
+    "record": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/cell"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "record"
+            },
+            "name": {
+              "enum": [
+                "EntityKey",
+                "BreadthCounts",
+                "BreadthFraction",
+                "IntervalOHLCVRow",
+                "IntervalVolumeShareRow",
+                "IntervalOHLCV",
+                "IntervalVolumeShares",
+                "TopKTradeRow",
+                "TopKTrades",
+                "QuoteStateCounts",
+                "QuoteObservation",
+                "SampledSpread",
+                "QuoteDurations",
+                "TimeWeightedSpread",
+                "InputBinding",
+                "ResultMetadata",
+                "EvidenceRow",
+                "PriceUnit",
+                "SourceBinding",
+                "Coverage",
+                "AdjustmentSpec",
+                "InputScope",
+                "IntervalCoverage",
+                "BatchMetadata",
+                "IntervalSpec",
+                "AvailabilitySpec",
+                "QualityRow"
+              ]
+            },
+            "fields": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/cell"
+              },
+              "maxProperties": 64
+            }
+          },
+          "required": [
+            "type",
+            "name",
+            "fields"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "command_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "backend_id": {
+          "$ref": "#/$defs/label"
+        },
+        "backend_version": {
+          "$ref": "#/$defs/label"
+        },
+        "metadata": {
+          "$ref": "#/$defs/record"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/column"
+          },
+          "maxItems": 39
+        },
+        "quality": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/quality"
+          },
+          "maxItems": 3900
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/record"
+          },
+          "maxItems": 100
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executed_features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/feature"
+          },
+          "minItems": 1,
+          "maxItems": 39,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "context",
+        "command_digest",
+        "backend_id",
+        "backend_version",
+        "metadata",
+        "columns",
+        "quality",
+        "evidence",
+        "next_cursor",
+        "executed_features"
+      ],
+      "additionalProperties": false
+    },
+    "slice": {
+      "type": "object",
+      "properties": {
+        "dataset": {
+          "$ref": "#/$defs/dataset"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/$defs/label"
+              },
+              "dtype": {
+                "enum": [
+                  "int64",
+                  "float64",
+                  "decimal128",
+                  "string",
+                  "bool"
+                ]
+              },
+              "unit": {
+                "$ref": "#/$defs/label"
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/cell"
+                },
+                "maxItems": 100
+              }
+            },
+            "required": [
+              "name",
+              "dtype",
+              "unit",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 64
+        },
+        "metadata": {
+          "$ref": "#/$defs/record"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "dataset",
+        "scope",
+        "columns",
+        "metadata",
+        "next_cursor"
+      ],
+      "additionalProperties": false
+    },
+    "error": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "transport"
+            },
+            "code": {
+              "enum": [
+                "invalid_json",
+                "invalid_schema",
+                "incompatible_version",
+                "bounds",
+                "inconsistent_identity"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "category",
+            "code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "authentication"
+            },
+            "code": {
+              "enum": [
+                "unauthenticated"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "category",
+            "code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "authorization"
+            },
+            "code": {
+              "enum": [
+                "not_permitted"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "category",
+            "code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "quota"
+            },
+            "code": {
+              "enum": [
+                "quota_exceeded"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "category",
+            "code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "contract"
+            },
+            "code": {
+              "enum": [
+                "invalid_schema",
+                "unknown_feature",
+                "unsupported_capability",
+                "invalid_order",
+                "duplicate",
+                "invalid_unit",
+                "bounds",
+                "overflow",
+                "inconsistent_identity",
+                "invalid_config",
+                "incompatible_version",
+                "unsupported_sampling",
+                "unsupported_adjustment"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "category",
+            "code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "internal"
+            },
+            "code": {
+              "enum": [
+                "internal_error"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "category",
+            "code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "job": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "$ref": "#/$defs/id"
+        },
+        "command_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running",
+            "succeeded",
+            "failed",
+            "cancel_requested",
+            "cancelled",
+            "expired"
+          ]
+        },
+        "result_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/error"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "job_id",
+        "command_digest",
+        "state",
+        "result_id",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "discovery": {
+      "type": "object",
+      "properties": {
+        "transport_versions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "1.0",
+              "1.1"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "registry_snapshot": {
+          "$ref": "#/$defs/digest"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/feature"
+          },
+          "maxItems": 39
+        }
+      },
+      "required": [
+        "transport_versions",
+        "registry_snapshot",
+        "features"
+      ],
+      "additionalProperties": false
+    },
+    "feature_slice": {
+      "type": "object",
+      "properties": {
+        "dataset": {
+          "$ref": "#/$defs/dataset"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "selected_features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/feature"
+          },
+          "minItems": 1,
+          "maxItems": 39,
+          "uniqueItems": true
+        },
+        "feature_result": {
+          "$ref": "#/$defs/result"
+        }
+      },
+      "required": [
+        "dataset",
+        "scope",
+        "selected_features",
+        "feature_result"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

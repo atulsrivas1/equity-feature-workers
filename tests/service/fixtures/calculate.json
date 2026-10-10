@@ -1,0 +1,50 @@
+{
+  "schema": "equity.remote",
+  "version": "1.0",
+  "kind": "request",
+  "request_id": "request-1",
+  "payload": {
+    "operation": "calculate",
+    "context": {
+      "namespace": "owned.fixture",
+      "dataset": {
+        "dataset_id": "synthetic.trades",
+        "revision": "owned-v1",
+        "snapshot_id": "snapshot-1",
+        "mapping_version": "mapping-1",
+        "source_id": "owned",
+        "input_id": "input-1"
+      },
+      "config": {
+        "config_id": "owned.count",
+        "revision": "config-1",
+        "schema_version": "1",
+        "digest": "01658b149d09050f5a1f4885402dc953b8de6ab9bc341bdba80f44d377577e75",
+        "algorithm_version": "v1"
+      },
+      "registry_snapshot": "386db6c41ca29110708ddcbc8df1ef0539076d9fb91dd031f38fc5c434f83b25",
+      "math_policy_version": "v1",
+      "features": [
+        {
+          "feature_id": "session.trade.count",
+          "algorithm_version": "v1"
+        }
+      ],
+      "availability": {
+        "market_cutoff_ns": "9007199254740993",
+        "knowledge_cutoff_ns": "9007199254740993",
+        "evaluation_ns": "9007199254740994",
+        "mode": "known_at",
+        "reconstruction_reason": null
+      }
+    },
+    "scope": {
+      "instrument_id": "owned:ONE",
+      "session_id": "session-1",
+      "start_ns": "9007199254740992",
+      "end_ns": "9007199254740993"
+    },
+    "idempotency_key": "idem-1",
+    "command_digest": "123002f9490e9f22c8bafe4422d7e68bb905818c29a5d0b19b3e46ff299a0f1d"
+  }
+}

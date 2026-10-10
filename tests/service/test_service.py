@@ -1,0 +1,298 @@
+"""Owned literal decisions through the actual packaged WSGI boundary."""
+from dataclasses import replace
+import hashlib
+import io
+import http.client
+import json
+from pathlib import Path
+import secrets
+import threading
+import unittest
+
+from equity_feature_contracts import (
+    CanonicalBatch, Column, DataKind, BatchMetadata, SourceBinding, Coverage,
+    PriceUnit, InputScope, ConfigSpec, EntityKey,
+)
+from equity_features.session.trades import compute_trades
+from equity_feature_service import Credential, Grant, Ledger, Limits, Service, Scope, RawRead, RawDataset, FeatureDataset, DatasetIdentity
+from equity_feature_service import codec
+from equity_feature_service.loopback import qualification_server
+
+ROOT = Path(__file__).resolve().parents[2]
+START = 9007199254740992
+END = START + 2
+
+
+class Clock:
+    def __init__(self): self.n = 100
+    def __call__(self): return self.n
+
+
+def raw_batch(rows=2):
+    values = {
+        'instrument_id': ('owned:ONE',) * rows, 'session_id': ('session-1',) * rows,
+        'event_ns': tuple(START + (n % 2) for n in range(rows)), 'order_key': tuple(range(rows)),
+        'event_id': tuple('event-' + str(n) for n in range(rows)), 'eligible': (True,) * rows,
+        'price': tuple(10100 if n % 2 == 0 else 10200 for n in range(rows)),
+        'size': tuple(2 if n % 2 == 0 else 3 for n in range(rows)),
+        'known_at_ns': tuple(None if n % 2 == 0 else 0 for n in range(rows)),
+    }
+    return CanonicalBatch(DataKind.TRADE, tuple(Column(k, v) for k, v in values.items()),
+        BatchMetadata('owned.fixture', SourceBinding('owned', 'snapshot-1', 'mapping-1', 'input-1'),
+                      Coverage(rows, rows, True), PriceUnit(2, 'USD'), scope=InputScope(START, END, 'owned-v1')))
+
+
+class Source:
+    def __init__(self):
+        self.value = RawRead(raw_batch(), 'a' * 64)
+        self.calls = 0
+        self.before = None
+    def read(self, cancellation=None):
+        self.calls += 1
+        if self.before: self.before()
+        if cancellation is not None and cancellation.is_cancelled():
+            raise RuntimeError('cancelled')
+        return self.value
+
+
+def env(value, token, **changes):
+    data = value if type(value) is bytes else codec.canonical(value)
+    result = {'REQUEST_METHOD': 'POST', 'PATH_INFO': '/v1/request', 'QUERY_STRING': '',
+              'CONTENT_TYPE': 'application/json', 'CONTENT_LENGTH': str(len(data)),
+              'HTTP_AUTHORIZATION': 'Bearer ' + token, 'REMOTE_ADDR': '127.0.0.1',
+              'wsgi.multiprocess': False, 'wsgi.input': io.BytesIO(data)}
+    result.update(changes)
+    return result
+
+
+def call(service, value, token, **changes):
+    status, headers = [], []
+    def start(s, h): status.append(int(s.split()[0])); headers.extend(h)
+    data = b''.join(service(env(value, token, **changes), start))
+    return status[0], json.loads(data) if data else None, data, dict(headers)
+
+
+class ServiceVectors(unittest.TestCase):
+    def setUp(self):
+        self.clock, self.source = Clock(), Source()
+        self.token, self.foreign = secrets.token_urlsafe(32), secrets.token_urlsafe(32)
+        self.scope = Scope('owned:ONE', 'session-1', START, END)
+        rights = frozenset(('raw_read', 'discover'))
+        self.dataset = RawDataset('synthetic.raw', 'owned-v1', self.scope, self.source.value, self.source.read,
+            columns=('event_ns', 'known_at_ns', 'price', 'size'), rights=rights,
+            rights_owner='owned-fixture', rights_evidence='synthetic-owned-v1', valid_from_ns=0, expires_at_ns=1000)
+        self.grant = Grant('grant-a', 'principal-a', 'synthetic.raw', 'owned-v1', 'policy-v1', self.scope,
+            frozenset(self.dataset.columns), rights, 0, 1000)
+        self.credentials = (Credential.provision('principal-a', self.token, 0, 1000),
+                            Credential.provision('principal-b', self.foreign, 0, 1000))
+        self.ledger = self.make_ledger()
+        self.service = Service(self.ledger)
+
+    def make_ledger(self, limits=None, grants=None, datasets=None):
+        return Ledger(clock=self.clock, limits=limits or Limits(60, 1048576, 2097152, 60000000000),
+            credentials=self.credentials, grants=grants if grants is not None else (self.grant,),
+            datasets=datasets if datasets is not None else (self.dataset,), policy_revision='policy-v1', registry_snapshot=next((d.registry_snapshot for d in (datasets or ()) if isinstance(d, FeatureDataset)), 'b' * 64))
+
+    def request(self, **changes):
+        payload = {'operation': 'slice', 'dataset': self.dataset.identity.wire(), 'scope': self.scope.wire(),
+                   'columns': ['event_ns', 'known_at_ns', 'price', 'size'], 'cursor': None}
+        payload.update(changes)
+        return {'schema': 'equity.remote', 'version': '1.0', 'kind': 'request', 'request_id': 'http-1', 'payload': payload}
+
+    def test_literal_precision_null_and_native_metadata(self):
+        status, result, data, headers = call(self.service, self.request(), self.token)
+        self.assertEqual(status, 200)
+        columns = {c['name']: c for c in result['payload']['columns']}
+        self.assertEqual([v['value'] for v in columns['event_ns']['values']], ['9007199254740992', '9007199254740993'])
+        self.assertEqual(columns['known_at_ns']['values'], [None, {'type': 'int64', 'value': '0'}])
+        self.assertEqual([v['value'] for v in columns['price']['values']], ['10100', '10200'])
+        self.assertEqual(result['payload']['metadata'], codec.cell(self.source.value.batch.metadata))
+        self.assertEqual(int(headers['Content-Length']), len(data))
+        self.assertEqual(self.source.calls, 1)
+
+    def test_anonymous_foreign_and_bad_tokens_do_not_read(self):
+        for token in ('', self.foreign, secrets.token_urlsafe(32), self.token + ',Bearer ' + self.token):
+            status, result, data, _ = call(self.service, self.request(), token)
+            self.assertIn(status, (401, 403))
+            self.assertNotIn(self.token.encode(), data)
+            self.assertNotIn(self.foreign.encode(), data)
+        self.assertEqual(self.source.calls, 0)
+
+    def test_revision_scope_columns_and_injection_denied_before_read(self):
+        for change in (
+            {'dataset': {**self.dataset.identity.wire(), 'revision': 'changed'}},
+            {'scope': {**self.scope.wire(), 'end_ns': str(END - 1)}},
+            {'scope': {**self.scope.wire(), 'instrument_id': "ONE' OR 1=1 --"}},
+            {'columns': ['price;DROP TABLE files']}, {'columns': ['__import__']},
+        ):
+            self.assertEqual(call(self.service, self.request(**change), self.token)[0], 403)
+        for field in ('sql', 'path', 'pickle', 'callable'):
+            self.assertEqual(call(self.service, self.request(**{field: 'untrusted'}), self.token)[0], 400)
+        self.assertEqual(self.source.calls, 0)
+
+    def test_strict_json_versions_direction_and_body_limits(self):
+        for data in (b'{"a":1,"a":2}', b'{"a":NaN}', b'\xff', b'\xef\xbb\xbf{}', b'[' * 33 + b'0' + b']' * 33,
+                     b' ' * 16385):
+            self.assertEqual(call(self.service, data, self.token)[0], 400)
+        req = self.request(); req['version'] = '2.0'
+        self.assertEqual(call(self.service, req, self.token)[0], 400)
+        self.assertEqual(self.source.calls, 0)
+
+    def test_scope_cursor_and_non_slice_operations(self):
+        self.assertEqual(call(self.service, self.request(cursor='unimplemented'), self.token)[0], 400)
+        req = {'schema': 'equity.remote', 'version': '1.0', 'kind': 'request', 'request_id': 'r',
+               'payload': {'operation': 'job_status', 'job_id': 'foreign-job'}}
+        self.assertEqual(call(self.service, req, self.token)[0], 400)
+        self.assertEqual(self.source.calls, 0)
+
+    def test_expiry_and_revocation(self):
+        ledger = self.make_ledger(grants=(replace(self.grant, expires_at_ns=200),))
+        self.clock.n = 200
+        self.assertEqual(call(Service(ledger), self.request(), self.token)[0], 403)
+        self.clock.n = 1000
+        self.assertEqual(call(self.service, self.request(), self.token)[0], 401)
+        self.assertEqual(self.source.calls, 0)
+
+    def test_shared_request_limits_and_interval_reset(self):
+        ledger = self.make_ledger(limits=Limits(1, 1048576, 2097152, 60000000000))
+        self.assertEqual(call(Service(ledger), self.request(), self.token)[0], 200)
+        self.assertEqual(call(Service(ledger), self.request(), self.token)[0], 429)
+        # Expiry is still independently enforced at a new accounting interval.
+        self.clock.n = 60000000000
+        self.assertEqual(call(Service(ledger), self.request(), self.token)[0], 401)
+
+    def test_errors_count_transfer_and_exhaustion_emits_no_free_body(self):
+        ledger = self.make_ledger(limits=Limits(60, 1048576, 1, 60000000000))
+        status, _, data, headers = call(Service(ledger), self.request(), '')
+        self.assertEqual((status, data, headers['Content-Length']), (429, b'', '0'))
+        self.assertEqual(self.source.calls, 0)
+
+    def test_revocation_wins_barrier_before_visibility(self):
+        entered, release = threading.Event(), threading.Event()
+        def pause(): entered.set(); self.assertTrue(release.wait(10))
+        self.source.before = pause
+        results = []
+        worker = threading.Thread(target=lambda: results.append(call(self.service, self.request(), self.token)))
+        worker.start(); self.assertTrue(entered.wait(10)); self.ledger.revoke('grant-a'); release.set(); worker.join(10)
+        self.assertFalse(worker.is_alive())
+        self.assertEqual(results[0][0], 403)
+        self.assertEqual(results[0][1]['kind'], 'error')
+        self.assertNotIn(b'10100', results[0][2])
+
+    def test_prepared_response_reauthorized_on_first_iteration(self):
+        headers = []
+        output = self.service(env(self.request(), self.token), lambda s, h: headers.append(s))
+        self.assertEqual(headers, [])
+        self.ledger.revoke('grant-a')
+        value = json.loads(b''.join(output))
+        self.assertTrue(headers[0].startswith('403'))
+        self.assertEqual(value['kind'], 'error')
+
+    def test_revocation_during_size_admission_prevents_source_read(self):
+        original = self.dataset.size_hint
+        def changed(*args):
+            amount = original(*args)
+            self.ledger.revoke('grant-a')
+            return amount
+        self.dataset.size_hint = changed
+        self.assertEqual(call(self.service, self.request(), self.token)[0], 403)
+        self.assertEqual(self.source.calls, 0)
+        self.assertEqual(self.ledger._reserved, 0)
+
+    def test_unemitted_response_holds_budget_and_close_releases_it(self):
+        amount = self.dataset.size_hint(tuple(self.dataset.columns), '1.0', 'http-1')
+        ledger = self.make_ledger(limits=Limits(60, amount, amount, 60000000000))
+        service = Service(ledger)
+        output = service(env(self.request(), self.token), lambda s, h: None)
+        self.assertEqual(ledger._reserved, amount)
+        self.assertEqual(call(service, self.request(), self.token)[0], 429)
+        self.assertEqual(self.source.calls, 1)
+        output.close()
+        self.assertEqual(ledger._reserved, 0)
+        self.assertEqual(call(service, self.request(), self.token)[0], 200)
+        self.assertEqual(ledger._transfer, amount)
+
+    def test_untrusted_clock_and_multiprocess_or_foreign_peer_denied(self):
+        for changes in ({'wsgi.multiprocess': True}, {'REMOTE_ADDR': '203.0.113.1'}, {'QUERY_STRING': 'token=untrusted'}):
+            self.assertEqual(call(self.service, self.request(), self.token, **changes)[0], 400)
+        self.clock.n = True
+        self.assertEqual(call(self.service, self.request(), self.token)[0], 500)
+        self.assertEqual(self.source.calls, 0)
+
+    def test_producer_receipt_and_mapping_tamper_redacted(self):
+        self.source.value = replace(self.source.value, receipt_fingerprint='c' * 64)
+        status, result, data, _ = call(self.service, self.request(), self.token)
+        self.assertIn(status, (400, 422))
+        self.assertNotIn(b'10100', data)
+        self.assertEqual(result['kind'], 'error')
+
+    def test_http_correlation_does_not_change_native_source(self):
+        first = call(self.service, self.request(), self.token)[1]
+        req = self.request(); req['request_id'] = 'http-2'
+        second = call(self.service, req, self.token)[1]
+        self.assertEqual(first['payload'], second['payload'])
+        self.assertEqual(second['request_id'], 'http-2')
+
+    def test_actual_loopback_http_and_duplicate_credentials(self):
+        server = qualification_server(self.service)
+        worker = threading.Thread(target=server.serve_forever, kwargs={'poll_interval': 0.05})
+        worker.start()
+        try:
+            host, port = server.server_address[:2]
+            c = http.client.HTTPConnection(host, port, timeout=10)
+            body = codec.canonical(self.request())
+            c.request('POST', '/v1/request', body, {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + self.token})
+            response = c.getresponse(); data = response.read()
+            self.assertEqual(response.status, 200)
+            self.assertEqual(json.loads(data)['payload']['dataset'], self.dataset.identity.wire())
+            c.close()
+            c = http.client.HTTPConnection(host, port, timeout=10)
+            c.putrequest('POST', '/v1/request')
+            c.putheader('Authorization', 'Bearer ' + self.token)
+            c.putheader('Authorization', 'Bearer ' + self.foreign)
+            c.putheader('Content-Type', 'application/json'); c.putheader('Content-Length', str(len(body)))
+            c.endheaders(body)
+            response = c.getresponse(); data = response.read()
+            self.assertEqual(response.status, 401)
+            self.assertNotIn(self.token.encode(), data)
+            c.close()
+        finally:
+            server.shutdown(); worker.join(10); server.server_close()
+
+    def feature_setup(self):
+        spec = ConfigSpec.from_json((ROOT / 'tests/service/fixtures/approved-config.json').read_text())
+        batch = raw_batch(1)
+        batch = replace(batch, metadata=replace(batch.metadata, scope=InputScope(START, START + 1, 'owned-v1')),
+            columns=tuple(replace(c, values=(START,)) if c.name == 'known_at_ns' else c for c in batch.columns))
+        result = compute_trades(batch, spec, entity=EntityKey('owned:ONE', 'session-1'))
+        producer = json.loads((ROOT / 'tests/service/fixtures/calculate.json').read_text())['payload']
+        scope = Scope('owned:ONE', 'session-1', START, START + 1)
+        identity = DatasetIdentity.from_source('synthetic.features', 'owned-v1', batch.metadata.source)
+        rights = frozenset(('derived_read', 'discover', 'retain'))
+        dataset = FeatureDataset(identity, scope, result, producer['context'], producer['command_digest'], rights=rights,
+            rights_owner='owned-fixture', rights_evidence='owned-native-calc', valid_from_ns=0, expires_at_ns=1000)
+        grant = replace(self.grant, dataset_id='synthetic.features', scope=scope, columns=frozenset(dataset.columns), actions=rights)
+        service = Service(self.make_ledger(grants=(grant,), datasets=(dataset,)))
+        req = self.request(dataset=identity.wire(), scope=scope.wire(), columns=['session.trade.count']); req['version'] = '1.1'
+        return service, req, result
+
+    def test_actual_native_feature_quality_metadata_and_version(self):
+        service, req, native = self.feature_setup()
+        status, result, _, _ = call(service, req, self.token)
+        self.assertEqual(status, 200)
+        self.assertEqual(result['kind'], 'feature_slice')
+        output = result['payload']['feature_result']
+        self.assertEqual(output['columns'][0]['values'], [{'type': 'int64', 'value': '1'}])
+        self.assertEqual(output['quality'][0]['status'], 'available')
+        self.assertEqual(output['metadata'], codec.cell(native.metadata))
+        self.assertEqual(output['backend_version'], native.metadata.backend_version)
+        req['version'] = '1.0'
+        self.assertEqual(call(service, req, self.token)[0], 400)
+
+    def test_derived_slice_requires_derived_right(self):
+        service, req, _ = self.feature_setup()
+        service.ledger.grants = tuple(replace(g, actions=frozenset(('raw_read',))) for g in service.ledger.grants)
+        self.assertEqual(call(service, req, self.token)[0], 403)
+
+
+if __name__ == '__main__': unittest.main()
