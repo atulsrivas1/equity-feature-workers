@@ -71,9 +71,9 @@ def qualify(form, artifact, deps, committed):
         run(py, '-I', '-m', 'unittest', 'discover', '-s', committed / 'tests/service', '-v', cwd=location)
         run(py, '-I', '-m', 'mypy', '--strict', '-p', 'equity_feature_service', cwd=location)
         positive = location / 'consumer.py'
-        positive.write_text('from equity_feature_service import Scope, Credential, Limits\ns: Scope = Scope("owned:ONE", "session-1", 1, 2)\nc: Credential = Credential.provision("owned", "a" * 43, 0, 100)\nl: Limits = Limits(1, 1024, 2048, 60000000000)\n', encoding='utf-8')
+        positive.write_text('from equity_feature_service import Scope, Credential, Limits\nfrom equity_feature_service.jobs import OwnedReceiptProfile, JobGrant\ns: Scope = Scope("owned:ONE", "session-1", 1, 2)\nc: Credential = Credential.provision("owned", "a" * 43, 0, 100)\nl: Limits = Limits(1, 1024, 2048, 60000000000)\np: OwnedReceiptProfile = OwnedReceiptProfile()\ng: JobGrant = JobGrant("owned-grant", "a" * 64, frozenset({("session.trade.volume", "v1")}))\n', encoding='utf-8')
         run(py, '-I', '-m', 'mypy', '--strict', positive, cwd=location)
-        positive.write_text('from equity_feature_service import Scope\ns = Scope("owned:ONE", "session-1", "bad", 2)\n', encoding='utf-8')
+        positive.write_text('from equity_feature_service import Scope\nfrom equity_feature_service.jobs import OwnedReceiptProfile\ns = Scope("owned:ONE", "session-1", "bad", 2)\np = OwnedReceiptProfile(123)\n', encoding='utf-8')
         invalid = subprocess.run([str(py), '-I', '-m', 'mypy', '--strict', str(positive)], cwd=location, capture_output=True, text=True)
         assert invalid.returncode == 1 and '[arg-type]' in invalid.stdout
         run(py, '-m', 'pip', 'check')

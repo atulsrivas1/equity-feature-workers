@@ -1,3 +1,7 @@
+## EQ078 candidate admission/maintenance correction
+
+Seal approved native job registrations and bind complete raw dataset content/receipt commitments; add independent terminal maintenance during busy native execution and current retention-right cancellation/cleanup. Expanded owned family/native int64/rights/publication fixtures pass; final current source/artifact/review qualification pending. Existing worker/core/I/O/schema bytes unchanged. See story88 and tracked handoff for actual preliminary findings/failures and superseded receipts.
+
 ## EQ078 native asynchronous runtime development — October10,2026 UTC
 
 EQ078#88 is OPEN/In progress after actual separately reviewed concrete planning and guarded Ready/start admission (https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6094640060), owneratulsrivas1,13 provisional points, paired draftPR360/31. Optional service0.1.0a1 now implements one shared native execution thread with opaque queued/running/terminal job snapshots, original owner/grant/config/full executed-feature rights, fixed native source request/full binding/content verification and registered native plan_acquisition -> execute_plan -> commit/readback. Current source is a preliminary development checkpoint, not final review or accepted artifacts. Accepted worker/core/I/O package and transport1.0/1.1 bytes remain unchanged.

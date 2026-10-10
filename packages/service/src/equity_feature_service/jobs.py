@@ -6,9 +6,11 @@ from collections.abc import Callable, Iterator
 from dataclasses import asdict, dataclass, field, replace
 import hashlib
 import json
+import re
 import secrets
 import threading
 import time
+from types import MappingProxyType
 from typing import Any
 
 from equity_feature_contracts import CanonicalBatch
@@ -21,7 +23,7 @@ from equity_feature_workers import (SessionCommandSpec, SourceOffer, ExecutionAp
     PlanningError, PlanningErrorCode, plan_acquisition, execute_plan)
 
 from . import codec
-from .datasets import DatasetIdentity, FeatureDataset, Scope
+from .datasets import DatasetIdentity, FeatureDataset, RawDataset, Scope, _batch_bytes
 from .service import Credential, Ledger, _Prepared, _error
 
 
@@ -43,6 +45,14 @@ class JobGrant:
     config_digest: str
     features: frozenset[tuple[str, str]]
 
+    def __post_init__(self) -> None:
+        if (type(self.grant_id) is not str or not 0 < len(self.grant_id) <= 256
+                or type(self.config_digest) is not str or re.fullmatch(r'[0-9a-f]{64}',self.config_digest) is None
+                or type(self.features) is not frozenset or not 1 <= len(self.features) <= 39
+                or any(type(pair) is not tuple or len(pair) != 2
+                       or any(type(v) is not str or not 0 < len(v) <= 256 for v in pair) for pair in self.features)):
+            raise ValueError('invalid_job_permission')
+
 
 @dataclass(frozen=True)
 class OwnedReceiptProfile:
@@ -56,13 +66,29 @@ class OwnedReceiptProfile:
 
 class JobRegistration:
     """Freeze native request/config and a complete observed owned delivery."""
+    def __setattr__(self, name: str, value: Any) -> None:
+        if getattr(self,'_sealed',False):
+            raise AttributeError('immutable_job_registration')
+        object.__setattr__(self,name,value)
+
+    def __delattr__(self, name: str) -> None:
+        raise AttributeError('immutable_job_registration')
+
+    @property
+    def sink_config(self) -> dict[str, Any]:
+        return json.loads(self.sink_config_bytes)  # type: ignore[no-any-return]
+
     def __init__(self, request: codec.Json, spec: SessionCommandSpec, delivery: AdapterBatch, *,
                  sources: SourceRegistry[HistoricalAdapter], source: SourceOffer,
                  sinks: SinkRegistry[ResultSink], sink_id: str, sink_config: dict[str, Any],
-                 credentials: CredentialProvider, receipt_profile: OwnedReceiptProfile) -> None:
+                 credentials: CredentialProvider, receipt_profile: OwnedReceiptProfile,
+                 acquisition_receipt_fingerprint: str) -> None:
         codec.validate(request)
         if type(receipt_profile) is not OwnedReceiptProfile:
             raise ValueError('unadmitted_receipt_profile')
+        if (type(acquisition_receipt_fingerprint) is not str
+                or re.fullmatch(r'[0-9a-f]{64}',acquisition_receipt_fingerprint) is None):
+            raise ValueError('invalid_acquisition_receipt')
         if (request['kind'] != 'request' or request['payload']['operation'] != 'calculate'
                 or type(spec) is not SessionCommandSpec or spec.family not in ('trades', 'bars', 'quotes')
                 or spec.request.max_batches != 1 or spec.request.max_rows > 100
@@ -97,10 +123,11 @@ class JobRegistration:
         self.payload_bytes = codec.canonical({k:v for k,v in payload.items() if k not in ('command_digest','idempotency_key')})
         self.spec_bytes = _bounded(asdict(spec), 16_384)
         self.delivery_hash = hashlib.sha256(_bounded(asdict(delivery), 1_048_576)).hexdigest()
+        self.acquisition_commitment = hashlib.sha256(_batch_bytes(batch)).hexdigest(),acquisition_receipt_fingerprint
         self.identity, self.scope = identity, scope
         self.spec, self.sources, self.source = spec, sources, source
         self.sinks, self.sink_id, self.credentials = sinks, sink_id, credentials
-        self.sink_config = json.loads(_bounded(sink_config, 8192))
+        self.sink_config_bytes = _bounded(sink_config,8192)
         self.receipt_profile = receipt_profile
         self.columns = tuple(column.name for column in batch.columns)
         self.execution_features = frozenset((f.feature_id,f.algorithm_version) for f in spec.features)
@@ -109,7 +136,8 @@ class JobRegistration:
                                              max_result_cells=3900,max_evidence_rows=100)
         self.registration_digest = hashlib.sha256(_bounded({'spec':asdict(spec),'delivery':self.delivery_hash,
             'context':context,'source':asdict(source),'sink_id':sink_id,'sink_config':self.sink_config,
-            'receipt_profile':asdict(receipt_profile)}, 65_536)).hexdigest()
+            'receipt_profile':asdict(receipt_profile),'acquisition_commitment':self.acquisition_commitment}, 65_536)).hexdigest()
+        self._sealed = True
 
 
 @dataclass
@@ -146,13 +174,14 @@ class JobScheduler:
         if any(type(r) is not JobRegistration for r in registrations) or any(type(g) is not JobGrant for g in grants):
             raise ValueError('invalid_job_startup')
         self.ledger, self.monotonic = ledger, monotonic
-        self.registrations = {r.identity.dataset_id:r for r in registrations}
-        self.grants = {g.grant_id:g for g in grants}
+        self.registrations = MappingProxyType({r.identity.dataset_id:r for r in registrations})
+        self.grants = MappingProxyType({g.grant_id:g for g in grants})
         if len(self.registrations) != len(registrations) or len(self.grants) != len(grants):
             raise ValueError('duplicate_job_registration')
         for r in registrations:
             dataset = ledger.datasets.get(r.identity.dataset_id)
-            if (dataset is None or dataset.identity != r.identity or dataset.scope != r.scope
+            if (type(dataset) is not RawDataset or dataset.identity != r.identity or dataset.scope != r.scope
+                    or dataset.acquisition_commitment != r.acquisition_commitment
                     or r.context_bytes != codec.canonical(json.loads(r.context_bytes))
                     or json.loads(r.context_bytes)['registry_snapshot'] != ledger.registry_snapshot):
                 raise ValueError('unadmitted_job_dataset')
@@ -180,7 +209,9 @@ class JobScheduler:
             setattr(ledger,'_job_scheduler',self)
         self.condition = threading.Condition(ledger.lock)
         self.thread = threading.Thread(target=self._run,name='owned-native-jobs',daemon=True)
+        self.maintenance = threading.Thread(target=self._maintain,name='owned-job-expiry',daemon=True)
         self.thread.start()
+        self.maintenance.start()
 
     def _mono(self) -> int:
         n = self.monotonic()
@@ -194,7 +225,10 @@ class JobScheduler:
         return self._last_wall
 
     def _authorized(self, credential: Credential, registration: JobRegistration, grant_id: str, action: str) -> bool:
-        grant = self.ledger.authorized(credential,self.ledger.datasets[registration.identity.dataset_id],registration.columns,action,self._now())
+        dataset = self.ledger.datasets[registration.identity.dataset_id]
+        if type(dataset) is not RawDataset or dataset.acquisition_commitment != registration.acquisition_commitment:
+            return False
+        grant = self.ledger.authorized(credential,dataset,registration.columns,action,self._now())
         rule = self.grants.get(grant_id)
         return (grant is not None and grant.grant_id == grant_id and rule is not None
                 and rule.config_digest == registration.spec.config.digest and registration.execution_features <= rule.features)
@@ -208,7 +242,8 @@ class JobScheduler:
     def _check(self, job: _Job, action: str = 'calculate', *, cancel: bool = True) -> None:
         with self.ledger.lock:
             r = self.registrations[job.dataset_id]
-            if (not self._authorized(self._credential(job),r,job.grant_id,action)
+            required = ('calculate','job_manage','retain') if action == 'calculate' else (action,)
+            if (not all(self._authorized(self._credential(job),r,job.grant_id,a) for a in required)
                     or (cancel and (job.cancelled or (job.deadline_ns and self._mono() >= job.deadline_ns)))):
                 raise SinkError(SinkErrorCode.CANCELLED)
 
@@ -235,7 +270,8 @@ class JobScheduler:
                     job.expires_ns = min(n+300_000_000_000,grant.expires_at_ns)
                     self._clear(job)
             if job.state in ('succeeded','failed','cancelled','expired'):
-                if job.expires_ns and n >= job.expires_ns:
+                if (job.expires_ns and n >= job.expires_ns
+                        or job.held and not self._authorized(self._credential(job),self.registrations[job.dataset_id],job.grant_id,'retain')):
                     self._clear(job)
                     job.state, job.result_id, job.error = 'expired',None,None
                 if n >= grant.expires_at_ns:
@@ -369,12 +405,27 @@ class JobScheduler:
                     except ValueError:
                         completed_ns = self._last_wall
                     job.expires_ns = min(completed_ns+300_000_000_000,grant.expires_at_ns)
-                    if job.state in ('failed','cancelled') and not job.receipt:
+                    try:
+                        keep_receipt = self._authorized(self._credential(job),self.registrations[job.dataset_id],job.grant_id,'retain')
+                    except ValueError:
+                        keep_receipt = False
+                    if job.state in ('failed','cancelled') and (not job.receipt or not keep_receipt):
                         self._clear(job)
                     actual = len(job.native)+len(job.wire)+len(job.envelope)+len(job.receipt)
                     self._release(job,job.held-actual)
                     self._running = None
                     self.condition.notify_all()
+
+    def _maintain(self) -> None:
+        while True:
+            with self.condition:
+                if self._closed and self._running is None:
+                    return
+                try:
+                    self._sweep()
+                except ValueError:
+                    pass
+                self.condition.wait(0.05)
 
     def _execute(self, job: _Job) -> None:
         registration = self.registrations[job.dataset_id]
@@ -538,5 +589,7 @@ class JobScheduler:
             except ValueError:
                 pass
             self.condition.notify_all()
+        end = time.monotonic()+timeout
         self.thread.join(timeout)
-        return not self.thread.is_alive()
+        self.maintenance.join(max(0.0,end-time.monotonic()))
+        return not self.thread.is_alive() and not self.maintenance.is_alive()

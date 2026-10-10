@@ -1,3 +1,9 @@
+## Full admission and background retention correction
+
+JobRegistration additionally requires acquisition_receipt_fingerprint: the exact original admitted RawDataset receipt commitment, supplied by trusted setup. Startup and native boundaries compare the complete canonical batch hash plus this receipt fingerprint to RawDataset.acquisition_commitment; matching catalog/source labels alone are insufficient. Registration fields and scheduler mappings are sealed; sink_config returns a fresh copy of frozen bytes. Native specification/config/dataset/sink choices remain server-owned and cannot change an admitted command.
+
+One separate maintenance thread performs bounded50ms synchronized terminal cleanup even while the sole native execution thread is busy. It uses metadata/accounting only, never native publication/recorder objects. Expired or no-longer-retainable payloads are physically cleared, while live running reservations remain charged until actual exit and tombstones retain their original lifetime. close joins both threads under one timeout. Every native boundary requires current calculate/job_manage/retain permission; removal during acquisition denies publication. Revocation after real commit preserves only an authorized bounded historical digest when exact payload retention is no longer permitted, without rollback/reexecution. Current source/typing/independent family/race tests are development evidence; renewed final review and current artifacts remain pending.
+
 ## Corrective admitted receipt profile — preliminary rework
 
 Worst-case prediction uses128 double-quote characters to account for JSON escaping, with explicit inclusive32768/excess32769 precommit regression; an unescaped ASCII placeholder is insufficient. Idle shutdown with no work is independent of wall-clock recovery. These corrections require renewed exact-head review.
