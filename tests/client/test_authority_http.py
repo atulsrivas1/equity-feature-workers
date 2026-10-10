@@ -7,12 +7,21 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import patch
 
 from test_client import RemoteClient, JobExpectation, producer, FIXTURES
-from test_owned_http import read_ready
 
 ROOT=Path(__file__).resolve().parents[2]
-ENTRY_SHA='584076d224f19f7f5d2460f831c323e3c9bdaf80a001b6aba908d85505ae2a07'
+ENTRY_SHA='68908384fd95db9552009bc356cc1fcbcca43e6e9adc135dcca0cd100228cec2'
+
+
+def completed_bytes(path,limit):
+    marker=path.with_name(path.name+'.complete')
+    if marker.exists() and not marker.is_dir():raise AssertionError('owned completion marker')
+    if not marker.is_dir():return None
+    with path.open('rb') as stream:raw=stream.read(limit+1)
+    if len(raw)>limit:raise AssertionError('owned completed payload bounds')
+    return raw
 
 
 class AuthorityHTTP(unittest.TestCase):
@@ -32,7 +41,15 @@ class AuthorityHTTP(unittest.TestCase):
                 except BaseException as error:errors.append(type(error).__name__)
             thread=threading.Thread(target=launch);thread.start()
             try:
-                port=read_ready(ready,thread,errors)
+                ready_deadline=time.monotonic()+10
+                ready_data=completed_bytes(ready,64)
+                while ready_data is None:
+                    self.assertTrue(thread.is_alive(),errors);self.assertLess(time.monotonic(),ready_deadline)
+                    time.sleep(.01)
+                    ready_data=completed_bytes(ready,64)
+                ready_value=json.loads(ready_data)
+                self.assertIs(type(ready_value),dict);self.assertEqual(set(ready_value),{'port'})
+                port=ready_value['port'];self.assertIs(type(port),int);self.assertTrue(1<=port<=65535)
                 owner=RemoteClient('http://127.0.0.1:'+str(port),lambda:'A'*43,attempts=3)
                 foreign_calls=[]
                 foreign=RemoteClient('http://127.0.0.1:'+str(port),lambda:foreign_calls.append(1) or 'B'*43,attempts=3)
@@ -45,21 +62,18 @@ class AuthorityHTTP(unittest.TestCase):
                     ack_slot=ack.with_name(ack.name+'.'+str(sequence[0]))
                     self.assertFalse(control_slot.exists());self.assertFalse(ack_slot.exists())
                     pending=control_slot.with_name(control_slot.name+'.pending');pending.write_bytes(data);pending.replace(control_slot)
+                    control_slot.with_name(control_slot.name+'.complete').mkdir()
                     deadline=time.monotonic()+4
                     while True:
                         self.assertTrue(thread.is_alive(),errors);self.assertLess(time.monotonic(),deadline)
-                        try:
+                        raw=completed_bytes(ack_slot,128)
+                        if raw is not None:
                             stream=ack_slot.open('rb')
-                        except FileNotFoundError:raw=b''
-                        else:
-                            try:raw=stream.read(129)
-                            except BaseException:stream.close();raise
                             # Hold the previous immutable ack open through the
                             # next publication: Windows must not replace it.
                             if held_ack[0] is not None:held_ack[0].close()
                             held_ack[0]=stream
-                        self.assertLessEqual(len(raw),128)
-                        if raw:
+                        if raw is not None:
                             result=json.loads(raw)
                             self.assertEqual(set(result),{'sequence','epoch','reads'})
                             self.assertEqual(result['sequence'],sequence[0]);return result
@@ -73,6 +87,22 @@ class AuthorityHTTP(unittest.TestCase):
             self.assertFalse(thread.is_alive());self.assertEqual(errors,[]);self.assertEqual(len(results),1)
             self.assertEqual((results[0].reason,results[0].exit_code),('exited',0))
             self.assertEqual(results[0].output.strip(),b'owned-authority-http-exited')
+
+    def test_completion_marker_orders_reads_and_denies_faults(self):
+        with tempfile.TemporaryDirectory() as directory:
+            payload=Path(directory)/'ack.1';marker=payload.with_name(payload.name+'.complete')
+            payload.write_bytes(b'{}')
+            with patch.object(Path,'open',side_effect=AssertionError('opened before completion')):
+                self.assertIsNone(completed_bytes(payload,128))
+            marker.mkdir();self.assertEqual(completed_bytes(payload,128),b'{}')
+            payload.unlink()
+            with self.assertRaises(FileNotFoundError):completed_bytes(payload,128)
+            payload.write_bytes(b'x'*129)
+            with self.assertRaises(AssertionError):completed_bytes(payload,128)
+            with patch.object(Path,'open',side_effect=PermissionError('permanent denial')):
+                with self.assertRaises(PermissionError):completed_bytes(payload,128)
+            marker.rmdir();marker.write_bytes(b'not a directory')
+            with self.assertRaises(AssertionError):completed_bytes(payload,128)
 
     def completed(self,client,key='owned-stable'):
         _,expected=producer(FIXTURES['native_cases'][0])
