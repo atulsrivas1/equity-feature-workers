@@ -61,6 +61,48 @@ class Peer:
 
 
 class Client(unittest.TestCase):
+    def test_late_decode_expiry_and_close_do_not_emit_a_view(self):
+        from equity_feature_client import client as module
+        original=module.response
+        payload={'transport_versions':['1.1'],'registry_snapshot':'0'*64,'features':[]}
+        for action in ('expire','close'):
+            with Peer(lambda r,_:(200,envelope('discovery',payload,r['request_id']),b'')) as peer:
+                client=RemoteClient(peer.origin,lambda:'A'*43,budget=.1)
+                def delayed(*args,**kwargs):
+                    result=original(*args,**kwargs)
+                    if action=='expire':time.sleep(.11)
+                    else:client.close()
+                    return result
+                with patch.object(module,'response',side_effect=delayed):result=client.discover(request_id='owned')
+                self.assertFalse(result.ok);self.assertIsNone(result.view)
+                self.assertEqual(result.failure.code,'timeout' if action=='expire' else 'client_closed')
+                self.assertEqual(len(peer.requests),1)
+
+    def test_actual_blocked_read_close_releases_socket_and_caller(self):
+        entered=threading.Event();release=threading.Event();results=[]
+        def wait(request,index):entered.set();release.wait(2);return None
+        with Peer(wait) as peer:
+            client=RemoteClient(peer.origin,lambda:'A'*43)
+            thread=threading.Thread(target=lambda:results.append(client.discover(request_id='owned')));thread.start()
+            try:
+                self.assertTrue(entered.wait(1));owned=client._socket;self.assertIsNotNone(owned)
+                client.close();thread.join(1)
+                self.assertFalse(thread.is_alive());self.assertFalse(results[0].ok)
+                self.assertEqual(owned.fileno(),-1);self.assertIsNone(client._socket)
+            finally:release.set();thread.join(2)
+
+    def test_retry_attempt_cap_and_budget_stop(self):
+        calls=[]
+        with Peer(lambda r,i:None,connections=3) as peer:
+            client=RemoteClient(peer.origin,lambda:calls.append(1) or 'A'*43,attempts=3,retry_delay=0)
+            self.assertEqual(client.discover(request_id='owned').failure.code,'disconnected')
+            self.assertEqual(len(calls),3);self.assertEqual(len(peer.requests),3)
+        calls=[]
+        with Peer(lambda r,i:None) as peer:
+            client=RemoteClient(peer.origin,lambda:calls.append(1) or 'A'*43,attempts=3,retry_delay=.1,budget=.02)
+            self.assertEqual(client.discover(request_id='owned').failure.code,'timeout')
+            self.assertEqual(len(calls),1);self.assertEqual(len(peer.requests),1)
+
     def test_extreme_configuration_has_closed_validation_errors(self):
         for name in ('timeout','budget','retry_delay'):
             for value in (10**1000, -(10**1000), float('nan'), float('inf'), True):

@@ -15,6 +15,22 @@ from test_client import producer, envelope, FIXTURES
 
 
 class Native(unittest.TestCase):
+    def test_converted_trades_local_kernel_matches_independent_literals(self):
+        from equity_feature_contracts import ConfigSpec,EntityKey
+        from equity_features.session.trades import compute_trades
+        fixture=json.loads((ROOT/'tests/service/fixtures/jobs_native.json').read_text(encoding='utf-8'))
+        config=ConfigSpec.from_json(json.dumps(next(f for f in fixture['fixtures'] if f['family']=='trades')['native_spec']['config']))
+        payload=FIXTURES['raw_cases'][0]['expected_raw_payload'];scope=payload['scope']
+        expected=RawExpectation(DatasetKey(**payload['dataset']),ScopeKey(scope['instrument_id'],scope['session_id'],int(scope['start_ns']),int(scope['end_ns'])),'trade',tuple(c['name'] for c in payload['columns']))
+        batch=convert_raw(RawSliceView(_wire.canonical(envelope('slice',payload),limit=262144)),expected)
+        self.assertTrue(batch.ok,batch.failure)
+        result=compute_trades(batch.view,config,entity=EntityKey('A','S'))
+        values={c.feature_id:c.values[0] for c in result.values}
+        self.assertEqual(values['session.trade.count'],3)
+        self.assertEqual(values['session.trade.volume'],10)
+        self.assertEqual(values['session.trade.notional'],1011)
+        self.assertEqual(result.metadata.inputs[0].metadata,batch.view.metadata)
+
     def test_raw5_complete_metadata_exact_values_and_ns(self):
         for case in FIXTURES['raw_cases']:
             payload=case['expected_raw_payload'];scope=payload['scope']
