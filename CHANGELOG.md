@@ -1,3 +1,7 @@
+## EQ080 header staging correction candidate
+
+Renew authority/current interval after header staging and fresh audit encoding; abort protected body on late failure; reject reentrant header request/iterator emission and settle current audit sequence/totals.27audit/full159 development/strict9bothplatform declarations pass; separate current source/installed/artifact/cache/inventory/all32/release pending. Preserve original header findings and superseded154fresh builder.
+
 ## EQ080 audit correction candidate
 
 Correct full-store authenticated principal accounting and original authority/current-window transfer after audit encoding.22audit/full154 development/strict9 pass; separate current review/fresh WinLinux artifacts/cache/inventory/all32/release remain pending. Original twoP2/151historical builder preserved.

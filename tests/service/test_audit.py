@@ -337,5 +337,78 @@ class Audit(unittest.TestCase):
         self.assertEqual(rows[-1]['transfer_used'],len(data))
         self.assertEqual(store.reserved_count,0)
 
+    def test_header_staging_expiry_revoke_retirement_abort_before_protected_chunk(self):
+        for mutation in ('expiry','revoke','retire'):
+            with self.subTest(mutation=mutation):
+                helper,scheduler,service,tokens,clock,observed = self.native_fixture(actions=delivery.ACTIONS)
+                job = helper.wait_terminal(scheduler,helper.submit(service,tokens[0]))
+                request = delivery.Delivery('runTest').request(job.result_id,'artifact_read')
+                def stage(status,headers):
+                    self.assertTrue(status.startswith('200 '))
+                    if mutation == 'expiry': clock.n = job.expires_ns
+                    elif mutation == 'revoke': scheduler.ledger.revoke(job.grant_id)
+                    else: scheduler.ledger.credentials = tuple(c for c in scheduler.ledger.credentials if c.principal != 'A')
+                emission = service(http.env(request,tokens[0]),stage)
+                self.assertEqual(next(emission),b'')
+                self.assertIsNone(emission.prepared.before_emit)
+                self.assertEqual(scheduler.ledger.audit.reserved_count,0)
+                rows = self.records(scheduler.ledger.audit,clock.n) if mutation != 'expiry' else [
+                    json.loads(body) for _,body in scheduler.ledger.audit._records]
+                self.assertEqual(rows[-1]['decision'],'abandoned')
+                self.assertEqual(observed['reads'],1)
+
+    def test_reentrant_header_controller_rejected_before_body_and_audit_mutation(self):
+        fixture = self.fixture(); store = fixture.ledger.audit
+        def stage(status,headers):
+            other = Service(fixture.ledger)
+            with self.assertRaisesRegex(RuntimeError,'reentrant_header_callback'):
+                http.call(other,fixture.request(),fixture.token)
+        emission = fixture.service(http.env(fixture.request(),fixture.token),stage)
+        data = next(emission)
+        rows = self.records(store)
+        self.assertEqual([r['sequence'] for r in rows],[0,1])
+        self.assertEqual((rows[-1]['transfer_used'],fixture.ledger._transfer),(len(data),len(data)))
+        self.assertEqual((fixture.source.calls,store.reserved_count),(1,0))
+        self.assertFalse(fixture.ledger._header_staging)
+
+    def test_header_time_window_rollover_has_fresh_audit_totals_and_current_charge(self):
+        helper,scheduler,service,tokens,clock,observed = self.native_fixture(actions=delivery.ACTIONS)
+        job = helper.wait_terminal(scheduler,helper.submit(service,tokens[0]))
+        request = delivery.Delivery('runTest').request(job.result_id)
+        def stage(status,headers): clock.n = 60_000_000_100
+        data = next(service(http.env(request,tokens[0]),stage))
+        self.assertEqual(json.loads(data)['kind'],'result')
+        self.assertEqual(scheduler.ledger._transfer,len(data))
+        rows = self.records(scheduler.ledger.audit,clock.n)
+        self.assertEqual(rows[-1]['transfer_used'],len(data))
+        self.assertEqual(rows[-1]['time_ns'],clock.n)
+
+    def test_credential_retirement_during_audit_preserves_authentication_401(self):
+        fixture = self.fixture(); store = fixture.ledger.audit
+        original = store.prepare_settlement
+        once = []
+        def retire(reservation,n,stage,decision,totals):
+            body = original(reservation,n,stage,decision,totals)
+            if stage == 'finish' and not once:
+                once.append(True); fixture.ledger.credentials = tuple(c for c in fixture.ledger.credentials if c.principal != 'principal-a')
+            return body
+        with patch.object(store,'prepare_settlement',side_effect=retire):
+            status,body,*_ = http.call(fixture.service,fixture.request(),fixture.token)
+        self.assertEqual(status,401)
+        self.assertEqual(body['payload']['category'],'authentication')
+
+    def test_prepared_nested_iterator_rejected_and_abandon_uses_fresh_sequence(self):
+        fixture = self.fixture(); store = fixture.ledger.audit
+        pending = fixture.service(http.env(fixture.request(),fixture.token),lambda *args:self.fail('nested headers'))
+        def stage(status,headers):
+            with self.assertRaisesRegex(RuntimeError,'reentrant_header_callback'): next(pending)
+            pending.close()
+        data = next(fixture.service(http.env(fixture.request(),fixture.token),stage))
+        rows = self.records(store)
+        self.assertEqual([r['sequence'] for r in rows],[0,1,2,3])
+        self.assertEqual([r['decision'] for r in rows],['admitted','admitted','abandoned','emitted'])
+        self.assertEqual(rows[-1]['transfer_used'],len(data))
+        self.assertEqual(store.reserved_count,0)
+
 
 if __name__ == '__main__': unittest.main()

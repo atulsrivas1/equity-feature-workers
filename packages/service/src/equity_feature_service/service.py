@@ -121,6 +121,7 @@ class Ledger:
         self.datasets = {d.identity.dataset_id: d for d in datasets}
         self.policy_revision, self.registry_snapshot = policy_revision, registry_snapshot
         self.lock = RLock()
+        self._header_staging = False
         self._revoked: set[str] = set()
         self._window: int | None = None
         self._last_ns: int | None = None
@@ -397,6 +398,9 @@ class Service:
         return result
 
     def __call__(self, env: dict[str, Any], start_response: StartResponse) -> Iterable[bytes]:
+        with self.ledger.lock:
+            if self.ledger._header_staging:
+                raise RuntimeError('reentrant_header_callback')
         reservation = None
         c = None
         admitted = None
@@ -437,7 +441,38 @@ class _Emission(Iterator[bytes]):
     def __iter__(self) -> _Emission:
         return self
 
+    def _current(self, p: _Prepared, n: int) -> int:
+        ledger, c = self.service.ledger,self.prepared.credential
+        if c is None or c not in ledger.credentials or not c.valid_from_ns <= n < c.expires_at_ns:
+            return 401
+        try:
+            if p.before_emit is not None:
+                p.before_emit()
+            elif p.action == 'discover':
+                features: set[tuple[str,str]] = set()
+                admitted = False
+                for dataset in ledger.datasets.values():
+                    if ledger.authorized(c,dataset,(),'discover',n):
+                        admitted = True
+                        features.update(dataset.features)
+                if self.service.jobs is not None:
+                    features.update(self.service.jobs.discovery_features(c))
+                if not admitted or p.envelope['payload']['features'] != [
+                        {'feature_id':f,'algorithm_version':a} for f,a in sorted(features)]:
+                    return 403
+            elif p.finalize is not None:
+                if codec.canonical(p.finalize()) != codec.canonical(p.envelope):
+                    return 403
+            elif p.dataset is None or ledger.authorized(c,p.dataset,p.columns,p.action,n) is None:
+                return 403
+        except Exception:
+            return 403
+        return 200
+
     def __next__(self) -> bytes:
+        with self.service.ledger.lock:
+            if self.service.ledger._header_staging:
+                raise RuntimeError('reentrant_header_callback')
         if self.emitted:
             raise StopIteration
         self.emitted = True
@@ -522,34 +557,10 @@ class _Emission(Iterator[bytes]):
                         audit_body = ledger.audit.prepare_settlement(reservation,audit_n,'finish',decision,predicted)
                     late = ledger.now()
                     if p.status == 200:
-                        permitted = c is not None and c in ledger.credentials and c.valid_from_ns <= late < c.expires_at_ns
-                        if permitted and p.before_emit is not None:
-                            try:
-                                p.before_emit()
-                            except Exception:
-                                permitted = False
-                        elif permitted and p.action == 'discover' and c is not None:
-                            late_features: set[tuple[str,str]] = set()
-                            admitted = False
-                            for dataset in ledger.datasets.values():
-                                if ledger.authorized(c,dataset,(),'discover',late):
-                                    admitted = True
-                                    late_features.update(dataset.features)
-                            if self.service.jobs is not None:
-                                late_features.update(self.service.jobs.discovery_features(c))
-                            permitted = admitted and p.envelope['payload']['features'] == [
-                                {'feature_id':f,'algorithm_version':a} for f,a in sorted(late_features)]
-                        elif permitted and p.finalize is not None and c is not None:
-                            # Job status/cancel snapshots have the same original
-                            # grant checks as their pure finalize callback.
-                            try:
-                                permitted = codec.canonical(p.finalize()) == codec.canonical(p.envelope)
-                            except Exception:
-                                permitted = False
-                        elif permitted and c is not None:
-                            permitted = p.dataset is not None and ledger.authorized(c,p.dataset,p.columns,p.action,late) is not None
-                        if not permitted:
-                            p = _error(403,'authorization','not_permitted',p.envelope['version'],p.envelope['request_id'])
+                        status = self._current(p,late)
+                        if status != 200:
+                            p = _error(status,'authentication' if status == 401 else 'authorization',
+                                'unauthenticated' if status == 401 else 'not_permitted',p.envelope['version'],p.envelope['request_id'])
                             data = codec.encode(p.envelope)
                             continue
                     if ledger._window != window or ledger.audit_totals() != totals:
@@ -564,10 +575,6 @@ class _Emission(Iterator[bytes]):
                 if ledger.audit is not None and reservation is not None and reservation.remaining:
                     ledger.audit.abandon_after_exit(reservation)
                 self.prepared.audit_reservation = None
-            if self.prepared.action in ("result_read", "artifact_read"):
-                self.prepared.envelope = _error(403, "authorization", "not_permitted").envelope
-                self.prepared.finalize = None
-                self.prepared.before_emit = None
             phrase = {200: "OK", 400: "Bad Request", 401: "Unauthorized", 403: "Forbidden", 422: "Unprocessable Entity", 429: "Too Many Requests", 500: "Internal Server Error"}[p.status]
             headers = [("Content-Type", "application/json"), ("Content-Length", str(len(data))),
                        ("Cache-Control", "no-store"), ("X-Content-Type-Options", "nosniff")]
@@ -575,9 +582,13 @@ class _Emission(Iterator[bytes]):
                 headers.append(("WWW-Authenticate", "Bearer"))
             if p.status == 200 and p.attachment is not None:
                 headers.append(("Content-Disposition", 'attachment; filename="' + p.attachment + '"'))
-            # This single bounded chunk is the authorization/transfer visibility linearization point.
+            charged_window = ledger._window
             try:
-                self.start_response(str(p.status) + " " + phrase, headers)
+                ledger._header_staging = True
+                try:
+                    self.start_response(str(p.status) + " " + phrase, headers)
+                finally:
+                    ledger._header_staging = False
             except BaseException:
                 if reservation is not None and reservation.remaining:
                     try:
@@ -585,10 +596,40 @@ class _Emission(Iterator[bytes]):
                     except Exception:
                         pass
                     self.prepared.audit_reservation = None
+                self.prepared.envelope = _error(403,'authorization','not_permitted').envelope
+                self.prepared.finalize = self.prepared.before_emit = None
                 raise
-            if audit_body is not None and reservation is not None and ledger.audit is not None:
-                ledger.audit.commit_settlement(reservation,audit_n,audit_body)
+            # Headers are staging: no protected chunk has yet been returned.
+            # A trusted server callback may change time/rights. Such a late
+            # denial aborts the body, rather than emitting the staged success.
+            try:
+                n = ledger.now()
+                abandoned = p.status == 200 and self._current(p,n) != 200
+                if abandoned:
+                    data = b''
+                if ledger._window != charged_window and data and not ledger.transfer(principal,len(data)):
+                    abandoned, data = True,b''
+                if reservation is not None and reservation.remaining and ledger.audit is not None:
+                    decision = ('abandoned' if abandoned else 'emitted' if p.status == 200 else 'denied_auth' if p.status in (401,403)
+                        else 'denied_quota' if p.status == 429 else 'internal_failure' if p.status == 500 else 'denied_contract')
+                    audit_n = ledger.now()
+                    window, totals = ledger._window,ledger.audit_totals()
+                    audit_body = ledger.audit.prepare_settlement(reservation,audit_n,'finish',decision,totals)
+                    if (p.status == 200 and data and self._current(p,ledger.now()) != 200
+                            or ledger._window != window or ledger.audit_totals() != totals):
+                        data = b''
+                        audit_n = ledger.now()
+                        audit_body = ledger.audit.prepare_settlement(reservation,audit_n,'finish','abandoned',ledger.audit_totals())
+                    ledger.audit.commit_settlement(reservation,audit_n,audit_body)
+                    self.prepared.audit_reservation = None
+            except Exception:
+                data = b''
+                if reservation is not None and reservation.remaining and ledger.audit is not None:
+                    ledger.audit.abandon_after_exit(reservation)
                 self.prepared.audit_reservation = None
+            if self.prepared.action in ('result_read','artifact_read') or not data:
+                self.prepared.envelope = _error(403,'authorization','not_permitted').envelope
+                self.prepared.finalize = self.prepared.before_emit = None
             return data
 
     def close(self) -> None:
