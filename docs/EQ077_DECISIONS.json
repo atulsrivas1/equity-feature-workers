@@ -166,6 +166,31 @@
       "id": "feature_via_1_1",
       "expected": "allow",
       "meaning": "all grants/bounds pass and separately frozen1.1 representation preserves full native feature data"
+    },
+    {
+      "id": "raw_strict_subset_scope",
+      "expected": "deny_authorization",
+      "meaning": "initial dataset admits one exact native query; narrower range needs separately registered binding"
+    },
+    {
+      "id": "http_correlation_changes",
+      "expected": "allow",
+      "meaning": "stable server-owned native acquisition request and receipt unchanged; HTTP correlation echoed separately"
+    },
+    {
+      "id": "chunk_binding_as_dataset",
+      "expected": "deny_contract",
+      "meaning": "whole native binding includes retained-map/mapped suffixes; chunk source is not full-read source"
+    },
+    {
+      "id": "native_mapping_suffix_changed",
+      "expected": "deny_contract",
+      "meaning": "no rewriting or stripping actual normalized identity to match logical catalog aliases"
+    },
+    {
+      "id": "producer_rows_or_receipt_changed",
+      "expected": "deny_contract",
+      "meaning": "exact approved canonical source and acquisition receipt revalidated before any visibility"
     }
   ]
 }
