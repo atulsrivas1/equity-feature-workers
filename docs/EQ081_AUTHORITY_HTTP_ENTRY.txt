@@ -41,7 +41,8 @@ try:
     if value['sequence']!=sequence+1:raise ValueError('owned sequence')
     action=value['action']
     if action=='restart':
-     scheduler.close(2);scheduler,service,clock,facts=create()
+     if scheduler.close(2) is not True:raise ValueError('owned epoch exit unconfirmed')
+     scheduler,service,clock,facts=create()
     elif action=='retire':
      with service.ledger.lock:service.ledger.credentials=original_credentials[1:]
      until=time.monotonic()+2
@@ -61,5 +62,6 @@ try:
     sequence=value['sequence'];publish(ack,{'sequence':sequence,'epoch':scheduler.epoch,'reads':facts['reads']})
   server.handle_request()
 finally:
- server.server_close();scheduler.close(2)
+ server.server_close()
+ if scheduler.close(2) is not True:raise ValueError('owned final exit unconfirmed')
 print('owned-authority-http-exited',flush=True)
