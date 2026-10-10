@@ -1,3 +1,9 @@
+## EQ082 actual installed MCP checkpoint and planned native families
+
+Current a66 local builder23713 and author artifact audit62931 completed exit0 PASS; push38092843270 SUCCESS bothOS. Author verified31MCP/23client/33service/19worker/10example inputs,9accepted dependency wheels,33Windows/31Linux official reference wheels,117package blobs, RECORD/fresh light/native forms/installed parent+child/typing/core/current server ZIP proof and116public blobs1471194bytes. Independent artifact review is assigned, approval not assumed. Archive corrective review6103044182 independently approved4methods/originaltwoP2/18path aliases/all33Windowswheel replay; scope remains auditor-only. Earlier failures and pending captures below are preserved history.
+
+New mirrored NATIVE_FAMILY_PLAN/ENTRY freeze four trusted owned native families before execution. Entry is only prepared/compiled; separate planning approval is required before running. Remaining partial32/final lifecycle/source/security/current30branch15main/artifacts/readback/release gates remain mandatory.92Inprogress13points/sevenDone-three remaining;93-94Backlog. No product/runtime or accepted component change.
+
 ## EQ082 independent archive auditor findings and adversarial corrections
 
 Independent reviewer /root/r7_policy_review found two P2 archive-only gaps at fd98788/4ed2d94: set construction collapsed duplicate physical ZIP names/RECORD entries; Windows drive-absolute path C:/escape.py passed path validation. Both original adversaries independently reproduced; no archive/artifact approval. Actual33 official Windows wheels passed and pinned versions matched; this is legitimate scoped evidence, not an adversarial auditor approval. Wrong hashes/sizes/selfdigest/duplicate rows/unrecorded files/parent traversal already denied. Accepted product/runtime/native entry/schema unchanged.
