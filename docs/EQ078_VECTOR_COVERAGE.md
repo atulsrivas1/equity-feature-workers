@@ -1,6 +1,6 @@
-# EQ078 frozen vector evidence — development checkpoint
+# EQ078 frozen vector evidence — qualified implementation
 
-Story88 remains In progress. This map records actual tests in companion tests/service/test_jobs.py (55 methods), not final acceptance. Frozen plans contain30 requirements. Current Windows editable development source is under renewed review; committed fresh current wheel/sdist and twoOS artifact audit remain mandatory. Literal full native family records come from the independently frozen pre-code fixtures, not recomputed expected values from the scheduler.
+Story88 remains OPEN/Ready to release. All30 frozen requirements map to55 native job methods/full90 service methods; separate final source/security/native/docs review and current main service installed/artifact qualification are approved. Actual-main foundation/all nine jobs independently approved6095783175; final delivery metadata review/publication/readback remain before release acceptance. The table records actual owned tests, including controlled serialization boundary probes, not a production memory/performance claim. Literal full native family records come from independently frozen pre-code fixtures.
 
 | Vector | Actual evidence or remaining requirement |
 | --- | --- |
