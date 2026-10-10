@@ -1,3 +1,7 @@
+## EQ080 contained owned epoch candidate
+
+Internal stdlib supervisor now contains owned Windows Service/native qualification before imports, bounds CPU/commit/process/output/wall and observes actual exit. Nine new regressions/current130/strict8 pass; current Linux/installed/final runtime/cache/audit/release evidence remains pending. No public hosting or acceptance.
+
 ## EQ080 in development
 
 Optional service0.1.0a3 bootstrap prerequisite uses lazy public exports so native imports occur after a future containment boundary. Existing public class identity/typing preserved;121 editable Windows service tests/strict7 pass. Pre-code OS capability probes are qualified separately. Actual supervisor/cache/audit/physical bounds/current installed/release gates remain unimplemented/pending; no acceptance claimed. Accepted calculations/worker/I/O/schema inputs unchanged.
