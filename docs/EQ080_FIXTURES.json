@@ -1,0 +1,125 @@
+{
+  "status": "pre-code independent expected requirements; no runtime enforcement evidence",
+  "accepted_native_fixture_sha256": "2ca65b4f548fe634e5acf7c7848cd4ae9de87420dbe35c3272d4937ba2df315a",
+  "arithmetic": [
+    {
+      "case": "principal-inclusive",
+      "job_bytes": 917504,
+      "cache_bytes": 131072,
+      "limit": 1048576,
+      "expected_total": 1048576,
+      "allow": true
+    },
+    {
+      "case": "principal-one-byte-over",
+      "job_bytes": 917505,
+      "cache_bytes": 131072,
+      "limit": 1048576,
+      "expected_total": 1048577,
+      "allow": false
+    },
+    {
+      "case": "global-inclusive",
+      "job_bytes": 1835008,
+      "cache_bytes": 262144,
+      "limit": 2097152,
+      "expected_total": 2097152,
+      "allow": true
+    },
+    {
+      "case": "global-one-byte-over",
+      "job_bytes": 1835009,
+      "cache_bytes": 262144,
+      "limit": 2097152,
+      "expected_total": 2097153,
+      "allow": false
+    },
+    {
+      "case": "audit-inclusive",
+      "records": 128,
+      "record_bytes": 512,
+      "limit": 65536,
+      "expected_total": 65536,
+      "allow": true
+    },
+    {
+      "case": "audit-next-record",
+      "records": 129,
+      "record_bytes": 512,
+      "limit": 65536,
+      "expected_total": 66048,
+      "allow": false
+    }
+  ],
+  "cache_identity_negative_dimensions": [
+    "principal",
+    "original_credential",
+    "grant_id",
+    "grant_validity",
+    "grant_actions",
+    "grant_scope",
+    "grant_columns",
+    "job_config",
+    "full_executed_features",
+    "policy",
+    "dataset_rights_owner",
+    "dataset_rights_evidence",
+    "dataset_rights_interval",
+    "dataset_revision",
+    "snapshot",
+    "mapping",
+    "full_source",
+    "acquisition_content",
+    "acquisition_receipt",
+    "registry",
+    "math_policy",
+    "algorithm",
+    "backend",
+    "native_content",
+    "producer_context",
+    "committed_receipt",
+    "wire_payload",
+    "result_id",
+    "epoch",
+    "operation",
+    "projection",
+    "version"
+  ],
+  "never_stored_canaries": [
+    "secret-token-canary",
+    "Authorization: Bearer secret-token-canary",
+    "C:/private/secret-data.parquet",
+    "SELECT * FROM private_rows",
+    "caller-request-id-canary",
+    "secret-exception-canary",
+    "private-payload-row-canary"
+  ],
+  "expiry_cases": [
+    {
+      "completed_ns": 100000000000,
+      "original_grant_end_ns": 200000000000,
+      "expected_expiry_ns": 200000000000
+    },
+    {
+      "completed_ns": 100000000000,
+      "original_grant_end_ns": 900000000000,
+      "expected_expiry_ns": 400000000000
+    }
+  ],
+  "windows_baseline": {
+    "kind": "accepted-native-baseline-only",
+    "worker_commit": "e5f5253ff8ed584147af4e49772f7676cf31858f",
+    "families": [
+      "trades",
+      "bars",
+      "quotes"
+    ],
+    "accepted_goldens_thread_ownership_pass": true,
+    "wall_seconds": 0.9369999999180436,
+    "cpu_process_seconds": 1.0625,
+    "windows_peak_committed_bytes": 31006720,
+    "windows_peak_working_set_bytes": 42352640,
+    "physical_containment_tested": false,
+    "eq080_runtime_tested": false
+  }
+}

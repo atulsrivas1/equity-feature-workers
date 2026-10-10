@@ -1,0 +1,88 @@
+# EQ080 quota, cache and audit isolation — pre-code candidate
+
+[Story90](https://github.com/atulsrivas1/equity-features/issues/90), E10#84, R7 milestone8. Thirteen provisional complexity points, not days. Live Project controls status. Dependencies EQ075–079 are accepted. EQ079 [final gate](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6097117862), [acceptance](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6097119023) and [Done readback](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6097120222) supersede pending captures. Preparation stays Backlog/unassigned until concrete prerequisites and separate planning review pass. No EQ080 runtime, tested quota/cache/audit enforcement or acceptance claimed.
+
+## Boundary and physical feasibility
+
+Extend only optional equity-feature-service, candidate0.1.0a3. Accepted calculation/worker/I/O/native publication APIs and closed1.0/1.1 schemas remain unchanged. The approved EQ075 logical caps do not bound arbitrary native callback CPU or process memory. Issue90 requires actual CPU/memory evidence: a detached stress probe or cooperative deadline is insufficient.
+
+The selected design direction is a mandatory externally supervised owned qualification profile enclosing the whole real service, all native factory construction and HTTP/job/maintenance threads before any trusted service initialization. Native source/sink lifetime and publication remain on the accepted creating thread inside the child. An OS cap/deadline ends the entire ephemeral service epoch. It cannot report graceful individual cancellation, surviving cache/audit/tombstones, rolled-back committed receipts or transparent restart/reexecution. An unsupervised Service remains a development API and cannot advertise physically bounded or hosted qualification.
+
+Before Ready, measure startup and all three admitted native families using accepted code, then freeze CPU, memory, process count, hard monotonic lifetime/deadline and termination tolerance per OS. Windows direction: suspended child assigned to configured Job Object before resume, finite aggregate committed-memory/user-CPU/active-process controls and kill-on-close, no breakaway. Linux selected candidate: explicitly single-process multithreaded profile with hard inherited RLIMIT_AS/RLIMIT_CPU plus irreversible no_new_privs/seccomp process-creation denial; delegated cgroups are not an assumed input. Per-process rlimits alone are insufficient when descendants are possible. No privileged system configuration, controller delegation or hosted operating permission is assumed. Unsupported hosts fail closed. No cross-OS RSS/CPU equivalence claim.
+
+Actual Windows/Linux installed tests must include noncooperative native factory allocation/spinning, process-creation escape, parent shutdown, failed boundary setup and postcommit epoch death. Whole-boundary wall lifetime is measured by an external monotonic supervisor; capacity is held until actual OS exit. Keep the existing cooperative30s job deadline and native receipt history honest. Hard death does not prove external storage cleanup. Supported architecture, precise API availability and budgets must be frozen in the decision record after feasibility and separate review, before runtime.
+
+## Shared quotas and representation cache
+
+Preserve fixed60s request/transfer accounting across controllers/retries/failures. Existing one running global, one queued/principal/two queued global,16 records/eight principal, original-expiry tombstones and native output subcaps remain. Add a bounded cache only for verified representations of an existing retained result. No cross-job computation reuse, native reexecution, raw material cache or cross-owner deduplication is admitted initially.
+
+Candidate cache subcaps: four entries/principal, eight global,131072 encoded bytes/principal and262144 global. Every duplicated retained canonical payload byte also counts in combined existing1MiB principal/2MiB global job/result/cache reservations. A cache entry holds canonical verified producer payload, not a correlation-specific frame, HTTP attachment header, native callback or mutable object. Reserve actual encoded bytes atomically before insertion under the same ledger lock; no eviction of live jobs/tombstones. Cache-full behavior is a miss with ordinary verified delivery only if its own reservations fit; it cannot bypass quotas. Expiry/revocation cleanup releases cache storage once and never refunds consumed transfer/request allowance.
+
+Key canonical identity must include original principal/credential and complete pinned grant identity/validity/actions/scope/columns/job feature-config rights; policy and dataset rights revision/owner/evidence/interval; full immutable dataset/source/snapshot/mapping/content/acquisition receipt; registry/config/math/algorithm/backend and complete executed producer context; native content/committed receipt/wire hashes; original result ID/service epoch; operation, full projection and transport version. Use bounded canonical identity bytes and SHA256, never concatenated ambiguous strings or dataset label alone. Original source labels cannot replace full bindings. Independent fixtures must change each identity dimension while keeping numerical values equal.
+
+Every hit repeats current original authority, original credential retention, pure native/receipt integrity and late post-encoding authority/TTL before first visibility. Result read requires derived_read+retain; attachment additionally export. Exact caller correlation and frame bytes are freshly encoded and charged. Cache TTL is min(original result expiry, original grant expiry), with no refresh or resurrection. Metadata-only cleanup must run while native work is blocked. Cache lookup changes no foreign-existence HTTP behavior. Existing service-owned expiry is logical form cleanup, not secure erase or external sink deletion.
+
+## Finite redacted audit
+
+Candidate synthetic in-memory profile:128 records,65536 actual canonical encoded bytes total,512 bytes/record, retention at most300 seconds with half-open server-clock expiry. The store is separately budgeted inside the physically bounded service. No persistence, backups or production audit rights are inferred. Trusted synthetic audit reader provision is separate from HTTP grants; no new remote audit operation or schema field.
+
+Record only epoch-scoped opaque references, fixed operation/decision codes and bounded integer accounting totals. Principal/command/grant/policy identifiers are keyed/digested opaque references rather than arbitrary caller strings. Never retain token/header/body/rows/raw path/SQL/exception message. Unauthenticated events carry no identity claim. Freeze event stages and exactly-once admission/emission/abandon outcomes, saturation and invalid-clock behavior before Ready. Live records are not silently overwritten: full audit storage denies new work until expiry, with bounded fixed overflow accounting; it cannot silently disable auditing and allow work. Authorized diagnostics cannot return foreign result payloads. Atomic audit reservation/enforcement failures and no-poll purge require adversarial evidence.
+
+## Independent requirements before implementation
+
+The following expected outcomes are pre-code requirements, not executed EQ080 tests. Native numerical references come from the accepted EQ079 four-fixture content, SHA2562ca65b4f548fe634e5acf7c7848cd4ae9de87420dbe35c3272d4937ba2df315a. No mathematical formula changes. Freeze additional literal identity/quota/audit vectors before runtime, including exact byte boundary arithmetic independent of implementation.
+
+| Case | Boundary | Required expected evidence |
+| --- | --- | --- |
+| Q01 | Actual guarded startup | Real Service/Ledger/JobScheduler and native factories import/start only inside established physical boundary |
+| Q02 | Native producer parity | All three admitted families preserve complete accepted goldens, quality, context and receipt; count3/volume10/notional1011, bars500/51200, quote mean1 |
+| Q03 | CPU exhaustion | Noncooperative actual native callback cannot consume CPU beyond finite OS profile; parent observes death, not successful result |
+| Q04 | Memory exhaustion | Native callback cannot allocate past actual OS address-space/commit cap; fixed sanitized outcome, no payload |
+| Q05 | Child escape | Actual callback process-creation attempt denied or enclosed; no surviving descendant outside boundary |
+| Q06 | Hard wall deadline | Ignoring cancellation ends entire service epoch within documented tolerance; hold supervisor capacity until observed exit |
+| Q07 | Supervisor failure | Startup/assignment/limits failure prevents service imports/factory/read; parent-close behavior tested separately per OS |
+| Q08 | Committed termination | Death after actual native commit causes no visible result or automatic reexecution; external historical receipt is not rolled back |
+| Q09 | Logical request/transfer | Existing shared fixed60s allowance includes failures/retries/hits/downloads; new controller cannot reset |
+| Q10 | Queue/run | One real running globally and one queued/principal/two global; cancellation cannot release slot before real exit |
+| Q11 | Combined retained bytes | Job/native/wire/envelope/receipt plus cached duplicate reserve fit inclusive1MiB principal/2MiB global; one extra byte denies |
+| Q12 | Cache subcaps | Candidate4 entries/principal8global and131072/262144 encoded bytes; exact boundary inclusion, failure reservation released once |
+| Q13 | Owner partition | B cannot hit A representation or observe its ID/context/timing counters through HTTP; same numerical content never deduplicates owners |
+| Q14 | Grant partition | Original grant identity/validity/actions/config/features/credential retirement included; alternate grant cannot reuse old cache |
+| Q15 | Policy and rights drift | Changed policy/rights interval/owner/evidence or denied retain/derived_read/export invalidates old cached visibility |
+| Q16 | Complete source identity | Revision/snapshot/mapping/normalized source/content/receipt differences miss or deny despite equal dataset label |
+| Q17 | Reproducibility identity | Registry/config/math/algorithm/backend/full executed features/native producer/receipt/wire identities cannot alias |
+| Q18 | Operation/projection/version | Result versus attachment/projection/version cannot upgrade rights or closed schema; caller correlation is newly encoded |
+| Q19 | Hit accounting | Every hit repeats authority and exact frame transfer reservation/settlement; emitted allowance not refunded |
+| Q20 | Original TTL | Cache expires no later than original result/grant boundary; hit/new token cannot refresh or resurrect |
+| Q21 | Emission race | Revocation/expiry/retirement after cache lookup or expensive encoding denies before first visible chunk |
+| Q22 | Integrity | Tampered native/wire/receipt/cache representation denies with no native source/sink calls on HTTP thread |
+| Q23 | No-poll cleanup | Expired cached service forms and accounting clear while native callback blocked; tombstones remain original semantics |
+| Q24 | Cache concurrency | Shared ledger linearizes insertion/hit/clear/revoke and avoids duplicate reservations/finalizer double release |
+| Q25 | Audit redaction | Token/header/body/request strings/private path/exception message/rows cannot appear in records; fixed codes and opaque digests only |
+| Q26 | Audit bounds | Candidate128 records/65536 encoded bytes/512 per record/300s max TTL inclusive; overflow denies new admission without silent bypass |
+| Q27 | Audit access | No HTTP audit operation; separately provisioned trusted synthetic audit reader required, unauthorized read denies |
+| Q28 | Audit expiry and failures | Half-open expiry/no-poll purge, invalid clock fail closed, finite saturation/overflow counters; no disk/backups claim |
+| Q29 | No foreign completion drain | Both accepted sink kinds preserve foreign committed records without reporter; native creating-thread ownership unchanged |
+| Q30 | Epoch/restart | Hard death destroys cache/audit/in-memory jobs; no transparent restart or same-key replay; old IDs deny |
+| Q31 | Fail-closed unsupported host | Unsupported architecture/OS/kernel/limit API cannot advertise physical bounded profile |
+| Q32 | Fresh installed qualification | Current Win/Linux wheel/sdist light/full native HTTP + physical boundary, typing/consumer/RECORD/dependency/core parity and actual-main readback |
+
+## Admission, review and release
+
+Ready requires actual physical startup feasibility/budgets/API choice, complete cache identity and accounting arithmetic, concrete audit event/full-store/reader profile, owned fixture vectors and separate planning review disposition. Publish concrete plans before guarded Backlog->Ready->In progress; assign owner/points and linked paired PRs. No runtime before that admission. Same-story public API/decisions/examples/changelog/knowledge/lesson/coverage/evidence accompany implementation. Final-head independent source/native/security/docs review, all applicable exact-head Windows/Linux CI and installed/artifacts, guarded paired publication, independent actual-main tree/public UTF8/Atul attribution/artifact proof precede Released/Done. All32 vectors must map to actual evidence. Start91 only after accepted90. EQ084 retains actual hosted TLS/identities/load/recovery/backup/operational approval; no CPU/memory requirement of90 is silently deferred.
+
+## Discovery history
+
+Read-only guessed policy/service paths and Windows literal glob searches failed before mutation; actual policy path is canonical docs/api/REMOTE_ACCESS_POLICY.md, and service quotas reside in service.py/jobs.py. No failed discovery counted as validation. Reviewer /root/r7_policy_review preliminary advice rejects logical-only resource claims and requires the actual native service inside the physical boundary. This advice is not final plan/runtime/release approval. Physical alternatives above remain unresolved until measured and reviewed.
+
+## Candidate physical profile and accepted-code sizing
+
+Accepted EQ079 Windows native goldens/creating-thread test passed all trades/bars/quotes in0.160s (whole Python startup/import0.937s, process CPU1.0625s). GetProcessMemoryInfo observed peak committed31006720bytes and working-set42352640bytes in that one owned baseline. This is sizing evidence only, not an isolation/performance guarantee or Linux qualification. Baseline code ran from accepted companione5f5253; no service runtime changed.
+
+Freeze the initial owned candidate maxima: Windows aggregate committed memory1073741824bytes (1GiB), Linux address space4294967296bytes (4GiB);10seconds OS-accounted CPU/epoch,30seconds external monotonic whole-epoch wall lifetime, one OS process with admitted threads, captured supervisor stdout/stderr65536bytes combined. Windows CPU means Job Object user-mode execution; Linux RLIMIT_CPU counts process CPU under its own kernel semantics. They are separate claims, not equal RSS or equal scheduler precision. A smaller test profile may tighten these maxima. Hard-limit termination must be observed within3seconds after the external deadline; exceeding tolerance fails qualification and capacity remains held until actual exit. CPU termination granularity and actual observed total are reported separately, never promised as exactly10.000seconds. RequiredController/native process pools remain unsupported in this profile.
+
+Linux bootstrap requires supported x86_64 native ABI, unprivileged effective UID and no retained resource-raising capabilities; hard limits cannot be raised, core dumps disabled. Install a checked inherited seccomp filter before service/native imports and before secondary threads; reject fork/vfork/nonthread clone and unsupported ABI/x32. Permit only the required CLONE_THREAD|CLONE_VM|CLONE_SIGHAND thread form, disallow namespace/vfork flags; clone3 returns ENOSYS so glibc may fall back to checked clone for native threads. Setup must fail closed rather than advertise limits. Windows requires supported64-bit API, suspended creation, correct structure widths, successful limit/assignment verification before resume, active-process count1 and no breakaway. Parent-close/death and child startup handshake must be independently tested; no remote import path/config/callable enters the supervisor.
+
+The parent invokes only a server-owned installed child entry point/profile, with environment/input/output bounded and sanitized; HTTP has no executable/module/path selector. The child constructs actual Service/Ledger/JobScheduler and owns native factories. Enforcement APIs require implementation after Ready. Pre-code API review plus actual installed startup/family/limit probes remain acceptance gates, not present evidence. No hosted authorization or hostile-code sandbox claim.
+
+Primary references: [Windows Job Objects](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects), [Windows aggregate committed-memory structure](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_extended_limit_information), [Python resource limits](https://docs.python.org/3/library/resource.html), [Linux resource-limit semantics](https://www.man7.org/linux/man-pages/man2/getrlimit.2.html), [glibc clone3 fallback](https://github.com/bminor/glibc/blob/master/sysdeps/unix/sysv/linux/clone-internal.c). References describe APIs; new enforcement and all runtime probes are still pending. Separate preliminary reviewer confirms this route is plausible without controller administration, conditional on actual twoOS probes.
