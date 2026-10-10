@@ -121,5 +121,301 @@
     "windows_peak_working_set_bytes": 42352640,
     "physical_containment_tested": false,
     "eq080_runtime_tested": false
-  }
+  },
+  "fingerprinted_records": {
+    "grant": {
+      "grant_id": "owned-grant-a",
+      "principal": "owned-a",
+      "dataset_id": "owned.trades",
+      "dataset_revision": "owned-v1",
+      "policy_revision": "owned-policy-v1",
+      "scope": {
+        "instrument_id": "owned:ONE",
+        "session_id": "session-1",
+        "start_ns": 1,
+        "end_ns": 100
+      },
+      "columns": [
+        "price",
+        "size"
+      ],
+      "actions": [
+        "calculate",
+        "derived_read",
+        "export",
+        "job_manage",
+        "retain"
+      ],
+      "valid_from_ns": 0,
+      "expires_at_ns": 900000000000
+    },
+    "job_grant": {
+      "grant_id": "owned-grant-a",
+      "config_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "features": [
+        [
+          "session.trade.volume",
+          "v1"
+        ]
+      ]
+    },
+    "rights": {
+      "rights_owner": "owned-synthetic",
+      "rights_evidence": "owned-fixture-v1",
+      "valid_from_ns": 0,
+      "expires_at_ns": 900000000000,
+      "rights": [
+        "calculate",
+        "derived_read",
+        "export",
+        "job_manage",
+        "retain"
+      ]
+    }
+  },
+  "cache_key": {
+    "schema": "cache.identity.v1",
+    "principal": "owned-a",
+    "original_credential_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "grant_sha256": "8a4989c7042a0eb12ce91ff849708465dfd3ff6b9397f1e5794508e0e4461607",
+    "job_grant_sha256": "75a8cff71b42690c4aa24bc15e7b098b21038391c39f9e1bfbcd737549aa24df",
+    "rights_sha256": "dd0535403377a13650d592dfda6042845e573f79240ab9349bc205e651762ae6",
+    "dataset_identity": {
+      "dataset_id": "owned.trades",
+      "revision": "owned-v1",
+      "snapshot_id": "owned-snapshot",
+      "mapping_version": "owned-map-v1",
+      "source_id": "owned-source",
+      "input_id": "owned-input"
+    },
+    "acquisition_commitment": {
+      "content_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "receipt_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "context_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+    "registration_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+    "result_id": "owned-epoch-result",
+    "epoch": "owned-epoch",
+    "native_content_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+    "committed_receipt_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+    "producer_wire_sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+    "operation": "result_read",
+    "projection": [
+      "session.trade.volume"
+    ],
+    "transport_version": "1.1"
+  },
+  "cache_key_sha256": "03d0b0b8565791a7d6e73d98a7c316868b850bff3812ff69b5cdb1670922871d",
+  "cache_key_encoding_max_bytes": 65536,
+  "digest_encoding": "lowercase64hex SHA256 of accepted canonical JSON bytes",
+  "identity_mutation_expectation": "Change exactly each named dimension in original complete record/context; cache key differs or original authorization denies; never reuse another partition",
+  "literal_identity_mutations": [
+    {
+      "dimension": "principal",
+      "path": "key.principal",
+      "replacement": "owned-b",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "original_credential",
+      "path": "key.original_credential_digest",
+      "replacement": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "grant_id",
+      "path": "records.grant.grant_id",
+      "replacement": "owned-grant-b",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "grant_validity",
+      "path": "records.grant.expires_at_ns",
+      "replacement": 899999999999,
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "grant_actions",
+      "path": "records.grant.actions",
+      "replacement": [
+        "calculate",
+        "derived_read",
+        "job_manage",
+        "retain"
+      ],
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "grant_scope",
+      "path": "records.grant.scope.end_ns",
+      "replacement": 101,
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "grant_columns",
+      "path": "records.grant.columns",
+      "replacement": [
+        "size"
+      ],
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "job_config",
+      "path": "records.job_grant.config_digest",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "full_executed_features",
+      "path": "records.job_grant.features",
+      "replacement": [
+        [
+          "session.trade.count",
+          "v1"
+        ]
+      ],
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "policy",
+      "path": "records.grant.policy_revision",
+      "replacement": "owned-policy-v2",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "dataset_rights_owner",
+      "path": "records.rights.rights_owner",
+      "replacement": "owned-other",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "dataset_rights_evidence",
+      "path": "records.rights.rights_evidence",
+      "replacement": "owned-fixture-v2",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "dataset_rights_interval",
+      "path": "records.rights.expires_at_ns",
+      "replacement": 899999999999,
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "dataset_revision",
+      "path": "key.dataset_identity.revision",
+      "replacement": "owned-v2",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "snapshot",
+      "path": "key.dataset_identity.snapshot_id",
+      "replacement": "owned-snapshot-v2",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "mapping",
+      "path": "key.dataset_identity.mapping_version",
+      "replacement": "owned-map-v2",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "full_source",
+      "path": "key.dataset_identity.source_id",
+      "replacement": "owned-source-b",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "acquisition_content",
+      "path": "key.acquisition_commitment.content_sha256",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "acquisition_receipt",
+      "path": "key.acquisition_commitment.receipt_sha256",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "registry",
+      "path": "context.registry_snapshot",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "math_policy",
+      "path": "context.math_policy_version",
+      "replacement": "owned-math-v2",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "algorithm",
+      "path": "context.features.0.algorithm_version",
+      "replacement": "owned-algorithm-v2",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "backend",
+      "path": "native.metadata.backend",
+      "replacement": "owned-other-backend",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "native_content",
+      "path": "key.native_content_sha256",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "producer_context",
+      "path": "key.context_sha256",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "committed_receipt",
+      "path": "key.committed_receipt_sha256",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "wire_payload",
+      "path": "key.producer_wire_sha256",
+      "replacement": "9999999999999999999999999999999999999999999999999999999999999999",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "result_id",
+      "path": "key.result_id",
+      "replacement": "owned-other-result",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "epoch",
+      "path": "key.epoch",
+      "replacement": "owned-other-epoch",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "operation",
+      "path": "key.operation",
+      "replacement": "artifact_read",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "projection",
+      "path": "key.projection",
+      "replacement": [
+        "session.trade.count"
+      ],
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    },
+    {
+      "dimension": "version",
+      "path": "key.transport_version",
+      "replacement": "1.0",
+      "expected": "different key or denial before result visibility; never hit unchanged partition"
+    }
+  ],
+  "audit_snapshot_max_bytes": 131072
 }
