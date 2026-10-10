@@ -24,6 +24,8 @@ from equity_feature_workers import (SessionCommandSpec, SourceOffer, ExecutionAp
     PlanningError, PlanningErrorCode, plan_acquisition, execute_plan)
 
 from . import codec
+from ._audit import AuditReservation, AuditDenied
+from ._cache import ResultCache, fingerprint, identity_key
 from .datasets import DatasetIdentity, FeatureDataset, RawDataset, Scope, _batch_bytes
 from .service import Credential, Ledger, _Prepared, _error
 
@@ -165,6 +167,7 @@ class _Job:
     wire: bytes = field(default=b'', repr=False)
     committed_receipt_sha256: str | None = None
     receipt_profile_failed: bool = False
+    audit_reservation: AuditReservation | None = field(default=None,repr=False)
 
 
 class JobScheduler:
@@ -199,6 +202,7 @@ class JobScheduler:
         self.queue: deque[str] = deque()
         self.retained: dict[str,int] = {}
         self.total_retained = 0
+        self.cache = ResultCache()
         self._running: str | None = None
         self._last_mono = 0
         self._last_wall = ledger.now()
@@ -261,12 +265,33 @@ class JobScheduler:
         self.retained[job.principal] -= amount
 
     def _clear(self, job: _Job) -> None:
+        if job.result_id is not None:
+            self.cache.purge(0,job.result_id)
         job.native = job.envelope = job.receipt = job.wire = b''
         if job.held:
             self._release(job,job.held)
 
+    def _audit_exit(self, job: _Job, decision: str, *, never_started: bool = False) -> bool:
+        reservation = job.audit_reservation
+        if reservation is None:
+            return True
+        try:
+            if reservation.remaining == 2:
+                self.ledger.audit_finish(reservation,'native_start','cancelled' if never_started else 'failed',exited=True)
+            self.ledger.audit_finish(reservation,'native_finish',decision,exited=True)
+            return True
+        except Exception:
+            if reservation.remaining and self.ledger.audit is not None:
+                self.ledger.audit.abandon_after_exit(reservation)
+            return False
+        finally:
+            job.audit_reservation = None
+
     def _sweep(self) -> None:
         n = self._now()
+        self.cache.purge(n)
+        if self.ledger.audit is not None:
+            self.ledger.audit.purge(n)
         for job in tuple(self.jobs.values()):
             if job.state == 'queued':
                 try:
@@ -276,6 +301,7 @@ class JobScheduler:
                     self.queue.remove(job.job_id)
                     job.expires_ns = min(n+300_000_000_000,job.grant_expires_ns)
                     self._clear(job)
+                    self._audit_exit(job,'cancelled',never_started=True)
             if job.state in ('succeeded','failed','cancelled','expired'):
                 if (job.expires_ns and n >= job.expires_ns
                         or job.held and not self._retention_allowed(job)):
@@ -345,8 +371,38 @@ class JobScheduler:
             _, body = dataset.produce(dataset.columns,'1.1')
             if codec.canonical(body) != job.wire:
                 raise codec.WireError('not_permitted')
+            # Only original producer representation is cached. Native content,
+            # receipt and complete reconstructed wire were verified above on
+            # every lookup; final authority and transfer remain controller work.
+            producer_payload = codec.canonical(body['feature_result'])
+            original_grant = next(g for g in self.ledger.grants if g.grant_id == job.grant_id)
+            current_dataset = self.ledger.datasets[job.dataset_id]
+            try:
+                self._result_job(credential,result_id,operation)
+                key = identity_key({'schema':'cache.identity.v1','principal':job.principal,
+                    'original_credential_digest':job.credential_digest,
+                    'grant_sha256':fingerprint(asdict(original_grant)),
+                    'job_grant_sha256':fingerprint(asdict(self.grants[job.grant_id])),
+                    'rights_sha256':fingerprint({'rights_owner':current_dataset.rights_owner,
+                        'rights_evidence':current_dataset.rights_evidence,'valid_from_ns':current_dataset.valid_from_ns,
+                        'expires_at_ns':current_dataset.expires_at_ns,'rights':current_dataset.rights}),
+                    'dataset_identity':current_dataset.identity.wire(),
+                    'acquisition_commitment':{'content_sha256':registration.acquisition_commitment[0],
+                        'receipt_sha256':registration.acquisition_commitment[1]},
+                    'context_sha256':hashlib.sha256(registration.context_bytes).hexdigest(),
+                    'registration_sha256':registration.registration_digest,'result_id':result_id,'epoch':self.epoch,
+                    'native_content_sha256':hashlib.sha256(job.native).hexdigest(),
+                    'committed_receipt_sha256':job.committed_receipt_sha256,
+                    'producer_wire_sha256':hashlib.sha256(job.wire).hexdigest(),
+                    'operation':operation,'projection':list(dataset.columns),'transport_version':version})
+                producer_payload = self.cache.representation(key,job.principal,result_id,producer_payload,
+                    job.expires_ns,self._now(),self.retained.get(job.principal,0),self.total_retained)
+            except ValueError:
+                # Complete oversized server records are never truncated. Cache
+                # refusal preserves ordinary independently verified delivery.
+                pass
             return {'schema':'equity.remote','version':version,'kind':'result','request_id':rid,
-                    'payload':body['feature_result']}
+                    'payload':json.loads(producer_payload)}
 
     def prepare_result(self, credential: Credential, request: codec.Json) -> _Prepared:
         version,rid,payload = request['version'],request['request_id'],request['payload']
@@ -409,11 +465,18 @@ class JobScheduler:
                 else:
                     if (len(self.jobs) >= 16 or sum(j.principal == credential.principal for j in self.jobs.values()) >= 8
                             or len(self.queue) >= 2 or any(self.jobs[j].principal == credential.principal for j in self.queue)
-                            or self.total_retained+262_144 > 2_097_152 or self.retained.get(credential.principal,0)+262_144 > 1_048_576):
+                            or self.total_retained+self.cache.total+262_144 > 2_097_152
+                            or self.retained.get(credential.principal,0)+self.cache.principal_bytes(credential.principal)+262_144 > 1_048_576):
                         return _error(429,'quota','quota_exceeded',version,rid)
                     job = _Job(self.epoch+'-'+secrets.token_hex(16),credential.principal,credential.digest,grant_id,registration.identity.dataset_id,key,identity,payload['command_digest'],
                         next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == grant_id))
                     _bounded({k:v for k,v in asdict(job).items() if k not in ('native','wire','envelope','receipt')},8192)
+                    if self.ledger.audit is not None:
+                        try:
+                            job.audit_reservation = self.ledger.audit.reserve(self._now(),actor=job.principal,
+                                command=job.command_digest,grant=job.grant_id,policy=self.ledger.policy_revision,action='calculate')
+                        except AuditDenied:
+                            return _error(429,'quota','quota_exceeded',version,rid)
                     self.jobs[job.job_id] = job
                     self.keys[(job.principal,key)] = job.job_id
                     self.queue.append(job.job_id)
@@ -432,6 +495,7 @@ class JobScheduler:
                         job.state = 'cancelled'
                         job.expires_ns = min(self._now()+300_000_000_000,job.grant_expires_ns)
                         self._clear(job)
+                        self._audit_exit(job,'cancelled',never_started=True)
                     else:
                         job.state = 'cancel_requested'
                     self.condition.notify()
@@ -459,6 +523,8 @@ class JobScheduler:
             try:
                 with self.ledger.lock:
                     job.deadline_ns = self._mono()+30_000_000_000
+                    if job.audit_reservation is not None:
+                        self.ledger.audit_finish(job.audit_reservation,'native_start','started',exited=False)
                 self._execute(job)
                 with self.ledger.lock:
                     self._check(job)
@@ -491,6 +557,12 @@ class JobScheduler:
                         self._clear(job)
                     actual = len(job.native)+len(job.wire)+len(job.envelope)+len(job.receipt)
                     self._release(job,job.held-actual)
+                    decision = ('historical_commit' if job.committed_receipt_sha256 and job.state != 'succeeded'
+                        else job.state if job.state in ('succeeded','failed','cancelled','expired') else 'failed')
+                    if not self._audit_exit(job,decision):
+                        job.state,job.result_id = 'failed',None
+                        job.error = {'category':'internal','code':'internal_error','retryable':False}
+                        self._clear(job)
                     self._running = None
                     self.condition.notify_all()
 
@@ -662,6 +734,7 @@ class JobScheduler:
                     job.expires_ns = min(self._last_wall+300_000_000_000,
                         job.grant_expires_ns)
                     self._clear(job)
+                    self._audit_exit(job,'cancelled',never_started=True)
             try:
                 self._sweep()
             except ValueError:

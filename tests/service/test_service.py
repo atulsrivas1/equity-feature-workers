@@ -91,10 +91,10 @@ class ServiceVectors(unittest.TestCase):
         self.ledger = self.make_ledger()
         self.service = Service(self.ledger)
 
-    def make_ledger(self, limits=None, grants=None, datasets=None):
+    def make_ledger(self, limits=None, grants=None, datasets=None, audit=None):
         return Ledger(clock=self.clock, limits=limits or Limits(60, 1048576, 2097152, 60000000000),
             credentials=self.credentials, grants=grants if grants is not None else (self.grant,),
-            datasets=datasets if datasets is not None else (self.dataset,), policy_revision='policy-v1', registry_snapshot=next((d.registry_snapshot for d in (datasets or ()) if isinstance(d, FeatureDataset)), 'b' * 64))
+            datasets=datasets if datasets is not None else (self.dataset,), policy_revision='policy-v1', registry_snapshot=next((d.registry_snapshot for d in (datasets or ()) if isinstance(d, FeatureDataset)), 'b' * 64),audit=audit)
 
     def request(self, **changes):
         payload = {'operation': 'slice', 'dataset': self.dataset.identity.wire(), 'scope': self.scope.wire(),

@@ -1,3 +1,39 @@
+## EQ080 remaining cache qualification candidate
+
+Add warm-key revocation/expiry, real forged cache, no-poll duplicate-byte cleanup, full runtime source identity drift and observed retained-encoder-fault admission fixtures;16cache development methods pass. Explicitly advertise only qualified ExampleSink owned service entries; persistent sink reporterless foundation proof remains separate. Runtime/mathematics unchanged; final current review/artifacts/release pending.
+
+## EQ080 frozen owned entry candidate
+
+Implement immutable synthetic source profiles and isolated complete startup frame/EOF-before-ACK, exact frozen-source execution and setup cleanup through actual exit; fourteen owned tests/strict12 development pass, current review/installed/full-map/release pending. Physical/mathematical/rights boundaries unchanged.
+
+## EQ080 expanded native/cache qualification candidate
+
+Test actual native callbacks under unchanged physical OS limits, preserve a returned native commit receipt witness across hard death without a visible result/replay, and exercise real owner/cache entry caps plus concurrent audited hits/revoke/emit/close. Expanded171Windows development pass; new exact-head/native/docs/artifacts pending. Add truthful32-vector coverage and pre-code frozen owned inventory proposal; no runtime/package/math/schema change.
+
+## EQ080 verified result cache candidate
+
+Implement full entitlement/context/content/receipt/wire/owner/epoch/operation key, finite original producer representation cache and shared job/cache byte reservations. Every hit retains full pure native verification/current rights/late visibility/new transfer checks. Seven new cache methods/all33 literal negatives/full166development pass; new final review/installed artifacts/inventory/all32/release pending. Frozen previous checkpoint source+service+foundation approved separately; no current-source equivalence claim.
+
+## EQ080 header staging correction candidate
+
+Renew authority/current interval after header staging and fresh audit encoding; abort protected body on late failure; reject reentrant header request/iterator emission and settle current audit sequence/totals.27audit/full159 development/strict9bothplatform declarations pass; separate current source/installed/artifact/cache/inventory/all32/release pending. Preserve original header findings and superseded154fresh builder.
+
+## EQ080 audit correction candidate
+
+Correct full-store authenticated principal accounting and original authority/current-window transfer after audit encoding.22audit/full154 development/strict9 pass; separate current review/fresh WinLinux artifacts/cache/inventory/all32/release remain pending. Original twoP2/151historical builder preserved.
+
+## EQ080 integrated audit candidate
+
+Optional service.a3 adds explicit owned-synthetic finite diagnostics under the shared Ledger for HTTP admission/emission/abandon and native start/real-exit, with full-store fail-closed enforcement and original authority unchanged.19audit/full151 development methods and strict9 pass; separate current review/WinLinux installed/artifact/cache/inventory/all32/release gates remain pending. Default development APIs do not advertise completed EQ080 enforcement.
+
+## EQ080 contained owned epoch candidate
+
+Internal stdlib supervisor now contains owned Windows Service/native qualification before imports, bounds CPU/commit/process/output/wall and observes actual exit. Nine new regressions/current130/strict8 pass; current Linux/installed/final runtime/cache/audit/release evidence remains pending. No public hosting or acceptance.
+
+## EQ080 in development
+
+Optional service0.1.0a3 bootstrap prerequisite uses lazy public exports so native imports occur after a future containment boundary. Existing public class identity/typing preserved;121 editable Windows service tests/strict7 pass. Pre-code OS capability probes are qualified separately. Actual supervisor/cache/audit/physical bounds/current installed/release gates remain unimplemented/pending; no acceptance claimed. Accepted calculations/worker/I/O/schema inputs unchanged.
+
 ## EQ079 qualified source and final delivery evidence — October10,2026 UTC
 
 Current lifecycle follows [story89 and live Project](https://github.com/atulsrivas1/equity-features/issues/89). Source PR362/worker33 merged after all18 exact-head checks and separate source/security/native/API/docs/service/foundation approval [6096528793](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6096528793). Qualified implementation mains canonical8dade31cf1e0455b1a176970e01a6c6808ee306d / worker3aeb69a346db93de842300166f54615dff19c8a1. Separate actual-main readback [6096565581](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6096565581) verified complete trees/all27 changed public UTF8 blobs2154706bytes/Atul-GitHub attribution/no coauthors. Runtime/test/build inputs equal reviewed source; accepted workers/core/I/O/closed schemas remain unchanged.

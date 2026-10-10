@@ -46,7 +46,7 @@ class Credentials:
 def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda value:value, monotonic=time.monotonic_ns,
           family='trades', registered_batch_transform=lambda value:value, audit_out=None, rows=None,
           max_input_bytes=None, ns_offset=0, adjacent=False, raw_receipt='a'*64, principals=('A','B'), dataset_label=None, grant_label=None,
-          actions=None):
+          actions=None, audit_store=None):
     fixture = json.loads(json.dumps(next(f for f in FROZEN['fixtures'] if f['family'] == family)))
     if ns_offset:
         def shift(value):
@@ -140,7 +140,7 @@ def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda
     credentials = tuple(Credential.provision(p,t,0,3_600_000_000_000) for p,t in zip(principals,tokens))
     grants = tuple(Grant(grant_label if grant_label is not None else 'grant-'+p,p,dataset_id,'owned-v1','policy-v1',scope,frozenset(columns),rights,0,3_600_000_000_000) for p in principals)
     ledger = Ledger(clock=clock,limits=Limits(60,1_048_576,2_097_152,60_000_000_000),credentials=credentials,grants=grants,datasets=(dataset,),
-                    policy_revision='policy-v1',registry_snapshot=fixture['request']['payload']['context']['registry_snapshot'])
+                    policy_revision='policy-v1',registry_snapshot=fixture['request']['payload']['context']['registry_snapshot'],audit=audit_store)
     scheduler = JobScheduler(ledger,(registration,),tuple(JobGrant(g.grant_id,config.digest,registration.execution_features) for g in grants),monotonic=monotonic)
     return scheduler,Service(ledger,jobs=scheduler),tokens,clock,audit
 

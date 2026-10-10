@@ -79,6 +79,35 @@ def budget(workers=1,**changes):
 class Supervisor(unittest.TestCase):
     def setUp(self):CALLS.clear();STARTED.clear()
 
+    def test_precommitted_foreign_record_preserved_without_reporter_both_sinks(self):
+        for kind in ('parquet', 'duckdb'):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as directory, sink_for(kind, Path(directory)) as inner:
+                sink = Proxy(inner)
+                own, _ = work('A'); foreign, _ = work('B')
+                expected = compute_session_inputs(foreign.task, foreign.batches)
+                publisher = SerialPublisher(sink, own.task.destination_scope,
+                    limits=PublicationLimits(), requirements=LIMITS)
+                publisher.submit(foreign.task, expected)
+                committed = publisher.drain()
+                self.assertEqual(len(committed), 1)
+                self.assertIsNone(committed[0].reason)
+                self.assertIsNotNone(committed[0].output)
+                receipt = committed[0].output.receipt
+                before = tuple(map(encode_result, sink.read(receipt)))
+                self.assertEqual(before, tuple(map(encode_result, expected)))
+                self.assertEqual(sink.begins, 1)
+                outcome = BoundedSupervisor().run((own,), publisher=publisher, progress=None)
+                self.assertIsNone(outcome.tasks[0].reason)
+                self.assertIsNotNone(outcome.tasks[0].output)
+                self.assertEqual(sink.begins, 2)
+                self.assertEqual(publisher.pending, ())
+                self.assertEqual(tuple(map(encode_result, sink.read(receipt))), before)
+                publisher.submit(foreign.task, expected)
+                replay = publisher.drain()
+                self.assertEqual(len(replay), 1)
+                self.assertEqual(replay[0].output, committed[0].output)
+                self.assertEqual(tuple(map(encode_result, sink.read(receipt))), before)
+
     def test_foreign_producer_preserved_without_reporter_both_sinks(self):
         self._foreign_producer_preserved()
 
