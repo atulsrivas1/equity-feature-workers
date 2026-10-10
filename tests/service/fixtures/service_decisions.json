@@ -1,0 +1,196 @@
+{
+  "schema": "equity.remote.service.decisions",
+  "version": "1",
+  "owned_raw_oracle": {
+    "event_ns": [
+      "9007199254740992",
+      "9007199254740993"
+    ],
+    "range_start_ns": "9007199254740992",
+    "range_end_ns": "9007199254740994",
+    "known_at_ns": [
+      null,
+      "0"
+    ],
+    "price_i64": [
+      "10100",
+      "10200"
+    ],
+    "size_i64": [
+      "2",
+      "3"
+    ]
+  },
+  "vectors": [
+    {
+      "id": "owned_raw",
+      "expected": "allow",
+      "meaning": "active raw_read grant, exact registered immutable dataset, instrument/session/time/columns"
+    },
+    {
+      "id": "owned_feature",
+      "expected": "allow",
+      "meaning": "active derived_read grant, exact precomputed feature/algorithm pair and entity scope"
+    },
+    {
+      "id": "anonymous",
+      "expected": "deny_authentication",
+      "meaning": "no source invocation or discovery"
+    },
+    {
+      "id": "duplicate_bearer",
+      "expected": "deny_authentication",
+      "meaning": "exactly one bounded credential"
+    },
+    {
+      "id": "unknown_token",
+      "expected": "deny_authentication",
+      "meaning": "same fixed error; no token/payload echo"
+    },
+    {
+      "id": "grant_expiry_equal",
+      "expected": "deny_authorization",
+      "meaning": "active token; trusted now equals grant exclusive expiry"
+    },
+    {
+      "id": "foreign_principal",
+      "expected": "deny_authorization",
+      "meaning": "no source invocation or existence disclosure"
+    },
+    {
+      "id": "raw_without_raw_right",
+      "expected": "deny_authorization",
+      "meaning": "derived permission does not imply raw access"
+    },
+    {
+      "id": "feature_without_derived_right",
+      "expected": "deny_authorization",
+      "meaning": "raw permission does not imply derived access"
+    },
+    {
+      "id": "missing_discover",
+      "expected": "deny_authorization",
+      "meaning": "metadata also requires permission"
+    },
+    {
+      "id": "revision_changed",
+      "expected": "deny_authorization",
+      "meaning": "dataset/snapshot/mapping/source/input must exactly match registration"
+    },
+    {
+      "id": "scope_one_ns_outside",
+      "expected": "deny_authorization",
+      "meaning": "range not contained in both dataset and grant"
+    },
+    {
+      "id": "unknown_or_injected_column",
+      "expected": "deny_authorization",
+      "meaning": "no SQL/path/import chosen by client"
+    },
+    {
+      "id": "non_null_cursor",
+      "expected": "deny_transport",
+      "meaning": "paging is not implemented"
+    },
+    {
+      "id": "unsupported_operation",
+      "expected": "deny_transport",
+      "meaning": "no job/result/exec service claim in this story"
+    },
+    {
+      "id": "rows_100",
+      "expected": "allow",
+      "meaning": "all predicates pass and actual input/output limits pass"
+    },
+    {
+      "id": "rows_101",
+      "expected": "deny_quota",
+      "meaning": "no partial body exposed"
+    },
+    {
+      "id": "body_16385",
+      "expected": "deny_transport",
+      "meaning": "before parse/source execution"
+    },
+    {
+      "id": "response_262145",
+      "expected": "deny_quota",
+      "meaning": "actual encoded bytes, never silent truncation"
+    },
+    {
+      "id": "request_61_same_interval",
+      "expected": "deny_quota",
+      "meaning": "shared global60 and principal60 inclusive cap"
+    },
+    {
+      "id": "transfer_one_byte_excess",
+      "expected": "deny_quota",
+      "meaning": "principal1048576/global2097152 shared inclusive limits"
+    },
+    {
+      "id": "fresh_controller_same_ledger",
+      "expected": "deny_quota",
+      "meaning": "creating controller does not replenish allowance"
+    },
+    {
+      "id": "revoke_before_publication",
+      "expected": "deny_authorization",
+      "meaning": "barrier makes revoke win atomic final boundary"
+    },
+    {
+      "id": "bad_source_identity",
+      "expected": "deny_contract",
+      "meaning": "registered producer cannot alter pinned source facts"
+    },
+    {
+      "id": "bad_native_result",
+      "expected": "deny_contract",
+      "meaning": "native quality/entity/provenance validated, not label-only"
+    },
+    {
+      "id": "multiprocess_wsgi",
+      "expected": "deny_startup",
+      "meaning": "in-memory shared ledger does not claim cross-process atomicity"
+    },
+    {
+      "id": "token_expiry_equal",
+      "expected": "deny_authentication",
+      "meaning": "trusted now equals credential exclusive expiry; no source invocation"
+    },
+    {
+      "id": "feature_via_1_0",
+      "expected": "deny_transport",
+      "meaning": "closed1.0 cannot silently omit native quality/entity/evidence; feature requires explicit1.1"
+    },
+    {
+      "id": "feature_via_1_1",
+      "expected": "allow",
+      "meaning": "all grants/bounds pass and separately frozen1.1 representation preserves full native feature data"
+    },
+    {
+      "id": "raw_strict_subset_scope",
+      "expected": "deny_authorization",
+      "meaning": "initial dataset admits one exact native query; narrower range needs separately registered binding"
+    },
+    {
+      "id": "http_correlation_changes",
+      "expected": "allow",
+      "meaning": "stable server-owned native acquisition request and receipt unchanged; HTTP correlation echoed separately"
+    },
+    {
+      "id": "chunk_binding_as_dataset",
+      "expected": "deny_contract",
+      "meaning": "whole native binding includes retained-map/mapped suffixes; chunk source is not full-read source"
+    },
+    {
+      "id": "native_mapping_suffix_changed",
+      "expected": "deny_contract",
+      "meaning": "no rewriting or stripping actual normalized identity to match logical catalog aliases"
+    },
+    {
+      "id": "producer_rows_or_receipt_changed",
+      "expected": "deny_contract",
+      "meaning": "exact approved canonical source and acquisition receipt revalidated before any visibility"
+    }
+  ]
+}

@@ -335,6 +335,7 @@
             "name": {
               "enum": [
                 "EntityKey",
+                "QualityRow",
                 "BreadthCounts",
                 "BreadthFraction",
                 "IntervalOHLCVRow",

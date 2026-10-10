@@ -1,3 +1,9 @@
+## Optional service0.1.0a0 — EQ077 candidate
+
+Separate distribution implements bounded authenticated slice/discovery, server-owned grants/dataset identities, shared fixed60s request/transfer admission, native cooperative cancellation and final visibility authorization. Raw1.0 stays unchanged; explicit1.1 feature projection preserves original producer context/quality/evidence/metadata and nested interval QualityRow. Existing worker/core/I/O runtime/package inputs stay unchanged. The worker foundation builder now explicitly selects packages/workers, because its previous enumeration incorrectly selected the optional service.
+
+Owned development34 methods and all34 frozen decision mappings pass, including actual native Parquet/feature/HTTP, exact response256KiB and transfer/row boundaries, unavailable/structured quality, tampering and revocation. Preliminary review corrections and failed schema/fixture/CI candidates are retained. Final separate review/current Windows/Linux/fresh wheel+sdist/artifact/main publication/readback are pending. [API/evidence](docs/EQ077_SERVICE.md). No external deployment/provider/private/paid/registry/stable publication.
+
 ## 0.1.0a8 — EQ063 experimental task claims
 
 Add trusted-local OS ownership through publication, bounded durable computation attempts, durable cooperative cancellation and receipt-first restart. Live expiry cannot steal ownership. Original committed results recover without callback/new begin, including cancelled or exhausted work. Caller supplies UTC time and protected source paths; no hidden scheduler or watchdog. Existing task/result/receipt codecs, sink locking and mandatory dependencies unchanged.

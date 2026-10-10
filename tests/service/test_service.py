@@ -12,8 +12,11 @@ import unittest
 from equity_feature_contracts import (
     CanonicalBatch, Column, DataKind, BatchMetadata, SourceBinding, Coverage,
     PriceUnit, InputScope, ConfigSpec, EntityKey,
+    ContractError, IntervalSpec, IntervalCoverage,
 )
 from equity_features.session.trades import compute_trades
+from equity_features.session.bars import compute_structure
+from equity_feature_io_contracts.publication import SinkError, SinkErrorCode
 from equity_feature_service import Credential, Grant, Ledger, Limits, Service, Scope, RawRead, RawDataset, FeatureDataset, DatasetIdentity
 from equity_feature_service import codec
 from equity_feature_service.loopback import qualification_server
@@ -111,6 +114,8 @@ class ServiceVectors(unittest.TestCase):
         self.assertEqual(self.source.calls, 1)
 
     def test_anonymous_foreign_and_bad_tokens_do_not_read(self):
+        self.assertEqual(call(self.service,self.request(),self.foreign)[0],403)
+        self.assertEqual(call(self.service,self.request(),'')[0],401)
         for token in ('', self.foreign, secrets.token_urlsafe(32), self.token + ',Bearer ' + self.token):
             status, result, data, _ = call(self.service, self.request(), token)
             self.assertIn(status, (401, 403))
@@ -122,6 +127,7 @@ class ServiceVectors(unittest.TestCase):
         for change in (
             {'dataset': {**self.dataset.identity.wire(), 'revision': 'changed'}},
             {'scope': {**self.scope.wire(), 'end_ns': str(END - 1)}},
+            {'scope': {**self.scope.wire(), 'start_ns': str(START - 1)}},
             {'scope': {**self.scope.wire(), 'instrument_id': "ONE' OR 1=1 --"}},
             {'columns': ['price;DROP TABLE files']}, {'columns': ['__import__']},
         ):
@@ -263,6 +269,97 @@ class ServiceVectors(unittest.TestCase):
         self.assertNotIn(b'10100', data)
         self.assertEqual(result['kind'], 'error')
 
+    def test_current_source_content_and_full_binding_tamper(self):
+        original = self.source.value
+        for field, value in (('input_id','input-1:chunk:0:0:2'),('mapping_version','mapping-1:mapped:changed'),('source_id','foreign-source')):
+            batch = replace(original.batch,metadata=replace(original.batch.metadata,source=replace(original.batch.metadata.source,**{field:value})))
+            self.source.value = replace(original,batch=batch)
+            self.assertEqual(call(self.service,self.request(),self.token)[0],422)
+        batch = replace(original.batch,columns=tuple(replace(c,values=(99999,10200)) if c.name=='price' else c for c in original.batch.columns))
+        self.source.value = replace(original,batch=batch)
+        status, _, data, _ = call(self.service,self.request(),self.token)
+        self.assertEqual(status,422)
+        self.assertNotIn(b'99999',data)
+
+    def test_nonmonotonic_producer_rejects_without_reordering(self):
+        original=self.source.value
+        batch=replace(original.batch,columns=tuple(replace(c,values=(START+1,START)) if c.name=='event_ns' else c for c in original.batch.columns))
+        self.source.value=replace(original,batch=batch)
+        status,result,_,_=call(self.service,self.request(),self.token)
+        self.assertEqual(status,422)
+        self.assertEqual(result['kind'],'error')
+
+    def test_raw_right_and_discovery_are_independently_required(self):
+        for actions, op in ((frozenset(('derived_read','discover')),'slice'),(frozenset(('raw_read',)),'discover')):
+            service = Service(self.make_ledger(grants=(replace(self.grant,actions=actions),)))
+            request = self.request()
+            if op=='discover': request['payload']={'operation':'discover'}
+            self.assertEqual(call(service,request,self.token)[0],403)
+        self.assertEqual(self.source.calls,0)
+
+    def test_discovery_rebuilds_on_revocation_and_versions_are_explicit(self):
+        request=self.request();request['payload']={'operation':'discover'};request['version']='1.1'
+        headers=[]
+        output=self.service(env(request,self.token),lambda s,h:headers.append(s))
+        self.ledger.revoke('grant-a')
+        self.assertEqual(json.loads(b''.join(output))['kind'],'error')
+        self.assertTrue(headers[0].startswith('403'))
+        fresh=Service(self.make_ledger())
+        self.assertEqual(call(fresh,request,self.token)[1]['payload']['transport_versions'],['1.0','1.1'])
+        request['version']='1.0'
+        self.assertEqual(call(fresh,request,self.token)[1]['payload']['transport_versions'],['1.0'])
+
+    def test_row_100_and_changed_producer_101_without_partial_output(self):
+        baseline=raw_batch(100)
+        baseline=replace(baseline,columns=tuple(replace(c,values=(START,)*100) if c.name=='event_ns' else c for c in baseline.columns))
+        self.source.value=RawRead(baseline,'a'*64)
+        dataset=RawDataset('synthetic.raw','owned-v1',self.scope,self.source.value,self.source.read,
+            columns=('event_ns',),rights=self.dataset.rights,rights_owner='owned-fixture',rights_evidence='synthetic-owned-v1',valid_from_ns=0,expires_at_ns=1000)
+        service=Service(self.make_ledger(datasets=(dataset,)))
+        result=call(service,self.request(columns=['event_ns']),self.token)
+        self.assertEqual(result[0],200)
+        self.assertEqual(len(result[1]['payload']['columns'][0]['values']),100)
+        self.source.value=RawRead(raw_batch(101),'a'*64)
+        status, result, _, _=call(service,self.request(columns=['event_ns']),self.token)
+        self.assertEqual(status,429)
+        self.assertEqual(result['kind'],'error')
+
+    def test_response_actual_262144_and_262145_bytes(self):
+        baseline=raw_batch(100)
+        baseline=replace(baseline,columns=tuple(replace(c,values=(START,)*100) if c.name=='event_ns' else c for c in baseline.columns)+(Column('condition',('',)*100),))
+        def dataset_for(batch):
+            self.source.value=RawRead(batch,'a'*64)
+            return RawDataset('synthetic.raw','owned-v1',self.scope,self.source.value,self.source.read,
+                columns=('condition',),rights=self.dataset.rights,rights_owner='owned-fixture',rights_evidence='synthetic-owned-v1',valid_from_ns=0,expires_at_ns=1000)
+        empty=dataset_for(baseline)
+        overhead=empty.size_hint(('condition',),'1.0','http-1')
+        for total, status in ((262144,200),(262145,429)):
+            padding=total-overhead
+            values=tuple('x'*(padding//100+(n<padding%100)) for n in range(100))
+            self.assertLessEqual(max(map(len,values)),4096)
+            batch=replace(baseline,columns=tuple(replace(c,values=values) if c.name=='condition' else c for c in baseline.columns))
+            dataset=dataset_for(batch)
+            grant=replace(self.grant,columns=frozenset(('condition',)))
+            service=Service(self.make_ledger(grants=(grant,),datasets=(dataset,)))
+            before=self.source.calls
+            result=call(service,self.request(columns=['condition']),self.token)
+            self.assertEqual(result[0],status)
+            if status==200:
+                self.assertEqual(len(result[2]),total)
+                self.assertEqual(self.source.calls,before+1)
+            else:
+                self.assertEqual(result[1]['kind'],'error')
+                self.assertEqual(self.source.calls,before)
+
+    def test_transfer_exact_boundary_and_one_byte_excess(self):
+        amount=self.dataset.size_hint(tuple(self.dataset.columns),'1.0','http-1')
+        for budget, status in ((amount,200),(amount-1,429)):
+            service=Service(self.make_ledger(limits=Limits(60,budget,budget,60000000000)))
+            before=self.source.calls
+            result=call(service,self.request(),self.token)
+            self.assertEqual(result[0],status)
+            self.assertEqual(self.source.calls,before+(status==200))
+
     def test_http_correlation_does_not_change_native_source(self):
         first = call(self.service, self.request(), self.token)[1]
         req = self.request(); req['request_id'] = 'http-2'
@@ -296,13 +393,23 @@ class ServiceVectors(unittest.TestCase):
         finally:
             server.shutdown(); worker.join(10); server.server_close()
 
-    def feature_setup(self):
-        spec = ConfigSpec.from_json((ROOT / 'tests/service/fixtures/approved-config.json').read_text())
+    def feature_setup(self, *, unknown=False, structured=False):
+        spec = ConfigSpec.from_json((ROOT / 'tests/service/fixtures/approved-config.json').read_text(encoding='utf-8'))
         batch = raw_batch(1)
         batch = replace(batch, metadata=replace(batch.metadata, scope=InputScope(START, START + 1, 'owned-v1')),
-            columns=tuple(replace(c, values=(START,)) if c.name == 'known_at_ns' else c for c in batch.columns))
-        result = compute_trades(batch, spec, entity=EntityKey('owned:ONE', 'session-1'))
-        producer = json.loads((ROOT / 'tests/service/fixtures/calculate.json').read_text())['payload']
+            columns=tuple(replace(c, values=(None if unknown else START,)) if c.name == 'known_at_ns' else c for c in batch.columns))
+        if structured:
+            interval=IntervalSpec('owned-interval',START,START+1)
+            spec=replace(spec,session=replace(spec.session,intervals=(interval,)))
+            values={'instrument_id':('owned:ONE',),'session_id':('session-1',),'start_ns':(START,),'end_ns':(START+1,),
+                'open':(10100,),'high':(10200,),'low':(10000,),'close':(10150,),'volume':(5,),'known_at_ns':(START,)}
+            batch=CanonicalBatch(DataKind.BAR,tuple(Column(k,v) for k,v in values.items()),replace(batch.metadata,interval_coverage=(IntervalCoverage('owned-interval',START,START+1,Coverage(1,1,True)),)))
+            result=compute_structure(batch,spec,entity=EntityKey('owned:ONE','session-1'))
+        else:
+            result = compute_trades(batch, spec, entity=EntityKey('owned:ONE', 'session-1'))
+        producer = json.loads((ROOT / 'tests/service/fixtures/calculate.json').read_text(encoding='utf-8'))['payload']
+        producer['context']['config']['digest']=spec.digest
+        if structured: producer['context']['features']=[{'feature_id':'session.structure.interval_ohlcv','algorithm_version':'v1'}]
         scope = Scope('owned:ONE', 'session-1', START, START + 1)
         identity = DatasetIdentity.from_source('synthetic.features', 'owned-v1', batch.metadata.source)
         rights = frozenset(('derived_read', 'discover', 'retain'))
@@ -310,7 +417,7 @@ class ServiceVectors(unittest.TestCase):
             rights_owner='owned-fixture', rights_evidence='owned-native-calc', valid_from_ns=0, expires_at_ns=1000)
         grant = replace(self.grant, dataset_id='synthetic.features', scope=scope, columns=frozenset(dataset.columns), actions=rights)
         service = Service(self.make_ledger(grants=(grant,), datasets=(dataset,)))
-        req = self.request(dataset=identity.wire(), scope=scope.wire(), columns=['session.trade.count']); req['version'] = '1.1'
+        req = self.request(dataset=identity.wire(), scope=scope.wire(), columns=['session.structure.interval_ohlcv' if structured else 'session.trade.count']); req['version'] = '1.1'
         return service, req, result
 
     def test_actual_native_feature_quality_metadata_and_version(self):
@@ -330,6 +437,42 @@ class ServiceVectors(unittest.TestCase):
         service, req, _ = self.feature_setup()
         service.ledger.grants = tuple(replace(g, actions=frozenset(('raw_read',))) for g in service.ledger.grants)
         self.assertEqual(call(service, req, self.token)[0], 403)
+
+    def test_actual_unavailable_native_quality_remains_null(self):
+        service,req,native=self.feature_setup(unknown=True)
+        status,result,_,_=call(service,req,self.token)
+        self.assertEqual(status,200)
+        value=result['payload']['feature_result']
+        self.assertEqual(value['columns'][0]['values'],[None])
+        self.assertEqual(value['quality'][0]['status'],'missing_input')
+        self.assertIn('unknown_availability',value['quality'][0]['reasons'])
+        self.assertEqual(value['metadata'],codec.cell(native.metadata))
+
+    def test_actual_structured_interval_and_nested_quality(self):
+        service,req,native=self.feature_setup(structured=True)
+        status,result,_,_=call(service,req,self.token)
+        self.assertEqual(status,200)
+        value=result['payload']['feature_result']['columns'][0]['values'][0]
+        self.assertEqual(value['name'],'IntervalOHLCV')
+        row=value['fields']['rows']['items'][0]['fields']
+        self.assertEqual(row['volume'],{'type':'int64','value':'5'})
+        self.assertEqual(row['open_price'],{'type':'float64','bits':'4059400000000000'})
+        self.assertEqual(row['quality']['name'],'QualityRow')
+        self.assertEqual(row['quality']['fields']['status'],{'type':'string','value':'available'})
+        self.assertEqual(value,codec.cell(native.values[0].values[0]))
+
+    def test_forged_native_result_fails_registration(self):
+        service,req,native=self.feature_setup()
+        identity=DatasetIdentity(**req['payload']['dataset'])
+        scope=Scope('owned:ONE','session-1',START,START+1)
+        # Bypass frozen dataclass construction to verify SDK native re-admission.
+        forged=replace(native)
+        object.__setattr__(forged,'quality',())
+        original=service.ledger.datasets[identity.dataset_id].produce(('session.trade.count',),'1.1')[1]['feature_result']
+        with self.assertRaises(SinkError) as caught:
+            FeatureDataset(identity,scope,forged,original['context'],original['command_digest'],rights=frozenset(('derived_read','retain')),
+                rights_owner='owned-fixture',rights_evidence='owned-native-calc',valid_from_ns=0,expires_at_ns=1000)
+        self.assertEqual(caught.exception.code,SinkErrorCode.INVALID_CONTENT)
 
 
 if __name__ == '__main__': unittest.main()

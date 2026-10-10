@@ -60,6 +60,7 @@ def qualify(form, artifact, deps, committed):
         run(py, '-I', '-c', "import importlib.util;import equity_feature_service as s;from pathlib import Path;assert 'site-packages' in Path(s.__file__).resolve().parts;assert s.__version__=='0.1.0a0';assert importlib.util.find_spec('duckdb') is None;assert importlib.util.find_spec('equity_feature_duckdb') is None;assert importlib.util.find_spec('equity_feature_workers') is None", cwd=location)
         assert fingerprint(py, location) == before
         run(py, '-m', 'pip', 'check')
+        run(py, '-I', committed / 'examples/service_owned.py', cwd=location)
         run(py, '-m', 'pip', 'install', '--no-deps', 'duckdb==1.5.6', 'numpy==2.2.6')
         native = [p for p in deps if p.name.startswith('equity_feature_duckdb-')]
         run(py, '-m', 'pip', 'install', '--no-index', '--no-deps', *native)
@@ -89,7 +90,7 @@ def main():
     output.mkdir(parents=True)
     with tempfile.TemporaryDirectory(prefix='service-build-', dir=ROOT / 'work') as tmp:
         temp = Path(tmp)
-        committed = snapshot(ROOT, commit, temp / 'component', ('packages/service','tests/service','tools'))
+        committed = snapshot(ROOT, commit, temp / 'component', ('packages/service','tests/service','tools','examples/service_owned.py'))
         core = snapshot(args.core_root.resolve(), CORE_COMMIT, temp / 'core')
         io = snapshot(args.io_root.resolve(), IO_COMMIT, temp / 'io')
         for relative in DEPENDENCIES:
