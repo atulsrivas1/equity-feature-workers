@@ -1,13 +1,17 @@
 # Equity Feature MCP
 
 Experimental optional local stdio tools over the accepted public remote client.
-This development checkpoint implements immutable owner registrations and profile
-snapshots plus internal bounded binary framing. The stdio server, protocol dispatch, reference ledger, installed
-interoperability and release qualification remain unfinished.
+Public immutable owner profiles and StdioServer provide synchronous bounded LF
+framing, the seven admitted tools and a finite process-local reference ledger.
+The trusted owner supplies an existing RemoteClient and MCPProfile, then calls
+server.run_stdio(input_binary, output_binary) once on the creating thread.
+EOF or output failure closes the owned client; no automatic replacement/replay.
 
-The owner supplies the fixed origin, token provider and complete public source,
-scope and producer expectations. Tool callers do not select credentials, paths,
-code or source/sink adapters. Calculation packages remain independent.
+Current evidence is Windows development only. Independent source review, actual
+product/reference/native interoperability, installed forms and release gates
+remain pending. Local references are not remote publication receipts or rights.
+The owner supplies fixed origin/token and complete public source/scope/producer
+expectations. Callers do not choose paths, credentials, code or adapters.
+Calculation packages remain independent; public source grants no hosted rights.
 
-Current scope and actual evidence: [EQ082](https://github.com/atulsrivas1/equity-features/issues/92).
-Public source does not grant hosted data rights or authorize deployment.
+[Current EQ082 evidence](https://github.com/atulsrivas1/equity-features/issues/92).
