@@ -17,7 +17,7 @@ def create():
 def publish(path,value):
  data=json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
  if len(data)>128:raise ValueError('owned acknowledgement bounds')
- temporary=path.with_suffix('.pending');temporary.write_bytes(data);temporary.replace(path)
+ temporary=path.with_name(path.name+'.pending');temporary.write_bytes(data);temporary.replace(path)
 scheduler,service,clock,facts=create();original_credentials=service.ledger.credentials
 requests=0
 def app(environ,start_response):
@@ -32,8 +32,9 @@ allowed={'ttl':{'ttl_before','ttl_exact'},'retire':{'retire','restore'},'grant':
 try:
  while requests<64:
   if stop.exists() or time.monotonic()>=deadline:break
-  if control.exists():
-   with control.open('rb') as stream:data=stream.read(129)
+  slot=control.with_name(control.name+'.'+str(sequence+1))
+  if sequence<16 and slot.exists():
+   with slot.open('rb') as stream:data=stream.read(129)
    if len(data)>128:raise ValueError('owned control bounds')
    value=json.loads(data)
    if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or not 1<=value['sequence']<=16 or type(value['action']) is not str or value['action'] not in allowed[scenario]:raise ValueError('owned control')
@@ -59,7 +60,7 @@ try:
       job=next(iter(scheduler.jobs.values()))
       if job.state!='succeeded':raise ValueError('owned terminal required')
       clock.n=job.expires_ns-(1 if action.endswith('before') else 0)
-    sequence=value['sequence'];publish(ack,{'sequence':sequence,'epoch':scheduler.epoch,'reads':facts['reads']})
+    sequence=value['sequence'];publish(ack.with_name(ack.name+'.'+str(sequence)),{'sequence':sequence,'epoch':scheduler.epoch,'reads':facts['reads']})
   server.handle_request()
 finally:
  server.server_close()
