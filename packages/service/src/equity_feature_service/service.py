@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from .jobs import JobScheduler
 
 from . import codec
+from ._audit import OwnedAudit, AuditReservation, AuditDenied
 from .datasets import Dataset, Scope, FeatureDataset
 from equity_feature_contracts import ContractError
 
@@ -74,7 +75,10 @@ class Ledger:
     """Share this exact instance across every controller in one process."""
     def __init__(self, *, clock: Callable[[], int], limits: Limits,
                  credentials: tuple[Credential, ...], grants: tuple[Grant, ...],
-                 datasets: tuple[Dataset, ...], policy_revision: str, registry_snapshot: str) -> None:
+                 datasets: tuple[Dataset, ...], policy_revision: str, registry_snapshot: str,
+                 audit: OwnedAudit | None = None) -> None:
+        if audit is not None and type(audit) is not OwnedAudit:
+            raise ValueError('unadmitted_audit')
         if type(limits) is not Limits or not callable(clock) or not policy_revision:
             raise ValueError("invalid_startup")
         if not 1 <= len(credentials) <= 16 or len(grants) > 64 or not 1 <= len(datasets) <= 16:
@@ -126,6 +130,31 @@ class Ledger:
         self._reserved = 0
         self._principal_reserved: dict[str, int] = {}
         self._principal_transfer: dict[str, int] = {}
+        self._audit = audit
+        if audit is not None:
+            audit.attach(self.lock)
+
+    @property
+    def audit(self) -> OwnedAudit | None:
+        return self._audit
+
+    def audit_totals(self) -> dict[str, int]:
+        scheduler = getattr(self,'_job_scheduler',None)
+        return dict(request_used=min(2**63-1,self._requests),transfer_used=self._transfer,
+                    transfer_reserved=self._reserved,retained_used=scheduler.total_retained if scheduler else 0,
+                    cache_used=0)
+
+    def audit_finish(self, reservation: AuditReservation, stage: str, decision: str, *, exited: bool) -> None:
+        if self.audit is None:
+            return
+        try:
+            self.audit.settle(reservation,self.now(),stage,decision,self.audit_totals())
+        except Exception:
+            # No visibility on audit failure. Only an actual closed request or
+            # exited native owner permits release of its remaining reservation.
+            if exited and reservation.remaining:
+                self.audit.abandon_after_exit(reservation)
+            raise
 
     def now(self) -> int:
         n = self.clock()
@@ -157,9 +186,9 @@ class Ledger:
         return found
 
     def admit_attempt(self, principal: str | None) -> bool:
-        self._requests += 1
+        self._requests = min(2**63-1,self._requests+1)
         if principal is not None:
-            self._principal_requests[principal] = self._principal_requests.get(principal, 0) + 1
+            self._principal_requests[principal] = min(2**63-1,self._principal_requests.get(principal,0)+1)
         return self._requests <= self.limits.requests and (principal is None or self._principal_requests[principal] <= self.limits.requests)
 
     def authorized(self, credential: Credential, dataset: Dataset, columns: tuple[str, ...], action: str, n: int) -> Grant | None:
@@ -214,6 +243,7 @@ class _Prepared:
     finalize: Callable[[], codec.Json] | None = None
     attachment: str | None = None
     before_emit: Callable[[], None] | None = None
+    audit_reservation: AuditReservation | None = None
 
 
 def _error(status: int, category: str, code: str, version: str = "1.0", request_id: str | None = None) -> _Prepared:
@@ -248,14 +278,19 @@ class Service:
                 raise ValueError("shared_job_scheduler_required")
         self.jobs = jobs
 
-    def _prepare(self, env: dict[str, Any]) -> _Prepared:
+    def _prepare(self, env: dict[str, Any], audit_reservation: AuditReservation | None = None,
+                 admission: tuple[Credential | None,bool] | None = None) -> _Prepared:
         ledger = self.ledger
         credential = None
         try:
             with ledger.lock:
-                n = ledger.now()
-                credential = ledger.authenticate(env.get("HTTP_AUTHORIZATION", ""), n)
-                if not ledger.admit_attempt(credential.principal if credential else None):
+                if admission is None:
+                    n = ledger.now()
+                    credential = ledger.authenticate(env.get("HTTP_AUTHORIZATION", ""), n)
+                    allowed_attempt = ledger.admit_attempt(credential.principal if credential else None)
+                else:
+                    credential,allowed_attempt = admission
+                if not allowed_attempt:
                     result = _error(429, "quota", "quota_exceeded")
                     result.credential = credential
                     return result
@@ -279,6 +314,9 @@ class Service:
             request = codec.decode(data)
             version, rid, payload = request["version"], request["request_id"], request["payload"]
             op = payload["operation"]
+            if ledger.audit is not None and audit_reservation is not None:
+                with ledger.lock:
+                    ledger.audit.bind(audit_reservation,action=op)
             if op in ("result_read", "artifact_read") and env.get("HTTP_RANGE") is not None:
                 raise codec.WireError("invalid_schema")
             if op in ("result_read", "artifact_read") and self.jobs is not None:
@@ -354,7 +392,34 @@ class Service:
         return result
 
     def __call__(self, env: dict[str, Any], start_response: StartResponse) -> Iterable[bytes]:
-        return _Emission(self, self._prepare(env), start_response)
+        reservation = None
+        c = None
+        admitted = None
+        counted = False
+        audit = self.ledger.audit
+        if audit is not None:
+            with self.ledger.lock:
+                try:
+                    n = self.ledger.now()
+                    c = self.ledger.authenticate(env.get('HTTP_AUTHORIZATION',''),n)
+                    allowed = self.ledger.admit_attempt(c.principal if c else None)
+                    counted = True
+                    admitted = (c,allowed)
+                    reservation = audit.reserve(n,actor=c.principal if c else None,policy=self.ledger.policy_revision)
+                    audit.settle(reservation,n,'attempt','admitted' if c else 'denied_auth',self.ledger.audit_totals())
+                except Exception as error:
+                    if not isinstance(error,AuditDenied):
+                        audit.fault()
+                    if reservation is not None and reservation.remaining:
+                        audit.abandon_after_exit(reservation)
+                    # Preserve normal attempt/transfer limits, without recursive
+                    # records or reading the caller body on audit exhaustion.
+                    if not counted:
+                        self.ledger.admit_attempt(c.principal if c else None)
+                    return _Emission(self,_error(429,'quota','quota_exceeded'),start_response)
+        prepared = self._prepare(env,reservation,admitted)
+        prepared.audit_reservation = reservation
+        return _Emission(self,prepared,start_response)
 
 
 class _Emission(Iterator[bytes]):
@@ -427,6 +492,23 @@ class _Emission(Iterator[bytes]):
                         data = b""  # No free error bytes once transfer allowance is exhausted.
             except Exception:
                 p, data = _error(500, "internal", "internal_error"), b""
+            reservation = self.prepared.audit_reservation
+            audit_body = None
+            audit_n = 0
+            if reservation is not None:
+                decision = ('emitted' if p.status == 200 else 'denied_auth' if p.status in (401,403)
+                            else 'denied_quota' if p.status == 429 else 'internal_failure' if p.status == 500
+                            else 'denied_contract')
+                try:
+                    audit_n = ledger.now()
+                    if ledger.audit is None:
+                        raise RuntimeError('audit_unavailable')
+                    audit_body = ledger.audit.prepare_settlement(reservation,audit_n,'finish',decision,ledger.audit_totals())
+                except Exception:
+                    p, data = _error(500,'internal','internal_error'),b''
+                    if ledger.audit is not None and reservation.remaining:
+                        ledger.audit.abandon_after_exit(reservation)
+                    self.prepared.audit_reservation = None
             if self.prepared.action in ("result_read", "artifact_read"):
                 self.prepared.envelope = _error(403, "authorization", "not_permitted").envelope
                 self.prepared.finalize = None
@@ -439,7 +521,19 @@ class _Emission(Iterator[bytes]):
             if p.status == 200 and p.attachment is not None:
                 headers.append(("Content-Disposition", 'attachment; filename="' + p.attachment + '"'))
             # This single bounded chunk is the authorization/transfer visibility linearization point.
-            self.start_response(str(p.status) + " " + phrase, headers)
+            try:
+                self.start_response(str(p.status) + " " + phrase, headers)
+            except BaseException:
+                if reservation is not None and reservation.remaining:
+                    try:
+                        ledger.audit_finish(reservation,'finish','abandoned',exited=True)
+                    except Exception:
+                        pass
+                    self.prepared.audit_reservation = None
+                raise
+            if audit_body is not None and reservation is not None and ledger.audit is not None:
+                ledger.audit.commit_settlement(reservation,audit_n,audit_body)
+                self.prepared.audit_reservation = None
             return data
 
     def close(self) -> None:
@@ -449,4 +543,12 @@ class _Emission(Iterator[bytes]):
                 if p.reserved_bytes and p.credential is not None:
                     self.service.ledger.release(p.credential.principal, p.reserved_bytes)
                     p.reserved_bytes = 0
+                if p.audit_reservation is not None:
+                    try:
+                        self.service.ledger.audit_finish(p.audit_reservation,'finish','abandoned',exited=True)
+                    except Exception:
+                        pass
+                    p.audit_reservation = None
+                p.envelope = _error(403,'authorization','not_permitted').envelope
+                p.finalize = p.before_emit = None
             self.emitted = True

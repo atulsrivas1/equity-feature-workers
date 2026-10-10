@@ -1,3 +1,7 @@
+## EQ080 integrated audit candidate
+
+Optional service.a3 adds explicit owned-synthetic finite diagnostics under the shared Ledger for HTTP admission/emission/abandon and native start/real-exit, with full-store fail-closed enforcement and original authority unchanged.19audit/full151 development methods and strict9 pass; separate current review/WinLinux installed/artifact/cache/inventory/all32/release gates remain pending. Default development APIs do not advertise completed EQ080 enforcement.
+
 ## EQ080 contained owned epoch candidate
 
 Internal stdlib supervisor now contains owned Windows Service/native qualification before imports, bounds CPU/commit/process/output/wall and observes actual exit. Nine new regressions/current130/strict8 pass; current Linux/installed/final runtime/cache/audit/release evidence remains pending. No public hosting or acceptance.
