@@ -31,6 +31,10 @@
     "types.py": {
       "sha256": "6824109cd1eabaf43c5dab829a83015b1b88ec9ae149765e6814afaf23f9bde5",
       "bytes": 64908
+    },
+    "shared\\version.py": {
+      "sha256": "18ac0ce561c0c1dd839ababb4f2ac01c41968533bff54289254982efdd4970c9",
+      "bytes": 156
     }
   },
   "dependencies": [
