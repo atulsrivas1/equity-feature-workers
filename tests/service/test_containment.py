@@ -16,6 +16,22 @@ from equity_feature_service._containment import OwnedEpochSupervisor
 
 
 class Containment(unittest.TestCase):
+    def native_entry(self, callback):
+        """Trusted owned fixture; callback is never HTTP-selected code."""
+        source = str(Path(__file__).resolve().parent)
+        return ('import sys,os,time,json\nsys.path.insert(0,'+repr(source)+')\n'
+            'from test_jobs import setup,Jobs\n'
+            'from equity_feature_service._audit import OwnedAudit\n'
+            'def callback(value):\n'+callback+'\n'
+            'audit=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300_000_000_000)\n'
+            'scheduler,service,tokens,clock,facts=setup(transform=callback,audit_store=audit)\n'
+            'job_id=Jobs().submit(service,tokens[0])\n'
+            'while scheduler.jobs[job_id].state in ("queued","running","cancel_requested"):\n time.sleep(.01)\n'
+            'job=scheduler.jobs[job_id]\n'
+            'print(json.dumps({"state":job.state,"native_bytes":len(job.native),"wire_bytes":len(job.wire),'
+            '"receipt":job.committed_receipt_sha256 is not None,"reads":facts["reads"]}),flush=True)\n'
+            'assert scheduler.close(2)\n')
+
     def launch(self, code, **kwargs):
         with tempfile.TemporaryDirectory() as temporary:
             entry = Path(temporary)/'owned.py'
@@ -37,11 +53,12 @@ class Containment(unittest.TestCase):
         supervisor = OwnedEpochSupervisor()
         with tempfile.TemporaryDirectory() as temporary:
             entry = Path(temporary)/'owned.py'
-            entry.write_text('while True: pass',encoding='utf-8')
-            result = supervisor.run(entry,wall_seconds=0.3)
+            entry.write_text(self.native_entry(' os.write(1,b"native-callback-entered\\n")\n while True: pass'),encoding='utf-8')
+            result = supervisor.run(entry,wall_seconds=3)
             self.assertEqual(result.reason,'deadline')
             self.assertNotEqual(result.exit_code,0)
-            self.assertLess(result.elapsed_seconds,3.3)
+            self.assertIn(b'native-callback-entered',result.output)
+            self.assertLess(result.elapsed_seconds,6)
             entry.write_text('import os\nos.write(1,b"next-epoch-explicit\\n")',encoding='utf-8')
             self.assertEqual(supervisor.run(entry).output,b'next-epoch-explicit\n')
 
@@ -52,22 +69,67 @@ class Containment(unittest.TestCase):
         self.assertEqual((result.reason,len(result.output)),('output_limit',65536))
 
     def test_process_creation_denied_but_threads_work(self):
-        code = 'import subprocess,sys,threading\nt=threading.Thread(target=lambda:None)\nt.start();t.join()\n'
-        code += 'try:\n p=subprocess.Popen([sys.executable,"-I","-c","print(123)"]);p.wait(timeout=2)\nexcept OSError:\n import os;os.write(1,b"denied\\n")\nelse:\n raise RuntimeError("escaped")\n'
+        code = self.native_entry(' import subprocess,threading\n t=threading.Thread(target=lambda:None)\n t.start();t.join()\n'
+            ' try:\n  p=subprocess.Popen([sys.executable,"-I","-c","print(123)"]);p.wait(timeout=2)\n'
+            ' except OSError:\n  os.write(1,b"denied\\n")\n else:\n  raise RuntimeError("escaped")\n return value')
         result = self.launch(code)
-        self.assertEqual((result.reason,result.output),('exited',b'denied\n'),result)
+        self.assertEqual((result.exit_code,result.reason),(0,'exited'),result)
+        self.assertTrue(result.output.startswith(b'denied\n'),result.output)
+        self.assertIn(b'"state": "succeeded"',result.output)
+        self.assertIn(b'"reads": 1',result.output)
 
-    def test_memory_exhaustion_is_child_failure_without_parent_growth(self):
-        result = self.launch('value=bytearray(5_000_000_000)')
-        self.assertNotEqual(result.exit_code,0)
-        self.assertEqual(result.reason,'child_failed')
-        self.assertIn(b'MemoryError',result.output)
+    def test_actual_native_memory_allocation_denied_without_visible_forms(self):
+        result = self.launch(self.native_entry(' value=bytearray(5_000_000_000)\n return value'))
+        # The OS denies the native callback allocation; accepted worker failure
+        # handling may keep this epoch alive, but must expose no producer forms.
+        self.assertEqual((result.exit_code,result.reason),(0,'exited'),result.output)
+        self.assertIn(b'"state": "failed"',result.output)
+        self.assertIn(b'"native_bytes": 0',result.output)
+        self.assertIn(b'"wire_bytes": 0',result.output)
+        self.assertIn(b'"receipt": false',result.output)
+        self.assertIn(b'"reads": 1',result.output)
 
     def test_cpu_budget_terminates_without_cooperation(self):
-        result = self.launch('while True: pass',wall_seconds=25)
+        result = self.launch(self.native_entry(' os.write(1,b"native-cpu-entered\\n")\n while True: pass'),wall_seconds=25)
         self.assertEqual(result.reason,'child_failed',result)
         self.assertNotEqual(result.exit_code,0)
+        self.assertIn(b'native-cpu-entered',result.output)
         self.assertLess(result.elapsed_seconds,23)
+
+    def test_actual_native_commit_witness_survives_epoch_death_without_visible_result_or_reexecution(self):
+        from equity_feature_io_sdk import decode_receipt, encode_receipt
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            marker = root/'historical-receipt.json'
+            code = self.native_entry(' return value')
+            owned_sink = ('from pathlib import Path\n'
+                'from equity_feature_example_extensions import ExampleSink\n'
+                'from equity_feature_io_sdk import encode_receipt\n'
+                'class AfterCommit(ExampleSink):\n'
+                ' def commit(self,session):\n'
+                '  receipt=super().commit(session)\n'
+                '  with Path('+repr(str(marker))+').open("xb") as witness:witness.write(encode_receipt(receipt))\n'
+                '  os.write(1,b"native-committed-witnessed\\n")\n'
+                '  while True:time.sleep(.01)\n')
+            code = code.replace('audit=OwnedAudit',owned_sink+'audit=OwnedAudit')
+            code = code.replace('setup(transform=callback,audit_store=audit)',
+                'setup(transform=callback,audit_store=audit,sink_create=AfterCommit)')
+            result = self.launch(code,wall_seconds=5)
+            self.assertEqual(result.reason,'deadline',result.output)
+            self.assertIn(b'native-committed-witnessed',result.output)
+            self.assertNotIn(b'"state"',result.output,'blocked commit must not return a successful service result')
+            receipt_bytes = marker.read_bytes()
+            receipt = decode_receipt(receipt_bytes)
+            self.assertEqual(receipt.result_count,1)
+            self.assertGreater(receipt.content_bytes,0)
+            self.assertEqual(encode_receipt(receipt),receipt_bytes)
+            time.sleep(.1)
+            self.assertEqual(marker.read_bytes(),receipt_bytes)
+            self.assertFalse(OwnedEpochSupervisor()._capacity.locked())
+            # This owned external witness is the returned native receipt, not a
+            # durable native payload or recovery store. ExampleSink's actual
+            # in-memory committed artifact dies with the epoch; no rollback,
+            # persistence/restart or post-death result-download claim follows.
 
     def test_running_epoch_holds_capacity_until_real_exit(self):
         with tempfile.TemporaryDirectory() as temporary:

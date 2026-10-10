@@ -1,3 +1,7 @@
+## EQ080 expanded native/cache qualification candidate
+
+Test actual native callbacks under unchanged physical OS limits, preserve a returned native commit receipt witness across hard death without a visible result/replay, and exercise real owner/cache entry caps plus concurrent audited hits/revoke/emit/close. Expanded171Windows development pass; new exact-head/native/docs/artifacts pending. Add truthful32-vector coverage and pre-code frozen owned inventory proposal; no runtime/package/math/schema change.
+
 ## EQ080 verified result cache candidate
 
 Implement full entitlement/context/content/receipt/wire/owner/epoch/operation key, finite original producer representation cache and shared job/cache byte reservations. Every hit retains full pure native verification/current rights/late visibility/new transfer checks. Seven new cache methods/all33 literal negatives/full166development pass; new final review/installed artifacts/inventory/all32/release pending. Frozen previous checkpoint source+service+foundation approved separately; no current-source equivalence claim.

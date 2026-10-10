@@ -1,13 +1,16 @@
 """Independent pre-code key/byte boundaries and real retained native hits."""
 from copy import deepcopy
 from dataclasses import replace
+from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
 import unittest
+from equity_feature_service._audit import OwnedAudit
 
 from equity_feature_service._cache import ResultCache, canonical_record, fingerprint, identity_key
 import test_delivery as delivery_helpers
-from test_service import call
+import test_jobs as native_helpers
+from test_service import call, env
 
 FIXTURE = json.loads((Path(__file__).parent/'fixtures/cache_identity.json').read_text(encoding='utf-8'))
 
@@ -112,6 +115,89 @@ class Cache(unittest.TestCase):
                 self.assertEqual(call(service,self.request(job.result_id),tokens[0])[0],403)
                 self.assertEqual(audit['reads'],1)
                 if field == 'expiry':self.assertEqual(scheduler.cache.total,0)
+
+    def test_actual_owner_partitions_four_principal_eight_global_entries(self):
+        scheduler,service,tokens,clock,audit,first = self.make()
+        helper = native_helpers.Jobs()
+        results = [(tokens[0],first)]
+        for owner,count in ((0,4),(1,4)):
+            for n in range(count):
+                job = helper.wait_terminal(scheduler,helper.submit(service,tokens[owner],f'cache-owner-{owner}-{n}'))
+                self.assertEqual(job.state,'succeeded')
+                results.append((tokens[owner],job))
+        payloads=[]
+        for token,job in results:
+            status,body,*_ = call(service,self.request(job.result_id),token)
+            self.assertEqual(status,200,body)
+            payloads.append(body['payload'])
+        self.assertTrue(all(p == payloads[0] for p in payloads))
+        # Equal native math does not collapse original owners/result IDs. The
+        # fifth A result remains ordinary delivery; B has its own four entries.
+        self.assertEqual(len(scheduler.cache.entries),8)
+        self.assertEqual(sum(e.principal=='A' for e in scheduler.cache.entries.values()),4)
+        self.assertEqual(sum(e.principal=='B' for e in scheduler.cache.entries.values()),4)
+        self.assertEqual(audit['reads'],9)
+        before = scheduler.cache.total
+        self.assertEqual(call(service,self.request(first.result_id),tokens[1])[0],403)
+        self.assertEqual(scheduler.cache.total,before)
+        self.assertEqual(audit['reads'],9)
+
+    def test_warm_representation_rebuilds_correlation_and_operation_frames(self):
+        scheduler,service,tokens,clock,audit,job = self.make()
+        for operation,rid in [('result_read','first'),('result_read','second'),('artifact_read','third')]:
+            request=self.request(job.result_id,operation);request['request_id']=rid
+            status,body,*_=call(service,request,tokens[0])
+            self.assertEqual(status,200,body)
+            self.assertEqual(body['request_id'],rid)
+        self.assertEqual(len(scheduler.cache.entries),2)
+        self.assertEqual(audit['reads'],1)
+        for entry in scheduler.cache.entries.values():
+            self.assertNotIn(b'"request_id"',entry.payload)
+            self.assertEqual(entry.expires_ns,job.expires_ns)
+
+    def test_actual_concurrent_hits_share_one_cache_reservation_and_charge_each_frame(self):
+        store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300_000_000_000)
+        scheduler,service,tokens,clock,audit,job = self.make(audit_store=store)
+        before=service.ledger._transfer
+        def read(n):
+            request=self.request(job.result_id);request['request_id']='parallel-'+str(n)
+            return call(service,request,tokens[0])
+        with ThreadPoolExecutor(max_workers=10) as pool:responses=list(pool.map(read,range(10)))
+        self.assertTrue(all(r[0]==200 for r in responses))
+        self.assertEqual({r[1]['request_id'] for r in responses},{'parallel-'+str(n) for n in range(10)})
+        self.assertEqual(service.ledger._transfer-before,sum(len(r[2]) for r in responses))
+        self.assertEqual(len(scheduler.cache.entries),1)
+        self.assertEqual(scheduler.cache.total,len(next(iter(scheduler.cache.entries.values())).payload))
+        self.assertEqual(service.ledger._reserved,0)
+        self.assertEqual(audit['reads'],1)
+        snapshot=json.loads(store.snapshot(store.permit,clock.n))
+        sequences=[r['sequence'] for r in snapshot['records']]
+        self.assertEqual(sequences,list(range(len(sequences))))
+
+    def test_concurrent_prepared_hits_revoke_before_emit_clear_cache_and_release_once(self):
+        store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300_000_000_000)
+        scheduler,service,tokens,clock,audit,job = self.make(audit_store=store)
+        prepared=[]
+        for n in range(10):
+            request=self.request(job.result_id);request['request_id']='prepared-'+str(n)
+            statuses=[]
+            emission=service(env(request,tokens[0]),lambda status,headers,out=statuses:out.append(status))
+            prepared.append((emission,statuses))
+        self.assertGreater(scheduler.cache.total,0)
+        service.ledger.revoke('grant-A')
+        def emit(pair):
+            emission,statuses=pair
+            raw=b''.join(emission);emission.close();emission.close()
+            return statuses,raw
+        with ThreadPoolExecutor(max_workers=10) as pool:responses=list(pool.map(emit,prepared))
+        self.assertTrue(all(s[0].startswith('403') and json.loads(raw)['kind']=='error' for s,raw in responses))
+        self.assertEqual(scheduler.cache.total,0)
+        self.assertEqual(service.ledger._reserved,0)
+        self.assertEqual(audit['reads'],1)
+        self.assertIsNotNone(job.committed_receipt_sha256)
+        snapshot=json.loads(store.snapshot(store.permit,clock.n))
+        sequences=[r['sequence'] for r in snapshot['records']]
+        self.assertEqual(sequences,list(range(len(sequences))))
 
 
 if __name__ == '__main__':unittest.main()
