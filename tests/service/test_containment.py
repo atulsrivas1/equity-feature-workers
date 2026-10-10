@@ -1,5 +1,6 @@
 """Actual owned Service/native execution and noncooperative epoch limits."""
 import ctypes
+import errno
 import os
 from pathlib import Path
 import sys
@@ -106,6 +107,22 @@ class Containment(unittest.TestCase):
         self.assertFalse(OwnedEpochSupervisor()._capacity.locked())
         result = self.launch('import os\nos.write(1,b"new-explicit-epoch")')
         self.assertEqual((result.reason,result.output),('exited',b'new-explicit-epoch'))
+
+    @unittest.skipUnless(sys.platform == 'win32','Windows HANDLE-to-CRT ownership boundary')
+    def test_capture_stream_wrapper_failure_closes_transferred_crt_descriptor(self):
+        descriptors = []
+        def fail(fd,*args,**kwargs):
+            descriptors.append(fd)
+            raise RuntimeError('owned-capture-wrapper-fault')
+        with patch('os.fdopen',side_effect=fail):
+            with self.assertRaisesRegex(RuntimeError,'owned-capture-wrapper-fault'):
+                self.launch('while True: pass')
+        self.assertEqual(len(descriptors),1)
+        with self.assertRaises(OSError) as caught:
+            os.fstat(descriptors[0])
+        self.assertEqual(caught.exception.errno,errno.EBADF)
+        self.assertFalse(OwnedEpochSupervisor()._capacity.locked())
+        self.assertEqual(self.launch('import os\nos.write(1,b"next")').output,b'next')
 
     def test_original_supervisor_death_kills_blocked_child(self):
         # Owned marker proves child startup, not stdout forwarding/persistence.

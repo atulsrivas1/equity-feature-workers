@@ -124,6 +124,7 @@ class _WindowsChild:
         nul: Any = None
         attributes: Any = None
         initialized = False
+        capture_fd: int | None = None
         child = Process()
         try:
             self.job = kernel.CreateJobObjectW(None, None)
@@ -171,9 +172,10 @@ class _WindowsChild:
             msvcrt: Any = import_module('msvcrt')
             if read.value is None:
                 raise OSError('owned_epoch_pipe')
-            fd = msvcrt.open_osfhandle(read.value,os.O_RDONLY | getattr(os, 'O_BINARY'))
+            capture_fd = int(msvcrt.open_osfhandle(read.value,os.O_RDONLY | getattr(os, 'O_BINARY')))
             read = w.HANDLE()
-            self.output = os.fdopen(fd,'rb',buffering=0)
+            self.output = os.fdopen(capture_fd,'rb',buffering=0)
+            capture_fd = None
             if kernel.ResumeThread(self.thread) == 0xffffffff:
                 raise OSError('owned_epoch_resume')
         except BaseException:
@@ -182,6 +184,7 @@ class _WindowsChild:
                 self.output.close()
             raise
         finally:
+            if capture_fd is not None: os.close(capture_fd)
             if write.value: kernel.CloseHandle(write)
             if read.value: kernel.CloseHandle(read)
             if nul: kernel.CloseHandle(nul)
