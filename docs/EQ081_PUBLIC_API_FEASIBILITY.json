@@ -1,0 +1,82 @@
+{
+  "scope": "Windows development public API/pre-code failure-value feasibility only, no HTTP/native client decoder implemented",
+  "raw_public_constructor_cases": [
+    {
+      "family": "trades",
+      "adjacent_1ns": false,
+      "rows": 3,
+      "full_literal_expected_sha256": "cfe2543eae46e4fe8db83e39264d138961f38bc41cd795b20319e48a231831d6",
+      "missing_required_column_denied": true
+    },
+    {
+      "family": "bars",
+      "adjacent_1ns": false,
+      "rows": 2,
+      "full_literal_expected_sha256": "003772db95e4334f4cb347d65fcf4fa2e093463afda12acbca09af981db5ce92",
+      "missing_required_column_denied": true
+    },
+    {
+      "family": "quotes",
+      "adjacent_1ns": false,
+      "rows": 4,
+      "full_literal_expected_sha256": "6de80e5fd83152328898d4225f51bc7d2ed0d0ed4e39f00cfe9f3f1a804d84a3",
+      "missing_required_column_denied": true
+    },
+    {
+      "family": "trades",
+      "adjacent_1ns": false,
+      "rows": 3,
+      "full_literal_expected_sha256": "5e391b3d2017422e476b4e6fdd9a6c75a24751f0e79a23428ada30bea666fe25",
+      "missing_required_column_denied": true
+    },
+    {
+      "family": "trades",
+      "adjacent_1ns": true,
+      "rows": 3,
+      "full_literal_expected_sha256": "3bf5bd1f3eaafe3af10c6e0d41db655c6cf30a54d16ef80da280624ffa0b0796",
+      "missing_required_column_denied": true
+    }
+  ],
+  "complete_native_public_constructor_cases": [
+    {
+      "case": "trades",
+      "native_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+      "producer_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+      "quality_rows": 5,
+      "evidence_rows": 0,
+      "public_constructor_roundtrip": true,
+      "command_digest_from_full_context_scope": true
+    },
+    {
+      "case": "bars",
+      "native_sha256": "8776f94ba6b31943da18c88a4b32eb8a0a110812030b556cff62bb4c7c358fa6",
+      "producer_sha256": "7f864e18ec55bcf86e2c50d89ed038e40ff8e09b7faebe648ae9a2d166b4a88f",
+      "quality_rows": 12,
+      "evidence_rows": 0,
+      "public_constructor_roundtrip": true,
+      "command_digest_from_full_context_scope": true
+    },
+    {
+      "case": "quotes",
+      "native_sha256": "0e585d4ee2f75e81d86af893c855afb29e4d100daf4031da5ee9e9f68abe7af4",
+      "producer_sha256": "4b7d87e4598dba13deff83df1b6c4cbff7829cdc24faf2332c0c2965a684a637",
+      "quality_rows": 2,
+      "evidence_rows": 4,
+      "public_constructor_roundtrip": true,
+      "command_digest_from_full_context_scope": true
+    },
+    {
+      "case": "trades-adjacent-large-ns",
+      "native_sha256": "4a4879d75f6fcd69f83c4b043f2eaf661cd542ca550aae3f948a041e84c2ce0a",
+      "producer_sha256": "1dd6d9c3486f85fe31b3fe5a167ec43db88ace7b81e0ba792b0843b0a188dbd8",
+      "quality_rows": 5,
+      "evidence_rows": 0,
+      "public_constructor_roundtrip": true,
+      "command_digest_from_full_context_scope": true
+    }
+  ],
+  "scalar_signed_zero_bits_preserved": true,
+  "failure_value_no_original_exception_graph": true,
+  "original_provider_exceptions_collected": 2,
+  "limitations": "Reference SDK bytes are independent expected producer inputs, constructor self-roundtrip is not conversion correctness proof; actual remote record/enum reconstruction and deadline/close/privacy consumer tests remain client runtime qualification."
+}

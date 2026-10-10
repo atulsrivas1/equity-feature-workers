@@ -1,0 +1,58 @@
+"""Existing public constructors and failure-value design feasibility, no client runtime."""
+from pathlib import Path
+import dataclasses,gc,hashlib,json,struct,weakref
+from collections import namedtuple
+from equity_feature_contracts import CanonicalBatch,Column,DataKind,BatchMetadata,SourceBinding,Coverage,PriceUnit,AdjustmentSpec,InputScope,FeatureResult,FeatureColumn
+from equity_feature_contracts.validation import validate_batch
+from equity_feature_io_sdk import decode_result,encode_result
+P=Path(__file__).resolve().parent
+fixture=json.loads((P/'equity-feature-workers/docs/EQ081_CLIENT_FIXTURES.json').read_text(encoding='utf-8'))
+def canonical(x):return json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+raw_proofs=[]
+for case in fixture['raw_cases']:
+ fields=case['expected_raw_payload']['metadata']['fields'];scope=fields['scope']['fields'];source=fields['source']['fields']
+ metadata=BatchMetadata('demo',SourceBinding(**{k:v['value'] for k,v in source.items()}),Coverage(len(case['native_values']['instrument_id']),len(case['native_values']['instrument_id']),True),PriceUnit(0,'USD'),AdjustmentSpec(),sampling='trade_snapshot' if case['family']=='quotes' else 'none',scope=InputScope(int(scope['start_ns']['value']),int(scope['end_ns']['value']),'example-v1'))
+ batch=CanonicalBatch(DataKind(case['data_kind']),tuple(Column(k,tuple(v)) for k,v in case['native_values'].items()),metadata)
+ validation=validate_batch(batch);assert validation.row_count==batch.row_count
+ assert batch.metadata.source.input_id==case['expected_raw_payload']['dataset']['input_id']
+ if case['adjacent_1ns']:
+  assert batch.column('event_ns').values==(9000000000000000110,9000000000000000111,9000000000000000112)
+  assert float(batch.column('event_ns').values[0])==float(batch.column('event_ns').values[1])
+ missing=tuple(c for c in batch.columns if c.name!='instrument_id')
+ try:CanonicalBatch(batch.kind,missing,metadata)
+ except Exception:pass
+ else:raise AssertionError('public constructor accepted missing identity')
+ raw_proofs.append({'family':case['family'],'adjacent_1ns':case['adjacent_1ns'],'rows':batch.row_count,'full_literal_expected_sha256':case['expected_raw_payload_sha256'],'missing_required_column_denied':True})
+native_proofs=[]
+for case in fixture['native_cases']:
+ encoded=canonical(case['native_result']);native=decode_result(encoded)
+ # Existing public constructors accept exact immutable native records. No HTTP decoder is implemented here.
+ rebuilt=FeatureResult(tuple(FeatureColumn(c.feature_id,c.algorithm_version,c.dtype,c.unit,c.entities,c.values,c.schema_version) for c in native.values),native.quality,native.metadata,native.evidence)
+ assert encode_result(rebuilt)==encoded and hashlib.sha256(encoded).hexdigest()==case['native_sha256']
+ producer=case['complete_producer_payload'];context=producer['context']
+ command={'operation':'calculate','context':context,'scope':{'instrument_id':native.values[0].entities[0].instrument_id,'session_id':native.metadata.session_id,'start_ns':str(native.metadata.inputs[0].metadata.scope.start_ns),'end_ns':str(native.metadata.inputs[0].metadata.scope.end_ns)}}
+ assert hashlib.sha256(canonical(command)).hexdigest()==producer['command_digest']
+ assert context['config']['digest']==native.metadata.config_digest
+ if case['family']=='trades':
+  values={c.feature_id:c.values[0] for c in native.values}
+  assert [values[k] for k in ('session.trade.count','session.trade.volume','session.trade.notional')]==[3,10,1011]
+ native_proofs.append({'case':case['case'],'native_sha256':case['native_sha256'],'producer_sha256':case['producer_payload_sha256'],'quality_rows':len(native.quality),'evidence_rows':len(native.evidence),'public_constructor_roundtrip':True,'command_digest_from_full_context_scope':True})
+assert struct.pack('>d',struct.unpack('>d',bytes.fromhex('8000000000000000'))[0]).hex()=='8000000000000000'
+Failure=namedtuple('Failure','category code phase status')
+class SecretError(Exception):pass
+references=[]
+def provider():
+ try:
+  original=SecretError('private-token-'+'A'*43);references.append(weakref.ref(original));raise original
+ except SecretError:
+  second=SecretError('private-body');references.append(weakref.ref(second));raise second
+def operational_boundary():
+ # Return inert closed values, not an exception carrying original cause/context/traceback.
+ try:provider()
+ except BaseException:return Failure('credentials','provider_failed','provider',None)
+failure=operational_boundary();gc.collect()
+assert all(reference()is None for reference in references)
+assert 'private' not in repr(failure) and not isinstance(failure,BaseException)
+assert not hasattr(failure,'__cause__') and not hasattr(failure,'__context__') and not hasattr(failure,'__traceback__')
+report={'scope':'Windows development public API/pre-code failure-value feasibility only, no HTTP/native client decoder implemented','raw_public_constructor_cases':raw_proofs,'complete_native_public_constructor_cases':native_proofs,'scalar_signed_zero_bits_preserved':True,'failure_value_no_original_exception_graph':True,'original_provider_exceptions_collected':len(references),'limitations':'Reference SDK bytes are independent expected producer inputs, constructor self-roundtrip is not conversion correctness proof; actual remote record/enum reconstruction and deadline/close/privacy consumer tests remain client runtime qualification.'}
+(P/'eq081-public-api-feasibility.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps(report))

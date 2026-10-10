@@ -1,0 +1,36 @@
+{
+  "scope": "pre-code development Windows owned native HTTP feasibility, not installed/client/TLS qualification",
+  "source_sha256": "e1cc8ccd0f1276ffc8d5c64d7ac9a312225586e611e01cd2f28ea8c6e2f124da",
+  "source_bytes": 1014,
+  "readiness_bytes": 15,
+  "requests": [
+    {
+      "operation": "calculate",
+      "kind": "job",
+      "bytes": 304,
+      "sha256": "eff8a350bc6a61c7ef404c15c85e8dd4d51f59f39da969255e40f700b9626173"
+    },
+    {
+      "operation": "job_status",
+      "kind": "job",
+      "bytes": 370,
+      "sha256": "0b98c6ea7e1e9e845e6808145eb4b5c1bab8428a6112924e0c9513899e7f40f7"
+    },
+    {
+      "operation": "result_read",
+      "kind": "result",
+      "bytes": 5765,
+      "sha256": "78c197ec19577aef31f49888615655fa9c89a6d8844d971c0350c80326fba819"
+    },
+    {
+      "operation": "slice",
+      "kind": "slice",
+      "bytes": 3283,
+      "sha256": "15b46522fcafd872975ad439cdf1253ad5cf117c78fea3cdd86e29e695570f61"
+    }
+  ],
+  "epoch_exit": 0,
+  "epoch_reason": "exited",
+  "mandatory_audit": true,
+  "client_runtime_changed": false
+}
