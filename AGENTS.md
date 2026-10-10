@@ -1,3 +1,7 @@
+## Owner-authorized R7 local review — October 9, 2026
+
+The owner explicitly authorized separate local Codex reviewers throughout bounded R7. This applies to optional service/client/MCP companion code linked to canonical R7 stories, including exact final source/security/docs/native/installed/artifact/publication evidence. Record actual reviewer identity, inspected final head, checks, findings/disposition and limitations. Relevant changes require renewed review. Author self-review/CI alone are insufficient. This is local automated review, not human/hosted review, identity/provider rights, external operations or registry/stable publication authorization. Canonical equity-features issue/Project/milestone remains the work-status authority.
+
 ## Owner-authorized R6 runner integration — October 8, 2026
 
 Canonical AGENTS.md/R6_AUTONOMOUS_HANDOFF.md authorize bounded R6 EQ067–074 and separate local automated review. EQ073 #82's necessary runner integration may change this worker repository after accepted BUG006/R5; concrete provider/file adapters remain I/O. This supersedes earlier stop-before-R6 snapshots for this dedicated R6 work only. Record exact review heads/findings/limits and retain numerical/docs/currentCI/native/installed/actual-publication/receipt/readback gates. No R7/private generation/provider data or charges/registry/stable/recurring/destructive work; free qualification downloads only expressly approved. No human/hosted/provider acceptance is inferred.
