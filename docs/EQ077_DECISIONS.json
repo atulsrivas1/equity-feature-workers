@@ -48,9 +48,9 @@
       "meaning": "same fixed error; no token/payload echo"
     },
     {
-      "id": "expiry_equal",
+      "id": "grant_expiry_equal",
       "expected": "deny_authorization",
-      "meaning": "trusted now equals token/grant exclusive expiry"
+      "meaning": "active token; trusted now equals grant exclusive expiry"
     },
     {
       "id": "foreign_principal",
@@ -151,6 +151,21 @@
       "id": "multiprocess_wsgi",
       "expected": "deny_startup",
       "meaning": "in-memory shared ledger does not claim cross-process atomicity"
+    },
+    {
+      "id": "token_expiry_equal",
+      "expected": "deny_authentication",
+      "meaning": "trusted now equals credential exclusive expiry; no source invocation"
+    },
+    {
+      "id": "feature_via_1_0",
+      "expected": "deny_transport",
+      "meaning": "closed1.0 cannot silently omit native quality/entity/evidence; feature requires explicit1.1"
+    },
+    {
+      "id": "feature_via_1_1",
+      "expected": "allow",
+      "meaning": "all grants/bounds pass and separately frozen1.1 representation preserves full native feature data"
     }
   ]
 }
