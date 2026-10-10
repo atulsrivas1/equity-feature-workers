@@ -39,7 +39,7 @@ Retry allowlist is explicit read operations discover/slice/job_status/result_rea
 | C07 response bounds | 262144bytes inclusive/one byte over, complete framing, partial/empty/truncated success denied, close response on every path. |
 | C08 parser hostility | Duplicate keys, invalid UTF8, nonfinite constants, excessive nesting/node counts, unknown fields/tags/versions denied. |
 | C09 correlation | Successful version/request_id/kind must match request; wrong nonnull error correlation denied; exact default1.0/null error status/category/code exceptions frozen from accepted source paths. |
-| C10 versions | 1.0 slice/discovery compatibility,1.1 native/job/results; 1.0 cannot invoke1.1 operations; no implicit downgrade. |
+| C10 versions | Both1.0/1.1 discover/rawslice/calculate/job_status/job_cancel; native feature_slice/result_read/artifact_read require1.1 at runtime. Schema membership alone is not support; no implicit downgrade. |
 | C11 safe retry | Bounded attempts only on an explicit read-operation allowlist; unchanged request bytes/correlation, fresh token each attempt. |
 | C12 mutation ambiguity | calculate/job_cancel are never automatically replayed; interrupted mutation reports outcome_unknown, no new key or implicit reexecution. |
 | C13 retry budget | 1-3 attempts, peroperation timeout<=5s, cooperative total budget<=15s, bounded retry delay<=5s; no hard DNS/OS wallclock claim. |

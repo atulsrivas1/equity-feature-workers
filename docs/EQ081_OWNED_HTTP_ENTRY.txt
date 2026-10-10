@@ -1,0 +1,19 @@
+import sys,time,json
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+scheduler,service,tokens,clock,facts=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+service.ledger.credentials=tuple(type(c).provision(c.principal,'A'*43,0,3600000000000) if n==0 else c for n,c in enumerate(service.ledger.credentials))
+server=qualification_server(service);server.timeout=.1
+ready=Path(sys.argv[2]);stop=Path(sys.argv[3])
+ready.write_text(json.dumps({'port':server.server_port}),encoding='ascii')
+deadline=time.monotonic()+20
+try:
+ for n in range(32):
+  if stop.exists() or time.monotonic()>=deadline:break
+  server.handle_request()
+finally:
+ server.server_close();scheduler.close(2)
+print('owned-audited-native-http-exited',flush=True)

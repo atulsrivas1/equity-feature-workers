@@ -1,3 +1,7 @@
+## EQ081 first concrete API/transport and owned HTTP feasibility freeze
+
+Initial corrective planning review6100074192 approved7fed/769, resolving impossible receipt claim. New decisions distinguish service wire from SDK encoding and actual1.0 job support; freeze proposed immutable API, exact token grammar, closed errors/no server-error retry, framing/deadline rules. Actual Windows admitted OwnedEpochSupervisor + mandatoryOwnedAudit nativeHTTP probe passed calculate1.0/status1.0/result1.1/rawslice1.0 with exit0/captureclosed. Committed entry/hash/execution receipt are feasibility only, not client/Linux/TLS/installed/numerical qualification. Independent complete fixtures/native mapping and realTLS/framing faults plus separate concrete planning review remain before Ready. No client code or admission. Source-read harness guessed nonexistent test_isolation path and wildcard SDK path failed read-only; corrected exact accepted paths, no failed invocation counted evidence.
+
 ## EQ081 initial planning correction
 
 Reviewer P2: accepted HTTP result does not carry native envelope/receipt/SHA; client cannot verify or invent them. Plan now confines client validation to transported producer/context/config/quality/evidence and leaves native receipt verification to service, with offline fixture checks distinct. Author additionally requires exact default1.0/null error tuples including codec/late paths. Seven Ready prerequisites and renewed exact-head planning review remain pending; no client implementation.
