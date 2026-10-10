@@ -12,7 +12,7 @@ from test_client import RemoteClient, JobExpectation, producer, FIXTURES
 from test_owned_http import read_ready
 
 ROOT=Path(__file__).resolve().parents[2]
-ENTRY_SHA='6a2c1017277fd6586a3fcd9ea85602543a1828455a50befedd231fe0733eb956'
+ENTRY_SHA='584076d224f19f7f5d2460f831c323e3c9bdaf80a001b6aba908d85505ae2a07'
 
 
 class AuthorityHTTP(unittest.TestCase):
@@ -37,24 +37,37 @@ class AuthorityHTTP(unittest.TestCase):
                 foreign_calls=[]
                 foreign=RemoteClient('http://127.0.0.1:'+str(port),lambda:foreign_calls.append(1) or 'B'*43,attempts=3)
                 sequence=[0]
+                held_ack=[None]
                 def action(name):
                     sequence[0]+=1;data=json.dumps({'sequence':sequence[0],'action':name},sort_keys=True,separators=(',',':')).encode('ascii')
                     self.assertLessEqual(len(data),128)
-                    pending=control.with_suffix('.pending');pending.write_bytes(data);pending.replace(control)
+                    control_slot=control.with_name(control.name+'.'+str(sequence[0]))
+                    ack_slot=ack.with_name(ack.name+'.'+str(sequence[0]))
+                    self.assertFalse(control_slot.exists());self.assertFalse(ack_slot.exists())
+                    pending=control_slot.with_name(control_slot.name+'.pending');pending.write_bytes(data);pending.replace(control_slot)
                     deadline=time.monotonic()+4
                     while True:
                         self.assertTrue(thread.is_alive(),errors);self.assertLess(time.monotonic(),deadline)
                         try:
-                            with ack.open('rb') as stream:raw=stream.read(129)
+                            stream=ack_slot.open('rb')
                         except FileNotFoundError:raw=b''
+                        else:
+                            try:raw=stream.read(129)
+                            except BaseException:stream.close();raise
+                            # Hold the previous immutable ack open through the
+                            # next publication: Windows must not replace it.
+                            if held_ack[0] is not None:held_ack[0].close()
+                            held_ack[0]=stream
                         self.assertLessEqual(len(raw),128)
                         if raw:
                             result=json.loads(raw)
                             self.assertEqual(set(result),{'sequence','epoch','reads'})
-                            if result['sequence']==sequence[0]:return result
+                            self.assertEqual(result['sequence'],sequence[0]);return result
                         time.sleep(.01)
                 try:yield owner,foreign,foreign_calls,action
-                finally:owner.close();foreign.close()
+                finally:
+                    if held_ack[0] is not None:held_ack[0].close()
+                    owner.close();foreign.close()
             finally:
                 stop.write_bytes(b'1');thread.join(6)
             self.assertFalse(thread.is_alive());self.assertEqual(errors,[]);self.assertEqual(len(results),1)
