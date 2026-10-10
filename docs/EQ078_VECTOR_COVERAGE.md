@@ -1,6 +1,6 @@
 # EQ078 frozen vector evidence — development checkpoint
 
-Story88 remains In progress. This map records actual tests in companion tests/service/test_jobs.py (42 methods), not final acceptance. Frozen plans contain30 requirements. Current Windows editable development source is under renewed review; committed fresh current wheel/sdist and twoOS artifact audit remain mandatory. Literal full native family records come from the independently frozen pre-code fixtures, not recomputed expected values from the scheduler.
+Story88 remains In progress. This map records actual tests in companion tests/service/test_jobs.py (44 methods), not final acceptance. Frozen plans contain30 requirements. Current Windows editable development source is under renewed review; committed fresh current wheel/sdist and twoOS artifact audit remain mandatory. Literal full native family records come from the independently frozen pre-code fixtures, not recomputed expected values from the scheduler.
 
 | Vector | Actual evidence or remaining requirement |
 | --- | --- |
@@ -30,7 +30,7 @@ Story88 remains In progress. This map records actual tests in companion tests/se
 | J24 | bars native unavailable overnight gap remains unavailable and full family SHA matches |
 | J25 | adjacent_large_int64_ns_native_and_wire_precision; direct pure values/quality/evidence plus exact metadata |
 | J26 | native_readback_failure, native_cancel_after_commit, commit_unknown_recovery and out_of_profile receipt methods |
-| J27 | eight_live_tombstones, payload_expiry and no_poll_physical_expiry_while_other_native_job_busy; global16/per-principal retention exact/overflow and independent grant-expiry/purge remain |
+| J27 | eight_live_tombstones, payload_expiry and no_poll_physical_expiry_while_other_native_job_busy; global16/per-principal retention exact/overflow and global/per-principal exact retention accounting (retirement original half-open expiry/purge now covered) remain |
 | J28 | invalid_idle_clock_cannot_prevent_empty_scheduler_shutdown; real-exit cancel/join; foreign native completion preservation/closed busy shutdown still to add |
 | J29 | closed existing codec tests plus job stale/code rejection; explicit job SQL/path/extra version variants still to add |
 | J30 | actual_loopback_two_principals_native_job_and_poll; current committed fresh wheel/sdist/light-full/public consumer typing/core invariance and perOS source/archive/RECORD audit pending |

@@ -1,3 +1,7 @@
+## EQ078 retirement correction
+
+Pin original grant lifetime per job and clear terminal payloads after live grant or credential retirement without stopping shared scheduler threads.44 job/full79 development tests and strict7 pass; current release gates remain pending. See [review disposition](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6095258027).
+
 ## EQ078 candidate admission/maintenance correction
 
 Seal approved native job registrations and bind complete raw dataset content/receipt commitments; add independent terminal maintenance during busy native execution and current retention-right cancellation/cleanup. Expanded owned family/native int64/rights/publication fixtures pass; final current source/artifact/review qualification pending. Existing worker/core/I/O/schema bytes unchanged. See story88 and tracked handoff for actual preliminary findings/failures and superseded receipts.

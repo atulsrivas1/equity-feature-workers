@@ -1,3 +1,7 @@
+## Retiring live identities
+
+An admitted job pins its original grant expiry for payload TTL and idempotency tombstone cleanup. Removing a current grant or credential denies further native work and retention; terminal payloads clear independently of polling. Cleanup, cancellation, finalization and shutdown use the pinned lifetime even after live authorization records disappear. Running capacity remains charged until native execution really exits. This candidate has44 job tests/full79 development tests passing; current artifact qualification and separate final review remain pending.
+
 ## Current42-method native qualification coverage
 
 Three native families,100/101rows, large adjacent int64ns, immutable grants/registration/content commitments and authorization/publication races now have actual development fixtures. [All30 frozen requirements and remaining evidence](EQ078_VECTOR_COVERAGE.md) records incomplete budget/retention/shutdown/installed qualification explicitly; no all30-pass claim. JobGrant rejects mutable feature permission sets. Fresh artifact harness now includes positive/negative public job profile/grant consumers alongside existing slice consumers. Current candidate remains under renewed separate review, not an accepted async release.

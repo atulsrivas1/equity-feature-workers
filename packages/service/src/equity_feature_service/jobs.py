@@ -150,6 +150,7 @@ class _Job:
     key_digest: str
     identity_digest: str
     command_digest: str
+    grant_expires_ns: int
     state: str = 'queued'
     result_id: str | None = None
     error: codec.Json | None = None
@@ -225,7 +226,7 @@ class JobScheduler:
         return self._last_wall
 
     def _authorized(self, credential: Credential, registration: JobRegistration, grant_id: str, action: str) -> bool:
-        dataset = self.ledger.datasets[registration.identity.dataset_id]
+        dataset = self.ledger.datasets.get(registration.identity.dataset_id)
         if type(dataset) is not RawDataset or dataset.acquisition_commitment != registration.acquisition_commitment:
             return False
         grant = self.ledger.authorized(credential,dataset,registration.columns,action,self._now())
@@ -238,6 +239,12 @@ class JobScheduler:
         if credential is None:
             raise codec.WireError('not_permitted')
         return credential
+
+    def _retention_allowed(self, job: _Job) -> bool:
+        try:
+            return self._authorized(self._credential(job),self.registrations[job.dataset_id],job.grant_id,'retain')
+        except ValueError:
+            return False
 
     def _check(self, job: _Job, action: str = 'calculate', *, cancel: bool = True) -> None:
         with self.ledger.lock:
@@ -260,21 +267,20 @@ class JobScheduler:
     def _sweep(self) -> None:
         n = self._now()
         for job in tuple(self.jobs.values()):
-            grant = next(g for g in self.ledger.grants if g.grant_id == job.grant_id)
             if job.state == 'queued':
                 try:
                     self._check(job)
                 except Exception:
                     job.cancelled, job.state = True,'cancelled'
                     self.queue.remove(job.job_id)
-                    job.expires_ns = min(n+300_000_000_000,grant.expires_at_ns)
+                    job.expires_ns = min(n+300_000_000_000,job.grant_expires_ns)
                     self._clear(job)
             if job.state in ('succeeded','failed','cancelled','expired'):
                 if (job.expires_ns and n >= job.expires_ns
-                        or job.held and not self._authorized(self._credential(job),self.registrations[job.dataset_id],job.grant_id,'retain')):
+                        or job.held and not self._retention_allowed(job)):
                     self._clear(job)
                     job.state, job.result_id, job.error = 'expired',None,None
-                if n >= grant.expires_at_ns:
+                if n >= job.grant_expires_ns:
                     self._clear(job)
                     self.keys.pop((job.principal,job.key_digest),None)
                     del self.jobs[job.job_id]
@@ -333,7 +339,8 @@ class JobScheduler:
                             or len(self.queue) >= 2 or any(self.jobs[j].principal == credential.principal for j in self.queue)
                             or self.total_retained+262_144 > 2_097_152 or self.retained.get(credential.principal,0)+262_144 > 1_048_576):
                         return _error(429,'quota','quota_exceeded',version,rid)
-                    job = _Job(self.epoch+'-'+secrets.token_hex(16),credential.principal,credential.digest,grant_id,registration.identity.dataset_id,key,identity,payload['command_digest'])
+                    job = _Job(self.epoch+'-'+secrets.token_hex(16),credential.principal,credential.digest,grant_id,registration.identity.dataset_id,key,identity,payload['command_digest'],
+                        next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == grant_id))
                     _bounded({k:v for k,v in asdict(job).items() if k not in ('native','wire','envelope','receipt')},8192)
                     self.jobs[job.job_id] = job
                     self.keys[(job.principal,key)] = job.job_id
@@ -351,7 +358,7 @@ class JobScheduler:
                     if job.state == 'queued':
                         self.queue.remove(job.job_id)
                         job.state = 'cancelled'
-                        job.expires_ns = min(self._now()+300_000_000_000,next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == job.grant_id))
+                        job.expires_ns = min(self._now()+300_000_000_000,job.grant_expires_ns)
                         self._clear(job)
                     else:
                         job.state = 'cancel_requested'
@@ -399,14 +406,13 @@ class JobScheduler:
                         if bounded_failure else {'category':'internal','code':'internal_error','retryable':False})
             finally:
                 with self.condition:
-                    grant = next(g for g in self.ledger.grants if g.grant_id == job.grant_id)
                     try:
                         completed_ns = self._now()
                     except ValueError:
                         completed_ns = self._last_wall
-                    job.expires_ns = min(completed_ns+300_000_000_000,grant.expires_at_ns)
+                    job.expires_ns = min(completed_ns+300_000_000_000,job.grant_expires_ns)
                     try:
-                        keep_receipt = self._authorized(self._credential(job),self.registrations[job.dataset_id],job.grant_id,'retain')
+                        keep_receipt = self._retention_allowed(job)
                     except ValueError:
                         keep_receipt = False
                     if job.state in ('failed','cancelled') and (not job.receipt or not keep_receipt):
@@ -582,7 +588,7 @@ class JobScheduler:
                     self.queue.remove(job.job_id)
                     job.state = 'cancelled'
                     job.expires_ns = min(self._last_wall+300_000_000_000,
-                        next(g.expires_at_ns for g in self.ledger.grants if g.grant_id == job.grant_id))
+                        job.grant_expires_ns)
                     self._clear(job)
             try:
                 self._sweep()

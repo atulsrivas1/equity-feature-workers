@@ -773,4 +773,60 @@ class Jobs(unittest.TestCase):
         self.assertEqual(clock.n,100,'numerical time must not become authorization time')
 
 
+
+    def test_retired_grant_or_credential_clears_payload_without_killing_threads(self):
+        for retired in ('grant','credential'):
+            with self.subTest(retired=retired):
+                scheduler,service,tokens,clock,audit = self.make()
+                job = self.wait_terminal(scheduler,self.submit(service,tokens[0]))
+                cleared = threading.Event()
+                original_clear = scheduler._clear
+                def clear(observed):
+                    original_clear(observed)
+                    if observed is job: cleared.set()
+                with scheduler.condition:
+                    scheduler._clear = clear
+                    if retired == 'grant':
+                        scheduler.ledger.grants = tuple(g for g in scheduler.ledger.grants if g.principal != 'A')
+                    else:
+                        scheduler.ledger.credentials = tuple(c for c in scheduler.ledger.credentials if c.principal != 'A')
+                    scheduler.condition.notify_all()
+                self.assertTrue(cleared.wait(1),'retired rights retained native payload without polling')
+                self.assertEqual(job.held,0)
+                self.assertTrue(scheduler.thread.is_alive())
+                self.assertTrue(scheduler.maintenance.is_alive())
+                self.assertEqual(self.wait_terminal(scheduler,self.submit(service,tokens[1])).state,'succeeded')
+
+    def test_retired_running_identity_holds_slot_until_exit_and_keeps_original_tombstone(self):
+        for retired in ('grant','credential'):
+            with self.subTest(retired=retired):
+                gate = threading.Event()
+                scheduler,service,tokens,clock,audit = self.make(gate=gate,cooperative=False)
+                self.addCleanup(gate.set)
+                job_id = self.submit(service,tokens[0])
+                self.assertTrue(audit['entered'].wait(1))
+                job = scheduler.jobs[job_id]
+                with scheduler.condition:
+                    if retired == 'grant':
+                        scheduler.ledger.grants = tuple(g for g in scheduler.ledger.grants if g.principal != 'A')
+                    else:
+                        scheduler.ledger.credentials = tuple(c for c in scheduler.ledger.credentials if c.principal != 'A')
+                    self.assertEqual(job.grant_expires_ns,3_600_000_000_000)
+                    self.assertEqual(job.held,262144)
+                self.assertFalse(scheduler.close(0.01),'closed native source has not really exited')
+                self.assertEqual(job.held,262144)
+                gate.set()
+                terminal = self.wait_terminal(scheduler,job_id)
+                self.assertEqual(terminal.state,'cancelled')
+                self.assertEqual(terminal.held,0)
+                self.assertTrue(scheduler.close(2))
+                with scheduler.condition:
+                    clock.n = job.grant_expires_ns-1
+                    scheduler._sweep()
+                    self.assertIn(job_id,scheduler.jobs)
+                    clock.n += 1
+                    scheduler._sweep()
+                    self.assertNotIn(job_id,scheduler.jobs)
+                    self.assertNotIn((job.principal,job.key_digest),scheduler.keys)
+
 if __name__ == '__main__': unittest.main()
