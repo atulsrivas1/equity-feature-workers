@@ -72,7 +72,7 @@ class Transport(unittest.TestCase):
             def connect(self,address):
                 self.was_active = bool(registered and registered[-1] is self)
                 raise KeyboardInterrupt
-        with patch('socket.socket',InterruptedSocket),self.assertRaises(KeyboardInterrupt):
+        with patch('socket.socket',InterruptedSocket),self.assertRaisesRegex(ExchangeError,'cancelled'):
             exchange(Origin.parse('http://127.0.0.1:9'),b'{}','A'*43,timeout=.1,deadline=time.monotonic()+.1,context=None,active=registered.append)
         self.assertEqual(len(allocated),1)
         self.assertTrue(allocated[0].was_active)

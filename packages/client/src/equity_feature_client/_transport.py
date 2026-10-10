@@ -121,7 +121,8 @@ def decode_frame(data: bytes) -> Frame:
 
 def exchange(origin: Origin, encoded: bytes, token: str, *, timeout: float,
              deadline: float, context: ssl.SSLContext | None,
-             active: Callable[[socket.socket | None], None]) -> Frame:
+             active: Callable[[socket.socket | None], None],
+             sending: Callable[[], None] | None = None) -> Frame:
     if type(encoded) is not bytes or len(encoded) > REQUEST_LIMIT:
         raise ExchangeError('bounds', 'prepare')
     if type(token) is not str or _TOKEN.fullmatch(token) is None:
@@ -167,6 +168,8 @@ def exchange(origin: Origin, encoded: bytes, token: str, *, timeout: float,
         headers = ('POST /v1/request HTTP/1.0\r\nHost: ' + origin.host_header + '\r\nAuthorization: Bearer ' + token + '\r\nContent-Type: application/json\r\nContent-Length: ' + str(len(encoded)) + '\r\nConnection: close\r\n\r\n').encode('ascii')
         owned.settimeout(remaining(deadline, timeout))
         sent = True  # sendall can raise after transmitting a partial request.
+        if sending is not None:
+            sending()
         owned.sendall(headers + encoded)
         phase = 'read'
         captured = bytearray()
@@ -189,6 +192,8 @@ def exchange(origin: Origin, encoded: bytes, token: str, *, timeout: float,
             if header_end is not None and len(captured) > header_end + RESPONSE_LIMIT:
                 raise ExchangeError('bounds', 'read', sent)
         remaining(deadline, timeout)
+        if not captured:
+            raise ExchangeError('disconnected', 'read', sent)
         return decode_frame(bytes(captured))
     except ExchangeError as error:
         # Internal callers receive only fixed codes and possible-send state.
@@ -199,6 +204,8 @@ def exchange(origin: Origin, encoded: bytes, token: str, *, timeout: float,
         raise ExchangeError('timeout', phase, sent) from None
     except (OSError, ValueError):
         raise ExchangeError('disconnected', phase, sent) from None
+    except BaseException:
+        raise ExchangeError('cancelled', phase, sent) from None
     finally:
         try:
             if owned is not None:

@@ -1,3 +1,7 @@
+## EQ081 client candidate (unreleased)
+
+Optional RemoteClient/helpers/immutableviews/closedFailure and boundedEOF/TLS transport implemented; Windows29development methods/strict6/currentpublicreview pending. Nativeconversion/bothOSinstalled/artifact/mainreleasegates unfinished, no release acceptance or acceptedcalculation changes.
+
 ## EQ080 qualification rework: Linux process observation — October 10, 2026
 
 [Actual guarded Ready to release -> Test rework](https://github.com/atulsrivas1/equity-features/issues/90#issuecomment-6099439813) supersedes earlier current-status captures. Metadata service producer38065425287/Linux job114251967807 failed the parent-death fixture: the child exited between `/proc/<pid>/stat` existence checking and reading, raising ESRCH. That producer is failed evidence, not accepted qualification. The raw failed log is preserved; unchanged flaky code is not rerun to obtain acceptance.
