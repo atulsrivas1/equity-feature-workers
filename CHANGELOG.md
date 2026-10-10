@@ -1,3 +1,7 @@
+## EQ079 unreleased development
+
+Scoped verified retained JSON result delivery and original expiry in optionalservice.a2; existing workers/core/I/O/schema unchanged. Current source/security/installed/artifact/release qualification pending.
+
 ## EQ078 qualified source publication and main service evidence — October 10, 2026 UTC
 
 EQ078 #88 is OPEN/Ready to release, the sole active story. [Final source review](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6095557026), [all18 prepublication checks/artifacts](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6095659594), [paired source publication](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6095669441), [independent main tree/public-byte/Atul readback](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6095682991) and [actual-main service qualification](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6095721842) supersede pending captures below. Source PR360/workerPR31 are merged. Qualified implementation mains are canonical adbfdd838d416f5615238483132d9d643959332b and worker80ef5b8fbaff20db2a49e744adf12e5aab545e25; whole trees equal separately approved5a3cc4b/6a9fe97. Reviewer independently read all30 changed public UTF8 blobs and Atul author/GitHub committer/no coauthors; accepted calculation/worker/I/O and closed1.0/1.1 schema bytes remain unchanged.

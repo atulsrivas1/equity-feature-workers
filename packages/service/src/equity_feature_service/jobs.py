@@ -18,7 +18,8 @@ from equity_feature_contracts.adapters import AdapterBatch, HistoricalAdapter
 from equity_feature_io_contracts import CredentialProvider, ResultSink, SinkRequirements
 from equity_feature_io_contracts.publication import (SinkError, SinkErrorCode, CompletionReceipt,
     ArtifactReference, PublicationState)
-from equity_feature_io_sdk import (SourceRegistry, SinkRegistry, encode_result, encode_envelope, encode_receipt)
+from equity_feature_io_sdk import (SourceRegistry, SinkRegistry, encode_result, encode_envelope, encode_receipt,
+    decode_result, decode_envelope, decode_receipt, verify_content, verify_receipt)
 from equity_feature_workers import (SessionCommandSpec, SourceOffer, ExecutionApproval, CommandOutcome,
     PlanningError, PlanningErrorCode, plan_acquisition, execute_plan)
 
@@ -297,6 +298,77 @@ class JobScheduler:
             if job is None or job.principal != credential.principal or not self._authorized(credential,self.registrations[job.dataset_id],job.grant_id,'job_manage'):
                 raise codec.WireError('not_permitted')
             return self._snapshot(job,version,rid)
+
+    def _result_job(self, credential: Credential, result_id: str, operation: str) -> _Job:
+        """Lightweight current authorization/expiry for preparation and final visibility."""
+        with self.ledger.lock:
+            self._sweep()
+            job = next((j for j in self.jobs.values() if j.result_id == result_id), None)
+            if (job is None or job.state != 'succeeded' or job.principal != credential.principal
+                    or credential not in self.ledger.credentials or not self._retention_allowed(job)):
+                raise codec.WireError('not_permitted')
+            registration = self.registrations[job.dataset_id]
+            dataset_now = self.ledger.datasets.get(job.dataset_id)
+            admission = hashlib.sha256(_bounded({'principal':job.principal,'grant':job.grant_id,
+                'policy':self.ledger.policy_revision,'registration':registration.registration_digest},8192)).hexdigest()
+            if (admission != job.identity_digest or dataset_now is None
+                    or dataset_now.identity != registration.identity or dataset_now.scope != registration.scope
+                    or self.ledger.registry_snapshot != json.loads(registration.context_bytes)['registry_snapshot']):
+                raise codec.WireError('not_permitted')
+            actions = ('derived_read','retain','export') if operation == 'artifact_read' else ('derived_read','retain')
+            if not all(self._authorized(credential,registration,job.grant_id,a) for a in actions):
+                raise codec.WireError('not_permitted')
+            return job
+
+    def result_current(self, credential: Credential, result_id: str, operation: str) -> None:
+        self._result_job(credential,result_id,operation)
+
+    def result_visible(self, credential: Credential, result_id: str, version: str, rid: str,
+                       operation: str) -> codec.Json:
+        """Pure retained-form verification; never accesses native source/sink objects."""
+        with self.ledger.lock:
+            job = self._result_job(credential,result_id,operation)
+            registration = self.registrations[job.dataset_id]
+            actions = ('derived_read','retain','export') if operation == 'artifact_read' else ('derived_read','retain')
+            if (len(job.native) > 65_536 or len(job.wire) > 131_072
+                    or len(job.envelope)+len(job.receipt) > 32_768
+                    or len(job.native)+len(job.wire)+len(job.envelope)+len(job.receipt) != job.held
+                    or hashlib.sha256(job.receipt).hexdigest() != job.committed_receipt_sha256):
+                raise codec.WireError('not_permitted')
+            native, envelope, receipt = decode_result(job.native),decode_envelope(job.envelope),decode_receipt(job.receipt)
+            verify_content(envelope,(native,))
+            verify_receipt(receipt,envelope,(native,))
+            dataset = FeatureDataset(registration.identity,registration.scope,native,
+                json.loads(registration.context_bytes),registration.command_digest,
+                rights=frozenset(actions),rights_owner='owned-registration',rights_evidence='verified-native-receipt',
+                valid_from_ns=0,expires_at_ns=job.grant_expires_ns)
+            _, body = dataset.produce(dataset.columns,'1.1')
+            if codec.canonical(body) != job.wire:
+                raise codec.WireError('not_permitted')
+            return {'schema':'equity.remote','version':version,'kind':'result','request_id':rid,
+                    'payload':body['feature_result']}
+
+    def prepare_result(self, credential: Credential, request: codec.Json) -> _Prepared:
+        version,rid,payload = request['version'],request['request_id'],request['payload']
+        if version != '1.1':
+            return _error(400,'transport','incompatible_version',version,rid)
+        if payload['cursor'] is not None:
+            return _error(400,'transport','invalid_schema',version,rid)
+        result_id,operation = payload['result_id'],payload['operation']
+        with self.ledger.lock:
+            try:
+                amount = len(codec.encode(self.result_visible(credential,result_id,version,rid,operation)))
+            except Exception:
+                return _error(403,'authorization','not_permitted',version,rid)
+            if not self.ledger.reserve(credential.principal,amount):
+                return _error(429,'quota','quota_exceeded',version,rid)
+            # Retain only bounded opaque/auth/correlation metadata between prepare and emission.
+            placeholder = _error(403,'authorization','not_permitted',version,rid).envelope
+            attachment = ('result-'+hashlib.sha256(result_id.encode('ascii')).hexdigest()+'.json'
+                          if operation == 'artifact_read' else None)
+            return _Prepared(200,placeholder,credential,action=operation,reserved_bytes=amount,
+                finalize=lambda: self.result_visible(credential,result_id,version,rid,operation),attachment=attachment,
+                before_emit=lambda: self.result_current(credential,result_id,operation))
 
     def discovery_features(self, credential: Credential) -> set[tuple[str,str]]:
         with self.ledger.lock:
