@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
-from typing import Any, Generic, Mapping, TypeVar, cast
+from typing import Any, Generic, Literal, Mapping, TypeVar, cast
 
 from . import _wire
 
@@ -19,6 +19,8 @@ class DatasetKey:
     input_id: str
 
     def __post_init__(self) -> None:
+        if any(type(getattr(self, name)) is not str for name in self.__slots__):
+            raise ValueError('invalid_expectation')
         _wire.definition('dataset', self.payload_json())
 
     def payload_json(self) -> dict[str, str]:
@@ -33,7 +35,7 @@ class ScopeKey:
     end_ns: int
 
     def __post_init__(self) -> None:
-        if type(self.start_ns) is not int or type(self.end_ns) is not int:
+        if type(self.instrument_id) is not str or type(self.session_id) is not str or type(self.start_ns) is not int or type(self.end_ns) is not int:
             raise ValueError('invalid_expectation')
         _wire.definition('scope', self.payload_json())
 
@@ -48,6 +50,8 @@ class FeatureRef:
     algorithm_version: str
 
     def __post_init__(self) -> None:
+        if type(self.feature_id) is not str or type(self.algorithm_version) is not str:
+            raise ValueError('invalid_expectation')
         _wire.definition('feature', self.payload_json())
 
     def payload_json(self) -> dict[str, str]:
@@ -69,15 +73,17 @@ def _features(values: object) -> tuple[FeatureRef, ...]:
 class RawExpectation:
     dataset: DatasetKey
     scope: ScopeKey
-    data_kind: str
+    data_kind: Literal['trade', 'bar', 'quote']
     columns: tuple[str, ...]
 
     def __post_init__(self) -> None:
-        if type(self.dataset) is not DatasetKey or type(self.scope) is not ScopeKey or self.data_kind not in ('trade', 'bar', 'quote'):
+        if type(self.dataset) is not DatasetKey or type(self.scope) is not ScopeKey or type(self.data_kind) is not str or self.data_kind not in ('trade', 'bar', 'quote'):
             raise ValueError('invalid_expectation')
         if type(self.columns) not in (tuple, list):
             raise ValueError('invalid_expectation')
         columns = tuple(self.columns)
+        if any(type(column) is not str for column in columns):
+            raise ValueError('invalid_expectation')
         _wire.definition('request', dict(operation='slice', dataset=self.dataset.payload_json(),
                          scope=self.scope.payload_json(), columns=list(columns), cursor=None))
         object.__setattr__(self, 'columns', columns)
@@ -101,6 +107,8 @@ class ProducerExpectation:
         _wire.definition('context', copied)
         inventory = _features(executed_features)
         for label in (backend_id, backend_version):
+            if type(label) is not str:
+                raise ValueError('invalid_expectation')
             _wire.definition('label', label)
         by_id = {v.feature_id: v.algorithm_version for v in inventory}
         if any(by_id.get(v['feature_id']) != v['algorithm_version'] for v in copied['features']):
@@ -120,6 +128,8 @@ class JobExpectation:
     command_digest: str
 
     def __post_init__(self) -> None:
+        if type(self.job_id) is not str or type(self.command_digest) is not str:
+            raise ValueError('invalid_expectation')
         _wire.definition('id', self.job_id)
         _wire.definition('digest', self.command_digest)
 
@@ -135,7 +145,9 @@ class Request:
             raise ValueError('invalid_request')
         value = dict(schema='equity.remote', version=version, request_id=request_id, kind='request', payload=dict(payload))
         data = _wire.canonical(value)
-        _wire.validate(value)
+        # Validate exactly the snapshot that will be sent, never caller-owned
+        # nested mappings that can mutate between encoding and validation.
+        _wire.validate(_wire.parse(data, limit=_wire.REQUEST_LIMIT))
         object.__setattr__(self, 'version', version)
         object.__setattr__(self, 'request_id', request_id)
         object.__setattr__(self, 'encoded', data)

@@ -4,6 +4,7 @@ import hashlib
 import json
 import sys
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'packages/client/src'))
@@ -14,6 +15,29 @@ FIXTURES = json.loads((ROOT / 'docs/EQ081_CLIENT_FIXTURES.json').read_text(encod
 
 
 class Models(unittest.TestCase):
+    def test_serialized_request_is_the_validated_snapshot(self):
+        dataset = DatasetKey(**FIXTURES['raw_cases'][0]['expected_raw_payload']['dataset'])
+        payload = dict(operation='slice', dataset=dataset.payload_json(), scope=ScopeKey('A', 'S', 100, 200).payload_json(), columns=['event_ns', 7], cursor=None)
+        original = _wire.canonical
+        def encode_then_mutate(value, **kwargs):
+            encoded = original(value, **kwargs)
+            payload['columns'][:] = ['event_ns']
+            return encoded
+        with patch.object(_wire, 'canonical', side_effect=encode_then_mutate), self.assertRaises(ValueError):
+            Request('1.1', 'owned', payload)
+
+    def test_mutable_equality_and_string_subclasses_denied(self):
+        class PretendTrade:
+            def __eq__(self, other): return True
+        class MutableLabel(str): pass
+        dataset = DatasetKey(**FIXTURES['raw_cases'][0]['expected_raw_payload']['dataset'])
+        scope = ScopeKey('A', 'S', 100, 200)
+        for kind in (PretendTrade(), MutableLabel('trade')):
+            with self.assertRaises(ValueError):
+                RawExpectation(dataset, scope, kind, ('event_ns',))
+        for fn in (lambda: ScopeKey(MutableLabel('A'), 'S', 0, 1), lambda: FeatureRef(MutableLabel('feature'), '1'), lambda: JobExpectation(MutableLabel('job'), '0'*64), lambda: RawExpectation(dataset, scope, 'trade', (MutableLabel('event_ns'),))):
+            with self.assertRaises(ValueError): fn()
+
     def test_literal_source_and_exact_adjacent_scope(self):
         raw = FIXTURES['raw_cases'][-1]['expected_raw_payload']
         dataset = DatasetKey(**raw['dataset'])
