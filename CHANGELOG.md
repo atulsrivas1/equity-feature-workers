@@ -1,3 +1,7 @@
+## EQ080 in development
+
+Optional service0.1.0a3 bootstrap prerequisite uses lazy public exports so native imports occur after a future containment boundary. Existing public class identity/typing preserved;121 editable Windows service tests/strict7 pass. Pre-code OS capability probes are qualified separately. Actual supervisor/cache/audit/physical bounds/current installed/release gates remain unimplemented/pending; no acceptance claimed. Accepted calculations/worker/I/O/schema inputs unchanged.
+
 ## EQ079 qualified source and final delivery evidence — October10,2026 UTC
 
 Current lifecycle follows [story89 and live Project](https://github.com/atulsrivas1/equity-features/issues/89). Source PR362/worker33 merged after all18 exact-head checks and separate source/security/native/API/docs/service/foundation approval [6096528793](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6096528793). Qualified implementation mains canonical8dade31cf1e0455b1a176970e01a6c6808ee306d / worker3aeb69a346db93de842300166f54615dff19c8a1. Separate actual-main readback [6096565581](https://github.com/atulsrivas1/equity-features/issues/89#issuecomment-6096565581) verified complete trees/all27 changed public UTF8 blobs2154706bytes/Atul-GitHub attribution/no coauthors. Runtime/test/build inputs equal reviewed source; accepted workers/core/I/O/closed schemas remain unchanged.

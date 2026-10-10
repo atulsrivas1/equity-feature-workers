@@ -39,7 +39,7 @@ def audit(path, source):
         for p in source.rglob('*'):
             if p.is_file(): assert files[prefix + 'src/' + p.relative_to(source.parent).as_posix()] == p.read_bytes()
     assert b'License-Expression: Apache-2.0' in metadata
-    assert b'Version: 0.1.0a2' in metadata
+    assert b'Version: 0.1.0a3' in metadata
     for name, data in files.items():
         assert '..' not in Path(name).parts and not name.startswith(('/', '\\'))
         assert '__pycache__' not in name and not name.endswith('.pyc')
@@ -58,7 +58,7 @@ def qualify(form, artifact, deps, committed):
         before = fingerprint(py, location)
         light = [p for p in deps if p.name.startswith(('equity_feature_io_contracts-', 'equity_feature_io_sdk-'))]
         run(py, '-m', 'pip', 'install', '--no-index', '--no-deps', '--no-build-isolation', *light, artifact)
-        run(py, '-I', '-c', "import importlib.util;import equity_feature_service as s;from pathlib import Path;assert 'site-packages' in Path(s.__file__).resolve().parts;assert s.__version__=='0.1.0a2';assert importlib.util.find_spec('duckdb') is None;assert importlib.util.find_spec('equity_feature_duckdb') is None;assert importlib.util.find_spec('equity_feature_workers') is None", cwd=location)
+        run(py, '-I', '-c', "import importlib.util;import equity_feature_service as s;from pathlib import Path;assert 'site-packages' in Path(s.__file__).resolve().parts;assert s.__version__=='0.1.0a3';assert importlib.util.find_spec('duckdb') is None;assert importlib.util.find_spec('equity_feature_duckdb') is None;assert importlib.util.find_spec('equity_feature_workers') is None", cwd=location)
         assert fingerprint(py, location) == before
         run(py, '-m', 'pip', 'check')
         run(py, '-I', committed / 'examples/service_owned.py', cwd=location)

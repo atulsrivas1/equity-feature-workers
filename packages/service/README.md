@@ -1,3 +1,7 @@
+## EQ080 bootstrap foundation candidate
+
+Optional service0.1.0a3 defers native graph initialization until explicit public access, preserving existing exports. [Current implementation and remaining isolation gates](../../docs/EQ080_ISOLATION.md) records121 editable Windows tests/strict7, approved pre-code and actual start. Supervisor/cache/audit runtime and physical/installed/release qualification remain pending. Prior EQ079 is accepted6097119023; older pending captures below are history.
+
 ## EQ079 development candidate
 
 Optional0.1.0a2 adds scoped retained result_read/artifact_read (explicit1.1, currentderived_read+retain/export). Complete JSON producer payload and controlled attachment; no native paths. [API, validation and pending gates](../../docs/EQ079_DELIVERY.md). Story89 In progress; no release acceptance.
