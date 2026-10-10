@@ -72,7 +72,7 @@ class _WindowsChild:
         from ctypes import wintypes as w
         if ctypes.sizeof(ctypes.c_void_p) != 8:
             raise RuntimeError('unsupported_host')
-        kernel: Any = ctypes.WinDLL('kernel32', use_last_error=True)
+        kernel: Any = getattr(ctypes, 'WinDLL')('kernel32', use_last_error=True)
         self.kernel = kernel
         self.job: Any = None
         self.process: Any = None
@@ -119,7 +119,7 @@ class _WindowsChild:
             function.argtypes, function.restype = args, result
         def check(value: Any) -> None:
             if not value:
-                raise OSError(ctypes.get_last_error(), 'owned_epoch_setup')
+                raise OSError(getattr(ctypes, 'get_last_error')(), 'owned_epoch_setup')
         read, write = w.HANDLE(), w.HANDLE()
         nul: Any = None
         attributes: Any = None
@@ -168,10 +168,10 @@ class _WindowsChild:
             check(kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
             if not contained.value:
                 raise RuntimeError('uncontained_child')
-            import msvcrt
+            msvcrt: Any = import_module('msvcrt')
             if read.value is None:
                 raise OSError('owned_epoch_pipe')
-            fd = msvcrt.open_osfhandle(read.value,os.O_RDONLY | os.O_BINARY)
+            fd = msvcrt.open_osfhandle(read.value,os.O_RDONLY | getattr(os, 'O_BINARY'))
             read = w.HANDLE()
             self.output = os.fdopen(fd,'rb',buffering=0)
             if kernel.ResumeThread(self.thread) == 0xffffffff:
@@ -259,6 +259,7 @@ class OwnedEpochSupervisor:
         start = time.monotonic()
         child: Any = None
         reader: threading.Thread | None = None
+        reader_started = False
         captured = bytearray()
         overflow, read_failure = threading.Event(), threading.Event()
         safe_release = True
@@ -291,6 +292,7 @@ class OwnedEpochSupervisor:
                     read_failure.set()
             reader = threading.Thread(target=drain,name='owned-epoch-output',daemon=True)
             reader.start()
+            reader_started = True
             reason = 'exited'
             while child.poll() is None:
                 if overflow.is_set() or read_failure.is_set() or time.monotonic()-start >= wall_seconds:
@@ -320,9 +322,13 @@ class OwnedEpochSupervisor:
                 else:
                     if child.poll() is None: child.kill()
                     child.wait(timeout=3)
-                if reader is not None: reader.join(3)
-                if reader is not None and reader.is_alive():
+                if reader_started and reader is not None: reader.join(3)
+                if reader_started and reader is not None and reader.is_alive():
                     raise RuntimeError('owned_epoch_capture_not_closed')
-                output.close()
-            if safe_release:
+                try:
+                    output.close()
+                finally:
+                    if safe_release:
+                        self._capacity.release()
+            elif safe_release:
                 self._capacity.release()

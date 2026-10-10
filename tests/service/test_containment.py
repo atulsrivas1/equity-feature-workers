@@ -8,7 +8,9 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import patch
 
+from equity_feature_service import _containment
 from equity_feature_service._containment import OwnedEpochSupervisor
 
 
@@ -87,6 +89,23 @@ class Containment(unittest.TestCase):
         for fields in ({'wall_seconds':31},{'wall_seconds':True},{'output_limit':65537},{'output_limit':True}):
             with self.subTest(fields=fields),self.assertRaises(ValueError):
                 self.launch('raise AssertionError("executed")',**fields)
+
+    def test_output_reader_start_failure_closes_capture_and_releases_dead_epoch(self):
+        original = _containment._WindowsChild if sys.platform == 'win32' else subprocess.Popen
+        streams = []
+        def observe(*args,**kwargs):
+            child = original(*args,**kwargs)
+            streams.append(child.output if sys.platform == 'win32' else child.stdout)
+            return child
+        target = 'equity_feature_service._containment._WindowsChild' if sys.platform == 'win32' else 'subprocess.Popen'
+        with patch(target,side_effect=observe),patch('threading.Thread.start',side_effect=RuntimeError('owned-reader-start-fault')):
+            with self.assertRaisesRegex(RuntimeError,'owned-reader-start-fault'):
+                self.launch('while True: pass')
+        self.assertEqual(len(streams),1)
+        self.assertTrue(streams[0].closed)
+        self.assertFalse(OwnedEpochSupervisor()._capacity.locked())
+        result = self.launch('import os\nos.write(1,b"new-explicit-epoch")')
+        self.assertEqual((result.reason,result.output),('exited',b'new-explicit-epoch'))
 
     def test_original_supervisor_death_kills_blocked_child(self):
         # Owned marker proves child startup, not stdout forwarding/persistence.
