@@ -56,7 +56,7 @@ def qualify(artifact,deps,reference,committed,client,service):
         run(py,'-m','pip','install','--no-index','--no-deps',*core)
         before=fingerprint(py,location)
         run(py,'-m','pip','install','--no-index','--no-deps',*[p for p in deps if p not in core])
-        run(py,'-m','pip','install','--no-index','--no-deps',*reference)
+        run(py,'-m','pip','install','--no-index','--no-deps','--force-reinstall',*reference)
         harness=location/'harness'
         for source,target in ((committed/'tests/mcp','tests/mcp'),(client/'tests/client','tests/client'),(service/'tests/service','tests/service')):
             shutil.copytree(source,harness/target)
