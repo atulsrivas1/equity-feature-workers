@@ -45,7 +45,8 @@ class Credentials:
 
 def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda value:value, monotonic=time.monotonic_ns,
           family='trades', registered_batch_transform=lambda value:value, audit_out=None, rows=None,
-          max_input_bytes=None, ns_offset=0, adjacent=False, raw_receipt='a'*64, principals=('A','B'), dataset_label=None, grant_label=None):
+          max_input_bytes=None, ns_offset=0, adjacent=False, raw_receipt='a'*64, principals=('A','B'), dataset_label=None, grant_label=None,
+          actions=None):
     fixture = json.loads(json.dumps(next(f for f in FROZEN['fixtures'] if f['family'] == family)))
     if ns_offset:
         def shift(value):
@@ -131,7 +132,7 @@ def setup(gate=None, sink_create=ExampleSink, cooperative=True, transform=lambda
     clock = Clock()
     scope = Scope('A','S',request.start_ns,request.end_ns)
     columns = tuple(facts)
-    rights = frozenset(('calculate','job_manage','retain','discover'))
+    rights = frozenset(('calculate','job_manage','retain','discover')) if actions is None else frozenset(actions)
     dataset_id = fixture['request']['payload']['context']['dataset']['dataset_id']
     dataset = RawDataset(dataset_id,'owned-v1',scope,RawRead(admitted_batch,raw_receipt),lambda cancellation:RawRead(admitted_batch,raw_receipt),
                          columns=columns,rights=rights,rights_owner='owned-test',rights_evidence='owned-native-fixture',valid_from_ns=0,expires_at_ns=3_600_000_000_000)

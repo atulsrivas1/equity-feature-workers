@@ -1,3 +1,7 @@
+## EQ079 development candidate
+
+Optional0.1.0a2 adds scoped retained result_read/artifact_read (explicit1.1, currentderived_read+retain/export). Complete JSON producer payload and controlled attachment; no native paths. [API, validation and pending gates](../../docs/EQ079_DELIVERY.md). Story89 In progress; no release acceptance.
+
 # Experimental equity-feature-service0.1.0a1 candidate
 
 EQ078 adds optional server-owned native asynchronous jobs after [approved Ready/start admission](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6094640060). OPEN/In progress; final review, installed artifacts and release gates remain pending. [Current job API/evidence](../../docs/EQ078_JOBS.md) describes explicit jobs extra, immutable native registrations, finite shared scheduler, current rights and restart restrictions. Base slice/discovery import remains light; accepted workers/calculations/I/O and closed transport schemas are unchanged. Public hosting/provider/private/paid/registry/stable publication is separately gated. Earlier EQ077 captures below preserve history.

@@ -18,7 +18,7 @@ from .datasets import Dataset, Scope, FeatureDataset
 from equity_feature_contracts import ContractError
 
 StartResponse = Callable[..., Any]
-_ACTIONS = frozenset(("discover", "raw_read", "derived_read", "retain", "calculate", "job_manage"))
+_ACTIONS = frozenset(("discover", "raw_read", "derived_read", "retain", "calculate", "job_manage", "export"))
 
 
 @dataclass(frozen=True)
@@ -212,6 +212,7 @@ class _Prepared:
     action: str = ""
     reserved_bytes: int = 0
     finalize: Callable[[], codec.Json] | None = None
+    attachment: str | None = None
 
 
 def _error(status: int, category: str, code: str, version: str = "1.0", request_id: str | None = None) -> _Prepared:
@@ -277,7 +278,9 @@ class Service:
             request = codec.decode(data)
             version, rid, payload = request["version"], request["request_id"], request["payload"]
             op = payload["operation"]
-            if op in ("calculate", "job_status", "job_cancel") and self.jobs is not None:
+            if op in ("result_read", "artifact_read") and self.jobs is not None:
+                result = self.jobs.prepare_result(credential, request)
+            elif op in ("calculate", "job_status", "job_cancel") and self.jobs is not None:
                 result = self.jobs.handle(credential, request)
             elif op == "discover":
                 features: set[tuple[str, str]] = set()
@@ -408,11 +411,16 @@ class _Emission(Iterator[bytes]):
                         data = b""  # No free error bytes once transfer allowance is exhausted.
             except Exception:
                 p, data = _error(500, "internal", "internal_error"), b""
+            if self.prepared.action in ("result_read", "artifact_read"):
+                self.prepared.envelope = _error(403, "authorization", "not_permitted").envelope
+                self.prepared.finalize = None
             phrase = {200: "OK", 400: "Bad Request", 401: "Unauthorized", 403: "Forbidden", 422: "Unprocessable Entity", 429: "Too Many Requests", 500: "Internal Server Error"}[p.status]
             headers = [("Content-Type", "application/json"), ("Content-Length", str(len(data))),
                        ("Cache-Control", "no-store"), ("X-Content-Type-Options", "nosniff")]
             if p.status == 401:
                 headers.append(("WWW-Authenticate", "Bearer"))
+            if p.status == 200 and p.attachment is not None:
+                headers.append(("Content-Disposition", 'attachment; filename="' + p.attachment + '"'))
             # This single bounded chunk is the authorization/transfer visibility linearization point.
             self.start_response(str(p.status) + " " + phrase, headers)
             return data

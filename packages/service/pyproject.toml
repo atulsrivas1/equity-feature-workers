@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-service"
-version = "0.1.0a1"
+version = "0.1.0a2"
 description = "Experimental authenticated bounded synthetic slice service"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
@@ -15,7 +15,7 @@ dependencies = ["equity-feature-io-sdk==0.1.0a2", "jsonschema==4.26.0", "attrs==
 
 [project.optional-dependencies]
 duckdb = ["equity-feature-duckdb==0.1.0a8"]
-jobs = ["equity-feature-workers==0.1.0a13"]
+jobs = ["equity-feature-workers==0.1.0a23"]
 
 [project.urls]
 Repository = "https://github.com/atulsrivas1/equity-feature-workers"
