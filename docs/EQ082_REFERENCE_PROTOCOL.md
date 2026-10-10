@@ -1,3 +1,5 @@
+> Historical partial input, superseded by current EQ082_DECISIONS/PROTOCOL_SCHEMAS. Earlier no-probe-yet and before-Ready fault-test wording records its original capture. Normal Windows composition is approved6102268290; product fault/bothOS tests occur after concrete Ready/start admission. This file is not current execution authority.
+
 # EQ082 reference SDK and bounded protocol decisions
 
 Story [EQ082 #92](https://github.com/atulsrivas1/equity-features/issues/92) remains Backlog/unassigned. This is partial concrete preparation, not Ready/start or runtime approval. [Initial planning review](https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6102086136) approved the original plan; seven Ready prerequisites still require complete concrete fixtures and independent review. No MCP package, product protocol handler or native service probe has been implemented or executed here.
