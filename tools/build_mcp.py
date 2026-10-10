@@ -1,18 +1,25 @@
 """Committed bounded MCP archives and fresh isolated reference/native qualification."""
 import argparse,base64,csv,hashlib,io,json,os,platform,shutil,subprocess,sys,tempfile,tarfile,tomllib,zipfile
-from pathlib import Path
+from pathlib import Path,PurePosixPath,PureWindowsPath
 from build_foundation import build,fingerprint,git,run,sha,snapshot,CORE_COMMIT,IO_COMMIT
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 ROOT=Path(__file__).resolve().parents[1]
 CLIENT_COMMIT='4365fe90aa5125662b222782873bf106bd49b778'
-INPUTS=('packages/mcp','tests/mcp','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','.github/workflows/mcp.yml')
+INPUTS=('packages/mcp','tests/mcp','tests/qualification/test_mcp_records.py','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','.github/workflows/mcp.yml')
 CLIENT_INPUTS=('packages/client','tests/client','docs/EQ081_CLIENT_FIXTURES.json','docs/EQ081_OWNED_HTTP_ENTRY.txt','docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 
 def reference_record(path):
     """Official wheel archives may include directory entries, which are not files."""
     with zipfile.ZipFile(path) as archive:
-        names={item.filename for item in archive.infolist() if not item.is_dir()}
-        assert all(not name.startswith(('/', '\\')) and '\\' not in name and '..' not in Path(name).parts for name in archive.namelist())
+        entries=archive.infolist()
+        assert len({item.filename for item in entries})==len(entries)
+        for item in entries:
+            name=item.filename[:-1] if item.is_dir() else item.filename
+            posix=PurePosixPath(name);windows=PureWindowsPath(name)
+            assert name and '\\' not in name and ':' not in name
+            assert not posix.is_absolute() and not windows.drive and not windows.root
+            assert '..' not in posix.parts and '/'.join(posix.parts)==name
+        names={item.filename for item in entries if not item.is_dir()}
         records=[n for n in names if n.endswith('.dist-info/RECORD')];assert len(records)==1
         record=records[0]
         rows=list(csv.reader(io.StringIO(archive.read(record).decode('utf-8'))))
@@ -114,6 +121,7 @@ def main():
         temp=Path(tmp);committed=snapshot(ROOT,commit,temp/'component',INPUTS)
         for name in ('build_mcp.py','build_client.py','build_foundation.py'):
             assert (ROOT/'tools'/name).read_bytes()==(committed/'tools'/name).read_bytes()
+        run(sys.executable,'-m','unittest','discover','-s',committed/'tests/qualification','-p','test_mcp_records.py','-v')
         client=snapshot(ROOT,CLIENT_COMMIT,temp/'client',CLIENT_INPUTS)
         service=snapshot(ROOT,SERVICE_COMMIT,temp/'service',('packages/service','tests/service'))
         workers=snapshot(ROOT,WORKER_COMMIT,temp/'workers',('packages/workers',))
