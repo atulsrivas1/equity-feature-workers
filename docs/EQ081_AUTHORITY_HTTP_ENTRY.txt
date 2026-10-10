@@ -17,7 +17,7 @@ def create():
 def publish(path,value):
  data=json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
  if len(data)>128:raise ValueError('owned acknowledgement bounds')
- temporary=path.with_name(path.name+'.pending');temporary.write_bytes(data);temporary.replace(path)
+ temporary=path.with_name(path.name+'.pending');temporary.write_bytes(data);temporary.replace(path);path.with_name(path.name+'.complete').mkdir()
 scheduler,service,clock,facts=create();original_credentials=service.ledger.credentials
 requests=0
 def app(environ,start_response):
@@ -33,7 +33,7 @@ try:
  while requests<64:
   if stop.exists() or time.monotonic()>=deadline:break
   slot=control.with_name(control.name+'.'+str(sequence+1))
-  if sequence<16 and slot.exists():
+  if sequence<16 and slot.with_name(slot.name+'.complete').is_dir():
    with slot.open('rb') as stream:data=stream.read(129)
    if len(data)>128:raise ValueError('owned control bounds')
    value=json.loads(data)
