@@ -8,7 +8,8 @@
         "protocolVersion": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 64
+          "maxLength": 64,
+          "pattern": "^[\\x20-\\x7e]{1,64}(?![\\s\\S])"
         },
         "capabilities": {
           "type": "object",
@@ -142,12 +143,14 @@
             "name": {
               "type": "string",
               "minLength": 1,
-              "maxLength": 64
+              "maxLength": 64,
+              "pattern": "^[\\x20-\\x7e]{1,64}(?![\\s\\S])"
             },
             "version": {
               "type": "string",
               "minLength": 1,
-              "maxLength": 64
+              "maxLength": 64,
+              "pattern": "^[\\x20-\\x7e]{1,64}(?![\\s\\S])"
             },
             "title": {
               "type": "string",

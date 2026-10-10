@@ -1,3 +1,7 @@
+## EQ082 final concrete freeze corrections
+
+Renewed80ef/8ab planning review independently closed original5 findings (sixschemas/SDKmetadata/13 metadata negatives/10record negatives/1016byte witness). Final P2 checked expiry must fitint63 BEFORE reserve/provider and P3 three initialization ASCII fields corrected; four arithmetic vectors/three non-ASCII parameter denials PASS offline. No product runtime/Ready/start; exact renewed planning review pending. Source/tool/nativefixture assets unchanged. Next actual approval then guarded92Backlog->Ready->Inprogress before implementing product.
+
 ## EQ082 concrete planning rework before Ready
 
 Separate reviewer found5pre-code findings at63d78dd/f60e442: local late-expiry/clock, invalidated reference re-admission, metadata shapes, label grammar and historical authority. Corrected concrete decisions/protocol parameter schemas/process-lifetime counted tombstones/reference record witness; no product runtime. Offline14 protocol denials and finite record proof PASS, reference record exact public ID grammar. Initial publication prefix checker failed after comment/PR bodies but before issue mutation; repaired preserving full old issue history/no duplicate comment. Renewed exact concrete review required before Ready/start; existing nine fixture/20argument/49reviewer-negative/schema39332byte evidence is scoped.

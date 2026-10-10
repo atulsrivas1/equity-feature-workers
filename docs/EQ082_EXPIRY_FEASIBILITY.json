@@ -1,0 +1,28 @@
+{
+  "scope": "Four frozen checked-expiry arithmetic decision vectors, not runtime/provider execution",
+  "vectors": [
+    {
+      "admission_ns": 9223371976854775807,
+      "ttl_seconds": 60,
+      "expected": "allow",
+      "expires_ns": 9223372036854775807
+    },
+    {
+      "admission_ns": 9223371976854775808,
+      "ttl_seconds": 60,
+      "expected": "deny_before_reservation_provider"
+    },
+    {
+      "admission_ns": true,
+      "ttl_seconds": 60,
+      "expected": "deny_before_reservation_provider"
+    },
+    {
+      "admission_ns": 9223372036854775807,
+      "ttl_seconds": 1,
+      "expected": "deny_before_reservation_provider"
+    }
+  ],
+  "ascii_initialization_denials": 3,
+  "guard": "Check exact int admission_ns/TTL and addition <=2^63-1 before reference reservation/provider/backend calculate; recheck trusted clock late as separately frozen."
+}
