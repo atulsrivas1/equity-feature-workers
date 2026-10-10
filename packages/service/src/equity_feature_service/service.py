@@ -8,14 +8,17 @@ import hmac
 import ipaddress
 import re
 from threading import RLock
-from typing import Any
+from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .jobs import JobScheduler
 
 from . import codec
 from .datasets import Dataset, Scope, FeatureDataset
 from equity_feature_contracts import ContractError
 
 StartResponse = Callable[..., Any]
-_ACTIONS = frozenset(("discover", "raw_read", "derived_read", "retain"))
+_ACTIONS = frozenset(("discover", "raw_read", "derived_read", "retain", "calculate", "job_manage"))
 
 
 @dataclass(frozen=True)
@@ -208,6 +211,7 @@ class _Prepared:
     columns: tuple[str, ...] = ()
     action: str = ""
     reserved_bytes: int = 0
+    finalize: Callable[[], codec.Json] | None = None
 
 
 def _error(status: int, category: str, code: str, version: str = "1.0", request_id: str | None = None) -> _Prepared:
@@ -232,10 +236,15 @@ class _CurrentGrant:
 
 
 class Service:
-    def __init__(self, ledger: Ledger) -> None:
+    def __init__(self, ledger: Ledger, *, jobs: JobScheduler | None = None) -> None:
         if type(ledger) is not Ledger:
             raise ValueError("shared_ledger_required")
         self.ledger = ledger
+        if jobs is not None:
+            from .jobs import JobScheduler
+            if type(jobs) is not JobScheduler or jobs.ledger is not ledger:
+                raise ValueError("shared_job_scheduler_required")
+        self.jobs = jobs
 
     def _prepare(self, env: dict[str, Any]) -> _Prepared:
         ledger = self.ledger
@@ -268,7 +277,9 @@ class Service:
             request = codec.decode(data)
             version, rid, payload = request["version"], request["request_id"], request["payload"]
             op = payload["operation"]
-            if op == "discover":
+            if op in ("calculate", "job_status", "job_cancel") and self.jobs is not None:
+                result = self.jobs.handle(credential, request)
+            elif op == "discover":
                 features: set[tuple[str, str]] = set()
                 admitted = False
                 with ledger.lock:
@@ -277,6 +288,8 @@ class Service:
                         if ledger.authorized(credential, discovery_dataset, (), "discover", n):
                             admitted = True
                             features.update(discovery_dataset.features)
+                    if self.jobs is not None:
+                        features.update(self.jobs.discovery_features(credential))
                 if not admitted:
                     result = _error(403, "authorization", "not_permitted", version, rid)
                 else:
@@ -361,6 +374,11 @@ class _Emission(Iterator[bytes]):
                 if (p.status == 200 or p.dataset is not None) and c is not None:
                     if not c.valid_from_ns <= n < c.expires_at_ns:
                         p = _error(401, "authentication", "unauthenticated", p.envelope["version"], p.envelope["request_id"])
+                    elif p.finalize is not None:
+                        try:
+                            p.envelope = p.finalize()
+                        except Exception:
+                            p = _error(403, "authorization", "not_permitted", p.envelope["version"], p.envelope["request_id"])
                     elif p.action == "discover":
                         # Rebuild permitted metadata after concurrent revocation; no stale vocabulary escapes.
                         features: set[tuple[str, str]] = set()
@@ -369,6 +387,8 @@ class _Emission(Iterator[bytes]):
                             if ledger.authorized(c, dataset, (), "discover", n):
                                 admitted = True
                                 features.update(dataset.features)
+                        if self.service.jobs is not None:
+                            features.update(self.service.jobs.discovery_features(c))
                         if not admitted:
                             p = _error(403, "authorization", "not_permitted", p.envelope["version"], p.envelope["request_id"])
                         else:

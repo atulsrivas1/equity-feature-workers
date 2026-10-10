@@ -1,3 +1,7 @@
+## EQ078 asynchronous jobs in development
+
+Optional equity-feature-service0.1.0a1 candidate implements registered native jobs outside accepted workers/calculations/I/O. Story88 is In progress; [current API and qualification limits](docs/EQ078_JOBS.md). Final runtime review/current Windows/Linux/fresh artifacts/publication gates remain pending. EQ0770.1.0a0 is accepted under its original receipt; earlier captures below are history.
+
 ## Qualified optional service0.1.0a0
 
 Authenticated bounded slice/discovery is independently reviewed and qualified on actual-main Windows/Linux using owned synthetic native source/result fixtures. The service is optional, preserves native identities/metadata/quality and keeps calculations, workers.a13 and I/O runtime packages unchanged. [API/install/evidence](docs/EQ077_SERVICE.md) and [owned loopback HTTP example](examples/service_owned.py) describe the experimental source/30-day Actions artifact channel and exact limits. This does not expose a public service or grant hosted/private/provider data rights. Earlier captures below are history; the live canonical story/Project owns lifecycle.

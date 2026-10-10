@@ -136,6 +136,11 @@ class RawDataset:
             values = col.values if col is not None else (None,) * batch.row_count
             self._value_sizes[name] = len(codec.canonical([codec.cell(v, decimal=field.dtype == i.DType.DECIMAL128) for v in values])) - 2
 
+    @property
+    def acquisition_commitment(self) -> tuple[str, str]:
+        """Complete admitted batch and receipt hashes, without another read."""
+        return self._fingerprint.hex(),self._receipt
+
     def _shell(self, name: str) -> codec.Json:
         field = i.schema_for(self._kind).field(name)
         dtype = "int64" if field.dtype == i.DType.UTC_NS else field.dtype.value

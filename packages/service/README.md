@@ -1,3 +1,7 @@
+# Experimental equity-feature-service0.1.0a1 candidate
+
+EQ078 adds optional server-owned native asynchronous jobs after [approved Ready/start admission](https://github.com/atulsrivas1/equity-features/issues/88#issuecomment-6094640060). OPEN/In progress; final review, installed artifacts and release gates remain pending. [Current job API/evidence](../../docs/EQ078_JOBS.md) describes explicit jobs extra, immutable native registrations, finite shared scheduler, current rights and restart restrictions. Base slice/discovery import remains light; accepted workers/calculations/I/O and closed transport schemas are unchanged. Public hosting/provider/private/paid/registry/stable publication is separately gated. Earlier EQ077 captures below preserve history.
+
 # Experimental equity-feature-service0.1.0a0
 
 Optional loopback synthetic qualification service for canonical EQ077. No public deployment is approved. Independently installable WSGI slice/discovery package; calculations, accepted workers and I/O remain unchanged. Explicit server-owned credentials, dataset rights/grants, immutable exact source scopes and one shared single-process ledger are mandatory. Raw requests use1.0; native feature projection uses separately advertised1.1. No SQL/path/import/code chosen by the client. No jobs, pagination, external identity issuer, physical retention, cache, durable multi-instance quotas or production RSS/CPU/SLO claims.
