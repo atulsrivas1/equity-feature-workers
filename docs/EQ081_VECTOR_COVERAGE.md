@@ -1,3 +1,15 @@
+## EQ081 installed harness qualification rework - October10,2026 UTC
+
+[Actual findings/correction disposition](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100731455).
+
+Separate local automated reviewer /root/r7_policy_review inspected immutable worker19513121f4c64ae3d361f00d50a3a30741e1a630 / canonicalf6dce4180aaca68d3e2ecb4743345082095aa28b. Strict7 PASS, runtime unchanged from approvedeced. Complete40 independently FAILED:39passed/one failure6.154s; actual20ms remaining-budget sleep may wake before deadline, permitting second provider evaluation. Exact-one-provider assertion was timing-dependent, not evidence of runtime excess budget. P2 qualification fixture corrected to explicit controlled monotonic/sleep expiry after an actual first disconnected loopback POST; binary-exact31.25ms budget avoids float subtraction assertion error. Existing actual late-provider and late-decoder wall-time budget tests remain. First corrective fixture used20ms against1.0 baseline and asserted float subtraction<=.02; tiny representation difference raised test assertion inside closed public boundary, producing cancelled. That failed correction is preserved, not counted.
+
+P2 schema-pin test read ROOT/packages/client/src from the intentionally package-free installed harness. Reviewer independently reproduced FileNotFoundError. Corrected importlib.resources.files('equity_feature_client') reads the actual bundled installed asset and preserves exact independent schema digests. Current author40 source tests PASS; runtime/package/build/workflow unchanged. The initial local195 builder FAILED in actual fresh installed wheel40 suite with missing schema resource and timing assertion, log eq081-client-1951312-build.log/session27923 exit1. Repeat archive builds and light absence stages passed before failure but no successful producer/receipt/form qualification claimed; partial output preserved. New corrected producer must qualify both forms and both OS.
+
+Current correction requires renewed independent exact-head review. EQ081 remains In progress, six R7 accepted/four remaining. All32 remaining owner/rights/epoch/public-clientTLS and installed/artifact/main/release gates remain mandatory. Prior source36 review6100698801 remains scoped and valid; no acceptance from this correction.
+
+Resume renewed exact correction review and fresh current client builder/WindowsLinux CI; inspect successful actual producers before archive/source/RECORD/native/publictyping/core/artifact claims. No client release acceptance.
+
 # EQ081 current independent vector coverage
 
 Development coverage only. A mapped case is not installed or release acceptance. [Separate 36-method source checkpoint review](https://github.com/atulsrivas1/equity-features/issues/91#issuecomment-6100698801).

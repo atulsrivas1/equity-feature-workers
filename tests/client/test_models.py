@@ -1,6 +1,7 @@
 from pathlib import Path
 import dataclasses
 import hashlib
+from importlib.resources import files
 import json
 import sys
 import unittest
@@ -128,7 +129,7 @@ class Models(unittest.TestCase):
                 _wire.parse(body + b' ', limit=maximum)
         pins = {'remote-v1.schema.json': '9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0', 'remote-v1.1.schema.json': 'dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2'}
         for name, sha in pins.items():
-            data = (ROOT / 'packages/client/src/equity_feature_client/schemas' / name).read_bytes()
+            data = files('equity_feature_client').joinpath('schemas', name).read_bytes()
             self.assertEqual(hashlib.sha256(data).hexdigest(), sha)
 
 

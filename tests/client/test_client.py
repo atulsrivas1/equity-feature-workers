@@ -99,8 +99,17 @@ class Client(unittest.TestCase):
             self.assertEqual(len(calls),3);self.assertEqual(len(peer.requests),3)
         calls=[]
         with Peer(lambda r,i:None) as peer:
-            client=RemoteClient(peer.origin,lambda:calls.append(1) or 'A'*43,attempts=3,retry_delay=.1,budget=.02)
-            self.assertEqual(client.discover(request_id='owned').failure.code,'timeout')
+            client=RemoteClient(peer.origin,lambda:calls.append(1) or 'A'*43,attempts=3,retry_delay=.125,budget=.03125)
+            from equity_feature_client import client as module
+            now=[1.0]
+            def elapsed(delay):
+                self.assertGreater(delay,0);self.assertLessEqual(delay,.03125)
+                now[0]=2.0
+            # An actual first disconnected POST, then an explicitly elapsed
+            # cooperative delay. A real timer may wake just before expiry,
+            # which legitimately permits a second provider evaluation.
+            with patch.object(module.time,'monotonic',side_effect=lambda:now[0]),patch.object(module.time,'sleep',side_effect=elapsed):
+                self.assertEqual(client.discover(request_id='owned').failure.code,'timeout')
             self.assertEqual(len(calls),1);self.assertEqual(len(peer.requests),1)
 
     def test_extreme_configuration_has_closed_validation_errors(self):
