@@ -1,3 +1,7 @@
+## EQ080 audit correction candidate
+
+Correct full-store authenticated principal accounting and original authority/current-window transfer after audit encoding.22audit/full154 development/strict9 pass; separate current review/fresh WinLinux artifacts/cache/inventory/all32/release remain pending. Original twoP2/151historical builder preserved.
+
 ## EQ080 integrated audit candidate
 
 Optional service.a3 adds explicit owned-synthetic finite diagnostics under the shared Ledger for HTTP admission/emission/abandon and native start/real-exit, with full-store fail-closed enforcement and original authority unchanged.19audit/full151 development methods and strict9 pass; separate current review/WinLinux installed/artifact/cache/inventory/all32/release gates remain pending. Default development APIs do not advertise completed EQ080 enforcement.

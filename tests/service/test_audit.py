@@ -11,6 +11,8 @@ from equity_feature_service._audit import OwnedAudit, AuditDenied, AuditReadPerm
 from equity_feature_service import Service
 import test_service as http
 import test_jobs as native
+import test_delivery as delivery
+from equity_feature_service import Limits
 
 ZERO = dict(request_used=0,transfer_used=0,transfer_reserved=0,retained_used=0,cache_used=0)
 
@@ -279,6 +281,61 @@ class Audit(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'shared_audit_ledger_required'):
             fixture.make_ledger(audit=store)
         with self.assertRaises(AttributeError): fixture.ledger.audit = None
+
+    def test_full_audit_denial_keeps_authenticated_one_byte_principal_budget(self):
+        fixture = http.ServiceVectors('runTest'); fixture.setUp()
+        store = self.store()
+        fixture.ledger = fixture.make_ledger(limits=Limits(60,1,2048,60_000_000_000),audit=store)
+        fixture.service = Service(fixture.ledger)
+        for _ in range(64): store.reserve(100)
+        status,body,data,_ = http.call(fixture.service,fixture.request(),fixture.token)
+        self.assertEqual((status,body,data),(429,None,b''))
+        self.assertEqual((fixture.ledger._transfer,fixture.source.calls),(0,0))
+        self.assertEqual(fixture.ledger._principal_transfer.get('principal-a',0),0)
+
+    def test_expiry_and_revoke_inside_audit_finish_encoding_deny_artifact(self):
+        for mutation in ('expiry','revoke'):
+            with self.subTest(mutation=mutation):
+                helper,scheduler,service,tokens,clock,observed = self.native_fixture(actions=delivery.ACTIONS)
+                job = helper.wait_terminal(scheduler,helper.submit(service,tokens[0]))
+                request = delivery.Delivery('runTest').request(job.result_id,'artifact_read')
+                statuses,headers = [],[]
+                emission = service(http.env(request,tokens[0]),lambda s,h:(statuses.append(s),headers.extend(h)))
+                store = scheduler.ledger.audit; original = store.prepare_settlement
+                once = []
+                def change(reservation,n,stage,decision,totals):
+                    body = original(reservation,n,stage,decision,totals)
+                    if stage == 'finish' and not once:
+                        once.append(True)
+                        if mutation == 'expiry': clock.n = job.expires_ns
+                        else: scheduler.ledger.revoke(job.grant_id)
+                    return body
+                with patch.object(store,'prepare_settlement',side_effect=change): data = next(emission)
+                self.assertTrue(statuses[0].startswith('403 '))
+                self.assertEqual(json.loads(data)['kind'],'error')
+                self.assertNotIn('Content-Disposition',dict(headers))
+                self.assertEqual(store.reserved_count,0)
+                self.assertEqual(observed['reads'],1)
+
+    def test_audit_encoding_window_rollover_charges_current_exact_frame(self):
+        helper,scheduler,service,tokens,clock,observed = self.native_fixture(actions=delivery.ACTIONS)
+        job = helper.wait_terminal(scheduler,helper.submit(service,tokens[0]))
+        request = delivery.Delivery('runTest').request(job.result_id)
+        emission = service(http.env(request,tokens[0]),lambda *args:None)
+        store = scheduler.ledger.audit; original = store.prepare_settlement
+        once = []
+        def rollover(reservation,n,stage,decision,totals):
+            body = original(reservation,n,stage,decision,totals)
+            if stage == 'finish' and not once:
+                once.append(True); clock.n = 60_000_000_100
+            return body
+        with patch.object(store,'prepare_settlement',side_effect=rollover): data = next(emission)
+        self.assertEqual(json.loads(data)['kind'],'result')
+        self.assertEqual(scheduler.ledger._transfer,len(data))
+        self.assertEqual(scheduler.ledger._principal_transfer['A'],len(data))
+        rows = self.records(store,clock.n)
+        self.assertEqual(rows[-1]['transfer_used'],len(data))
+        self.assertEqual(store.reserved_count,0)
 
 
 if __name__ == '__main__': unittest.main()
