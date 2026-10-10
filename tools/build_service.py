@@ -66,7 +66,7 @@ def qualify(form, artifact, deps, committed):
         run(py, '-I', '-m', 'unittest', 'discover', '-s', committed / 'tests/service', '-v', cwd=location)
         run(py, '-I', '-m', 'mypy', '--strict', '-p', 'equity_feature_service', cwd=location)
         positive = location / 'consumer.py'
-        positive.write_text('from equity_feature_service import Scope, Credential, Limits\ns: Scope = Scope("owned:ONE", "session-1", 1, 2)\nc: Credential = Credential.provision("owned", "a" * 43, 0, 100)\nl: Limits = Limits(1, 1024, 2048, 100)\n', encoding='utf-8')
+        positive.write_text('from equity_feature_service import Scope, Credential, Limits\ns: Scope = Scope("owned:ONE", "session-1", 1, 2)\nc: Credential = Credential.provision("owned", "a" * 43, 0, 100)\nl: Limits = Limits(1, 1024, 2048, 60000000000)\n', encoding='utf-8')
         run(py, '-I', '-m', 'mypy', '--strict', positive, cwd=location)
         positive.write_text('from equity_feature_service import Scope\ns = Scope("owned:ONE", "session-1", "bad", 2)\n', encoding='utf-8')
         invalid = subprocess.run([str(py), '-I', '-m', 'mypy', '--strict', str(positive)], cwd=location, capture_output=True, text=True)
@@ -80,10 +80,11 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--core-root', type=Path, required=True)
     p.add_argument('--io-root', type=Path, required=True)
+    p.add_argument('--outdir', type=Path, default=ROOT / 'dist/service')
     args = p.parse_args()
     commit = git(ROOT, 'rev-parse', 'HEAD')
     (ROOT / 'work').mkdir(exist_ok=True)
-    output = ROOT / 'dist/service'
+    output = args.outdir.resolve()
     assert not output.exists(), 'Use a new qualification checkout/output; preserve prior evidence.'
     output.mkdir(parents=True)
     with tempfile.TemporaryDirectory(prefix='service-build-', dir=ROOT / 'work') as tmp:

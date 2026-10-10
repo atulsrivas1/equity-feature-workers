@@ -161,6 +161,43 @@ class ServiceVectors(unittest.TestCase):
         self.clock.n = 60000000000
         self.assertEqual(call(Service(ledger), self.request(), self.token)[0], 401)
 
+    def test_policy_window_cannot_be_shortened(self):
+        for interval in (1, 999, 59999999999, 60000000001):
+            with self.assertRaises(ValueError): Limits(60, 1048576, 2097152, interval)
+        self.assertEqual(Limits(60,1048576,2097152,60000000000).interval_ns,60000000000)
+        for n in range(60):
+            self.clock.n = 100 + n
+            self.assertEqual(call(self.service,self.request(),self.token)[0],200)
+        self.clock.n = 160
+        self.assertEqual(call(self.service,self.request(),self.token)[0],429)
+        self.assertEqual(self.source.calls,60)
+
+    def test_absent_native_column_is_not_present_null(self):
+        with self.assertRaisesRegex(ValueError, 'absent_native_column'):
+            RawDataset('synthetic.raw','owned-v1',self.scope,self.source.value,self.source.read,
+                columns=('condition',),rights=self.dataset.rights,rights_owner='owned-fixture',rights_evidence='synthetic-owned-v1',valid_from_ns=0,expires_at_ns=1000)
+        # Existing known_at_ns column is present and its actual null cell remains null.
+        self.assertIsNotNone(self.source.value.batch.column('known_at_ns'))
+        result = call(self.service,self.request(columns=['known_at_ns']),self.token)[1]
+        self.assertEqual(result['payload']['columns'][0]['values'],[None,{'type':'int64','value':'0'}])
+
+    def test_reference_effective_start_half_open_scope(self):
+        def reference(stamp):
+            values = {'instrument_id':('owned:ONE',),'session_id':('session-1',),
+                'reference_id':('ref-1',),'fact_kind':('owned-fact',),
+                'effective_start_ns':(stamp,),'effective_end_ns':(END+100,), 'price':(10100,)}
+            return RawRead(CanonicalBatch(DataKind.REFERENCE,tuple(Column(k,v) for k,v in values.items()),
+                BatchMetadata('owned.fixture',SourceBinding('owned','snapshot-1','mapping-1','input-1'),Coverage(1,1,True),PriceUnit(2,'USD'),scope=InputScope(START,END,'owned-v1'))),'a'*64)
+        def register(value):
+            return RawDataset('synthetic.reference','owned-v1',self.scope,value,lambda cancel:value,
+                columns=('effective_start_ns','effective_end_ns','price'),rights=self.dataset.rights,
+                rights_owner='owned-fixture',rights_evidence='synthetic-owned-v1',valid_from_ns=0,expires_at_ns=1000)
+        for stamp in (0,START-1,END):
+            with self.assertRaises(codec.WireError): register(reference(stamp))
+        # Canonical reference selection bounds the effective start; end may extend beyond the read window.
+        registered = register(reference(START))
+        self.assertEqual(registered.produce(('effective_end_ns',),'1.0')[1]['columns'][0]['values'],[{'type':'int64','value':str(END+100)}])
+
     def test_errors_count_transfer_and_exhaustion_emits_no_free_body(self):
         ledger = self.make_ledger(limits=Limits(60, 1048576, 1, 60000000000))
         status, _, data, headers = call(Service(ledger), self.request(), '')

@@ -26,6 +26,8 @@ class Limits:
     interval_ns: int
 
     def __post_init__(self) -> None:
+        if type(self.interval_ns) is not int or self.interval_ns != 60_000_000_000:
+            raise ValueError("invalid_policy_interval")
         for value, maximum in ((self.requests, 60), (self.principal_transfer, 1_048_576),
                                (self.global_transfer, 2_097_152), (self.interval_ns, 60_000_000_000)):
             if type(value) is not int or not 0 < value <= maximum:

@@ -80,7 +80,7 @@ def _batch(value: i.CanonicalBatch, scope: Scope) -> i.CanonicalBatch:
         col = batch.column(name)
         if col is None or any(x != expected for x in col.values):
             raise codec.WireError("inconsistent_identity")
-    for name in ("event_ns", "start_ns"):
+    for name in ("event_ns", "start_ns", "effective_start_ns"):
         col = batch.column(name)
         if col is not None and any(type(x) is not int or not scope.start_ns <= x < scope.end_ns for x in col.values):
             raise codec.WireError("inconsistent_identity")
@@ -119,6 +119,8 @@ class RawDataset:
             raise ValueError("invalid_columns")
         for name in columns:
             i.schema_for(batch.kind).field(name)
+            if batch.column(name) is None:
+                raise ValueError("absent_native_column")
         self._fingerprint = hashlib.sha256(_batch_bytes(batch)).digest()
         self._receipt = baseline.receipt_fingerprint
         self._read = read
