@@ -1,5 +1,5 @@
-"""Windows developer PRODUCT composition; planned source, not executed."""
-import sys,json,time,tempfile,ctypes,hashlib
+"""Owned platform-aware PRODUCT composition; installed harness has no package sources."""
+import sys,json,time,tempfile,ctypes,hashlib,errno
 from pathlib import Path
 from datetime import timedelta
 from unittest.mock import patch
@@ -17,8 +17,17 @@ source=entry.read_bytes()
 assert len(source)<=8192
 expected_source=Path(sys.argv[2]).read_text(encoding='ascii').strip()
 assert hashlib.sha256(source).hexdigest()==expected_source
-if sys.platform!='win32':raise ValueError('Windows feasibility only')
+if sys.platform not in ('win32','linux'):raise ValueError('unsupported qualification platform')
+if not (root/'packages').exists():
+ import equity_feature_mcp,equity_feature_client
+ assert all('site-packages' in Path(v.__file__).resolve().parts for v in (equity_feature_mcp,equity_feature_client))
 def exited(pid):
+ if sys.platform=='linux':
+  try:stat=(Path('/proc')/str(pid)/'stat').read_text(encoding='ascii')
+  except OSError as error:
+   if error.errno in (errno.ENOENT,errno.ESRCH):return True
+   raise
+  return stat.rsplit(')',1)[1].strip().split()[0]=='Z'
  kernel=ctypes.WinDLL('kernel32',use_last_error=True)
  kernel.OpenProcess.argtypes=[ctypes.c_uint32,ctypes.c_int,ctypes.c_uint32];kernel.OpenProcess.restype=ctypes.c_void_p
  kernel.WaitForSingleObject.argtypes=[ctypes.c_void_p,ctypes.c_uint32];kernel.WaitForSingleObject.restype=ctypes.c_uint32
@@ -43,7 +52,7 @@ with patch.object(authority,'RemoteClient',side_effect=owned_client),fixture.nat
   assert len(origins)==2 and origins[0]==origins[1]
   origin=origins[0]
   # Capture public constructor input; no transport response or native work mocked.
-  params=StdioServerParameters(command=sys.executable,args=[str(entry),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid_marker),str(root)],encoding='utf-8',encoding_error_handler='strict')
+  params=StdioServerParameters(command=sys.executable,args=['-I',str(entry),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid_marker),str(root)],encoding='utf-8',encoding_error_handler='strict')
   report={}
   async def qualify():
    async with stdio_client(params) as (read,write):
