@@ -1,3 +1,52 @@
+## EQ082 protocol adversaries and native-state fixture preparation
+
+Current test_protocol_boundary adds8author Windows methodsPASS1.193s/full40PASS23.453s/exit0. Allseven tools closedargument matrix53denials/unknownregistration deny before token provider; unsupported resource-prompt-sampling-task-logging methods and ignored uncancellable notification/no advertised capabilities; creating-thread denial;16actual HTTP queued job admissions and seventeenth pre-provider capacity denial; invalid exact clocks bool-negative-float-None before provider and after actual response failclose; actual token-provider RuntimeError/KeyboardInterrupt private text redacted/no replay; physical OS inputpipe EOF while synchronous provider active remains unobservable until return then closes client/server/thread; complete projection full selected metadata/context plus forged scope/selection/missingquality denials; exact structured canonical16384inclusive/16385boundsdenial with no truncated fields. These are protocol/publicclient/provider/real HTTP representation cases, not native queued/cancel computation or a hard callback interrupt claim. No product runtime change. Renewed exactsource/currentinstalledbothOS qualification pending.
+
+First7boundary methods FAILED1 fixture-construction assertion:3event strings limited4000 could not reach exact16384 (1138bytes remaining). Corrected synthetic namespace padding within allowed string4096; preserves all metadata fields, no blanket truncation. Corrected7PASS0.929s, then projection eighthPASS/full40 above. Raw logs preserved. Read-only guessed worker policy/log paths failed then corrected canonical/parent paths before public mutation; no product failure countedPASS.
+
+Prior exact848source/native family review6103196750 and installed artifact checkpoint https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6103365757 genuinelyapproved:33/23/33/19/10inputs/9accepted+2MCParchives/33Windows31Linuxofficialwheels/117moduleblobs/118public1481279bytes/currentserverZIP/PyPIproof/RECORD/producer32methods perform/bothOS, strict6+consumer1/core/installedparentANDchild approved. The new boundary methods are not included in those old artifacts. Preserve original identities and previous failures below.
+
+New mirrored NATIVE_STATE_ENTRY1968UTF8bytes/SHA8f7e757277b684f689cb32a8188adff257fa5b3d569ca2c4519ceff7004a8168 and PLAN are PREPARATION ONLY, not executed. Two fixed owner modes actual gate-blocked queued/running/queuedcancel/runningcancel-request/realexitcancelled and private native callback failure; mandatoryAudit/Supervisor/publicSessionCommandSpec, causal readiness/owner-onlyrelease directory/exactnativeclose. Separate exact plan approval mandatory before executing. Remaining real native-state/cancel, TLS/output-fault/full32/current30branch15main/finalreview/artifacts/lifecycle/publication/readback/release gates remain;92Inprogress13points/sevenDone-three remaining,93-94Backlog/noacceptance.
+
+## Current M01-M32 qualification matrix (partial, not acceptance)
+
+| Requirement | Scope | Actual evidence | Remaining gate |
+|---|---|---|---|
+| M01 | Optional boundary | Public-only source imports; accepted runtime bytes unchanged | Installed core/archive equality at every current producer pending |
+| M02 | Actual integration | Prior actual developer reference/native approval6102748292; approved installed probe plan6102946925 | Current fresh installed Windows/Linux producer and independent audit pending |
+| M03 | Protocol pin | test_server closed lifecycle; updated SDK probe exact2025-11-25 | Current installed SDK transcript pending |
+| M04 | Framing | test_wire real pipes and exact LF/overflow/short-write; new boundary actual active-provider OS input EOF | Independent current installed physical fault replay pending |
+| M05 | Hostile parser | test_wire duplicates/nonfinite/UTF8/depth/node32-10000; reviewer extra hostile vectors6102591217 | Current installed replay pending |
+| M06 | Lifecycle | test_server lifecycle plus boundary unsupported methods/notifications/creating-thread denial | Renewed exact source/current installed lifecycle inventory pending |
+| M07 | Discovery schema | test_server seven exact tools; precode standalone schemas/frame39332; SDK seven-tool transcript | Current installed schemas/text parity and hints audit pending |
+| M08 | Closed arguments | Boundary53 closedargument negatives across seven tools/no token-provider calls; unknownregistration denial | Independent current source/installed matrix replay pending |
+| M09 | Fixed origin | MCPProfile/public StdioServer exact public client; no protocol transport constructor | Installed negative origin/token/code/path inventory audit pending |
+| M10 | Immutable registrations | test_profiles six methods/full independent literal identity/source snapshots | Installed replay pending |
+| M11 | Authenticated discovery | test_native_authority actual valid B discovery and provider count | Current installed native/reference replay pending |
+| M12 | Bounded slice | Nativefamilies real raw4/fullmetadata; fixed raw5 and new fullselected projection/forgedscope-selection-quality denials | Current installed projection and exact bounds pending |
+| M13 | Calculate | test_native_authority actual native stablekey; ledger reserve/reuse; unknown post-send onlyonce | Integrated full16 admission provider counters pending |
+| M14 | Native states | Native actual succeeded plus HTTPqueued admission capacity; real gated state plan frozen unexecuted | Separate stateentry planning approval then actual queued/running/cancel_requested/cancelled/failed required |
+| M15 | Explicit cancellation | Public cancel mapping and foreign deny; uncancellable protocol notification observed ignored; actualnative cancel plan unexecuted | Owned actual native explicit cancellation plus installed replay pending |
+| M16 | Unknown outcome | test_transport_fixtures real calculate POST disconnect/provider1/Outcomeunknown/no replay | Actual cancellation ambiguity and active callback EOF/termination pending |
+| M17 | Structured output | Fixed raw5/producer4 and real native4 full canonical parity; exact structured16384/16385 realHTTP boundary denial | Renewed independent current source and installed boundary replay pending |
+| M18 | Summary fidelity | Actual trades/bars/quotes/largeNs native computation/full original hashes/context/quality/evidence; installed848 independentlyapproved | Latest qualification source delta requires current installed audit |
+| M19 | Artifact references | Real HTTP attachment SHA filename and artifact_read twice; actual native export parity | Installed/current output and privacy audit pending |
+| M20 | No auto file output | Public methods only; output bounded binary protocol; no payload file writer | Installed/runtime source audit pending |
+| M21 | Full identity | test_ledger wrong identity/profilealias/global nativejob tombstone/resultID update | Current installed source/integrity audit pending |
+| M22 | Cross owner | Actual B discovery then A/forged local references status/cancel/result/export same deny before provider | Installed reference/native replay pending |
+| M23 | Grant expiry | Actual halfopen native result/export expiry/retire restore/grant earlier expiry/no resurrection | Installed bothOS replay pending |
+| M24 | Epoch ambiguity | Actual scheduler.close=True/restart old IDs deny/manual new client-server nonce and samekey only explicit | Installed bothOS replay pending |
+| M25 | Finite state | Ledger tests and integrated16HTTPjobs/seventeenth preproviderdeny; before/afteractual-response clock failclose | Independent current integrated capacity/clock/output fixture audit pending |
+| M26 | Backpressure | Creatingthread/runonce; physical EOF during blocked synchronous provider unobserved until return; joined explicitowner testthread | Current installed cooperative limitation/fault replay pending; no hard callback interruption claim |
+| M27 | Error separation | New token-provider RuntimeError/KeyboardInterrupt redaction and no autoreplay; closed inputs/inert source separation | Independent current failure/privacy inventory replay pending |
+| M28 | Transport failures | Accepted client remains unchanged; real post-send disconnect no retry | Public MCP TLS/reference/provider fault installed integration pending |
+| M29 | Cleanup faults | Native actualexit and new injected-source assertioncleanup reviewer; physical active-provider EOF/interrupt finally close | Actual closed output during active callback/TLS and reference partialoutput cleanup pending |
+| M30 | Independent native fixtures | Four supervised audited native families actual originalhash/SDK reconstruction/source1/export parity; trades pure3/10/1011, exactadjacentns9e18; installed848 reviewer approved | Final exactcurrent full32review and laterqualification deltas pending |
+| M31 | Installed artifacts | Actual848 repeatwheel-sdist/light/reference-native/RECORD/pins/publicZIP/parent+child independentlyapproved https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6103365757 | New boundary qualification test input requires current Windows/Linux producer/artifact audit |
+| M32 | Delivery | Same-story API/decisions/lesson/handoff/public issues and exact scoped reviews | Final all32/current30branch/15main gates/review/lifecycle/publication/readback/receipt/acceptance pending |
+
+## Superseded qualification captures preserved as history
+
 ## EQ082 four actual owned native families and independent installed checkpoint
 
 Separate pre-execution family entry/plan approval https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6103176844 at79b322b/48f0b35 preceded execution. New test_native_families owns one method/four real child subcases: public bounded MCP->public RemoteClient->mandatory audited/supervised actual native trades/bars/quotes/adjacent largeNs SessionCommandSpec. Full raw metadata equality, complete producer equality and original SHA, public reconstructed native SDK encode_result SHA, export plus export-mode followup equality, final source1, bounded provider calls/status count/readiness, stop/client close/join/actualexit0/native close exactTrue verified. Trades and adjacent9e18 pure local compute_trades independently preserve3/10/1011 and exact1ns event gaps. Quote/bar unavailable quality/evidence remain full original golden bytes, no math recomputation or truncation.
