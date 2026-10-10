@@ -7,6 +7,7 @@ import secrets
 import threading
 import time
 import unittest
+from unittest.mock import patch
 
 from equity_feature_contracts import (CanonicalBatch, Column, DataKind, BatchMetadata, SourceBinding,
     Coverage, PriceUnit, InputScope, ConfigSpec)
@@ -14,8 +15,8 @@ from equity_feature_contracts.adapters import AdapterBatch, AdapterCapabilities,
 from equity_feature_contracts.specs import IntervalSpec
 from equity_feature_contracts.results import ValueType
 from equity_feature_io_contracts import FeatureHeader
-from equity_feature_io_contracts.publication import SinkError, SinkErrorCode
-from equity_feature_io_sdk import SourceRegistry, SinkRegistry, decode_result
+from equity_feature_io_contracts.publication import SinkError, SinkErrorCode, CompletionReceipt, ArtifactReference
+from equity_feature_io_sdk import SourceRegistry, SinkRegistry, decode_result, decode_envelope, encode_receipt
 from equity_feature_example_extensions import ExampleSink
 from equity_feature_workers import SessionCommandSpec, SourceOffer
 from equity_feature_service import Credential, Grant, Ledger, Limits, Service, RawDataset, RawRead, Scope
@@ -474,6 +475,43 @@ class Jobs(unittest.TestCase):
         self.assertLessEqual(len(job.receipt)+len(job.envelope),32768)
         self.assertEqual(self.submit(service,tokens[0]),job_id)
         self.assertEqual(audit['reads'],1)
+
+    def test_invalid_idle_clock_cannot_prevent_empty_scheduler_shutdown(self):
+        scheduler,service,tokens,clock,audit = self.make()
+        clock.n = -1
+        self.assertTrue(scheduler.close(2))
+        self.assertFalse(scheduler.thread.is_alive())
+        self.assertEqual((len(scheduler.queue),scheduler._running),(0,None))
+
+    def test_worst_escaped_receipt_exact_precommit_boundary(self):
+        scheduler,service,tokens,clock,audit = self.make()
+        baseline = self.wait_terminal(scheduler,self.submit(service,tokens[0]))
+        envelope = decode_envelope(baseline.envelope)
+        worst = CompletionReceipt(envelope.identity,'f'*64,'f'*64,1,2**63-1,2**63-1,2**63-1,
+            (ArtifactReference('"'*128,'f'*64,2**63-1),),-2**63)
+        unescaped = replace(worst,artifacts=(replace(worst.artifacts[0],artifact_id='x'*128),))
+        self.assertEqual(len(encode_receipt(worst))-len(encode_receipt(unescaped)),128)
+        from equity_feature_service import jobs
+        original = jobs.encode_envelope
+        for excess,expected in ((0,'succeeded'),(1,'failed')):
+            begins = []
+            class CountBegin(ExampleSink):
+                def begin(self, value):
+                    begins.append(value)
+                    return super().begin(value)
+            native,controller,owned,_,facts = self.make(sink_create=CountBegin)
+            target = 32768-len(encode_receipt(worst))+excess
+            def padded(value):
+                encoded = original(value)
+                self.assertLessEqual(len(encoded),target)
+                return encoded+b' '*(target-len(encoded))
+            with patch.object(jobs,'encode_envelope',padded):
+                job = self.wait_terminal(native,self.submit(controller,owned[0]))
+            self.assertEqual(job.state,expected,job.error)
+            self.assertEqual(len(begins),0 if excess else 1)
+            if excess:
+                self.assertFalse(job.committed_receipt_sha256)
+                self.assertEqual(job.held,0)
 
 
 if __name__ == '__main__': unittest.main()

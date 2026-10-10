@@ -326,6 +326,8 @@ class JobScheduler:
     def _run(self) -> None:
         while True:
             with self.condition:
+                if self._closed and not self.queue:
+                    return
                 try:
                     self._sweep()
                 except ValueError:
@@ -433,7 +435,7 @@ class JobScheduler:
                     self.check()
                     data = encode_envelope(envelope)
                     worst = CompletionReceipt(envelope.identity,'f'*64,'f'*64,1,2**63-1,2**63-1,
-                        2**63-1,(ArtifactReference('x'*128,'f'*64,2**63-1),),-2**63)
+                        2**63-1,(ArtifactReference('"'*128,'f'*64,2**63-1),),-2**63)
                     if len(data)+len(encode_receipt(worst)) > 32_768:
                         raise SinkError(SinkErrorCode.RESOURCE_LIMIT)
                     job.envelope = data

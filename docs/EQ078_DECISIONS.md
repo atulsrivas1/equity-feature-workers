@@ -1,5 +1,7 @@
 ## Corrective admitted receipt profile — preliminary rework
 
+Worst-case prediction uses128 double-quote characters to account for JSON escaping, with explicit inclusive32768/excess32769 precommit regression; an unescaped ASCII placeholder is insufficient. Idle shutdown with no work is independent of wall-clock recovery. These corrections require renewed exact-head review.
+
 Native capabilities permit arbitrary artifact tuples and labels, so they cannot prove a fixed32768byte envelope-plus-receipt bound. JobRegistration now requires an explicit trusted OwnedReceiptProfile() attestation: exactly one artifact with printable ASCII ID no longer than128characters. Worst-case scalar lengths and exact native identity predict receipt encoding; deny before native begin if actual envelope plus this worst-case receipt exceeds32768. Compliant direct commit, committed begin and confirmed lookup/abort recovery capture exact receipt bytes; final native outcome must match recorded envelope/receipt. A sink violating the profile after physical commit produces a nonvisible failed job with a bounded committed-receipt SHA256/profile-violation marker and no automatic retry; do not claim rollback or full out-of-profile receipt retention. Arbitrary unprofiled sinks are unsupported. This explicitly supersedes earlier universal full-receipt retention wording; no retained budget increases. Separate corrective review and adversarial/current artifact qualification remain pending.
 
 # EQ078 concrete native job admission decisions
