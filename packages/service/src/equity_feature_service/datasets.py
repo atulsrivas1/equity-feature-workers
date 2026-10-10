@@ -208,6 +208,10 @@ class FeatureDataset:
             raise codec.WireError("inconsistent_identity")
         if re.fullmatch(r"[0-9a-f]{64}", producer_command_digest) is None:
             raise codec.WireError("invalid_schema")
+        original_command = {"operation": "calculate", "context": context, "scope": scope.wire()}
+        actual_digest = hashlib.sha256(codec.canonical(original_command)).hexdigest()
+        if producer_command_digest != actual_digest:
+            raise codec.WireError("inconsistent_identity")
         # Pin source aggregate scope rather than relabeling numerical values.
         if not md.inputs or any(b.metadata.scope is None or (b.metadata.scope.start_ns, b.metadata.scope.end_ns) != (scope.start_ns, scope.end_ns) for b in md.inputs):
             raise codec.WireError("inconsistent_identity")

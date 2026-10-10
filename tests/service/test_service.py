@@ -411,6 +411,8 @@ class ServiceVectors(unittest.TestCase):
         producer['context']['config']['digest']=spec.digest
         if structured: producer['context']['features']=[{'feature_id':'session.structure.interval_ohlcv','algorithm_version':'v1'}]
         scope = Scope('owned:ONE', 'session-1', START, START + 1)
+        original_command={'operation':'calculate','context':producer['context'],'scope':scope.wire()}
+        producer['command_digest']=hashlib.sha256(json.dumps(original_command,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')).hexdigest()
         identity = DatasetIdentity.from_source('synthetic.features', 'owned-v1', batch.metadata.source)
         rights = frozenset(('derived_read', 'discover', 'retain'))
         dataset = FeatureDataset(identity, scope, result, producer['context'], producer['command_digest'], rights=rights,
@@ -460,6 +462,27 @@ class ServiceVectors(unittest.TestCase):
         self.assertEqual(row['quality']['name'],'QualityRow')
         self.assertEqual(row['quality']['fields']['status'],{'type':'string','value':'available'})
         self.assertEqual(value,codec.cell(native.values[0].values[0]))
+        producer=result['payload']['feature_result']
+        original_command={'operation':'calculate','context':producer['context'],'scope':req['payload']['scope']}
+        expected=hashlib.sha256(json.dumps(original_command,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')).hexdigest()
+        self.assertEqual(producer['command_digest'],expected)
+
+    def test_producer_command_digest_is_bound_to_original_context_scope(self):
+        service,req,native=self.feature_setup(structured=True)
+        identity=DatasetIdentity(**req['payload']['dataset'])
+        dataset=service.ledger.datasets[identity.dataset_id]
+        original=dataset.produce(tuple(dataset.columns),'1.1')[1]['feature_result']
+        stale=json.loads((ROOT/'tests/service/fixtures/calculate.json').read_text(encoding='utf-8'))['payload']['command_digest']
+        self.assertNotEqual(stale,original['command_digest'])
+        for digest in (stale,'0'*64):
+            with self.assertRaises(codec.WireError) as caught:
+                FeatureDataset(identity,dataset.scope,native,original['context'],digest,rights=dataset.rights,
+                    rights_owner='owned-fixture',rights_evidence='owned-native-calc',valid_from_ns=0,expires_at_ns=1000)
+            self.assertEqual(caught.exception.code,'inconsistent_identity')
+        # Column projection leaves the original full producer command untouched.
+        result=call(service,req,self.token)[1]['payload']['feature_result']
+        self.assertEqual(result['context'],original['context'])
+        self.assertEqual(result['command_digest'],original['command_digest'])
 
     def test_forged_native_result_fails_registration(self):
         service,req,native=self.feature_setup()

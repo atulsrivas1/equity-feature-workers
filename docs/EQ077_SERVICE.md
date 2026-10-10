@@ -1,5 +1,7 @@
 # EQ077 optional service implementation checkpoint
 
+Current corrected candidate passes35 development methods(8.423s), all34 frozen decision mappings and strict6sourcefiles. Final source review of worker e8b2bfe/canonical e46feb8 found P2: producer command digest was syntax-checked without binding original context/scope. Registration now recomputes the accepted sorted compact ASCII SHA256 of the original calculate payload (operation/context/exact native production scope, excluding digest/idempotency) and rejects mismatch. Structured fixture computes its own correct original digest; new mismatch/stale-digest regression and projection invariance pass. Story returned to In progress for rework; renewed final-head review and latest artifacts remain required.
+
 Canonical [story87](https://github.com/atulsrivas1/equity-features/issues/87) remains In progress. [PR29](https://github.com/atulsrivas1/equity-feature-workers/pull/29) contains a separate experimental `equity-feature-service0.1.0a0` distribution; this checkpoint is not release acceptance. Existing worker, calculation and I/O package inputs and their build workflow are unchanged.
 
 ## Operator API
