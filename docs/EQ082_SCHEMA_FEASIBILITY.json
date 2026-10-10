@@ -1,0 +1,162 @@
+{
+  "schema": "eq082.precode_schema_feasibility.v1",
+  "scope": "Offline standalone schemas and original fixtures only, not MCP runtime/parser/native integration/Ready approval",
+  "fixture_checks": [
+    {
+      "case": "trades",
+      "tool": "equity_result_summary",
+      "structured_bytes": 5805,
+      "frame_bytes": 12794,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "bars",
+      "tool": "equity_result_summary",
+      "structured_bytes": 9001,
+      "frame_bytes": 19706,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "quotes",
+      "tool": "equity_result_summary",
+      "structured_bytes": 9375,
+      "frame_bytes": 20704,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "trades-adjacent-large-ns",
+      "tool": "equity_result_summary",
+      "structured_bytes": 5933,
+      "frame_bytes": 13050,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "trades-0",
+      "tool": "equity_slice",
+      "structured_bytes": 3246,
+      "frame_bytes": 7366,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "bars-1",
+      "tool": "equity_slice",
+      "structured_bytes": 3279,
+      "frame_bytes": 7430,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "quotes-2",
+      "tool": "equity_slice",
+      "structured_bytes": 3327,
+      "frame_bytes": 7552,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "trades-3",
+      "tool": "equity_slice",
+      "structured_bytes": 3406,
+      "frame_bytes": 7686,
+      "schema_valid": true,
+      "text_parity": true
+    },
+    {
+      "case": "trades-4",
+      "tool": "equity_slice",
+      "structured_bytes": 3406,
+      "frame_bytes": 7686,
+      "schema_valid": true,
+      "text_parity": true
+    }
+  ],
+  "argument_denials": [
+    {
+      "tool": "equity_discover",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_discover",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_slice",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_slice",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_slice",
+      "denial": "boolean logical/reference identifier"
+    },
+    {
+      "tool": "equity_calculate",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_calculate",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_calculate",
+      "denial": "boolean logical/reference identifier"
+    },
+    {
+      "tool": "equity_job_status",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_job_status",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_job_status",
+      "denial": "boolean logical/reference identifier"
+    },
+    {
+      "tool": "equity_job_cancel",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_job_cancel",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_job_cancel",
+      "denial": "boolean logical/reference identifier"
+    },
+    {
+      "tool": "equity_result_summary",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_result_summary",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_result_summary",
+      "denial": "boolean logical/reference identifier"
+    },
+    {
+      "tool": "equity_artifact_reference",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_artifact_reference",
+      "denial": "extra origin/token before provider"
+    },
+    {
+      "tool": "equity_artifact_reference",
+      "denial": "boolean logical/reference identifier"
+    }
+  ],
+  "tool_count": 7,
+  "tools_list_frame_bytes": 39332
+}
