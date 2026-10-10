@@ -1,0 +1,89 @@
+"""Windows developer PRODUCT composition; planned source, not executed."""
+import sys,json,time,tempfile,ctypes,hashlib
+from pathlib import Path
+from datetime import timedelta
+from unittest.mock import patch
+import anyio
+from mcp import ClientSession,StdioServerParameters
+from mcp.client.stdio import stdio_client
+root=Path(sys.argv[1]).resolve()
+sys.path.insert(0,str(root/'tests/client'))
+from test_authority_http import AuthorityHTTP,completed_bytes
+import test_authority_http as authority
+from test_client import FIXTURES
+from equity_feature_client import RemoteClient
+entry=root/'docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt'
+source=entry.read_bytes()
+assert len(source)<=8192
+expected_source=Path(sys.argv[2]).read_text(encoding='ascii').strip()
+assert hashlib.sha256(source).hexdigest()==expected_source
+if sys.platform!='win32':raise ValueError('Windows feasibility only')
+def exited(pid):
+ kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+ kernel.OpenProcess.argtypes=[ctypes.c_uint32,ctypes.c_int,ctypes.c_uint32];kernel.OpenProcess.restype=ctypes.c_void_p
+ kernel.WaitForSingleObject.argtypes=[ctypes.c_void_p,ctypes.c_uint32];kernel.WaitForSingleObject.restype=ctypes.c_uint32
+ kernel.CloseHandle.argtypes=[ctypes.c_void_p];kernel.CloseHandle.restype=ctypes.c_int
+ handle=kernel.OpenProcess(0x100000,False,pid)
+ if not handle:
+  error=ctypes.get_last_error()
+  if error==87:return True
+  raise OSError(error,'owned process inspection')
+ try:return kernel.WaitForSingleObject(handle,0)==0
+ finally:assert kernel.CloseHandle(handle)
+fixture=AuthorityHTTP('test_authenticated_foreign_owner_and_original_half_open_ttl')
+origins=[]
+def owned_client(origin,provider,**kwargs):
+ origins.append(origin)
+ return RemoteClient(origin,provider,**kwargs)
+with patch.object(authority,'RemoteClient',side_effect=owned_client),fixture.native('ttl') as (_,foreign,foreign_calls,action):
+ # Existing fixture owns mandatory audited native HTTP, real native child exit.
+ assert foreign.discover(request_id='owned-valid-foreign').ok
+ with tempfile.TemporaryDirectory() as directory:
+  pid_marker=Path(directory)/'pid'
+  assert len(origins)==2 and origins[0]==origins[1]
+  origin=origins[0]
+  # Capture public constructor input; no transport response or native work mocked.
+  params=StdioServerParameters(command=sys.executable,args=[str(entry),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid_marker),str(root)],encoding='utf-8',encoding_error_handler='strict')
+  report={}
+  async def qualify():
+   async with stdio_client(params) as (read,write):
+    async with ClientSession(read,write,read_timeout_seconds=timedelta(seconds=10)) as session:
+     init=await session.initialize();assert init.protocolVersion=='2025-11-25'
+     listed=await session.list_tools();assert [v.name for v in listed.tools]==['equity_discover','equity_slice','equity_calculate','equity_job_status','equity_job_cancel','equity_result_summary','equity_artifact_reference']
+     async def call(name,arguments):
+      result=await session.call_tool(name,arguments)
+      assert len(result.content)==1 and result.content[0].type=='text'
+      assert json.loads(result.content[0].text)==result.structuredContent
+      return result
+     assert (await call('equity_discover',{})).structuredContent['ok']
+     admitted=await call('equity_calculate',{'profile':'trades','idempotency_key':'owned-mcp-product'})
+     assert admitted.structuredContent['ok']
+     reference=admitted.structuredContent['payload']['reference']
+     for _ in range(20):
+      state=await call('equity_job_status',{'reference':reference});assert state.structuredContent['ok']
+      if state.structuredContent['payload']['data']['state']=='succeeded':break
+      await anyio.sleep(.02)
+     assert state.structuredContent['payload']['data']['state']=='succeeded'
+     value=await call('equity_result_summary',{'reference':reference})
+     assert value.structuredContent['ok'] and value.structuredContent['payload']['data']==FIXTURES['native_cases'][0]['complete_producer_payload']
+     exported=await call('equity_artifact_reference',{'reference':reference})
+     assert exported.structuredContent['ok']
+     exportref=exported.structuredContent['payload']['reference']
+     exported_value=await call('equity_result_summary',{'reference':exportref})
+     assert exported_value.structuredContent['ok'] and exported_value.structuredContent['payload']['data']==FIXTURES['native_cases'][0]['complete_producer_payload']
+     assert action('ttl_before')['reads']==1
+     assert (await call('equity_result_summary',{'reference':reference})).structuredContent['ok']
+     assert action('ttl_exact')['reads']==1
+     denied=await call('equity_result_summary',{'reference':reference})
+     assert denied.isError and denied.structuredContent['failure']['status']==403
+     before=await call('equity_calculate',{'profile':'trades','idempotency_key':'owned-mcp-product'})
+     assert before.isError and before.structuredContent['failure']['code']=='reference_expired'
+     report.update(protocol=init.protocolVersion,tools=7,producer_equal=True,export_followup_equal=True,source_reads=1,half_open_expiry=True,local_tombstone_denial=True)
+  anyio.run(qualify)
+  data=completed_bytes(pid_marker,64);assert data is not None
+  marker=json.loads(data);assert set(marker)=={'pid'} and type(marker['pid']) is int
+  deadline=time.monotonic()+3
+  while not exited(marker['pid']):
+   assert time.monotonic()<deadline;time.sleep(.01)
+  report['reference_child_observed_exited']=True
+print(json.dumps(report,sort_keys=True))
