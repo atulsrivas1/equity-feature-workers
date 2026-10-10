@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "equity-feature-client"
+version = "0.1.0a0"
+description = "Experimental explicit bounded Python remote client"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{name = "Equity Features contributors"}]
+dependencies = ["jsonschema==4.26.0", "attrs==26.1.0", "jsonschema-specifications==2025.9.1", "referencing==0.37.0", "rpds-py==2026.9.1", "typing-extensions==4.16.0"]
+
+[project.optional-dependencies]
+native = ["equity-feature-contracts==0.0.4a4", "equity-feature-io-sdk==0.1.0a2"]
+
+[project.urls]
+Repository = "https://github.com/atulsrivas1/equity-feature-workers"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+equity_feature_client = ["py.typed", "schemas/*.json"]
