@@ -1,0 +1,901 @@
+{
+  "scope": "Pre-code immutable source/API/fixture/dependency inputs; not execution, conformance or Ready approval",
+  "accepted_canonical": "aa2b411073dfa0385812a19e2871920bf38fb1aa",
+  "accepted_worker": "40ff5e020105adb290d995455ab373d5c85a62fb",
+  "initial_planning_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6104575482",
+  "reference_entry": {
+    "bytes": 3332,
+    "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+  },
+  "public_inventory": {
+    "scope": "Read-only pre-code source inventory; not feasibility/runtime/installed proof or Ready admission",
+    "head": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+    "inputs": [
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/client/src/equity_feature_client/__init__.py",
+        "bytes": 881,
+        "sha256": "daa44178a847be89b3e71de48b81b73e81dbc004edff6c1ad1dfa926976913e4",
+        "public_declarations": []
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/client/src/equity_feature_client/client.py",
+        "bytes": 12050,
+        "sha256": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233",
+        "public_declarations": [
+          {
+            "name": "RemoteClient",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "close",
+                "args": "self",
+                "returns": "None"
+              },
+              {
+                "name": "discover",
+                "args": "self, *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[DiscoveryView]"
+              },
+              {
+                "name": "slice_raw",
+                "args": "self, expectation: RawExpectation, *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[RawSliceView]"
+              },
+              {
+                "name": "slice_features",
+                "args": "self, dataset: DatasetKey, expectation: ProducerExpectation, selected: tuple[FeatureRef, ...], *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[FeatureSliceView]"
+              },
+              {
+                "name": "calculate",
+                "args": "self, expectation: ProducerExpectation, idempotency_key: str, *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[JobView]"
+              },
+              {
+                "name": "job_status",
+                "args": "self, expectation: JobExpectation, *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[JobView]"
+              },
+              {
+                "name": "job_cancel",
+                "args": "self, expectation: JobExpectation, *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[JobView]"
+              },
+              {
+                "name": "result_read",
+                "args": "self, result_id: str, expectation: ProducerExpectation, *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[ResultView]"
+              },
+              {
+                "name": "artifact_read",
+                "args": "self, result_id: str, expectation: ProducerExpectation, *, request_id: str, version: str='1.1'",
+                "returns": "Outcome[ResultView]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/client/src/equity_feature_client/models.py",
+        "bytes": 8011,
+        "sha256": "b895015595a0f38efeb0a48185b677b3116ce92306f0a7b36684b9d315156f05",
+        "public_declarations": [
+          {
+            "name": "DatasetKey",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, str]"
+              }
+            ]
+          },
+          {
+            "name": "ScopeKey",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, str]"
+              }
+            ]
+          },
+          {
+            "name": "FeatureRef",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, str]"
+              }
+            ]
+          },
+          {
+            "name": "RawExpectation",
+            "kind": "ClassDef",
+            "methods": []
+          },
+          {
+            "name": "ProducerExpectation",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "context_json",
+                "args": "self",
+                "returns": "dict[str, Any]"
+              }
+            ]
+          },
+          {
+            "name": "JobExpectation",
+            "kind": "ClassDef",
+            "methods": []
+          },
+          {
+            "name": "Request",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, Any]"
+              }
+            ]
+          },
+          {
+            "name": "Failure",
+            "kind": "ClassDef",
+            "methods": []
+          },
+          {
+            "name": "Outcome",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "ok",
+                "args": "self",
+                "returns": "bool"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/client/src/equity_feature_client/native.py",
+        "bytes": 9352,
+        "sha256": "cff814d907af69652a7d048e25e4701aac21c9904ce1b08b8e2008cf3385de24",
+        "public_declarations": []
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+        "bytes": 28666,
+        "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+        "bytes": 30039,
+        "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/mcp/src/equity_feature_mcp/__init__.py",
+        "bytes": 331,
+        "sha256": "d3fc175cad2be076126119be52671498b29301c1928a9d7dc20917598a39fd0c",
+        "public_declarations": []
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/mcp/src/equity_feature_mcp/models.py",
+        "bytes": 5230,
+        "sha256": "1c712e14161c885c1932ddf3fc5c14e3566dfac971776a952816c370fe6c4212",
+        "public_declarations": [
+          {
+            "name": "RawSliceRegistration",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, Any]"
+              }
+            ]
+          },
+          {
+            "name": "FeatureSliceRegistration",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, Any]"
+              }
+            ]
+          },
+          {
+            "name": "CommandRegistration",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, Any]"
+              }
+            ]
+          },
+          {
+            "name": "MCPProfile",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "payload_json",
+                "args": "self",
+                "returns": "dict[str, Any]"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "packages/mcp/src/equity_feature_mcp/server.py",
+        "bytes": 13023,
+        "sha256": "8d314f299ec8b9fa4903e8e94fc1ec685dafdcc331fc2c9f57425afbb78ba84b",
+        "public_declarations": [
+          {
+            "name": "StdioServer",
+            "kind": "ClassDef",
+            "methods": [
+              {
+                "name": "close",
+                "args": "self",
+                "returns": "None"
+              },
+              {
+                "name": "run_stdio",
+                "args": "self, input_binary: BinaryIO, output_binary: BinaryIO",
+                "returns": "None"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "docs/EQ081_CLIENT_FIXTURES.json",
+        "bytes": 76771,
+        "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "docs/EQ081_AUTHORITY_HTTP_ENTRY.txt",
+        "bytes": 3879,
+        "sha256": "68908384fd95db9552009bc356cc1fcbcca43e6e9adc135dcca0cd100228cec2"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "docs/EQ082_NATIVE_FAMILY_ENTRY.txt",
+        "bytes": 1853,
+        "sha256": "19a03bc41a70162e6998b140977e4b1b642aff5b287eed7e9608eaee01050e64"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "docs/EQ082_NATIVE_STATE_ENTRY.txt",
+        "bytes": 1968,
+        "sha256": "8f7e757277b684f689cb32a8188adff257fa5b3d569ca2c4519ceff7004a8168"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt",
+        "bytes": 1828,
+        "sha256": "7d9117da97632c3c9fa93d77013f330dd893e9052ebc71174a8cf984496b40c9"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "tests/service/fixtures/jobs_native.json",
+        "bytes": 22366,
+        "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+        "path": "tools/requirements-mcp-reference.txt",
+        "bytes": 738,
+        "sha256": "f37fbdad94f5742ee96f7d44bbd9acd10c617ad3386ecd1423a31f8798c36205"
+      }
+    ],
+    "native_cases": [
+      {
+        "case": "trades",
+        "family": "trades",
+        "producer_payload_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+        "native_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+        "producer_keys": [
+          "backend_id",
+          "backend_version",
+          "columns",
+          "command_digest",
+          "context",
+          "evidence",
+          "executed_features",
+          "metadata",
+          "next_cursor",
+          "quality"
+        ],
+        "quality": [
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.count",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.volume",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.notional",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.vwap",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.mean_size",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          }
+        ],
+        "source_reads": 1
+      },
+      {
+        "case": "bars",
+        "family": "bars",
+        "producer_payload_sha256": "7f864e18ec55bcf86e2c50d89ed038e40ff8e09b7faebe648ae9a2d166b4a88f",
+        "native_sha256": "8776f94ba6b31943da18c88a4b32eb8a0a110812030b556cff62bb4c7c358fa6",
+        "producer_keys": [
+          "backend_id",
+          "backend_version",
+          "columns",
+          "command_digest",
+          "context",
+          "evidence",
+          "executed_features",
+          "metadata",
+          "next_cursor",
+          "quality"
+        ],
+        "quality": [
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.bar.open",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.bar.high",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.bar.low",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.bar.close",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.bar.volume",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.bar.notional",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.bar.close_weighted_price",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.price.open_close_return",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.price.range_fraction",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.price.close_location",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.price.overnight_gap",
+            "observed": "2",
+            "reasons": [
+              "absent_input"
+            ],
+            "status": "missing_input"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
+            "feature_id": "session.price.close_close_return",
+            "observed": "2",
+            "reasons": [
+              "absent_input"
+            ],
+            "status": "missing_input"
+          }
+        ],
+        "source_reads": 1
+      },
+      {
+        "case": "quotes",
+        "family": "quotes",
+        "producer_payload_sha256": "4b7d87e4598dba13deff83df1b6c4cbff7829cdc24faf2332c0c2965a684a637",
+        "native_sha256": "0e585d4ee2f75e81d86af893c855afb29e4d100daf4031da5ee9e9f68abe7af4",
+        "producer_keys": [
+          "backend_id",
+          "backend_version",
+          "columns",
+          "command_digest",
+          "context",
+          "evidence",
+          "executed_features",
+          "metadata",
+          "next_cursor",
+          "quality"
+        ],
+        "quality": [
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "4",
+            "feature_id": "session.quote.sampled_spread",
+            "observed": "4",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "4",
+            "feature_id": "session.quote.state_counts",
+            "observed": "4",
+            "reasons": [],
+            "status": "available"
+          }
+        ],
+        "source_reads": 1
+      },
+      {
+        "case": "trades-adjacent-large-ns",
+        "family": "trades",
+        "producer_payload_sha256": "1dd6d9c3486f85fe31b3fe5a167ec43db88ace7b81e0ba792b0843b0a188dbd8",
+        "native_sha256": "4a4879d75f6fcd69f83c4b043f2eaf661cd542ca550aae3f948a041e84c2ce0a",
+        "producer_keys": [
+          "backend_id",
+          "backend_version",
+          "columns",
+          "command_digest",
+          "context",
+          "evidence",
+          "executed_features",
+          "metadata",
+          "next_cursor",
+          "quality"
+        ],
+        "quality": [
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.count",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.volume",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.notional",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.vwap",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "3",
+            "feature_id": "session.trade.mean_size",
+            "observed": "3",
+            "reasons": [],
+            "status": "available"
+          }
+        ],
+        "source_reads": 1
+      }
+    ],
+    "raw_cases": [
+      {
+        "case": null,
+        "family": "trades",
+        "data_kind": "trade",
+        "expected_raw_payload_sha256": "cfe2543eae46e4fe8db83e39264d138961f38bc41cd795b20319e48a231831d6",
+        "column_count": 9
+      },
+      {
+        "case": null,
+        "family": "bars",
+        "data_kind": "bar",
+        "expected_raw_payload_sha256": "003772db95e4334f4cb347d65fcf4fa2e093463afda12acbca09af981db5ce92",
+        "column_count": 11
+      },
+      {
+        "case": null,
+        "family": "quotes",
+        "data_kind": "quote",
+        "expected_raw_payload_sha256": "6de80e5fd83152328898d4225f51bc7d2ed0d0ed4e39f00cfe9f3f1a804d84a3",
+        "column_count": 8
+      },
+      {
+        "case": null,
+        "family": "trades",
+        "data_kind": "trade",
+        "expected_raw_payload_sha256": "5e391b3d2017422e476b4e6fdd9a6c75a24751f0e79a23428ada30bea666fe25",
+        "column_count": 9
+      },
+      {
+        "case": null,
+        "family": "trades",
+        "data_kind": "trade",
+        "expected_raw_payload_sha256": "3bf5bd1f3eaafe3af10c6e0d41db655c6cf30a54d16ef80da280624ffa0b0796",
+        "column_count": 9
+      }
+    ],
+    "scalar_cases": [
+      {
+        "cell": {
+          "type": "int64",
+          "value": "-9223372036854775808"
+        },
+        "expected_integer": "-9223372036854775808"
+      },
+      {
+        "cell": {
+          "type": "int64",
+          "value": "9223372036854775807"
+        },
+        "expected_integer": "9223372036854775807"
+      },
+      {
+        "cell": {
+          "coefficient": "99999999999999999999999999999999999999",
+          "scale": 0,
+          "type": "decimal128"
+        },
+        "expected_integer": "99999999999999999999999999999999999999"
+      },
+      {
+        "cell": {
+          "bits": "8000000000000000",
+          "type": "float64"
+        },
+        "expected_ieee_bits": "8000000000000000"
+      },
+      {
+        "cell": {
+          "bits": "3ff0000000000000",
+          "type": "float64"
+        },
+        "expected_ieee_bits": "3ff0000000000000"
+      },
+      {
+        "cell": null,
+        "expected_type": "null"
+      },
+      {
+        "cell": {
+          "type": "bool",
+          "value": true
+        },
+        "expected_type": "bool"
+      },
+      {
+        "cell": {
+          "type": "string",
+          "value": "owned"
+        },
+        "expected_type": "str"
+      }
+    ]
+  },
+  "accepted_mcp_builds": {
+    "Linux": {
+      "receipt_sha256": "a725e6c284a81afc55fbb9c7eaa411f1e33cb1c7bbca7e935ee2dd68445fc5d5",
+      "producer_run": 38102943053,
+      "package_archives": {
+        "equity_feature_mcp-0.1.0a0-py3-none-any.whl": "fe79f437fc36bd533e40739c1d4c6fd9a5a12d99b6bc03e0f418dcf3059df1c3",
+        "equity_feature_mcp-0.1.0a0.tar.gz": "92eb3ae3cef17ac2d34b874aa3991ef4a7ff40f2fe550270ce0f97d04f072b15"
+      },
+      "accepted_internal_wheels": {
+        "equity_feature_client-0.1.0a0-py3-none-any.whl": "ce763e19e46ea2ff8a77aa4af5ce554f3fb0a98de49800545d634543828e0d7c",
+        "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "acaa84fc0340c4640ced2b7cdbef04d5ba7cfaec20cd0525b866b415147635cc",
+        "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "2abcd7084371e82e7ec887353a1159ed900616d764df36baafe49a2b57c9c676",
+        "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "6bed73224f033f4d67ad7d519bce76c5b8d3f6076766ccc0726b6a36a9bf3bde",
+        "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "ef4deb9adc03b0e77075a36236fc20fe30d9373218386a60dc769d0145c09c99",
+        "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "71c2316ab93d3382b24701ce6f4990b1355f90b8f66e562c8b1d34e539d60783",
+        "equity_feature_service-0.1.0a3-py3-none-any.whl": "6be0bb94c570429830fedda22813cfd6cc06d73072ff540250be318fa3df54d5",
+        "equity_feature_workers-0.1.0a13-py3-none-any.whl": "a4eae3ca4ae6e37d277e941958199b47b0dd0ce150064c0952c2d0269e042faf",
+        "equity_features-0.0.4a4-py3-none-any.whl": "cf8965e1600a3d8ef10dbefcfdea21f2d48ad8c8f80e0268abe12c365b1cd26e"
+      },
+      "qualification_reference_wheels": {
+        "annotated_types-0.8.0-py3-none-any.whl": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+        "anyio-4.15.1-py3-none-any.whl": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+        "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+        "certifi-2026.7.22-py3-none-any.whl": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+        "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+        "click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+        "cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079",
+        "duckdb-1.5.6-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl": "bc9619ed7d4ffa117b5155d84b44794366bb6635178d78ed5e13a6024845c757",
+        "h11-0.16.0-py3-none-any.whl": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+        "httpcore-1.0.9-py3-none-any.whl": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+        "httpx-0.28.1-py3-none-any.whl": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+        "httpx_sse-0.4.3-py3-none-any.whl": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+        "idna-3.20-py3-none-any.whl": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+        "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+        "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+        "mcp-1.30.0-py3-none-any.whl": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+        "numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "fd83c01228a688733f1ded5201c678f0c53ecc1006ffbc404db9f7a899ac6249",
+        "pycparser-3.11-py3-none-any.whl": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+        "pydantic-2.14.0-py3-none-any.whl": "15fab1bea6f1dc5003b54fc2ecab230c1fd1dbade2acd4addc52d81e32416d4b",
+        "pydantic_core-2.50.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "f187030fc3d62c668feb0f09e92852e0eb414d7fcefc4748f2e67d245aade37e",
+        "pydantic_settings-2.15.0-py3-none-any.whl": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+        "pyjwt-2.15.1-py3-none-any.whl": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+        "python_dotenv-1.2.4-py3-none-any.whl": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+        "python_multipart-0.0.32-py3-none-any.whl": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+        "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+        "rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "addeda51556dac7c1a2f14cda62db8b621cd12afba3091d03a96c72932387eab",
+        "sse_starlette-3.5.0-py3-none-any.whl": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+        "starlette-1.7.0-py3-none-any.whl": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+        "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+        "typing_inspection-0.4.4-py3-none-any.whl": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+        "uvicorn-0.54.0-py3-none-any.whl": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+      }
+    },
+    "Windows": {
+      "receipt_sha256": "a6edc4d7056812b47da8334649db100b814bd2fe13930426f64cd22b91c85192",
+      "producer_run": 38102943053,
+      "package_archives": {
+        "equity_feature_mcp-0.1.0a0-py3-none-any.whl": "49358ab38934053bc55db5fbd1e06d62b692fd6a7dd62b8324300c7293a10f93",
+        "equity_feature_mcp-0.1.0a0.tar.gz": "b10f2d8abd3bbaef4c4a1e3a45029e2c1b1c1d562e7a9a7ee1d5691d19e26c8a"
+      },
+      "accepted_internal_wheels": {
+        "equity_feature_client-0.1.0a0-py3-none-any.whl": "881b6059a37b3b076f26ac2ddcf14c2fa343fb0292a6aba3fc7652df500540b1",
+        "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2",
+        "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc",
+        "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8",
+        "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549",
+        "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb",
+        "equity_feature_service-0.1.0a3-py3-none-any.whl": "f6be07ba2dc03ae0d5fee65e21a6ac615f544344df3d5517e0eb20b64db62f56",
+        "equity_feature_workers-0.1.0a13-py3-none-any.whl": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324",
+        "equity_features-0.0.4a4-py3-none-any.whl": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0"
+      },
+      "qualification_reference_wheels": {
+        "annotated_types-0.8.0-py3-none-any.whl": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+        "anyio-4.15.1-py3-none-any.whl": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+        "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+        "certifi-2026.7.22-py3-none-any.whl": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+        "cffi-2.1.1-cp312-cp312-win_amd64.whl": "f53e442b08449d42821fa4a4fba000095af9f62742a500f978a9f557ec44339a",
+        "click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+        "colorama-0.4.6-py2.py3-none-any.whl": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+        "cryptography-50.0.2-cp311-abi3-win_amd64.whl": "7afa5a6602a9f29af1f3a2965f831bae7c9d5d597b7cbb716d41ab3b7d89879c",
+        "duckdb-1.5.6-cp312-cp312-win_amd64.whl": "09ff51b230219f0d8b47fc8a1e17fb595ba9fab0c3d96a6de4d00b8ff86b3cf1",
+        "h11-0.16.0-py3-none-any.whl": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+        "httpcore-1.0.9-py3-none-any.whl": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+        "httpx-0.28.1-py3-none-any.whl": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+        "httpx_sse-0.4.3-py3-none-any.whl": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+        "idna-3.20-py3-none-any.whl": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+        "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+        "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+        "mcp-1.30.0-py3-none-any.whl": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+        "numpy-2.2.6-cp312-cp312-win_amd64.whl": "c1f9540be57940698ed329904db803cf7a402f3fc200bfe599334c9bd84a40b2",
+        "pycparser-3.11-py3-none-any.whl": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+        "pydantic-2.14.0-py3-none-any.whl": "15fab1bea6f1dc5003b54fc2ecab230c1fd1dbade2acd4addc52d81e32416d4b",
+        "pydantic_core-2.50.0-cp312-cp312-win_amd64.whl": "1541c334af5d42cb9eb03862a9b4d2cfbfc670fd05172ec51f3ce02d704550f1",
+        "pydantic_settings-2.15.0-py3-none-any.whl": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+        "pyjwt-2.15.1-py3-none-any.whl": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+        "python_dotenv-1.2.4-py3-none-any.whl": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+        "python_multipart-0.0.32-py3-none-any.whl": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+        "pywin32-312-cp312-cp312-win_amd64.whl": "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc",
+        "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+        "rpds_py-2026.9.1-cp312-cp312-win_amd64.whl": "5ce8943f79c2210f7abcc28e86367b03b28d95027fd01c46d2472373ae70c86f",
+        "sse_starlette-3.5.0-py3-none-any.whl": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+        "starlette-1.7.0-py3-none-any.whl": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+        "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+        "typing_inspection-0.4.4-py3-none-any.whl": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+        "uvicorn-0.54.0-py3-none-any.whl": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+      }
+    }
+  },
+  "producer_comparison": "ENTIRE complete_producer_payload including all source/context/config/quality/evidence and scalar tags; no variable producer fields",
+  "variable_outer_transport_fields": [
+    "HTTP envelope.request_id (explicit per-call correlation equality required)",
+    "HTTP/client job payload.job_id and result_id (explicit binding equality within original native epoch)",
+    "MCP request/response JSONRPC.id (exact supplied equality required)",
+    "MCP wrapper reference (opaque same-object reuse/originalTTL/process-owner-profile constraints checked)"
+  ],
+  "unavailable_cases": {
+    "bars": {
+      "session.price.overnight_gap": "missing_input",
+      "session.price.close_close_return": "missing_input"
+    }
+  },
+  "reference_revision": "2025-11-25",
+  "reference_sdk": "mcp==1.30.0"
+}

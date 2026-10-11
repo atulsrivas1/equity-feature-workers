@@ -1,0 +1,77 @@
+import sys,time,json
+from pathlib import Path
+from dataclasses import replace
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+scenario=sys.argv[6]
+if scenario not in ('ttl','retire','grant','epoch'):raise ValueError('owned scenario')
+ready,stop,control,ack=(Path(v) for v in sys.argv[2:6])
+actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export')
+def create():
+ scheduler,service,tokens,clock,facts=setup(actions=actions,audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+ service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
+ if scenario=='grant':service.ledger.grants=tuple(replace(g,expires_at_ns=1000) if n==0 else g for n,g in enumerate(service.ledger.grants))
+ return scheduler,service,clock,facts
+def publish(path,value):
+ data=json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
+ if len(data)>256:raise ValueError('owned acknowledgement bounds')
+ temporary=path.with_name(path.name+'.pending');temporary.write_bytes(data);temporary.replace(path);path.with_name(path.name+'.complete').mkdir()
+scheduler,service,clock,facts=create();original_credentials=service.ledger.credentials
+requests=0
+def app(environ,start_response):
+ global requests
+ if requests>=64:raise ValueError('owned request cap')
+ requests+=1
+ return service(environ,start_response)
+server=qualification_server(service);server.set_app(app);server.timeout=.05
+publish(ready,{'port':server.server_port})
+sequence=0;deadline=time.monotonic()+20
+allowed={'ttl':{'ttl_before','ttl_exact'},'retire':{'retire','restore'},'grant':{'grant_before','grant_exact'},'epoch':{'restart'}}
+try:
+ while requests<64:
+  if stop.exists() or time.monotonic()>=deadline:break
+  slot=control.with_name(control.name+'.'+str(sequence+1))
+  if sequence<16 and slot.with_name(slot.name+'.complete').is_dir():
+   with slot.open('rb') as stream:data=stream.read(129)
+   if len(data)>128:raise ValueError('owned control bounds')
+   value=json.loads(data)
+   if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or not 1<=value['sequence']<=16 or type(value['action']) is not str or value['action'] not in allowed[scenario]:raise ValueError('owned control')
+   if value['sequence']>sequence:
+    if value['sequence']!=sequence+1:raise ValueError('owned sequence')
+    action=value['action']
+    if action=='restart':
+     if scheduler.close(2) is not True:raise ValueError('owned epoch exit unconfirmed')
+     scheduler,service,clock,facts=create()
+    elif action=='retire':
+     with service.ledger.lock:service.ledger.credentials=original_credentials[1:]
+     until=time.monotonic()+2
+     while True:
+      with service.ledger.lock:cleared=all(not j.held for j in scheduler.jobs.values())
+      if cleared:break
+      if time.monotonic()>=until:raise ValueError('owned retirement maintenance')
+      time.sleep(.01)
+    elif action=='restore':
+     with service.ledger.lock:service.ledger.credentials=original_credentials
+    else:
+     # Terminal visibility is not finalization. Observe expiry and released slot
+     # under the scheduler condition before moving the trusted fixture clock.
+     with scheduler.condition:
+      if len(scheduler.jobs)!=1:raise ValueError('owned job count')
+      job=next(iter(scheduler.jobs.values()))
+      until=time.monotonic()+3
+      while scheduler._running is not None or job.expires_ns<=0:
+       remaining=until-time.monotonic()
+       if remaining<=0:raise ValueError('owned finalization unconfirmed')
+       scheduler.condition.wait(remaining)
+      if job.state!='succeeded':raise ValueError('owned terminal required')
+      if scenario=='grant' and job.expires_ns!=1000:raise ValueError('owned original grant cap')
+      expiry=job.expires_ns
+      clock.n=expiry-(1 if action.endswith('before') else 0)
+    sequence=value['sequence'];publish(ack.with_name(ack.name+'.'+str(sequence)),{'sequence':sequence,'epoch':scheduler.epoch,'reads':facts['reads'],'requests':requests,'expiry':expiry if action in ('ttl_before','ttl_exact','grant_before','grant_exact') else None})
+  server.handle_request()
+finally:
+ server.server_close()
+ if scheduler.close(2) is not True:raise ValueError('owned final exit unconfirmed')
+print(json.dumps({'marker':'eq083-authority-http-exited','reads':facts['reads'],'requests':requests,'scenario':scenario},sort_keys=True,separators=(',',':')),flush=True)

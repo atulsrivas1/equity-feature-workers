@@ -1,0 +1,269 @@
+"""Frozen EQ083 positive three-lane parent; trusted installed harness only."""
+import sys,json,hashlib,math,socket,re,time,threading,tempfile,ctypes,errno
+from pathlib import Path
+from datetime import timedelta
+import anyio
+from jsonschema import Draft202012Validator
+from mcp import ClientSession,StdioServerParameters
+from mcp.client.stdio import stdio_client
+import equity_feature_client,equity_feature_mcp,equity_feature_service
+from equity_feature_client import RemoteClient,Request,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation,JobExpectation,ResultView
+from equity_feature_client.native import convert_result
+from equity_feature_io_sdk import encode_result
+from equity_feature_service._containment import OwnedEpochSupervisor
+from equity_feature_service._entry import OwnedEntryInventory,OwnedEntryProfile
+
+if len(sys.argv)!=2:raise ValueError('owned parent arguments')
+root=Path(sys.argv[1]).resolve()
+assert sys.platform in ('win32','linux') and not (root/'packages').exists()
+assert all('site-packages' in Path(v.__file__).resolve().parts for v in (equity_feature_client,equity_feature_mcp,equity_feature_service))
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+def pinned(path,size,digest):
+ with (root/path).open('rb') as stream:value=stream.read(size+1)
+ assert len(value)==size and hashlib.sha256(value).hexdigest()==digest
+ return value
+with (root/'docs/EQ083_AUTHORITY_PARENT_INPUTS.json').open('rb') as stream:manifest_bytes=stream.read(65537)
+assert len(manifest_bytes)<=65536
+manifest=json.loads(manifest_bytes)
+assert set(manifest)=={'scope','inputs','reference_entry','authority_entry','request_ledger'}
+assert 1<=len(manifest['inputs'])<=32 and len({v['harness_path'] for v in manifest['inputs']})==len(manifest['inputs'])
+assets={item['harness_path']:pinned(item['harness_path'],item['bytes'],item['sha256']) for item in manifest['inputs']}
+fixture=json.loads(assets['docs/EQ081_CLIENT_FIXTURES.json'])
+remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']))
+remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
+tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
+assert len(tools)==7
+authority_source=pinned('docs/EQ083_AUTHORITY_ENTRY.txt',4645,'3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270')
+pinned('docs/EQ083_REFERENCE_ENTRY.txt',3332,'eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917')
+def completed(path,limit):
+ marker=path.with_name(path.name+'.complete')
+ if not marker.exists():return None
+ assert marker.is_dir()
+ with path.open('rb') as stream:data=stream.read(limit+1)
+ assert len(data)<=limit
+ return json.loads(data)
+def wait_completed(path,limit,seconds):
+ deadline=time.monotonic()+seconds
+ while True:
+  value=completed(path,limit)
+  if value is not None:return value
+  assert time.monotonic()<deadline
+  time.sleep(.01)
+def exited(pid):
+ assert type(pid) is int and pid>0
+ if sys.platform=='linux':
+  try:value=(Path('/proc')/str(pid)/'stat').read_text(encoding='ascii')
+  except OSError as error:
+   if error.errno in (errno.ENOENT,errno.ESRCH):return True
+   raise
+  return value.rsplit(')',1)[1].strip().split()[0]=='Z'
+ kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+ kernel.OpenProcess.argtypes=[ctypes.c_uint32,ctypes.c_int,ctypes.c_uint32];kernel.OpenProcess.restype=ctypes.c_void_p
+ kernel.WaitForSingleObject.argtypes=[ctypes.c_void_p,ctypes.c_uint32];kernel.WaitForSingleObject.restype=ctypes.c_uint32
+ kernel.CloseHandle.argtypes=[ctypes.c_void_p];kernel.CloseHandle.restype=ctypes.c_int
+ handle=kernel.OpenProcess(0x100000,False,pid)
+ if not handle:
+  code=ctypes.get_last_error()
+  if code==87:return True
+  raise OSError(code,'owned process inspection')
+ try:
+  status=kernel.WaitForSingleObject(handle,0)
+  assert status in (0,258)
+  return status==0
+ finally:assert kernel.CloseHandle(handle)
+def pairs(items):
+ value={}
+ for key,item in items:
+  assert key not in value;value[key]=item
+ return value
+def number(value):
+ result=float(value);assert math.isfinite(result);return result
+def parse(raw):return json.loads(raw.decode('utf-8','strict'),object_pairs_hook=pairs,parse_float=number,parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite')))
+reports=[]
+case=fixture['native_cases'][0];producer=case['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+def verify(value):
+ assert value==producer and hashlib.sha256(canonical(value)).hexdigest()==case['producer_payload_sha256']
+ native=convert_result(ResultView(canonical(dict(schema='equity.remote',version='1.1',request_id='native-proof',kind='result',payload=value))),expected)
+ assert native.ok and hashlib.sha256(encode_result(native.view)).hexdigest()==case['native_sha256']
+def value(outcome):assert outcome.ok;return outcome.view.payload_json()
+def denied(outcome,status):
+ assert not outcome.ok and outcome.view is None
+ f=outcome.failure
+ assert (f.category,f.code,f.phase,f.status)==('credentials' if status==401 else 'authorization','remote_denial','decode',status)
+for scenario in ('ttl','grant','retire'):
+ with tempfile.TemporaryDirectory(prefix='eq083-authority-') as directory:
+  ready,stop,control,ack,owner_pid,foreign_pid=(Path(directory)/name for name in ('ready','stop','control','ack','owner-pid','foreign-pid'))
+  profile=OwnedEntryProfile('eq083-authority-'+scenario,authority_source,hashlib.sha256(authority_source).hexdigest(),(str(root/'tests/service'),str(ready),str(stop),str(control),str(ack),scenario),True)
+  supervisor=OwnedEpochSupervisor(OwnedEntryInventory((profile,)));results=[];errors=[];clients=[]
+  def launch():
+   try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=25,output_limit=768))
+   except BaseException as error:errors.append(type(error).__name__)
+  thread=threading.Thread(target=launch);thread.start()
+  direct_count=0;counts={'A':0,'B':0};sequence=0;acknowledgements=[];mcp_counts=[]
+  try:
+   address=wait_completed(ready,128,4);assert set(address)=={'port'} and type(address['port']) is int and 1<=address['port']<=65535 and thread.is_alive()
+   port=address['port'];origin='http://127.0.0.1:'+str(port)
+   def direct(payload,kind,status=200,principal='A'):
+    global direct_count
+    assert direct_count<31;direct_count+=1
+    request=Request('1.1','eq083-http-'+str(direct_count),payload)
+    assert len(request.encoded)<=16384
+    wire=b'POST /v1/request HTTP/1.0\r\nHost: 127.0.0.1:'+str(port).encode()+b'\r\nAuthorization: Bearer '+principal.encode('ascii')*43+b'\r\nContent-Type: application/json\r\nContent-Length: '+str(len(request.encoded)).encode()+b'\r\nConnection: close\r\n\r\n'+request.encoded
+    with socket.create_connection(('127.0.0.1',port),timeout=5) as connection:
+     connection.settimeout(5);connection.sendall(wire);response=bytearray();boundary=None
+     while True:
+      chunk=connection.recv(1024)
+      if not chunk:break
+      response.extend(chunk)
+      if boundary is None:
+       location=response.find(b'\r\n\r\n')
+       if location>=0:boundary=location+4;assert boundary<=8192
+       else:assert len(response)<=8192
+      if boundary is not None:assert len(response)-boundary<=262144
+    assert boundary is not None
+    header=bytes(response[:boundary-4]);body=bytes(response[boundary:]);lines=header.split(b'\r\n')
+    assert re.fullmatch(rb'HTTP/1\.[01] '+str(status).encode('ascii')+rb' [\x20-\x7e]*',lines[0])
+    headers={}
+    for line in lines[1:]:
+     name,separator,value=line.partition(b':');assert separator
+     name=name.decode('ascii').lower();assert name not in headers
+     headers[name]=value.strip().decode('ascii')
+    assert headers['content-type']=='application/json' and headers['cache-control']=='no-store' and headers['x-content-type-options']=='nosniff'
+    assert 'transfer-encoding' not in headers and 'content-encoding' not in headers
+    assert re.fullmatch(r'0|[1-9][0-9]*',headers['content-length']) and int(headers['content-length'])==len(body)
+    value=parse(body);(remote_v1 if status==401 else remote).validate(value)
+    assert (value['version'],value['request_id'],value['kind'])==(('1.0',None,'error') if status==401 else ('1.1',request.request_id,kind))
+    if status!=200:assert 'content-disposition' not in headers
+    if status==200 and payload['operation']=='artifact_read':assert headers['content-disposition']=='attachment; filename="result-'+hashlib.sha256(payload['result_id'].encode('ascii')).hexdigest()+'.json"'
+    return value['payload']
+
+   def http_error(payload,status,principal='A'):
+    error=direct(payload,'error',status,principal)
+    assert error['category']==('authentication' if status==401 else 'authorization') and error['code']==('unauthenticated' if status==401 else 'not_permitted') and error['retryable'] is False
+   def calculate():return direct(dict(operation='calculate',context=expected.context_json(),scope=expected.scope.payload_json(),idempotency_key='eq083-authority',command_digest=expected.command_digest),'job')
+   def provider(principal):
+    def token():
+     assert counts[principal]<12;counts[principal]+=1;return principal*43
+    return token
+   owner=RemoteClient(origin,provider('A'),attempts=1,budget=5);foreign=RemoteClient(origin,provider('B'),attempts=1,budget=5);clients.extend((owner,foreign))
+   first=calculate()
+   for _ in range(20):
+    first=direct(dict(operation='job_status',job_id=first['job_id']),'job')
+    if first['state']=='succeeded':break
+    assert first['state'] in ('queued','running');time.sleep(.02)
+   assert first['state']=='succeeded' and first['result_id'] is not None
+   job=JobExpectation(first['job_id'],expected.command_digest)
+   result_payload=dict(operation='result_read',result_id=first['result_id'],cursor=None)
+   export_payload=dict(operation='artifact_read',result_id=first['result_id'],cursor=None)
+   status_payload=dict(operation='job_status',job_id=first['job_id'])
+   for payload in (result_payload,export_payload):verify(direct(payload,'result'))
+   repeated=value(owner.calculate(expected,'eq083-authority',request_id='typed-admit'))
+   assert (repeated['job_id'],repeated['result_id'])==(first['job_id'],first['result_id'])
+   assert value(owner.job_status(job,request_id='typed-status'))['state']=='succeeded'
+   verify(value(owner.result_read(first['result_id'],expected,request_id='typed-result')))
+   verify(value(owner.artifact_read(first['result_id'],expected,request_id='typed-export')))
+   discovery=direct(dict(operation='discover'),'discovery',principal='B')
+   http_error(result_payload,403,'B')
+   assert value(foreign.discover(request_id='foreign-discovery'))==discovery
+   denied(foreign.result_read(first['result_id'],expected,request_id='foreign-result'),403)
+   def action(name):
+    global sequence
+    sequence+=1;assert sequence<=16
+    slot=control.with_name(control.name+'.'+str(sequence));target=ack.with_name(ack.name+'.'+str(sequence))
+    assert not slot.exists() and not target.exists()
+    raw=canonical(dict(sequence=sequence,action=name));assert len(raw)<=128
+    pending=slot.with_name(slot.name+'.pending');pending.write_bytes(raw);pending.replace(slot);slot.with_name(slot.name+'.complete').mkdir()
+    observed=wait_completed(target,256,4)
+    assert set(observed)=={'sequence','epoch','reads','requests','expiry'} and observed['sequence']==sequence and observed['reads']==1
+    expected_mcp=6 if sequence==1 else (7 if scenario=='retire' else 8)
+    assert type(observed['requests']) is int and observed['requests']==direct_count+sum(counts.values())+expected_mcp and observed['requests']<=60
+    if scenario in ('ttl','grant'):assert type(observed['expiry']) is int and observed['expiry']>0
+    if scenario=='grant':assert observed['expiry']==1000
+    acknowledgements.append(observed);return observed
+   def params(principal,pid):return StdioServerParameters(command=sys.executable,args=['-I',str(root/'docs/EQ083_REFERENCE_ENTRY.txt'),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),principal,str(pid),case['case']],encoding='utf-8',encoding_error_handler='strict')
+   async def opened_call(session,name,arguments):
+    response=await session.call_tool(name,arguments);structured=response.structuredContent
+    assert len(response.content)==1 and response.content[0].type=='text' and response.content[0].text.encode('ascii')==canonical(structured) and len(canonical(structured))<=16384
+    Draft202012Validator(next(v['outputSchema'] for v in tools if v['name']==name)).validate(structured)
+    assert response.isError==(not structured['ok']);return structured
+   async def initialize(session):
+    init=await session.initialize();assert init.protocolVersion=='2025-11-25' and init.capabilities.model_dump(exclude_none=True)==dict(tools=dict(listChanged=False))
+    listed=await session.list_tools();assert [v.name for v in listed.tools]==[v['name'] for v in tools]
+    for actual,frozen in zip(listed.tools,tools):assert actual.inputSchema==frozen['inputSchema'] and actual.outputSchema==frozen['outputSchema']
+   async def dialogue():
+    async with stdio_client(params('A',owner_pid)) as (read,write):
+     async with ClientSession(read,write,read_timeout_seconds=timedelta(seconds=10)) as session:
+      await initialize(session)
+      async def success(name,arguments):
+       result=await opened_call(session,name,arguments);assert result['ok'];return result['payload']
+      admission=await success('equity_calculate',dict(profile='command',idempotency_key='eq083-authority'))
+      assert (admission['data']['job_id'],admission['data']['result_id'])==(first['job_id'],first['result_id'])
+      ref=admission['reference'];assert (await success('equity_job_status',dict(reference=ref)))['data']['state']=='succeeded'
+      verify((await success('equity_result_summary',dict(reference=ref)))['data'])
+      export=await success('equity_artifact_reference',dict(reference=ref));assert export['operation']=='artifact_read'
+      verify((await success('equity_result_summary',dict(reference=export['reference'])))['data'])
+      async with stdio_client(params('B',foreign_pid)) as (bread,bwrite):
+       async with ClientSession(bread,bwrite,read_timeout_seconds=timedelta(seconds=10)) as bsession:
+        await initialize(bsession)
+        bvalue=await opened_call(bsession,'equity_discover',{});assert bvalue['ok'] and bvalue['payload']['data']==discovery
+        local=await opened_call(bsession,'equity_result_summary',dict(reference=ref))
+        assert local==dict(ok=False,failure=dict(source='mcp',code='unknown_reference'))
+      if scenario!='retire':
+       action('ttl_before' if scenario=='ttl' else 'grant_before')
+       for payload in (result_payload,export_payload):verify(direct(payload,'result'))
+       verify(value(owner.result_read(first['result_id'],expected,request_id='before-result')))
+       verify(value(owner.artifact_read(first['result_id'],expected,request_id='before-export')))
+       assert value(owner.job_status(job,request_id='before-status'))['state']=='succeeded'
+       verify((await success('equity_result_summary',dict(reference=ref)))['data'])
+       verify((await success('equity_result_summary',dict(reference=export['reference'])))['data'])
+       action('ttl_exact' if scenario=='ttl' else 'grant_exact')
+       for payload in (result_payload,export_payload):http_error(payload,403)
+       denied(owner.result_read(first['result_id'],expected,request_id='after-result'),403)
+       denied(owner.artifact_read(first['result_id'],expected,request_id='after-export'),403)
+       if scenario=='ttl':
+        assert direct(status_payload,'job')['state']=='expired' and calculate()['job_id']==first['job_id']
+        assert value(owner.job_status(job,request_id='after-status'))['state']=='expired'
+        assert value(owner.calculate(expected,'eq083-authority',request_id='after-calculate'))['job_id']==first['job_id']
+       else:
+        http_error(status_payload,403)
+        http_error(dict(operation='calculate',context=expected.context_json(),scope=expected.scope.payload_json(),idempotency_key='eq083-authority',command_digest=expected.command_digest),403)
+        denied(owner.job_status(job,request_id='after-status'),403)
+        denied(owner.calculate(expected,'eq083-authority',request_id='after-calculate'),403)
+        assert value(foreign.discover(request_id='grant-foreign-discovery'))==discovery
+       remote=await opened_call(session,'equity_result_summary',dict(reference=ref))
+       assert remote==dict(ok=False,failure=dict(source='client',category='authorization',code='remote_denial',phase='decode',status=403))
+      else:
+       action('retire')
+       for payload in (status_payload,result_payload):http_error(payload,401)
+       denied(owner.job_status(job,request_id='retired-status'),401);denied(owner.result_read(first['result_id'],expected,request_id='retired-result'),401)
+       remote=await opened_call(session,'equity_result_summary',dict(reference=ref))
+       assert remote==dict(ok=False,failure=dict(source='client',category='credentials',code='remote_denial',phase='decode',status=401))
+       action('restore')
+       assert direct(status_payload,'job')['state']=='expired' and calculate()['job_id']==first['job_id']
+       for payload in (result_payload,export_payload):http_error(payload,403)
+       assert value(owner.job_status(job,request_id='restored-status'))['state']=='expired'
+       assert value(owner.calculate(expected,'eq083-authority',request_id='restored-calculate'))['job_id']==first['job_id']
+       denied(owner.result_read(first['result_id'],expected,request_id='restored-result'),403);denied(owner.artifact_read(first['result_id'],expected,request_id='restored-export'),403)
+      for name,args in [('equity_result_summary',dict(reference=export['reference'])),('equity_calculate',dict(profile='command',idempotency_key='eq083-authority'))]:
+       local=await opened_call(session,name,args);assert local==dict(ok=False,failure=dict(source='mcp',code='reference_expired'))
+   anyio.run(dialogue)
+   for pid,expected_calls in ((foreign_pid,1),(owner_pid,6 if scenario=='retire' else 8)):
+    marker=wait_completed(pid,128,3);closed=wait_completed(pid.with_name(pid.name+'.closed'),128,3)
+    assert closed==dict(pid=marker['pid'],provider_calls=expected_calls,marker='eq083-mcp-closed')
+    until=time.monotonic()+3
+    while not exited(marker['pid']):assert time.monotonic()<until;time.sleep(.01)
+    mcp_counts.append(expected_calls)
+   assert counts==dict(A=10 if scenario=='retire' else 11,B=3 if scenario=='grant' else 2)
+   total=direct_count+sum(counts.values())+sum(mcp_counts)
+   assert total<=dict(ttl=53,grant=54,retire=50)[scenario]
+  finally:
+   for client in clients:client.close()
+   stop.write_bytes(b'1');thread.join(6)
+  assert not thread.is_alive() and not errors and len(results)==1
+  assert (results[0].reason,results[0].exit_code)==('exited',0),(results[0].reason,results[0].exit_code,results[0].output)
+  assert json.loads(results[0].output)==dict(marker='eq083-authority-http-exited',reads=1,requests=total,scenario=scenario)
+  reports.append(dict(scenario=scenario,direct=direct_count,client=counts,mcp=mcp_counts,total=total,source_reads=1,acknowledgements=acknowledgements,native_exit=True,reference_exits=True))
+assert len(reports)==3
+print(json.dumps(dict(marker='eq083-three-lane-authority',cases=reports),sort_keys=True,separators=(',',':')))
