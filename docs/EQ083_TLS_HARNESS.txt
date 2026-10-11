@@ -65,6 +65,7 @@ for item in manifest['inputs']:
  commit=head if item['commit'] is None else item['commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
  source=subprocess.check_output(['git','show',commit+':'+item['path']],cwd=repo)
  assert len(source)==item['bytes'] and hashlib.sha256(source).hexdigest()==item['sha256']
+ if item['path']=='docs/EQ083_TLS_OWNER_ENTRY.txt':assert len(source)<=8192
  source.decode('utf-8','strict');copies.append((item['harness_path'],source))
 out.mkdir()
 for name,source in copies:

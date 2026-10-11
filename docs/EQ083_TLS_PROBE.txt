@@ -394,7 +394,8 @@ remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']
 remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
 tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
 assert len(tools)==7
-owner_source=pinned('docs/EQ083_TLS_OWNER_ENTRY.txt',9985,'8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100')
+owner_source=pinned('docs/EQ083_TLS_OWNER_ENTRY.txt',7687,'c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746')
+assert 1<=len(owner_source)<=8192
 pinned('docs/EQ083_TLS_REFERENCE_ENTRY.txt',5916,'298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231')
 pinned('docs/EQ083_TLS_SESSION_TRANSPORT.txt',20709,'f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50')
 

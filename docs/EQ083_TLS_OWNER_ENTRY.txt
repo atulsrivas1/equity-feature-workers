@@ -1,148 +1,148 @@
 import sys,time,json,hashlib
 from pathlib import Path
-if len(sys.argv)!=8:raise ValueError('owned TLS arguments')
+if len(sys.argv)!=8:raise ValueError('T1')
 import ssl
-certroot=Path(sys.argv[2])
-if certroot!=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-tls-certificates-6197efe') or certroot.is_symlink() or certroot.resolve()!=certroot:raise ValueError('owned TLS certificate root')
-certificate_pins={'valid': {'cert': {'bytes': 1174, 'sha256': '1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc'}, 'key': {'bytes': 1732, 'sha256': 'e2414edfb163e9d3d534fdb02edfd88739d0db27b0396af024219ec2bdc48b47'}}, 'wrong': {'cert': {'bytes': 1174, 'sha256': '6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0'}, 'key': {'bytes': 1732, 'sha256': 'f9ac19359e1adf915908bdce2a2e8d93e323348661529ca433c80eba6ba159e6'}}}
-contexts={}
-for case,files in certificate_pins.items():
- for kind,pin in files.items():
-  file=certroot/(case+'-'+kind+'.pem')
-  if file.is_symlink():raise ValueError('owned TLS certificate file')
-  with file.open('rb') as stream:data=stream.read(8193)
-  if len(data)!=pin['bytes'] or hashlib.sha256(data).hexdigest()!=pin['sha256']:raise ValueError('owned TLS certificate identity')
- context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);context.minimum_version=ssl.TLSVersion.TLSv1_2
- context.load_cert_chain(str(certroot/(case+'-cert.pem')),str(certroot/(case+'-key.pem')));contexts[case]=context
-mode=sys.argv[7]
-modes=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
-if mode not in modes:raise ValueError('owned TLS mode')
-framing=mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length')
-reads_fault=framing or mode=='actual-owner-denial'
-fault_requests=4 if reads_fault else 0
+zd=Path(sys.argv[2])
+if zd!=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-tls-certificates-6197efe') or zd.is_symlink() or zd.resolve()!=zd:raise ValueError('T2')
+zc={'valid': {'cert': {'bytes': 1174, 'sha256': '1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc'}, 'key': {'bytes': 1732, 'sha256': 'e2414edfb163e9d3d534fdb02edfd88739d0db27b0396af024219ec2bdc48b47'}}, 'wrong': {'cert': {'bytes': 1174, 'sha256': '6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0'}, 'key': {'bytes': 1732, 'sha256': 'f9ac19359e1adf915908bdce2a2e8d93e323348661529ca433c80eba6ba159e6'}}}
+z16={}
+for zb,z24 in zc.items():
+ for z2a,z36 in z24.items():
+  z23=zd/(zb+'-'+z2a+'.pem')
+  if z23.is_symlink():raise ValueError('T15')
+  with z23.open('rb') as z4a:z18=z4a.read(8193)
+  if len(z18)!=z36['bytes'] or hashlib.sha256(z18).hexdigest()!=z36['sha256']:raise ValueError('T16')
+ z15=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);z15.minimum_version=ssl.TLSVersion.TLSv1_2
+ z15.load_cert_chain(str(zd/(zb+'-cert.pem')),str(zd/(zb+'-key.pem')));z16[zb]=z15
+z2d=sys.argv[7]
+z2e=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+if z2d not in z2e:raise ValueError('T3')
+z26=z2d in ('extra-response-byte','truncated-response-byte','duplicate-content-length')
+z39=z26 or z2d=='actual-owner-denial'
+z20=4 if z39 else 0
 sys.path.insert(0,sys.argv[1])
 from test_jobs import setup
 from equity_feature_service._audit import OwnedAudit
 from equity_feature_service.loopback import qualification_server
-ready,stop,control,ack=(Path(v) for v in sys.argv[3:7])
-scheduler,service,tokens,clock,facts=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
-service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
-requests=0;sequence=0;original_snapshot=None
-def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
-def snapshot(wait):
- with scheduler.condition:
-  if len(scheduler.jobs)!=1:raise ValueError('owned TLS single job')
-  job=next(iter(scheduler.jobs.values()));until=time.monotonic()+3
-  while scheduler._running is not None or job.expires_ns<=0:
-   remaining=until-time.monotonic()
-   if not wait or remaining<=0:raise ValueError('owned TLS physical completion unconfirmed')
-   scheduler.condition.wait(remaining)
-  sizes=[len(job.native),len(job.wire),len(job.envelope),len(job.receipt)]
-  if job.state!='succeeded' or job.result_id is None or scheduler.queue or facts['reads']!=1 or not facts['entered'].is_set() or len(facts['sink_threads'])!=1:raise ValueError('owned TLS completion facts')
-  if any(type(size) is not int or size<=0 for size in sizes):raise ValueError('owned TLS full forms')
-  if type(job.held) is not int or not 0<job.held==sum(sizes)<=262144 or scheduler.total_retained!=job.held or scheduler.retained!={job.principal:job.held}:raise ValueError('owned TLS retained accounting')
-  if type(job.expires_ns) is not int or not 0<job.expires_ns<=9223372036854775807:raise ValueError('owned TLS original expiry')
-  return dict(job=job.job_id,result=job.result_id,state=job.state,expiry=job.expires_ns,held=job.held,sizes=sizes,reads=facts['reads'],running=scheduler._running,queue=len(scheduler.queue),sink_entries=len(facts['sink_threads']))
-def publish(path,value,limit):
- data=canonical(value)
- if len(data)>limit or path.exists() or path.with_name(path.name+'.complete').exists():raise ValueError('owned TLS owner marker')
- pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
-armed=False;tls=dict(accepts=0,success=0,failure=0);connections=[];raw_connections=[];transport_cleanup=[];faults=[]
-def app(environ,start_response):
- global requests
- if requests>=24 or sequence==5:raise ValueError('owned TLS request cap')
- requests+=1
- if not armed or not framing:return service(environ,start_response)
- if len(faults)>=3:raise ValueError('owned TLS framing count')
- headers=[];status=[]
- def capture(value,fields,exc_info=None):
-  if status or exc_info is not None or type(value) is not str or value!='200 OK' or type(fields) is not list:raise ValueError('owned TLS actual successful response required')
-  status.append(value);headers.extend(fields)
-  def forbidden_write(data):raise ValueError('owned TLS iterable only')
-  return forbidden_write
- iterable=service(environ,capture);chunks=[];length=0
+z3a,z49,z17,z1=(Path(v) for v in sys.argv[3:7])
+z3e,z42,z4e,z11,z1d=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+z42.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(z42.ledger.credentials))
+z3c=0;z40=0;z32=None
+def z9(z51):return json.dumps(z51,sort_keys=True,separators=(',',':')).encode('ascii')
+def z46(z52):
+ with z3e.condition:
+  if len(z3e.jobs)!=1:raise ValueError('T17')
+  z29=next(iter(z3e.jobs.values()));z50=time.monotonic()+3
+  while z3e._running is not None or z29.expires_ns<=0:
+   z3b=z50-time.monotonic()
+   if not z52 or z3b<=0:raise ValueError('T27')
+   z3e.condition.wait(z3b)
+  z44=[len(z29.native),len(z29.wire),len(z29.envelope),len(z29.receipt)]
+  if z29.state!='succeeded' or z29.result_id is None or z3e.queue or z1d['reads']!=1 or not z1d['entered'].is_set() or len(z1d['sink_threads'])!=1:raise ValueError('T18')
+  if any(type(z43) is not int or z43<=0 for z43 in z44):raise ValueError('T19')
+  if type(z29.held) is not int or not 0<z29.held==sum(z44)<=262144 or z3e.total_retained!=z29.held or z3e.retained!={z29.principal:z29.held}:raise ValueError('T20')
+  if type(z29.expires_ns) is not int or not 0<z29.expires_ns<=9223372036854775807:raise ValueError('T21')
+  return dict(job=z29.job_id,result=z29.result_id,state=z29.state,expiry=z29.expires_ns,held=z29.held,sizes=z44,reads=z1d['reads'],running=z3e._running,queue=len(z3e.queue),sink_entries=len(z1d['sink_threads']))
+def z37(z34,z51,z2c):
+ z18=z9(z51)
+ if len(z18)>z2c or z34.exists() or z34.with_name(z34.name+'.complete').exists():raise ValueError('T5')
+ z35=z34.with_name(z34.name+'.pending');z35.write_bytes(z18);z35.replace(z34);z34.with_name(z34.name+'.complete').mkdir()
+z7=False;z4d=dict(accepts=0,success=0,failure=0);z14=[];z38=[];z4f=[];z21=[]
+def z6(z1b,z47):
+ global z3c
+ if z3c>=24 or z40==5:raise ValueError('T6')
+ z3c+=1
+ if not z7 or not z26:return z42(z1b,z47)
+ if len(z21)>=3:raise ValueError('T7')
+ z27=[];z48=[]
+ def za(z51,z22,z1c=None):
+  if z48 or z1c is not None or type(z51) is not str or z51!='200 OK' or type(z22) is not list:raise ValueError('T22')
+  z48.append(z51);z27.extend(z22)
+  def z25(z18):raise ValueError('T23')
+  return z25
+ z28=z42(z1b,za);zf=[];z2b=0
  try:
-  for chunk in iterable:
-   if type(chunk) is not bytes:raise ValueError('owned TLS response chunk type')
-   length+=len(chunk)
-   if length>262144 or len(chunks)>=4:raise ValueError('owned TLS response body bound')
-   chunks.append(chunk)
+  for ze in z28:
+   if type(ze) is not bytes:raise ValueError('T28')
+   z2b+=len(ze)
+   if z2b>262144 or len(zf)>=4:raise ValueError('T29')
+   zf.append(ze)
  finally:
-  close=getattr(iterable,'close',None)
-  if close is not None:close()
- body=b''.join(chunks)
- declared=[value for name,value in headers if name.lower()=='content-length']
- if len(status)!=1 or len(declared)!=1 or declared[0]!=str(len(body)) or not body:raise ValueError('owned TLS original framing')
- if sum(len(name)+len(value)+4 for name,value in headers)>8192:raise ValueError('owned TLS response header bound')
- witness=dict(original_bytes=len(body),original_sha256=hashlib.sha256(body).hexdigest())
- if mode=='extra-response-byte':outgoing=body+b'x'
- elif mode=='truncated-response-byte':outgoing=body[:-1]
- else:headers.append(('Content-Length',declared[0]));outgoing=body
- witness['forwarded_bytes']=len(outgoing);faults.append(witness)
- start_response(status[0],headers)
- return [outgoing]
-actions=('settled','baseline','arm','restored','final')
-def observe(action):
- global original_snapshot,armed
- targets=(1,12,13 if reads_fault else 12,16 if reads_fault else 12,18+fault_requests)
- successes=targets[sequence]
- failures=3 if mode in ('untrusted-certificate','hostname-mismatch') and sequence>=3 else 0
- if requests!=targets[sequence] or tls!=dict(accepts=successes+failures,success=successes,failure=failures):raise ValueError('owned TLS physical ledger')
- if transport_cleanup:raise ValueError('owned TLS transport cleanup failed')
- if any(connection.fileno()!=-1 for connection in connections+raw_connections):raise ValueError('owned TLS connection still open')
- if action=='settled':original_snapshot=snapshot(True)
- elif original_snapshot is None or snapshot(False)!=original_snapshot:raise ValueError('owned TLS original changed')
- if action=='arm':armed=True
- if action=='restored':
-  if len(faults)!=(3 if framing else 0):raise ValueError('owned TLS response fault witnesses')
-  armed=False
- return dict(sequence=sequence+1,action=action,mode=mode,requests=requests,tls=dict(tls),faults=list(faults),snapshot=original_snapshot)
-server=None;deadline=time.monotonic()+20
+  z12=getattr(z28,'close',None)
+  if z12 is not None:z12()
+ z8=b''.join(zf)
+ z1a=[z51 for z2f,z51 in z27 if z2f.lower()=='content-length']
+ if len(z48)!=1 or len(z1a)!=1 or z1a[0]!=str(len(z8)) or not z8:raise ValueError('T8')
+ if sum(len(z2f)+len(z51)+4 for z2f,z51 in z27)>8192:raise ValueError('T9')
+ z53=dict(original_bytes=len(z8),original_sha256=hashlib.sha256(z8).hexdigest())
+ if z2d=='extra-response-byte':z33=z8+b'x'
+ elif z2d=='truncated-response-byte':z33=z8[:-1]
+ else:z27.append(('Content-Length',z1a[0]));z33=z8
+ z53['forwarded_bytes']=len(z33);z21.append(z53)
+ z47(z48[0],z27)
+ return [z33]
+z3=('settled','baseline','arm','restored','final')
+def z30(z2):
+ global z32,z7
+ z4c=(1,12,13 if z39 else 12,16 if z39 else 12,18+z20)
+ z4b=z4c[z40]
+ z1f=3 if z2d in ('untrusted-certificate','hostname-mismatch') and z40>=3 else 0
+ if z3c!=z4c[z40] or z4d!=dict(accepts=z4b+z1f,success=z4b,failure=z1f):raise ValueError('T10')
+ if z4f:raise ValueError('T11')
+ if any(z13.fileno()!=-1 for z13 in z14+z38):raise ValueError('T12')
+ if z2=='settled':z32=z46(True)
+ elif z32 is None or z46(False)!=z32:raise ValueError('T24')
+ if z2=='arm':z7=True
+ if z2=='restored':
+  if len(z21)!=(3 if z26 else 0):raise ValueError('T25')
+  z7=False
+ return dict(sequence=z40+1,action=z2,mode=z2d,requests=z3c,tls=dict(z4d),faults=list(z21),snapshot=z32)
+z41=None;z19=time.monotonic()+20
 try:
- server=qualification_server(service);server.set_app(app);server.timeout=.05
- original_accept=server.get_request
- def accepted_tls():
-  if tls['accepts']>=24:raise ValueError('owned TLS accept cap')
-  connection,address=original_accept();tls['accepts']+=1;raw_connections.append(connection);secured=None
+ z41=qualification_server(z42);z41.set_app(z6);z41.timeout=.05
+ z31=z41.get_request
+ def z0():
+  if z4d['accepts']>=24:raise ValueError('T26')
+  z13,z5=z31();z4d['accepts']+=1;z38.append(z13);z3f=None
   try:
-   connection.settimeout(2)
-   context=contexts['wrong' if armed and mode=='hostname-mismatch' else 'valid']
-   secured=context.wrap_socket(connection,server_side=True,do_handshake_on_connect=False)
-   connections.append(secured);secured.settimeout(2);secured.do_handshake();tls['success']+=1
-   return secured,address
+   z13.settimeout(2)
+   z15=z16['wrong' if z7 and z2d=='hostname-mismatch' else 'valid']
+   z3f=z15.wrap_socket(z13,server_side=True,do_handshake_on_connect=False)
+   z14.append(z3f);z3f.settimeout(2);z3f.do_handshake();z4d['success']+=1
+   return z3f,z5
   except BaseException:
-   tls['failure']+=1
-   for failed in (secured,connection):
-    if failed is not None:
-     try:failed.close()
-     except BaseException:transport_cleanup.append('failed handshake socket close')
+   z4d['failure']+=1
+   for z1e in (z3f,z13):
+    if z1e is not None:
+     try:z1e.close()
+     except BaseException:z4f.append('failed handshake socket close')
    raise
- server.get_request=accepted_tls
- publish(ready,dict(port=server.server_port),128)
- while requests<=24:
-  if stop.exists() or time.monotonic()>=deadline:break
-  slot=control.with_name(control.name+'.'+str(sequence+1))
-  if sequence<5 and slot.with_name(slot.name+'.complete').is_dir():
-   with slot.open('rb') as stream:data=stream.read(129)
-   if len(data)>128:raise ValueError('owned TLS control bound')
-   value=json.loads(data)
-   if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or value['sequence']!=sequence+1 or value['action']!=actions[sequence]:raise ValueError('owned TLS control order')
-   result=observe(value['action']);sequence+=1;publish(ack.with_name(ack.name+'.'+str(sequence)),result,1024)
-  server.handle_request()
- if sequence!=5:raise ValueError('owned TLS dialogue incomplete')
+ z41.get_request=z0
+ z37(z3a,dict(port=z41.server_port),128)
+ while z3c<=24:
+  if z49.exists() or time.monotonic()>=z19:break
+  z45=z17.with_name(z17.name+'.'+str(z40+1))
+  if z40<5 and z45.with_name(z45.name+'.complete').is_dir():
+   with z45.open('rb') as z4a:z18=z4a.read(129)
+   if len(z18)>128:raise ValueError('T30')
+   z51=json.loads(z18)
+   if type(z51) is not dict or set(z51)!={'sequence','action'} or type(z51['sequence']) is not int or z51['sequence']!=z40+1 or z51['action']!=z3[z40]:raise ValueError('T31')
+   z3d=z30(z51['action']);z40+=1;z37(z1.with_name(z1.name+'.'+str(z40)),z3d,1024)
+  z41.handle_request()
+ if z40!=5:raise ValueError('T13')
 finally:
- active_exception=sys.exc_info()[0] is not None;cleanup=list(transport_cleanup)
- if server is not None:
-  try:server.server_close()
-  except BaseException:cleanup.append('server close')
- for connection in connections+raw_connections:
+ z4=sys.exc_info()[0] is not None;z10=list(z4f)
+ if z41 is not None:
+  try:z41.server_close()
+  except BaseException:z10.append('server close')
+ for z13 in z14+z38:
   try:
-   connection.close()
-   if connection.fileno()!=-1:cleanup.append('connection close')
-  except BaseException:cleanup.append('connection close')
+   z13.close()
+   if z13.fileno()!=-1:z10.append('connection close')
+  except BaseException:z10.append('connection close')
  try:
-  if scheduler.close(2) is not True:cleanup.append('native exit unconfirmed')
- except BaseException:cleanup.append('native close')
- if cleanup and not active_exception:raise ValueError('owned TLS cleanup failed')
-if snapshot(False)!=original_snapshot:raise ValueError('owned TLS cleanup changed original result')
-print(canonical(dict(marker='eq083-tls-http-exited',mode=mode,requests=requests,sequence=sequence,snapshot_sha256=hashlib.sha256(canonical(original_snapshot)).hexdigest())).decode('ascii'),flush=True)
+  if z3e.close(2) is not True:z10.append('native exit unconfirmed')
+ except BaseException:z10.append('native close')
+ if z10 and not z4:raise ValueError('T14')
+if z46(False)!=z32:raise ValueError('T4')
+print(z9(dict(marker='eq083-tls-http-exited',mode=z2d,requests=z3c,sequence=z40,snapshot_sha256=hashlib.sha256(z9(z32)).hexdigest())).decode('ascii'),flush=True)

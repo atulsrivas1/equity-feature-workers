@@ -1,5 +1,5 @@
 {
-  "scope": "PRE-EXECUTION Windows-only corrected full TLS parent/copier, independent renewed review pending; initial raw envelope P2 retained. No TLS/native/socket execution",
+  "scope": "Corrective PRE-EXECUTION source within accepted8192 owner cap; renewed independent exact owner/parent/copier review pending, not TLS PASS",
   "inputs": [
     {
       "repo": "equity-feature-workers",
@@ -67,11 +67,11 @@
     },
     {
       "repo": "equity-feature-workers",
-      "commit": "2ceb179f9330ef7d75ee0ac378a6c3a7795d84fe",
+      "commit": null,
       "path": "docs/EQ083_TLS_OWNER_ENTRY.txt",
       "harness_path": "docs/EQ083_TLS_OWNER_ENTRY.txt",
-      "bytes": 9985,
-      "sha256": "8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100"
+      "bytes": 7687,
+      "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746"
     },
     {
       "repo": "equity-feature-workers",
@@ -86,8 +86,8 @@
       "commit": null,
       "path": "docs/EQ083_TLS_PROBE.txt",
       "harness_path": "docs/EQ083_TLS_PROBE.txt",
-      "bytes": 43728,
-      "sha256": "7697359a26b0e756fcb7edec7ef087871acc9d0d6c8d5c8826960b74950536af"
+      "bytes": 43762,
+      "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a"
     },
     {
       "repo": "equity-feature-workers",
@@ -104,9 +104,9 @@
     "review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107495742"
   },
   "owner_entry": {
-    "bytes": 9985,
-    "sha256": "8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100",
-    "review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107465135"
+    "bytes": 7687,
+    "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746",
+    "review": "Renewed exact compaction source review pending; prior9985 source review6107465135 did not check admission cap"
   },
   "session_transport": {
     "bytes": 20709,
