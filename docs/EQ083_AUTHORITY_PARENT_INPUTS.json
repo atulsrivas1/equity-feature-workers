@@ -70,8 +70,16 @@
       "commit": null,
       "path": "docs/EQ083_AUTHORITY_PROBE.txt",
       "harness_path": "docs/EQ083_AUTHORITY_PROBE.txt",
-      "bytes": 19534,
-      "sha256": "689d6a9aff4b62959b6ade2fc22a5c8c7e51559c4294998719052fdc694017cc"
+      "bytes": 19756,
+      "sha256": "ebd4f4fc0b45328e931b09fe443fd840e500e1304aab95ffb7ca0634900da5d7"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "82e88703135d517825d09ae75d63fe15d4760a78",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+      "harness_path": "schemas/remote-v1.schema.json",
+      "bytes": 28666,
+      "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
     }
   ],
   "reference_entry": {

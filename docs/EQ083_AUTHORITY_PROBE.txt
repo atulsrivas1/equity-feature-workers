@@ -30,6 +30,7 @@ assert 1<=len(manifest['inputs'])<=32 and len({v['harness_path'] for v in manife
 assets={item['harness_path']:pinned(item['harness_path'],item['bytes'],item['sha256']) for item in manifest['inputs']}
 fixture=json.loads(assets['docs/EQ081_CLIENT_FIXTURES.json'])
 remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']))
+remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
 tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
 assert len(tools)==7
 authority_source=pinned('docs/EQ083_AUTHORITY_ENTRY.txt',4645,'3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270')
@@ -132,8 +133,9 @@ for scenario in ('ttl','grant','retire'):
     assert headers['content-type']=='application/json' and headers['cache-control']=='no-store' and headers['x-content-type-options']=='nosniff'
     assert 'transfer-encoding' not in headers and 'content-encoding' not in headers
     assert re.fullmatch(r'0|[1-9][0-9]*',headers['content-length']) and int(headers['content-length'])==len(body)
-    value=parse(body);remote.validate(value)
-    assert (value['version'],value['request_id'],value['kind'])==('1.1',request.request_id,kind)
+    value=parse(body);(remote_v1 if status==401 else remote).validate(value)
+    assert (value['version'],value['request_id'],value['kind'])==(('1.0',None,'error') if status==401 else ('1.1',request.request_id,kind))
+    if status!=200:assert 'content-disposition' not in headers
     if status==200 and payload['operation']=='artifact_read':assert headers['content-disposition']=='attachment; filename="result-'+hashlib.sha256(payload['result_id'].encode('ascii')).hexdigest()+'.json"'
     return value['payload']
 
