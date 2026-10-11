@@ -2,8 +2,8 @@
   "schema": "eq083-installed-tree-collector-source-v1",
   "scope": "PRE-EXECUTION SOURCE ONLY; all capture/comparison success unconditionally admitted:false; trusted fixed builder roots, recipes, whole generated map, interpreter-installer-form and loaded host integration pending. No actual filesystem capture authorized.",
   "source": {
-    "bytes": 8822,
-    "sha256": "975f714b100892e576acfbd733c95bf7846cab9566599b6c610dd309ace8f069"
+    "bytes": 9004,
+    "sha256": "bb6910c4f0daff617f70f7fea18929d9d1db2d54c56036fbdd8b388894816797"
   },
   "bases": {
     "equity-features": "ff9fdb11e00ae2313f74542c8e939bfbd87d3acb",
@@ -880,5 +880,84 @@
     "total_bytes": 1073741824,
     "depth": 64
   },
-  "execution": "NONE; AST/source preparation only, no collector invocation, platform/product imports, installation, compiler, generation, native process/socket/TLS/copy/probe"
+  "execution": "NONE; AST/source preparation only, no collector invocation, platform/product imports, installation, compiler, generation, native process/socket/TLS/copy/probe",
+  "previous_source": {
+    "bytes": 8822,
+    "sha256": "975f714b100892e576acfbd733c95bf7846cab9566599b6c610dd309ace8f069"
+  },
+  "previous_heads": {
+    "equity-features": "f6acfd3847a5278a1af71f58583e4f19be8404f0",
+    "equity-feature-workers": "46d51a934061bd50612a47a62757a6147de68e93"
+  },
+  "previous_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "f6acfd3847a5278a1af71f58583e4f19be8404f0",
+      "equity-feature-workers": "46d51a934061bd50612a47a62757a6147de68e93"
+    },
+    "source": {
+      "bytes": 8822,
+      "sha256": "975f714b100892e576acfbd733c95bf7846cab9566599b6c610dd309ace8f069"
+    },
+    "disposition": "REWORK",
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_INSTALLED_TREE_COLLECTOR.txt",
+        "line": 77,
+        "title": "Preserve active scan errors when scandir cleanup fails",
+        "evidence": "names_in uses an unguarded scandir context manager. Inert invalid-component ValueError plus context exit OSError raises OSError instead; iteration LookupError plus close OSError likewise replaces original. Descriptor close is guarded correctly in read_regular, but scan closure is not.",
+        "correction": "Own scandir cleanup explicitly and preserve an active original BaseException while still attempting close; deny ordinary close failure with no active original."
+      }
+    ],
+    "checks": [
+      "Exact8822 SHA/AST, three source mirrors, clean five-doc diffs/diffcheck/protected inputs/Atul-noCoauthors.",
+      "37 fake component/stat/tree/read/compare/bound cases; two scandir cleanup replacement regressions reproduced separately; no actual collector filesystem API invocation.",
+      "Fake normal tree captures every byte including empty REQUESTED with final name/identity checks; mutation/count/depth/total/link/reparse/hardlink/alias denials exercised; read_regular close attempted and active error preserved."
+    ],
+    "inert_cases": [
+      "Windows component ..",
+      "Windows component a/b",
+      "Windows component a\\b",
+      "Windows component a:b",
+      "Windows component NUL",
+      "Windows component con.txt",
+      "Windows component com1",
+      "Windows component lpt\u00b2.txt",
+      "Windows component foo.",
+      "Windows component foo ",
+      "Windows component x?y",
+      "valid component a.py",
+      "valid component REQUESTED",
+      "valid component valid-name",
+      "symlink",
+      "reparse",
+      "nonregular",
+      "hardlink",
+      "oversize",
+      "boolsize",
+      "boollinks",
+      "scan alias",
+      "scan alias",
+      "entire fake tree including empty file/all descriptors and scans closed",
+      "entire compare files",
+      "entire compare total_bytes",
+      "entire compare root",
+      "entire compare observed",
+      "capture mutation file identity",
+      "capture mutation directory add",
+      "capture mutation ancestor identity",
+      "ordinary descriptor cleanup denial",
+      "active descriptor original retained despite close error",
+      "fake cap MAX_FILES",
+      "fake cap MAX_DIRS",
+      "fake cap MAX_TOTAL",
+      "fake cap MAX_DEPTH"
+    ],
+    "limits": [
+      "Only extracted functions with fake OS/stat/path/open/read/scandir maps; no actual collector filesystem/platform calls or whole-module import. Standard-library AST/source/Git reads only.",
+      "Always admitted:false. Fixed trusted roots/wholemaps/host/generated integration pending; no locking or hostile same-user guarantee, installation/compiler/product/SDK/process/native/TLS/copy/generation/probe or Ready/execution approval."
+    ]
+  },
+  "correction": "Only names_in replaces raw scandir context manager with explicit iterator close guarded by active exception; preserves original iteration/component errors, normal close fault denies. Other function AST unchanged; no collector execution."
 }

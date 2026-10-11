@@ -1,3 +1,5 @@
+Original8822 source independently REWORK before execution: scandir context-manager close could mask active enumeration/component error. Full report/previoussource and heads retained INPUTS. Corrected to explicit iterator ownership/finally close preserving original active error; normal close failure denies. Renewed independent source review required before integration or execution.
+
 # EQ083 bounded installed-tree collector source
 
 PRE-EXECUTION SOURCE ONLY. This separate source captures a complete dedicated installation subtree and compares two entire captures, always admitted:false. It is not a trusted root issuer, host inspector, accepted recipe, whole distribution/generated-map orchestrator or fresh environment admission. Main denies. Publication/review does not authorize invocation; exact source binding and future builder/host/form integration must be reviewed before any capture or installation/import/compiler execution. Current certificate authority/parent/copier/literal ENV unchanged; Linux admitted:false. No product/test/tool/workflow implementation.

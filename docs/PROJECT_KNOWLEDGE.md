@@ -1,3 +1,5 @@
+EQ083 collector8822 source REWORK cleanup masking preserved full report; corrected explicit scandir close preserves original enumeration/component error BEFORE any capture/integration/execution. Other AST unchanged; ALWAYSadmittedfalse/LinuxENVfalse/host-wholemap-freshforms-all24-sevenReady pending.
+
 EQ083 generated9351 independently SOURCE APPROVED6110919537/54INERT/fulloriginal8706P2 report preserved. New bounded installed-tree collector source captures complete regular-file/directory/ancestor bytes and identities with link/alias/count/size/mutation guards, ALWAYSadmittedfalse. Exact fixed builder root/recipe/wholemap/loadedhost/freshforms/all24/sevenReady still pending BEFORE execution; no actual filesystem capture/install/compiler/native/TLS, LinuxENVfalse/protected sources unchanged.
 
 EQ083 generated-file semantic source original8706 REWORK P2 Windows suffix filename/destination collision preserved full report; corrected exactdistlib filename and complete deriveddestination checks BEFORE integration/execution. Renewed source review required/alwaysadmittedfalse/LinuxENVfalse/no compiler-native-TLS action.

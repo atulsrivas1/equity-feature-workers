@@ -74,12 +74,20 @@ def checked_root(root, system):
 def names_in(directory, windows):
     # scandir is closed before recursion; no followed DirEntry type predicates.
     names = []
-    with os.scandir(directory) as entries:
+    entries = os.scandir(directory)
+    try:
         for entry in entries:
             component(entry.name, windows)
             names.append(entry.name)
             if len(names) > MAX_FILES + MAX_DIRS:
                 raise ValueError('directory entry bound')
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            entries.close()
+        except BaseException:
+            if not active:
+                raise
     if len(set(name.casefold() if windows else name for name in names)) != len(names):
         raise ValueError('tree case/destination collision')
     return tuple(sorted(names))
