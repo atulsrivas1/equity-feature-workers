@@ -203,7 +203,7 @@
         "retained client and MCP sdist installs",
         "service sdist",
         "worker sdist",
-        "five core/I/O wheels",
+        "six accepted dependency wheels: equity-feature-contracts, equity-features, equity-feature-io-contracts, equity-feature-io-sdk, equity-feature-duckdb, equity-feature-example-extensions",
         "official reference wheels"
       ],
       "sdist_audit_only_wheels": [
@@ -212,7 +212,15 @@
         "service",
         "worker"
       ],
-      "identity_checks": "per-component original sdist closure and built installed wheel RECORD before and after composition; no selected component replacement"
+      "identity_checks": "per-component original sdist closure and built installed wheel RECORD before and after composition; no selected component replacement",
+      "dependency_distribution_names": [
+        "equity-feature-contracts",
+        "equity-features",
+        "equity-feature-io-contracts",
+        "equity-feature-io-sdk",
+        "equity-feature-duckdb",
+        "equity-feature-example-extensions"
+      ]
     }
   },
   "new_certificate_backend": "existing qualification cryptography==50.0.2, new exact helper source/pins still pending",
@@ -381,5 +389,77 @@
       "Initial read guessed requirements-service.txt at repo root; path not found; corrected to tools/requirements-service.txt. No product execution or mutation."
     ]
   },
-  "remaining_fixture_inventory_sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+  "remaining_fixture_inventory_sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d",
+  "renewed_design_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "9f2ebbc8ba7ac6a16e9d45a1bb30309523108560",
+      "equity-feature-workers": "a5d67ea7fc67917c20fa8b934473ef1d9a5c32d2"
+    },
+    "bases": {
+      "equity-features": "1f93460c7a4d5401adc20f48f26ea49ac1960f90",
+      "equity-feature-workers": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b"
+    },
+    "disposition": "REWORK",
+    "scope": "DESIGN ONLY: renewed architecture and source-derived fixture inventory review, not Ready/runtime approval",
+    "source_hashes": {
+      "BUILDER_DESIGN.md": {
+        "bytes": 20126,
+        "sha256": "f4e3cd7c6d9b06fa29e09597b7472dee2bffb945bbe0591652e5659c148110df"
+      },
+      "BUILDER_INPUTS.json": {
+        "bytes": 17130,
+        "sha256": "7919ad1ed658bd62d0b8a54ff637e3d5c9541577fcd68211f9436277cb228bb9"
+      },
+      "REMAINING_FIXTURE_INPUTS.json": {
+        "bytes": 7383,
+        "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+      }
+    },
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_BUILDER_DESIGN.md",
+        "line": 17,
+        "title": "Retain all six non-form internal dependency wheels",
+        "trigger": "Implement the new sdist native-reference contract as written, using only five remaining accepted core/I/O dependency wheels.",
+        "evidence": "Accepted nine-wheel dependency set excludes MCP. Removing client/service/worker leaves contracts, features, IO contracts, IO SDK, duckdb adapter and example extensions: six. tests/service/test_jobs.py imports ExampleSink from equity_feature_example_extensions at line21.",
+        "consequence": "A five-wheel selection cannot preserve the complete accepted dependency closure; dropping example extensions prevents the owned native fixture, and no omitted dependency is identified.",
+        "requested_correction": "Replace five with six and freeze the exact six names, keeping MCP as the separately selected form artifact. Continue audit-only matching wheels for client/service/worker/MCP and exact pre/post form RECORD identity."
+      }
+    ],
+    "resolved_findings": [
+      "Original blanket nine-wheel installation/sdist replacement P2 resolved by explicit form-owned source distribution retention and pre/post RECORD identities"
+    ],
+    "checks": [
+      "Three exact Git UTF8 mirrors match canonical/worker",
+      "18 accepted builder assets plus seven remaining-fixture Git pins exact bytes/hash; Python AST parse only",
+      "Both bars unavailable columns/quality/evidence exactly match independently frozen full bars producer and SHA; no numerical/constructor execution",
+      "Source trace six planned routes: jobs dataset/scope guard403 before registration equality422; RawDataset.produce receipt/full-batch mismatch; public ProducerExpectation inventory consistency and command digest; client error-status mismatch yields read protocol or sent-mutation unknown at422; MCP forwards client failure",
+      "Exact clean heads, literal five-doc changes per repo, diffcheck, protected input invariance, Atul author/committer no coauthor",
+      "Original source report is retained as REWORK; form-owned sdist no-replacement rule and pre/post installed-wheel provenance correct original P2",
+      "Read-only accepted MCP receipt dependency enumeration: nine internal wheels, client/service/worker removed leaves six; MCP archive separate"
+    ],
+    "accepted_remaining_dependency_wheels": [
+      "equity_feature_contracts-0.0.4a4-py3-none-any.whl",
+      "equity_feature_duckdb-0.1.0a8-py3-none-any.whl",
+      "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl",
+      "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl",
+      "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl",
+      "equity_features-0.0.4a4-py3-none-any.whl"
+    ],
+    "fixture_scope": "Six proposed mismatch routes and two exact existing bars unavailable columns are source-derived credible planning inputs, not admitted executable case/ledger or new computation proof",
+    "remaining_ready_obligations": [
+      "Correct complete six-dependency form contract",
+      "Portable exact certificate/Linux bootstrap/reference sources and source review/feasibility",
+      "PerOS complete build/typing/bootstrap wheel file pins and RECORD closure",
+      "Concrete owner/reference/parent controls and all24 per-lane vector/expected-envelope/counter mapping",
+      "Full seven Ready exact review before guarded admission/implementation"
+    ],
+    "limitations": [
+      "No product/SDK imports, constructor/native/TLS/socket/process/helper/build/copy/install/probe execution or downloads",
+      "No current CI/artifact qualification, full24 proof, Ready/start or release approval",
+      "Earlier Windows same-env separate-process TLS proof and failed source/review/execution history remain scoped and retained"
+    ]
+  }
 }
