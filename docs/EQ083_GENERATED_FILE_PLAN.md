@@ -1,3 +1,5 @@
+Original8706 at10dbe6f/1fd3813 independently REWORK oneP2: Windows demo.py expected filename demo.py.exe disagreed with actual pinned distlib demo.exe and demo/demo.py collision passed. Full original report/source pin retained in INPUTS; corrected BEFOREintegration/execution by exact suffix.startswith(.py) stripping and full console/gui derived destination casefold collision checks. Renewed exact source review required; alwaysadmittedfalse/no compiler or runtime action.
+
 # EQ083 generated direct URL, entry script and bytecode semantics source
 
 PRE-EXECUTION SOURCE ONLY. These functions validate bytes against trusted future fixed recipes and always return admitted:false/GENERATED_SEMANTIC_ONLY_HOST_PENDING. Main denies. They are not registered/imported into current parent/copier or ENV. No full installed host/form admission or execution approval. Existing Linux ENVfalse/currentprotected authority-parent-copier unchanged.

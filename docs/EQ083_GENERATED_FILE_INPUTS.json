@@ -2,8 +2,8 @@
   "schema": "eq083-generated-semantic-source-v1",
   "scope": "Source only per-file generated semantics ALWAYS admitted:false; trusted collector/runtime/installer/form recipes and host binding/integration still pending; no compiler/install execution authorized",
   "source": {
-    "bytes": 8706,
-    "sha256": "4ce09f1d0a2c62b6f781fa521e0b7adab81bae47c5033bea168be6c4eb7c03c7"
+    "bytes": 9351,
+    "sha256": "3c55265c7e970b59c98c6242554d2c6f10b3e924bfffd0b95c68e829b152e128"
   },
   "bases": {
     "equity-features": "2ca92f492e4cf895f094f202de8d7162f207ed6d",
@@ -575,5 +575,78 @@
       "sha256": "97769c5bcd00fb80e3cf4c22aaebe38101dad74e4b6589dae6c5f3f2dafb6864"
     }
   },
-  "linux_admitted": false
+  "linux_admitted": false,
+  "original_source_review_rework": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "10dbe6fee00fbd291e44800b1a859650ded80327",
+      "equity-feature-workers": "1fd38134b1a980208b32526e97728168e8ff1941"
+    },
+    "source": {
+      "bytes": 8706,
+      "sha256": "4ce09f1d0a2c62b6f781fa521e0b7adab81bae47c5033bea168be6c4eb7c03c7"
+    },
+    "disposition": "REWORK",
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_GENERATED_FILE_SEMANTICS.txt",
+        "line": 142,
+        "title": "Match distlib Windows suffix stripping and resulting collisions",
+        "evidence": "Accepted console metadata demo.py produces expected filename demo.py.exe in this validator, but pinned pip25.0.1 distlib _write_script strips a final suffix beginning .py before appending .exe and writes demo.exe. Both demo and demo.py also pass the current casefold inventory though they collide at the actual Windows destination. Reproduced with synthetic metadata and pinned launcher bytes; no generated script executed.",
+        "correction": "Reproduce fixed distlib filename derivation or explicitly deny those unsupported names; detect collisions after actual OS-specific destination derivation, including console/gui combinations."
+      }
+    ],
+    "checks": [
+      "Exact source8706 SHA/AST, three mirrors, clean five-doc diff/diffcheck/protected inputs/Atul-noCoauthors.",
+      "34 synthetic directURL/entry/path/shebang/ZIP/PYC-shape cases passed; original filename discrepancy reproduced separately.",
+      "PYC uses only fake compile/marshal/source_hash/interpreter dependencies; exact timestamp0/checkedhash3/magic3531 and full body compare inspected without actual compiler/code load.",
+      "Four pinned CPython and five pip sources and two whole launcher candidates read-only size/SHA checked; full prior wheel corrective report preserved."
+    ],
+    "inert_cases": [
+      "Linux directurl",
+      "directurl extra",
+      "directurl wrongURI",
+      "directurl wronghash",
+      "directurl duplicate",
+      "directurl nonfinite",
+      "Windows directurl",
+      "directurl extra",
+      "directurl wrongURI",
+      "directurl wronghash",
+      "directurl duplicate",
+      "directurl nonfinite",
+      "entry metadata denial",
+      "entry metadata denial",
+      "entry metadata denial",
+      "entry metadata denial",
+      "entry metadata denial",
+      "entry metadata denial",
+      "Linux shebang /owned/python",
+      "altered script",
+      "Linux shebang /owned space/python",
+      "altered script",
+      "Linux shebang /xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/python",
+      "altered script",
+      "Windows console full candidate launcher/ZIP",
+      "Windows gui full candidate launcher/ZIP",
+      "PYC fake timestamp",
+      "PYC whole body mismatch",
+      "PYC fake checked_hash",
+      "PYC whole body mismatch",
+      "PYC mtime True",
+      "PYC mtime -1",
+      "PYC mtime 1.0",
+      "PYC mtime 9223372036854775808"
+    ],
+    "limits": [
+      "No product/platform/SDK/crypto/SSL imports, filesystem collector/fresh installation/actual pyc compiler/unmarshal/installed code import or execution, permission/process/native/TLS/copy/generation/probe.",
+      "Candidate preserved installer/launcher sources are not selected fresh installer or loaded-host closure. Always admitted:false; trusted collector/form/runtime recipes/host binding/integration still pending; no execution/Ready/full24/release approval."
+    ]
+  },
+  "previous_source": {
+    "bytes": 8706,
+    "sha256": "4ce09f1d0a2c62b6f781fa521e0b7adab81bae47c5033bea168be6c4eb7c03c7"
+  },
+  "correction": "Windows exact distlib final suffix.startswith(.py) stripping before .exe, complete console/gui derived destination casefold collisions; original P2 preserved BEFORE integration/execution"
 }

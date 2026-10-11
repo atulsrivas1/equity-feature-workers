@@ -1,3 +1,5 @@
+EQ083 generated-file semantic source original8706 REWORK P2 Windows suffix filename/destination collision preserved full report; corrected exactdistlib filename and complete deriveddestination checks BEFORE integration/execution. Renewed source review required/alwaysadmittedfalse/LinuxENVfalse/no compiler-native-TLS action.
+
 EQ083 wheel-payload RECORD source10108 independently APPROVED6110642748/fullcorrective report and originalP3REWORK preserved. New generated directURL/entryscript/pyc semantic SOURCE freeze alwaysadmittedfalse; exact wholearchive provenance/templates/launcher candidates/CPython header-and-source body comparison proposed, NO pyc compiler/installation/runtime executed. Independentreview/trustedcollector/hostbinding/freshmaps/all24/sevenReady remain pending/LinuxENVfalse.
 
 EQ083 byte-map relocation source original9552 REWORK P3 False==0 observation metadata preserved full report; corrected10108 exact scalar/closed observation checks BEFORE integration/execution. Renewed source review required/admittedalwaysfalse/LinuxENVfalse/protected runtime unchanged.

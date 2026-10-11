@@ -84,14 +84,24 @@ def dotted_identifier(value):
         raise ValueError('entry callable syntax')
     return value
 
-def entry_inventory(metadata):
+def entry_filename(name, system):
+    if system == 'Linux':
+        return name
+    if system != 'Windows':
+        raise ValueError('entry filename OS')
+    suffix = PurePosixPath(name).suffix
+    if suffix.startswith('.py'):
+        name = name[:-len(suffix)]
+    return name + '.exe'
+
+def entry_inventory(metadata, system):
     bounded_bytes(metadata, 65536)
     parser = configparser.ConfigParser(interpolation=None, delimiters=('=',), strict=True)
     parser.optionxform = str
     parser.read_string(metadata.decode('utf-8', errors='strict'))
     if parser.defaults():
         raise ValueError('entry default inheritance')
-    result, names = {}, set()
+    result, names, destinations = {}, set(), set()
     for section, kind in (('console_scripts', 'console'), ('gui_scripts', 'gui')):
         if not parser.has_section(section):
             continue
@@ -102,14 +112,19 @@ def entry_inventory(metadata):
             if len(fields) != 2:
                 raise ValueError('entry target arity/extras unsupported')
             module, function = map(dotted_identifier, fields)
+            filename = entry_filename(name, system)
+            identity = filename.casefold() if system == 'Windows' else filename
+            if identity in destinations:
+                raise ValueError('derived entry destination collision')
+            destinations.add(identity)
             names.add(name.casefold())
-            result[name] = dict(kind=kind, module=module, function=function)
+            result[name] = dict(kind=kind, module=module, function=function, filename=filename)
     if len(result) > 128:
         raise ValueError('entry inventory bound')
     return result
 
 def expected_entry_bytes(metadata, name, executable, system, launcher=None, launcher_sha=None):
-    inventory = entry_inventory(metadata)
+    inventory = entry_inventory(metadata, system)
     if type(name) is not str or name not in inventory:
         raise ValueError('entry metadata association')
     entry = inventory[name]
@@ -128,7 +143,7 @@ def expected_entry_bytes(metadata, name, executable, system, launcher=None, laun
     if system == 'Linux':
         if launcher is not None or launcher_sha is not None:
             raise ValueError('Linux launcher unexpected')
-        return name, shebang + body
+        return entry['filename'], shebang + body
     bounded_bytes(launcher)
     size, fixed_sha = WINDOWS_LAUNCHERS[entry['kind']]
     if len(launcher) != size or sha(launcher_sha) != fixed_sha or not launcher.startswith(b'MZ') or hashlib.sha256(launcher).hexdigest() != fixed_sha:
@@ -139,7 +154,7 @@ def expected_entry_bytes(metadata, name, executable, system, launcher=None, laun
     info.create_system = 0
     with zipfile.ZipFile(stream, 'w') as archive:
         archive.writestr(info, body)
-    return name + '.exe', launcher + shebang + stream.getvalue()
+    return entry['filename'], launcher + shebang + stream.getvalue()
 
 def verify_entry_script(data, metadata, name, executable, system, launcher=None, launcher_sha=None):
     bounded_bytes(data)
