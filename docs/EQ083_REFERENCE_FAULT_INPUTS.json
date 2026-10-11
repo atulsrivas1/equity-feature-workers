@@ -1,0 +1,123 @@
+{
+  "scope": "PRE-EXECUTION trusted reference fault entry only; exact owner service/parent/copier/dialogue still pending",
+  "entry": {
+    "bytes": 7919,
+    "sha256": "b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57"
+  },
+  "source_inputs": [
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "docs/EQ083_VERSION_REFERENCE_ENTRY.txt",
+      "bytes": 3707,
+      "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "packages/mcp/src/equity_feature_mcp/server.py",
+      "bytes": 13023,
+      "sha256": "8d314f299ec8b9fa4903e8e94fc1ec685dafdcc331fc2c9f57425afbb78ba84b"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "packages/mcp/src/equity_feature_mcp/_ledger.py",
+      "bytes": 9353,
+      "sha256": "cbde00e3f4c80d0c603c057584a0942342ec78e4ebfb3af52c6708f1495c3a69"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "packages/mcp/src/equity_feature_mcp/_wire.py",
+      "bytes": 3614,
+      "sha256": "83f8d5149d3e8d2342cb3c4d95784eadd06a45a046f02c57ef46a47d41f25c47"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "packages/mcp/src/equity_feature_mcp/models.py",
+      "bytes": 5230,
+      "sha256": "1c712e14161c885c1932ddf3fc5c14e3566dfac971776a952816c370fe6c4212"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "packages/client/src/equity_feature_client/client.py",
+      "bytes": 12050,
+      "sha256": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "packages/client/src/equity_feature_client/models.py",
+      "bytes": 8011,
+      "sha256": "b895015595a0f38efeb0a48185b677b3116ce92306f0a7b36684b9d315156f05"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "packages/client/src/equity_feature_client/_transport.py",
+      "bytes": 9468,
+      "sha256": "c35439a8fbad8bad4fdd5d14a1f2062b49b77fbd537d9bef993f14ed5766ce21"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "tests/mcp/test_protocol_boundary.py",
+      "bytes": 16652,
+      "sha256": "5ebb5b8f5c9ca050bd66aae07736510846ccab6b41419d20e06e735dfe4a2f88"
+    },
+    {
+      "commit": "be73ca764ac3d0161f4da43f486e4df2241e9ef0",
+      "path": "tests/mcp/test_ledger.py",
+      "bytes": 6794,
+      "sha256": "486f0a58418f8054e79968024c59201abebb64b8e2f2eb7bdf67269de3ed6d54"
+    }
+  ],
+  "modes": [
+    "provider-runtime",
+    "provider-interrupt",
+    "clock-before-bool",
+    "clock-before-negative",
+    "clock-before-float",
+    "clock-before-none",
+    "clock-after",
+    "active-eof-runtime",
+    "active-eof-interrupt",
+    "partial-output"
+  ],
+  "bounds": {
+    "provider_calls": 2,
+    "clock_samples": 64,
+    "control": 64,
+    "control_read": 65,
+    "entered": 256,
+    "pid": 128,
+    "closed": 512,
+    "release_cooperative_seconds": 3,
+    "frame": 65536,
+    "full_frames": 4,
+    "partial_bytes": 64,
+    "closed_worst": 381
+  },
+  "planned_reference_counts": {
+    "provider_privacy": {
+      "provider": 1,
+      "http": 0
+    },
+    "clock_before": {
+      "provider": 0,
+      "http": 0
+    },
+    "clock_after": {
+      "provider": 2,
+      "http": 2
+    },
+    "active_eof": {
+      "provider": 1,
+      "http": 0
+    },
+    "partial_output": {
+      "provider": 1,
+      "http": 1
+    }
+  }
+}
