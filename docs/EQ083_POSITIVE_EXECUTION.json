@@ -1,0 +1,488 @@
+{
+  "scope": "Actual installed Windows native-wheel positive/unavailable/reproducibility feasibility only; not fullReady/Linux/authority/fault/artifact/release",
+  "source_heads": {
+    "equity-features": "e913b33ef248c0ca47fa925e7728ce72c7581457",
+    "equity-feature-workers": "ab2df4fbc7f90a835856f1a9246a1dfe0e608a2a"
+  },
+  "probe": {
+    "bytes": 14843,
+    "sha256": "689d50f53ff8f35a953debdf002941a8ba355115c422d9d572d490fe3fadaeee",
+    "review_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6105061187"
+  },
+  "setup": {
+    "bytes": 7449,
+    "sha256": "919edca9d0af4ca3505c1dcbb3bee925c4efc8ec22b0edfb0551f5c7e22248e2",
+    "review_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6105002369",
+    "system": "Windows",
+    "wheel_count": 43,
+    "accepted_receipt_sha256": "a6edc4d7056812b47da8334649db100b814bd2fe13930426f64cd22b91c85192",
+    "archive_pins": {
+      "equity_feature_mcp-0.1.0a0-py3-none-any.whl": "49358ab38934053bc55db5fbd1e06d62b692fd6a7dd62b8324300c7293a10f93",
+      "equity_feature_mcp-0.1.0a0.tar.gz": "b10f2d8abd3bbaef4c4a1e3a45029e2c1b1c1d562e7a9a7ee1d5691d19e26c8a",
+      "equity_feature_client-0.1.0a0-py3-none-any.whl": "881b6059a37b3b076f26ac2ddcf14c2fa343fb0292a6aba3fc7652df500540b1",
+      "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2",
+      "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc",
+      "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8",
+      "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549",
+      "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb",
+      "equity_feature_service-0.1.0a3-py3-none-any.whl": "f6be07ba2dc03ae0d5fee65e21a6ac615f544344df3d5517e0eb20b64db62f56",
+      "equity_feature_workers-0.1.0a13-py3-none-any.whl": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324",
+      "equity_features-0.0.4a4-py3-none-any.whl": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0",
+      "annotated_types-0.8.0-py3-none-any.whl": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+      "anyio-4.15.1-py3-none-any.whl": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+      "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+      "certifi-2026.7.22-py3-none-any.whl": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+      "cffi-2.1.1-cp312-cp312-win_amd64.whl": "f53e442b08449d42821fa4a4fba000095af9f62742a500f978a9f557ec44339a",
+      "click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+      "colorama-0.4.6-py2.py3-none-any.whl": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+      "cryptography-50.0.2-cp311-abi3-win_amd64.whl": "7afa5a6602a9f29af1f3a2965f831bae7c9d5d597b7cbb716d41ab3b7d89879c",
+      "duckdb-1.5.6-cp312-cp312-win_amd64.whl": "09ff51b230219f0d8b47fc8a1e17fb595ba9fab0c3d96a6de4d00b8ff86b3cf1",
+      "h11-0.16.0-py3-none-any.whl": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+      "httpcore-1.0.9-py3-none-any.whl": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+      "httpx-0.28.1-py3-none-any.whl": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+      "httpx_sse-0.4.3-py3-none-any.whl": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+      "idna-3.20-py3-none-any.whl": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+      "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+      "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+      "mcp-1.30.0-py3-none-any.whl": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+      "numpy-2.2.6-cp312-cp312-win_amd64.whl": "c1f9540be57940698ed329904db803cf7a402f3fc200bfe599334c9bd84a40b2",
+      "pycparser-3.11-py3-none-any.whl": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+      "pydantic-2.14.0-py3-none-any.whl": "15fab1bea6f1dc5003b54fc2ecab230c1fd1dbade2acd4addc52d81e32416d4b",
+      "pydantic_core-2.50.0-cp312-cp312-win_amd64.whl": "1541c334af5d42cb9eb03862a9b4d2cfbfc670fd05172ec51f3ce02d704550f1",
+      "pydantic_settings-2.15.0-py3-none-any.whl": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+      "pyjwt-2.15.1-py3-none-any.whl": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+      "python_dotenv-1.2.4-py3-none-any.whl": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+      "python_multipart-0.0.32-py3-none-any.whl": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+      "pywin32-312-cp312-cp312-win_amd64.whl": "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc",
+      "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+      "rpds_py-2026.9.1-cp312-cp312-win_amd64.whl": "5ce8943f79c2210f7abcc28e86367b03b28d95027fd01c46d2472373ae70c86f",
+      "sse_starlette-3.5.0-py3-none-any.whl": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+      "starlette-1.7.0-py3-none-any.whl": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+      "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "typing_inspection-0.4.4-py3-none-any.whl": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+      "uvicorn-0.54.0-py3-none-any.whl": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+    },
+    "harness_inputs": [
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "docs/EQ081_CLIENT_FIXTURES.json",
+        "harness_path": "docs/EQ081_CLIENT_FIXTURES.json",
+        "bytes": 76771,
+        "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "docs/EQ083_REFERENCE_ENTRY.txt",
+        "harness_path": "docs/EQ083_REFERENCE_ENTRY.txt",
+        "bytes": 3332,
+        "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "docs/EQ082_NATIVE_FAMILY_ENTRY.txt",
+        "harness_path": "docs/EQ082_NATIVE_FAMILY_ENTRY.txt",
+        "bytes": 1853,
+        "sha256": "19a03bc41a70162e6998b140977e4b1b642aff5b287eed7e9608eaee01050e64"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+        "harness_path": "schemas/remote-v1.1.schema.json",
+        "bytes": 30039,
+        "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+        "harness_path": "schemas/mcp-tools.json",
+        "bytes": 104088,
+        "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/test_jobs.py",
+        "harness_path": "tests/service/test_jobs.py",
+        "bytes": 60646,
+        "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/test_service.py",
+        "harness_path": "tests/service/test_service.py",
+        "bytes": 30744,
+        "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/fixtures/jobs_native.json",
+        "harness_path": "tests/service/fixtures/jobs_native.json",
+        "bytes": 22366,
+        "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": null,
+        "path": "docs/EQ083_REFERENCE_PROBE.txt",
+        "harness_path": "docs/EQ083_REFERENCE_PROBE.txt",
+        "bytes": 14843,
+        "sha256": "689d50f53ff8f35a953debdf002941a8ba355115c422d9d572d490fe3fadaeee",
+        "identity_note": "This new literal source is frozen by hash here; its published commit is recorded outside this manifest after publication, avoiding self-reference."
+      }
+    ],
+    "module_origins_relative_to_new_venv": {
+      "client": "Lib/site-packages/equity_feature_client/__init__.py",
+      "mcp": "Lib/site-packages/equity_feature_mcp/__init__.py",
+      "service": "Lib/site-packages/equity_feature_service/__init__.py"
+    },
+    "installed": [
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1"
+      },
+      {
+        "name": "attrs",
+        "version": "26.1.0"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.7.22"
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1"
+      },
+      {
+        "name": "click",
+        "version": "8.5.0"
+      },
+      {
+        "name": "colorama",
+        "version": "0.4.6"
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.2"
+      },
+      {
+        "name": "duckdb",
+        "version": "1.5.6"
+      },
+      {
+        "name": "equity-feature-client",
+        "version": "0.1.0a0"
+      },
+      {
+        "name": "equity-feature-contracts",
+        "version": "0.0.4a4"
+      },
+      {
+        "name": "equity-feature-duckdb",
+        "version": "0.1.0a8"
+      },
+      {
+        "name": "equity-feature-example-extensions",
+        "version": "0.1.0a0"
+      },
+      {
+        "name": "equity-feature-io-contracts",
+        "version": "0.1.0a2"
+      },
+      {
+        "name": "equity-feature-io-sdk",
+        "version": "0.1.0a2"
+      },
+      {
+        "name": "equity-feature-mcp",
+        "version": "0.1.0a0"
+      },
+      {
+        "name": "equity-feature-service",
+        "version": "0.1.0a3"
+      },
+      {
+        "name": "equity-feature-workers",
+        "version": "0.1.0a13"
+      },
+      {
+        "name": "equity-features",
+        "version": "0.0.4a4"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "httpx-sse",
+        "version": "0.4.3"
+      },
+      {
+        "name": "idna",
+        "version": "3.20"
+      },
+      {
+        "name": "jsonschema",
+        "version": "4.26.0"
+      },
+      {
+        "name": "jsonschema-specifications",
+        "version": "2025.9.1"
+      },
+      {
+        "name": "mcp",
+        "version": "1.30.0"
+      },
+      {
+        "name": "numpy",
+        "version": "2.2.6"
+      },
+      {
+        "name": "pip",
+        "version": "25.0.1"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.11"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.14.0"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.50.0"
+      },
+      {
+        "name": "pydantic-settings",
+        "version": "2.15.0"
+      },
+      {
+        "name": "PyJWT",
+        "version": "2.15.1"
+      },
+      {
+        "name": "python-dotenv",
+        "version": "1.2.4"
+      },
+      {
+        "name": "python-multipart",
+        "version": "0.0.32"
+      },
+      {
+        "name": "pywin32",
+        "version": "312"
+      },
+      {
+        "name": "referencing",
+        "version": "0.37.0"
+      },
+      {
+        "name": "rpds-py",
+        "version": "2026.9.1"
+      },
+      {
+        "name": "sse-starlette",
+        "version": "3.5.0"
+      },
+      {
+        "name": "starlette",
+        "version": "1.7.0"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4"
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0"
+      }
+    ],
+    "raw_setup_log_sha256": "633fd4560820adff1e6bfdb03595e3c5846216e19a9d51a0b3235ecfb0dd8a14"
+  },
+  "author": {
+    "exit_code": 0,
+    "raw_probe_log_sha256": "92f29a98369067cd62842a678d419369671bfc199f8d64c901b7bddedf63d268",
+    "report": {
+      "cases": [
+        {
+          "case": "trades",
+          "client": 6,
+          "direct": 12,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 25
+        },
+        {
+          "case": "bars",
+          "client": 6,
+          "direct": 15,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "8776f94ba6b31943da18c88a4b32eb8a0a110812030b556cff62bb4c7c358fa6",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 28
+        },
+        {
+          "case": "quotes",
+          "client": 6,
+          "direct": 12,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "0e585d4ee2f75e81d86af893c855afb29e4d100daf4031da5ee9e9f68abe7af4",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 25
+        },
+        {
+          "case": "trades-adjacent-large-ns",
+          "client": 6,
+          "direct": 12,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "4a4879d75f6fcd69f83c4b043f2eaf661cd542ca550aae3f948a041e84c2ce0a",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 25
+        }
+      ],
+      "marker": "eq083-three-lane-positive"
+    }
+  },
+  "failure_history": {
+    "original_author_exit_code": 1,
+    "original_author_log_sha256": "36f75969164d5b5fc69b4bb0410e7e2d495c6fad81ac9a77a436641d79f31f55",
+    "independent_diagnostic_report_sha256": "1b74c868eedf332ccaa8e96fc4339095766f0a2e1c7852c08976b7eed879452e",
+    "independent_diagnostic_log_sha256": "cb8c67a76a71858afd957e638ada6126fd805a2cfeacfe0b943f43517d8f3258",
+    "cause": "Combined startup plus final diagnostic capture256 overflowed; corrected bounded640 without relaxing realexit/fullsource2 checks"
+  },
+  "limits": [
+    "No private filesystem paths or raw environment reports published",
+    "Reviewer actually passed separate-process all4cases using author verified isolated environment; no independent reinstall",
+    "Authority/state/cancel/negative/version/clock/TLS/EOF/partialoutput and dedicatedbothOSbuilder/fullsevenReady remain pending"
+  ],
+  "reviewer": {
+    "reviewer": "/root/r7_policy_review",
+    "canonical_head": "e913b33ef248c0ca47fa925e7728ce72c7581457",
+    "worker_head": "ab2df4fbc7f90a835856f1a9246a1dfe0e608a2a",
+    "scope": "Independent separate-process Windows native-wheel positive feasibility execution reusing author verified isolated environment; no independent reinstall",
+    "disposition": "PASS scoped four-case positive composition; no actionable findings",
+    "parent_bytes": 14843,
+    "parent_sha256": "689d50f53ff8f35a953debdf002941a8ba355115c422d9d572d490fe3fadaeee",
+    "command": "eq083-feasibility-ab2df4f/venv/Scripts/python.exe -I eq083-feasibility-ab2df4f/harness/docs/EQ083_REFERENCE_PROBE.txt eq083-feasibility-ab2df4f/harness",
+    "exit_code": 0,
+    "raw_log": "eq083-three-lane-corrective-reviewer.log",
+    "raw_log_bytes": 1162,
+    "raw_log_sha256": "42cf1a7a579d3ccf8bbff82b72e1ef1ab59a13d28249f3b1e728f3e1a2288d4c",
+    "result": {
+      "cases": [
+        {
+          "case": "trades",
+          "client": 6,
+          "direct": 12,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 25
+        },
+        {
+          "case": "bars",
+          "client": 6,
+          "direct": 15,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "8776f94ba6b31943da18c88a4b32eb8a0a110812030b556cff62bb4c7c358fa6",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 28
+        },
+        {
+          "case": "quotes",
+          "client": 6,
+          "direct": 13,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "0e585d4ee2f75e81d86af893c855afb29e4d100daf4031da5ee9e9f68abe7af4",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 26
+        },
+        {
+          "case": "trades-adjacent-large-ns",
+          "client": 6,
+          "direct": 12,
+          "full_producer": true,
+          "full_raw": true,
+          "mcp": 7,
+          "native_sha": "4a4879d75f6fcd69f83c4b043f2eaf661cd542ca550aae3f948a041e84c2ce0a",
+          "native_supervisor_observed_exited": true,
+          "reference_child_observed_exited": true,
+          "source_reads": 2,
+          "total": 25
+        }
+      ],
+      "marker": "eq083-three-lane-positive"
+    },
+    "preflight": [
+      "9copiedGitassets/hash/size/exactpublishedbytes/manifestclosure",
+      "setup-report43Windowswheels/acceptedmcp1receipt44archivehashes/currentnewenvmoduleorigins",
+      "source-freeharness/no packages/-Iparentchild; exact unchanged source"
+    ],
+    "actual_checks": [
+      "three lanes samefirstkey nativejob/resultbinding; distinctsecondjob same complete producer/nativeSHA",
+      "full raw/producer quality/evidence/context/scope/scalars and SDKoriginalnativebytehashes allfourcases",
+      "realbars missing_input/absent_input nullvalues transported throughallthree lanes",
+      "canonicalMCPtext+structuredContent/standaloneoutputschema/seventools/negotiation/assertedannotations",
+      "closedMCPwitnessprovider7/actualreferenceprocessExit; nativefullfinalsource2/reasonexited0/threadjoined/acceptedentryschedulercloseTrue"
+    ],
+    "limits": [
+      "No authority/retirement/grant/TTL/epoch/cancel/fault/newTLS/negative-state or Linux feasibility qualified",
+      "Native-wheelonly reuse existingverifiedenvironment; no freshsdist/lightforms/build/artifact/release qualification",
+      "Previous256budgetauthor/reviewerfailedruns remainfailures",
+      "NotReady/start/full24orEQ083acceptance"
+    ]
+  },
+  "review_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6105082105"
+}
