@@ -218,52 +218,53 @@ for mode in modes:
    anyio.run(sdk,'baseline',True);assert (direct_count,client_count,sdk_count)==(3,4,5);action('baseline')
    fault_pid,arm,entered,release=(Path(directory)/name for name in ('fault-pid','arm','entered','release'))
    command=[sys.executable,'-I',str(root/'docs/EQ083_REFERENCE_FAULT_ENTRY.txt'),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(fault_pid),case['case'],mode,str(arm),str(entered),str(release)]
+   started=[];readers=[]
    process=subprocess.Popen(command,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=0,creationflags=subprocess.CREATE_NO_WINDOW if sys.platform=='win32' else 0)
-   output=queue.Queue(maxsize=262210);reader_errors=[];stderr=bytearray();received=bytearray();sent=0
-   def reader():
-    count=0
-    try:
-     while True:
-      b=process.stdout.read(1)
-      if not b:break
-      count+=1;assert count<=262208;output.put_nowait(b)
-    except BaseException as error:reader_errors.append(type(error).__name__)
-    finally:output.put_nowait(None)
-   def err_reader():
-    try:
-     while True:
-      b=process.stderr.read(1024)
-      if not b:break
-      stderr.extend(b);assert len(stderr)<=4096
-    except BaseException as error:reader_errors.append(type(error).__name__)
-   readers=[threading.Thread(target=reader),threading.Thread(target=err_reader)]
-   for r in readers:r.start()
-   def send(method,params=None,notification=False):
-    global sent
-    sent+=1;assert sent<=6
-    v=dict(jsonrpc='2.0',method=method)
-    if not notification:v['id']=str(sent)
-    if params is not None:v['params']=params
-    raw=canonical(v)+b'\n';assert len(raw)<=16384
-    assert process.stdin.write(raw)==len(raw);process.stdin.flush();return str(sent)
-   def frame(ident):
-    data=bytearray();until=time.monotonic()+5
-    while True:
-     remaining=until-time.monotonic();assert remaining>0
-     b=output.get(timeout=remaining);assert b is not None;data.extend(b);received.extend(b);assert len(data)<=65536
-     if b==b'\n':break
-    v=parse(bytes(data));assert set(v)=={'jsonrpc','id','result'} and v['jsonrpc']=='2.0' and v['id']==ident
-    return v['result']
-   def remainder():
-    data=bytearray();until=time.monotonic()+5
-    while True:
-     remaining=until-time.monotonic();assert remaining>0
-     b=output.get(timeout=remaining)
-     if b is None:break
-     data.extend(b);received.extend(b);assert len(data)<=65536
-    return bytes(data)
-   def tool(name,args):return send('tools/call',dict(name=name,arguments=args))
    try:
+    output=queue.Queue(maxsize=262210);reader_errors=[];stderr=bytearray();received=bytearray();sent=0
+    def reader():
+     count=0
+     try:
+      while True:
+       b=process.stdout.read(1)
+       if not b:break
+       count+=1;assert count<=262208;output.put_nowait(b)
+     except BaseException as error:reader_errors.append(type(error).__name__)
+     finally:output.put_nowait(None)
+    def err_reader():
+     try:
+      while True:
+       b=process.stderr.read(1024)
+       if not b:break
+       stderr.extend(b);assert len(stderr)<=4096
+     except BaseException as error:reader_errors.append(type(error).__name__)
+    readers=[threading.Thread(target=reader),threading.Thread(target=err_reader)]
+    for r in readers:r.start();started.append(r)
+    def send(method,params=None,notification=False):
+     global sent
+     sent+=1;assert sent<=6
+     v=dict(jsonrpc='2.0',method=method)
+     if not notification:v['id']=str(sent)
+     if params is not None:v['params']=params
+     raw=canonical(v)+b'\n';assert len(raw)<=16384
+     assert process.stdin.write(raw)==len(raw);process.stdin.flush();return str(sent)
+    def frame(ident):
+     data=bytearray();until=time.monotonic()+5
+     while True:
+      remaining=until-time.monotonic();assert remaining>0
+      b=output.get(timeout=remaining);assert b is not None;data.extend(b);received.extend(b);assert len(data)<=65536
+      if b==b'\n':break
+     v=parse(bytes(data));assert set(v)=={'jsonrpc','id','result'} and v['jsonrpc']=='2.0' and v['id']==ident
+     return v['result']
+    def remainder():
+     data=bytearray();until=time.monotonic()+5
+     while True:
+      remaining=until-time.monotonic();assert remaining>0
+      b=output.get(timeout=remaining)
+      if b is None:break
+      data.extend(b);received.extend(b);assert len(data)<=65536
+     return bytes(data)
+    def tool(name,args):return send('tools/call',dict(name=name,arguments=args))
     marker=wait_completed(fault_pid,128,4);assert marker==dict(pid=process.pid)
     init=frame(send('initialize',dict(protocolVersion='2025-11-25',capabilities={},clientInfo=dict(name='eq083-fault-observer',version='1'))))
     assert init['protocolVersion']=='2025-11-25' and init['capabilities']==dict(tools=dict(listChanged=False))
@@ -305,12 +306,20 @@ for mode in modes:
     assert b'eq083-synthetic-private-token-path' not in received and b'A'*43 not in received and b'Bearer' not in received
     reference_exits.append(process.pid)
    finally:
-    if not process.stdin.closed:process.stdin.close()
-    if process.poll() is None:
-     try:process.wait(timeout=4)
-     except subprocess.TimeoutExpired:process.kill();process.wait(timeout=3)
-    for r in readers:r.join(3)
-    process.stdout.close();process.stderr.close()
+    active_exception=sys.exc_info()[0] is not None;cleanup_errors=[]
+    def clean(callback):
+     try:callback()
+     except BaseException as error:cleanup_errors.append(type(error).__name__)
+    if not process.stdin.closed:clean(process.stdin.close)
+    try:process.wait(timeout=4)
+    except subprocess.TimeoutExpired:
+     clean(process.kill);clean(lambda:process.wait(timeout=3))
+    except BaseException as error:cleanup_errors.append(type(error).__name__)
+    for r in started:clean(lambda r=r:r.join(3))
+    for pipe in (process.stdin,process.stdout,process.stderr):
+     if not pipe.closed:clean(pipe.close)
+    if process.poll() is None or any(r.is_alive() for r in started):cleanup_errors.append('owned cleanup incomplete')
+    if cleanup_errors and not active_exception:raise ValueError('owned fault cleanup failed')
    assert all(not r.is_alive() for r in readers) and not reader_errors and not stderr
    action('after_fault')
    assert direct(calc(),'job')==complete;verify(direct(result_payload,'result'))
