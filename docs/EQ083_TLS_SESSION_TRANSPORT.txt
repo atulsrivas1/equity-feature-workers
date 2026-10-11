@@ -308,8 +308,16 @@ async def owned_tls_session_streams(root,origin,pid,mode,arm,role,observations):
    tasks.start_soon(receive);tasks.start_soon(send)
    try:yield read_stream,write_stream
    finally:
+    original=sys.exc_info()[0] is not None;inner_errors=[]
     with anyio.CancelScope(shield=True):
-     await write_stream.aclose();write_stop.set();tasks.cancel_scope.cancel()
+     try:await write_stream.aclose()
+     except BaseException as error:inner_errors.append(type(error).__name__)
+     for callback in (write_stop.set,tasks.cancel_scope.cancel):
+      try:callback()
+      except BaseException as error:inner_errors.append(type(error).__name__)
+    if inner_errors:
+     errors.extend(inner_errors)
+     if not original:raise ValueError('owned SDK inner cleanup failed')
   normal=True
  finally:
   active_exception=sys.exc_info()[0] is not None;cleanup=[]

@@ -5,8 +5,8 @@
     "equity-feature-workers": "5e30fbe9057d7989a1dc67a4df65554438842f7c"
   },
   "source": {
-    "bytes": 20319,
-    "sha256": "75d64fc25931b1eded48fd7775add1e365d614c1b92623d2b70678b80df29d69"
+    "bytes": 20704,
+    "sha256": "df841289172cece3abd53830f00bc71bc6bcbc1f7dcd07f752c28aa3d969caa6"
   },
   "owned_process_source": {
     "commit": "5e30fbe9057d7989a1dc67a4df65554438842f7c",
@@ -148,6 +148,17 @@
     "prior_source_sha256": "66a0fb7471b9c0a993581cb192cd178c0a28a4df5eeb6cd702ece1c640f9c30f",
     "review_report_sha256": "ad1b35b4fe72dcb6a414b050e9483cb09e55aae90a919e93c40ae460dc949659",
     "finding": "P2 pipe/thread cleanup inspection can mask active exception or skip stream closes; every inspection now executes inside clean callback",
+    "executed": false
+  },
+  "context_cleanup_correction": {
+    "prior_heads": {
+      "equity-features": "2ec56dfffd5859aee81673702ba95f567ac938ac",
+      "equity-feature-workers": "d92c40befbaf4a0ac25145d233514ba2742b2c7e"
+    },
+    "prior_source_bytes": 20319,
+    "prior_source_sha256": "75d64fc25931b1eded48fd7775add1e365d614c1b92623d2b70678b80df29d69",
+    "review_report_sha256": "473771ba7d72e4fbe69defadfa2a8d1531661ac3ba3ecbaa0b91c7b6c3c70b15",
+    "finding": "P2 yielded-context stream close could mask active dialogue and skip explicit stop/cancel; each cleanup attempted and original preserved",
     "executed": false
   }
 }
