@@ -1,0 +1,104 @@
+{
+  "scope": "pre-execution uncertain mutation owner source only; no parent/copy/execution/fullReady",
+  "entry": {
+    "bytes": 7926,
+    "sha256": "5bab47a923af9e7e5d260da0ca2a3c37f7beaedb4de52360d2570c2371075487"
+  },
+  "source_inputs": [
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "packages/service/src/equity_feature_service/jobs.py",
+      "bytes": 43441,
+      "sha256": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "packages/service/src/equity_feature_service/loopback.py",
+      "bytes": 1264,
+      "sha256": "69cd65d929765961927c74a12ccfb199a53bf5a5435253559a61a8c06aeb321a"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "packages/client/src/equity_feature_client/_response.py",
+      "bytes": 11985,
+      "sha256": "8cd9f5c34658a81600e8b69f6cce6c6d52b0e0818aab21df4ce7ca1a13023a8c"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "packages/client/src/equity_feature_client/_transport.py",
+      "bytes": 9468,
+      "sha256": "c35439a8fbad8bad4fdd5d14a1f2062b49b77fbd537d9bef993f14ed5766ce21"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "packages/client/src/equity_feature_client/client.py",
+      "bytes": 12050,
+      "sha256": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "tests/client/test_client.py",
+      "bytes": 18358,
+      "sha256": "184aabc8b060bcfdb916853bd9a7d444760dd3fb92401d06b6eb7197c6703b5a"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "tests/mcp/test_transport_fixtures.py",
+      "bytes": 5854,
+      "sha256": "529422eace53aa6d8aa9d8143014850cdd697bbe444881d98ccfbe5ac9796574"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "docs/EQ083_REFERENCE_ENTRY.txt",
+      "bytes": 3332,
+      "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+    },
+    {
+      "commit": "2c994cb02ec508e914c9c9ecc7ff0a0edc4448a6",
+      "path": "docs/EQ083_INPUTS.json",
+      "bytes": 35406,
+      "sha256": "fb18bb76e11634cc4a6d750730da7467155baa21e429f0989a550dbae82b1f0f"
+    }
+  ],
+  "operation_ledger": {
+    "calculate": {
+      "http": 6,
+      "client": 9,
+      "mcp": 10
+    },
+    "cancel": {
+      "http": 6,
+      "client": 7,
+      "mcp": 8
+    }
+  },
+  "bounds": {
+    "requests": 16,
+    "discard_bytes": 270336,
+    "ack": 1024,
+    "control_bytes": 128,
+    "controls_max": 6,
+    "owner_seconds": 20,
+    "supervisor_seconds": 25,
+    "output_bytes": 768,
+    "stop_join_seconds": 6
+  }
+}
