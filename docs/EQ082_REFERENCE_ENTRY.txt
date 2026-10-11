@@ -1,0 +1,57 @@
+"""Owned SDK composition feasibility only; NOT the bounded product server."""
+import sys,json,re,hashlib,os
+from pathlib import Path
+import anyio
+from mcp import types
+from mcp.server.lowlevel import Server
+from mcp.server.models import InitializationOptions
+from mcp.server.stdio import stdio_server
+from equity_feature_client import RemoteClient,ScopeKey,FeatureRef,ProducerExpectation,JobExpectation
+if len(sys.argv)!=5:raise ValueError('owned arguments')
+origin,fixture,principal,pid_marker=sys.argv[1:]
+if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535 or principal not in ('A','B'):raise ValueError('owned origin')
+with Path(fixture).open('rb') as stream:raw=stream.read(76772)
+if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29':raise ValueError('owned fixture')
+producer=json.loads(raw)['native_cases'][0]['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+client=RemoteClient(origin,lambda:principal*43,attempts=1,budget=5)
+marker=Path(pid_marker)
+if marker.exists() or len(pid_marker)>1024:raise ValueError('owned marker')
+marker.write_text(json.dumps({'pid':os.getpid()},separators=(',',':')),encoding='ascii')
+marker.with_name(marker.name+'.complete').mkdir()
+server=Server('owned-eq082-reference-probe')
+names=('owned_discover','owned_calculate','owned_status','owned_result')
+state={}
+empty={'type':'object','properties':{},'additionalProperties':False}
+output={'type':'object','properties':{'ok':{'type':'boolean'},'payload':{'type':'object'},'failure':{'type':'object'}},'required':['ok'],'additionalProperties':False}
+@server.list_tools()
+async def tools():
+ return [types.Tool(name=n,inputSchema=empty,outputSchema=output,annotations=types.ToolAnnotations(readOnlyHint=n!='owned_calculate',destructiveHint=False,idempotentHint=n!='owned_calculate',openWorldHint=True)) for n in names]
+@server.call_tool()
+async def call(name,arguments):
+ if arguments or name not in names:raise ValueError('owned tool')
+ if name=='owned_discover':outcome=client.discover(request_id='owned-discover')
+ elif name=='owned_calculate':outcome=client.calculate(expected,'owned-mcp-feasibility',request_id='owned-calculate')
+ elif name=='owned_status':outcome=client.job_status(JobExpectation(state['job_id'],expected.command_digest),request_id='owned-status')
+ else:outcome=client.result_read(state['result_id'],expected,request_id='owned-result')
+ if outcome.ok:
+  payload=outcome.view.payload_json()
+  if name in ('owned_calculate','owned_status'):
+   state['job_id']=payload['job_id']
+   if payload.get('result_id') is not None:state['result_id']=payload['result_id']
+  value={'ok':True,'payload':payload}
+ else:
+  failure=outcome.failure
+  value={'ok':False,'failure':{'category':failure.category,'code':failure.code,'phase':failure.phase,'status':failure.status}}
+ text=json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False)
+ if len(text.encode('ascii'))>16384:raise ValueError('owned output')
+ result=types.CallToolResult(content=[types.TextContent(type='text',text=text)],structuredContent=value,isError=not outcome.ok)
+ if len(result.model_dump_json(by_alias=True,exclude_none=True).encode('utf-8'))>65536:raise ValueError('owned frame')
+ return result
+async def run():
+ try:
+  async with stdio_server() as (read,write):
+   await server.run(read,write,InitializationOptions(server_name='owned-eq082-reference-probe',server_version='0.0.0-probe',capabilities=types.ServerCapabilities(tools=types.ToolsCapability(listChanged=False))))
+ finally:client.close()
+anyio.run(run)

@@ -1,0 +1,366 @@
+{
+  "schema": "equity.mcp.protocol.v1",
+  "protocol": "2025-11-25",
+  "params_schemas": {
+    "initialize": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[\\x20-\\x7e]{1,64}(?![\\s\\S])"
+        },
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "experimental": {
+              "type": "object",
+              "maxProperties": 8,
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "additionalProperties": {
+                "type": "object",
+                "maxProperties": 16,
+                "propertyNames": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "additionalProperties": {}
+              }
+            },
+            "roots": {
+              "type": "object",
+              "properties": {
+                "listChanged": {
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "sampling": {
+              "type": "object",
+              "properties": {
+                "context": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "tools": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "additionalProperties": false
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "elicitation": {
+              "type": "object",
+              "properties": {
+                "form": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "url": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "additionalProperties": false
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "tasks": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "cancel": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "sampling": {
+                      "type": "object",
+                      "properties": {
+                        "createMessage": {
+                          "type": "object",
+                          "properties": {},
+                          "required": [],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    },
+                    "elicitation": {
+                      "type": "object",
+                      "properties": {
+                        "create": {
+                          "type": "object",
+                          "properties": {},
+                          "required": [],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "clientInfo": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[\\x20-\\x7e]{1,64}(?![\\s\\S])"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[\\x20-\\x7e]{1,64}(?![\\s\\S])"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "websiteUrl": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "icons": {
+              "type": "array",
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 512
+                  },
+                  "mimeType": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "sizes": {
+                    "type": "array",
+                    "maxItems": 8,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 32,
+                      "pattern": "^(any|[1-9][0-9]{0,3}x[1-9][0-9]{0,3})(?![\\s\\S])"
+                    }
+                  },
+                  "theme": {
+                    "enum": [
+                      "light",
+                      "dark"
+                    ]
+                  }
+                },
+                "required": [
+                  "src"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "name",
+            "version"
+          ],
+          "additionalProperties": false
+        },
+        "_meta": {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "capabilities",
+        "clientInfo"
+      ],
+      "additionalProperties": false
+    },
+    "ping": {
+      "type": "object",
+      "properties": {
+        "_meta": {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "initialized": {
+      "type": "object",
+      "properties": {
+        "_meta": {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "cancelled": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[\\x20-\\x7e]{1,64}(?![\\s\\S])"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "_meta": {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "requestId"
+      ],
+      "additionalProperties": false
+    },
+    "tools_list": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "const": null
+        },
+        "_meta": {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "tools_call": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "arguments": {
+          "type": "object"
+        },
+        "_meta": {
+          "type": "object",
+          "maxProperties": 16,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "semantic_limits": {
+    "meta_canonical_bytes": 2048,
+    "experimental_canonical_bytes": 4096,
+    "frame_including_lf": 16384,
+    "depth": 32,
+    "nodes": 10000
+  },
+  "scope": "Pre-code closed parameter freeze,14 offline denials; no product parser/protocol/runtime qualification",
+  "official_sources": [
+    "https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle",
+    "https://modelcontextprotocol.io/specification/2025-11-25/server/tools"
+  ]
+}

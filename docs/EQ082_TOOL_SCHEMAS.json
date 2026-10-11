@@ -1,0 +1,3446 @@
+{
+  "schema": "equity.mcp.tools.v1",
+  "protocol": "2025-11-25",
+  "tools": [
+    {
+      "name": "equity_discover",
+      "description": "Read current authenticated remote feature and transport inventory.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "remote_discovery"
+                  },
+                  "data": {
+                    "$ref": "#/$defs/discovery"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "data"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$defs": {
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}(?![\\s\\S])",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "discovery": {
+            "type": "object",
+            "properties": {
+              "transport_versions": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "1.0",
+                    "1.1"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 2,
+                "uniqueItems": true
+              },
+              "registry_snapshot": {
+                "$ref": "#/$defs/digest"
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/feature"
+                },
+                "maxItems": 39
+              }
+            },
+            "required": [
+              "transport_versions",
+              "registry_snapshot",
+              "features"
+            ],
+            "additionalProperties": false
+          },
+          "feature": {
+            "type": "object",
+            "properties": {
+              "feature_id": {
+                "$ref": "#/$defs/label"
+              },
+              "algorithm_version": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "feature_id",
+              "algorithm_version"
+            ],
+            "additionalProperties": false
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "equity_slice",
+      "description": "Read one owner-admitted projection with original typed values and metadata.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_.-]{1,64}(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "profile"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "representation": {
+                        "const": "raw_slice"
+                      },
+                      "data": {
+                        "$ref": "#/$defs/slice"
+                      }
+                    },
+                    "required": [
+                      "representation",
+                      "data"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "representation": {
+                        "const": "projected_feature_slice"
+                      },
+                      "data": {
+                        "$ref": "#/$defs/feature_slice"
+                      }
+                    },
+                    "required": [
+                      "representation",
+                      "data"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$defs": {
+          "availability": {
+            "type": "object",
+            "properties": {
+              "market_cutoff_ns": {
+                "$ref": "#/$defs/i64"
+              },
+              "knowledge_cutoff_ns": {
+                "$ref": "#/$defs/i64"
+              },
+              "evaluation_ns": {
+                "$ref": "#/$defs/i64"
+              },
+              "mode": {
+                "enum": [
+                  "known_at",
+                  "reconstruction"
+                ]
+              },
+              "reconstruction_reason": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/label"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "market_cutoff_ns",
+              "knowledge_cutoff_ns",
+              "evaluation_ns",
+              "mode",
+              "reconstruction_reason"
+            ],
+            "additionalProperties": false
+          },
+          "cell": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "int64"
+                  },
+                  "value": {
+                    "$ref": "#/$defs/i64"
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "float64"
+                  },
+                  "bits": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{16}(?![\\s\\S])",
+                    "minLength": 16,
+                    "maxLength": 16
+                  }
+                },
+                "required": [
+                  "type",
+                  "bits"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "decimal128"
+                  },
+                  "coefficient": {
+                    "type": "string",
+                    "pattern": "^(0|-?[1-9][0-9]{0,37})(?![\\s\\S])"
+                  },
+                  "scale": {
+                    "type": "integer",
+                    "minimum": -38,
+                    "maximum": 38
+                  }
+                },
+                "required": [
+                  "type",
+                  "coefficient",
+                  "scale"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "string"
+                  },
+                  "value": {
+                    "type": "string",
+                    "maxLength": 4096
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "bool"
+                  },
+                  "value": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "record"
+                  },
+                  "name": {
+                    "enum": [
+                      "EntityKey",
+                      "QualityRow",
+                      "BreadthCounts",
+                      "BreadthFraction",
+                      "IntervalOHLCVRow",
+                      "IntervalVolumeShareRow",
+                      "IntervalOHLCV",
+                      "IntervalVolumeShares",
+                      "TopKTradeRow",
+                      "TopKTrades",
+                      "QuoteStateCounts",
+                      "QuoteObservation",
+                      "SampledSpread",
+                      "QuoteDurations",
+                      "TimeWeightedSpread",
+                      "InputBinding",
+                      "ResultMetadata",
+                      "EvidenceRow",
+                      "PriceUnit",
+                      "SourceBinding",
+                      "Coverage",
+                      "AdjustmentSpec",
+                      "InputScope",
+                      "IntervalCoverage",
+                      "BatchMetadata",
+                      "IntervalSpec",
+                      "AvailabilitySpec"
+                    ]
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+                    },
+                    "additionalProperties": {
+                      "$ref": "#/$defs/cell"
+                    },
+                    "maxProperties": 64
+                  }
+                },
+                "required": [
+                  "type",
+                  "name",
+                  "fields"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "list"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/cell"
+                    },
+                    "maxItems": 100
+                  }
+                },
+                "required": [
+                  "type",
+                  "items"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "column": {
+            "type": "object",
+            "properties": {
+              "feature_id": {
+                "$ref": "#/$defs/label"
+              },
+              "algorithm_version": {
+                "$ref": "#/$defs/label"
+              },
+              "schema_version": {
+                "const": "1"
+              },
+              "dtype": {
+                "enum": [
+                  "int64",
+                  "decimal128",
+                  "float64",
+                  "string",
+                  "bool",
+                  "breadth_counts",
+                  "breadth_fraction",
+                  "time_weighted_spread",
+                  "quote_state_counts",
+                  "sampled_spread",
+                  "top_k_trades",
+                  "interval_ohlcv",
+                  "interval_volume_shares"
+                ]
+              },
+              "unit": {
+                "$ref": "#/$defs/label"
+              },
+              "entities": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/entity"
+                },
+                "maxItems": 4
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/cell"
+                },
+                "maxItems": 4
+              }
+            },
+            "required": [
+              "feature_id",
+              "algorithm_version",
+              "schema_version",
+              "dtype",
+              "unit",
+              "entities",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "config_id": {
+                "$ref": "#/$defs/id"
+              },
+              "revision": {
+                "$ref": "#/$defs/label"
+              },
+              "schema_version": {
+                "const": "1"
+              },
+              "digest": {
+                "$ref": "#/$defs/digest"
+              },
+              "algorithm_version": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "config_id",
+              "revision",
+              "schema_version",
+              "digest",
+              "algorithm_version"
+            ],
+            "additionalProperties": false
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "namespace": {
+                "$ref": "#/$defs/label"
+              },
+              "dataset": {
+                "$ref": "#/$defs/dataset"
+              },
+              "config": {
+                "$ref": "#/$defs/config"
+              },
+              "registry_snapshot": {
+                "$ref": "#/$defs/digest"
+              },
+              "math_policy_version": {
+                "$ref": "#/$defs/label"
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/feature"
+                },
+                "minItems": 1,
+                "maxItems": 39,
+                "uniqueItems": true
+              },
+              "availability": {
+                "$ref": "#/$defs/availability"
+              }
+            },
+            "required": [
+              "namespace",
+              "dataset",
+              "config",
+              "registry_snapshot",
+              "math_policy_version",
+              "features",
+              "availability"
+            ],
+            "additionalProperties": false
+          },
+          "dataset": {
+            "type": "object",
+            "properties": {
+              "dataset_id": {
+                "$ref": "#/$defs/id"
+              },
+              "revision": {
+                "$ref": "#/$defs/label"
+              },
+              "snapshot_id": {
+                "$ref": "#/$defs/label"
+              },
+              "mapping_version": {
+                "$ref": "#/$defs/label"
+              },
+              "source_id": {
+                "$ref": "#/$defs/label"
+              },
+              "input_id": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "dataset_id",
+              "revision",
+              "snapshot_id",
+              "mapping_version",
+              "source_id",
+              "input_id"
+            ],
+            "additionalProperties": false
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}(?![\\s\\S])",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "entity": {
+            "type": "object",
+            "properties": {
+              "instrument_id": {
+                "$ref": "#/$defs/label"
+              },
+              "session_id": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "instrument_id",
+              "session_id"
+            ],
+            "additionalProperties": false
+          },
+          "feature": {
+            "type": "object",
+            "properties": {
+              "feature_id": {
+                "$ref": "#/$defs/label"
+              },
+              "algorithm_version": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "feature_id",
+              "algorithm_version"
+            ],
+            "additionalProperties": false
+          },
+          "feature_slice": {
+            "type": "object",
+            "properties": {
+              "dataset": {
+                "$ref": "#/$defs/dataset"
+              },
+              "scope": {
+                "$ref": "#/$defs/scope"
+              },
+              "selected_features": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/feature"
+                },
+                "minItems": 1,
+                "maxItems": 39,
+                "uniqueItems": true
+              },
+              "feature_result": {
+                "$ref": "#/$defs/result"
+              }
+            },
+            "required": [
+              "dataset",
+              "scope",
+              "selected_features",
+              "feature_result"
+            ],
+            "additionalProperties": false
+          },
+          "i64": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]{0,18})(?![\\s\\S])"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+          },
+          "quality": {
+            "type": "object",
+            "properties": {
+              "entity": {
+                "$ref": "#/$defs/entity"
+              },
+              "feature_id": {
+                "$ref": "#/$defs/label"
+              },
+              "status": {
+                "enum": [
+                  "available",
+                  "insufficient_history",
+                  "missing_input",
+                  "incomplete_coverage",
+                  "not_applicable"
+                ]
+              },
+              "expected": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/i64"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observed": {
+                "$ref": "#/$defs/i64"
+              },
+              "reasons": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "absent_input",
+                    "null_field",
+                    "observed_empty",
+                    "no_eligible_observations",
+                    "missing_action_evidence",
+                    "insufficient_history",
+                    "governed_gap",
+                    "unknown_availability",
+                    "future_knowledge",
+                    "partial_universe",
+                    "zero_denominator",
+                    "empty_universe",
+                    "ineligible",
+                    "future_market"
+                  ]
+                },
+                "uniqueItems": true,
+                "maxItems": 14
+              }
+            },
+            "required": [
+              "entity",
+              "feature_id",
+              "status",
+              "expected",
+              "observed",
+              "reasons"
+            ],
+            "additionalProperties": false
+          },
+          "record": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/cell"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "record"
+                  },
+                  "name": {
+                    "enum": [
+                      "EntityKey",
+                      "BreadthCounts",
+                      "BreadthFraction",
+                      "IntervalOHLCVRow",
+                      "IntervalVolumeShareRow",
+                      "IntervalOHLCV",
+                      "IntervalVolumeShares",
+                      "TopKTradeRow",
+                      "TopKTrades",
+                      "QuoteStateCounts",
+                      "QuoteObservation",
+                      "SampledSpread",
+                      "QuoteDurations",
+                      "TimeWeightedSpread",
+                      "InputBinding",
+                      "ResultMetadata",
+                      "EvidenceRow",
+                      "PriceUnit",
+                      "SourceBinding",
+                      "Coverage",
+                      "AdjustmentSpec",
+                      "InputScope",
+                      "IntervalCoverage",
+                      "BatchMetadata",
+                      "IntervalSpec",
+                      "AvailabilitySpec",
+                      "QualityRow"
+                    ]
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+                    },
+                    "additionalProperties": {
+                      "$ref": "#/$defs/cell"
+                    },
+                    "maxProperties": 64
+                  }
+                },
+                "required": [
+                  "type",
+                  "name",
+                  "fields"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "context": {
+                "$ref": "#/$defs/context"
+              },
+              "command_digest": {
+                "$ref": "#/$defs/digest"
+              },
+              "backend_id": {
+                "$ref": "#/$defs/label"
+              },
+              "backend_version": {
+                "$ref": "#/$defs/label"
+              },
+              "metadata": {
+                "$ref": "#/$defs/record"
+              },
+              "columns": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/column"
+                },
+                "maxItems": 16
+              },
+              "quality": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/quality"
+                },
+                "maxItems": 64
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/record"
+                },
+                "maxItems": 16
+              },
+              "next_cursor": {
+                "const": null
+              },
+              "executed_features": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/feature"
+                },
+                "minItems": 1,
+                "maxItems": 16,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "context",
+              "command_digest",
+              "backend_id",
+              "backend_version",
+              "metadata",
+              "columns",
+              "quality",
+              "evidence",
+              "next_cursor",
+              "executed_features"
+            ],
+            "additionalProperties": false
+          },
+          "scope": {
+            "type": "object",
+            "properties": {
+              "instrument_id": {
+                "$ref": "#/$defs/label"
+              },
+              "session_id": {
+                "$ref": "#/$defs/label"
+              },
+              "start_ns": {
+                "$ref": "#/$defs/i64"
+              },
+              "end_ns": {
+                "$ref": "#/$defs/i64"
+              }
+            },
+            "required": [
+              "instrument_id",
+              "session_id",
+              "start_ns",
+              "end_ns"
+            ],
+            "additionalProperties": false
+          },
+          "slice": {
+            "type": "object",
+            "properties": {
+              "dataset": {
+                "$ref": "#/$defs/dataset"
+              },
+              "scope": {
+                "$ref": "#/$defs/scope"
+              },
+              "columns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "$ref": "#/$defs/label"
+                    },
+                    "dtype": {
+                      "enum": [
+                        "int64",
+                        "float64",
+                        "decimal128",
+                        "string",
+                        "bool"
+                      ]
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/label"
+                    },
+                    "values": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/cell"
+                      },
+                      "maxItems": 32
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "dtype",
+                    "unit",
+                    "values"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 16
+              },
+              "metadata": {
+                "$ref": "#/$defs/record"
+              },
+              "next_cursor": {
+                "const": null
+              }
+            },
+            "required": [
+              "dataset",
+              "scope",
+              "columns",
+              "metadata",
+              "next_cursor"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "equity_calculate",
+      "description": "Explicitly submit an owner-admitted command with a caller stable idempotency key.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_.-]{1,64}(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "idempotency_key": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "profile",
+          "idempotency_key"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "native_job_state"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+                    "minLength": 43,
+                    "maxLength": 43
+                  },
+                  "profile": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_.-]{1,64}(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "data": {
+                    "$ref": "#/$defs/job"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "profile",
+                  "data"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$defs": {
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}(?![\\s\\S])",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "error": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "transport"
+                  },
+                  "code": {
+                    "enum": [
+                      "invalid_json",
+                      "invalid_schema",
+                      "incompatible_version",
+                      "bounds",
+                      "inconsistent_identity"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "authentication"
+                  },
+                  "code": {
+                    "enum": [
+                      "unauthenticated"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "authorization"
+                  },
+                  "code": {
+                    "enum": [
+                      "not_permitted"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "quota"
+                  },
+                  "code": {
+                    "enum": [
+                      "quota_exceeded"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "contract"
+                  },
+                  "code": {
+                    "enum": [
+                      "invalid_schema",
+                      "unknown_feature",
+                      "unsupported_capability",
+                      "invalid_order",
+                      "duplicate",
+                      "invalid_unit",
+                      "bounds",
+                      "overflow",
+                      "inconsistent_identity",
+                      "invalid_config",
+                      "incompatible_version",
+                      "unsupported_sampling",
+                      "unsupported_adjustment"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "internal"
+                  },
+                  "code": {
+                    "enum": [
+                      "internal_error"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+          },
+          "job": {
+            "type": "object",
+            "properties": {
+              "job_id": {
+                "$ref": "#/$defs/id"
+              },
+              "command_digest": {
+                "$ref": "#/$defs/digest"
+              },
+              "state": {
+                "enum": [
+                  "queued",
+                  "running",
+                  "succeeded",
+                  "failed",
+                  "cancel_requested",
+                  "cancelled",
+                  "expired"
+                ]
+              },
+              "result_id": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/error"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "job_id",
+              "command_digest",
+              "state",
+              "result_id",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "equity_job_status",
+      "description": "Read native job state for a process-owned reference; no automatic polling.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+            "minLength": 43,
+            "maxLength": 43
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "native_job_state"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+                    "minLength": 43,
+                    "maxLength": 43
+                  },
+                  "profile": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_.-]{1,64}(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "data": {
+                    "$ref": "#/$defs/job"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "profile",
+                  "data"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$defs": {
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}(?![\\s\\S])",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "error": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "transport"
+                  },
+                  "code": {
+                    "enum": [
+                      "invalid_json",
+                      "invalid_schema",
+                      "incompatible_version",
+                      "bounds",
+                      "inconsistent_identity"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "authentication"
+                  },
+                  "code": {
+                    "enum": [
+                      "unauthenticated"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "authorization"
+                  },
+                  "code": {
+                    "enum": [
+                      "not_permitted"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "quota"
+                  },
+                  "code": {
+                    "enum": [
+                      "quota_exceeded"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "contract"
+                  },
+                  "code": {
+                    "enum": [
+                      "invalid_schema",
+                      "unknown_feature",
+                      "unsupported_capability",
+                      "invalid_order",
+                      "duplicate",
+                      "invalid_unit",
+                      "bounds",
+                      "overflow",
+                      "inconsistent_identity",
+                      "invalid_config",
+                      "incompatible_version",
+                      "unsupported_sampling",
+                      "unsupported_adjustment"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "internal"
+                  },
+                  "code": {
+                    "enum": [
+                      "internal_error"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+          },
+          "job": {
+            "type": "object",
+            "properties": {
+              "job_id": {
+                "$ref": "#/$defs/id"
+              },
+              "command_digest": {
+                "$ref": "#/$defs/digest"
+              },
+              "state": {
+                "enum": [
+                  "queued",
+                  "running",
+                  "succeeded",
+                  "failed",
+                  "cancel_requested",
+                  "cancelled",
+                  "expired"
+                ]
+              },
+              "result_id": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/error"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "job_id",
+              "command_digest",
+              "state",
+              "result_id",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "equity_job_cancel",
+      "description": "Explicitly request cooperative backend cancellation; no rollback promise.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+            "minLength": 43,
+            "maxLength": 43
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "native_job_state"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+                    "minLength": 43,
+                    "maxLength": 43
+                  },
+                  "profile": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_.-]{1,64}(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "data": {
+                    "$ref": "#/$defs/job"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "profile",
+                  "data"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$defs": {
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}(?![\\s\\S])",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "error": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "transport"
+                  },
+                  "code": {
+                    "enum": [
+                      "invalid_json",
+                      "invalid_schema",
+                      "incompatible_version",
+                      "bounds",
+                      "inconsistent_identity"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "authentication"
+                  },
+                  "code": {
+                    "enum": [
+                      "unauthenticated"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "authorization"
+                  },
+                  "code": {
+                    "enum": [
+                      "not_permitted"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "quota"
+                  },
+                  "code": {
+                    "enum": [
+                      "quota_exceeded"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "contract"
+                  },
+                  "code": {
+                    "enum": [
+                      "invalid_schema",
+                      "unknown_feature",
+                      "unsupported_capability",
+                      "invalid_order",
+                      "duplicate",
+                      "invalid_unit",
+                      "bounds",
+                      "overflow",
+                      "inconsistent_identity",
+                      "invalid_config",
+                      "incompatible_version",
+                      "unsupported_sampling",
+                      "unsupported_adjustment"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "const": "internal"
+                  },
+                  "code": {
+                    "enum": [
+                      "internal_error"
+                    ]
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "category",
+                  "code",
+                  "retryable"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+          },
+          "job": {
+            "type": "object",
+            "properties": {
+              "job_id": {
+                "$ref": "#/$defs/id"
+              },
+              "command_digest": {
+                "$ref": "#/$defs/digest"
+              },
+              "state": {
+                "enum": [
+                  "queued",
+                  "running",
+                  "succeeded",
+                  "failed",
+                  "cancel_requested",
+                  "cancelled",
+                  "expired"
+                ]
+              },
+              "result_id": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/error"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "job_id",
+              "command_digest",
+              "state",
+              "result_id",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "equity_result_summary",
+      "description": "Read the bounded original transported producer through the reference-pinned operation.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+            "minLength": 43,
+            "maxLength": 43
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "complete_transported_producer"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+                    "minLength": 43,
+                    "maxLength": 43
+                  },
+                  "data": {
+                    "$ref": "#/$defs/result"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "data"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$defs": {
+          "availability": {
+            "type": "object",
+            "properties": {
+              "market_cutoff_ns": {
+                "$ref": "#/$defs/i64"
+              },
+              "knowledge_cutoff_ns": {
+                "$ref": "#/$defs/i64"
+              },
+              "evaluation_ns": {
+                "$ref": "#/$defs/i64"
+              },
+              "mode": {
+                "enum": [
+                  "known_at",
+                  "reconstruction"
+                ]
+              },
+              "reconstruction_reason": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/label"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "market_cutoff_ns",
+              "knowledge_cutoff_ns",
+              "evaluation_ns",
+              "mode",
+              "reconstruction_reason"
+            ],
+            "additionalProperties": false
+          },
+          "cell": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "int64"
+                  },
+                  "value": {
+                    "$ref": "#/$defs/i64"
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "float64"
+                  },
+                  "bits": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{16}(?![\\s\\S])",
+                    "minLength": 16,
+                    "maxLength": 16
+                  }
+                },
+                "required": [
+                  "type",
+                  "bits"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "decimal128"
+                  },
+                  "coefficient": {
+                    "type": "string",
+                    "pattern": "^(0|-?[1-9][0-9]{0,37})(?![\\s\\S])"
+                  },
+                  "scale": {
+                    "type": "integer",
+                    "minimum": -38,
+                    "maximum": 38
+                  }
+                },
+                "required": [
+                  "type",
+                  "coefficient",
+                  "scale"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "string"
+                  },
+                  "value": {
+                    "type": "string",
+                    "maxLength": 4096
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "bool"
+                  },
+                  "value": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "record"
+                  },
+                  "name": {
+                    "enum": [
+                      "EntityKey",
+                      "QualityRow",
+                      "BreadthCounts",
+                      "BreadthFraction",
+                      "IntervalOHLCVRow",
+                      "IntervalVolumeShareRow",
+                      "IntervalOHLCV",
+                      "IntervalVolumeShares",
+                      "TopKTradeRow",
+                      "TopKTrades",
+                      "QuoteStateCounts",
+                      "QuoteObservation",
+                      "SampledSpread",
+                      "QuoteDurations",
+                      "TimeWeightedSpread",
+                      "InputBinding",
+                      "ResultMetadata",
+                      "EvidenceRow",
+                      "PriceUnit",
+                      "SourceBinding",
+                      "Coverage",
+                      "AdjustmentSpec",
+                      "InputScope",
+                      "IntervalCoverage",
+                      "BatchMetadata",
+                      "IntervalSpec",
+                      "AvailabilitySpec"
+                    ]
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+                    },
+                    "additionalProperties": {
+                      "$ref": "#/$defs/cell"
+                    },
+                    "maxProperties": 64
+                  }
+                },
+                "required": [
+                  "type",
+                  "name",
+                  "fields"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "list"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/cell"
+                    },
+                    "maxItems": 100
+                  }
+                },
+                "required": [
+                  "type",
+                  "items"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "column": {
+            "type": "object",
+            "properties": {
+              "feature_id": {
+                "$ref": "#/$defs/label"
+              },
+              "algorithm_version": {
+                "$ref": "#/$defs/label"
+              },
+              "schema_version": {
+                "const": "1"
+              },
+              "dtype": {
+                "enum": [
+                  "int64",
+                  "decimal128",
+                  "float64",
+                  "string",
+                  "bool",
+                  "breadth_counts",
+                  "breadth_fraction",
+                  "time_weighted_spread",
+                  "quote_state_counts",
+                  "sampled_spread",
+                  "top_k_trades",
+                  "interval_ohlcv",
+                  "interval_volume_shares"
+                ]
+              },
+              "unit": {
+                "$ref": "#/$defs/label"
+              },
+              "entities": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/entity"
+                },
+                "maxItems": 4
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/cell"
+                },
+                "maxItems": 4
+              }
+            },
+            "required": [
+              "feature_id",
+              "algorithm_version",
+              "schema_version",
+              "dtype",
+              "unit",
+              "entities",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "config_id": {
+                "$ref": "#/$defs/id"
+              },
+              "revision": {
+                "$ref": "#/$defs/label"
+              },
+              "schema_version": {
+                "const": "1"
+              },
+              "digest": {
+                "$ref": "#/$defs/digest"
+              },
+              "algorithm_version": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "config_id",
+              "revision",
+              "schema_version",
+              "digest",
+              "algorithm_version"
+            ],
+            "additionalProperties": false
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "namespace": {
+                "$ref": "#/$defs/label"
+              },
+              "dataset": {
+                "$ref": "#/$defs/dataset"
+              },
+              "config": {
+                "$ref": "#/$defs/config"
+              },
+              "registry_snapshot": {
+                "$ref": "#/$defs/digest"
+              },
+              "math_policy_version": {
+                "$ref": "#/$defs/label"
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/feature"
+                },
+                "minItems": 1,
+                "maxItems": 39,
+                "uniqueItems": true
+              },
+              "availability": {
+                "$ref": "#/$defs/availability"
+              }
+            },
+            "required": [
+              "namespace",
+              "dataset",
+              "config",
+              "registry_snapshot",
+              "math_policy_version",
+              "features",
+              "availability"
+            ],
+            "additionalProperties": false
+          },
+          "dataset": {
+            "type": "object",
+            "properties": {
+              "dataset_id": {
+                "$ref": "#/$defs/id"
+              },
+              "revision": {
+                "$ref": "#/$defs/label"
+              },
+              "snapshot_id": {
+                "$ref": "#/$defs/label"
+              },
+              "mapping_version": {
+                "$ref": "#/$defs/label"
+              },
+              "source_id": {
+                "$ref": "#/$defs/label"
+              },
+              "input_id": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "dataset_id",
+              "revision",
+              "snapshot_id",
+              "mapping_version",
+              "source_id",
+              "input_id"
+            ],
+            "additionalProperties": false
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}(?![\\s\\S])",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "entity": {
+            "type": "object",
+            "properties": {
+              "instrument_id": {
+                "$ref": "#/$defs/label"
+              },
+              "session_id": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "instrument_id",
+              "session_id"
+            ],
+            "additionalProperties": false
+          },
+          "feature": {
+            "type": "object",
+            "properties": {
+              "feature_id": {
+                "$ref": "#/$defs/label"
+              },
+              "algorithm_version": {
+                "$ref": "#/$defs/label"
+              }
+            },
+            "required": [
+              "feature_id",
+              "algorithm_version"
+            ],
+            "additionalProperties": false
+          },
+          "i64": {
+            "type": "string",
+            "pattern": "^(0|-?[1-9][0-9]{0,18})(?![\\s\\S])"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+          },
+          "quality": {
+            "type": "object",
+            "properties": {
+              "entity": {
+                "$ref": "#/$defs/entity"
+              },
+              "feature_id": {
+                "$ref": "#/$defs/label"
+              },
+              "status": {
+                "enum": [
+                  "available",
+                  "insufficient_history",
+                  "missing_input",
+                  "incomplete_coverage",
+                  "not_applicable"
+                ]
+              },
+              "expected": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/i64"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observed": {
+                "$ref": "#/$defs/i64"
+              },
+              "reasons": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "absent_input",
+                    "null_field",
+                    "observed_empty",
+                    "no_eligible_observations",
+                    "missing_action_evidence",
+                    "insufficient_history",
+                    "governed_gap",
+                    "unknown_availability",
+                    "future_knowledge",
+                    "partial_universe",
+                    "zero_denominator",
+                    "empty_universe",
+                    "ineligible",
+                    "future_market"
+                  ]
+                },
+                "uniqueItems": true,
+                "maxItems": 14
+              }
+            },
+            "required": [
+              "entity",
+              "feature_id",
+              "status",
+              "expected",
+              "observed",
+              "reasons"
+            ],
+            "additionalProperties": false
+          },
+          "record": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/cell"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "record"
+                  },
+                  "name": {
+                    "enum": [
+                      "EntityKey",
+                      "BreadthCounts",
+                      "BreadthFraction",
+                      "IntervalOHLCVRow",
+                      "IntervalVolumeShareRow",
+                      "IntervalOHLCV",
+                      "IntervalVolumeShares",
+                      "TopKTradeRow",
+                      "TopKTrades",
+                      "QuoteStateCounts",
+                      "QuoteObservation",
+                      "SampledSpread",
+                      "QuoteDurations",
+                      "TimeWeightedSpread",
+                      "InputBinding",
+                      "ResultMetadata",
+                      "EvidenceRow",
+                      "PriceUnit",
+                      "SourceBinding",
+                      "Coverage",
+                      "AdjustmentSpec",
+                      "InputScope",
+                      "IntervalCoverage",
+                      "BatchMetadata",
+                      "IntervalSpec",
+                      "AvailabilitySpec",
+                      "QualityRow"
+                    ]
+                  },
+                  "fields": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[^\\u0000-\\u001f\\u007f]+(?![\\s\\S])"
+                    },
+                    "additionalProperties": {
+                      "$ref": "#/$defs/cell"
+                    },
+                    "maxProperties": 64
+                  }
+                },
+                "required": [
+                  "type",
+                  "name",
+                  "fields"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "context": {
+                "$ref": "#/$defs/context"
+              },
+              "command_digest": {
+                "$ref": "#/$defs/digest"
+              },
+              "backend_id": {
+                "$ref": "#/$defs/label"
+              },
+              "backend_version": {
+                "$ref": "#/$defs/label"
+              },
+              "metadata": {
+                "$ref": "#/$defs/record"
+              },
+              "columns": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/column"
+                },
+                "maxItems": 16
+              },
+              "quality": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/quality"
+                },
+                "maxItems": 64
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/record"
+                },
+                "maxItems": 16
+              },
+              "next_cursor": {
+                "const": null
+              },
+              "executed_features": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/feature"
+                },
+                "minItems": 1,
+                "maxItems": 16,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "context",
+              "command_digest",
+              "backend_id",
+              "backend_version",
+              "metadata",
+              "columns",
+              "quality",
+              "evidence",
+              "next_cursor",
+              "executed_features"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "equity_artifact_reference",
+      "description": "Verify current export access and issue an opaque process-local artifact followup reference.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+            "minLength": 43,
+            "maxLength": 43
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "opaque_artifact_reference"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])",
+                    "minLength": 43,
+                    "maxLength": 43
+                  },
+                  "followup_tool": {
+                    "const": "equity_result_summary"
+                  },
+                  "operation": {
+                    "const": "artifact_read"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "followup_tool",
+                  "operation"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    }
+  ],
+  "limits": {
+    "input_frame_including_lf": 16384,
+    "output_frame_including_lf": 65536,
+    "structured_content": 16384,
+    "arguments": 4096,
+    "depth": 32,
+    "nodes": 10000,
+    "registrations": 8,
+    "registration_snapshot_bytes": 65536,
+    "reference_records": 16,
+    "reference_record_bytes": 4096,
+    "reference_total_bytes": 65536,
+    "reference_ttl_seconds_max": 300,
+    "reference_ttl_seconds_default": 60,
+    "active_calls": 1,
+    "raw_columns": 16,
+    "raw_rows": 32,
+    "producer_columns": 16,
+    "producer_entities_per_column": 4,
+    "quality_rows": 64,
+    "evidence_rows": 16
+  },
+  "provenance": {
+    "accepted_client_schema_sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2",
+    "independent_fixture_sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29",
+    "derivation": "Standalone transitive local definitions copied from public accepted1.1 schema; narrower summary caps only; source schema unchanged"
+  },
+  "discovery_frame_bytes_at_64char_id": 39332,
+  "status": "Pre-code assets; no MCP product/runtime/Ready approval"
+}

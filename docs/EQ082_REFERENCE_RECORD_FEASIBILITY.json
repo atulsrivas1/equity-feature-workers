@@ -1,0 +1,135 @@
+{
+  "scope": "Proposed local reference record schema/worst encoded capacity, no runtime/authority/expiry validation",
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "reference": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 43,
+        "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])"
+      },
+      "process_nonce": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+      },
+      "owner_context": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[A-Za-z0-9_.-]{1,64}(?![\\s\\S])"
+      },
+      "profile_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[A-Za-z0-9_.-]{1,64}(?![\\s\\S])"
+      },
+      "profile_sha256": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+      },
+      "command_digest": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+      },
+      "result_id": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.:-]+(?![\\s\\S])"
+          }
+        ]
+      },
+      "mode": {
+        "enum": [
+          "job",
+          "artifact"
+        ]
+      },
+      "state": {
+        "enum": [
+          "live",
+          "tombstone"
+        ]
+      },
+      "stable_key_sha256": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+          }
+        ]
+      },
+      "origin_job_reference": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 43,
+            "pattern": "^[A-Za-z0-9_-]{43}(?![\\s\\S])"
+          }
+        ]
+      },
+      "created_ns": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775807
+      },
+      "expires_ns": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775807
+      }
+    },
+    "required": [
+      "reference",
+      "process_nonce",
+      "owner_context",
+      "profile_id",
+      "profile_sha256",
+      "command_digest",
+      "job_id",
+      "result_id",
+      "mode",
+      "state",
+      "stable_key_sha256",
+      "origin_job_reference",
+      "created_ns",
+      "expires_ns"
+    ],
+    "additionalProperties": false
+  },
+  "worst_case_encoded_bytes": 1016,
+  "sixteen_records_encoded_bytes": 16256,
+  "per_record_cap": 4096,
+  "all_records_cap": 65536,
+  "negative_vectors": 4,
+  "identity_note": "Full immutable profile snapshot is stored separately and compared, SHA never replaces source identity; local clock fields do not claim HTTP native TTL."
+}

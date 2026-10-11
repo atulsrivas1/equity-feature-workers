@@ -1,0 +1,36 @@
+{
+  "kind": "eq082.windows_normal_composition.v1",
+  "reviewed_heads": {
+    "equity-features": "a4dc30dde2e556330fb7e8da92c39bfb138a6714",
+    "equity-feature-workers": "4d4836af65cd788e00f1c3e2e184a0f6f934068b"
+  },
+  "entry_sha256": "4d27219a404c94d0f513374b95bd87d10edd39b1bccc79e91cb4966ba4b50122",
+  "parent_sha256": "1e36cb75888b13884ad7aba92569a178817960401e4ffab98549bdc0b65653e4",
+  "result": {
+    "half_open_expiry": true,
+    "producer_equal": true,
+    "protocol": "2025-11-25",
+    "reference_child_observed_exited": true,
+    "source_reads": 1,
+    "tools": 4
+  },
+  "author_exit_code": 0,
+  "author_tool_wall_seconds": 5.9356001,
+  "independent_reviewer_exit_code": 0,
+  "independent_reviewer_tool_wall_seconds": 6.034,
+  "review_url": "https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6102268290",
+  "author_log_sha256": "fe5400d16087fd59f4873cb2e0f791911fcd7c24fbeb6cee65425d3d1a5090fd",
+  "limitations": [
+    "Normal owned Windows SDK composition only",
+    "Parent helper may import accepted developer client source; spawned client uses isolated accepted installation",
+    "No bounded product framing/schema validation/cleanup-fault/Linux/Ready/runtime/release approval",
+    "No native HTTP publication receipt proof; complete transported producer parity only"
+  ],
+  "next_inputs": [
+    "Public immutable registrations and owner/process identity",
+    "Closed seven tool input/output/native-tagged schemas and standalone tools/list byte bound",
+    "Finite opaque reference ledger count/bytes/expiry/admission before mutations",
+    "Remaining actual cancellation/EOF/authority/epoch fault decisions",
+    "Complete separate concrete Ready review then guarded admission"
+  ]
+}

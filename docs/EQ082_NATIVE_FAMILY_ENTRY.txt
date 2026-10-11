@@ -1,0 +1,29 @@
+import sys,time,json
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+family=sys.argv[4]
+if family not in ('trades','bars','quotes','large_ns'):raise ValueError('owned family')
+ready,stop=Path(sys.argv[2]),Path(sys.argv[3])
+actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export')
+scheduler,service,tokens,clock,facts=setup(family='trades' if family=='large_ns' else family,ns_offset=9000000000000000000 if family=='large_ns' else 0,adjacent=family=='large_ns',actions=actions,audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
+requests=0
+def app(environ,start_response):
+ global requests
+ if requests>=64:raise ValueError('owned request cap')
+ requests+=1
+ return service(environ,start_response)
+server=qualification_server(service);server.set_app(app);server.timeout=.05
+try:
+ data=json.dumps({'port':server.server_port},sort_keys=True,separators=(',',':')).encode('ascii')
+ if len(data)>128:raise ValueError('owned readiness bounds')
+ temporary=ready.with_name(ready.name+'.pending');temporary.write_bytes(data);temporary.replace(ready);ready.with_name(ready.name+'.complete').mkdir()
+ deadline=time.monotonic()+20
+ while requests<64 and not stop.exists() and time.monotonic()<deadline:server.handle_request()
+finally:
+ server.server_close()
+ if scheduler.close(2) is not True:raise ValueError('owned native exit unconfirmed')
+print(json.dumps({'marker':'owned-family-http-exited','family':family,'reads':facts['reads']},sort_keys=True,separators=(',',':')),flush=True)

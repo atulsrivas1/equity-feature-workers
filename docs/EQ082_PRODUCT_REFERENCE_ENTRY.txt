@@ -1,0 +1,23 @@
+"""Trusted developer-owned product composition entry; no public CLI loader."""
+import sys,json,re,hashlib,os
+from pathlib import Path
+if len(sys.argv)!=6:raise ValueError('owned arguments')
+origin,fixture,principal,pid_marker,source_root=sys.argv[1:]
+if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535 or principal not in ('A','B'):raise ValueError('owned origin')
+if len(source_root)>1024:raise ValueError('owned source')
+root=Path(source_root).resolve()
+sys.path.insert(0,str(root/'packages/mcp/src'))
+from equity_feature_client import RemoteClient,ScopeKey,FeatureRef,ProducerExpectation
+from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration
+with Path(fixture).open('rb') as stream:raw=stream.read(76772)
+if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29':raise ValueError('owned fixture')
+producer=json.loads(raw)['native_cases'][0]['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+client=RemoteClient(origin,lambda:principal*43,attempts=1,budget=5)
+server=StdioServer(client,MCPProfile('owned-probe',(),(CommandRegistration('trades',expected),),60))
+marker=Path(pid_marker)
+if marker.exists() or len(pid_marker)>1024:raise ValueError('owned marker')
+marker.write_text(json.dumps({'pid':os.getpid()},separators=(',',':')),encoding='ascii')
+marker.with_name(marker.name+'.complete').mkdir()
+server.run_stdio(sys.stdin.buffer,sys.stdout.buffer)
