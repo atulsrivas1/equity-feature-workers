@@ -1,0 +1,180 @@
+"""EQ083 bounded installed-tree collector SOURCE ONLY.
+
+A future trusted builder selects dedicated installation subtrees, never a
+public caller. Capturing bytes does NOT admit their provenance or host runtime.
+No capture is authorized by publishing this source. No locking or hostile
+same-user security is claimed; before/after identity checks detect observed
+changes, not arbitrary concurrent changes restored between observations.
+"""
+import hashlib
+import os
+from pathlib import Path
+import re
+import stat
+import sys
+
+MAX_FILES = 16384
+MAX_DIRS = 16384
+MAX_FILE = 67108864
+MAX_TOTAL = 1073741824
+MAX_DEPTH = 64
+REPARSE = 0x400
+
+
+def component(name, windows):
+    if type(name) is not str or not name or len(name) > 255 or name in ('.', '..') or any(ord(c) < 32 or c in '/\\:\x00' for c in name):
+        raise ValueError('tree component syntax')
+    if windows:
+        if name[-1] in ' .' or any(c in name for c in '<>"|?*'):
+            raise ValueError('Windows component alias')
+        stem = name.split('.')[0].upper()
+        if stem in {'CON', 'PRN', 'AUX', 'NUL', 'CONIN$', 'CONOUT$'} or re.fullmatch('(COM|LPT)[1-9\u00b9\u00b2\u00b3]', stem):
+            raise ValueError('Windows reserved device')
+    return name
+
+
+def identity(info, kind):
+    # atime is excluded because reading may change it. ctime/mtime are retained.
+    if type(info.st_size) is not int or info.st_size < 0 or type(info.st_nlink) is not int or info.st_nlink < 1:
+        raise ValueError('stat scalar shape')
+    if getattr(info, 'st_file_attributes', 0) & REPARSE or stat.S_ISLNK(info.st_mode):
+        raise ValueError('link/reparse forbidden')
+    if kind == 'directory':
+        if not stat.S_ISDIR(info.st_mode):
+            raise ValueError('directory required')
+    elif kind == 'file':
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size > MAX_FILE:
+            raise ValueError('regular single-link bounded file required')
+    else:
+        raise ValueError('stat kind')
+    return tuple(getattr(info, key) for key in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')) + (getattr(info, 'st_uid', None), getattr(info, 'st_gid', None), getattr(info, 'st_file_attributes', 0))
+
+
+def checked_root(root, system):
+    if system not in ('Windows', 'Linux') or type(root) is not str or not root or len(root) > 2048 or any(c in root for c in '\x00\r\n'):
+        raise ValueError('collector root shape')
+    if (system == 'Windows') != (os.name == 'nt') or (system == 'Linux') != sys.platform.startswith('linux'):
+        raise ValueError('collector actual OS')
+    path = Path(root)
+    if not path.is_absolute() or str(path) != root or '..' in path.parts:
+        raise ValueError('canonical absolute root')
+    if system == 'Windows' and (path.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:', path.drive) is None):
+        raise ValueError('local Windows root')
+    for name in path.parts[1:]:
+        component(name, system == 'Windows')
+    ancestors = tuple(reversed(path.parents)) + (path,)
+    if len(ancestors) > MAX_DEPTH:
+        raise ValueError('root ancestor bound')
+    pins = tuple((str(item), identity(item.lstat(), 'directory')) for item in ancestors)
+    if str(path.resolve(strict=True)) != root:
+        raise ValueError('root resolved alias')
+    return path, pins
+
+
+def names_in(directory, windows):
+    # scandir is closed before recursion; no followed DirEntry type predicates.
+    names = []
+    with os.scandir(directory) as entries:
+        for entry in entries:
+            component(entry.name, windows)
+            names.append(entry.name)
+            if len(names) > MAX_FILES + MAX_DIRS:
+                raise ValueError('directory entry bound')
+    if len(set(name.casefold() if windows else name for name in names)) != len(names):
+        raise ValueError('tree case/destination collision')
+    return tuple(sorted(names))
+
+
+def read_regular(path, expected):
+    flags = os.O_RDONLY | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0)
+    fd = os.open(path, flags)
+    try:
+        if identity(os.fstat(fd), 'file') != expected or identity(path.lstat(), 'file') != expected:
+            raise ValueError('opened file identity changed')
+        chunks, size = [], 0
+        while True:
+            block = os.read(fd, min(65536, MAX_FILE + 1 - size))
+            if not block:
+                break
+            size += len(block)
+            if size > MAX_FILE or size > expected[4]:
+                raise ValueError('file grew beyond pinned size/bound')
+            chunks.append(block)
+        if size != expected[4] or identity(os.fstat(fd), 'file') != expected or identity(path.lstat(), 'file') != expected:
+            raise ValueError('read file identity/size changed')
+        return b''.join(chunks)
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            os.close(fd)
+        except BaseException:
+            if not active:
+                raise
+
+
+def capture_tree(root, system):
+    """Future internal capture: complete subtree, all rows, ALWAYS unadmitted.
+
+    Linux venv interpreter symlinks are not followed or silently excluded here.
+    The future fixed builder must select disjoint site-packages/scripts payload
+    roots and reconcile interpreter links in a separately reviewed host inspector.
+    This function has no accepted recipe/issuer or environment mutation path.
+    """
+    path, ancestor_pins = checked_root(root, system)
+    windows = system == 'Windows'
+    files, file_pins, directories, total = {}, {}, {}, 0
+
+    def visit(directory, relative, depth):
+        nonlocal total
+        if depth > MAX_DEPTH or len(directories) >= MAX_DIRS:
+            raise ValueError('directory count/depth bound')
+        pinned = identity(directory.lstat(), 'directory')
+        names = names_in(directory, windows)
+        directories[relative] = (pinned, names)
+        for name in names:
+            target = directory / name
+            key = relative + '/' + name if relative else name
+            observed = target.lstat()
+            if stat.S_ISDIR(observed.st_mode):
+                identity(observed, 'directory')
+                visit(target, key, depth + 1)
+            else:
+                pinned_file = identity(observed, 'file')
+                if len(files) >= MAX_FILES or total + pinned_file[4] > MAX_TOTAL:
+                    raise ValueError('file count/total bound')
+                data = read_regular(target, pinned_file)
+                total += len(data)
+                files[key], file_pins[key] = data, pinned_file
+        if identity(directory.lstat(), 'directory') != pinned or names_in(directory, windows) != names:
+            raise ValueError('directory changed during capture')
+
+    visit(path, '', 0)
+    # Recheck every recorded path/complete directory name set and every ancestor.
+    # This still is not filesystem locking or a same-user adversary boundary.
+    for key, pinned in file_pins.items():
+        if identity((path / key).lstat(), 'file') != pinned:
+            raise ValueError('file changed before snapshot completion')
+    for key, (pinned, names) in directories.items():
+        directory = path / key
+        if identity(directory.lstat(), 'directory') != pinned or names_in(directory, windows) != names:
+            raise ValueError('directory changed before snapshot completion')
+    for name, pinned in ancestor_pins:
+        if identity(Path(name).lstat(), 'directory') != pinned:
+            raise ValueError('ancestor changed before snapshot completion')
+    observed = {key: dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest()) for key, data in files.items()}
+    return dict(scope='TREE_CAPTURE_ONLY_RECIPE_HOST_AND_GENERATED_MAP_PENDING', admitted=False,
+                root=root, system=system, files=files, observed=observed, file_identities=file_pins,
+                directories=directories, ancestors=ancestor_pins, total_bytes=total)
+
+
+def compare_capture(before, after):
+    if type(before) is not dict or type(after) is not dict or before.get('admitted') is not False or after.get('admitted') is not False:
+        raise ValueError('unadmitted collector snapshots required')
+    keys = {'scope', 'admitted', 'root', 'system', 'files', 'observed', 'file_identities', 'directories', 'ancestors', 'total_bytes'}
+    if set(before) != keys or set(after) != keys or before['scope'] != 'TREE_CAPTURE_ONLY_RECIPE_HOST_AND_GENERATED_MAP_PENDING' or before != after:
+        raise ValueError('entire captured tree changed')
+    return dict(scope='TREE_CAPTURE_ONLY_RECIPE_HOST_AND_GENERATED_MAP_PENDING', admitted=False)
+
+
+if __name__ == '__main__':
+    raise SystemExit('SOURCE ONLY: trusted fixed roots/recipes/host/wholemap integration pending; no capture admission')
