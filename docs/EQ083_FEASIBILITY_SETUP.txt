@@ -1,0 +1,96 @@
+"""Frozen offline owned native-wheel feasibility setup, not release qualification."""
+import sys,json,hashlib,subprocess,platform,struct,re,zipfile,csv,io,base64
+from pathlib import Path,PurePosixPath,PureWindowsPath
+if len(sys.argv)!=4:raise ValueError('owned setup arguments')
+repo=Path(sys.argv[1]).resolve();head=sys.argv[2];out=Path(sys.argv[3]).resolve()
+assert re.fullmatch('[0-9a-f]{40}',head) and sys.version_info[:2]==(3,12) and struct.calcsize('P')==8
+assert platform.system() in ('Windows','Linux')
+parent=repo.parent;system=platform.system()
+assert repo.name=='equity-feature-workers' and out.parent==parent and out.name=='eq083-feasibility-'+head[:7] and not out.exists()
+def git(*args):return subprocess.check_output(['git',*args],cwd=repo)
+assert git('rev-parse','HEAD').decode().strip()==head and not git('status','--porcelain').strip()
+def sha(path):
+ value=hashlib.sha256()
+ with path.open('rb') as stream:
+  while chunk:=stream.read(1048576):value.update(chunk)
+ return value.hexdigest()
+inputs=json.loads(git('show',head+':docs/EQ083_INPUTS.json'))
+assert inputs['accepted_worker']=='40ff5e020105adb290d995455ab373d5c85a62fb' and inputs['accepted_canonical']=='aa2b411073dfa0385812a19e2871920bf38fb1aa'
+assert (inputs['reference_sdk'],inputs['reference_revision'])==('mcp==1.30.0','2025-11-25')
+pins=inputs['accepted_mcp_builds'][system]
+accepted=parent/'eq082-mcp-ci-40ff5e0'/system
+receipt_path=accepted/'mcp-receipt.json'
+assert sha(receipt_path)==pins['receipt_sha256']
+receipt=json.loads(receipt_path.read_bytes());assert receipt['schema']=='mcp1' and receipt['commit']=='40ff5e020105adb290d995455ab373d5c85a62fb'
+assert receipt['system']==system
+assert receipt['repeat_artifacts']==pins['package_archives'] and receipt['dependencies']==pins['accepted_internal_wheels'] and receipt['reference_dependencies']==pins['qualification_reference_wheels']
+all_pins={}
+for group in (pins['package_archives'],pins['accepted_internal_wheels'],pins['qualification_reference_wheels']):
+ assert not set(all_pins)&set(group);all_pins.update(group)
+assert len(pins['accepted_internal_wheels'])==9 and len(pins['qualification_reference_wheels'])==(33 if system=='Windows' else 31)
+assert sum((accepted/name).stat().st_size for name in all_pins)<=268435456
+for name,digest in all_pins.items():
+ assert PurePosixPath(name).name==name and PureWindowsPath(name).name==name and ':' not in name and '\\' not in name
+ assert (accepted/name).stat().st_size<=67108864 and sha(accepted/name)==digest
+def record(path):
+ with zipfile.ZipFile(path) as archive:
+  entries=archive.infolist();assert len({v.filename for v in entries})==len(entries)
+  assert sum(v.file_size for v in entries)<=268435456
+  for item in entries:
+   name=item.filename[:-1] if item.is_dir() else item.filename
+   posix=PurePosixPath(name);windows=PureWindowsPath(name)
+   assert name and ':' not in name and '\\' not in name and not posix.is_absolute() and not windows.drive and not windows.root
+   assert '..' not in posix.parts and '/'.join(posix.parts)==name and item.file_size<=67108864
+  names={v.filename for v in entries if not v.is_dir()}
+  records=[v for v in names if v.endswith('.dist-info/RECORD')];assert len(records)==1
+  assert archive.getinfo(records[0]).file_size<=1048576
+  rows=list(csv.reader(io.StringIO(archive.read(records[0]).decode('utf-8'))))
+  assert len({v[0] for v in rows})==len(rows) and {v[0] for v in rows}==names
+  for name,digest,size in rows:
+   if name==records[0]:assert digest==size=='';continue
+   value=hashlib.sha256();count=0
+   with archive.open(name) as stream:
+    while chunk:=stream.read(1048576):value.update(chunk);count+=len(chunk)
+   assert count==int(size) and digest=='sha256='+base64.urlsafe_b64encode(value.digest()).rstrip(b'=').decode('ascii')
+wheels=[accepted/name for name in all_pins if name.endswith('.whl')]
+assert len(wheels)==(43 if system=='Windows' else 41)
+for wheel in wheels:record(wheel)
+manifest_raw=git('show',head+':docs/EQ083_PARENT_INPUTS.json');assert len(manifest_raw)<=65536
+manifest=json.loads(manifest_raw)
+assert 1<=len(manifest['inputs'])<=32 and len({v['harness_path'] for v in manifest['inputs']})==len(manifest['inputs'])
+allowed={
+ 'docs/EQ081_CLIENT_FIXTURES.json':'docs/EQ081_CLIENT_FIXTURES.json',
+ 'docs/EQ083_REFERENCE_ENTRY.txt':'docs/EQ083_REFERENCE_ENTRY.txt',
+ 'docs/EQ082_NATIVE_FAMILY_ENTRY.txt':'docs/EQ082_NATIVE_FAMILY_ENTRY.txt',
+ 'packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json':'schemas/remote-v1.1.schema.json',
+ 'packages/mcp/src/equity_feature_mcp/schemas/tools.json':'schemas/mcp-tools.json',
+ 'tests/service/test_jobs.py':'tests/service/test_jobs.py',
+ 'tests/service/test_service.py':'tests/service/test_service.py',
+ 'tests/service/fixtures/jobs_native.json':'tests/service/fixtures/jobs_native.json',
+ 'docs/EQ083_REFERENCE_PROBE.txt':'docs/EQ083_REFERENCE_PROBE.txt'}
+assert len(manifest['inputs'])==len(allowed) and {v['path']:v['harness_path'] for v in manifest['inputs']}==allowed
+assets={}
+for item in manifest['inputs']:
+ name=item['harness_path'];path=PurePosixPath(name)
+ assert name and '/'.join(path.parts)==name and '..' not in path.parts and not path.is_absolute() and ':' not in name and '\\' not in name
+ assert item['repo']=='equity-feature-workers' and type(item['bytes']) is int and 0<=item['bytes']<=1048576
+ revision=item['commit'] if item['commit'] is not None else head
+ assert re.fullmatch('[0-9a-f]{40}',revision)
+ raw=git('show',revision+':'+item['path'])
+ assert len(raw)==item['bytes'] and hashlib.sha256(raw).hexdigest()==item['sha256'];assets[name]=raw
+assert not any(name.startswith('packages/') for name in assets)
+# All archive and source checks precede environment creation or installation.
+out.mkdir();harness=out/'harness';harness.mkdir()
+for name,raw in assets.items():
+ target=harness/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+(harness/'docs/EQ083_PARENT_INPUTS.json').write_bytes(manifest_raw)
+assert not (harness/'packages').exists()
+subprocess.run([sys.executable,'-m','venv',str(out/'venv')],check=True)
+python=out/'venv'/('Scripts/python.exe' if system=='Windows' else 'bin/python')
+subprocess.run([str(python),'-m','pip','install','--no-index','--no-deps',*[str(v) for v in wheels]],check=True)
+subprocess.run([str(python),'-m','pip','check'],check=True)
+module_proof=subprocess.check_output([str(python),'-I','-c',"import json;from pathlib import Path;import equity_feature_client as c,equity_feature_mcp as m,equity_feature_service as s;v={k:str(Path(x.__file__).resolve()) for k,x in [('client',c),('mcp',m),('service',s)]};assert all('site-packages' in Path(p).parts for p in v.values());print(json.dumps(v,sort_keys=True))"],cwd=out)
+installed=json.loads(subprocess.check_output([str(python),'-m','pip','list','--format=json'],encoding='utf-8'))
+report=dict(marker='eq083-offline-native-feasibility-setup',system=system,source_head=head,accepted_receipt_sha=pins['receipt_sha256'],wheel_count=len(wheels),archive_pins=all_pins,harness_inputs=manifest['inputs'],module_origins=json.loads(module_proof),installed=installed,scope='New isolated offline native-wheel setup only; parent probe NOT executed, no Ready or release qualification')
+(out/'setup-report.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps(dict(marker=report['marker'],system=system,wheels=len(wheels),probe_executed=False),sort_keys=True))
