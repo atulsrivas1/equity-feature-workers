@@ -47,7 +47,7 @@ def publish(path,value,limit):
  data=canonical(value)
  if len(data)>limit or path.exists() or path.with_name(path.name+'.complete').exists():raise ValueError('owned TLS owner marker')
  pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
-armed=False;tls=dict(accepts=0,success=0,failure=0);connections=[];faults=[]
+armed=False;tls=dict(accepts=0,success=0,failure=0);connections=[];raw_connections=[];transport_cleanup=[];faults=[]
 def app(environ,start_response):
  global requests
  if requests>=24 or sequence==5:raise ValueError('owned TLS request cap')
@@ -88,7 +88,8 @@ def observe(action):
  successes=targets[sequence]
  failures=3 if mode in ('untrusted-certificate','hostname-mismatch') and sequence>=3 else 0
  if requests!=targets[sequence] or tls!=dict(accepts=successes+failures,success=successes,failure=failures):raise ValueError('owned TLS physical ledger')
- if any(connection.fileno()!=-1 for connection in connections):raise ValueError('owned TLS connection still open')
+ if transport_cleanup:raise ValueError('owned TLS transport cleanup failed')
+ if any(connection.fileno()!=-1 for connection in connections+raw_connections):raise ValueError('owned TLS connection still open')
  if action=='settled':original_snapshot=snapshot(True)
  elif original_snapshot is None or snapshot(False)!=original_snapshot:raise ValueError('owned TLS original changed')
  if action=='arm':armed=True
@@ -102,7 +103,7 @@ try:
  original_accept=server.get_request
  def accepted_tls():
   if tls['accepts']>=24:raise ValueError('owned TLS accept cap')
-  connection,address=original_accept();tls['accepts']+=1;secured=None
+  connection,address=original_accept();tls['accepts']+=1;raw_connections.append(connection);secured=None
   try:
    connection.settimeout(2)
    context=contexts['wrong' if armed and mode=='hostname-mismatch' else 'valid']
@@ -111,9 +112,10 @@ try:
    return secured,address
   except BaseException:
    tls['failure']+=1
-   try:
-    if secured is not None:secured.close()
-   finally:connection.close()
+   for failed in (secured,connection):
+    if failed is not None:
+     try:failed.close()
+     except BaseException:transport_cleanup.append('failed handshake socket close')
    raise
  server.get_request=accepted_tls
  publish(ready,dict(port=server.server_port),128)
@@ -129,11 +131,11 @@ try:
   server.handle_request()
  if sequence!=5:raise ValueError('owned TLS dialogue incomplete')
 finally:
- active_exception=sys.exc_info()[0] is not None;cleanup=[]
+ active_exception=sys.exc_info()[0] is not None;cleanup=list(transport_cleanup)
  if server is not None:
   try:server.server_close()
   except BaseException:cleanup.append('server close')
- for connection in connections:
+ for connection in connections+raw_connections:
   try:
    connection.close()
    if connection.fileno()!=-1:cleanup.append('connection close')

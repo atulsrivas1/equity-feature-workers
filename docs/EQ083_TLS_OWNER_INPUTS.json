@@ -5,8 +5,8 @@
     "equity-feature-workers": "6197efe3d0ed6c3ac4aabc314916f3f8cfb794fc"
   },
   "owner": {
-    "bytes": 9687,
-    "sha256": "553b3f069fc17ec7970748437fb3db13a2170f08767b7f0cb47cd9e23786ee6f"
+    "bytes": 9985,
+    "sha256": "8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100"
   },
   "source_inputs": [
     {
@@ -472,10 +472,20 @@
     "ack": 1024,
     "conservative_ack": 865,
     "final_including_lf": 181,
-    "readiness": 128
+    "readiness": 128,
+    "retained_accepted_socket_handles": 48
   },
   "scope": "PRE-EXECUTION audited native TLS OWNER source only; exact reference/parent/copier still pending, no TLS/native/socket execution",
   "executed": false,
   "reviewed": false,
-  "runtime_unchanged": true
+  "runtime_unchanged": true,
+  "prior_owner_review": {
+    "heads": {
+      "equity-features": "6c7797fe8f642f0b4116c7213f157efd81df3a8d",
+      "equity-feature-workers": "7adcad108d2785a90883f97a452deb7758fbe4f1"
+    },
+    "report": "eq083-tls-owner-reviewer-report.json",
+    "disposition": "REWORK cleanup masked handshake exception",
+    "corrected_before_execution": true
+  }
 }
