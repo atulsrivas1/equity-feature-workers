@@ -233,12 +233,12 @@ MEM_PRIVATE, MEM_MAPPED, MEM_IMAGE = 0x20000, 0x40000, 0x1000000
 
 def section_row(address, maximum, page, fields):
     # Pure decoding only. FREE fields except base/size/state are undefined.
-    if any(type(v) is not int for v in (address, maximum, page)) or not 0 <= address <= maximum < 2**63 or page < 4096 or page & (page - 1):
+    if any(type(v) is not int for v in (address, maximum, page)) or not 0 <= address <= maximum < 2**63 or page < 4096 or page & (page - 1) or (maximum + 1) % page:
         raise ValueError('section walk bounds')
     if type(fields) is not tuple or len(fields) != 8 or any(type(v) is not int or not 0 <= v < 2**64 for v in fields):
         raise ValueError('section fields')
     base, allocation, allocation_protect, partition, size, state, protect, kind = fields
-    if base != address or base % page or size == 0 or size % page or base + size > 2**64 - 1:
+    if base != address or base % page or size == 0 or size % page or base + size > maximum + 1:
         raise ValueError('section range/advance')
     if state not in (MEM_FREE, MEM_RESERVE, MEM_COMMIT):
         raise ValueError('section state')

@@ -5,8 +5,8 @@
     "equity-feature-workers": "8fbe056af52a2d792783517ec3652d5fad025fab"
   },
   "source": {
-    "bytes": 21536,
-    "sha256": "5594a10942c863a8764d2a015d5fc9d810540f5e92bdf7a3384b5b43b261e52c"
+    "bytes": 21562,
+    "sha256": "aeb92c64e83929130f90fdde49cb38931df16b15cf6dddcd8d8c645b40bedc10"
   },
   "previous_observer": {
     "source": {
@@ -1430,5 +1430,88 @@
     "https://learn.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-getmappedfilenamew"
   ],
   "execution": "NONE: source AST preparation only; no whole module imports/ctypes/API calls/collector/compiler/install/process/native/TLS/copy",
-  "admission": false
+  "admission": false,
+  "previous_source": {
+    "bytes": 21536,
+    "sha256": "5594a10942c863a8764d2a015d5fc9d810540f5e92bdf7a3384b5b43b261e52c"
+  },
+  "previous_heads": {
+    "equity-features": "e65586576a67abada64d3c150e432964bc7c2736",
+    "equity-feature-workers": "bf9e36d4a267113f130b7a9529aa3e89b05cbade"
+  },
+  "previous_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "e65586576a67abada64d3c150e432964bc7c2736",
+      "equity-feature-workers": "bf9e36d4a267113f130b7a9529aa3e89b05cbade"
+    },
+    "source": {
+      "bytes": 21536,
+      "sha256": "5594a10942c863a8764d2a015d5fc9d810540f5e92bdf7a3384b5b43b261e52c"
+    },
+    "disposition": "REWORK",
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_WINDOWS_SECTION_OBSERVER.txt",
+        "line": 241,
+        "title": "Constrain region endpoint to current process maximum",
+        "evidence": "section_row accepts base4096/maximum16383/page4096 with size2**60 for FREE and IMAGE. Full fake VirtualQuery walk likewise returns huge final IMAGE, terminates after addresses0 and4096 and reports success with region end beyond GetSystemInfo maximum. Only uint64 overflow is checked, so bounded current-process address coverage is not validated.",
+        "correction": "Freeze and validate GetSystemInfo maximum/page-end shape and require every next endpoint <=maximum+1 (or a precisely reviewed final rounding rule), for all states/types. Reject oversized last regions before reporting observation."
+      }
+    ],
+    "tool_only_corrections": [
+      "Initial reviewer used protected as a top-level INPUTS key; KeyError after inert cases before report writes. Used actual nested previous_observer.inputs.protected and verified prior report exactly.",
+      "Initial inert sweep wrote provisional outside APPROVED before completing final range adversary; completed fake oversized-last-region check found P2 and superseded report to REWORK before final disposition/publication. No source execution approval given.",
+      "Supplemental fake-walk initially retained a later fixture lambda instead of the extracted windows_sections function; restored the AST-extracted function and reran the inert regression successfully. No source or actual API execution occurred."
+    ],
+    "checks": [
+      "Exact21536 SHA/AST/three mirrors/clean five-doc diffs/Atul-noCoauthors/protected hashes; all original11858 function ASTs unchanged.",
+      "35 fake section/ABI/API/device/loader/whole-observation cases pass; FREE undefined fields ignored, RESERVE Protect omitted, full advancement and IMAGE/MAPPED retained, malformed MULTI_SZ/alias/collision/truncation/borrowed handles/final drift checked.",
+      "Microsoft VirtualQuery/MBI/QueryDosDevice primary docs inspected: fixed x64 layout, FREE/RESERVE undefined fields, current first DOS mapping and terminating MULTI_SZ align with source.",
+      "Pure FREE/IMAGE oversized-region cases and full fake VirtualQuery walk accept impossible endpoint beyond system maximum; retained as REWORK. Private nonexec regions traverse without retention as documented; RESERVED image/mapped requires path or denies."
+    ],
+    "inert_cases": [
+      "FREE ignores undefined fields",
+      "committed IMAGE",
+      "RESERVE protect omitted",
+      "section base nonadvance",
+      "section zero size",
+      "section unaligned",
+      "section unknown state",
+      "section allocation ahead",
+      "section partition",
+      "section kind",
+      "private executable",
+      "current DOS mapping only",
+      "device prior",
+      "device alias",
+      "device traversal",
+      "device ADS",
+      "device trailingdot",
+      "device SUBST",
+      "device duplicate drive",
+      "fake x64 ABI48/offset24-40 whole walk retains IMAGE+MAPPED/DATAFILE",
+      "fake API multisz",
+      "fake API dos overflow",
+      "fake API no advance",
+      "fake API query false",
+      "fake API query short",
+      "fake API mapped truncate",
+      "fake API mapped false",
+      "fake API drives zero",
+      "loader AllocationBase/path matching",
+      "loader not IMAGE",
+      "loader path mismatch",
+      "fake full section observation",
+      "observation final map",
+      "observation final runtime",
+      "observation file"
+    ],
+    "limits": [
+      "AST extracted functions and fake ctypes/OS structures only; no real ctypes/WinDLL/platform calls/whole-observer/product SDK crypto SSL imports or load/collection/compiler/install/process/native/TLS/generation/copy/probe.",
+      "Always admitted:false; current mapped backing file SHA is not loaded-memory hash, no locking or hostile same-user security. Fixed resolver/form/host/child/wholemap reconciliation and actual observation/admission still pending."
+    ]
+  },
+  "correction": "Only section_row constrains maximum to page-end and ALL region endpoints <=maximum+1. Original oversized FREE/IMAGE/fake API walk REWORK preserved. No actual platform calls; all other functions AST unchanged; ALWAYSfalse."
 }
