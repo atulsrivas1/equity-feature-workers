@@ -324,7 +324,7 @@ async def owned_tls_session_streams(root,origin,pid,mode,arm,role,observations):
   def clean(callback):
    try:callback()
    except BaseException as error:cleanup.append(type(error).__name__)
-  write_stop.set()
+  clean(write_stop.set)
   if process is not None:
    clean(lambda:process.wait(timeout=3))
    if normal:
