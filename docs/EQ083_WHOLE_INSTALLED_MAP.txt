@@ -411,7 +411,9 @@ def wheel_byte_map(raw, expected_sha, windows):
             raise ValueError('wheel member count')
         seen = set()
         for item in infos:
-            name = item.filename
+            if type(item.orig_filename) is not str or item.orig_filename != item.filename:
+                raise ValueError('ZIP original spelling rewritten/truncated/Unicode override')
+            name = item.orig_filename
             directory = name.endswith('/')
             path = relative_path(name[:-1] if directory else name)
             identity = path.casefold() if windows else path
@@ -503,8 +505,20 @@ def verify_whole_installed_map(installed, recipe):
         metadata_path = item['info'] + '/METADATA'
         if metadata_path not in wheel:
             raise ValueError('selected distribution metadata required')
-        metadata = wheel[metadata_path].decode('utf-8', errors='strict').split('\n\n', 1)[0].splitlines()
-        declared = [v[6:] for v in metadata if v.startswith('Name: ')]
+        declared, last_field = [], None
+        for line in wheel[metadata_path].decode('utf-8', errors='strict').splitlines():
+            if line == '':
+                break  # LF and CRLF terminate headers before description text.
+            if line[:1] in (' ', '\t'):
+                if last_field is None or last_field == 'name':
+                    raise ValueError('metadata Name/initial header continuation')
+                continue
+            key, separator, value = line.partition(':')
+            if not separator or re.fullmatch('[A-Za-z0-9-]+', key) is None:
+                raise ValueError('metadata header field syntax')
+            last_field = key.casefold()
+            if last_field == 'name':
+                declared.append(value.strip())
         if len(declared) != 1 or re.sub('[-_.]+', '-', declared[0]).lower() != normalized:
             raise ValueError('component metadata name identity')
         compressed += len(item['wheel_bytes']) + len(item['archive_bytes'])

@@ -1,8 +1,8 @@
 {
   "schema": "eq083-whole-selected-installed-map-source-v1",
   "source": {
-    "bytes": 30533,
-    "sha256": "771d0e392b68b3adc3548eb36ce2c8df844c56d0ed74b2fb15fcfc15cc620a19"
+    "bytes": 31313,
+    "sha256": "8dff4305962a48150b8c4ff6971daeb1ca265906e92d82659866d32c30e50773"
   },
   "bases": {
     "equity-features": "bb710bdd64156b0d0937284cd73e82c3caeb8561",
@@ -1808,5 +1808,94 @@
       }
     }
   },
-  "scope": "SOURCE ONLY: complete selected-distribution byte ownership union/finite generated semantics, ALWAYSfalse; no filesystem collection/pyc compilation/installation/platform host binding. Bootstrap installer ownership, actual schemes and full host/form resolver still pending."
+  "scope": "SOURCE ONLY: complete selected-distribution byte ownership union/finite generated semantics, ALWAYSfalse; no filesystem collection/pyc compilation/installation/platform host binding. Bootstrap installer ownership, actual schemes and full host/form resolver still pending.",
+  "previous_source": {
+    "bytes": 30533,
+    "sha256": "771d0e392b68b3adc3548eb36ce2c8df844c56d0ed74b2fb15fcfc15cc620a19"
+  },
+  "previous_heads": {
+    "equity-features": "99f0dab2c9cfc1aa520868af723837e3e498181b",
+    "equity-feature-workers": "6d36fd3b29dc7f039298c9ec4af8105476e47ffc"
+  },
+  "previous_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "99f0dab2c9cfc1aa520868af723837e3e498181b",
+      "equity-feature-workers": "6d36fd3b29dc7f039298c9ec4af8105476e47ffc"
+    },
+    "source": {
+      "bytes": 30533,
+      "sha256": "771d0e392b68b3adc3548eb36ce2c8df844c56d0ed74b2fb15fcfc15cc620a19"
+    },
+    "disposition": "REWORK",
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_WHOLE_INSTALLED_MAP.txt",
+        "line": 506,
+        "title": "Respect CRLF metadata header boundary",
+        "evidence": "Complete synthetic wheel/installed RECORD passes despite no Name header: CRLF METADATA description contains Name: demo after the empty line. LF-only split fails to stop at the CRLF header boundary and treats description as producer name.",
+        "correction": "Parse actual header/body boundary for CRLF and LF before extracting Name; reject missing/duplicate real Name headers. Retain closed identity validation and add complete whole-map regression."
+      },
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_WHOLE_INSTALLED_MAP.txt",
+        "line": 414,
+        "title": "Validate original ZIP member spelling before normalized filename",
+        "evidence": "Synthetic ZIP central-directory bytes contain a\\b; Windows ZipInfo retains orig_filename a\\b but exposes filename a/b. wheel_byte_map accepts this physical noncanonical path as a/b. The same archive is rejected on POSIX, violating the strict portable physical path contract. Also raw local/central filename nul\\x00tail is accepted as nul on both platforms because orig_filename is retained before NUL truncation. A valid 0x7075 Unicode-path extra field also changes original safe to other and is accepted.",
+        "correction": "Validate item.orig_filename exact canonical spelling and its equality to filename before path/scheme handling; retain physical uniqueness and reject backslash aliases without relying on platform ZipInfo normalization."
+      }
+    ],
+    "tool_only_corrections": [
+      "Initial synthetic backslash denial failed because Windows ZipInfo normalizes physical names; verified raw central-directory bytes and orig_filename before recording genuine P2, rather than treating this as passing fixture.",
+      "Supplemental historical protected traversal guessed every nested schema was repo-keyed; KeyError before supplemental report write. Corrected to explicit current protected map."
+    ],
+    "inert_cases": [
+      "Linux wheel full payload-generated RECORD union",
+      "Linux sdist full payload-generated RECORD union",
+      "full Linux entry-script bytes/RECORD",
+      "two-distribution whole ownership union",
+      "missing payload",
+      "extra path",
+      "payload change",
+      "generated installer change",
+      "pyc present",
+      "directurl changed",
+      "nonbool requested",
+      "nonbool purelib",
+      "archive hash drift",
+      "wheel hash drift",
+      "selected form invalid",
+      "bytecode bool impostor",
+      "epoch bool",
+      "interpreter bool",
+      "duplicate components",
+      "whole comparison exact",
+      "whole compare altered SHA",
+      "ZIP duplicate physical file",
+      "ZIP case alias",
+      "ZIP traversal",
+      "ZIP absolute",
+      "ZIP directory payload",
+      "ZIP empty directory allowed"
+    ],
+    "checks": [
+      "27 passing synthetic complete-map/RECORD/ZIP/recipe cases plus CRLF Name-in-description and raw ZIP backslash-normalization exploits reproduced.",
+      "Embedded payload10108/generated9351 function ASTs unchanged; verify_pyc excluded from extraction and never invoked.",
+      "Exact source/mirrors/clean five-doc diffs/Atul-no-coauthors checked.",
+      "Physical backslash and NUL ZIP names verified in raw bytes/local-central names and orig_filename; parser accepts normalized/truncated names. No extracted product/module imports performed.",
+      "All current top-level protected source identities checked against exact reviewed Git blobs; historical nested schemas were not treated as current maps.",
+      "Static pinned interpreter zipfile source inspected: orig_filename precedes NUL/backslash sanitization and Unicode-path extra override. Synthetic all three rewrites reproduced without filesystem ZIP extraction."
+    ],
+    "limits": [
+      "Pure AST-extracted stdlib byte functions and synthetic ZIPs only. No whole-module/importlib/marshal/compiler/product/SDK/platform/filesystem collector/install/process/native/TLS/copy/probe execution.",
+      "Always admitted:false. Fixed collector roots, host-form-authority, installer bootstrap/special scripts, selected sdist build closure and runtime integration remain pending."
+    ]
+  },
+  "zip_source_pin": {
+    "bytes": 90666,
+    "sha256": "80cf964f4288847c4c73d1f379115b55c21d047f2316ca3a995155e8d6a86169",
+    "scope": "actual base source read-only identity; NOT fresh host selected interpreter/installer proof"
+  },
+  "correction": "Only wheel_byte_map rejects orig_filename!=filename and validates original spelling; verify_whole_installed_map parses LF/CRLF header boundary/case-insensitive unique Name with malformed Name fold denial. Original twoP2/fullreport retained; all embedded functions unchanged; no execution."
 }
