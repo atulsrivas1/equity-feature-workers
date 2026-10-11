@@ -81,12 +81,13 @@
   },
   "bounds": {
     "ack": 1024,
-    "ack_worst": 844,
     "final": 256,
     "final_worst_including_lf": 184,
     "controls": 4,
     "control_bytes": 128,
-    "requests": 60
+    "requests": 60,
+    "ack_final_action_sample": 844,
+    "ack_conservative_generic": 851
   },
   "retained_success_invariant": "0<held==sum(native/wire/envelope/receipt lengths)<=262144; total_retained==held; retained=={principal:held}; _running None and empty queue",
   "prior_review": {
