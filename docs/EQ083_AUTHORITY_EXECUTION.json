@@ -1,0 +1,409 @@
+{
+  "scope": "Actual installed Windows three-lane TTL/grant/retirement feasibility only",
+  "executed_heads": {
+    "equity-features": "c65b3e71e767884dac1a5c47be164fe632b200e1",
+    "equity-feature-workers": "f837dc6db1dcb19b9aaa7dffdc0a2637b45a409b"
+  },
+  "probe": {
+    "bytes": 19756,
+    "sha256": "ebd4f4fc0b45328e931b09fe443fd840e500e1304aab95ffb7ca0634900da5d7"
+  },
+  "copy": {
+    "bytes": 5612,
+    "sha256": "ef39bd3411089f170f81b0b1407c009e934faa1a90b8b36c9640cd7255423094",
+    "raw_log_sha256": "6054aaa3d00ed9ca36465616fb66fd0760da457b7ce8918d930689a034d74f63",
+    "report": {
+      "inputs": 10,
+      "marker": "eq083-authority-harness-copy",
+      "scope": "Reuses verified author Windows nativewheel environment; fresh copied harness only, no probe execution or independent reinstall",
+      "source_head": "f837dc6db1dcb19b9aaa7dffdc0a2637b45a409b",
+      "verified_archives": 44
+    }
+  },
+  "pre_execution_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6105185156",
+  "inputs": {
+    "scope": "Exact three-lane TTL/grant/retirement parent PRE-EXECUTION only",
+    "inputs": [
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "docs/EQ081_CLIENT_FIXTURES.json",
+        "harness_path": "docs/EQ081_CLIENT_FIXTURES.json",
+        "bytes": 76771,
+        "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "docs/EQ083_REFERENCE_ENTRY.txt",
+        "harness_path": "docs/EQ083_REFERENCE_ENTRY.txt",
+        "bytes": 3332,
+        "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+        "harness_path": "schemas/remote-v1.1.schema.json",
+        "bytes": 30039,
+        "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+        "harness_path": "schemas/mcp-tools.json",
+        "bytes": 104088,
+        "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/test_jobs.py",
+        "harness_path": "tests/service/test_jobs.py",
+        "bytes": 60646,
+        "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/test_service.py",
+        "harness_path": "tests/service/test_service.py",
+        "bytes": 30744,
+        "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/fixtures/jobs_native.json",
+        "harness_path": "tests/service/fixtures/jobs_native.json",
+        "bytes": 22366,
+        "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "583ef805aa0603c952a4668587cf68a89b6dc6f8",
+        "path": "docs/EQ083_AUTHORITY_ENTRY.txt",
+        "harness_path": "docs/EQ083_AUTHORITY_ENTRY.txt",
+        "bytes": 4645,
+        "sha256": "3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": null,
+        "path": "docs/EQ083_AUTHORITY_PROBE.txt",
+        "harness_path": "docs/EQ083_AUTHORITY_PROBE.txt",
+        "bytes": 19756,
+        "sha256": "ebd4f4fc0b45328e931b09fe443fd840e500e1304aab95ffb7ca0634900da5d7"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "82e88703135d517825d09ae75d63fe15d4760a78",
+        "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+        "harness_path": "schemas/remote-v1.schema.json",
+        "bytes": 28666,
+        "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
+      }
+    ],
+    "reference_entry": {
+      "bytes": 3332,
+      "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+    },
+    "authority_entry": {
+      "bytes": 4645,
+      "sha256": "3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270"
+    },
+    "request_ledger": {
+      "baseline": {
+        "rawHTTP": 25,
+        "publicClientA": 4,
+        "publicClientB": 2,
+        "referenceMCPA": 5,
+        "referenceMCPB": 1,
+        "total": 37,
+        "detail": "RawHTTP calculate1/status<=20/result1/export1 plus authenticatedB discover1/nativeA result4031. TypedA samekey calculate/status/result/export4; typedB discover/result4032. ReferenceA samekey calculate/status/result/export/export-followup5; referenceB discover1 and unknown opaqueA reference0."
+      },
+      "before_boundary": {
+        "rawHTTP": 2,
+        "publicClientA": 3,
+        "referenceMCPA": 2,
+        "total": 7
+      },
+      "ttl_after": {
+        "rawHTTP": 4,
+        "publicClientA": 4,
+        "referenceMCPA": 1,
+        "localReferenceFailures": 2,
+        "total": 9,
+        "maximum": 53
+      },
+      "grant_after": {
+        "rawHTTP": 4,
+        "publicClientA": 4,
+        "publicClientB": 1,
+        "referenceMCPA": 1,
+        "localReferenceFailures": 2,
+        "total": 10,
+        "maximum": 54
+      },
+      "retired": {
+        "rawHTTP": 2,
+        "publicClientA": 2,
+        "referenceMCPA": 1,
+        "total": 5
+      },
+      "restored": {
+        "rawHTTP": 4,
+        "publicClientA": 4,
+        "referenceMCPA": 0,
+        "localReferenceFailures": 2,
+        "total": 8,
+        "maximum": 50
+      }
+    }
+  },
+  "author": {
+    "exit_code": 0,
+    "raw_log_sha256": "55adede6eb35f28699de210a28746b72546a3825241fc47e3f80aa3a55430601",
+    "report": {
+      "cases": [
+        {
+          "acknowledgements": [
+            {
+              "epoch": "42d604da492af46573ad8fa3c8a4dac4",
+              "expiry": 300000000100,
+              "reads": 1,
+              "requests": 21,
+              "sequence": 1
+            },
+            {
+              "epoch": "42d604da492af46573ad8fa3c8a4dac4",
+              "expiry": 300000000100,
+              "reads": 1,
+              "requests": 28,
+              "sequence": 2
+            }
+          ],
+          "client": {
+            "A": 11,
+            "B": 2
+          },
+          "direct": 15,
+          "mcp": [
+            1,
+            8
+          ],
+          "native_exit": true,
+          "reference_exits": true,
+          "scenario": "ttl",
+          "source_reads": 1,
+          "total": 37
+        },
+        {
+          "acknowledgements": [
+            {
+              "epoch": "359b82edaf292490d0093bb956082c3b",
+              "expiry": 1000,
+              "reads": 1,
+              "requests": 22,
+              "sequence": 1
+            },
+            {
+              "epoch": "359b82edaf292490d0093bb956082c3b",
+              "expiry": 1000,
+              "reads": 1,
+              "requests": 29,
+              "sequence": 2
+            }
+          ],
+          "client": {
+            "A": 11,
+            "B": 3
+          },
+          "direct": 16,
+          "mcp": [
+            1,
+            8
+          ],
+          "native_exit": true,
+          "reference_exits": true,
+          "scenario": "grant",
+          "source_reads": 1,
+          "total": 39
+        },
+        {
+          "acknowledgements": [
+            {
+              "epoch": "e1b06c5c6d4f64622d4efc4132a23b35",
+              "expiry": null,
+              "reads": 1,
+              "requests": 21,
+              "sequence": 1
+            },
+            {
+              "epoch": "e1b06c5c6d4f64622d4efc4132a23b35",
+              "expiry": null,
+              "reads": 1,
+              "requests": 26,
+              "sequence": 2
+            }
+          ],
+          "client": {
+            "A": 10,
+            "B": 2
+          },
+          "direct": 15,
+          "mcp": [
+            1,
+            6
+          ],
+          "native_exit": true,
+          "reference_exits": true,
+          "scenario": "retire",
+          "source_reads": 1,
+          "total": 34
+        }
+      ],
+      "marker": "eq083-three-lane-authority"
+    }
+  },
+  "reviewer": {
+    "reviewer": "/root/r7_policy_review",
+    "canonical_head": "c65b3e71e767884dac1a5c47be164fe632b200e1",
+    "worker_head": "f837dc6db1dcb19b9aaa7dffdc0a2637b45a409b",
+    "disposition": "PASS independently executed scoped Windows three-lane authority feasibility",
+    "scope": "Separate -I process reusing author verified isolated nativewheel environment and exactcopiedharness, not independent reinstall",
+    "source_bytes": 19756,
+    "source_sha256": "ebd4f4fc0b45328e931b09fe443fd840e500e1304aab95ffb7ca0634900da5d7",
+    "exit_code": 0,
+    "raw_log": "eq083-three-lane-authority-reviewer.log",
+    "raw_log_bytes": 1122,
+    "raw_log_sha256": "bb3ece707c88426633862fc86871b0ea1cf7667743df65e05854099feaf59586",
+    "result": {
+      "cases": [
+        {
+          "acknowledgements": [
+            {
+              "epoch": "7af907726e0baf55cbc17e0fecb5cd27",
+              "expiry": 300000000100,
+              "reads": 1,
+              "requests": 18,
+              "sequence": 1
+            },
+            {
+              "epoch": "7af907726e0baf55cbc17e0fecb5cd27",
+              "expiry": 300000000100,
+              "reads": 1,
+              "requests": 25,
+              "sequence": 2
+            }
+          ],
+          "client": {
+            "A": 11,
+            "B": 2
+          },
+          "direct": 12,
+          "mcp": [
+            1,
+            8
+          ],
+          "native_exit": true,
+          "reference_exits": true,
+          "scenario": "ttl",
+          "source_reads": 1,
+          "total": 34
+        },
+        {
+          "acknowledgements": [
+            {
+              "epoch": "9ba370b2bdfe48d866fdf734e537801a",
+              "expiry": 1000,
+              "reads": 1,
+              "requests": 21,
+              "sequence": 1
+            },
+            {
+              "epoch": "9ba370b2bdfe48d866fdf734e537801a",
+              "expiry": 1000,
+              "reads": 1,
+              "requests": 28,
+              "sequence": 2
+            }
+          ],
+          "client": {
+            "A": 11,
+            "B": 3
+          },
+          "direct": 15,
+          "mcp": [
+            1,
+            8
+          ],
+          "native_exit": true,
+          "reference_exits": true,
+          "scenario": "grant",
+          "source_reads": 1,
+          "total": 38
+        },
+        {
+          "acknowledgements": [
+            {
+              "epoch": "2275cbbfcdc8f2fca0ef63da1f7d71db",
+              "expiry": null,
+              "reads": 1,
+              "requests": 22,
+              "sequence": 1
+            },
+            {
+              "epoch": "2275cbbfcdc8f2fca0ef63da1f7d71db",
+              "expiry": null,
+              "reads": 1,
+              "requests": 27,
+              "sequence": 2
+            }
+          ],
+          "client": {
+            "A": 10,
+            "B": 2
+          },
+          "direct": 16,
+          "mcp": [
+            1,
+            6
+          ],
+          "native_exit": true,
+          "reference_exits": true,
+          "scenario": "retire",
+          "source_reads": 1,
+          "total": 35
+        }
+      ],
+      "marker": "eq083-three-lane-authority"
+    },
+    "preflight": [
+      "tenexactcopiedGitassetbyteSHA/manifestclosure/sourcefreeharness",
+      "accepted44Windowsarchivepins/fullreportmap/reused43wheelinstalledenvironment"
+    ],
+    "actual_checks": [
+      "fullproducer/nativeSDKoriginalhash beforeboundaries acrossHTTP/client/referenceMCP",
+      "authenticatedB discovery200 and Aresult403 viaHTTPandtypedclient; Bforeignopaquereference unknown_reference/provider0",
+      "initializedpositiveexpiry+releasedslotcondition barrier; TTL300000000100/grant1000 ACKs",
+      "serviceoriginalTTL result/export403 while status/samekeyoriginalexpiredjob200; no source increment",
+      "grant999success/1000 denial with credentialsstillvalid; no reexecution",
+      "retirement401 default1.0null closed-schema; maintenanceclearedretainedforms before ACK; restoreexpiredjob/result-export403",
+      "linkedMCPrefs/samekeytombstones locallydenied provider0 after firstbackend403or401",
+      "exactprovider/callACK/finalrequestcounts; nativefinalJSONsource1/reasonexited0/threadjoins; bothreferencephysicalexits"
+    ],
+    "limits": [
+      "No epoch/cancel/fault/TLS/clock-negative/version/config-negative/Linux/all24/fullReady/currentartifact/release approval",
+      "No newcopy/install/download/environment/repository modification",
+      "Directpollcounts differ authorrun within reviewedmaxima, not fixedtiming/performance evidence"
+    ]
+  },
+  "review_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6105202017",
+  "limits": [
+    "Both executions reuse verified isolated author Windows nativewheel environment; reviewer separateprocess, not independent reinstall",
+    "No epoch/cancel/fault/Linux/sdist-light/artifact/full24/Ready/start/release proof",
+    "Original positive256capturefailure and authority pre-execution P2 findings retained; no failedrun countedPASS"
+  ]
+}
