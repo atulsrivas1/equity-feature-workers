@@ -706,8 +706,15 @@ def verify_bootstrap_union(complete_files, complete_links, selected_files, map_r
     selected = verify_whole_installed_map(selected_files, map_recipe)
     windows = map_recipe['system'] == 'Windows'
     byte_map(complete_files, windows)
-    if type(complete_links) is not dict or complete_links != expected['links']:
+    if type(complete_links) is not dict or any(type(p) is not str or type(t) is not str for p, t in complete_links.items()) or complete_links != expected['links']:
         raise ValueError('full bootstrap link inventory')
+    # Files and links cannot be directories in the same physical namespace.
+    occupied = {p.casefold() if windows else p for p in complete_files}
+    occupied.update(p.casefold() if windows else p for p in complete_links)
+    for path in occupied:
+        parts = path.split('/')
+        if any('/'.join(parts[:n]) in occupied for n in range(1, len(parts))):
+            raise ValueError('file/link ancestor namespace collision')
     owners = {p.casefold() if windows else p for p in selected_files}
     for path, data in expected['files'].items():
         key = path.casefold() if windows else path

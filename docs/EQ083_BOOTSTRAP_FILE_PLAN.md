@@ -1,3 +1,5 @@
+Original39379 BOOTSTRAP SOURCE REWORK1P2 preserved FULLreport/sourceheads: complete synthetic selected .data payload beneath lib64 link or python regular-file ancestor accepted. Corrected BEFOREexecution verify_bootstrap_union rejects ALL file/link ancestor namespace collisions plus exactstr link keys/targets; all other functionAST unchanged/ALWAYSfalse/fixedhost-issuer-form binding PENDING. No actual filesystem/install/native failure invented; renewed exact source review required.
+
 # EQ083 bootstrap file ownership source
 
 PRE-EXECUTION SOURCE ONLY. Exact copied installer32821 SOURCE6112323607/full87INERT functions unchanged. Adds fixed_bootstrap_recipe/bootstrap_file_expectations/verify_bootstrap_union only. Always admitted:false, mainDENIES. No actual venv/ensurepip/pip imports/setup/copy/installer/collector/observer/platform/productSDKSSLcrypto imports-load/compiler/generation/process/native/socket/TLS. No installed PYC compiler/import/exec/unmarshal. Supplied source byte recipes are NOT trusted current-host/issuer/form authority.
