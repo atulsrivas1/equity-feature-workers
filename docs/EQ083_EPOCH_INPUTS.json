@@ -1,0 +1,91 @@
+{
+  "scope": "pre-execution owner epoch entry and exact proposed ledger only",
+  "entry": {
+    "bytes": 5825,
+    "sha256": "b8ddd0fd830a6abdd6f5ec5a179c9350ce169637aa7bd29502cede4cfc8b5122"
+  },
+  "source_inputs": [
+    {
+      "commit": "8ab42f0a248a5ddf750a0f6e9b059c674cb3874b",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "8ab42f0a248a5ddf750a0f6e9b059c674cb3874b",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "8ab42f0a248a5ddf750a0f6e9b059c674cb3874b",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "commit": "8ab42f0a248a5ddf750a0f6e9b059c674cb3874b",
+      "path": "packages/service/src/equity_feature_service/jobs.py",
+      "bytes": 43441,
+      "sha256": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68"
+    },
+    {
+      "commit": "8ab42f0a248a5ddf750a0f6e9b059c674cb3874b",
+      "path": "docs/EQ083_AUTHORITY_ENTRY.txt",
+      "bytes": 4645,
+      "sha256": "3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270"
+    },
+    {
+      "commit": "8ab42f0a248a5ddf750a0f6e9b059c674cb3874b",
+      "path": "docs/EQ083_REFERENCE_ENTRY.txt",
+      "bytes": 3332,
+      "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+    }
+  ],
+  "operation_ledger": {
+    "old_epoch": {
+      "http": 4,
+      "client": 4,
+      "mcp": 5,
+      "total": 13
+    },
+    "new_epoch_old_id_denials": {
+      "http": 3,
+      "client": 3,
+      "old_mcp": 1,
+      "local_mcp": 0,
+      "total": 7
+    },
+    "new_epoch_new_job": {
+      "http": 3,
+      "client": 4,
+      "new_mcp": 6,
+      "local_mcp": 0,
+      "total": 13
+    },
+    "total": 33,
+    "per_epoch": [
+      13,
+      20
+    ],
+    "http": 10,
+    "client": 11,
+    "old_mcp": 6,
+    "new_mcp": 6,
+    "controls": 4,
+    "polls": 0,
+    "native_source_entries": [
+      1,
+      1
+    ]
+  },
+  "bounds": {
+    "ack": 1024,
+    "ack_worst": 740,
+    "final": 256,
+    "final_worst_including_lf": 184,
+    "controls": 4,
+    "control_bytes": 128,
+    "requests": 60
+  }
+}
