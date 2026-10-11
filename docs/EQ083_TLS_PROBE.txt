@@ -534,9 +534,12 @@ for mode in modes:
     assert 'transfer-encoding' not in headers and 'content-encoding' not in headers
     assert all(re.fullmatch(r'0|[1-9][0-9]*',v) for v in lengths)
     if fault and mode=='extra-response-byte':
-     assert len(lengths)==1 and int(lengths[0])+1==len(body) and body[-1:]==b'x';verify(parse(body[:-1])['payload'])
+     assert len(lengths)==1 and int(lengths[0])+1==len(body) and body[-1:]==b'x'
+     parsed=parse(body[:-1]);remote.validate(parsed);assert (parsed['version'],parsed['request_id'],parsed['kind'])==('1.1',request_id,kind);verify(parsed['payload'])
     elif fault and mode=='truncated-response-byte':assert len(lengths)==1 and int(lengths[0])==len(body)+1
-    elif fault and mode=='duplicate-content-length':assert len(lengths)==2 and lengths[0]==lengths[1]==str(len(body));verify(parse(body)['payload'])
+    elif fault and mode=='duplicate-content-length':
+     assert len(lengths)==2 and lengths[0]==lengths[1]==str(len(body))
+     parsed=parse(body);remote.validate(parsed);assert (parsed['version'],parsed['request_id'],parsed['kind'])==('1.1',request_id,kind);verify(parsed['payload'])
     else:
      assert len(lengths)==1 and int(lengths[0])==len(body)
      parsed=parse(body);remote.validate(parsed);assert (parsed['version'],parsed['request_id'],parsed['kind'])==('1.1',request_id,kind)

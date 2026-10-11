@@ -1,5 +1,5 @@
 {
-  "scope": "PRE-EXECUTION Windows-only full seven-case TLS parent/copier, independent review pending. No TLS/native/socket execution",
+  "scope": "PRE-EXECUTION Windows-only corrected full TLS parent/copier, independent renewed review pending; initial raw envelope P2 retained. No TLS/native/socket execution",
   "inputs": [
     {
       "repo": "equity-feature-workers",
@@ -86,8 +86,8 @@
       "commit": null,
       "path": "docs/EQ083_TLS_PROBE.txt",
       "harness_path": "docs/EQ083_TLS_PROBE.txt",
-      "bytes": 43460,
-      "sha256": "eb2c0c82d2f6a7a255a47e15c947028ef7d342757073a151da880c46adfd9c29"
+      "bytes": 43728,
+      "sha256": "7697359a26b0e756fcb7edec7ef087871acc9d0d6c8d5c8826960b74950536af"
     },
     {
       "repo": "equity-feature-workers",
