@@ -1,0 +1,68 @@
+{
+  "schema": "eq083.reference-process.pre-execution.v1",
+  "bases": {
+    "equity-features": "188dce12a0ee7376100b069bd96b5f9b3e8f200f",
+    "equity-feature-workers": "99ce76f18dc812058365e4ffd037d1cc1c9c6135"
+  },
+  "source_pin": {
+    "commit": "99ce76f18dc812058365e4ffd037d1cc1c9c6135",
+    "path": "packages/service/src/equity_feature_service/_containment.py",
+    "bytes": 28231,
+    "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd"
+  },
+  "qualification_source": {
+    "bytes": 11927,
+    "sha256": "3c4683e781dc1db654b6878f3976550cc6f67b79351daf80137fdfb8f8e5f161"
+  },
+  "scope": "Windows 64-bit qualification source only, not executed or reviewed; exact fault parent/copier integration and renewed review still required before any new native/socket/copy/probe execution",
+  "imports": [
+    "ctypes",
+    "os",
+    "subprocess",
+    "sys",
+    "time",
+    "ctypes.wintypes",
+    "msvcrt"
+  ],
+  "fixed_argv": {
+    "length": 12,
+    "executable": "sys.executable",
+    "flags": [
+      "-I"
+    ],
+    "reference_owner_arguments": 9
+  },
+  "job": {
+    "active_process_limit": 2,
+    "job_cpu_100ns": 100000000,
+    "job_memory_bytes": 1073741824,
+    "limit_flags": 8716,
+    "attribute_job_list": 131085,
+    "attribute_handle_list": 131074,
+    "creation_flags": 134743044
+  },
+  "bounds": {
+    "command_utf16_units_including_nul": 32760,
+    "attributes_bytes": 65536,
+    "pipe_buffer_bytes": 4096,
+    "initial_parent_handles": 6,
+    "child_inherited_handles": 3,
+    "wait_max_seconds": 4,
+    "cleanup_launcher_seconds": 3,
+    "cleanup_job_seconds": 3
+  },
+  "ownership": [
+    "CreateProcessW suspended with exact job and handle list attributes",
+    "Verify launcher membership before ResumeThread",
+    "Validate positive non-bool DWORD entry PID and retain OpenProcess handle after same-job membership verification",
+    "Observe entry handle exit and separately launcher exit/reap",
+    "Failure cleanup terminates entire owned job and verifies active process count zero before closing job handle"
+  ],
+  "pid_diagnostic": "eq083-reference-fault-pid-diagnostic-reviewer-report.json",
+  "failed_execution": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6106903171",
+  "windows_only": true,
+  "linux_ownership_design_pending": true,
+  "runtime_unchanged": true,
+  "executed": false,
+  "reviewed": false
+}
