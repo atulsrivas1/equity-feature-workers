@@ -1,0 +1,56 @@
+"""Trusted qualification copy into a new authority harness; no installation/execution."""
+from pathlib import Path
+import sys,json,hashlib,subprocess,re
+if len(sys.argv)!=4:raise ValueError('owned arguments')
+repo=Path(sys.argv[1]).resolve();head=sys.argv[2];out=Path(sys.argv[3]).resolve();parent=repo.parent
+assert repo.name=='equity-feature-workers' and re.fullmatch('[0-9a-f]{40}',head)
+assert out.parent==parent and out.name=='eq083-authority-harness-'+head[:7] and not out.exists()
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo).decode().strip()==head
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=repo).strip()
+env=parent/'eq083-feasibility-ab2df4f';report_path=env/'setup-report.json'
+with report_path.open('rb') as stream:raw=stream.read(262145)
+assert len(raw)<=262144;report=json.loads(raw)
+assert report['marker']=='eq083-offline-native-feasibility-setup' and report['system']=='Windows' and report['wheel_count']==43
+assert report['source_head']=='ab2df4fbc7f90a835856f1a9246a1dfe0e608a2a'
+assert report['accepted_receipt_sha']=='a6edc4d7056812b47da8334649db100b814bd2fe13930426f64cd22b91c85192'
+venv=(env/'venv').resolve();assert (venv/'Scripts/python.exe').is_file()
+assert set(report['module_origins'])=={'client','mcp','service'}
+for path in report['module_origins'].values():
+ relative=Path(path).resolve().relative_to(venv)
+ assert 'site-packages' in relative.parts and Path(path).is_file()
+assert len(report['archive_pins'])==44
+artifacts=parent/'eq082-mcp-ci-40ff5e0/Windows'
+for name,digest in report['archive_pins'].items():
+ assert Path(name).name==name and '\\' not in name and ':' not in name and re.fullmatch('[0-9a-f]{64}',digest)
+ f=artifacts/name;assert f.stat().st_size<=67108864
+ h=hashlib.sha256()
+ with f.open('rb') as stream:
+  while block:=stream.read(1048576):h.update(block)
+ assert h.hexdigest()==digest
+manifest_raw=subprocess.check_output(['git','show',head+':docs/EQ083_AUTHORITY_PARENT_INPUTS.json'],cwd=repo)
+assert len(manifest_raw)<=65536;manifest=json.loads(manifest_raw)
+literal={
+ 'docs/EQ081_CLIENT_FIXTURES.json':'docs/EQ081_CLIENT_FIXTURES.json',
+ 'docs/EQ083_REFERENCE_ENTRY.txt':'docs/EQ083_REFERENCE_ENTRY.txt',
+ 'packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json':'schemas/remote-v1.1.schema.json',
+ 'packages/mcp/src/equity_feature_mcp/schemas/tools.json':'schemas/mcp-tools.json',
+ 'tests/service/test_jobs.py':'tests/service/test_jobs.py',
+ 'tests/service/test_service.py':'tests/service/test_service.py',
+ 'tests/service/fixtures/jobs_native.json':'tests/service/fixtures/jobs_native.json',
+ 'docs/EQ083_AUTHORITY_ENTRY.txt':'docs/EQ083_AUTHORITY_ENTRY.txt',
+ 'docs/EQ083_AUTHORITY_PROBE.txt':'docs/EQ083_AUTHORITY_PROBE.txt'}
+assert len(manifest['inputs'])==9 and {v['path']:v['harness_path'] for v in manifest['inputs']}==literal
+assert len({v['path'] for v in manifest['inputs']})==9 and len({v['harness_path'] for v in manifest['inputs']})==9
+copies=[]
+for item in manifest['inputs']:
+ assert item['repo']=='equity-feature-workers' and type(item['bytes']) is int and 0<item['bytes']<=1048576
+ commit=head if item['commit'] is None else item['commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
+ source=subprocess.check_output(['git','show',commit+':'+item['path']],cwd=repo)
+ assert len(source)==item['bytes'] and hashlib.sha256(source).hexdigest()==item['sha256']
+ source.decode('utf-8','strict');copies.append((item['harness_path'],source))
+out.mkdir()
+for name,source in copies:
+ f=out/name;f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(source)
+(out/'docs/EQ083_AUTHORITY_PARENT_INPUTS.json').write_bytes(manifest_raw)
+assert not (out/'packages').exists()
+print(json.dumps(dict(marker='eq083-authority-harness-copy',source_head=head,inputs=9,verified_archives=44,scope='Reuses verified author Windows nativewheel environment; fresh copied harness only, no probe execution or independent reinstall'),sort_keys=True,separators=(',',':')))
