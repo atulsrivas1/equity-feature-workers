@@ -204,9 +204,9 @@ def strict_json(data):
   return result
  return json.loads(data.decode('utf-8','strict'),object_pairs_hook=pairs,parse_constant=lambda value:(_ for _ in ()).throw(ValueError('certificate nonfinite')))
 
-def bounded(path,cap):
+def bounded(path,cap,allow_empty=False):
  with path.open('rb') as stream:data=stream.read(cap+1)
- if not 0<len(data)<=cap:raise ValueError('certificate file bound')
+ if not (0 if allow_empty else 1)<=len(data)<=cap:raise ValueError('certificate file bound')
  return data
 
 def proc_identity(pid):
@@ -219,9 +219,19 @@ class LinuxCertificateChild:
  def __init__(self,argv):
   if sys.platform!='linux' or type(argv)is not list or len(argv)!=7 or argv[:2]!=[sys.executable,'-I']:raise ValueError('certificate Linux argv')
   environment={key:os.environ[key] for key in ('HOME','TMPDIR','LANG','LC_ALL') if key in os.environ}
+  self.pid=self.stdin=self.stdout=self.stderr=None;self.identity=None;self.ownership_closed=False
   self.process=subprocess.Popen(argv,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=environment,start_new_session=True,bufsize=0)
-  self.pid=self.process.pid;self.stdin,self.stdout,self.stderr=self.process.stdin,self.process.stdout,self.process.stderr
-  self.identity=None;self.ownership_closed=False
+  try:
+   self.pid=self.process.pid;self.stdin,self.stdout,self.stderr=self.process.stdin,self.process.stdout,self.process.stderr
+  except BaseException:
+   def attempt(callback):
+    try:callback()
+    except BaseException:pass
+   def kill_group():
+    if self.process.returncode is None:os.killpg(self.process.pid,signal.SIGKILL)
+   attempt(kill_group);attempt(lambda:self.process.kill());attempt(lambda:self.process.wait(timeout=3))
+   for name in ('stdin','stdout','stderr'):attempt(lambda name=name:getattr(self.process,name).close())
+   raise
  def poll(self):return self.process.poll()
  def wait(self,timeout):
   if type(timeout)not in(int,float) or not 0<timeout<=4:raise ValueError('certificate Linux wait bound')
@@ -235,6 +245,9 @@ class LinuxCertificateChild:
   except ProcessLookupError:return True
   return False
  def kill(self):
+  if self.process.returncode is not None:return
+  current=proc_identity(self.pid)
+  if current['parent']!=os.getpid() or current['group']!=self.pid or current['session']!=self.pid or self.identity is not None and current!=self.identity:raise ValueError('certificate Linux termination identity')
   try:os.killpg(self.pid,signal.SIGKILL)
   except ProcessLookupError:pass
  def close(self):
@@ -261,7 +274,7 @@ def validate_records(inputs):
    if relative.is_absolute() or '..' in relative.parts:raise ValueError('certificate installed record path')
    path=prefix/relative
    if not path.is_file() or path.is_symlink() or path.resolve().is_relative_to(prefix)is not True:raise ValueError('certificate installed record origin')
-   data=bounded(path,67108864)
+   data=bounded(path,67108864,True)
    if dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest())!=file['observed']:raise ValueError('certificate installed record bytes')
  return environment
 

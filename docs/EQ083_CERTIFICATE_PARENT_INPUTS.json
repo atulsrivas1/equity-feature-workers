@@ -2,13 +2,13 @@
   "schema": "eq083.certificate-parent-source.v1",
   "scope": "PRE-EXECUTION SOURCE ONLY; integrated parent/copier not executed, no generation/platform/exit/cleanup/Ready proof",
   "bases": {
-    "equity-features": "5d0be6b39987b885ada6c232b3d9ad21ec17f04f",
-    "equity-feature-workers": "35dcaff306df539bfbd0e5f6a75d738664376d0e"
+    "equity-features": "5845b0c6f02b4aaeeafcddcf7c03113e12fb1178",
+    "equity-feature-workers": "b5a0cbd422a4f93298c1a617853b25872e477011"
   },
   "sources": {
     "docs/EQ083_CERTIFICATE_PARENT.txt": {
-      "bytes": 26929,
-      "sha256": "ab5b685f92dd976b19fff4d326d73b89bd58972bf008238e6ebcae388e0b7321"
+      "bytes": 27748,
+      "sha256": "dd140e306c56349fa09e00309d050fc6c5eb949746fc5a567a61fa0951600488"
     },
     "docs/EQ083_WINDOWS_CERTIFICATE_BOOTSTRAP.txt": {
       "bytes": 2111,
@@ -29,17 +29,17 @@
   },
   "copier": {
     "bytes": 6157,
-    "sha256": "e02b7556bd5def74b8dce085206297a50f40466fdf194c20ac8364b612dc6c36"
+    "sha256": "ed0e61354b7f2e18dd9135378eeb77a769a6f4c388f71cfbc12f0bf1d0bab08f"
   },
   "derivation": {
     "bases": {
-      "equity-features": "5d0be6b39987b885ada6c232b3d9ad21ec17f04f",
-      "equity-feature-workers": "35dcaff306df539bfbd0e5f6a75d738664376d0e"
+      "equity-features": "5845b0c6f02b4aaeeafcddcf7c03113e12fb1178",
+      "equity-feature-workers": "b5a0cbd422a4f93298c1a617853b25872e477011"
     },
     "sources": {
       "parent": {
-        "bytes": 26929,
-        "sha256": "ab5b685f92dd976b19fff4d326d73b89bd58972bf008238e6ebcae388e0b7321"
+        "bytes": 27748,
+        "sha256": "dd140e306c56349fa09e00309d050fc6c5eb949746fc5a567a61fa0951600488"
       },
       "windows": {
         "bytes": 2111,
@@ -90,5 +90,102 @@
     "wait_seconds": 3,
     "reader_join_seconds": 2
   },
-  "remaining": "Independent exact integrated source review before ANY copy/generation; Linux records not admitted so no Linux launch. Full perOS fresh archive/RECORD/backend maps and distinct TLS reference plus all24 fullsevenReady remain pending."
+  "remaining": "Independent exact integrated source review before ANY copy/generation; Linux records not admitted so no Linux launch. Full perOS fresh archive/RECORD/backend maps and distinct TLS reference plus all24 fullsevenReady remain pending.",
+  "original_preexecution_rework": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "5845b0c6f02b4aaeeafcddcf7c03113e12fb1178",
+      "equity-feature-workers": "b5a0cbd422a4f93298c1a617853b25872e477011"
+    },
+    "disposition": "REWORK",
+    "scope": "PRE-EXECUTION integrated certificate parent/copier/gates SOURCE ONLY",
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_CERTIFICATE_PARENT.txt",
+        "line": 264,
+        "title": "Permit pinned empty installed RECORD files",
+        "evidence": "The admitted Windows record map contains zero-byte REQUESTED files. validate_records delegates every file to bounded(), whose 0<len(data) guard rejects them. Exact empty-file fake reproduces certificate file bound before launch.",
+        "correction": "Use a separate installed-file reader allowing 0<=len(data)<=cap and exact recorded size/hash; retain nonempty requirements for source/marker/cert/receipt."
+      },
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_CERTIFICATE_PARENT.txt",
+        "line": 222,
+        "title": "Protect successful Popen immediately inside the constructor",
+        "evidence": "After Popen returns, pid and pipe property setup occur without try/finally. Two fake post-Popen faults raise before constructor returns; main process assignment remains None, no kill/wait/reap/pipe cleanup occurs.",
+        "correction": "Initialize ownership bookkeeping before launch; immediately protect successful Popen and clean the local child/available streams on all later setup errors, preserving original error. Do not depend on the caller receiving a constructed object."
+      },
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_CERTIFICATE_PARENT.txt",
+        "line": 238,
+        "title": "Avoid signalling a reaped or reused process-group identifier",
+        "evidence": "main polls/waits and reaps before finally close(). Linux close unconditionally invokes killpg(self.pid); stored start-tick identity is never consulted. Already-reaped/stale fake still reaches SIGKILL on the numeric identifier, which can be reused after reap.",
+        "correction": "Do not signal after the owned direct child is reaped; while unreaped use retained identity/start/group ownership and fail closed on mismatch. Freeze the actual termination/reap/group-absence order so no unrelated reused group can be killed."
+      }
+    ],
+    "sources": {
+      "docs/EQ083_CERTIFICATE_PARENT.txt": {
+        "bytes": 26929,
+        "sha256": "ab5b685f92dd976b19fff4d326d73b89bd58972bf008238e6ebcae388e0b7321"
+      },
+      "docs/EQ083_WINDOWS_CERTIFICATE_BOOTSTRAP.txt": {
+        "bytes": 2111,
+        "sha256": "65e49e1c31e4fa5f544073c8171e5705e8e1379402c9aec6c973eb1e84aec5f0"
+      },
+      "docs/EQ083_LINUX_CERTIFICATE_GATE.txt": {
+        "bytes": 6252,
+        "sha256": "d9759e68160f96054be38ca24cd2fc1dd69ede3454d9dfd6d9c5dde2f122437d"
+      },
+      "docs/EQ083_PORTABLE_CERTIFICATE_ENTRY.txt": {
+        "bytes": 7790,
+        "sha256": "7f7aa8ac55d81fe5b8271cbb773ccb2c01dd4838fde18e865ed4535100b91d42"
+      },
+      "docs/EQ083_CERTIFICATE_ENV_INPUTS.json": {
+        "bytes": 587716,
+        "sha256": "6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532"
+      }
+    },
+    "copier": {
+      "bytes": 6157,
+      "sha256": "e02b7556bd5def74b8dce085206297a50f40466fdf194c20ac8364b612dc6c36"
+    },
+    "checks": [
+      "Seven source/doc mirrors, literal source/copier bytes/SHA/AST/UTF8 match; helper7790 remains unchanged",
+      "Windows11944 prefix exact sole argv12->6 change; new Linux gate exact sole fixed GO+EOF insertion, original Linux preserved",
+      "Inert actual bounded() rejects pinned empty installed row; two post-Popen property faults produce no kill/wait/reap attempts; already-reaped stale-identity kill() still signals numeric PGID",
+      "Ten exact Windows/Linux fixed-GO guards: good EOF admits; empty/short/wrong/extra denies; no helper execution",
+      "Copier five literal source/harness pairs exact; complete disjoint2+9+33 accepted map/rawreceipt/setup-report closure source-read; all byte/record guards precede mkdir",
+      "Four inert accepted-map equality negatives: missing-all/missing-one/extra/altered hash",
+      "Exact clean heads/nine-doc allowed diffs/protected input invariance/Atul/no coauthor/diffcheck"
+    ],
+    "empty_installed_record_paths": [
+      "Lib/site-packages/cryptography-50.0.2.dist-info/REQUESTED",
+      "Lib/site-packages/cryptography/py.typed",
+      "Lib/site-packages/pythonwin/pywin/dialogs/__init__.py",
+      "Lib/site-packages/pythonwin/pywin/docking/__init__.py",
+      "Lib/site-packages/pythonwin/pywin/framework/__init__.py",
+      "Lib/site-packages/pythonwin/pywin/framework/editor/color/__init__.py",
+      "Lib/site-packages/pythonwin/pywin/mfc/__init__.py",
+      "Lib/site-packages/pythonwin/pywin/tools/__init__.py",
+      "Lib/site-packages/pywin32-312.dist-info/REQUESTED",
+      "Lib/site-packages/win32com/demos/__init__.py",
+      "Lib/site-packages/win32com/servers/__init__.py",
+      "Lib/site-packages/win32comext/axscript/demos/client/wsh/blank.pys",
+      "Lib/site-packages/win32comext/axscript/server/__init__.py",
+      "Lib/site-packages/cffi-2.1.1.dist-info/REQUESTED",
+      "Lib/site-packages/pycparser-3.11.dist-info/REQUESTED"
+    ],
+    "limitations": [
+      "Only source/AST/JSON/accepted evidence read and extracted functions with fake streams/os/process/paths; no actual parent/helper/copier or platform/product/crypto imports/process/TLS/native/copy/install/generation/probe/download",
+      "Linux remains admitted:false, defects describe future unsafe source paths rather than demonstrated actual Linux runtime failures",
+      "Constructor mocks demonstrate ownership gaps, not a real child launch",
+      "No feasibility/Ready/full24/forms/backend/cleanup approval; exact fresh maps/distinct TLS reference/all seven gates pending"
+    ],
+    "tool_only_corrections": [
+      "Reviewer guessed EQ083_CERTIFICATE_LINUX_GATE path; actual published path is EQ083_LINUX_CERTIFICATE_GATE, corrected read-only."
+    ],
+    "disposition_after_source_fix": "Original REWORK retained; three source corrections prepared before execution, renewed independent source review REQUIRED."
+  }
 }
