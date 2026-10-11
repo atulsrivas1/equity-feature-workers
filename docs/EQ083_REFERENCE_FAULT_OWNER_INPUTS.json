@@ -1,0 +1,263 @@
+{
+  "scope": "PRE-EXECUTION audited native owner source and proposed exact composed ledger only; parent/copier pending",
+  "owner": {
+    "bytes": 5139,
+    "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+  },
+  "reference_source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6106642799",
+  "source_inputs": [
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "docs/EQ083_VERSION_ENTRY.txt",
+      "bytes": 5947,
+      "sha256": "3e1098a213cdd5d70db0d5fdee42c1b017efc3e02cee556bd448c669eba5a77a"
+    },
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "docs/EQ083_REFERENCE_FAULT_ENTRY.txt",
+      "bytes": 7919,
+      "sha256": "b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57"
+    },
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "packages/service/src/equity_feature_service/jobs.py",
+      "bytes": 43441,
+      "sha256": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68"
+    },
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "packages/service/src/equity_feature_service/loopback.py",
+      "bytes": 1264,
+      "sha256": "69cd65d929765961927c74a12ccfb199a53bf5a5435253559a61a8c06aeb321a"
+    },
+    {
+      "commit": "1f1c6f87cc52ea462bab4e6e7722f589bc9bef78",
+      "path": "packages/service/src/equity_feature_service/_audit.py",
+      "bytes": 8062,
+      "sha256": "6dcb31bb3551813df30b81e8bbbfa8d41fab06eb8d71975d9abb1937dc87e1c6"
+    }
+  ],
+  "modes": [
+    "provider-runtime",
+    "provider-interrupt",
+    "clock-before-bool",
+    "clock-before-negative",
+    "clock-before-float",
+    "clock-before-none",
+    "clock-after",
+    "active-eof-runtime",
+    "active-eof-interrupt",
+    "partial-output"
+  ],
+  "bounds": {
+    "request_cap": 24,
+    "service_quota": 60,
+    "controls": 4,
+    "control": 128,
+    "control_read": 129,
+    "ack": 512,
+    "ack_conservative": 399,
+    "ready": 128,
+    "owner_cooperative_seconds": 20,
+    "condition_seconds": 3,
+    "accept_seconds": 0.05,
+    "close_seconds": 2,
+    "planned_supervisor_seconds": 25,
+    "planned_stop_join_seconds": 6,
+    "planned_output": 768,
+    "planned_startup": 512,
+    "planned_final": 256,
+    "final_conservative_including_lf": 190,
+    "reference_closed_conservative": 382
+  },
+  "ledgers": {
+    "provider-runtime": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 1,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "provider-interrupt": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 1,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "clock-before-bool": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 0,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "clock-before-negative": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 0,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "clock-before-float": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 0,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "clock-before-none": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 0,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "clock-after": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 2,
+      "fault_http": 2,
+      "total_http": 20,
+      "ack_requests": [
+        1,
+        12,
+        14,
+        20
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "active-eof-runtime": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 1,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "active-eof-interrupt": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 1,
+      "fault_http": 0,
+      "total_http": 18,
+      "ack_requests": [
+        1,
+        12,
+        12,
+        18
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    },
+    "partial-output": {
+      "raw": 5,
+      "typed": 6,
+      "baseline_mcp": 5,
+      "followup_mcp": 2,
+      "fault_provider": 1,
+      "fault_http": 1,
+      "total_http": 19,
+      "ack_requests": [
+        1,
+        12,
+        13,
+        19
+      ],
+      "native_source": 1,
+      "sink_factory": 1
+    }
+  }
+}
