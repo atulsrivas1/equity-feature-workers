@@ -19,9 +19,11 @@ def snapshot(scheduler,facts,wait):
    remaining=until-time.monotonic()
    if not wait or remaining<=0:raise ValueError('owned epoch physical completion unconfirmed')
    scheduler.condition.wait(remaining)
-  if job.state!='succeeded' or job.result_id is None or job.held or scheduler.queue or facts['reads']!=1 or not facts['entered'].is_set() or len(facts['sink_threads'])!=1:raise ValueError('owned epoch completion facts')
+  sizes=[len(job.native),len(job.wire),len(job.envelope),len(job.receipt)]
+  if job.state!='succeeded' or job.result_id is None or scheduler.queue or facts['reads']!=1 or not facts['entered'].is_set() or len(facts['sink_threads'])!=1:raise ValueError('owned epoch completion facts')
+  if type(job.held) is not int or not 0<job.held==sum(sizes)<=262144 or scheduler.total_retained!=job.held or scheduler.retained!={job.principal:job.held}:raise ValueError('owned epoch retained accounting')
   if type(job.expires_ns) is not int or not 0<job.expires_ns<=9223372036854775807:raise ValueError('owned epoch original expiry')
-  return {'epoch':scheduler.epoch,'job':job.job_id,'result':job.result_id,'expiry':job.expires_ns,'reads':facts['reads'],'held':job.held,'running':scheduler._running,'queue':len(scheduler.queue),'sink_entries':len(facts['sink_threads'])}
+  return {'epoch':scheduler.epoch,'job':job.job_id,'result':job.result_id,'expiry':job.expires_ns,'reads':facts['reads'],'held':job.held,'retained_sizes':sizes,'running':scheduler._running,'queue':len(scheduler.queue),'sink_entries':len(facts['sink_threads'])}
 def publish(path,value):
  data=canonical(value)
  if len(data)>1024:raise ValueError('owned epoch acknowledgement bound')

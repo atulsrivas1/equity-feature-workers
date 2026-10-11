@@ -1,8 +1,8 @@
 {
   "scope": "pre-execution owner epoch entry and exact proposed ledger only",
   "entry": {
-    "bytes": 5825,
-    "sha256": "b8ddd0fd830a6abdd6f5ec5a179c9350ce169637aa7bd29502cede4cfc8b5122"
+    "bytes": 6118,
+    "sha256": "4562705ced6f7650be30072ec1062762bed035c3912e279225c67397f3fa4442"
   },
   "source_inputs": [
     {
@@ -81,11 +81,20 @@
   },
   "bounds": {
     "ack": 1024,
-    "ack_worst": 740,
+    "ack_worst": 844,
     "final": 256,
     "final_worst_including_lf": 184,
     "controls": 4,
     "control_bytes": 128,
     "requests": 60
+  },
+  "retained_success_invariant": "0<held==sum(native/wire/envelope/receipt lengths)<=262144; total_retained==held; retained=={principal:held}; _running None and empty queue",
+  "prior_review": {
+    "heads": {
+      "equity-features": "6222fa1d26ec06b4a21b15fcce65d884bed78124",
+      "equity-feature-workers": "510ebe7cf2017b70c21c4dda0f19a9b82a865e3e"
+    },
+    "report": "eq083-epoch-entry-reviewer-report.json",
+    "disposition": "REWORK P2 successful retained accounting; corrected before execution, renewed review pending"
   }
 }
