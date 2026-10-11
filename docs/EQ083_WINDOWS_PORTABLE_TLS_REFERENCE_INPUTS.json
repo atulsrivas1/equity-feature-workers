@@ -1,0 +1,82 @@
+{
+  "schema": "eq083.windows-portable-tls-reference-source.v1",
+  "scope": "PRE-EXECUTION SOURCE ONLY; not imported/executed/copied/admitted",
+  "bases": {
+    "equity-features": "06f6d19a2723165e4b3d2183c3fbd647f91e818e",
+    "equity-feature-workers": "b8286e213a2a7207e77ffe05709d94bb7399cb44"
+  },
+  "reference": {
+    "bytes": 7675,
+    "sha256": "89310d3333f6c8c6e7ae76e8b587ed74b255fdc0cd58da3d0886d3c7cdac2d1e"
+  },
+  "bridge": {
+    "bytes": 21583,
+    "sha256": "10845d7ad5bf76617558acf7373a1f770b24b95ab5d7f3053113c45c7f5fa8f6"
+  },
+  "source_pins": {
+    "docs/EQ083_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 5916,
+      "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231"
+    },
+    "docs/EQ083_TLS_SESSION_TRANSPORT.txt": {
+      "bytes": 20709,
+      "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+    },
+    "docs/EQ083_LINUX_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 7870,
+      "sha256": "c4dbc1009641e4acae4b628a37256fb2ebde364dda5b53bf09a20ed7c94a81c8"
+    },
+    "docs/EQ083_PORTABLE_CERTIFICATE_AUTHORITY.txt": {
+      "bytes": 31786,
+      "sha256": "ededa5a073359b8445047ee12ddefc65acc6b9e3b60bed437a0caa36fb9680da"
+    },
+    "docs/EQ083_PORTABLE_TLS_OWNER_ENTRY.txt": {
+      "bytes": 8021,
+      "sha256": "921966565c7f218663541541d92643ce0903f77de1caeeffd3becf6bd2aabab9"
+    },
+    "docs/EQ083_CERTIFICATE_ENV_INPUTS.json": {
+      "bytes": 587716,
+      "sha256": "6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532"
+    }
+  },
+  "owner_source_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "06f6d19a2723165e4b3d2183c3fbd647f91e818e",
+      "equity-feature-workers": "b8286e213a2a7207e77ffe05709d94bb7399cb44"
+    },
+    "source": {
+      "bytes": 8021,
+      "sha256": "921966565c7f218663541541d92643ce0903f77de1caeeffd3becf6bd2aabab9"
+    },
+    "disposition": "APPROVED",
+    "scope": "PRE-EXECUTION portable TLS owner source/compaction ONLY",
+    "findings": [],
+    "checks": [
+      "8021 source exactSHA/compile; five-source pins/three mirrors; full8448 oracle inverseAST including Global/Nonlocal/function/arg identifiers exact, no target-name collision/external attribute or keyword change; accepted7687 tail AST exact from z16={} onward",
+      "Actual extracted accepted OwnedEntryProfile bound admits8021/8192 and denies8193/empty, no product import/native execution or source loader",
+      "Seventeen exact duplicate/receipt identity/orderedrole/nonboolserial/file-name/closedpin/nonbool positive size8192/SHA inert cases passed; fullreceipt semantics/private-root trust deliberately delegated to pending trusted binding integration",
+      "Exact cleanfive-document-only heads/protected certificate authority-parent-copier-ENV/runtime-input invariance/Atul-noCoauthors/history retained",
+      "Seven exact root/hash binding guards and three whole cert-key byte identity fake cases: absolute/resolved/dotdot/1024limit/lowercase SHA and length+full SHA denial verified"
+    ],
+    "limitations": [
+      "Only exact Git/AST/JSON and extracted guards with inert supplied locals; no product/platform/crypto/SSL/SDK imports, process/generation/native/TLS/copy/install/probe execution",
+      "No parser/handshake/native numerical or physical cleanup observation from this review; original accepted tail parity only",
+      "Trusted same-parent CertificateBinding/root-hash integration still pending; receipt source guard alone is not complete cryptographic/private permission/host backend proof",
+      "Linux current ENV remainsadmitted:false; exact integrated parent/copier/host fresh maps/all24/sevenReady remain pending; no execution/Ready/forms/artifact/release authority"
+    ],
+    "inert_guard_counts": {
+      "native_source_cap": 4,
+      "duplicate_receipt_and_pin_guards": 17,
+      "root_receipt_binding": 7,
+      "whole_file_size_hash": 3
+    }
+  },
+  "owner_approval": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6109645626",
+  "declared_class_changes": [
+    "WindowsReferenceChild->WindowsTLSReferenceChild only to prevent authority helper collision",
+    "argv length12->13 for receipt SHA"
+  ],
+  "private_permission_authority": "Trusted parent CertificateBinding verify enforces current-owner private ACLs; child reads only public certificate and receipt, never private keys",
+  "remaining": "Exact registered authority module, integrated parent/copier immutable binding controls, full host/fresh perOS form maps/validators/all24/sevenReady BEFORE execution"
+}
