@@ -1,0 +1,228 @@
+"""EQ083 current-process loaded-host observation SOURCE ONLY, never admission.
+
+Fixed current process only. Future form-parent AND each owned child must emit
+separate reviewed observations. No import/load/install/native execution is
+performed by source publication/review. Full resolver/form/loader closure,
+Windows datafile mappings and trusted receipt reconciliation remain pending.
+"""
+import hashlib
+import os
+from pathlib import Path
+import re
+import stat
+import sys
+
+MAX_MAPS = 4096
+MAX_MODULES = 1024
+MAX_MAP_BYTES = 1048576
+MAX_FILE = 67108864
+MAX_TOTAL = 1073741824
+REPARSE = 0x400
+
+
+def stat_pin(info):
+    if not stat.S_ISREG(info.st_mode) or getattr(info, 'st_file_attributes', 0) & REPARSE:
+        raise ValueError('resolved regular nonreparse file required')
+    if type(info.st_size) is not int or not 0 <= info.st_size <= MAX_FILE:
+        raise ValueError('host file size')
+    return tuple(getattr(info, key) for key in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+
+
+def actual_file(path, system):
+    if type(path) is not str or not path or len(path) > 32767 or any(c in path for c in '\x00\r\n'):
+        raise ValueError('host absolute path shape')
+    p = Path(path)
+    if not p.is_absolute() or '..' in p.parts:
+        raise ValueError('host absolute path')
+    if system == 'Windows' and (p.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:',p.drive) is None or any(':' in item for item in p.parts[1:])):
+        raise ValueError('host Windows local drive/no alternate stream')
+    # Linux mapped pathnames are already resolved by the kernel. Interpreter
+    # venv symlinks are retained separately by runtime observation below.
+    if p.is_symlink() or system == 'Windows' and getattr(p.lstat(), 'st_file_attributes', 0) & REPARSE:
+        raise ValueError('mapped pathname link/reparse')
+    resolved = p.resolve(strict=True)
+    ancestors = tuple(reversed(resolved.parents))
+    pins = []
+    for parent in ancestors:
+        info = parent.lstat()
+        if not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & REPARSE:
+            raise ValueError('resolved ancestor directory/link')
+        pins.append((str(parent), info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns))
+    expected = stat_pin(resolved.lstat())
+    flags = os.O_RDONLY | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0)
+    fd = os.open(resolved, flags)
+    try:
+        if stat_pin(os.fstat(fd)) != expected:
+            raise ValueError('host open identity')
+        digest, size = hashlib.sha256(), 0
+        while True:
+            block = os.read(fd, 65536)
+            if not block:
+                break
+            size += len(block)
+            if size > MAX_FILE or size > expected[4]:
+                raise ValueError('host read growth')
+            digest.update(block)
+        if size != expected[4] or stat_pin(os.fstat(fd)) != expected or stat_pin(resolved.lstat()) != expected:
+            raise ValueError('host read identity changed')
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            os.close(fd)
+        except BaseException:
+            if not active:
+                raise
+    for parent, device, inode, mode, mtime, ctime in pins:
+        info = Path(parent).lstat()
+        if (info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns) != (device, inode, mode, mtime, ctime):
+            raise ValueError('host ancestor changed')
+    if str(p.resolve(strict=True)) != str(resolved) or stat_pin(p.lstat()) != expected:
+        raise ValueError('host original path changed/alias')
+    return dict(path=str(resolved), identity=expected, ancestors=tuple(pins), bytes=size, sha256=digest.hexdigest())
+
+
+def linux_maps(raw):
+    if type(raw) is not bytes or not raw or len(raw) > MAX_MAP_BYTES or not raw.endswith(b'\n'):
+        raise ValueError('complete bounded maps bytes')
+    rows, last_end = [], 0
+    for line in raw.decode('utf-8', errors='strict').splitlines():
+        match = re.fullmatch(r'([0-9a-f]+)-([0-9a-f]+) ([r-][w-][x-][ps]) ([0-9a-f]+) ([0-9a-f]+):([0-9a-f]+) ([0-9]+)(?: +(.*))?', line)
+        if match is None:
+            raise ValueError('maps closed row syntax')
+        start, end, permissions, offset, major, minor, inode, name = match.groups()
+        start, end, offset, major, minor, inode = int(start,16), int(end,16), int(offset,16), int(major,16), int(minor,16), int(inode)
+        if not 0 <= start < end <= 18446744073709551615 or start < last_end or offset > 18446744073709551615:
+            raise ValueError('maps range/ordering')
+        last_end = end
+        name = name or ''
+        if '\\' in name or '\x00' in name or name.endswith(' (deleted)'):
+            raise ValueError('maps escaped/deleted/ambiguous name')
+        if name.startswith('/'):
+            if inode == 0 or '..' in Path(name).parts:
+                raise ValueError('file mapping inode/path')
+            kind = 'file'
+        elif name in ('', '[heap]', '[stack]', '[vdso]', '[vvar]', '[vvar_vclock]', '[vsyscall]'):
+            if inode != 0 or major != 0 or minor != 0 or 'x' in permissions and name not in ('[vdso]', '[vsyscall]'):
+                raise ValueError('anonymous executable/unowned mapping')
+            kind = 'virtual'
+        else:
+            raise ValueError('unknown mapping kind')
+        rows.append(dict(start=start,end=end,permissions=permissions,offset=offset,device=(major,minor),inode=inode,path=name,kind=kind))
+        if len(rows) > MAX_MAPS:
+            raise ValueError('maps row bound')
+    return tuple(rows)
+
+
+def read_linux_maps():
+    # proc pseudo-file has no meaningful stat size; bound complete read by bytes.
+    fd = os.open('/proc/self/maps', os.O_RDONLY | getattr(os, 'O_CLOEXEC', 0))
+    try:
+        chunks, size = [], 0
+        while True:
+            block = os.read(fd, min(65536, MAX_MAP_BYTES + 1 - size))
+            if not block:
+                break
+            size += len(block)
+            if size > MAX_MAP_BYTES:
+                raise ValueError('proc maps read bound')
+            chunks.append(block)
+        return linux_maps(b''.join(chunks))
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            os.close(fd)
+        except BaseException:
+            if not active:
+                raise
+
+
+def windows_modules():
+    # Future invocation imports ctypes before the first enumeration; those
+    # resulting interpreter/native modules are included in the observation.
+    import ctypes as c
+    from ctypes import wintypes as w
+    if c.sizeof(c.c_void_p) != 8:
+        raise ValueError('Windows x64 inspector only')
+    k = c.WinDLL('kernel32', use_last_error=True)
+    current = k.GetCurrentProcess
+    current.argtypes, current.restype = [], w.HANDLE
+    enum = k.K32EnumProcessModulesEx
+    enum.argtypes, enum.restype = [w.HANDLE, c.POINTER(w.HMODULE), w.DWORD, c.POINTER(w.DWORD), w.DWORD], w.BOOL
+    filename = k.K32GetModuleFileNameExW
+    filename.argtypes, filename.restype = [w.HANDLE, w.HMODULE, w.LPWSTR, w.DWORD], w.DWORD
+    process = current()  # pseudo-handle: not owned/never CloseHandle.
+    modules, needed = (w.HMODULE * MAX_MODULES)(), w.DWORD()
+    if not enum(process, modules, c.sizeof(modules), c.byref(needed), 3):
+        raise c.WinError(c.get_last_error())
+    if needed.value == 0 or needed.value > c.sizeof(modules) or needed.value % c.sizeof(w.HMODULE):
+        raise ValueError('module array incomplete/bound')
+    result, seen = [], set()
+    for module in modules[:needed.value // c.sizeof(w.HMODULE)]:
+        if not module or module in seen:
+            raise ValueError('module handle duplicate/null')
+        seen.add(module)
+        buffer = c.create_unicode_buffer(32768)
+        count = filename(process, module, buffer, len(buffer))
+        if count == 0:
+            raise c.WinError(c.get_last_error())
+        if count >= len(buffer) or count != len(buffer.value):
+            raise ValueError('module path truncation')
+        result.append((int(module), buffer.value))
+    # Returned module handles belong to loader snapshot, not this inspector.
+    return tuple(sorted(result))
+
+
+def runtime_paths(system):
+    result = {}
+    for key, value in (('executable',sys.executable),('base_executable',getattr(sys,'_base_executable',None))):
+        if type(value) is not str or not Path(value).is_absolute():
+            raise ValueError('runtime executable path')
+        p = Path(value)
+        info = p.lstat()
+        link = os.readlink(p) if stat.S_ISLNK(info.st_mode) else None
+        resolved = str(p.resolve(strict=True))
+        record = actual_file(resolved,system)
+        after = p.lstat()
+        if (info.st_dev,info.st_ino,info.st_mode,info.st_mtime_ns,info.st_ctime_ns) != (after.st_dev,after.st_ino,after.st_mode,after.st_mtime_ns,after.st_ctime_ns) or (os.readlink(p) if link is not None else None) != link or str(p.resolve(strict=True)) != resolved:
+            raise ValueError('runtime executable link/identity changed')
+        result[key] = dict(requested=value,link_target=link,link_identity=(info.st_dev,info.st_ino,info.st_mode,info.st_mtime_ns,info.st_ctime_ns),resolved=record)
+    return result
+
+
+def observe_host(system):
+    if system not in ('Windows','Linux') or (system == 'Windows') != (os.name == 'nt') or (system == 'Linux') != sys.platform.startswith('linux'):
+        raise ValueError('host actual OS')
+    if sys.flags.isolated != 1 or sys.flags.optimize != 0 or sys.implementation.name != 'cpython':
+        raise ValueError('host isolated CPython flags')
+    enumerate_loaded = windows_modules if system == 'Windows' else read_linux_maps
+    before = enumerate_loaded()
+    runtime = runtime_paths(system)
+    paths = [row[1] for row in before] if system == 'Windows' else [row['path'] for row in before if row['kind'] == 'file']
+    files, aliases, total = {}, {}, 0
+    for path in sorted(set(paths)):
+        record = actual_file(path,system)
+        alias = record['path'].casefold() if system == 'Windows' else record['path']
+        if alias in aliases and aliases[alias] != path:
+            raise ValueError('loaded module path alias')
+        aliases[alias] = path
+        total += record['bytes']
+        if len(files) >= MAX_MODULES or total > MAX_TOTAL:
+            raise ValueError('loaded file count/total bound')
+        if system == 'Linux':
+            for row in before:
+                if row['kind'] == 'file' and row['path'] == path and (row['inode'] != record['identity'][1] or row['device'] != (os.major(record['identity'][0]),os.minor(record['identity'][0]))):
+                    raise ValueError('mapped inode-device/current file mismatch')
+        files[path] = record
+    after = enumerate_loaded()
+    if before != after or runtime_paths(system) != runtime:
+        raise ValueError('loaded mappings/runtime changed during observation')
+    for path, record in files.items():
+        if actual_file(path,system) != record:
+            raise ValueError('loaded file bytes changed before completion')
+    return dict(scope='LOADED_OBSERVATION_ONLY_RESOLVER_FORM_CLOSURE_PENDING',admitted=False,system=system,pid=os.getpid(),
+                version=tuple(sys.version_info[:3]),cache_tag=sys.implementation.cache_tag,prefix=sys.prefix,base_prefix=sys.base_prefix,
+                isolated=sys.flags.isolated,optimize=sys.flags.optimize,runtime=runtime,mappings=before,files=files,total_bytes=total)
+
+
+if __name__ == '__main__':
+    raise SystemExit('SOURCE ONLY: loader coverage, fixed form provenance and host admission integration pending')
