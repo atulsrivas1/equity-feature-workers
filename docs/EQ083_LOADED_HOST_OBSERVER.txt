@@ -219,6 +219,8 @@ def observe_host(system):
     for path, record in files.items():
         if actual_file(path,system) != record:
             raise ValueError('loaded file bytes changed before completion')
+    if runtime_paths(system) != runtime or enumerate_loaded() != before:
+        raise ValueError('loaded mappings/runtime changed during final file rehash')
     return dict(scope='LOADED_OBSERVATION_ONLY_RESOLVER_FORM_CLOSURE_PENDING',admitted=False,system=system,pid=os.getpid(),
                 version=tuple(sys.version_info[:3]),cache_tag=sys.implementation.cache_tag,prefix=sys.prefix,base_prefix=sys.base_prefix,
                 isolated=sys.flags.isolated,optimize=sys.flags.optimize,runtime=runtime,mappings=before,files=files,total_bytes=total)

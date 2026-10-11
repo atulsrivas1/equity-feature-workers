@@ -1,3 +1,5 @@
+EQ083 loadedhost11700 SOURCE REWORK P2 final-rehash loader mutation gap preserved fullreport/source; corrected final runtime+mapping check AFTER rehash BEFOREexecution. Other AST unchanged/ALWAYSadmittedfalse/LinuxENVfalse/fullresolver-wholemap-freshforms-all24-sevenReady pending.
+
 EQ083 collector9004 independently SOURCEAPPROVED6111186738/full41INERTcases/original8822P2 history preserved. New bounded current-process Windows loader/Linuxmaps host observation SOURCE freezes actual backing-file-device-inode-sizeSHA/runtime path checks, ALWAYSadmittedfalse/fullresolver-form/Windowsdatafile/wholemap integration stillpending. No inspector/platform/collection/import/load/install/compiler/native/TLS execution, LinuxENVfalse/protected sources unchanged.
 
 EQ083 collector8822 source REWORK cleanup masking preserved full report; corrected explicit scandir close preserves original enumeration/component error BEFORE any capture/integration/execution. Other AST unchanged; ALWAYSadmittedfalse/LinuxENVfalse/host-wholemap-freshforms-all24-sevenReady pending.

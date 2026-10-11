@@ -1,8 +1,8 @@
 {
   "schema": "eq083-loaded-host-observation-source-v1",
   "source": {
-    "bytes": 11700,
-    "sha256": "48dd4ada1784b71e32d083bcd447de324002154d561d488f565faf407ec666bb"
+    "bytes": 11858,
+    "sha256": "145f7b5dd5b8ac614110548bdd24ddbd81f42e4f180b69d2f787cc36f37328e1"
   },
   "bases": {
     "equity-features": "6c15d0eb16b01cfffcdcdb50837368ce6b6b849e",
@@ -1208,5 +1208,89 @@
       "fact": "address/perms/offset/device/inode/path; deleted suffix/escaped names/anonymous special mappings distinguished"
     }
   ],
-  "execution": "NONE; AST/source preparation and official documentation read only; no whole inspector import/host enumeration/platform APIs/loaded modules/compiler/install/process/native/TLS/copy"
+  "execution": "NONE; AST/source preparation and official documentation read only; no whole inspector import/host enumeration/platform APIs/loaded modules/compiler/install/process/native/TLS/copy",
+  "previous_source": {
+    "bytes": 11700,
+    "sha256": "48dd4ada1784b71e32d083bcd447de324002154d561d488f565faf407ec666bb"
+  },
+  "previous_heads": {
+    "equity-features": "bb203d0f9c67da2f46dc40c82bcb8670b60319b9",
+    "equity-feature-workers": "5ddbd7893f259395a28485fe24f692a860ad31a4"
+  },
+  "previous_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "bb203d0f9c67da2f46dc40c82bcb8670b60319b9",
+      "equity-feature-workers": "5ddbd7893f259395a28485fe24f692a860ad31a4"
+    },
+    "source": {
+      "bytes": 11700,
+      "sha256": "48dd4ada1784b71e32d083bcd447de324002154d561d488f565faf407ec666bb"
+    },
+    "disposition": "REWORK",
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_LOADED_HOST_OBSERVER.txt",
+        "line": 219,
+        "title": "Recheck mappings and runtime after final backing-file rehash",
+        "evidence": "Fake final actual_file rehash changes the loader map while keeping backing record unchanged. observe_host performs only two enumerations, both before this phase, then returns success without detecting new mapping. This is incomplete observed endpoint validation, not an atomicity/host-admission claim.",
+        "correction": "After final backing-file rehash, repeat mapping and runtime comparisons against original snapshots before returning. Preserve no-locking/loaded-memory limits and deny any observed drift."
+      }
+    ],
+    "checks": [
+      "Exact11700 SHA/AST/three mirrors/clean five-doc diffs/protected invariance/Atul-noCoauthors.",
+      "34 extracted fake proc rows/Windows loader/stat/read/backing hash/observe_host cases pass; no actual OS inspector invocation.",
+      "Windows mocked64-bit needed0/oversize/misalignment/false/null/duplicate and filenamezero/truncation/count mismatch deny; borrowed pseudo/module handles never closed.",
+      "Linux completeLF/ordereduint64 rows/deviceinode/anonymous executable/name denials and final loader/runtime/backingfile changes reject; active file error preserved when descriptor close fails.",
+      "Microsoft primary API read confirms LIST_MODULES_ALL, needed-buffer semantics, borrowed module handles and DATAFILE exclusion; man7 reference retrieval timed out, source/parser assessment retained explicit limitation.",
+      "Fake final-phase loader mutation is accepted with stable file records and only two pre-rehash enumerations; independently confirmed returned mappings differ from subsequent loader snapshot. Three runtime symlink fakes preserve link metadata/target and deny observed mutations. All protected source SHA identities and nested original histories exact."
+    ],
+    "inert_cases": [
+      "complete maps file and virtual",
+      "maps denial noLF",
+      "maps denial overlap",
+      "maps denial zero inode",
+      "maps denial deleted",
+      "maps denial escaped",
+      "maps denial virtual exec",
+      "maps denial virtual device",
+      "maps denial unknown bracket",
+      "maps denial overflow",
+      "maps denial invalidUTF8",
+      "maps row cap",
+      "Windows borrowed pseudo/module handles normal",
+      "Windows x86",
+      "Windows zero needed",
+      "Windows oversized needed",
+      "Windows misaligned needed",
+      "Windows enum failure",
+      "Windows null handle",
+      "Windows duplicate handle",
+      "Windows filename zero",
+      "Windows filename truncation",
+      "Windows filename count mismatch",
+      "actual_file fake complete hash/descriptor close",
+      "file mutation",
+      "file growth",
+      "file symlink",
+      "file ordinary close",
+      "file active original preserved on close failure",
+      "observe_host fake complete stable identity/mappings",
+      "observe maps changed",
+      "observe runtime changed",
+      "observe file changed",
+      "observe inode mismatch"
+    ],
+    "limits": [
+      "Only AST-extracted functions with fake ctypes/filesystem/procmaps/sys/stat; no actual ctypes/WinDLL/OS inspector/whole-module/product/platform/SDK/SSL imports or install/compiler/process/native/TLS/copy/probe.",
+      "Always admitted:false. Partial Windows loader API excludes DATAFILE; complete resolver/form/wholemap/child-source integration pending. Backing file SHA is not loaded-memory SHA; no locking or hostile same-user security.",
+      "Read-only Microsoft documentation fetched; man7 fetch timeout means its live text was not independently retrieved during this review."
+    ],
+    "inert_case_count": 37,
+    "tool_only_corrections": [
+      "Initial source/inert sweep wrote a provisional APPROVED outside report after34 cases; completed final-phase adversary confirmed P2 and report superseded to REWORK before final disposition/publication. No source execution/approval given."
+    ]
+  },
+  "correction": "Only observe_host adds final runtime comparison then loaded mapping enumeration AFTER final backing-file rehash. Detect final-phase loader change; preserves non-atomic limitations/alwaysfalse. Other functions unchanged/no host execution."
 }

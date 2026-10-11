@@ -1,3 +1,5 @@
+Original11700 source independently REWORK P2 before execution: loader map could change during final backing-file rehash after last enumeration. Full report/source/heads retained INPUTS; corrected final runtime comparison then third loaded enumeration after all file rehashes detects this observed change. Renewed review required; still non-atomic/non-locking/ALWAYSfalse, no actual host call.
+
 # EQ083 loaded-host observation source
 
 PRE-EXECUTION SOURCE ONLY; ALWAYS admitted:false/LOADED_OBSERVATION_ONLY_RESOLVER_FORM_CLOSURE_PENDING; main denies. This is bounded actual-current-process enumeration and backing-file observation source, not executed host evidence, full dynamic linker resolver, approved form, installed archive equivalence or admission. Exact source review BEFORE any invocation/import/platform load. Current certificateparent/copier/authority/ENV remains unchanged/Linuxadmittedfalse. No product/tests/tools/workflow implementation. Collector9004 source approval6111186738/full41inertcases/original8822P2 history retained full INPUTS; generated9351/payload10108 histories nested unchanged.
