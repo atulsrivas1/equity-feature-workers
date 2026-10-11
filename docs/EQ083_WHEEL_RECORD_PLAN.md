@@ -1,3 +1,5 @@
+Original9552 source at84eeb27/3c94ec6 independently REWORK oneP3: empty REQUESTED observation bytesFalse equaled0 and returned caller boolean. Full original report preserved in INPUTS; corrected BEFORE integration/execution with exact observation dict keys/non-bool int bytecount/canonical string SHA and digest equality. New source10108 requires renewed exact review; admitted alwaysfalse/no runtime action.
+
 # EQ083 wheel payload and installed RECORD relocation source
 
 PRE-EXECUTION SOURCE ONLY. This byte-map verifier has no filesystem, install, product import, subprocess, permission or host inspection operations. Its only successful result is admitted:false with PAYLOAD_RECORD_ONLY_GENERATED_SEMANTICS_AND_HOST_PENDING. Main always denies. It is not integrated into any current parent, copier or ENV; Linux remains admitted:false. No full fresh installed RECORD admission, Ready or execution permission is implied.

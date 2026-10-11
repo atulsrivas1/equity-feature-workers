@@ -2,8 +2,8 @@
   "schema": "eq083-wheel-record-relocation-source-v1",
   "scope": "Inert byte-map payload/RECORD relocation source only; ALWAYS admitted:false; generated semantics, real filesystem collector, host reconciliation and fresh maps pending",
   "source": {
-    "bytes": 9552,
-    "sha256": "e406106f815a38905961824ff8542b275430e2d16bb8cdb301c10f04535d44b3"
+    "bytes": 10108,
+    "sha256": "06b751adcc63268b39a9876d55ec8c71948a424d00a26586abf99d63bd8acc96"
   },
   "bases": {
     "equity-features": "60830bca17bc9cf1b460e4c3a3bd5e0099f80e6a",
@@ -191,5 +191,73 @@
     "Loaded host interpreter-runtime-DLL-ELF inspector/resolution reconciliation before-after",
     "Fresh perOS wheel/sdist/light/native-reference maps and full build closure; revised literal admission source review",
     "R04/R05 controls/ledgers/all24/fullsevenReady/guard93ReadyInprogressactual13assignment BEFORE product implementation"
-  ]
+  ],
+  "original_source_review_rework": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "84eeb27dbbe95c4b394409777774d9572771f296",
+      "equity-feature-workers": "3c94ec64bb666cc0e99f916edf999bfcbaeb4370"
+    },
+    "source": {
+      "bytes": 9552,
+      "sha256": "e406106f815a38905961824ff8542b275430e2d16bb8cdb301c10f04535d44b3"
+    },
+    "disposition": "REWORK",
+    "findings": [
+      {
+        "severity": "P3",
+        "path": "docs/EQ083_WHEEL_RECORD_RELOCATION.txt",
+        "line": 165,
+        "title": "Require exact generated observation scalar types",
+        "evidence": "For the legitimate zero-byte REQUESTED generated file, observed.bytes=False is accepted because dictionary equality treats False as 0. The verifier returns that boolean in generated_pending instead of an exact integer size. This affects the finite observation contract, not host admission: admitted remains False.",
+        "correction": "Validate observed as an exact closed dict with exact non-bool int bytes in bounds and exact str canonical SHA before equality with digest(installed[path]); reject subclasses/impostors if exact inert types are intended."
+      }
+    ],
+    "checks": [
+      "Exact source bytes/hash/AST/compile and three mirrors; clean exact five-doc diffs/UTF8/diffcheck/Atul-noCoauthors/protected invariance.",
+      "26 synthetic byte-map cases cover both OS shebang replacement, empty REQUESTED, complete RECORD/canonical size/hash/self/duplicate rows, lexical path and legitimate installed relative destination, collision/type/payload/generated denials.",
+      "Inert actual function reproduces boolean observed.bytes acceptance for zero-byte REQUESTED while always returning admitted:false.",
+      "All five pinned preserved pip25.0.1 source files reread/hash verified; fix_script exact whole-first-line replacement and OS line ending inspected read-only. Full prior Linux source approval report embedded exactly; host/fresh maps remain pending."
+    ],
+    "inert_cases": [
+      "Linux exact payload/script relocation/empty REQUESTED",
+      "Windows exact payload/script relocation/empty REQUESTED",
+      "path '/x'",
+      "path 'a//b'",
+      "path 'a/../b'",
+      "path 'a/./b'",
+      "path 'C:x'",
+      "path 'a\\\\b'",
+      "path 'a\\x00'",
+      "path 'a\\nb'",
+      "legitimate installed relative script",
+      "installed path outside venv",
+      "altered payload",
+      "missing payload",
+      "unowned extra",
+      "wrong executable",
+      "wrong purelib",
+      "foreign .data",
+      "generated ordinary payload",
+      "bad generated hash",
+      "Windows case aliases",
+      "nonbytes payload",
+      "record arity",
+      "record noncanonical size",
+      "record duplicate self",
+      "record hashed self"
+    ],
+    "limits": [
+      "Only standard-library source extraction and synthetic byte maps executed; no filesystem collector, installation, product/SDK/platform imports, pyc compilation, permission, process/native/TLS/copy/setup/probe.",
+      "Generated direct_url/entry scripts/pyc semantics and actual host identity/collector/fresh maps remain pending; no fresh installed or host admission/Ready/execution approval."
+    ],
+    "tool_only_corrections": [
+      "Initial inert reviewer script reused canonical repo variable c for a synthetic recipe dict; provenance check raised TypeError before report writes. Repo name made literal; source/inert checks rerun successfully."
+    ]
+  },
+  "previous_source": {
+    "bytes": 9552,
+    "sha256": "e406106f815a38905961824ff8542b275430e2d16bb8cdb301c10f04535d44b3"
+  },
+  "correction": "Exact observation closed keys/non-bool integer size/canonical exact-str SHA before byte equality; original P3 preserved BEFORE integration/execution"
 }

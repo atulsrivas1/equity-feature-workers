@@ -162,8 +162,17 @@ def verify_payload_record(wheel, installed, recipe):
         raise ValueError('generated ownership/fileset')
     pending = {}
     for path, item in generated.items():
-        if type(item) is not dict or set(item) != {'kind', 'source', 'observed'} or item['observed'] != digest(installed[path]):
+        if type(item) is not dict or set(item) != {'kind', 'source', 'observed'}:
             raise ValueError('generated closed identity')
+        observed = item['observed']
+        if type(observed) is not dict or set(observed) != {'bytes', 'sha256'}:
+            raise ValueError('generated observation shape')
+        if type(observed['bytes']) is not int or not 0 <= observed['bytes'] <= MAX_FILE:
+            raise ValueError('generated observation size')
+        if type(observed['sha256']) is not str or re.fullmatch('[0-9a-f]{64}', observed['sha256']) is None:
+            raise ValueError('generated observation SHA')
+        if observed != digest(installed[path]):
+            raise ValueError('generated observed bytes mismatch')
         kind = item['kind']
         if kind in ('INSTALLER', 'REQUESTED', 'direct_url'):
             name = {'INSTALLER': 'INSTALLER', 'REQUESTED': 'REQUESTED', 'direct_url': 'direct_url.json'}[kind]
