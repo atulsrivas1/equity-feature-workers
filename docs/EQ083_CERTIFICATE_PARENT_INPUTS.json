@@ -1,0 +1,94 @@
+{
+  "schema": "eq083.certificate-parent-source.v1",
+  "scope": "PRE-EXECUTION SOURCE ONLY; integrated parent/copier not executed, no generation/platform/exit/cleanup/Ready proof",
+  "bases": {
+    "equity-features": "5d0be6b39987b885ada6c232b3d9ad21ec17f04f",
+    "equity-feature-workers": "35dcaff306df539bfbd0e5f6a75d738664376d0e"
+  },
+  "sources": {
+    "docs/EQ083_CERTIFICATE_PARENT.txt": {
+      "bytes": 26929,
+      "sha256": "ab5b685f92dd976b19fff4d326d73b89bd58972bf008238e6ebcae388e0b7321"
+    },
+    "docs/EQ083_WINDOWS_CERTIFICATE_BOOTSTRAP.txt": {
+      "bytes": 2111,
+      "sha256": "65e49e1c31e4fa5f544073c8171e5705e8e1379402c9aec6c973eb1e84aec5f0"
+    },
+    "docs/EQ083_LINUX_CERTIFICATE_GATE.txt": {
+      "bytes": 6252,
+      "sha256": "d9759e68160f96054be38ca24cd2fc1dd69ede3454d9dfd6d9c5dde2f122437d"
+    },
+    "docs/EQ083_PORTABLE_CERTIFICATE_ENTRY.txt": {
+      "bytes": 7790,
+      "sha256": "7f7aa8ac55d81fe5b8271cbb773ccb2c01dd4838fde18e865ed4535100b91d42"
+    },
+    "docs/EQ083_CERTIFICATE_ENV_INPUTS.json": {
+      "bytes": 587716,
+      "sha256": "6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532"
+    }
+  },
+  "copier": {
+    "bytes": 6157,
+    "sha256": "e02b7556bd5def74b8dce085206297a50f40466fdf194c20ac8364b612dc6c36"
+  },
+  "derivation": {
+    "bases": {
+      "equity-features": "5d0be6b39987b885ada6c232b3d9ad21ec17f04f",
+      "equity-feature-workers": "35dcaff306df539bfbd0e5f6a75d738664376d0e"
+    },
+    "sources": {
+      "parent": {
+        "bytes": 26929,
+        "sha256": "ab5b685f92dd976b19fff4d326d73b89bd58972bf008238e6ebcae388e0b7321"
+      },
+      "windows": {
+        "bytes": 2111,
+        "sha256": "65e49e1c31e4fa5f544073c8171e5705e8e1379402c9aec6c973eb1e84aec5f0"
+      },
+      "linux": {
+        "bytes": 6252,
+        "sha256": "d9759e68160f96054be38ca24cd2fc1dd69ede3454d9dfd6d9c5dde2f122437d"
+      },
+      "inputs": {
+        "bytes": 587716,
+        "sha256": "6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532"
+      }
+    },
+    "helper_original": {
+      "bytes": 11944,
+      "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+    },
+    "helper_derived": {
+      "bytes": 11943,
+      "sha256": "51dfc8f1f7e695df91e9d13443c639ba3f1ad8258569c7d8debf36033fa08fd0"
+    },
+    "helper_declared_diff": "exact one argv-length predicate12->6, no other byte changes",
+    "linux_declared_diff": "exact one fixed GO+EOF gate inserted immediately before original helper exec; original6158 preserved in Git history",
+    "scope": "AST/compile source preparation only; no imports/launch/permissions/crypto/generation/native/TLS/copy/probe, not published/reviewed/executed"
+  },
+  "source_reviews": [
+    {
+      "report": "eq083-portable-certificate-reviewer-report.json",
+      "url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6108659499",
+      "scope": "original portable helper source only"
+    },
+    {
+      "report": "eq083-linux-certificate-reviewer-report.json",
+      "url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6108679989",
+      "scope": "original6158 Linux bootstrap source only; NEW6252 gate requires renewed integrated review"
+    }
+  ],
+  "limits": {
+    "helper_source_bytes": 8192,
+    "parent_source_bytes": 65536,
+    "copier_source_bytes": 65536,
+    "input_bytes": 2097152,
+    "stdout_bytes": 512,
+    "stderr_bytes": 4096,
+    "startup_seconds": 4,
+    "cooperative_generation_seconds": 20,
+    "wait_seconds": 3,
+    "reader_join_seconds": 2
+  },
+  "remaining": "Independent exact integrated source review before ANY copy/generation; Linux records not admitted so no Linux launch. Full perOS fresh archive/RECORD/backend maps and distinct TLS reference plus all24 fullsevenReady remain pending."
+}
