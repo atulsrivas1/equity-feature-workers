@@ -1,0 +1,204 @@
+{
+  "schema": "eq083.builder-design.v1",
+  "scope": "SOURCE-DERIVED DESIGN ONLY, no implementation/execution/fullReady",
+  "bases": {
+    "equity-features": "88dcc0254607733c7b0311681d6641949cda012f",
+    "equity-feature-workers": "474bb2e833033de309a49366223889178a2d08f4"
+  },
+  "source_inventory": {
+    "scope": "Outside source-derived fresh bothOS builder-WORKFLOW DESIGN inventory only; not written/published/reviewed/implemented/executed/Ready",
+    "worker_head": "474bb2e833033de309a49366223889178a2d08f4",
+    "assets": [
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_mcp.py",
+        "bytes": 13459,
+        "sha256": "10790320bb5ab930c3ba20c004a78137daec12035b48b916c5dae3dfdbedb4bc",
+        "functions": [
+          "reference_record",
+          "audit_mcp",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_client.py",
+        "bytes": 11830,
+        "sha256": "5edd15d1f7e842298a6eecbb7097d0fe78d7f9e53598995ba837dcdd3689993e",
+        "functions": [
+          "audit_client",
+          "wheel_record",
+          "provenance",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_service.py",
+        "bytes": 9766,
+        "sha256": "56d3560c2b8b1d207940e1a45ab12cfc3145d0d3a17034aa77501365518381af",
+        "functions": [
+          "audit",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_foundation.py",
+        "bytes": 15394,
+        "sha256": "f984e6d04cc0ca76c5ea41de816532f95033670481cc092ddcd17c89ff854778",
+        "functions": [
+          "run",
+          "sha",
+          "git",
+          "snapshot",
+          "normalize",
+          "inspect",
+          "build",
+          "install",
+          "fingerprint",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/qualify_job_native.py",
+        "bytes": 7240,
+        "sha256": "8eff6dbefeb79ccd07cbc7a18f6f66a4019ed8da82480086dd1e5380558274a6",
+        "functions": [
+          "flow"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/requirements-mcp-reference.txt",
+        "bytes": 738,
+        "sha256": "f37fbdad94f5742ee96f7d44bbd9acd10c617ad3386ecd1423a31f8798c36205"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/mcp.yml",
+        "bytes": 1233,
+        "sha256": "4429fe49a5eff622d99984afbe75f9068c7bba8c587c73e4b7f80eed5911576b"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/client.yml",
+        "bytes": 1247,
+        "sha256": "e554bc8dc10603f68ca0063a5271c70a4b2c82a79a2be7d5927d363d1fc278a8"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/service.yml",
+        "bytes": 1245,
+        "sha256": "20f2a7c6b7c663e826ab431a89e8fc65d5c67de45b4d6d55f84359ca92e9d2c2"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/foundation.yml",
+        "bytes": 1631,
+        "sha256": "c796a58b0ea4f4636b7784b2cce1ecdd09cb33c68a61b620030c023d1c83ff5e"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_INPUTS.json",
+        "bytes": 35406,
+        "sha256": "fb18bb76e11634cc4a6d750730da7467155baa21e429f0989a550dbae82b1f0f"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_PLAN.md",
+        "bytes": 13470,
+        "sha256": "c9d1b076ab3f2a82e754ac6895fd06b7079723b8f1e9228a20183bb8230bc7a1"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_TLS_EXECUTION.json",
+        "bytes": 192750,
+        "sha256": "582d76468e26c6d491905bd2a2c1ec27210758f6f070869cf339d49f567e7241"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_TLS_PROBE.txt",
+        "bytes": 43762,
+        "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_TLS_SESSION_TRANSPORT.txt",
+        "bytes": 20709,
+        "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_OBSERVER_PATCH.txt",
+        "bytes": 907,
+        "sha256": "496400d3f254cc05e55fe735d8b09fcac09179defb37321d1b1bb5ff649f3a5d"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "packages/service/src/equity_feature_service/_entry.py",
+        "bytes": 2770,
+        "sha256": "66d6982313a84627916be6145f9b611b4237c6641a6b542e9a8f2e459abb6b7e",
+        "functions": [
+          "canonical",
+          "startup_frame",
+          "startup_ack",
+          "validate_startup"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "packages/service/src/equity_feature_service/_containment.py",
+        "bytes": 28231,
+        "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd",
+        "functions": [
+          "_linux_limits",
+          "_launch_metadata",
+          "_epoch_clock"
+        ]
+      }
+    ],
+    "design_obligations": [
+      "Dedicated qualification bundle and exact24requirement coverage without new runtime package or generic competing service/client",
+      "Fresh Windows/Linux wheel AND sdist/light/native/reference environments; installed-I parentANDchild, pipcheck and no checkout shadow",
+      "Accepted complete perOS archive/source equivalence, source-sdist closure and whole RECORD validation, dependency/core/typing-positive-negative proofs",
+      "Full publicGit/currentserverZIP whole-tree every-entry/head-size-digest-unexpired proof; no merge-only or local-only acceptance",
+      "Portable fixed synthetic cert generation/source pins perOS before TLS; privatekeys excluded and no truststore mutation",
+      "Windows atomic reference lifecycle versus explicitly frozen Linux processgroup/ownedcontainment cleanup; no relabeling Windows source proof",
+      "Bounded trusted fixture/fault ledgers/all original producer snapshots/schemas/nativegoldenSHA; all priorfailures explicit",
+      "Approved DOCS-only Linux observer correction applied only after fullsevenReady admission",
+      "Freeze builder/source/entry/config/artifact/receipt identities with variable fields explicit and genuine qualified implementation then additive metadata, no selfreceiptloop"
+    ]
+  },
+  "proposed_paths": [
+    "tools/build_resilience.py",
+    "tests/resilience",
+    ".github/workflows/resilience.yml"
+  ],
+  "form_matrix": {
+    "os": [
+      "Windows",
+      "Linux"
+    ],
+    "artifacts": [
+      "wheel",
+      "sdist"
+    ],
+    "phases": [
+      "light",
+      "native-reference"
+    ]
+  },
+  "new_certificate_backend": "existing qualification cryptography==50.0.2, new exact helper source/pins still pending",
+  "outstanding_ready_gates": [
+    "portable exact reference/bootstrap/certificate sources and source review",
+    "concrete bootstrap/buildwheel perOS closure pins",
+    "exact R04/R05/R07 full independent fixture coverage and pervector mapping",
+    "fullsevenReady independent exactreview before admission/implementation"
+  ]
+}
