@@ -1,0 +1,113 @@
+"""Proposed trusted qualification certificate helper, not executed or admitted."""
+import sys,os,json,hashlib,datetime,ipaddress,stat,importlib.metadata
+from pathlib import Path
+if sys.flags.isolated!=1 or len(sys.argv)!=2:raise ValueError('owned arguments')
+root=Path(sys.argv[1])
+if not root.is_absolute() or len(str(root))>1024 or os.path.lexists(root) or '..' in root.parts or not root.parent.is_dir() or root.parent.resolve()!=root.parent:raise ValueError('owned fresh private root')
+security=None;owner=None
+def private(path,directory):
+ info=path.lstat()
+ if stat.S_ISLNK(info.st_mode) or bool(getattr(info,'st_file_attributes',0)&0x400):raise ValueError('owned reparse denied')
+ if directory!=stat.S_ISDIR(info.st_mode) or (not directory and not stat.S_ISREG(info.st_mode)):raise ValueError('owned file type')
+ if os.name=='nt':
+  descriptor=security.GetNamedSecurityInfo(str(path),1,5)
+  control,_=descriptor.GetSecurityDescriptorControl()
+  acl=descriptor.GetSecurityDescriptorDacl()
+  if descriptor.GetSecurityDescriptorOwner()!=owner or acl is None or acl.GetAceCount()!=1:raise ValueError('owned private DACL')
+  header,mask,sid=acl.GetAce(0)
+  if header[0]!=0 or mask!=0x1f01ff or sid!=owner:raise ValueError('owned private ACE')
+  if directory:
+   if not control&0x1000 or header[1]!=3:raise ValueError('owned private inherited root')
+  elif header[1]!=16:raise ValueError('owned private inherited file')
+ elif info.st_uid!=os.geteuid() or stat.S_IMODE(info.st_mode)!=(0o700 if directory else 0o600):raise ValueError('owned private mode')
+def create_private_root():
+ global security,owner
+ if os.name=='nt':
+  if len(root.drive)!=2 or not root.drive.endswith(':') or importlib.metadata.version('pywin32')!='312':raise ValueError('owned Windows dependency')
+  import win32security,win32api,win32file,pywintypes
+  if not all('site-packages' in Path(module.__file__).resolve().parts for module in (win32security,win32api,win32file,pywintypes)):raise ValueError('owned installed permissions')
+  security=win32security;token=security.OpenProcessToken(win32api.GetCurrentProcess(),8)
+  try:owner=security.GetTokenInformation(token,1)[0]
+  finally:
+   original=sys.exc_info()[1]
+   try:token.Close()
+   except BaseException:
+    if original is None:raise
+  acl=security.ACL();acl.AddAccessAllowedAceEx(2,3,0x1f01ff,owner)
+  descriptor=security.SECURITY_DESCRIPTOR();descriptor.SetSecurityDescriptorOwner(owner,False);descriptor.SetSecurityDescriptorDacl(True,acl,False)
+  descriptor.SetSecurityDescriptorControl(0x1000,0x1000)
+  attributes=pywintypes.SECURITY_ATTRIBUTES();attributes.SECURITY_DESCRIPTOR=descriptor;attributes.bInheritHandle=False
+  win32file.CreateDirectory(str(root),attributes)
+ elif sys.platform=='linux':
+  if os.geteuid()==0:raise ValueError('owned Linux user')
+  root.mkdir(mode=0o700)
+ else:raise ValueError('owned platform')
+ private(root,True)
+import cryptography
+if cryptography.__version__!='50.0.2' or 'site-packages' not in Path(cryptography.__file__).resolve().parts:raise ValueError('owned installed cryptography')
+from cryptography import x509
+from cryptography.x509.oid import NameOID,ExtendedKeyUsageOID
+from cryptography.hazmat.primitives import hashes,serialization
+from cryptography.hazmat.primitives.asymmetric import rsa,padding
+from cryptography.hazmat.backends.openssl.backend import backend
+now=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
+start=now-datetime.timedelta(minutes=1);end=now+datetime.timedelta(days=30)
+create_private_root()
+entries=[]
+def digest(data):return hashlib.sha256(data).hexdigest()
+def publish(name,data,cap):
+ if type(data)is not bytes or not 0<len(data)<=cap:raise ValueError('owned encoded bound')
+ path=root/name;pending=path.with_name(path.name+'.pending')
+ if path.exists() or pending.exists():raise ValueError('owned no replacement')
+ descriptor=os.open(pending,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+ try:stream=os.fdopen(descriptor,'wb')
+ except BaseException:
+  try:os.close(descriptor)
+  except BaseException:pass
+  raise
+ try:
+  private(root,True);private(pending,False)
+  if stream.write(data)!=len(data):raise ValueError('owned short write')
+  stream.flush()
+ finally:
+  fault=sys.exc_info()[1]
+  try:stream.close()
+  except BaseException:
+   if fault is None:raise
+ pending.replace(path)
+ private(path,False)
+ observed=path.read_bytes()
+ if observed!=data:raise ValueError('owned publication mismatch')
+ return dict(name=name,bytes=len(data),sha256=digest(data))
+for role,address,serial in (('valid','127.0.0.1',8301),('wrong','127.0.0.2',8302)):
+ key=rsa.generate_private_key(public_exponent=65537,key_size=2048)
+ name=x509.Name([x509.NameAttribute(NameOID.COMMON_NAME,'eq083-'+role)])
+ cert=(x509.CertificateBuilder().subject_name(name).issuer_name(name)
+  .public_key(key.public_key()).serial_number(serial)
+  .not_valid_before(start).not_valid_after(end)
+  .add_extension(x509.BasicConstraints(ca=False,path_length=None),critical=True)
+  .add_extension(x509.ExtendedKeyUsage([ExtendedKeyUsageOID.SERVER_AUTH]),critical=False)
+  .add_extension(x509.SubjectAlternativeName([x509.IPAddress(ipaddress.ip_address(address))]),critical=False)
+  .sign(key,hashes.SHA256()))
+ cert_bytes=cert.public_bytes(serialization.Encoding.PEM)
+ key_bytes=key.private_bytes(serialization.Encoding.PEM,serialization.PrivateFormat.PKCS8,serialization.NoEncryption())
+ cert_record=publish(role+'-cert.pem',cert_bytes,8192)
+ key_record=publish(role+'-key.pem',key_bytes,8192)
+ parsed=x509.load_pem_x509_certificate((root/cert_record['name']).read_bytes())
+ parsed_key=serialization.load_pem_private_key((root/key_record['name']).read_bytes(),password=None)
+ if not isinstance(parsed_key,rsa.RSAPrivateKey) or parsed_key.key_size!=2048:raise ValueError('owned RSA key')
+ public=lambda value:value.public_bytes(serialization.Encoding.DER,serialization.PublicFormat.SubjectPublicKeyInfo)
+ if public(parsed.public_key())!=public(parsed_key.public_key()) or parsed.serial_number!=serial:raise ValueError('owned keypair serial')
+ if parsed.extensions.get_extension_for_class(x509.SubjectAlternativeName).value.get_values_for_type(x509.IPAddress)!=[ipaddress.ip_address(address)]:raise ValueError('owned SAN')
+ if parsed.not_valid_before_utc!=start or parsed.not_valid_after_utc!=end:raise ValueError('owned validity')
+ if parsed.extensions.get_extension_for_class(x509.BasicConstraints).value.ca:raise ValueError('owned CA')
+ if list(parsed.extensions.get_extension_for_class(x509.ExtendedKeyUsage).value)!=[ExtendedKeyUsageOID.SERVER_AUTH]:raise ValueError('owned usage')
+ if parsed.signature_hash_algorithm.name!='sha256':raise ValueError('owned signature algorithm')
+ if parsed.subject!=parsed.issuer:raise ValueError('owned self issued')
+ parsed.public_key().verify(parsed.signature,parsed.tbs_certificate_bytes,padding.PKCS1v15(),parsed.signature_hash_algorithm)
+ entries.append(dict(role=role,address=address,serial=serial,certificate=cert_record,private_key=key_record,certificate_der_sha256=digest(parsed.public_bytes(serialization.Encoding.DER)),public_key_der_sha256=digest(public(parsed.public_key()))))
+record=dict(schema='eq083.synthetic-certificate.v1',cryptography_version=cryptography.__version__,backend_version=backend.openssl_version_text(),generated_utc=now.isoformat(),valid_from_utc=start.isoformat(),valid_until_utc=end.isoformat(),entries=entries,scope='synthetic qualification inputs; keys remain private, no truststore mutation, not native OpenSSL process proof')
+receipt=json.dumps(record,sort_keys=True,separators=(',',':')).encode('utf-8')
+receipt_record=publish('certificate-record.json',receipt,16384)
+(root/'certificate-record.json.complete').mkdir()
+print(json.dumps(dict(marker='eq083-certificates-complete',record=receipt_record),sort_keys=True,separators=(',',':')))
