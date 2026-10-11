@@ -362,7 +362,17 @@ class Jobs(unittest.TestCase):
             job_id = self.submit(service,tokens[0])
         self.assertEqual(self.wait_terminal(scheduler,job_id).state,'failed')
         self.assertTrue(scheduler.thread.is_alive())
-        self.assertIsNone(scheduler._running)
+        # Terminal state can become visible before the executor's finally cleanup.
+        # Observe real capacity release before repairing the clock or reusing it.
+        end = time.monotonic()+3
+        with scheduler.condition:
+            while scheduler._running == job_id:
+                remaining = end-time.monotonic()
+                self.assertGreater(remaining,0,'failed job did not release native slot')
+                scheduler.condition.wait(remaining)
+            self.assertIsNone(scheduler._running)
+            self.assertEqual(scheduler.jobs[job_id].held,0)
+        self.assertTrue(scheduler.thread.is_alive())
         self.assertEqual(audit['reads'],0)
         mono[0] = 100
         next_id = self.submit(service,tokens[0],'fresh')
