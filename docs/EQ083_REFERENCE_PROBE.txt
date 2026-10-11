@@ -97,7 +97,7 @@ for index,case in enumerate(fixture['native_cases']):
   supervisor=OwnedEpochSupervisor(OwnedEntryInventory((profile,)))
   results=[];errors=[];client=None
   def launch():
-   try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=25,output_limit=256))
+   try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=25,output_limit=640))
    except BaseException as error:errors.append(type(error).__name__)
   thread=threading.Thread(target=launch);thread.start()
   direct_count=0;client_count=0;child_count=None
@@ -204,7 +204,7 @@ for index,case in enumerate(fixture['native_cases']):
    if client is not None:client.close()
    stop.write_bytes(b'1');thread.join(6)
   assert not thread.is_alive() and not errors and len(results)==1
-  assert (results[0].reason,results[0].exit_code)==('exited',0)
+  assert (results[0].reason,results[0].exit_code)==('exited',0), (results[0].reason,results[0].exit_code,results[0].output)
   assert json.loads(results[0].output)==dict(marker='owned-family-http-exited',family=family,reads=2)
   reports.append(dict(case=case['case'],direct=direct_count,client=client_count,mcp=child_count,total=direct_count+client_count+child_count,source_reads=2,full_producer=True,full_raw=True,native_sha=case['native_sha256'],reference_child_observed_exited=True,native_supervisor_observed_exited=True))
 assert len(reports)==4

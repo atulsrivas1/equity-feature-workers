@@ -70,8 +70,8 @@
       "commit": null,
       "path": "docs/EQ083_REFERENCE_PROBE.txt",
       "harness_path": "docs/EQ083_REFERENCE_PROBE.txt",
-      "bytes": 14783,
-      "sha256": "cf921879f873e610467ab5a203ca7ddb2730aaf69778074596639764eb1bf4af",
+      "bytes": 14843,
+      "sha256": "689d50f53ff8f35a953debdf002941a8ba355115c422d9d572d490fe3fadaeee",
       "identity_note": "This new literal source is frozen by hash here; its published commit is recorded outside this manifest after publication, avoiding self-reference."
     }
   ],
