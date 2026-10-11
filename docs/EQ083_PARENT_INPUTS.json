@@ -1,0 +1,135 @@
+{
+  "scope": "Frozen positive/unavailable/reproducibility parent inputs, NOT execution or Ready proof",
+  "inputs": [
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "harness_path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "docs/EQ083_REFERENCE_ENTRY.txt",
+      "harness_path": "docs/EQ083_REFERENCE_ENTRY.txt",
+      "bytes": 3332,
+      "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "docs/EQ082_NATIVE_FAMILY_ENTRY.txt",
+      "harness_path": "docs/EQ082_NATIVE_FAMILY_ENTRY.txt",
+      "bytes": 1853,
+      "sha256": "19a03bc41a70162e6998b140977e4b1b642aff5b287eed7e9608eaee01050e64"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+      "harness_path": "schemas/remote-v1.1.schema.json",
+      "bytes": 30039,
+      "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+      "harness_path": "schemas/mcp-tools.json",
+      "bytes": 104088,
+      "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_jobs.py",
+      "harness_path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_service.py",
+      "harness_path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "harness_path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_REFERENCE_PROBE.txt",
+      "harness_path": "docs/EQ083_REFERENCE_PROBE.txt",
+      "bytes": 14783,
+      "sha256": "cf921879f873e610467ab5a203ca7ddb2730aaf69778074596639764eb1bf4af",
+      "identity_note": "This new literal source is frozen by hash here; its published commit is recorded outside this manifest after publication, avoiding self-reference."
+    }
+  ],
+  "reference_entry": {
+    "bytes": 3332,
+    "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+  },
+  "family_entry": {
+    "bytes": 1853,
+    "sha256": "19a03bc41a70162e6998b140977e4b1b642aff5b287eed7e9608eaee01050e64"
+  },
+  "request_ledger": [
+    {
+      "lane": "rawHTTP first job",
+      "operations": [
+        "calculate:first",
+        "job_status:first <=20",
+        "discover",
+        "slice:raw",
+        "result_read:first",
+        "artifact_read:first"
+      ],
+      "maximum": 25
+    },
+    {
+      "lane": "publicClient same first key",
+      "operations": [
+        "calculate:same-first",
+        "job_status:first",
+        "discover",
+        "slice_raw",
+        "result_read:first",
+        "artifact_read:first"
+      ],
+      "maximum": 6
+    },
+    {
+      "lane": "referenceMCP same first key",
+      "operations": [
+        "equity_calculate:same-first",
+        "equity_job_status:first",
+        "equity_result_summary:first",
+        "equity_artifact_reference:first",
+        "equity_result_summary:export-followup",
+        "equity_discover",
+        "equity_slice:raw"
+      ],
+      "maximum": 7,
+      "initialization_backend_calls": 0
+    },
+    {
+      "lane": "rawHTTP second explicit job",
+      "operations": [
+        "calculate:second",
+        "job_status:second <=20",
+        "result_read:second"
+      ],
+      "maximum": 22
+    }
+  ]
+}
