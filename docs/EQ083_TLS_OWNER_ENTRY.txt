@@ -1,0 +1,146 @@
+import sys,time,json,hashlib
+from pathlib import Path
+if len(sys.argv)!=8:raise ValueError('owned TLS arguments')
+import ssl
+certroot=Path(sys.argv[2])
+if certroot!=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-tls-certificates-6197efe') or certroot.is_symlink() or certroot.resolve()!=certroot:raise ValueError('owned TLS certificate root')
+certificate_pins={'valid': {'cert': {'bytes': 1174, 'sha256': '1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc'}, 'key': {'bytes': 1732, 'sha256': 'e2414edfb163e9d3d534fdb02edfd88739d0db27b0396af024219ec2bdc48b47'}}, 'wrong': {'cert': {'bytes': 1174, 'sha256': '6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0'}, 'key': {'bytes': 1732, 'sha256': 'f9ac19359e1adf915908bdce2a2e8d93e323348661529ca433c80eba6ba159e6'}}}
+contexts={}
+for case,files in certificate_pins.items():
+ for kind,pin in files.items():
+  file=certroot/(case+'-'+kind+'.pem')
+  if file.is_symlink():raise ValueError('owned TLS certificate file')
+  with file.open('rb') as stream:data=stream.read(8193)
+  if len(data)!=pin['bytes'] or hashlib.sha256(data).hexdigest()!=pin['sha256']:raise ValueError('owned TLS certificate identity')
+ context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);context.minimum_version=ssl.TLSVersion.TLSv1_2
+ context.load_cert_chain(str(certroot/(case+'-cert.pem')),str(certroot/(case+'-key.pem')));contexts[case]=context
+mode=sys.argv[7]
+modes=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+if mode not in modes:raise ValueError('owned TLS mode')
+framing=mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length')
+reads_fault=framing or mode=='actual-owner-denial'
+fault_requests=4 if reads_fault else 0
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+ready,stop,control,ack=(Path(v) for v in sys.argv[3:7])
+scheduler,service,tokens,clock,facts=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
+requests=0;sequence=0;original_snapshot=None
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
+def snapshot(wait):
+ with scheduler.condition:
+  if len(scheduler.jobs)!=1:raise ValueError('owned TLS single job')
+  job=next(iter(scheduler.jobs.values()));until=time.monotonic()+3
+  while scheduler._running is not None or job.expires_ns<=0:
+   remaining=until-time.monotonic()
+   if not wait or remaining<=0:raise ValueError('owned TLS physical completion unconfirmed')
+   scheduler.condition.wait(remaining)
+  sizes=[len(job.native),len(job.wire),len(job.envelope),len(job.receipt)]
+  if job.state!='succeeded' or job.result_id is None or scheduler.queue or facts['reads']!=1 or not facts['entered'].is_set() or len(facts['sink_threads'])!=1:raise ValueError('owned TLS completion facts')
+  if any(type(size) is not int or size<=0 for size in sizes):raise ValueError('owned TLS full forms')
+  if type(job.held) is not int or not 0<job.held==sum(sizes)<=262144 or scheduler.total_retained!=job.held or scheduler.retained!={job.principal:job.held}:raise ValueError('owned TLS retained accounting')
+  if type(job.expires_ns) is not int or not 0<job.expires_ns<=9223372036854775807:raise ValueError('owned TLS original expiry')
+  return dict(job=job.job_id,result=job.result_id,state=job.state,expiry=job.expires_ns,held=job.held,sizes=sizes,reads=facts['reads'],running=scheduler._running,queue=len(scheduler.queue),sink_entries=len(facts['sink_threads']))
+def publish(path,value,limit):
+ data=canonical(value)
+ if len(data)>limit or path.exists() or path.with_name(path.name+'.complete').exists():raise ValueError('owned TLS owner marker')
+ pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
+armed=False;tls=dict(accepts=0,success=0,failure=0);connections=[];faults=[]
+def app(environ,start_response):
+ global requests
+ if requests>=24 or sequence==5:raise ValueError('owned TLS request cap')
+ requests+=1
+ if not armed or not framing:return service(environ,start_response)
+ if len(faults)>=3:raise ValueError('owned TLS framing count')
+ headers=[];status=[]
+ def capture(value,fields,exc_info=None):
+  if status or exc_info is not None or type(value) is not str or value!='200 OK' or type(fields) is not list:raise ValueError('owned TLS actual successful response required')
+  status.append(value);headers.extend(fields)
+  def forbidden_write(data):raise ValueError('owned TLS iterable only')
+  return forbidden_write
+ iterable=service(environ,capture);chunks=[];length=0
+ try:
+  for chunk in iterable:
+   if type(chunk) is not bytes:raise ValueError('owned TLS response chunk type')
+   length+=len(chunk)
+   if length>262144 or len(chunks)>=4:raise ValueError('owned TLS response body bound')
+   chunks.append(chunk)
+ finally:
+  close=getattr(iterable,'close',None)
+  if close is not None:close()
+ body=b''.join(chunks)
+ declared=[value for name,value in headers if name.lower()=='content-length']
+ if len(status)!=1 or len(declared)!=1 or declared[0]!=str(len(body)) or not body:raise ValueError('owned TLS original framing')
+ if sum(len(name)+len(value)+4 for name,value in headers)>8192:raise ValueError('owned TLS response header bound')
+ witness=dict(original_bytes=len(body),original_sha256=hashlib.sha256(body).hexdigest())
+ if mode=='extra-response-byte':outgoing=body+b'x'
+ elif mode=='truncated-response-byte':outgoing=body[:-1]
+ else:headers.append(('Content-Length',declared[0]));outgoing=body
+ witness['forwarded_bytes']=len(outgoing);faults.append(witness)
+ start_response(status[0],headers)
+ return [outgoing]
+actions=('settled','baseline','arm','restored','final')
+def observe(action):
+ global original_snapshot,armed
+ targets=(1,12,13 if reads_fault else 12,16 if reads_fault else 12,18+fault_requests)
+ successes=targets[sequence]
+ failures=3 if mode in ('untrusted-certificate','hostname-mismatch') and sequence>=3 else 0
+ if requests!=targets[sequence] or tls!=dict(accepts=successes+failures,success=successes,failure=failures):raise ValueError('owned TLS physical ledger')
+ if any(connection.fileno()!=-1 for connection in connections):raise ValueError('owned TLS connection still open')
+ if action=='settled':original_snapshot=snapshot(True)
+ elif original_snapshot is None or snapshot(False)!=original_snapshot:raise ValueError('owned TLS original changed')
+ if action=='arm':armed=True
+ if action=='restored':
+  if len(faults)!=(3 if framing else 0):raise ValueError('owned TLS response fault witnesses')
+  armed=False
+ return dict(sequence=sequence+1,action=action,mode=mode,requests=requests,tls=dict(tls),faults=list(faults),snapshot=original_snapshot)
+server=None;deadline=time.monotonic()+20
+try:
+ server=qualification_server(service);server.set_app(app);server.timeout=.05
+ original_accept=server.get_request
+ def accepted_tls():
+  if tls['accepts']>=24:raise ValueError('owned TLS accept cap')
+  connection,address=original_accept();tls['accepts']+=1;secured=None
+  try:
+   connection.settimeout(2)
+   context=contexts['wrong' if armed and mode=='hostname-mismatch' else 'valid']
+   secured=context.wrap_socket(connection,server_side=True,do_handshake_on_connect=False)
+   connections.append(secured);secured.settimeout(2);secured.do_handshake();tls['success']+=1
+   return secured,address
+  except BaseException:
+   tls['failure']+=1
+   try:
+    if secured is not None:secured.close()
+   finally:connection.close()
+   raise
+ server.get_request=accepted_tls
+ publish(ready,dict(port=server.server_port),128)
+ while requests<=24:
+  if stop.exists() or time.monotonic()>=deadline:break
+  slot=control.with_name(control.name+'.'+str(sequence+1))
+  if sequence<5 and slot.with_name(slot.name+'.complete').is_dir():
+   with slot.open('rb') as stream:data=stream.read(129)
+   if len(data)>128:raise ValueError('owned TLS control bound')
+   value=json.loads(data)
+   if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or value['sequence']!=sequence+1 or value['action']!=actions[sequence]:raise ValueError('owned TLS control order')
+   result=observe(value['action']);sequence+=1;publish(ack.with_name(ack.name+'.'+str(sequence)),result,1024)
+  server.handle_request()
+ if sequence!=5:raise ValueError('owned TLS dialogue incomplete')
+finally:
+ active_exception=sys.exc_info()[0] is not None;cleanup=[]
+ if server is not None:
+  try:server.server_close()
+  except BaseException:cleanup.append('server close')
+ for connection in connections:
+  try:
+   connection.close()
+   if connection.fileno()!=-1:cleanup.append('connection close')
+  except BaseException:cleanup.append('connection close')
+ try:
+  if scheduler.close(2) is not True:cleanup.append('native exit unconfirmed')
+ except BaseException:cleanup.append('native close')
+ if cleanup and not active_exception:raise ValueError('owned TLS cleanup failed')
+if snapshot(False)!=original_snapshot:raise ValueError('owned TLS cleanup changed original result')
+print(canonical(dict(marker='eq083-tls-http-exited',mode=mode,requests=requests,sequence=sequence,snapshot_sha256=hashlib.sha256(canonical(original_snapshot)).hexdigest())).decode('ascii'),flush=True)

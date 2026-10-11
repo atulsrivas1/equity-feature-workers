@@ -1,0 +1,481 @@
+{
+  "schema": "eq083.tls-owner.pre-execution.v1",
+  "bases": {
+    "equity-features": "95d27a31f72a23e21f6599c9dcbf6ac8cb1beb5a",
+    "equity-feature-workers": "6197efe3d0ed6c3ac4aabc314916f3f8cfb794fc"
+  },
+  "owner": {
+    "bytes": 9687,
+    "sha256": "553b3f069fc17ec7970748437fb3db13a2170f08767b7f0cb47cd9e23786ee6f"
+  },
+  "source_inputs": [
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/service/src/equity_feature_service/loopback.py",
+      "bytes": 1264,
+      "sha256": "69cd65d929765961927c74a12ccfb199a53bf5a5435253559a61a8c06aeb321a"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/client/src/equity_feature_client/_transport.py",
+      "bytes": 9468,
+      "sha256": "c35439a8fbad8bad4fdd5d14a1f2062b49b77fbd537d9bef993f14ed5766ce21"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/client/src/equity_feature_client/client.py",
+      "bytes": 12050,
+      "sha256": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/mcp/src/equity_feature_mcp/server.py",
+      "bytes": 13023,
+      "sha256": "8d314f299ec8b9fa4903e8e94fc1ec685dafdcc331fc2c9f57425afbb78ba84b"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/mcp/src/equity_feature_mcp/models.py",
+      "bytes": 5230,
+      "sha256": "1c712e14161c885c1932ddf3fc5c14e3566dfac971776a952816c370fe6c4212"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/client/test_public_tls.py",
+      "bytes": 5551,
+      "sha256": "b8f9a524e3adff9088e0add14299f206a7d6a1499e89dd66841d6d4e38e49555"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/mcp/test_tls_boundary.py",
+      "bytes": 6677,
+      "sha256": "37127d595d8a04c01a2d75f796dcb5f198ae448b186ad703022c6833fbf3cd19"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ083_REFERENCE_FAULT_OWNER.txt",
+      "bytes": 5139,
+      "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ083_REFERENCE_PROCESS.txt",
+      "bytes": 11944,
+      "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ083_UNKNOWN_ENTRY.txt",
+      "bytes": 7926,
+      "sha256": "5bab47a923af9e7e5d260da0ca2a3c37f7beaedb4de52360d2570c2371075487"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    }
+  ],
+  "derived_owner": {
+    "commit": "6197efe3d0ed6c3ac4aabc314916f3f8cfb794fc",
+    "path": "docs/EQ083_REFERENCE_FAULT_OWNER.txt",
+    "bytes": 5139,
+    "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+  },
+  "certificate_execution": {
+    "schema": "eq083.tls-certificate-execution.v1",
+    "heads": {
+      "equity-features": "95d27a31f72a23e21f6599c9dcbf6ac8cb1beb5a",
+      "equity-feature-workers": "6197efe3d0ed6c3ac4aabc314916f3f8cfb794fc"
+    },
+    "source": {
+      "bytes": 17117,
+      "sha256": "5fc06444865d62b862cfc9525a36eeaf537fe2002a7269dd0cb35735cdfbd995"
+    },
+    "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107363421",
+    "actual_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107393637",
+    "author_log": {
+      "file": "eq083-tls-certificates-author.log",
+      "sha256": "e69586ee956fa8c62374a4ced85d671f5632b2af4b89e68a559e1c6bcb708aa0",
+      "exit_code": 0
+    },
+    "local_record": {
+      "relative_directory": "eq083-tls-certificates-6197efe",
+      "sha256": "f121d4abbbc7def06cc5c9b27107d7107a8ca8067c9bba2a85801e638a981eca"
+    },
+    "binary_pins": [
+      {
+        "name": "openssl.exe",
+        "bytes": 1050780,
+        "sha256": "822034da8a01558c17cbe53f42f33985a6eaf7c89e21273779f9c6560d8c4d78"
+      },
+      {
+        "name": "libcrypto-3-x64.dll",
+        "bytes": 5805212,
+        "sha256": "0330b5f558996f297d687e1a2b2fcc2cacf883b16baef74aaef35285d7c1231c"
+      },
+      {
+        "name": "libssl-3-x64.dll",
+        "bytes": 1026716,
+        "sha256": "feb5b300e0b3a021fed481178f3d66896426576d4d13b85a304d2a3809b25bfd"
+      }
+    ],
+    "commands": [
+      {
+        "case": "version",
+        "exit_code": 0,
+        "job_active": 0,
+        "version": "OpenSSL 3.5.7 9 Jun 2026 (Library: OpenSSL 3.5.7 9 Jun 2026)",
+        "outputs": {
+          "stdout": {
+            "bytes": 62,
+            "sha256": "abca2d2b3e9e564d3795aff39324e2f9a13ec5fa90c804015faf74206d5de9c0"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        "ownership_closed": true
+      },
+      {
+        "case": "valid",
+        "exit_code": 0,
+        "job_active": 0,
+        "version": null,
+        "outputs": {
+          "stderr": {
+            "bytes": 1651,
+            "sha256": "feb03447c22a1274f714c0a3b7d93b39bac11a9e732b9e70381c6d9affd1060b"
+          },
+          "stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        "ownership_closed": true
+      },
+      {
+        "case": "wrong",
+        "exit_code": 0,
+        "job_active": 0,
+        "version": null,
+        "outputs": {
+          "stderr": {
+            "bytes": 1724,
+            "sha256": "3a3ba36717684c00007baee9db340aec74ab0845aed38feca9006d7eb0433c0c"
+          },
+          "stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        "ownership_closed": true
+      }
+    ],
+    "certificates": {
+      "valid": {
+        "files": {
+          "cert": {
+            "bytes": 1174,
+            "sha256": "1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc"
+          },
+          "key": {
+            "bytes": 1732,
+            "sha256": "e2414edfb163e9d3d534fdb02edfd88739d0db27b0396af024219ec2bdc48b47"
+          }
+        },
+        "san": "127.0.0.1",
+        "der_sha256": "c0a3c29fcd28b214f5b244f35a71d83443a50cdc39fe8e4037c47a09b91ef9e9",
+        "not_before": "Oct 11 08:59:19 2026 GMT",
+        "not_after": "Nov 10 08:59:19 2026 GMT"
+      },
+      "wrong": {
+        "files": {
+          "cert": {
+            "bytes": 1174,
+            "sha256": "6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0"
+          },
+          "key": {
+            "bytes": 1732,
+            "sha256": "f9ac19359e1adf915908bdce2a2e8d93e323348661529ca433c80eba6ba159e6"
+          }
+        },
+        "san": "127.0.0.2",
+        "der_sha256": "7dc2951ca43895e74d11570a5630face4d0971c956ddf4616dcaa7dbb84577ed",
+        "not_before": "Oct 11 08:59:19 2026 GMT",
+        "not_after": "Nov 10 08:59:19 2026 GMT"
+      }
+    },
+    "reviewer": {
+      "identity": "/root/r7_policy_review",
+      "scope": "Separate verified-environment read-only parser, file/hash/SAN/validity/keypair checks; NO regeneration or independent OpenSSL exit observation",
+      "report": "eq083-tls-certificates-reviewer-report.json"
+    },
+    "limits": [
+      "Local certificate setup only, no TLS socket/handshake/service/native/reference composition",
+      "Private key bytes never published; keys remain owned outside repos",
+      "Static imports not dynamic module/source-build proof",
+      "Windows only, not Linux/forms/full24/Ready/artifact/release"
+    ],
+    "history": [
+      "Original17103byte generator name-shadowing P2 corrected BEFOREexecution at95d27a/6197efe; initialREWORK preserved",
+      "Recorder expected findings field absent in actual reviewer report: KeyError BEFOREcomment/write, reviewer added genuine findings:[], then recorder succeeded",
+      "Author read reviewer report from wrong repo cwd failed read-only, corrected explicit parent; no product failure"
+    ]
+  },
+  "certificate_pins": {
+    "valid": {
+      "cert": {
+        "bytes": 1174,
+        "sha256": "1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc"
+      },
+      "key": {
+        "bytes": 1732,
+        "sha256": "e2414edfb163e9d3d534fdb02edfd88739d0db27b0396af024219ec2bdc48b47"
+      }
+    },
+    "wrong": {
+      "cert": {
+        "bytes": 1174,
+        "sha256": "6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0"
+      },
+      "key": {
+        "bytes": 1732,
+        "sha256": "f9ac19359e1adf915908bdce2a2e8d93e323348661529ca433c80eba6ba159e6"
+      }
+    }
+  },
+  "operation_ledgers": {
+    "schema": "eq083.tls-dialogue.outside-design.v1",
+    "scope": "Source-derived outside design only, not frozen, reviewed, executed or Ready",
+    "common_baseline": {
+      "raw": 3,
+      "typed": 4,
+      "official_sdk_mcp": 5,
+      "http": 12,
+      "source": 1,
+      "native": "One actual audited original trades producer, entire producer and native SDK golden SHA; no stripped metadata",
+      "process": "Observe baseline MCP actual entry OS exit before fault process"
+    },
+    "common_followup": {
+      "raw": 2,
+      "typed": 2,
+      "new_official_sdk_mcp": 2,
+      "http": 6,
+      "source": 1,
+      "operation": "Explicit same-key calculate and full result/summary only, no replay or second compute"
+    },
+    "cases": [
+      {
+        "name": "verified-full-result",
+        "http_total": 18,
+        "accepts": 18,
+        "handshake_success": 18,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "fault": "None; full baseline and explicit followup"
+      },
+      {
+        "name": "untrusted-certificate",
+        "http_total": 18,
+        "accepts": 21,
+        "handshake_success": 18,
+        "handshake_failure": 3,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "raw_fault_attempts": 1,
+        "typed_fault_provider": 1,
+        "mcp_fault_provider": 1,
+        "fault": "Three explicit same-key calculate calls, each one TLS handshake and zero WSGI dispatch; default public trust rejects owned self-signed certificate before any HTTP send",
+        "controls_http": [
+          1,
+          12,
+          12,
+          12,
+          18
+        ]
+      },
+      {
+        "name": "hostname-mismatch",
+        "http_total": 18,
+        "accepts": 21,
+        "handshake_success": 18,
+        "handshake_failure": 3,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "raw_fault_attempts": 1,
+        "typed_fault_provider": 1,
+        "mcp_fault_provider": 1,
+        "fault": "Same fixed origin127.0.0.1 and trust store containing both owned certs; check_hostname stays true. Owner switches per-connection server context to SAN127.0.0.2, then restores valid context",
+        "controls_http": [
+          1,
+          12,
+          12,
+          12,
+          18
+        ]
+      },
+      {
+        "name": "extra-response-byte",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Fault MCP explicit same-key attach BEFORE arm adds1 actual HTTP; then raw/typed/MCP result reads each actually dispatch. Consume and close actual service response, append one byte with original Content-Length. No cached/fabricated producer",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "truncated-response-byte",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Same pre-arm MCP attach and three actual result dispatches; consume/close entire original response, forward all but last byte, preserve original declared length",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "duplicate-content-length",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Same pre-arm MCP attach and three actual result dispatches; append duplicate actual original Content-Length header, preserve actual producer body",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "actual-owner-denial",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "MCP fault process attaches original nativeA job using A provider BEFORE arm, then fixed provider rotates to B after arm and reads same A reference; actual HTTP403 invalidates local reference. Raw/typedB read actual nativeA result IDs403. Immutable MCP profile stays identical; token callback is trusted owner state. Foreign process unknown_reference0 is distinct",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      }
+    ],
+    "physical_caps": {
+      "accepts": 24,
+      "service_dispatch": 24,
+      "handshake_seconds": 2,
+      "accepted_connection_timeout_before_handshake": true,
+      "http_body": 262144,
+      "http_header": 8192,
+      "native_output": 768,
+      "control": 128,
+      "control_read": 129,
+      "ack": 1024
+    },
+    "controls": [
+      "settled",
+      "baseline",
+      "arm",
+      "restored",
+      "final"
+    ],
+    "pending": [
+      "Exact five controls/counters/handshake and response close source",
+      "Certificate identities from separately reviewed and actually completed local generation",
+      "TLS owner/ref/parent/copier published and separately reviewed before any TLS/socket/native execution",
+      "Generic schema and canonical SDK content checks",
+      "Full original snapshot after all repetitions AND actual native/server/process close"
+    ],
+    "limitations": "Attempt/provider/handshake/WSGI dispatch/native source are separate counters. TLS cert failure connect/statusNone is not mutation outcome_unknown because no HTTP bytes were sent. Read framing failure decode/statusNone is protocol invalid_response and not autoretryable. Server audit emitted is not remote receipt. No scheduler/HTTP owner replacement, hostname bypass, system trust installation, public hosting or TLS proof from fake-wire tests. Timing is cooperative, not hard DNS or callback termination. Counts remain proposed until exact source review and actual run."
+  },
+  "bounds": {
+    "cooperative_owner_seconds": 20,
+    "supervisor_seconds": 25,
+    "native_output": 768,
+    "startup_output": 512,
+    "final_output": 256,
+    "stop_join_seconds": 6,
+    "service_dispatch": 24,
+    "accepts": 24,
+    "accepted_timeout_before_handshake_seconds": 2,
+    "body": 262144,
+    "headers": 8192,
+    "controls": 128,
+    "control_read": 129,
+    "ack": 1024,
+    "conservative_ack": 865,
+    "final_including_lf": 181,
+    "readiness": 128
+  },
+  "scope": "PRE-EXECUTION audited native TLS OWNER source only; exact reference/parent/copier still pending, no TLS/native/socket execution",
+  "executed": false,
+  "reviewed": false,
+  "runtime_unchanged": true
+}
