@@ -1,8 +1,8 @@
 {
   "schema": "eq083-whole-selected-installed-map-source-v1",
   "source": {
-    "bytes": 31313,
-    "sha256": "8dff4305962a48150b8c4ff6971daeb1ca265906e92d82659866d32c30e50773"
+    "bytes": 31593,
+    "sha256": "8df7cbfd764bead0c459387dc70835588ead05b235221045350d590850ac2496"
   },
   "bases": {
     "equity-features": "bb710bdd64156b0d0937284cd73e82c3caeb8561",
@@ -1897,5 +1897,94 @@
     "sha256": "80cf964f4288847c4c73d1f379115b55c21d047f2316ca3a995155e8d6a86169",
     "scope": "actual base source read-only identity; NOT fresh host selected interpreter/installer proof"
   },
-  "correction": "Only wheel_byte_map rejects orig_filename!=filename and validates original spelling; verify_whole_installed_map parses LF/CRLF header boundary/case-insensitive unique Name with malformed Name fold denial. Original twoP2/fullreport retained; all embedded functions unchanged; no execution."
+  "correction": "Only verify_whole_installed_map replaces splitlines with LF-only splitting/one optional trailing CR/forbidden header controls. Original30533 twoP2 and31313 renewedP2 VT header spoof reports/sourceheads fully preserved. All other functions AST unchanged; no actual execution.",
+  "prior_corrective_history": {
+    "source": {
+      "bytes": 31313,
+      "sha256": "8dff4305962a48150b8c4ff6971daeb1ca265906e92d82659866d32c30e50773"
+    },
+    "heads": {
+      "equity-features": "88e9c8dfc97769faa3024d7add40fd79977c70ca",
+      "equity-feature-workers": "c340943583b70a146b58196cf948966b9fa46fd4"
+    },
+    "report": {
+      "reviewer": "/root/r7_policy_review",
+      "heads": {
+        "equity-features": "88e9c8dfc97769faa3024d7add40fd79977c70ca",
+        "equity-feature-workers": "c340943583b70a146b58196cf948966b9fa46fd4"
+      },
+      "source": {
+        "bytes": 31313,
+        "sha256": "8dff4305962a48150b8c4ff6971daeb1ca265906e92d82659866d32c30e50773"
+      },
+      "disposition": "REWORK",
+      "findings": [
+        {
+          "severity": "P2",
+          "path": "docs/EQ083_WHOLE_INSTALLED_MAP.txt",
+          "line": 509,
+          "title": "Use only metadata line delimiters when finding Name",
+          "evidence": "Complete synthetic wheel/RECORD whole-map still accepts missing real Name: Summary contains vertical-tab then Name: demo. str.splitlines turns VT into a new header; stdlib email parser confirms actual Name is absent.",
+          "correction": "Split only LF with optional CRLF carriage removal, reject malformed bare CR/control separators in headers, and retain first empty header boundary/closed Name semantics. Add VT/FF/NEL/Unicode line-separator adversaries."
+        }
+      ],
+      "tool_only_corrections": [
+        "Reviewer generated a quoted source-line matcher with invalid nested quotes; SyntaxError occurred before checks or report writes. Replaced it with a simple distinctive line matcher, then completed the 40-case inert sweep and provenance checks."
+      ],
+      "inert_cases": [
+        "Linux wheel full payload-generated RECORD union",
+        "Linux sdist full payload-generated RECORD union",
+        "full Linux entry-script bytes/RECORD",
+        "two-distribution whole ownership union",
+        "missing payload",
+        "extra path",
+        "payload change",
+        "generated installer change",
+        "pyc present",
+        "directurl changed",
+        "nonbool requested",
+        "nonbool purelib",
+        "archive hash drift",
+        "wheel hash drift",
+        "selected form invalid",
+        "bytecode bool impostor",
+        "epoch bool",
+        "interpreter bool",
+        "duplicate components",
+        "whole comparison exact",
+        "whole compare altered SHA",
+        "ZIP duplicate physical file",
+        "ZIP case alias",
+        "ZIP traversal",
+        "ZIP absolute",
+        "ZIP directory payload",
+        "ZIP empty directory allowed",
+        "physical ZIP backslash",
+        "physical ZIP NUL",
+        "physical ZIP Unicode extra override",
+        "CRLF body cannot supply Name",
+        "LF body cannot supply Name",
+        "casevariant duplicate Name",
+        "Name fold",
+        "initial continuation",
+        "invalid header",
+        "invalid field",
+        "validCRLF bodyNameignored",
+        "casevariant realName",
+        "other header fold"
+      ],
+      "checks": [
+        "40 passing synthetic complete-map/RECORD/ZIP/recipe cases plus corrected original CRLF/ZIP attacks and vertical-tab header spoofing regression.",
+        "Embedded payload10108/generated9351 function ASTs unchanged; verify_pyc excluded from extraction and never invoked.",
+        "Exact source/mirrors/clean five-doc diffs/Atul-no-coauthors checked.",
+        "Original full two-P2 REWORK embedded exactly; protected hashes and all function ASTs except the two correction targets unchanged."
+      ],
+      "limits": [
+        "Pure AST-extracted stdlib byte functions and synthetic ZIPs only. No whole-module/importlib/marshal/compiler/product/SDK/platform/filesystem collector/install/process/native/TLS/copy/probe execution.",
+        "Always admitted:false. Fixed collector roots, host-form-authority, installer bootstrap/special scripts, selected sdist build closure and runtime integration remain pending.",
+        "The email parser was invoked only on synthetic header bytes as a stdlib delimiter oracle; no installed code/product/compiler branch executed."
+      ]
+    },
+    "correction": "Only wheel_byte_map rejects orig_filename!=filename and validates original spelling; verify_whole_installed_map parses LF/CRLF header boundary/case-insensitive unique Name with malformed Name fold denial. Original twoP2/fullreport retained; all embedded functions unchanged; no execution."
+  }
 }

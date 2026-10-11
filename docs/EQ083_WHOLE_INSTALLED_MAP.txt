@@ -506,7 +506,11 @@ def verify_whole_installed_map(installed, recipe):
         if metadata_path not in wheel:
             raise ValueError('selected distribution metadata required')
         declared, last_field = [], None
-        for line in wheel[metadata_path].decode('utf-8', errors='strict').splitlines():
+        for line in wheel[metadata_path].decode('utf-8', errors='strict').split('\n'):
+            if line.endswith('\r'):
+                line = line[:-1]  # Exactly one CR is allowed only before LF.
+            if any(ord(c) < 32 and c != '\t' or ord(c) in (127, 133, 8232, 8233) for c in line):
+                raise ValueError('metadata header control separator')
             if line == '':
                 break  # LF and CRLF terminate headers before description text.
             if line[:1] in (' ', '\t'):
