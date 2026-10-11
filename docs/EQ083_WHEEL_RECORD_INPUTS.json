@@ -1,0 +1,195 @@
+{
+  "schema": "eq083-wheel-record-relocation-source-v1",
+  "scope": "Inert byte-map payload/RECORD relocation source only; ALWAYS admitted:false; generated semantics, real filesystem collector, host reconciliation and fresh maps pending",
+  "source": {
+    "bytes": 9552,
+    "sha256": "e406106f815a38905961824ff8542b275430e2d16bb8cdb301c10f04535d44b3"
+  },
+  "bases": {
+    "equity-features": "60830bca17bc9cf1b460e4c3a3bd5e0099f80e6a",
+    "equity-feature-workers": "6ed7e8b84d51d9a20ca5f02fed6c6778e569aeaf"
+  },
+  "installer_source_inventory": {
+    "schema": "eq083-fresh-validator-source-inventory-v1",
+    "scope": "Read-only source/AST inventory from preserved Windows pip25.0.1, not a selected fresh installer, installed equivalence, validator review or any installation/execution permission",
+    "heads": {
+      "equity-features": "60830bca17bc9cf1b460e4c3a3bd5e0099f80e6a",
+      "equity-feature-workers": "6ed7e8b84d51d9a20ca5f02fed6c6778e569aeaf"
+    },
+    "source_assets": [
+      {
+        "path": "pip/_internal/operations/install/wheel.py",
+        "bytes": 27615,
+        "sha256": "5f9233f72520e4b94ae55350f60da291ce9d711bbc10f8bf4948b98ae103460a",
+        "functions": [
+          {
+            "name": "fix_script",
+            "line": 94,
+            "end_line": 111
+          },
+          {
+            "name": "_record_to_fs_path",
+            "line": 227,
+            "end_line": 228
+          },
+          {
+            "name": "_fs_to_record_path",
+            "line": 231,
+            "end_line": 238
+          },
+          {
+            "name": "get_csv_rows_for_installed",
+            "line": 241,
+            "end_line": 270
+          },
+          {
+            "name": "_install_wheel",
+            "line": 422,
+            "end_line": 708
+          }
+        ]
+      },
+      {
+        "path": "pip/_vendor/distlib/scripts.py",
+        "bytes": 18608,
+        "sha256": "04996268301969507b580930a24802dc75f02c3da25a21da548e741fb0ba786f",
+        "functions": [
+          {
+            "name": "_build_shebang",
+            "line": 147,
+            "end_line": 181
+          },
+          {
+            "name": "_get_shebang",
+            "line": 183,
+            "end_line": 247
+          },
+          {
+            "name": "_write_script",
+            "line": 259,
+            "end_line": 312
+          },
+          {
+            "name": "_make_script",
+            "line": 326,
+            "end_line": 340
+          }
+        ]
+      },
+      {
+        "path": "pip/_internal/models/direct_url.py",
+        "bytes": 6578,
+        "sha256": "b81b58d871dddd33bd70a4095a1d1386f139151afe3164580a1454e081bd1d91",
+        "functions": [
+          {
+            "name": "from_json",
+            "line": 217,
+            "end_line": 218
+          },
+          {
+            "name": "to_json",
+            "line": 220,
+            "end_line": 221
+          }
+        ]
+      },
+      {
+        "path": "pip/_internal/utils/direct_url_helpers.py",
+        "bytes": 3196,
+        "sha256": "af6311b64543002bfd006a983830540bd0a3c20b6c514d6cebc86681f08932d0",
+        "functions": [
+          {
+            "name": "direct_url_from_link",
+            "line": 39,
+            "end_line": 87
+          }
+        ]
+      },
+      {
+        "path": "pip-25.0.1.dist-info/METADATA",
+        "bytes": 3677,
+        "sha256": "4fa7318cf30f979db7cec45c12cbbc2b4f88a15f12eefbf59a6291d0a03af926"
+      }
+    ],
+    "required_contracts": [
+      "One-to-one explicit scheme relocation for every archive payload; reject destination collisions and reparse/symlink escapes",
+      "Finite changed archive scripts derive full exact interpreter transformation; installed RECORD must carry rewritten actual hash and size",
+      "Self RECORD observed full bytes and parsed unique complete rows; exactly one unhashed self row",
+      "INSTALLER exact pip LF; REQUESTED exact empty bytes only when selected; direct_url entire closed canonical semantics bound to local accepted archive identity",
+      "Entry points enumerate exact names, console/gui callable and distlib launcher/shebang/template source identities; finite expected path list",
+      "Pyc enumerate cache paths from each admitted installed Python source with observed full bytes/hash and header/source association; no import or marshal/code execution for review",
+      "Installer/interpreter source identities and selected perOS form archive maps required before fresh validator admission",
+      "Before/after maps deny extra/missing/unowned or mutated generated paths; no blanket exclusions or reuse of preserved-env pyc hash"
+    ],
+    "remaining": "Exact generated-row validator and host inspector source freeze/review; perOS installer/runtime/loaded module/fresh installed archive maps still pending; Linux admitted false"
+  },
+  "linux_parent_source_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "60830bca17bc9cf1b460e4c3a3bd5e0099f80e6a",
+      "equity-feature-workers": "6ed7e8b84d51d9a20ca5f02fed6c6778e569aeaf"
+    },
+    "parent": {
+      "bytes": 40857,
+      "sha256": "8b37ff9e3aa4acc96bed7acc3d62aef59d6839d4122ff568d04aa3faef49bd7c"
+    },
+    "copier": {
+      "bytes": 5969,
+      "sha256": "97769c5bcd00fb80e3cf4c22aaebe38101dad74e4b6589dae6c5f3f2dafb6864"
+    },
+    "disposition": "APPROVED",
+    "findings": [],
+    "scope": "Linux portable TLS integrated parent/copier SOURCE ONLY; literal current Linux denied",
+    "checks": [
+      "Exact parent40857/copier5969 hashes/UTF8/AST compile; four mirrors; clean heads/six-doc diffs/diffcheck/Atul-noCoauthors/protected invariance.",
+      "All18 declared source pins independently reread; Linux14570 bridge byte-exact embedded, bootstrap6390/ref7870/owner8021/authority31786/ENV unchanged; full previous Windows portable_sources metadata and both reviewer reports preserved exactly.",
+      "All42 accepted Linux2+9+31 archives streamed SHA/bounds, exact raw receipt map closure; four omitted/extra/altered map shapes deny equality. Archive evidence is not installed host admission.",
+      "Actual extracted parent admission with fake filesystem/current exact ENV denies before first product/SSL/SDK import; copier admission AST precedes archive reads/mkdir; literal18 paths and four source omissions/substitutions deny. No real copier invocation.",
+      "Twelve seven-mode producer/schema/error/send/control/binding helper ASTs equal reviewed Windows parent; Linux observation fields direct_child_exit/group_empty/entry_exit only, no Windows launcher/job completion claim. Original retained snapshot and native close assertions preserved.",
+      "Six extracted async wrapper fake cases: normal, active original, post-cleanup verification failure, ordinary verification denial, underlying cleanup failure, combined cleanup+verification; active cleanup/original preserved and verification attempted after underlying context. No anyio/SDK/product source imported.",
+      "Authority fixed registration/issuance/identity block AST byte-semantic equality to previously inert-reviewed Windows parent; prior registration substitutions carried forward without importing authority source."
+    ],
+    "limits": [
+      "Only stdlib source/AST/JSON, offline existing archives and extracted fake admission/context functions executed. No actual product/platform/Win32/crypto/SSL/SDK/anyio imports, process/native/TLS/socket/permissions/generation/copy/setup/install/probes.",
+      "Exact existing Linux bridge/bootstrap limits and ownership cleanup evidence referenced from eq083-linux-tls-reference-reviewer-report.json by byte identity; no OS cleanup observed or runtime regression rerun.",
+      "Current Linux admitted:false remains immutable and denies. Future exact host/fresh installed forms/maps/validators and revised admission require separate review; no execution authorization, Ready/all24/forms/artifact/release approval."
+    ],
+    "tool_only_corrections": [
+      "Initial review script compared previous_windows_metadata to the entire old manifest rather than its intended portable_sources historical object; assertion stopped before report writes. Corrected exact historical-object comparison; original REWORK and corrective report equality separately verified."
+    ]
+  },
+  "linux_parent_source_approval": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6110398710",
+  "protected": {
+    "EQ083_CERTIFICATE_ENV_INPUTS.json": {
+      "bytes": 587716,
+      "sha256": "6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532"
+    },
+    "EQ083_CERTIFICATE_PARENT.txt": {
+      "bytes": 27748,
+      "sha256": "dd140e306c56349fa09e00309d050fc6c5eb949746fc5a567a61fa0951600488"
+    },
+    "EQ083_CERTIFICATE_COPIER.txt": {
+      "bytes": 6157,
+      "sha256": "ed0e61354b7f2e18dd9135378eeb77a769a6f4c388f71cfbc12f0bf1d0bab08f"
+    },
+    "EQ083_PORTABLE_CERTIFICATE_AUTHORITY.txt": {
+      "bytes": 31786,
+      "sha256": "ededa5a073359b8445047ee12ddefc65acc6b9e3b60bed437a0caa36fb9680da"
+    },
+    "EQ083_LINUX_PORTABLE_TLS_PROBE.txt": {
+      "bytes": 40857,
+      "sha256": "8b37ff9e3aa4acc96bed7acc3d62aef59d6839d4122ff568d04aa3faef49bd7c"
+    },
+    "EQ083_LINUX_PORTABLE_TLS_HARNESS.txt": {
+      "bytes": 5969,
+      "sha256": "97769c5bcd00fb80e3cf4c22aaebe38101dad74e4b6589dae6c5f3f2dafb6864"
+    }
+  },
+  "next": [
+    "Exact generated entry-script/direct_url/pyc header-and-code-source validators with trusted installer/interpreter/form recipe",
+    "Bounded real filesystem collector with lstat/reparse/owner enumeration and whole-distribution installed origins",
+    "Loaded host interpreter-runtime-DLL-ELF inspector/resolution reconciliation before-after",
+    "Fresh perOS wheel/sdist/light/native-reference maps and full build closure; revised literal admission source review",
+    "R04/R05 controls/ledgers/all24/fullsevenReady/guard93ReadyInprogressactual13assignment BEFORE product implementation"
+  ]
+}
