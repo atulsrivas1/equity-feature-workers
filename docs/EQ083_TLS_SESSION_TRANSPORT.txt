@@ -326,12 +326,16 @@ async def owned_tls_session_streams(root,origin,pid,mode,arm,role,observations):
    clean(process.close)
   for thread in started:clean(lambda thread=thread:thread.join(2))
   for pipe in (() if process is None else (process.stdin,process.stdout,process.stderr)):
-   if not pipe.closed:clean(pipe.close)
+   def close_pipe(pipe=pipe):
+    if not pipe.closed:pipe.close()
+   clean(close_pipe)
   with anyio.CancelScope(shield=True):
    for stream in (read_stream,read_sender,write_stream,write_receiver):
     try:await stream.aclose()
     except BaseException as error:cleanup.append(type(error).__name__)
-  if process is not None and (process.ownership_closed is not True or process.returncode is None or any(thread.is_alive() for thread in started)):cleanup.append('owned SDK incomplete cleanup')
+  def inspect_cleanup():
+   if process is not None and (process.ownership_closed is not True or process.returncode is None or any(thread.is_alive() for thread in started)):raise ValueError('owned SDK incomplete cleanup')
+  clean(inspect_cleanup)
   if errors or stderr:cleanup.append('owned SDK wire reader failed')
   if cleanup and not active_exception:raise ValueError('owned SDK cleanup failed')
  if not normal:raise ValueError('owned SDK incomplete context')

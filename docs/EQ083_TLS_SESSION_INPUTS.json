@@ -5,8 +5,8 @@
     "equity-feature-workers": "5e30fbe9057d7989a1dc67a4df65554438842f7c"
   },
   "source": {
-    "bytes": 20219,
-    "sha256": "66a0fb7471b9c0a993581cb192cd178c0a28a4df5eeb6cd702ece1c640f9c30f"
+    "bytes": 20319,
+    "sha256": "75d64fc25931b1eded48fd7775add1e365d614c1b92623d2b70678b80df29d69"
   },
   "owned_process_source": {
     "commit": "5e30fbe9057d7989a1dc67a4df65554438842f7c",
@@ -138,5 +138,16 @@
   },
   "scope": "Source-only Windows qualification byte bridge to official public ClientSession. Exact TLS parent/copier/dialogue still pending before any execution",
   "executed": false,
-  "reviewed": false
+  "reviewed": false,
+  "cleanup_correction": {
+    "prior_heads": {
+      "equity-features": "777f6a111558e5d685b00dae1e848feaa3e15a94",
+      "equity-feature-workers": "fb36f6dc91b2df2ca2504789c6f35f4cdb30854f"
+    },
+    "prior_source_bytes": 20219,
+    "prior_source_sha256": "66a0fb7471b9c0a993581cb192cd178c0a28a4df5eeb6cd702ece1c640f9c30f",
+    "review_report_sha256": "ad1b35b4fe72dcb6a414b050e9483cb09e55aae90a919e93c40ae460dc949659",
+    "finding": "P2 pipe/thread cleanup inspection can mask active exception or skip stream closes; every inspection now executes inside clean callback",
+    "executed": false
+  }
 }
