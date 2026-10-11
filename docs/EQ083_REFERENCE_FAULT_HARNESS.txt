@@ -55,9 +55,10 @@ literal={
  'tests/service/fixtures/jobs_native.json':'tests/service/fixtures/jobs_native.json',
  'docs/EQ083_REFERENCE_FAULT_OWNER.txt':'docs/EQ083_REFERENCE_FAULT_OWNER.txt',
  'docs/EQ083_REFERENCE_FAULT_ENTRY.txt':'docs/EQ083_REFERENCE_FAULT_ENTRY.txt',
- 'docs/EQ083_REFERENCE_FAULT_PROBE.txt':'docs/EQ083_REFERENCE_FAULT_PROBE.txt'}
-assert len(manifest['inputs'])==11 and {v['path']:v['harness_path'] for v in manifest['inputs']}==literal
-assert len({v['path'] for v in manifest['inputs']})==11 and len({v['harness_path'] for v in manifest['inputs']})==11
+ 'docs/EQ083_REFERENCE_FAULT_PROBE.txt':'docs/EQ083_REFERENCE_FAULT_PROBE.txt',
+ 'docs/EQ083_REFERENCE_PROCESS.txt':'docs/EQ083_REFERENCE_PROCESS.txt'}
+assert len(manifest['inputs'])==12 and {v['path']:v['harness_path'] for v in manifest['inputs']}==literal
+assert len({v['path'] for v in manifest['inputs']})==12 and len({v['harness_path'] for v in manifest['inputs']})==12
 copies=[]
 for item in manifest['inputs']:
  assert item['repo']=='equity-feature-workers' and type(item['bytes']) is int and 0<item['bytes']<=1048576
@@ -70,4 +71,4 @@ for name,source in copies:
  f=out/name;f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(source)
 (out/'docs/EQ083_REFERENCE_FAULT_PARENT_INPUTS.json').write_bytes(manifest_raw)
 assert not (out/'packages').exists()
-print(json.dumps(dict(marker='eq083-reference-fault-harness-copy',source_head=head,inputs=11,verified_archives=44,scope='Reuses verified author Windows nativewheel environment; fresh copied harness only, no probe execution or independent reinstall'),sort_keys=True,separators=(',',':')))
+print(json.dumps(dict(marker='eq083-reference-fault-harness-copy',source_head=head,inputs=12,verified_archives=44,scope='Reuses verified author Windows nativewheel environment; fresh copied harness only, no probe execution or independent reinstall'),sort_keys=True,separators=(',',':')))
