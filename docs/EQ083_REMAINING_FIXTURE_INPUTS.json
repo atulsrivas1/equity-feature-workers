@@ -1,0 +1,215 @@
+{
+  "scope": "SOURCE-DERIVED PROPOSED ONLY, no product imports, constructor/runtime tests, socket/native execution, source admission or Ready proof",
+  "worker_head": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+  "assets": [
+    {
+      "commit": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "commit": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+      "path": "packages/service/src/equity_feature_service/jobs.py",
+      "bytes": 43441,
+      "sha256": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68"
+    },
+    {
+      "commit": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+      "path": "packages/service/src/equity_feature_service/datasets.py",
+      "bytes": 14401,
+      "sha256": "41db66b5f84bdc79fe88f4f5eae9f8d380e3affa12086bcf1021e2ec3ae3914f"
+    },
+    {
+      "commit": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+      "path": "packages/client/src/equity_feature_client/models.py",
+      "bytes": 8011,
+      "sha256": "b895015595a0f38efeb0a48185b677b3116ce92306f0a7b36684b9d315156f05"
+    },
+    {
+      "commit": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+      "path": "packages/client/src/equity_feature_client/client.py",
+      "bytes": 12050,
+      "sha256": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233"
+    },
+    {
+      "commit": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+      "bytes": 30039,
+      "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+    },
+    {
+      "commit": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    }
+  ],
+  "planned_cases": [
+    {
+      "case_id": "R04-calculate-foreign-snapshot",
+      "change": "context.dataset.snapshot_id=eq083-foreign-snapshot; public constructor recomputes command digest",
+      "raw_status": 403,
+      "typed_mcp_failure": [
+        "authorization",
+        "remote_denial",
+        "decode",
+        403
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle dataset identity guard before grants and registration comparison"
+    },
+    {
+      "case_id": "R04-raw-return-foreign-snapshot",
+      "change": "trusted RawRead callback replaces only batch.metadata.source.snapshot_id after baseline admission",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "protocol",
+        "invalid_response",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "raw_callback_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "RawDataset.produce whole admitted batch fingerprint"
+    },
+    {
+      "case_id": "R04-raw-return-foreign-receipt",
+      "change": "trusted RawRead callback preserves ENTIRE batch but changes receipt_fingerprint from a*64 to b*64 after admission",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "protocol",
+        "invalid_response",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "raw_callback_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "RawDataset.produce original receipt equality; no public receipt request field"
+    },
+    {
+      "case_id": "R05-calculate-config-digest",
+      "change": "context.config.digest=b*64 unless original equals b*64 then c*64; recompute public command digest",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "unknown",
+        "outcome_unknown",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle complete registered calculate payload equality"
+    },
+    {
+      "case_id": "R05-calculate-config-algorithm",
+      "change": "context.config.algorithm_version=eq083-unsupported; recompute public command digest",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "unknown",
+        "outcome_unknown",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle complete registered calculate payload equality"
+    },
+    {
+      "case_id": "R05-calculate-feature-algorithm",
+      "change": "context.features[0].algorithm_version=eq083-unsupported AND corresponding FeatureRef in immutable expectation inventory changed consistently; recompute public command digest",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "unknown",
+        "outcome_unknown",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle complete registered calculate payload equality; inconsistent public expectation inventory would fail locally instead"
+    }
+  ],
+  "unavailable_cases": [
+    {
+      "case_id": "R07-bars-session.price.overnight_gap",
+      "column": {
+        "algorithm_version": "v1",
+        "dtype": "float64",
+        "entities": [
+          {
+            "instrument_id": "A",
+            "session_id": "S"
+          }
+        ],
+        "feature_id": "session.price.overnight_gap",
+        "schema_version": "1",
+        "unit": "fraction",
+        "values": [
+          null
+        ]
+      },
+      "quality": {
+        "entity": {
+          "instrument_id": "A",
+          "session_id": "S"
+        },
+        "expected": "2",
+        "feature_id": "session.price.overnight_gap",
+        "observed": "2",
+        "reasons": [
+          "absent_input"
+        ],
+        "status": "missing_input"
+      },
+      "evidence": []
+    },
+    {
+      "case_id": "R07-bars-session.price.close_close_return",
+      "column": {
+        "algorithm_version": "v1",
+        "dtype": "float64",
+        "entities": [
+          {
+            "instrument_id": "A",
+            "session_id": "S"
+          }
+        ],
+        "feature_id": "session.price.close_close_return",
+        "schema_version": "1",
+        "unit": "fraction",
+        "values": [
+          null
+        ]
+      },
+      "quality": {
+        "entity": {
+          "instrument_id": "A",
+          "session_id": "S"
+        },
+        "expected": "2",
+        "feature_id": "session.price.close_close_return",
+        "observed": "2",
+        "reasons": [
+          "absent_input"
+        ],
+        "status": "missing_input"
+      },
+      "evidence": []
+    }
+  ],
+  "full_bars_producer_sha256": "7f864e18ec55bcf86e2c50d89ed038e40ff8e09b7faebe648ae9a2d166b4a88f",
+  "remaining": "Exact owner/reference/parent/control ledgers and full24 mapping must be frozen and independently reviewed before execution. Future baseline/followup must compare ENTIRE original snapshots and producer after repeats and native close. This inventory does not establish all missing/coverage states.",
+  "tool_only_history": [
+    "Direct rg wildcard paths were rejected read-only; later directory search uses -g. Guessed remote.schema.json and response.py missing, actual paths discovered. One rg omitted worker cwd and failed read-only. No product mutation or native failure."
+  ]
+}
