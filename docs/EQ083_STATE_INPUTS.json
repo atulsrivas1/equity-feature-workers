@@ -1,0 +1,39 @@
+{
+  "scope": "pre-execution owner state entry only",
+  "entry": {
+    "bytes": 5443,
+    "sha256": "cd40982ba6784e1e785b34780c3ae0b1771b2f6c2e2b6e0a8a17e91691c8a041"
+  },
+  "source_inputs": [
+    {
+      "commit": "a572071c3a1e9674980fb214f8f2ae3fb1da0eb0",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "a572071c3a1e9674980fb214f8f2ae3fb1da0eb0",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "a572071c3a1e9674980fb214f8f2ae3fb1da0eb0",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "commit": "a572071c3a1e9674980fb214f8f2ae3fb1da0eb0",
+      "path": "packages/service/src/equity_feature_service/jobs.py",
+      "bytes": 43441,
+      "sha256": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68"
+    },
+    {
+      "commit": "a572071c3a1e9674980fb214f8f2ae3fb1da0eb0",
+      "path": "docs/EQ082_NATIVE_STATE_ENTRY.txt",
+      "bytes": 1968,
+      "sha256": "8f7e757277b684f689cb32a8188adff257fa5b3d569ca2c4519ceff7004a8168"
+    }
+  ]
+}
