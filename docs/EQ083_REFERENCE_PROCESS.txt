@@ -131,7 +131,7 @@ class WindowsReferenceChild:
 
  def verify_entry(self,pid):
   from ctypes import wintypes as w
-  if self.entry is not None or type(pid) is not int or not 0<pid<=4294967295:raise ValueError('owned reference entry PID')
+  if self.entry is not None or type(pid) is not int or not 0<pid<=4294967295 or pid==self.pid:raise ValueError('owned reference entry PID')
   handle=self.kernel.OpenProcess(0x1000|0x100000,False,pid)
   if not handle:raise OSError(ctypes.get_last_error(),'owned reference entry open')
   try:
