@@ -1,0 +1,92 @@
+"""Proposed trusted Linux MCP reference bootstrap only, not executed/admitted."""
+import sys,os,ctypes,platform,errno,re,json,hashlib,stat
+from pathlib import Path
+from importlib import import_module
+if sys.flags.isolated!=1 or sys.flags.optimize!=0 or sys.platform!='linux' or len(sys.argv)!=14:raise ValueError('owned Linux reference bootstrap arguments')
+parent_text,marker_text,entry_text=sys.argv[1:4];arguments=sys.argv[4:]
+if not re.fullmatch(r'[1-9][0-9]{0,6}',parent_text):raise ValueError('owned Linux parent')
+parent=int(parent_text)
+if not 1<parent<=4194304:raise ValueError('owned Linux parent bound')
+marker=Path(marker_text);entry=Path(entry_text)
+for path in (marker,entry,Path(arguments[1]),Path(arguments[3]),Path(arguments[6]),Path(arguments[7])):
+ if not path.is_absolute() or '..' in path.parts or len(str(path))>1024 or path.parent.resolve()!=path.parent:raise ValueError('owned Linux fixed paths')
+if marker==Path(arguments[3]):raise ValueError('owned Linux distinct markers')
+info=entry.lstat()
+if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.geteuid() or info.st_mode&0o022:raise ValueError('owned Linux source ownership')
+with entry.open('rb') as stream:source=stream.read(8193)
+if len(source)!=7870 or hashlib.sha256(source).hexdigest()!='c4dbc1009641e4acae4b628a37256fb2ebde364dda5b53bf09a20ed7c94a81c8':raise ValueError('owned Linux reference source')
+if any(os.path.lexists(p) for p in (marker,marker.with_name(marker.name+'.pending'),marker.with_name(marker.name+'.complete'),Path(arguments[3]),Path(arguments[3]+'.pending'),Path(arguments[3]+'.complete'),Path(arguments[3]+'.closed'),Path(arguments[3]+'.closed.pending'),Path(arguments[3]+'.closed.complete'))):raise ValueError('owned Linux fresh marker')
+if any(name in os.environ for name in ('LD_PRELOAD','LD_LIBRARY_PATH','PYTHONPATH','PYTHONHOME','OPENSSL_CONF','OPENSSL_MODULES','SSL_CERT_FILE','SSL_CERT_DIR')):raise ValueError('owned Linux environment')
+
+def _linux_limits(expected_parent: int) -> None:
+    """Run in the initial child thread before installation/native imports."""
+    resource: Any = import_module('resource')
+    if (platform.machine() != 'x86_64' or ctypes.sizeof(ctypes.c_void_p) != 8 or getattr(os, 'geteuid')() == 0
+            or len(os.listdir('/proc/self/task')) != 1):
+        raise RuntimeError('unsupported_host')
+    with open('/proc/self/status', encoding='ascii') as stream:
+        capabilities = next(row for row in stream if row.startswith('CapEff:'))
+    if capabilities.split()[1] != '0000000000000000' or os.getppid() != expected_parent or expected_parent <= 1:
+        raise RuntimeError('unadmitted_parent_or_capabilities')
+    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    resource.setrlimit(resource.RLIMIT_AS, (4_294_967_296, 4_294_967_296))
+    resource.setrlimit(resource.RLIMIT_CPU, (10, 10))
+    library: Any = ctypes.CDLL(None, use_errno=True)
+    library.prctl.restype = ctypes.c_int
+    if library.prctl(1, 9, 0, 0, 0) != 0:
+        raise RuntimeError('parent_death_setup')
+    death = ctypes.c_int()
+    if library.prctl(2, ctypes.byref(death), 0, 0, 0) != 0 or death.value != 9 or os.getppid() != expected_parent:
+        raise RuntimeError('parent_death_setup')
+    class Instruction(ctypes.Structure):
+        _fields_ = [('code', ctypes.c_ushort), ('jt', ctypes.c_ubyte), ('jf', ctypes.c_ubyte), ('k', ctypes.c_uint)]
+    class Program(ctypes.Structure):
+        _fields_ = [('length', ctypes.c_ushort), ('filter', ctypes.POINTER(Instruction))]
+    rows = [
+        (0x20,0,0,4), (0x15,1,0,0xc000003e), (0x06,0,0,0x80000000),
+        (0x20,0,0,0), (0x45,0,1,0x40000000), (0x06,0,0,0x80000000),
+        (0x15,0,1,57), (0x06,0,0,0x00050000 | errno.EPERM),
+        (0x15,0,1,58), (0x06,0,0,0x00050000 | errno.EPERM),
+        (0x15,0,1,435), (0x06,0,0,0x00050000 | errno.ENOSYS),
+        (0x15,1,0,56), (0x06,0,0,0x7fff0000),
+        (0x20,0,0,16), (0x45,0,1,0x7e0240ff), (0x06,0,0,0x00050000 | errno.EPERM),
+        (0x54,0,0,0x10900), (0x15,1,0,0x10900),
+        (0x06,0,0,0x00050000 | errno.EPERM), (0x06,0,0,0x7fff0000)]
+    instructions = (Instruction * len(rows))(*(Instruction(*row) for row in rows))
+    program = Program(len(rows), instructions)
+    if library.prctl(38,1,0,0,0) != 0 or library.prctl(22,2,ctypes.byref(program),0,0) != 0:
+        raise RuntimeError('process_filter_setup')
+    if library.prctl(21,0,0,0,0) != 2:
+        raise RuntimeError('process_filter_setup')
+
+_linux_limits(parent)
+resource=import_module('resource')
+for name,bound in (('RLIMIT_CORE',0),('RLIMIT_AS',4294967296),('RLIMIT_CPU',10)):
+ if resource.getrlimit(getattr(resource,name))!=(bound,bound):raise ValueError('owned bootstrap limit readback')
+if ctypes.CDLL(None,use_errno=True).prctl(39,0,0,0,0)!=1:raise ValueError('owned bootstrap no new privileges')
+pid=os.getpid()
+if not 1<pid<=4194304 or os.getppid()!=parent or os.getpgrp()!=pid or os.getsid(0)!=pid:raise ValueError('owned bootstrap process group')
+with open('/proc/self/stat','rb') as stream:process_stat=stream.read(4097)
+if not 0<len(process_stat)<=4096:raise ValueError('owned bootstrap proc bound')
+first,separator,tail=process_stat.rpartition(b') ')
+fields=tail.split()
+if not separator or len(fields)<20 or not fields[19].isdigit() or int(fields[19])<=0:raise ValueError('owned bootstrap proc identity')
+if int(fields[1])!=parent or int(fields[2])!=pid or int(fields[3])!=pid:raise ValueError('owned bootstrap proc group')
+data=json.dumps(dict(pid=pid,parent=parent,group=pid,session=pid,start_ticks=fields[19].decode('ascii'),core=0,memory=4294967296,cpu=10,seccomp=2,no_new_privileges=1),sort_keys=True,separators=(',',':')).encode('ascii')
+if len(data)>512:raise ValueError('owned bootstrap marker cap')
+pending=marker.with_name(marker.name+'.pending')
+stream=pending.open('xb')
+try:
+ if stream.write(data)!=len(data):raise ValueError('owned bootstrap marker short write')
+ stream.flush()
+finally:
+ active=sys.exc_info()[0] is not None
+ try:stream.close()
+ except BaseException:
+  if not active:raise
+pending.replace(marker)
+if marker.read_bytes()!=data:raise ValueError('owned bootstrap marker readback')
+marker.with_name(marker.name+'.complete').mkdir()
+if sys.stdin.buffer.read(3)!=b'GO\n':raise ValueError('owned bootstrap parent identity gate')
+sys.argv=[str(entry),*arguments]
+exec(compile(source,str(entry),'exec'),dict(__name__='__main__',__file__=str(entry)))

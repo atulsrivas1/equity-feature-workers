@@ -1,0 +1,95 @@
+{
+  "schema": "eq083.linux-tls-reference-source.v1",
+  "scope": "PRE-EXECUTION SOURCE ONLY; exact Linux reference/bootstrap/bytebridge new, no imports/process/TLS/SDK execution or Linux admission",
+  "bases": {
+    "equity-features": "233e13cbee1059f19ad34132fb66500e907d4a79",
+    "equity-feature-workers": "bc10ec09a0d9266de9225db89f6044d00d3250bb"
+  },
+  "sources": {
+    "_LINUX_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 7870,
+      "sha256": "c4dbc1009641e4acae4b628a37256fb2ebde364dda5b53bf09a20ed7c94a81c8"
+    },
+    "_LINUX_TLS_REFERENCE_BOOTSTRAP.txt": {
+      "bytes": 6390,
+      "sha256": "549b01bcd1c31fb425ab55ba4df08b6233c22f2e170b7cc998a4693387d94d39"
+    },
+    "_LINUX_TLS_SESSION_TRANSPORT.txt": {
+      "bytes": 14570,
+      "sha256": "045c47ffb59016d4bc78f2bae5d939bea2ca12e2a4ee06aaf01dac24998550cb"
+    }
+  },
+  "source_pins": {
+    "packages/service/src/equity_feature_service/_containment.py": {
+      "bytes": 28231,
+      "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd"
+    },
+    "docs/EQ083_CERTIFICATE_PARENT.txt": {
+      "bytes": 27748,
+      "sha256": "dd140e306c56349fa09e00309d050fc6c5eb949746fc5a567a61fa0951600488"
+    },
+    "docs/EQ083_LINUX_CERTIFICATE_GATE.txt": {
+      "bytes": 6252,
+      "sha256": "d9759e68160f96054be38ca24cd2fc1dd69ede3454d9dfd6d9c5dde2f122437d"
+    },
+    "docs/EQ083_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 5916,
+      "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231"
+    },
+    "docs/EQ083_TLS_SESSION_TRANSPORT.txt": {
+      "bytes": 20709,
+      "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+    },
+    "docs/EQ083_PORTABLE_CERTIFICATE_ENTRY.txt": {
+      "bytes": 7790,
+      "sha256": "7f7aa8ac55d81fe5b8271cbb773ccb2c01dd4838fde18e865ed4535100b91d42"
+    },
+    "docs/EQ083_CERTIFICATE_BACKEND_INPUTS.json": {
+      "bytes": 412760,
+      "sha256": "b5a389b031a00f5835df0f4b42997858e98731fd140f05127b90c64efee26151"
+    },
+    "docs/EQ081_CLIENT_FIXTURES.json": {
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    "docs/EQ083_BUILDER_DESIGN.md": {
+      "bytes": 20899,
+      "sha256": "59fdb42e8f51f87f78b152256fa4dc684817f500bb3c97aece63778511a84c58"
+    }
+  },
+  "accepted_linux_limits": {
+    "bytes": 2491,
+    "sha256": "1a8a8c28c5ffdf50c5397f3e8400669077d2153ddff91ea7b820a2c913a5e19c"
+  },
+  "backend_source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6109069943",
+  "derivation": {
+    "reference": "Reviewed Windows5916 body retains fixed TLS seven modes, provider roles/caps/clock/profile/client, fixture identity and public StdioServer. New Linux/optimize guard, trusted portable receipt SHA/root/cert-byte verification and closed marker publication; no private key reads.",
+    "bootstrap": "Reviewed6252 gate retains entire accepted _linux_limits and marker code; new fixed7870 source pin, 13 owned args, distinct marker and GO3 retaining stdin.",
+    "bridge": "Reviewed TLS20709 transport suffix retains frame/parser/official SessionMessage queues/reader/task cleanup; reviewed certificate parent bounded/proc identity/LinuxChild changes only class name/argv7->16/returncode property, plus explicit bootstrap gate/marker/receipt arguments and direct child/group witness instead of Windows job/launcher."
+  },
+  "limits": {
+    "entry_source": 8192,
+    "bootstrap_source": 8192,
+    "bridge_source": 65536,
+    "bootstrap_marker": 512,
+    "reference_pid_marker": 128,
+    "closed_marker": 256,
+    "certificate_receipt": 16384,
+    "certificate_pem": 8192,
+    "incoming_frames": 8,
+    "incoming_frame_bytes": 65536,
+    "incoming_total_bytes": 524288,
+    "outgoing_frames": 8,
+    "outgoing_frame_bytes": 16384,
+    "queue_slots": 9,
+    "stderr_bytes": 4096,
+    "startup_seconds": 4,
+    "wait_seconds": 3,
+    "reader_join_seconds": 2,
+    "linux_cpu_seconds": 10,
+    "linux_memory_bytes": 4294967296
+  },
+  "admitted": false,
+  "remaining": "Exact integrated parent/copier/portable receipt origin+hash binding, host inspection/generated rows/freshperOS maps, all24/fullsevenReady pending BEFORE ANY copy/import/install/generation/process/TLS/SDK execution",
+  "tool_history": "Initial unpublished AST-only bridge extraction omitted bounded dependency; author readback found it, source extraction expanded to include exact bounded helper BEFORE publication/review/execution. Initial reference optimize0 guard added before freeze; no product/runtime failure."
+}
