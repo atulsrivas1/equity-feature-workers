@@ -52,13 +52,13 @@ def observe(action):
  else:
   if original_snapshot is None or snapshot(False)!=original_snapshot:raise ValueError('owned version original identity changed')
   if action=='raw_bad':
-   if requests!=35 or raw_reads!=1 or raw_bad:raise ValueError('owned version raw bad order')
+   if requests!=33 or raw_reads!=1 or raw_bad:raise ValueError('owned version raw bad order')
    raw_bad=True
   elif action=='raw_restore':
-   if requests!=38 or raw_reads!=4 or not raw_bad:raise ValueError('owned version raw restore order')
+   if requests!=36 or raw_reads!=4 or not raw_bad:raise ValueError('owned version raw restore order')
    raw_bad=False
   elif action=='final':
-   if requests!=44 or raw_reads!=7 or raw_bad:raise ValueError('owned version final counters')
+   if requests!=42 or raw_reads!=7 or raw_bad:raise ValueError('owned version final counters')
   else:raise ValueError('owned version action')
  return dict(sequence=sequence+1,action=action,requests=requests,raw_reads=raw_reads,raw_bad=raw_bad,snapshot=original_snapshot)
 server=qualification_server(service);server.set_app(app);server.timeout=.05

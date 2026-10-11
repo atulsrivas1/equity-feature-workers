@@ -2,7 +2,7 @@
   "scope": "PRE-EXECUTION version snapshot actual contract failure sources only",
   "owner": {
     "bytes": 5947,
-    "sha256": "9c0a01d22e68a3b4e39428b90704d63dc44267a443e74b633fb04cab52bb7eae"
+    "sha256": "3e1098a213cdd5d70db0d5fdee42c1b017efc3e02cee556bd448c669eba5a77a"
   },
   "reference": {
     "bytes": 3707,
@@ -116,9 +116,9 @@
     "registry_snapshot": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   "operation_ledger": {
-    "total": 44,
+    "total": 42,
     "raw": 16,
-    "client": 18,
+    "client": 16,
     "mcp": 10,
     "controls": 4,
     "polls": 0,
@@ -126,9 +126,9 @@
     "raw_source_reads": 7,
     "ack_requests": [
       1,
-      35,
-      38,
-      44
+      33,
+      36,
+      42
     ],
     "ack_raw_reads": [
       0,
@@ -138,7 +138,7 @@
     ],
     "supported_versions": {
       "raw": 10,
-      "client": 10,
+      "client": 8,
       "mcp": 6
     },
     "wrong_registry": {
@@ -180,5 +180,25 @@
     "final_worst_including_lf": 165,
     "requests": 48,
     "raw_reads": 7
+  },
+  "local_typed_version_1_0_reads": {
+    "operations": [
+      "result_read",
+      "artifact_read"
+    ],
+    "category": "configuration",
+    "code": "invalid_request",
+    "phase": "prepare",
+    "status": null,
+    "provider_calls": 0
+  },
+  "superseded_source_review": {
+    "heads": {
+      "equity-features": "6f9c5ae135a1aa2917947543ff450c03de91b06d",
+      "equity-feature-workers": "480bdacafaa3277e0d44361e339a711b38d68dce"
+    },
+    "report": "eq083-version-entry-reviewer-report.json",
+    "disposition": "REWORK",
+    "finding": "P2 typed1.0 result/export are local prepare denials; original44-send barriers overcounted two physical sends; corrected before execution."
   }
 }
