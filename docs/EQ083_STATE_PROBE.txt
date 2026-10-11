@@ -33,7 +33,7 @@ remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']
 remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
 tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
 assert len(tools)==7
-state_source=pinned('docs/EQ083_STATE_ENTRY.txt',5443,'cd40982ba6784e1e785b34780c3ae0b1771b2f6c2e2b6e0a8a17e91691c8a041')
+state_source=pinned('docs/EQ083_STATE_ENTRY.txt',5821,'25cf443dc80b53999453c8382d69b8ad859ff7dc131795ed59461cefd7729772')
 pinned('docs/EQ083_REFERENCE_ENTRY.txt',3332,'eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917')
 def completed(path,limit):
  marker=path.with_name(path.name+'.complete')
@@ -245,7 +245,7 @@ for mode in ('cancel','failure'):
    stop.write_bytes(b'1');thread.join(6)
   assert not thread.is_alive() and not errors and len(results)==1
   assert (results[0].reason,results[0].exit_code)==('exited',0),(results[0].reason,results[0].exit_code,results[0].output)
-  assert json.loads(results[0].output)==dict(marker='eq083-state-http-exited',mode=mode,reads=1,requests=total,sequence=sequence,sink_entries=1)
+  assert json.loads(results[0].output)==dict(marker='eq083-state-http-exited',mode=mode,reads=1,requests=total,sequence=sequence,sink_entries=1,final_expiries=[v['expiry'] for v in sorted(acknowledgements[-1]['jobs'],key=lambda j:j['id'])])
   reports.append(dict(mode=mode,direct=direct_count,client=typed_count,mcp=mcp_count,total=total,source_reads=1,sink_factory_entries=1,acknowledgements=acknowledgements,native_exit=True,reference_exit=True))
 assert len(reports)==2
 print(json.dumps(dict(marker='eq083-three-lane-state',cases=reports),sort_keys=True,separators=(',',':')))

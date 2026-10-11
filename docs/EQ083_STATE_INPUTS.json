@@ -1,8 +1,8 @@
 {
-  "scope": "pre-execution owner state entry only",
+  "scope": "PRE-EXECUTION corrected owner state entry with final-expiry witness; source review pending",
   "entry": {
-    "bytes": 5443,
-    "sha256": "cd40982ba6784e1e785b34780c3ae0b1771b2f6c2e2b6e0a8a17e91691c8a041"
+    "bytes": 5821,
+    "sha256": "25cf443dc80b53999453c8382d69b8ad859ff7dc131795ed59461cefd7729772"
   },
   "source_inputs": [
     {

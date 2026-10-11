@@ -76,4 +76,8 @@ try:
 finally:
  gate.set();server.server_close()
  if scheduler.close(2) is not True:raise ValueError('owned state final exit unconfirmed')
-print(json.dumps({'marker':'eq083-state-http-exited','mode':mode,'reads':facts['reads'],'requests':requests,'sequence':sequence,'sink_entries':len(facts['sink_threads'])},sort_keys=True,separators=(',',':')),flush=True)
+with scheduler.condition:
+ if len(scheduler.jobs)!=(2 if mode=='cancel' else 1):raise ValueError('owned final job count')
+ final_expiries=[j.expires_ns for j in sorted(scheduler.jobs.values(),key=lambda j:j.job_id)]
+ if any(type(v) is not int or not 0<v<=9223372036854775807 for v in final_expiries):raise ValueError('owned final expiry bounds')
+print(json.dumps({'marker':'eq083-state-http-exited','mode':mode,'reads':facts['reads'],'requests':requests,'sequence':sequence,'sink_entries':len(facts['sink_threads']),'final_expiries':final_expiries},sort_keys=True,separators=(',',':')),flush=True)

@@ -67,19 +67,19 @@
     },
     {
       "repo": "equity-feature-workers",
-      "commit": "e58195a280ff7848bbbf72ac4f8de0242fd64cab",
+      "commit": null,
       "path": "docs/EQ083_STATE_ENTRY.txt",
       "harness_path": "docs/EQ083_STATE_ENTRY.txt",
-      "bytes": 5443,
-      "sha256": "cd40982ba6784e1e785b34780c3ae0b1771b2f6c2e2b6e0a8a17e91691c8a041"
+      "bytes": 5821,
+      "sha256": "25cf443dc80b53999453c8382d69b8ad859ff7dc131795ed59461cefd7729772"
     },
     {
       "repo": "equity-feature-workers",
       "commit": null,
       "path": "docs/EQ083_STATE_PROBE.txt",
       "harness_path": "docs/EQ083_STATE_PROBE.txt",
-      "bytes": 17970,
-      "sha256": "e10813b6bbfeb2041a0d88a967764715d62e14d7b5e76fb6a05e6ab8ddd521f1"
+      "bytes": 18066,
+      "sha256": "a0b631b3553432820ea785341ee64d1ca282cb749546bcf0cf08b3dfb4bb7c21"
     }
   ],
   "reference_entry": {
@@ -87,8 +87,8 @@
     "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
   },
   "state_entry": {
-    "bytes": 5443,
-    "sha256": "cd40982ba6784e1e785b34780c3ae0b1771b2f6c2e2b6e0a8a17e91691c8a041"
+    "bytes": 5821,
+    "sha256": "25cf443dc80b53999453c8382d69b8ad859ff7dc131795ed59461cefd7729772"
   },
   "request_ledger": {
     "cancel": {
