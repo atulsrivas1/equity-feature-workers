@@ -1,0 +1,80 @@
+{
+  "heads": {
+    "equity-features": "43c07a09497af1486cc8324f8ec7dbc20a955fcf",
+    "equity-feature-workers": "32fa6bdf6dbb214d6e96b43954b34359c48bb43d"
+  },
+  "copy_exit": 0,
+  "parent_exit": 1,
+  "log_sha256": "0f101449635ededa8a415700e63f7e8a8341962ad81b4fba8a1599c4797ce440",
+  "source_approval": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6106891452",
+  "failure_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6106903171",
+  "scope": "FAILED Windows reference fault feasibility; PID diagnosis pending; no PASS or completed cleanup proof",
+  "schema": "eq083.reference-fault.failed-execution.v1",
+  "parent_bytes": 24254,
+  "parent_sha256": "8ed0ac8e59bef232df1bb81aac13f625b778b3c00fa9120cef00db80f87b7771",
+  "copy_bytes": 5762,
+  "copy_sha256": "bd97a249fed1d32c8c2a9b7cd312370ebf3d1642035609fcc4806ec8ee294a80",
+  "diagnostic": {
+    "disposition": "REWORK qualification PID topology; no demonstrated accepted runtime defect",
+    "heads": {
+      "equity-features": "43c07a09497af1486cc8324f8ec7dbc20a955fcf",
+      "equity-feature-workers": "32fa6bdf6dbb214d6e96b43954b34359c48bb43d"
+    },
+    "parent_sha256": "8ed0ac8e59bef232df1bb81aac13f625b778b3c00fa9120cef00db80f87b7771",
+    "failed_log_sha256": "0f101449635ededa8a415700e63f7e8a8341962ad81b4fba8a1599c4797ce440",
+    "observed_failure": "Actual author exit1 at parent line268 marker==dict(pid=process.pid), before init/faultcall; numeric PIDs not included in log.",
+    "evidence": {
+      "venv_executable_bytes": 274424,
+      "venv_executable_sha256": "0b471133e110cfb53a061cad528ce8e517d7b9ac41a0a396c39ad795a487fc14",
+      "identical_to_installed_venv_redirector": true,
+      "base_executable_bytes": 104952,
+      "cpython_source": "https://github.com/python/cpython/blob/v3.12.10/PC/launcher.c",
+      "cpython_source_sha256": "5f22f9a9be91601e323d8ffc5e74279af4676acbc01daeeba0b92457f67590a1",
+      "source_semantics": "CreateProcessW line810 creates interpreter child; AssignProcessToJobObject line814 unchecked; waits child line816; KILL_ON_JOB_CLOSE configured line787. Assignment is after process creation, so not atomic."
+    },
+    "findings": [
+      {
+        "priority": 2,
+        "title": "Popen launcher PID conflated with entry marker PID",
+        "locations": [
+          268,
+          283,
+          284,
+          294,
+          298,
+          307
+        ],
+        "correction": "Validate closed marker with exact positive non-bool platform-bounded integer; keep launcher and entry PID separately. Use entry PID for entered/closed witness and actual entry liveness/exit; independently wait/reap Popen and observe launcher exit. Retain exact stream/ledger/provider/no-replay assertions."
+      },
+      {
+        "priority": 2,
+        "title": "Cleanup ownership must cover actual entry and pre-marker topology",
+        "correction": "Before renewed execution freeze owned cleanup for both processes, including missing/malformed marker and reader-start failure. Marker-present cleanup must terminate/wait actual entry as needed plus launcher wait; do not rely solely on launcher kill or claim CPython post-create unchecked Job assignment is atomic. An owned atomic JobObject strategy or another reviewed topology must cover startup before marker, with failure preserving original exception."
+      }
+    ],
+    "inert_checks": {
+      "distinct_positive_launcher_entry_pids_admissible": true,
+      "closed_marker_invalid_cases_rejected": 7
+    },
+    "review_miss": "Prior source approval missed Windows venv redirector PID distinction; retained as reviewer miss, failed run remains failed.",
+    "limits": [
+      "No unchanged probe rerun, native/reference/socket/copy/setup/install execution or environment modification.",
+      "Diagnosis is source and verified binary-layout evidence; the failed log contains no actual marker/launcher PID values and no cleanup report, so no physical exit or completed native cleanup claimed.",
+      "Proposed marker guard tested with inert values only; candidate correction needs exact published pre-execution source review.",
+      "No Ready/full24/Linux/artifact/release qualification."
+    ]
+  },
+  "actual_env_reinstalled": false,
+  "source_runtime_unchanged": true,
+  "owner_notified_once": true,
+  "no_matching_live_python_observed": true,
+  "process_inventory_scope": "Read-only matching-command process inventory found none after failure; not completed cleanup proof",
+  "remaining": "Freeze exact distinct launcher/entry PID guards and reviewed pre-marker cleanup ownership, publish/review before NEW corrected harness/run; original failed run unchanged/no PASS",
+  "candidate_ownership_source_pin": {
+    "commit": "32fa6bdf6dbb214d6e96b43954b34359c48bb43d",
+    "path": "packages/service/src/equity_feature_service/_containment.py",
+    "bytes": 28231,
+    "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd",
+    "scope": "AST/source only: accepted _WindowsChild uses PROC_THREAD_ATTRIBUTE_JOB_LIST atomically before suspended CreateProcess/IsProcessInJob/ResumeThread; active1/stdinNUL oradmissionACK cannot be reused unchanged for venv redirector+interactiveMCP. New qualification-only fixed wrapper must freeze exactactive2/stdin-out-err pipes/limits/readback/entrymembership/active0cleanup, no productruntime edits."
+  }
+}
