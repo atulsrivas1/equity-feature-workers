@@ -101,8 +101,8 @@ class WindowsCertificateChild:
    environment={key:os.environ[key] for key in ('SystemRoot','WINDIR','TEMP','TMP') if key in os.environ}
    environment.update(OPENSSL_CONF=str(root/'empty.cnf'),OPENSSL_MODULES=str(root/'providers'))
    block=ctypes.create_unicode_buffer(''.join(k+'='+v+'\0' for k,v in sorted(environment.items()))+'\0')
-   command=ctypes.create_unicode_buffer(command_text)
-   check(self.kernel.CreateProcessW(argv[0],command,None,None,True,4|0x80000|0x400|0x8000000,block,str(root),ctypes.byref(startup.startup),ctypes.byref(child)))
+   command_buffer=ctypes.create_unicode_buffer(command_text)
+   check(self.kernel.CreateProcessW(argv[0],command_buffer,None,None,True,4|0x80000|0x400|0x8000000,block,str(root),ctypes.byref(startup.startup),ctypes.byref(child)))
    self.process,self.thread,self.pid=child.process,child.thread,int(child.pid)
    contained=w.BOOL();check(self.kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
    if not contained.value:raise ValueError('owned certificate launcher membership')

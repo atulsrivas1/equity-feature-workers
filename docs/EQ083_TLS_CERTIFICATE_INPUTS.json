@@ -5,8 +5,8 @@
     "equity-feature-workers": "47650925744cc494ba56a8e47012aff52bce20e6"
   },
   "qualification_source": {
-    "bytes": 17103,
-    "sha256": "ce65af69c630977af420904d352ac140db289a9d2d1833b9c13c9897ef1b213d"
+    "bytes": 17117,
+    "sha256": "5fc06444865d62b862cfc9525a36eeaf537fe2002a7269dd0cb35735cdfbd995"
   },
   "derived_helper_pin": {
     "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
@@ -127,5 +127,14 @@
   "executed": false,
   "reviewed": false,
   "runtime_unchanged": true,
-  "linux_design_pending": true
+  "linux_design_pending": true,
+  "prior_source_review": {
+    "heads": {
+      "equity-features": "38c6a86f1fc361d959b171fda97e712e1efc5887",
+      "equity-feature-workers": "9880275262aa1361aa9306dd2892d86679392e27"
+    },
+    "disposition": "REWORK P2 constructor command name shadowing",
+    "report": "eq083-tls-certificate-reviewer-report.json",
+    "corrected_before_execution": true
+  }
 }
