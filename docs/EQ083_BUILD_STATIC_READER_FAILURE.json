@@ -1,0 +1,227 @@
+{
+  "schema": "eq083-static-build-reader-failure.v1",
+  "disposition": "FAILED_METADATA_LITERAL_CONTRACT",
+  "admitted": false,
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6118067913",
+  "invocation": {
+    "source_heads": {
+      "equity-features": "153a392d8569b0b69d8cf0155f2d23a029ec8251",
+      "equity-feature-workers": "9a7bbe1bdececc07c40506820b90e36dd3a128e3"
+    },
+    "source_bytes": 19065,
+    "source_sha256": "4b41c813d1dee284341ac9ac3938cb72323189c6ac5341c1bfc641dc4a92e88b",
+    "interpreter": "Existing Windows BASE CPython3.12.10 x64 -I-B-S; private absolute path outside Git",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Owner-authorized expected-source preparation and latest heartbeat: bounded static public build archive acquisition after exact source freeze and independent review; no install or build authority",
+    "exit_code": 1,
+    "elapsed_seconds": 2.7559417,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 1021,
+    "stderr_sha256": "2c85a3a9c3b69962f293a767750c40caa78cf3a04ac2811ae802e1cb06d112f4",
+    "admitted": false,
+    "scope": "Public static archive acquisition and complete member/RECORD observation only; no package execution, install, build, host/import/security/form/Ready admission"
+  },
+  "independent_failure_review": {
+    "heads": {
+      "equity-features": "153a392d8569b0b69d8cf0155f2d23a029ec8251",
+      "equity-feature-workers": "9a7bbe1bdececc07c40506820b90e36dd3a128e3"
+    },
+    "source": {
+      "bytes": 19065,
+      "sha256": "4b41c813d1dee284341ac9ac3938cb72323189c6ac5341c1bfc641dc4a92e88b"
+    },
+    "disposition": "DIAGNOSED_FAILED_METADATA_LITERAL_CONTRACT",
+    "findings": [
+      {
+        "priority": "P2",
+        "title": "Publisher and wheel raw requirement serialization are distinct",
+        "detail": "build1.2.2.post1 matching pinned bytes contains Requires-Python >= 3.8, while publisher metadata and reader manifest say >=3.8. Exact literal comparison rejects the fifth wheel; this is a qualification metadata contract defect, not evidence of a package/runtime defect or corrupt acquisition. The same wheel also has raw Requires-Dist whitespace and four single-comparison grouping differences; changing only Requires-Python would leave the next literal guard failure."
+      }
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 2.7559417,
+    "evidence": {
+      "invocation_receipt_sha256": "219046efc2fe856bd86108fc8e0e601ab85c187f575843a84d7b20c143dd7e56",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 1021,
+      "stderr_sha256": "2c85a3a9c3b69962f293a767750c40caa78cf3a04ac2811ae802e1cb06d112f4",
+      "completed_download_prefix": 5,
+      "prior_audit_calls_completed_from_source_flow": 4,
+      "saved_prefix_compressed_bytes": 23006033,
+      "missing_remaining_files": 3
+    },
+    "saved_archive_observations": [
+      {
+        "filename": "setuptools-80.9.0-py3-none-any.whl",
+        "compressed_bytes": 1201486,
+        "sha256": "062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922",
+        "file_members": 512,
+        "uncompressed_bytes": 4142215,
+        "independent_saved_archive_crc_record_verified": true,
+        "publisher_requires_python": ">=3.9",
+        "archive_requires_python": ">=3.9",
+        "requires_python_literal_equal": true,
+        "requires_dist_literal_equal": true,
+        "requires_dist_missing": [],
+        "requires_dist_extra": []
+      },
+      {
+        "filename": "mypy_extensions-1.1.0-py3-none-any.whl",
+        "compressed_bytes": 4963,
+        "sha256": "1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505",
+        "file_members": 5,
+        "uncompressed_bytes": 10550,
+        "independent_saved_archive_crc_record_verified": true,
+        "publisher_requires_python": ">=3.8",
+        "archive_requires_python": ">=3.8",
+        "requires_python_literal_equal": true,
+        "requires_dist_literal_equal": true,
+        "requires_dist_missing": [],
+        "requires_dist_extra": []
+      },
+      {
+        "filename": "mypy-1.15.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl",
+        "compressed_bytes": 12410020,
+        "sha256": "8023ff13985661b50a5928fc7a5ca15f3d1affb41e5f0a9952cb68ef090b31ee",
+        "file_members": 1261,
+        "uncompressed_bytes": 41555686,
+        "independent_saved_archive_crc_record_verified": true,
+        "publisher_requires_python": ">=3.9",
+        "archive_requires_python": ">=3.9",
+        "requires_python_literal_equal": true,
+        "requires_dist_literal_equal": true,
+        "requires_dist_missing": [],
+        "requires_dist_extra": []
+      },
+      {
+        "filename": "mypy-1.15.0-cp312-cp312-win_amd64.whl",
+        "compressed_bytes": 9366614,
+        "sha256": "171a9ca9a40cd1843abeca0e405bc1940cd9b305eaeea2dda769ba096932bb22",
+        "file_members": 1261,
+        "uncompressed_bytes": 27648527,
+        "independent_saved_archive_crc_record_verified": true,
+        "publisher_requires_python": ">=3.9",
+        "archive_requires_python": ">=3.9",
+        "requires_python_literal_equal": true,
+        "requires_dist_literal_equal": true,
+        "requires_dist_missing": [],
+        "requires_dist_extra": []
+      },
+      {
+        "filename": "build-1.2.2.post1-py3-none-any.whl",
+        "compressed_bytes": 22950,
+        "sha256": "1d61c0887fa860c01971625baae8bdd338e517b836a2f70dd1f7aa3a6b2fc5b5",
+        "file_members": 19,
+        "uncompressed_bytes": 62029,
+        "independent_saved_archive_crc_record_verified": true,
+        "publisher_requires_python": ">=3.8",
+        "archive_requires_python": ">= 3.8",
+        "requires_python_literal_equal": false,
+        "requires_dist_literal_equal": false,
+        "requires_dist_missing": [
+          "build[uv,virtualenv]; extra == \"test\"",
+          "build[uv]; extra == \"typing\"",
+          "filelock>=3; extra == \"test\"",
+          "furo>=2023.08.17; extra == \"docs\"",
+          "importlib-metadata>=4.6; python_full_version < \"3.10.2\"",
+          "importlib-metadata>=5.1; extra == \"typing\"",
+          "mypy~=1.9.0; extra == \"typing\"",
+          "packaging>=19.1",
+          "pytest-cov>=2.12; extra == \"test\"",
+          "pytest-mock>=2; extra == \"test\"",
+          "pytest-rerunfailures>=9.1; extra == \"test\"",
+          "pytest-xdist>=1.34; extra == \"test\"",
+          "pytest>=6.2.4; extra == \"test\"",
+          "setuptools>=42.0.0; extra == \"test\" and python_version < \"3.10\"",
+          "setuptools>=56.0.0; extra == \"test\" and python_version == \"3.10\"",
+          "setuptools>=56.0.0; extra == \"test\" and python_version == \"3.11\"",
+          "setuptools>=67.8.0; extra == \"test\" and python_version >= \"3.12\"",
+          "sphinx-argparse-cli>=1.5; extra == \"docs\"",
+          "sphinx-autodoc-typehints>=1.10; extra == \"docs\"",
+          "sphinx-issues>=3.0.0; extra == \"docs\"",
+          "sphinx~=7.0; extra == \"docs\"",
+          "tomli; extra == \"typing\"",
+          "tomli>=1.1.0; python_version < \"3.11\"",
+          "typing-extensions>=3.7.4.3; extra == \"typing\"",
+          "uv>=0.1.18; extra == \"uv\"",
+          "virtualenv>=20.0.35; extra == \"virtualenv\"",
+          "wheel>=0.36.0; extra == \"test\""
+        ],
+        "requires_dist_extra": [
+          "build[uv, virtualenv] ; extra == \"test\"",
+          "build[uv] ; extra == \"typing\"",
+          "filelock >= 3 ; extra == \"test\"",
+          "furo >= 2023.08.17 ; extra == \"docs\"",
+          "importlib-metadata >= 4.6; python_full_version < \"3.10.2\"",
+          "importlib-metadata >= 5.1 ; extra == \"typing\"",
+          "mypy ~= 1.9.0 ; extra == \"typing\"",
+          "packaging >= 19.1",
+          "pytest >= 6.2.4 ; extra == \"test\"",
+          "pytest-cov >= 2.12 ; extra == \"test\"",
+          "pytest-mock >= 2 ; extra == \"test\"",
+          "pytest-rerunfailures >= 9.1 ; extra == \"test\"",
+          "pytest-xdist >= 1.34 ; extra == \"test\"",
+          "setuptools >= 42.0.0 ; extra == \"test\" and ( python_version < \"3.10\")",
+          "setuptools >= 56.0.0 ; extra == \"test\" and ( python_version == \"3.10\")",
+          "setuptools >= 56.0.0 ; extra == \"test\" and ( python_version == \"3.11\")",
+          "setuptools >= 67.8.0 ; extra == \"test\" and ( python_version >= \"3.12\")",
+          "sphinx ~= 7.0 ; extra == \"docs\"",
+          "sphinx-argparse-cli >= 1.5 ; extra == \"docs\"",
+          "sphinx-autodoc-typehints >= 1.10 ; extra == \"docs\"",
+          "sphinx-issues >= 3.0.0 ; extra == \"docs\"",
+          "tomli ; extra == \"typing\"",
+          "tomli >= 1.1.0; python_version < \"3.11\"",
+          "typing-extensions >= 3.7.4.3 ; extra == \"typing\"",
+          "uv >= 0.1.18 ; extra == \"uv\"",
+          "virtualenv >= 20.0.35 ; extra == \"virtualenv\"",
+          "wheel >= 0.36.0 ; extra == \"test\""
+        ]
+      }
+    ],
+    "semantic_assessment": {
+      "observed_difference": "single optional whitespace after >= operator",
+      "equivalent_version_constraint": true,
+      "primary_source": "https://packaging.python.org/en/latest/specifications/version-specifiers/",
+      "basis": "Specification permits whitespace between a conditional operator and its following version identifier. This exact pair denotes the same >=3.8 constraint; no generic dependency normalization or resolver was run.",
+      "requires_dist_differing_raw_rows": 27,
+      "requires_dist_closed_saved_pair_token_equivalence": true,
+      "dependency_primary_source": "https://packaging.python.org/en/latest/specifications/dependency-specifiers/",
+      "dependency_basis": "All differing saved row pairs have identical quoted literals, identifiers/operators/extras after ignoring optional non-linebreaking whitespace and redundant parentheses around a single Python-version comparison. This is an exact saved-row diagnosis, not a generic policy normalizer or dependency resolver."
+    },
+    "advice": [
+      "Preserve original failed invocation and publisher claim verbatim. Freeze independent artifact raw metadata claims tied to exact archive bytes, alongside publisher claims and this narrowly evidenced equivalence. Pin both raw Requires-Python and raw Requires-Dist artifact strings independently; preserve publisher JSON and these exact metadata differences.",
+      "Correct only the metadata-source contract after complete saved-prefix inspection; do not weaken byte/hash/ZIP/member/CRC/RECORD/version/identity/tag guards or silently rewrite publisher history.",
+      "Remaining three wheels are absent; later acquisition needs a reviewed exact source/quarantine policy and cannot call this failure a completed eight-wheel audit."
+    ],
+    "limitations": [
+      "Read-only retained files/ZIP bytes and metadata plus primary specification only; no HTTP/download/rerun/pip/install/import/build/native/stat host observer.",
+      "Independent saved archive static CRC/RECORD checks above are reviewer evidence distinct from author failed-prefix audit; downloaded code was never imported/executed.",
+      "No complete8 audit, runtime PASS, cleanup-general/host/form/issuer/Ready/security admission or vulnerability impact established.",
+      "No live cause beyond exact observed metadata string mismatch inferred; original run remains FAILED."
+    ],
+    "tool_only_history": [
+      "Preliminary metadata comparison looked for manifest in corrective INPUTS, which contains original history rather than direct manifest. Corrected to AST literal extraction from exact source; no downloaded code execution."
+    ]
+  },
+  "completed_eight_archive_audit": false,
+  "security_disposition": "unassessed",
+  "established": "Fifth archive build1.2.2.post1 exact pinned bytes has raw Requires-Python >= 3.8 vs publisher >=3.8; 27 Requires-Dist raw formatting differences. Primary PyPA rules and exact saved-pair reviewer assessment identify formatting equivalence, not a package defect or corrupt acquisition.",
+  "next": "Freeze exact independently observed artifact raw Requires-Python and Requires-Dist strings tied to archive SHA alongside unchanged publisher claims; do not normalize or weaken all metadata/byte/ZIP/RECORD guards. Reuse five retained originals without redownload in a reviewed finite source operation for the three still absent public wheels, separate quarantine/evidence and independent review before call. Full eight-archive/source-build/physical-issuer/form closure remains pending.",
+  "limitations": [
+    "Original source19065 review86INERT approved; actual run remains FAILED. Four earlier author audit calls completed by source flow but no returned full report.",
+    "Independent saved-file reviewer CRC/fullRECORD checks for all five retained archives are separate evidence, not retroactive author PASS.",
+    "Five files total23006033 bytes match publisher pins; three absent. No complete8 audit or installation/import/build/extraction/native product operation.",
+    "Stream finally source is not a generalized actual cleanup/job/security witness. Quarantine retained, no automatic deletion/retry.",
+    "All prior18334REWORK41+3 and older actual host failures/nonadmitted discovery remain unchanged. No Ready/fullR7/form/security/host authority."
+  ],
+  "tool_only_history": [
+    "Author inline PowerShell-quoted Python metadata-reader syntax failed before reads/writes; saved standalone reader fixed quoting.",
+    "Standalone diagnostic initially counted nested vendored METADATA as package metadata and rejected before output; corrected to sole top-level dist-info/METADATA, then read five saved files only. No download/source rerun or runtime product failure from these tooling errors."
+  ]
+}
