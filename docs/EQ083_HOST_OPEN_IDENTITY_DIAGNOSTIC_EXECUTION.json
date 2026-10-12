@@ -1,0 +1,140 @@
+{
+  "schema": "eq083-host-open-identity-diagnostic-failed-execution-v1",
+  "admitted": false,
+  "disposition": "FAILED_WITH_PRIVATE_FIELD_WITNESS",
+  "owner_permission": "Direct yes please scoped reviewed readonlypreReady; actualfreshmapsTestafterguardedReady",
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6116361949",
+  "invocation": {
+    "source_heads": {
+      "equity-features": "7cd670f2cc726e4a0f2af0641fc5996d93970881",
+      "equity-feature-workers": "4f9df753816220851b7bf0e1c5d7291fce824c75"
+    },
+    "source_bytes": 39184,
+    "source_sha256": "7add88b275eff56f447f29437822da1612d6d0deda2bbff874d580bcf4fbf890",
+    "interpreter": "Existing Windows CPython3.12.10 x64 BASE, direct -I-B-S; private exact path outsideGit",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Direct human yes please to reviewed readonly baseline preReady and actual fresh installation maps Test after Ready; bounded reviewed diagnostic correction same scope",
+    "exit_code": 1,
+    "elapsed_seconds": 0.2436879,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 1828,
+    "stderr_sha256": "5d035a41d3c36d50f0964b59950d738782cd857cf9991fc740e2f4c015c302de",
+    "admitted": false,
+    "scope": "Readonly Windows baseline diagnostic; no product/form/resolver/Ready admission"
+  },
+  "independent_failure_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "7cd670f2cc726e4a0f2af0641fc5996d93970881",
+      "equity-feature-workers": "4f9df753816220851b7bf0e1c5d7291fce824c75"
+    },
+    "source": {
+      "bytes": 39184,
+      "sha256": "7add88b275eff56f447f29437822da1612d6d0deda2bbff874d580bcf4fbf890"
+    },
+    "disposition": "DIAGNOSED_FAILED_INCOMPATIBLE_STAT_VIEWS",
+    "findings": [
+      {
+        "priority": "P2",
+        "title": "Freeze a Windows cross-interface identity contract before replacing full tuple equality",
+        "function": "actual_file/stat_pin",
+        "body": "Observed pathname and fd pins differ in mode and ctime only. CPython3.12.10 pathname stat synthesizes executable mode bits and substitutes creation time into ctime; fd fstat retains attributes-derived mode and ChangeTime. Equality compares different field meanings. This is a qualification observer contract issue, not demonstrated product/runtime or mutation defect; correction must retain exact native identity, both time meanings and attributes/mode-view checks, without dropping fields or tolerance."
+      }
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 0.2436879,
+    "raw_log_sha256": "5d035a41d3c36d50f0964b59950d738782cd857cf9991fc740e2f4c015c302de",
+    "evidence": {
+      "invocation_receipt_bytes": 1021,
+      "invocation_receipt_sha256": "9f266f30883368d907cf2b3070e3b2f924e7ef2fe2f0fd473b0496eef8d19051",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 1828,
+      "stderr_sha256": "5d035a41d3c36d50f0964b59950d738782cd857cf9991fc740e2f4c015c302de",
+      "exception_notes": 1,
+      "json_note_bytes": 406,
+      "actual_differing_fields": [
+        "st_mode",
+        "st_ctime_ns"
+      ],
+      "expected_mode": 33279,
+      "opened_mode": 33206,
+      "mode_xor": 73,
+      "mode_xor_octal": "0111",
+      "ctime_delta_ns": -46778252573690100,
+      "ctime_precision_remainders_ns": [
+        0,
+        0
+      ],
+      "equal_fields": [
+        "st_dev",
+        "st_ino",
+        "st_nlink",
+        "st_size",
+        "st_mtime_ns"
+      ],
+      "private_fields": "Full timestamps/device/inode/path pins retained only in private rawlog; not copied here."
+    },
+    "diagnosis": {
+      "established": "Actual captured mismatch has exactly mode and ctime; allfive other full pin values equal. Primary3.12.10 source explains distinct conversion semantics: pathname win32_xstat applies filename mode overlay and copies birthtime into ctime; _Py_fstat_noraise invokes attribute conversion that uses ChangeTime for ctime and no suffix overlay.",
+      "not_established": [
+        "Actual native CreationTime/ChangeTime/attributes captured from this retained fd; no native metadata reads occurred during reviewer diagnosis.",
+        "Source-build equivalence of the selected binary solely from tagged source, or absence of all concurrent file changes/security issues.",
+        "Complete inventory/content hash/Pythonorigins/resource/physicalcleanup/host admission/PASS."
+      ]
+    },
+    "proposed_source_contract": [
+      "Separate pinned Windows function obtains borrowed OS handle from exactly retained os.open fd; never closes borrowed HANDLE independently and never reopens a guessed pathname. Freeze ABI/access/right/argument/count/error/cleanup bounds before any call.",
+      "Read-only GetFileInformationByHandleEx FileBasicInfo + FileStandardInfo + FileIdInfo (and reparse/tag information if required) on the same handle; require non-directory/nonreparse regular disk file, full volume+128bitID, exact nlink/size, raw attributes, CreationTime/LastWriteTime/ChangeTime, with exact 100ns-to-ns conversion and no tolerance/fallback truncation.",
+      "Validate fdstat mode equals attributes-derived regular/read-only mode; validate pathname mode equals that same base plus exactly the pinned recognized suffix overlay. Preserve exact separate pathname and fd views and same-view before/after equality, not universal masking0111. These synthetic POSIX modes do not establish effective ACL permissions; any DACL/access claim needs separately specified read-only native evidence.",
+      "Validate pathname ctime exactly against converted native CreationTime; fd ctime exactly against native ChangeTime; validate mtime against LastWriteTime and retain both original fulltimes. No droppingctime or arbitrary delta allowance.",
+      "Retain exact dev/ino/nlink/size, native raw identity+times/attributes before/after read, existing path/ancestor/reparse/original-path checks and explicit fd close. Fail on native missing data/identity/view mismatch/drift; frozen new source must be independently reviewed before corrective invocation."
+    ],
+    "primary_sources": [
+      {
+        "url": "https://raw.githubusercontent.com/python/cpython/v3.12.10/Modules/posixmodule.c",
+        "sections": "update_st_mode_from_path1777-1798; win32_xstat2008-2018; FSTAT/os_fstat route",
+        "source_only": "Tagged primary source, no locally hashed source or binary equivalence claim."
+      },
+      {
+        "url": "https://raw.githubusercontent.com/python/cpython/v3.12.10/Python/fileutils.c",
+        "sections": "attributes_to_mode1003-1015; _Py_attribute_data_to_stat1026-1069; _Py_stat_basic_info_to_stat1071-1097; _Py_fstat_noraise1147-1195",
+        "source_only": "CreationTime/birthtime versus ChangeTime/ctime and attributes mode observed in source; no API calls."
+      }
+    ],
+    "checks": [
+      "Exact receipt fullheads/source39184SHA/raw sizes/hashes/exit/time, one406-byte closed tuple note and seven primitive fields verified read-only.",
+      "Actual full tuples compared privately; only established field names/modes/delta/100ns precision included in report. Allprevious failed reports left untouched."
+    ],
+    "limitations": [
+      "Read-only source/log/receipt and official tagged source inspection only. No actual stat/fstat/observer/platform/process/native handle/metadata/hashbaseline or whole-module invocation, TLS/product/SDK/copy/install/setup actions.",
+      "Previous75 helper tests inherited, not rerun. This report diagnoses failure and proposes source contract; it does not approve an implementation/newrun/Ready/freshforms/Linux/fullresolver/release.",
+      "Source mechanism matches observed differences but actual same-fd native metadata/ACL/authority remains unobserved; no success or cleanup inference."
+    ],
+    "tool_only_history": []
+  },
+  "observed_fields": {
+    "differing_fields": [
+      "st_mode",
+      "st_ctime_ns"
+    ],
+    "expected_mode": 33279,
+    "opened_mode": 33206,
+    "mode_xor": 73,
+    "all_other_five_fields_equal": true,
+    "note_json_bytes": 406
+  },
+  "privacy": "Full expected/opened dev/inode/time values private outsideGit; only field names and mode bits sanitized for public record; stderrSHA binds actualcomplete witness",
+  "original_failures": "All1006 and37723hostopenidentity failure records preserved unchanged",
+  "next": "Exact Windows path-stat/fd-stat interface semantics and same-held-handle native identity/time contract SOURCE design; no omitted ctime/mode/nlink, ignoredtime differences or arbitrary tolerance. Independent source review before changed-source readonly execution.",
+  "limitations": [
+    "Actual existing rejection remainsexit1/no contenthash/Pythonorigins/complete discovery/PASS/Ready/host-form-Linux-fullresolver/cleanup proof.",
+    "Mode xor0111 plus ctime mismatch established; source interpretation must not infer filesystem mutation or handle authority from field differences alone.",
+    "No extra stat/API/process/hash read, normalization, retry or installation/product/collector/pip/SDKcrypto/nativeworker/TLS/certificate-key operation."
+  ]
+}
