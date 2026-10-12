@@ -1,0 +1,327 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "NINE_IMMUTABLE_UPSTREAM_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+    "disposition": "CURRENT_CORE_QUOTA_UPGRADE_AND_LIFETIME_PATHS_CONFIRMED_WHOLE_DOMAIN_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_release": "26.08",
+    "research_tag_object": "3d75dc71b1bea0c03ec0151912ef320e3d64fb92",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "source_receipt_sha256": "f2178576a49caeaa130ac9245f19123dc2b260d72036fc7390d585035e43ee99",
+    "source_pins": [
+      {
+        "bytes": 6,
+        "git_sha1": "f583e33b1b6cc6489c923912a0b2090247885bf6",
+        "sha256": "76ed97f19889753e2807db2326f3d123df5bc0fdf01e6c55dbba235343b2996b",
+        "path": "VERSION",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/VERSION"
+      },
+      {
+        "bytes": 36177,
+        "git_sha1": "f2eaf5bfcd103270861125660c855dc6f45eb433",
+        "sha256": "232a468bf368830f53bdf5b1cdd3f8b954dc14dfff207028ed303cb42c3049db",
+        "path": "LICENSE",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/LICENSE"
+      },
+      {
+        "bytes": 298,
+        "git_sha1": "015572697d0b5f39ef452bbb49ed2efca0ded31a",
+        "sha256": "42f8328e5d2cf48ee1069d9947db1c7bd6e96f9c00c8c2aa7593cb27cad327b6",
+        "path": "repos/base-nova/ports/nova.port",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/ports/nova.port"
+      },
+      {
+        "bytes": 27287,
+        "git_sha1": "9c41b156fc419c017410d6bdeb38ab531b364993",
+        "sha256": "a695a0022374cb94b7f30786a0c45c5611339f1556e4f439e586314a5b7e9b42",
+        "path": "repos/base-nova/src/core/pager.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/pager.cc"
+      },
+      {
+        "bytes": 6566,
+        "git_sha1": "512831ae0f9b3ad0249cc9dada64bab77e93dfda",
+        "sha256": "52d18e949ae47e6a2504b93c4fd7bdd3412cd9013302dfdeccc8b5bc527a7371",
+        "path": "repos/base-nova/src/core/pd_session_support.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/pd_session_support.cc"
+      },
+      {
+        "bytes": 1881,
+        "git_sha1": "7498cd81e718d8470c18b6435b0c560a45147925",
+        "sha256": "475e3dae0753c28ad306a5739d300938df8ce3791e35dace93ec1290607831ca",
+        "path": "repos/base-nova/src/core/platform_pd.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/platform_pd.cc"
+      },
+      {
+        "bytes": 1618,
+        "git_sha1": "2cb8fdc3a1f91b17777e8b2bfed3b57c5c85c30b",
+        "sha256": "96d8717d88f9ff4a2e6010e4365b6cb2825d5cb9cba75e04f5955f870f972e22",
+        "path": "repos/base-nova/src/core/include/platform_pd.h",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/include/platform_pd.h"
+      },
+      {
+        "bytes": 9267,
+        "git_sha1": "512be056a722b454589a1600ddc03f873224686e",
+        "sha256": "e1d7188736b5d54da606033631000aa04af0f4fbc9075e26526677649d4b3794",
+        "path": "repos/base-nova/src/core/include/nova_util.h",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/include/nova_util.h"
+      },
+      {
+        "bytes": 13889,
+        "git_sha1": "36a1be0176a9cb68fa0f1fd6232f30992dea1525",
+        "sha256": "61d4fe482c037a640be1f9ffb4a98ef7009b270ddc6d7daacb62d5816e2732b3",
+        "path": "repos/base-nova/src/core/vm_session_component.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/vm_session_component.cc"
+      }
+    ],
+    "total_bytes": 96989,
+    "facts": [
+      {
+        "paths": [
+          "VERSION",
+          "repos/base-nova/ports/nova.port",
+          "LICENSE"
+        ],
+        "fact": "VERSION reads26.08. The port declares GPLv2 NOVA from alex-ab/NOVA at b5177517cae440940348af0406903f607ea73a46, with sorted repository patches. LICENSE declares AGPLv3 and conditional linking additional permission for independent modules under approved licenses. This partial source research selects neither a license/distribution strategy nor an unpatched upstream kernel binary."
+      },
+      {
+        "lines": "729-913",
+        "functions": [
+          "Pager_object::handle_oom",
+          "Pager_object::_oom_handler"
+        ],
+        "paths": [
+          "repos/base-nova/src/core/pager.cc"
+        ],
+        "fact": "Current handle_oom transfers two kernel-quota pages from a source PD to destination; a prefer-source policy can fall back to core. If transfers fail it requests remote memory revocation and compares reported usage. Continued failure returns PD_OOM; comments describe deferred RCU release. The OOM handler initializes UPGRADE_CORE_TO_DST and commonly chooses core as donor even for non-core interactions. Success resumes original IPC; unresolved OOM blocks on a semaphore. STOP and unknown-case paths exist. No deadline or global frozen total is established by these paths."
+      },
+      {
+        "functions": [
+          "retry_syscall",
+          "syscall_retry",
+          "_with_kernel_quota_upgrade"
+        ],
+        "paths": [
+          "repos/base-nova/src/core/pd_session_support.cc",
+          "repos/base-nova/src/core/include/nova_util.h",
+          "repos/base-nova/src/core/vm_session_component.cc"
+        ],
+        "fact": "Each inspected helper retries its operation while PD_OOM and OOM handling returns OK. VM helper explicitly requests a core-to-target upgrade. There is no explicit iteration cap or elapsed deadline in these loops. This is a source-level absence of a finite local bound, not proof that an actual invocation hangs or consumes unbounded physical memory."
+      },
+      {
+        "functions": [
+          "Platform_pd::Platform_pd",
+          "Platform_pd::~Platform_pd",
+          "Platform_pd::flush"
+        ],
+        "paths": [
+          "repos/base-nova/src/core/platform_pd.cc",
+          "repos/base-nova/src/core/include/platform_pd.h"
+        ],
+        "fact": "PD creation passes literals for two pages kept unavailable for upgrades and32 upper-limit pages. Invalid selector and create failure are logged/returned as coded. Destruction invokes revoke then removes the capability mapping; flush revokes a flexpage sequence. These callsites do not establish syscall completion deadlines or full resource release. In light of upgrade paths,32 is not an established fixed lifetime or whole-subsystem maximum; kernel implementation and patch semantics remain outside this receipt."
+      },
+      {
+        "functions": [
+          "Vm_session_component::Vm_session_component",
+          "Vcpu::startup",
+          "Vcpu::exit_handler",
+          "Vm_session_component::attach"
+        ],
+        "paths": [
+          "repos/base-nova/src/core/vm_session_component.cc"
+        ],
+        "fact": "VM construction wraps RAM/cap quota guards, trace control, heap and memory-map owners, withdraws one cap and creates the VM PD with the same2/32 parameters. vCPU startup, portal mapping, EC/semaphore creation and memory delegation use upgrade helpers, including a VMM-PD target. Mapping failures return allocation/invalid-dataspace classifications. RAM and capability guards do not independently attest a nonexpanding kernel quota or all external backing costs."
+      },
+      {
+        "functions": [
+          "Vm_session_component::~Vm_session_component",
+          "Vcpu::~Vcpu",
+          "Pd_selector::~Pd_selector",
+          "Vm_session_component::_detach",
+          "Pager_object::~Pager_object"
+        ],
+        "paths": [
+          "repos/base-nova/src/core/vm_session_component.cc",
+          "repos/base-nova/src/core/pager.cc"
+        ],
+        "fact": "VM destruction iterates and destroys vCPUs; vCPU destructor dissolves entrypoint identity, removes trace source and replenishes/removes its cap range. PD-selector destructor removes its mapping with revoke semantics delegated to unseen implementation. Detach invokes revocation over flexpages. Pager destruction revokes cleanup/block portals. Member/base destructors, cap-map implementation, kernel RCU, all VMM/device/provider lifetimes and partial-constructor unwind need additional source closure; these nine files are not a full cleanup proof."
+      }
+    ],
+    "conclusion": "The current26.08 core code, rather than historical15.08 documentation alone, confirms quota growth from core, OOM retry/revocation/blocking paths and VM/PD cleanup callsites. Stock initial quota numbers are not the complete fixed-budget contract. A candidate remains substantive, but requires the exact complete allocation-and-authority graph plus supported finite lifetime enforcement before positive admission.",
+    "remaining_obligations": [
+      "Inspect the fixed NOVA kernel and all applied patches as permitted source text before interpreting create/transfer/revoke and RCU resource accounting. No kernel acquisition occurred here.",
+      "Close current core boot allocations, cap-map and RAM/session/base destructors, all quota donors/upgrades, page tables, threads, mappings and temporary overlap.",
+      "Close actual supported VMM/guest/device/provider routes, independent backing, disk bytes/nodes, external transfers and every failed construction path.",
+      "Provide bounded independent stop/drain/revoke/reap/close and residual release for all owners; source loops and logical destruction are not physical completion witnesses.",
+      "Validate exact selected Windows/Linux guest and CPython/native artifact forms, full source/build/resolver/host and license obligations without inheriting upstream compatibility claims."
+    ],
+    "limitations": [
+      "Only saved UTF8 source text was read and independently hashed as DATA; no C++ compilation/import/execution, source acquisition, kernel or binary acquisition, native/core/API/host/VM/probe/test.",
+      "Nine files96989bytes are a partial inventory, not whole vendor/core/kernel/VMM/provider closure, current binary provenance or immutable selected configuration.",
+      "Failure branches and missing deadlines are static observations, not actual runtime failure, leak, hang, vendor bug or universal impossibility.",
+      "No dependency/topology/license selected, no new owner-input requirement, no operational/Ready grant. Previously rejected binary task not reattempted."
+    ],
+    "tool_only_history": [
+      "First summary requested nonexistent git_blob_sha1 field; actual receipt git_sha1 was identified before verification. A PowerShell nested-range rendering produced argument-type errors; explicit scalar ranges corrected source reading. No source edits or operations occurred."
+    ],
+    "selected_mechanism": false,
+    "operational_authorization": false,
+    "ready_approval": false
+  },
+  "full_prior_resource_trading_docs_reports": {
+    "eq083-resource-trading-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "bases": {
+        "equity-features": "b39c0d2abd3450340ed363138fcd71f583dbf191",
+        "equity-feature-workers": "27a0b4d01b9cdcb32466d933a84480d1e9cf5c8e"
+      },
+      "disposition": "APPROVED",
+      "findings": [],
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_RESOURCE_TRADING_DESIGN.md": {
+            "bytes": 9159,
+            "sha256": "42cd7301364241b567ab52022b8a38c2455257844d8fedfe685f22d2f7584f57"
+          },
+          "docs/stories/EQ-083_RESOURCE_TRADING_INPUTS.json": {
+            "bytes": 546,
+            "sha256": "013c1cf3506e3fd0dd32544f926a53138688c507996b7b0f055dd179b9f0ed1e"
+          },
+          "docs/stories/EQ-083_RESOURCE_TRADING_EVIDENCE.json": {
+            "bytes": 16294,
+            "sha256": "88d76062a4425b904013ad51678fa4a56b9aab5b01e620dd29dcbe67ab7ac63f"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 527091,
+            "sha256": "1a97a40ada30f50be58d46467b99f5dc20bc082b8813bf28be3929d0c135c96b"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 786342,
+            "sha256": "b5c6e8e9a3250bd05fd8ff6fefd7ba54a997deeb6550a3b154e3cab848c274cc"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_RESOURCE_TRADING_DESIGN.md": {
+            "bytes": 9159,
+            "sha256": "42cd7301364241b567ab52022b8a38c2455257844d8fedfe685f22d2f7584f57"
+          },
+          "docs/EQ083_RESOURCE_TRADING_INPUTS.json": {
+            "bytes": 546,
+            "sha256": "013c1cf3506e3fd0dd32544f926a53138688c507996b7b0f055dd179b9f0ed1e"
+          },
+          "docs/EQ083_RESOURCE_TRADING_EVIDENCE.json": {
+            "bytes": 16294,
+            "sha256": "88d76062a4425b904013ad51678fa4a56b9aab5b01e620dd29dcbe67ab7ac63f"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 389760,
+            "sha256": "afd908a262cb3643659a4918b31e12f932fb05e234630cdff47359eb1c9f2fe1"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 500898,
+            "sha256": "16ec49941f3e6f90aa3bd3ca8f39e27bbddbeb2e340ad1e017b7bf8df3fb8f71"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases, five documentation-only paths each, other tracked source/history unchanged.",
+        "Mirrored assets byte-identical; complete primary report and both prior capability prepared/final reports including tooling correction preserved exactly.",
+        "Old knowledge/handoff suffixes preserved with line-ending normalization.",
+        "ONE-subsystem allocation-and-authority graph is explicitly project inference; no currently selected/enforced topology or numerical budget claimed.",
+        "Historical NOVA upgrade heuristic remains historical and unselected; old VirtualBox snapshot distinguished from newer Genode port support, exact native forms unqualified.",
+        "Independent donation backing, failed withdrawal, indefinite RPC, continuous storage/node/writer policy, DMA and finite complete teardown remain explicit obligations.",
+        "No new owner-input mandate, implementation/operational/Ready or physical qualification claim."
+      ],
+      "limitations": [
+        "No research, source/native/host/probe/test rerun; comparison uses the completed primary report.",
+        "The linked 25.05 removal statement and 26.08 VFS aside are author documentation context, not newly independently researched release facts in this review.",
+        "Prepared changes have no new commit attribution yet; final immutable publication readback remains required."
+      ],
+      "tool_only_history": [
+        "Read-only initial guessed RESOURCE_TRADING_RESEARCH.md was missing; preparation declared DESIGN.md and the exact document was then read. No writes or runtime action resulted."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-resource-trading-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "2b3e0ae9757a99360acd0c02970cad01cf50241b",
+        "equity-feature-workers": "20da6757ded6f0c6362daf9e4a3b38b9f9b09640"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_RESOURCE_TRADING_DESIGN.md": {
+            "bytes": 9159,
+            "sha256": "42cd7301364241b567ab52022b8a38c2455257844d8fedfe685f22d2f7584f57"
+          },
+          "docs/stories/EQ-083_RESOURCE_TRADING_INPUTS.json": {
+            "bytes": 546,
+            "sha256": "013c1cf3506e3fd0dd32544f926a53138688c507996b7b0f055dd179b9f0ed1e"
+          },
+          "docs/stories/EQ-083_RESOURCE_TRADING_EVIDENCE.json": {
+            "bytes": 16294,
+            "sha256": "88d76062a4425b904013ad51678fa4a56b9aab5b01e620dd29dcbe67ab7ac63f"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 527091,
+            "sha256": "1a97a40ada30f50be58d46467b99f5dc20bc082b8813bf28be3929d0c135c96b"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 786342,
+            "sha256": "b5c6e8e9a3250bd05fd8ff6fefd7ba54a997deeb6550a3b154e3cab848c274cc"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_RESOURCE_TRADING_DESIGN.md": {
+            "bytes": 9159,
+            "sha256": "42cd7301364241b567ab52022b8a38c2455257844d8fedfe685f22d2f7584f57"
+          },
+          "docs/EQ083_RESOURCE_TRADING_INPUTS.json": {
+            "bytes": 546,
+            "sha256": "013c1cf3506e3fd0dd32544f926a53138688c507996b7b0f055dd179b9f0ed1e"
+          },
+          "docs/EQ083_RESOURCE_TRADING_EVIDENCE.json": {
+            "bytes": 16294,
+            "sha256": "88d76062a4425b904013ad51678fa4a56b9aab5b01e620dd29dcbe67ab7ac63f"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 389760,
+            "sha256": "afd908a262cb3643659a4918b31e12f932fb05e234630cdff47359eb1c9f2fe1"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 500898,
+            "sha256": "16ec49941f3e6f90aa3bd3ca8f39e27bbddbeb2e340ad1e017b7bf8df3fb8f71"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git LF bytes match reviewed_git_files and reviewed prepared byte pins after only line-ending normalization; no CR.",
+        "Exact five-document changes per repository and direct reviewed parent bases; clean paired codex/eq083-resilience branches.",
+        "Three mirrored assets and unchanged old knowledge/handoff suffixes; other source/history outside allowed paths unchanged.",
+        "Atul author identity and absence of Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "46365dc157ca581fdade647b46a2b1b302d555441c3f121c9ef0985e81bd800e",
+      "limitations": [
+        "Published docs byte/scope/attribution readback only; no semantic research, source/native/host/probe/test rerun.",
+        "Prepared report remains unchanged, including guessed RESEARCH versus actual DESIGN filename tooling miss; this is not a runtime failure.",
+        "No operational, implementation, full resource topology, compatibility, runtime qualification or Ready approval."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Current immutable upstream source allocation/transfer/retry/reclamation paths only, not whole topology or native operation",
+  "tool_history": "Prior reviewer guessed RESEARCH.md corrected actual DESIGN.md/full prepared report preserved here. Current GitHub26.08 read404 resolved official archived migration to Codeberg/tag metadata; no absence claim. Initial PowerShell collection Select-Object produced null projection; corrected full input JSON exposed actual tag/peeled commit before source reads. A broad snippet query duplicated contexts and was narrowed to complete OOM function and platform PD; no source/runtime failure inferred."
+}

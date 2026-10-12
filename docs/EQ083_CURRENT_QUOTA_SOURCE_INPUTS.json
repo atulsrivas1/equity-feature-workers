@@ -1,0 +1,85 @@
+{
+  "schema": "eq083.genode-current-quota-source-research.v1",
+  "bases": {
+    "equity-features": "2b3e0ae9757a99360acd0c02970cad01cf50241b",
+    "equity-feature-workers": "20da6757ded6f0c6362daf9e4a3b38b9f9b09640"
+  },
+  "source_metadata": {
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_release": "26.08",
+    "research_tag_object": "3d75dc71b1bea0c03ec0151912ef320e3d64fb92",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "scope": "Nine selected upstream UTF8 source-text files as DATA only; not full vendor/ABI/build/configuration/binary/current-host proof; no C++ compilation/import/execution",
+    "total_bytes": 96989,
+    "new_tests": 0,
+    "files": [
+      {
+        "path": "VERSION",
+        "git_sha1": "f583e33b1b6cc6489c923912a0b2090247885bf6",
+        "bytes": 6,
+        "sha256": "76ed97f19889753e2807db2326f3d123df5bc0fdf01e6c55dbba235343b2996b",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/VERSION"
+      },
+      {
+        "path": "LICENSE",
+        "git_sha1": "f2eaf5bfcd103270861125660c855dc6f45eb433",
+        "bytes": 36177,
+        "sha256": "232a468bf368830f53bdf5b1cdd3f8b954dc14dfff207028ed303cb42c3049db",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/LICENSE"
+      },
+      {
+        "path": "repos/base-nova/ports/nova.port",
+        "git_sha1": "015572697d0b5f39ef452bbb49ed2efca0ded31a",
+        "bytes": 298,
+        "sha256": "42f8328e5d2cf48ee1069d9947db1c7bd6e96f9c00c8c2aa7593cb27cad327b6",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/ports/nova.port"
+      },
+      {
+        "path": "repos/base-nova/src/core/pager.cc",
+        "git_sha1": "9c41b156fc419c017410d6bdeb38ab531b364993",
+        "bytes": 27287,
+        "sha256": "a695a0022374cb94b7f30786a0c45c5611339f1556e4f439e586314a5b7e9b42",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/pager.cc"
+      },
+      {
+        "path": "repos/base-nova/src/core/pd_session_support.cc",
+        "git_sha1": "512831ae0f9b3ad0249cc9dada64bab77e93dfda",
+        "bytes": 6566,
+        "sha256": "52d18e949ae47e6a2504b93c4fd7bdd3412cd9013302dfdeccc8b5bc527a7371",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/pd_session_support.cc"
+      },
+      {
+        "path": "repos/base-nova/src/core/platform_pd.cc",
+        "git_sha1": "7498cd81e718d8470c18b6435b0c560a45147925",
+        "bytes": 1881,
+        "sha256": "475e3dae0753c28ad306a5739d300938df8ce3791e35dace93ec1290607831ca",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/platform_pd.cc"
+      },
+      {
+        "path": "repos/base-nova/src/core/include/platform_pd.h",
+        "git_sha1": "2cb8fdc3a1f91b17777e8b2bfed3b57c5c85c30b",
+        "bytes": 1618,
+        "sha256": "96d8717d88f9ff4a2e6010e4365b6cb2825d5cb9cba75e04f5955f870f972e22",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/include/platform_pd.h"
+      },
+      {
+        "path": "repos/base-nova/src/core/include/nova_util.h",
+        "git_sha1": "512be056a722b454589a1600ddc03f873224686e",
+        "bytes": 9267,
+        "sha256": "e1d7188736b5d54da606033631000aa04af0f4fbc9075e26526677649d4b3794",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/include/nova_util.h"
+      },
+      {
+        "path": "repos/base-nova/src/core/vm_session_component.cc",
+        "git_sha1": "36a1be0176a9cb68fa0f1fd6232f30992dea1525",
+        "bytes": 13889,
+        "sha256": "61d4fe482c037a640be1f9ffb4a98ef7009b270ddc6d7daacb62d5816e2732b3",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base-nova/src/core/vm_session_component.cc"
+      }
+    ]
+  },
+  "scope": "Nine fixed Genode26.08 upstream source-text identities only; no C++ compilation, complete kernel/configuration/ABI/binary/host closure or selected dependency",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}
