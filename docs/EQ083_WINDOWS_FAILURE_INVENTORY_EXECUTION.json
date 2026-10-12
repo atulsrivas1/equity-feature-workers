@@ -1,0 +1,150 @@
+{
+  "schema": "eq083-windows-failure-inventory-execution-v1",
+  "admitted": false,
+  "authority_unresolved": true,
+  "disposition": "COMPLETED_NONADMITTED_DISCOVERY_NOT_HOST_QUALIFICATION",
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6117488986",
+  "invocation": {
+    "source_heads": {
+      "equity-features": "8fd044c9d046e315d4bc18bb6557ed929634ea59",
+      "equity-feature-workers": "e296ff28f0f4fb39d223488884836cc85fd42883"
+    },
+    "source_bytes": 68907,
+    "source_sha256": "15ac0ac945e553634eb5c107ba367797b02f58e819749fce33261db9d3f6fb8d",
+    "interpreter": "Existing Windows CPython3.12.10 x64 BASE direct -I-B-S; exactprivatepath outsideGit",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Direct human yes please to reviewed readonly baseline preReady and actual fresh installation maps Test after Ready; bounded reviewed diagnostic correction same scope",
+    "exit_code": 0,
+    "elapsed_seconds": 1.689497,
+    "stdout_bytes": 1073442,
+    "stdout_sha256": "99e473168e92914b6c91b521463bc0c6d8672ea39e1005444f5e7b8434bd2f14",
+    "stderr_bytes": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "admitted": false,
+    "scope": "Readonly Windows baseline diagnostic; no product/form/resolver/Ready admission"
+  },
+  "independent_result_review": {
+    "heads": {
+      "equity-features": "8fd044c9d046e315d4bc18bb6557ed929634ea59",
+      "equity-feature-workers": "e296ff28f0f4fb39d223488884836cc85fd42883"
+    },
+    "source": {
+      "bytes": 68907,
+      "sha256": "15ac0ac945e553634eb5c107ba367797b02f58e819749fce33261db9d3f6fb8d"
+    },
+    "disposition": "COMPLETE_DISCOVERY_AUTHORITY_UNRESOLVED",
+    "findings": [],
+    "exit_code": 0,
+    "elapsed_seconds": 1.689497,
+    "raw_log_sha256": "99e473168e92914b6c91b521463bc0c6d8672ea39e1005444f5e7b8434bd2f14",
+    "stdout_bytes": 1073442,
+    "stderr_bytes": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "invocation_receipt_sha256": "1660844142ff0df7e9f3d204e29ead6b2f6fa82cf73f3ec5d5c102e0e3e0a527",
+    "actual_saved_record_checks": [
+      "strict duplicate/nonfinite JSON parsing, ASCII/LF/output cap, exact raw bytes/hash and source/head binding",
+      "three snapshots/two scans/first and second complete path unions/full unfiltered record differences/final paths reconciled",
+      "every native 12-field record validated; all 201 failures independently classified by field names",
+      "every saved owned fd and path cleanup flag reconciled; full unsampled fields preserved"
+    ],
+    "summary": {
+      "admitted": false,
+      "authority_unresolved": true,
+      "complete_stable_samples": false,
+      "full_snapshots_equal": false,
+      "phases": 3,
+      "scans": 2,
+      "files_per_scan": [
+        103,
+        103
+      ],
+      "file_observations": 206,
+      "total_read_bytes": 133025874,
+      "changed_files": 102,
+      "unscanned_final_paths": 0,
+      "alias_groups": 48,
+      "unresolved_files": 201,
+      "unresolved_sections": 69,
+      "loader_errors_per_phase": [
+        0,
+        0,
+        0
+      ],
+      "failure_stages": {
+        "native_fd_after": 201
+      },
+      "differing_field_classification": [
+        {
+          "fields": [
+            "access"
+          ],
+          "records": 201
+        }
+      ],
+      "unclassified_file_failures": 0,
+      "consistent_file_samples": 5,
+      "fd_cleanup_success_flags": 206,
+      "path_cleanup_success_flags": 211
+    },
+    "limitations": [
+      "Saved records and receipt reviewed only; no new observation, process, API/native/stat/msvcrt call or live backing-file hash verification.",
+      "All 201 error records show fd AccessTime drift and other 11 native fields equal; path-post remains unsampled. Read causality, filesystem/update policy, external mutation, attack and product defect are not established.",
+      "The 48 alias groups describe repeated resolved-casefold paths only; they are not security or backing-mapping identity proof. Unresolved mapped rows retain error context without verified backing identity.",
+      "Author exit0 completes nonadmitted discovery; it is not qualification PASS, Ready/form/resolver/issuer admission or continuous stability/loaded-memory proof.",
+      "206 fd and 211 path cleanup success flags witness only this invocation and its scoped attempts; not independent reviewer-observed exits, general cleanup, outer-job or future form proof.",
+      "Observed hashes are held-fd byte digests, not trusted pathname or authority hashes. No private raw native IDs/timestamps/paths/addresses/PIDs are exposed in this report."
+    ],
+    "advice": [
+      "Preserve all strict authority checks: deny unresolved mapping identities and any full native metadata drift, including AccessTime.",
+      "Use these saved records to freeze a separate discovery-versus-authority contract; strict stable AccessTime across a readonly read is not established here. Any policy change needs explicit reviewed scope rather than normalization, tolerance, timestamp mutation or automatic rerun.",
+      "Resolve the actual issuer/host/form full-map and native source-origin contracts before admitting fresh installs; current saved baseline is evidence of unresolved authority, not a supplied-token authority substitute."
+    ],
+    "tool_only_history": [
+      "Reviewer initially used device/error field names in saved section-row validation; exact actual source schema uses device_path/error_code. Corrected before successful report persistence. No observer/API call or product failure."
+    ],
+    "prior_history": "All original failed invocations remain failures; this review does not relabel source68907 completed nonadmitted discovery as qualification or resolve prior strict authority failures."
+  },
+  "observed_summary": {
+    "phases": 3,
+    "scans": [
+      103,
+      103
+    ],
+    "file_observations": 206,
+    "total_read_bytes": 133025874,
+    "changed_files": 102,
+    "final_unscanned_paths": 0,
+    "alias_groups": 48,
+    "unresolved_file_observations": 201,
+    "consistent_file_observations": 5,
+    "unresolved_section_rows": 69,
+    "loader_errors": [
+      0,
+      0,
+      0
+    ],
+    "complete_stable_samples": false,
+    "full_snapshots_equal": false,
+    "actual_error_stage": "native_fd_after",
+    "actual_differing_native_fields": [
+      "access"
+    ],
+    "other_native_fields_equal": 11,
+    "scoped_fd_close_success_flags": 206,
+    "scoped_path_close_success_flags": 211
+  },
+  "established": "Three finite complete snapshots/two complete path-union scans were emitted. ALL201 file errors have fd AccessTime drift only/other11equal/pathpostnot_sampled. Every native/file observation remains nonadmitted; five consistent file samples do not issue authority.",
+  "unknown": "Actualcause/readcausality/filesystem-updatepolicy/security-attack/productdefect; trusted file/import/loaded-memory/fullresolver authority. Alias grouping and error1006 do not prove physicalbacking identities or attack.",
+  "next": "Review and freeze discovery-versus-authority/fullphysicalissuer-form operation contracts preserving strict unknown/drift denial. Continue independent expectedarchive-build closure/R04R05parent/R07golden-source work; no unchangedobserver rerun or metadata policy mutation. ActualfreshmapsTestafterguardedReady, immutableexpectedmaps/verificationcontractsReady.",
+  "limitations": [
+    "EXIT0 means completed nonadmitted discovery only, not host qualification/PASS/Ready/forms/fullR7.",
+    "206fd/211path successful closeflags reflect this saved author observer only, not outerjob/general form cleanup/security enforcement.",
+    "Original68001REWORKtwoP2/full46+4;68796REWORKoneP3/full57;68907SOURCE117CURRENT57+60. Neither priorinventorysource invoked.",
+    "All earlier actual51853/49213/39184/37723/30467-31037 failed histories protected unchanged/no failedPASS.",
+    "No newproduct-installer-pip-collector-SDKcrypto-nativeworker-TLS-certificate-key-Linuxsetup-publichosting authority. ENV Linuxfalse/keys untouched."
+  ]
+}
