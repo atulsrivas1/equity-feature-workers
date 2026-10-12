@@ -1,3 +1,5 @@
+EQ083 owned hook bridge original SOURCE REWORK49+3 preserved: restoration error skipped remaining hooks and invalid run eligibility did not poison. Separate corrective ONLY run_original_main attempts all restorations, keeps primary/first-cleanup priority and terminal guard. ASTcompileonly/uninvoked pending renewed mock-source review; no original hook/backend/physical issuer/Ready proof. All histories preserved.
+
 EQ083 concrete ownedhookbridge SOURCE loadsfixedoriginalbytes internally andpatches originalread_json/write_json; closedPythonreply shape BEFOREserialization/boundedexclusivewrite/wholeoriginalbytesSHA/singleinvocation counts/restoreprimarypriority. Uninvoked/ASTcompileonly pendingmockreview; physicalpreimportentry-ownership-resources-fullresolver-controller stillpending/no providedtokenissuer-Ready proof/allhistoriesprotected.
 
 EQ083 controlfile SOURCE REWORK68+3closedselector subclass cases preserved; separatecorrective ONLYfourfixed-name exactstr checks beforemembership. Inertmockdefensivecontract NOTactualfile/nativeattack; uninvoked pendingrenewedsource review/no physicalissuer-Ready authority. Allolderprefixes-reports-failedhistory preserved.
