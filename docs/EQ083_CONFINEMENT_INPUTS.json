@@ -1,0 +1,13 @@
+{
+  "schema": "eq083.confinement-contract-research.v1",
+  "bases": {
+    "equity-features": "549e25de52cc991adfdd44e4abfc76198aaf2c0d",
+    "equity-feature-workers": "ebb9ab41a69ffc837129e3c0ffa4e8f971762552"
+  },
+  "scope": "Current primary Microsoft documentation browser reads only; not immutable SDK/native proof",
+  "source_implemented": false,
+  "mechanism_admitted": false,
+  "new_tests": 0,
+  "new_operational_authorization": false,
+  "dependency_or_profile_selected": false
+}
