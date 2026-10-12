@@ -1,0 +1,79 @@
+{
+  "schema": "eq083.cache-section-source-research.v1",
+  "bases": {
+    "equity-features": "fdc3538fd7eefbdced767c06fe46674fb94840e9",
+    "equity-feature-workers": "8063c943f5593a165f107770e317139248214e98"
+  },
+  "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+  "annotated_tag": "bcc52225ec7e6a9f5c889b5cdb8051adf41c4b91",
+  "release_label": "v2.1",
+  "sources": {
+    "License.txt": {
+      "bytes": 36658,
+      "sha256": "68ae2fa9d8e6110ebdc9a236beecf118e279f8a26530daf09c9e682c231f7879",
+      "git_blob_sha1": "372164f96a3c976286f082eb4cece6c2287c60a5",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/License.txt"
+    },
+    "inc/winfsp/winfsp.h": {
+      "bytes": 94418,
+      "sha256": "163332ebe058dd6e49d038edefef273454912c2ec44e8430a18ed73112e5678c",
+      "git_blob_sha1": "c0cd62ca918418b6bb6ab3e2a861cfb6e6c609d9",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/inc/winfsp/winfsp.h"
+    },
+    "inc/winfsp/fsctl.h": {
+      "bytes": 31630,
+      "sha256": "7a83a69cdeb155751032eedbbb6875234b1e0824be7cf2d7ba23c1ef44944651",
+      "git_blob_sha1": "94ade4a920fa046e3071b73650820e48caa2dd60",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/inc/winfsp/fsctl.h"
+    },
+    "src/dll/fsop.c": {
+      "bytes": 75283,
+      "sha256": "0fadbf9630e5db3705ebccad60145ef4ae83f1b39c6202039e2cb5c909ef5df6",
+      "git_blob_sha1": "da1977edf5581d8096f1b8499fa92fa8c5bc353b",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/dll/fsop.c"
+    },
+    "src/sys/create.c": {
+      "bytes": 76927,
+      "sha256": "bc5264397fc09dcc801fee9dd6a642946c31b9710175422e7e0773eea6ddcbca",
+      "git_blob_sha1": "eb89dc4f2ede8f4eebdb73086fb3912ed6a91e46",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/create.c"
+    },
+    "src/sys/write.c": {
+      "bytes": 25793,
+      "sha256": "5c0e0e1cb19f003363ed3dae6882a65bb0aabade7a4226e8aff9c09c1d53fc97",
+      "git_blob_sha1": "d99ce95f7a00543736bb3e6baa76e7c767321903",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/write.c"
+    },
+    "src/sys/file.c": {
+      "bytes": 102654,
+      "sha256": "50d5fda80fe7690e9206c7712cf8ba50636df1355f2f08b9a44f551a47a6d386",
+      "git_blob_sha1": "34539052ff82c562ccb0cdc70a06bbd0509e0fed",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/file.c"
+    },
+    "src/sys/callbacks.c": {
+      "bytes": 9595,
+      "sha256": "3994f6644b8ee612c1a3bb1d076d795e46cf35e45f4e5e7d19221c35fa9b051e",
+      "git_blob_sha1": "1426ea222cab49666626499508327fea756928ae",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/callbacks.c"
+    },
+    "src/sys/driver.c": {
+      "bytes": 20869,
+      "sha256": "891b471e1b147a55817784b8558b95a190943a9a58c115606b2dc9d78b81a34c",
+      "git_blob_sha1": "cca261af95e9dcf8c3295dfaa55ee9342a837641",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/driver.c"
+    },
+    "src/sys/driver.h": {
+      "bytes": 85360,
+      "sha256": "e597a6f0a5873f1e973f7541722f241375653b31a562780a8daee95a5c1e6802",
+      "git_blob_sha1": "0822d3dfb28ce64f473b4bb5a489164e099ef2ff",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/driver.h"
+    }
+  },
+  "inventory_scope": "Partial ten-file upstream source-text inventory only; no entire source tree, compiled ABI, source-to-binary, installer or host qualification",
+  "dependency_selected": false,
+  "release_selected": false,
+  "license_selected": false,
+  "mechanism_admitted": false,
+  "new_tests": 0,
+  "new_operational_authorization": false
+}

@@ -1,0 +1,180 @@
+{
+  "full_independent_source_research": {
+    "eq083-winfsp-release-cache-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "disposition": "SOURCE_RESEARCH_CACHE_ROUTING_SUPPORTED_MAPPING_CONFINEMENT_UNESTABLISHED",
+      "scope": "OFFICIAL_IMMUTABLE_RELEASE_SOURCE_TEXT_ONLY",
+      "research_commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+      "release_label": "v2.1",
+      "annotated_tag": "bcc52225ec7e6a9f5c889b5cdb8051adf41c4b91",
+      "release_metadata_provenance": "Parent supplied GitHub API tag metadata; this reviewer independently read commit-addressed official source text, not release binaries or installer provenance.",
+      "tests": 0,
+      "newtests": 0,
+      "saved_source_text_receipt_review": {
+        "file": "eq083-winfsp-release-source-text-receipt.json",
+        "scope": "UTF8 text as data only; seven supplied source length/SHA256 pairs independently recomputed, total 443363 bytes; not code execution or whole release/ABI provenance",
+        "source_sha256": {
+          "License.txt": "68ae2fa9d8e6110ebdc9a236beecf118e279f8a26530daf09c9e682c231f7879",
+          "inc/winfsp/winfsp.h": "163332ebe058dd6e49d038edefef273454912c2ec44e8430a18ed73112e5678c",
+          "inc/winfsp/fsctl.h": "7a83a69cdeb155751032eedbbb6875234b1e0824be7cf2d7ba23c1ef44944651",
+          "src/dll/fsop.c": "0fadbf9630e5db3705ebccad60145ef4ae83f1b39c6202039e2cb5c909ef5df6",
+          "src/sys/create.c": "bc5264397fc09dcc801fee9dd6a642946c31b9710175422e7e0773eea6ddcbca",
+          "src/sys/write.c": "5c0e0e1cb19f003363ed3dae6882a65bb0aabade7a4226e8aff9c09c1d53fc97",
+          "src/sys/file.c": "50d5fda80fe7690e9206c7712cf8ba50636df1355f2f08b9a44f551a47a6d386"
+        },
+        "missing_optional_path": "src/sys/fastio.c",
+        "missing_path_provenance": "Author saved tree receipt declares missing; reviewer did not infer source absence from failed web rendering."
+      },
+      "findings": [],
+      "facts": [
+        {
+          "source": "https://raw.githubusercontent.com/winfsp/winfsp/ddca7bd5481857a65ba552f643b8776fd070836f/inc/winfsp/fsctl.h",
+          "lines": "539-552",
+          "fact": "The successful Create.Opened response contains the one-bit DisableCache field alongside granted access, contexts and file information. It is a low-level response field, not itself an authorization, quota or section-denial contract."
+        },
+        {
+          "source": "https://raw.githubusercontent.com/winfsp/winfsp/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/create.c",
+          "lines": "1036-1055",
+          "fact": "FO_CACHE_SUPPORTED is enabled only with infinite FileInfoTimeout, without FILE_NO_INTERMEDIATE_BUFFERING, and with DisableCache unset. SectionObjectPointer is assigned separately before this condition. Thus setting the bit prevents this open from gaining that cache-supported flag; it does not establish section creation rejection."
+        },
+        {
+          "source": "https://raw.githubusercontent.com/winfsp/winfsp/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/write.c",
+          "lines": "94-100,198-203,267-315",
+          "fact": "FastIoWrite refuses the cached fast path without FO_CACHE_SUPPORTED. Ordinary writes select the noncached implementation when that flag is absent or paging/noncache flags apply. Cached extending writes request new EOF through SetInformation before proceeding. These are routing facts, not proof that all mappings, dirty-page storage or kernel allocations are bounded by user-mode callbacks."
+        },
+        {
+          "source": "https://raw.githubusercontent.com/winfsp/winfsp/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/file.c",
+          "lines": "669-683,940-967",
+          "fact": "The source accounts for user-writable sections with no open handles. Default cleanup semantics permit mapped I/O to deleted files after Cleanup. FlushAndPurgeOnCleanup changes those semantics and may discard cached data; it is not an established universal mapping-denial or safe-drain substitute. Namespace removal and handle cleanup cannot alone authorize releasing orphan storage charges."
+        },
+        {
+          "source": "https://raw.githubusercontent.com/winfsp/winfsp/ddca7bd5481857a65ba552f643b8776fd070836f/inc/winfsp/winfsp.h",
+          "lines": "1300-1309,1366-1374,1411-1432",
+          "fact": "OperationContext exposes the current request/response; SetOperation replaces a low-level operation. The process-ID helper is explicitly limited to Create/Open and qualifying Rename requests, returning zero for other kinds. It is not a universal Write/Close caller identity or an outside-writer exclusion mechanism."
+        },
+        {
+          "source": "https://raw.githubusercontent.com/winfsp/winfsp/ddca7bd5481857a65ba552f643b8776fd070836f/src/dll/fsop.c",
+          "lines": "392-494,829-867,905-927",
+          "fact": "The normal Create/Open wrappers populate contexts, access and file information without an explicit DisableCache assignment in the inspected successful branches. A candidate must explicitly freeze where the response bit is set, covering every successful Create disposition/Open path. Cleanup and Close callbacks use retained file contexts; Cleanup cannot report a callback failure through its void interface."
+        },
+        {
+          "source": "https://raw.githubusercontent.com/winfsp/winfsp/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/driver.c",
+          "lines": "94-126",
+          "fact": "The driver registers section-creation, modified-page-write and cache-flush/lazy-write callbacks independently of its FastIoWrite dispatch. Their registration reinforces that a cached-write flag condition cannot substitute for tracing the section and paging lifecycle implementations."
+        }
+      ],
+      "supported_candidate_topology": [
+        "An explicitly pinned low-level Create operation wrapper can call the original operation and set DisableCache on every successful Opened response, with source-frozen success/reparse/error rules. This is a candidate design inference, not an implemented adapter or runtime proof.",
+        "The quota adapter still needs synchronized live/pending/orphan allocation, node, context and request reservations across all mutation paths, retaining ownership through deferred work and final release.",
+        "Opening identity and rights may be bound to a retained per-open context, but transferred handles, section references, subsequent callers and outside writers require a separate supported confinement contract."
+      ],
+      "missing_requirements": [
+        "Complete selected-release section/paging acquisition implementation trace and a supported enforceable mapping policy; no claim that DisableCache denies mappings.",
+        "Uniform bit-setting coverage for every Create disposition and alternate low-level operation, including future accidental reopen/cache-enabled paths and already-existing contexts.",
+        "Actual outside-writer and handle-transfer exclusion, finite async/drain lifecycle and orphan-storage reservation release criteria.",
+        "Explicit kernel cache/mapped-page/request-buffer bounds distinct from adapter-owned backing allocation quotas; cumulative write traffic is also distinct.",
+        "Exact selected dependency/release/license decision, source-to-binary provenance, native resolver and host admission, confinement implementation and runtime validation remain pending."
+      ],
+      "tool_only_history": [
+        "Official raw src/sys/fastio.c returned HTTP 404; API/tree directory views and several guessed source paths failed to render. No absence or complete callback-implementation coverage was inferred from those failures.",
+        "Web find results can be false negatives. The process-ID helper was verified from actual immutable header lines, not inferred absent from search results.",
+        "Initial Get-Content line-limited receipt read was unsuitable because full C text occupied individual JSON lines and output was truncated. Replaced with bounded property-only parsing and length/SHA256 verification; no source invoked."
+      ],
+      "limitations": [
+        "Text inspection only; no mocks, tests, native calls, driver or binary download, installation, compilation, mount, process, host inventory, archive verification or rejected binary-task reattempt.",
+        "Seven saved raw source-text SHA256 pairs were independently recomputed; complete repository, compiled release assets, native ABI and loaded-host correspondence were not verified.",
+        "No dependency, release, license, execution environment, AppContainer arrangement or operational grant is selected by this report.",
+        "This report does not establish mapping exclusion, continuous complete resource enforcement, physical issuer authority, Ready admission, Linux host availability or release qualification."
+      ],
+      "operational_authorization": false,
+      "physical_qualification": false,
+      "selected_dependency": false,
+      "selected_release": false
+    },
+    "eq083-winfsp-section-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "disposition": "SOURCE_RESEARCH_SECTION_LOCKING_CONFIRMED_MAPPING_DENIAL_UNESTABLISHED",
+      "scope": "OFFICIAL_IMMUTABLE_SOURCE_TEXT_AND_PRIMARY_DOCUMENTATION_ONLY",
+      "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+      "annotated_tag": "bcc52225ec7e6a9f5c889b5cdb8051adf41c4b91",
+      "release_label": "v2.1",
+      "tests": 0,
+      "newtests": 0,
+      "findings": [],
+      "source_text_receipt": "eq083-winfsp-release-section-source-text-receipt.json",
+      "sources": {
+        "src/sys/callbacks.c": {
+          "bytes": 9595,
+          "sha256": "3994f6644b8ee612c1a3bb1d076d795e46cf35e45f4e5e7d19221c35fa9b051e"
+        },
+        "src/sys/driver.c": {
+          "bytes": 20869,
+          "sha256": "891b471e1b147a55817784b8558b95a190943a9a58c115606b2dc9d78b81a34c"
+        },
+        "src/sys/driver.h": {
+          "bytes": 85360,
+          "sha256": "e597a6f0a5873f1e973f7541722f241375653b31a562780a8daee95a5c1e6802"
+        }
+      },
+      "text_identity_checks": "Independently encoded each supplied text as UTF8 and recomputed length and SHA256; all three matched. Source text was treated only as data.",
+      "combined_source_binding": {
+        "previous_receipt": "eq083-winfsp-release-source-text-receipt.json",
+        "previous_files": 7,
+        "previous_bytes": 443363,
+        "additional_files": 3,
+        "additional_bytes": 115824,
+        "total_files": 10,
+        "total_bytes": 559187,
+        "scope": "Partial ten-file upstream source-text inventory, not whole repository, filesystem, native ABI or release binary closure"
+      },
+      "preserved_previous_report": {
+        "file": "eq083-winfsp-release-cache-source-reviewer-report.json",
+        "sha256": "042891d9ac31384ff974f60beecf5757be4b7ddb85652411facfec3e55ce620e",
+        "modified": false
+      },
+      "facts": [
+        {
+          "source": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/callbacks.c",
+          "locations": "FspAcquireFileForNtCreateSection/FspReleaseFileForNtCreateSection; FspAcquireForModWrite; FspAcquireForCcFlush; FspAcquireForLazyWrite",
+          "fact": "Section acquisition is a void callback taking the node's exclusive Full lock and setting its CreateSection TLS flag. Release clears the flag and releases that lock. Modified-page acquisition tries that lock and returns success or STATUS_CANT_WAIT; flush/lazy-write callbacks also manage locks and thread/top-level bookkeeping. None of these inspected bodies dispatches a user-mode mapping-authorization request or implements a universal mapping refusal."
+        },
+        {
+          "source": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/driver.c",
+          "locations": "DriverEntry fast-I/O and CacheManager callback registration",
+          "fact": "The registered section acquire/release, modified-write, flush and lazy-write callbacks are the functions in callbacks.c. This resolves the previous guessed fastio.c implementation-path gap, without turning cache routing into mapping denial."
+        },
+        {
+          "source": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/driver.h",
+          "locations": "FAST_IO callback declarations and FSP_FILE_NODE.Tls",
+          "fact": "Header callback declarations and the CreateSection/LazyWriteThread/CcFlush node bookkeeping agree with the inspected implementations. These are synchronization state, not retained originating-process authorization for each mapped/paging write."
+        },
+        {
+          "source": "https://learn.microsoft.com/en-us/windows-hardware/drivers/ifs/flt-parameters-for-irp-mj-acquire-for-section-synchronization",
+          "fact": "Microsoft documents that filters cannot fail SyncTypeOther. For SyncTypeCreateSection it describes failure with STATUS_INSUFFICIENT_RESOURCES when memory is insufficient. This reference does not support proposing a generic STATUS_ACCESS_DENIED minifilter shortcut for mapping authorization. It concerns the FSFilter interface, which must not be conflated with WinFsp's void FastIo callback."
+        }
+      ],
+      "conclusion": "DisableCache remains an open-specific cache-routing control. The newly traced callbacks provide section/cache synchronization rather than an authorization denial mechanism. A quota design must retain reservations through mapping, paging, deferred work and final release unless a separately supported enforceable exclusion policy is established.",
+      "missing_requirements": [
+        "Supported mapping and handle-transfer confinement policy, or a complete reservation/lifetime contract that safely accounts for the permitted section/paging paths.",
+        "Outside-writer exclusion and actual per-open identity/rights binding; the originating PID helper remains limited to Create/Open/qualifying Rename.",
+        "Finite adapter/kernel/request resource bounds and drain ordering, source-frozen integrated owner/entry, native resolver/host admission and later runtime evidence.",
+        "No dependency, selected release, license choice or execution environment is established by this research."
+      ],
+      "limitations": [
+        "No source compilation/import, tests, native/DLL/API calls, process launch, driver/library/installer download, installation, mount, host observation, archive/binary parsing or rejected binary-task reattempt.",
+        "Ten text identities do not establish whole-filesystem coverage, compiled ABI, source-to-release correspondence or runtime enforcement.",
+        "No full memory/storage hard-cap, mapping ban, outside-writer security, physical issuer, Ready, form qualification or operational authorization claim."
+      ],
+      "selected_dependency": false,
+      "selected_release": false,
+      "operational_authorization": false,
+      "physical_qualification": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Immutable official source text and primary documentation only",
+  "tool_history": [
+    "Guessed src/sys/fastio.c absent from fixed tree; actual implementation src/sys/callbacks.c inspected with driver registrations/declarations. Browser find NoMatch was a false negative; no absence claim relied on it.",
+    "Source receipt Get-Content -TotalCount included a long inert License.txt JSON text line and output was truncated; no raw source copied into tracked documents. Subsequent preparation strips text values and retains metadata plus full independent reports."
+  ]
+}
