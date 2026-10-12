@@ -1,0 +1,120 @@
+{
+  "schema": "eq083-windows-native-post-diagnostic-failed-execution-v1",
+  "admitted": false,
+  "disposition": "FAILED_NATIVE_DESCRIPTOR_ACCESS_TIME_DRIFT",
+  "owner_permission": "Direct yesplease scoped source-reviewed readonlybaselinepreReady; actualfreshmapsTestafterguardedReady",
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6117078636",
+  "invocation": {
+    "source_heads": {
+      "equity-features": "40e41efc393f70f4cfaeef2f575ede078cf869ef",
+      "equity-feature-workers": "9206c28a314dd09313fdb74e5350e65f68b96e8f"
+    },
+    "source_bytes": 51853,
+    "source_sha256": "7a11ef8d5e4290ad8b00578e394286fca211241060274b83a6ff3f757ddf9b47",
+    "interpreter": "Existing Windows CPython3.12.10 x64 BASE direct -I-B-S; exactprivatepath outsideGit",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Direct human yes please to reviewed readonly baseline preReady and actual fresh installation maps Test after Ready; bounded reviewed diagnostic correction same scope",
+    "exit_code": 1,
+    "elapsed_seconds": 0.2742188,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 2361,
+    "stderr_sha256": "7d0185152b23342da5900a3db6761a606eab0c2cbaf85e0602220be84ca72822",
+    "admitted": false,
+    "scope": "Readonly Windows baseline diagnostic; no product/form/resolver/Ready admission"
+  },
+  "independent_failure_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "40e41efc393f70f4cfaeef2f575ede078cf869ef",
+      "equity-feature-workers": "9206c28a314dd09313fdb74e5350e65f68b96e8f"
+    },
+    "source": {
+      "bytes": 51853,
+      "sha256": "7a11ef8d5e4290ad8b00578e394286fca211241060274b83a6ff3f757ddf9b47"
+    },
+    "disposition": "DIAGNOSED_FAILED_FD_ACCESS_TIME_DRIFT",
+    "findings": [],
+    "exit_code": 1,
+    "elapsed_seconds": 0.2742188,
+    "raw_log_sha256": "7d0185152b23342da5900a3db6761a606eab0c2cbaf85e0602220be84ca72822",
+    "evidence": {
+      "invocation_receipt_bytes": 1021,
+      "invocation_receipt_sha256": "54614581ce9bdc11fd91ea9cb6cd34aafab8d1fee555f98660c7cbcc416c7fa6",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 2361,
+      "stderr_sha256": "7d0185152b23342da5900a3db6761a606eab0c2cbaf85e0602220be84ca72822",
+      "exception_notes": 1,
+      "json_note_bytes": 649,
+      "stage": "fd",
+      "path_post": "not_sampled",
+      "differing_fields": [
+        "access"
+      ],
+      "other_native_fields_equal": 11,
+      "closed_native_keys": [
+        "access",
+        "allocation",
+        "attributes",
+        "change",
+        "creation",
+        "delete_pending",
+        "directory",
+        "file_id",
+        "nlink",
+        "size",
+        "volume",
+        "write"
+      ],
+      "original_error": "Windows native metadata drift",
+      "private_payload": "Complete native values/timestamps/volume/fileID retained only in private rawlog; not copied to this report."
+    },
+    "diagnosis": {
+      "established": "Complete bounded before/after native fd snapshots differ only in AccessTime after the bounded held-fd read and same-interface checks. Other11 native fields equal. The fd-stage rejection occurs before the path-post query, which is explicitly not sampled. Invocation remains failed/no stdout.",
+      "not_established": [
+        "Whether the read caused the access-time change, the selected filesystem/update policy, an external actor or any attack/product defect.",
+        "The path-post state, complete stable host inventory, trusted file-authority or returned completed hash record.",
+        "Physical cleanup, fresh forms/Ready/Linux/fullresolver/admission/PASS."
+      ],
+      "meaningful_next_source": "Separate explicitly nonadmitted discovery can retain all full native snapshots, drift/error taxonomy and path-post unsampled markers without changing strict actual_windows_file/future issuer rejection. A computed held-fd byte digest may be labeled an observed read only, never trusted pathname/backing-file authority. Freeze a finite full scan preserving every attempted record/error and phase snapshot. Existing outer native/Python full-record equality may also reject changing snapshots; retain all differences and classify authority unresolved rather than silently filter AccessTime or exempt it from comparison. Keep strict authority code separate and fail-closed.",
+      "readonly_contract_limit": "Read-only file access does not guarantee stable access metadata across the read. Current observed failure and documented filesystem timestamp variability expose an availability/contract tension; further phase diagnostics alone do not resolve a universal stable-AccessTime guarantee. A strict host can remain unsupported. No SetFileTime/fsutil/registry mutation, time tolerance/normalization/drop or automatic unchanged rerun is justified. Policy resolution must distinguish honest discovery from authority admission."
+    },
+    "continuity": {
+      "previous49213_failure": "Preserved FAILED/no complete inventory; new diagnostic identifies fd AccessTime drift in a distinct invocation, not a retrospective PASS.",
+      "source242": "Source-only242 inert report remains separate/inherited, not rerun during diagnosis.",
+      "next_source": "Advice only, no implemented or approved new discovery/runtime unit."
+    },
+    "checks": [
+      "Exact source51853/SHA7a11ef8d and author fullheads/receipt/raw lengths+hashes/exit/time verified read-only.",
+      "Exactly one649-byte ASCII note, complete closed12-field schemas/types/bounds, actual field-by-field equality and fd/not_sampled stage verified without public raw values.",
+      "Original ValueError retained, prior unknown-stage failure remains unchanged; no additional metadata calls by reviewer."
+    ],
+    "limitations": [
+      "Read-only source/log/receipt parsing only; no native handles/stat/msvcrt/observer/platform/process/API/preflight/hashbaseline invocation, source-tests/wholemodule/product import/install/copy/setup/TLS/probe.",
+      "Actual witness establishes one fd AccessTime drift only; causal, security, filesystem and fullmap interpretations remain unproven. All raw metadata identity/timestamps private.",
+      "Discovery advice is not source implementation/permission/admission; strict full AccessTime and other-field rejection remain unchanged. No completeinventory/PASS/cleanup/Ready/form/resolver/release claim."
+    ],
+    "tool_only_history": [],
+    "primary_source": {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/fileio/setting-and-getting-the-timestamp-of-a-file",
+      "review_scope": "Official source inspected read-only. Describes filesystem timestamp resolution/update variability and NTFS delayed last-access updates, not the actual selected filesystem or cause of this observed drift."
+    }
+  },
+  "established": "Exact649ASCIIbyte private note: stage fd/path_post not_sampled; only access differs, other11nativefields equal. Same Windows native metadata drift rejection before completed filehash/inventory.",
+  "unknown": "Actual cause of AccessTime change, selectedfilesystem/updatepolicy, separatepathpost metadata, finalwholehost authority/cleanup. Readcausality is not established.",
+  "next": "Source-first policy/design for nonadmitted discovery retaining full unresolved file metadata without dropping AccessTime or promoting changed/unobserved records to trusted hash/authority. Strict observer/physicalissuer must still deny unresolved or changed authority. Independent review before any changed readonly call; no further unchanged rerun.",
+  "limitations": [
+    "No completed inventory/PASS/cleanup/Ready/form/Linux/fullresolver or broader execution authority.",
+    "Prior49213FAILED6116894749/original49036REWORKfull133+5/corrective165,39184/37723/1006actualfailed histories remainunchanged.",
+    "No native metadata setters/fsutil/registry/policy changes; no newproduct/install/pip/collector/SDKcrypto/nativeworker/TLS/certificate-key operations; currentENVLinuxfalsekeysuntouched."
+  ],
+  "source_context": {
+    "timestamp_document": "https://learn.microsoft.com/en-us/windows/win32/fileio/setting-and-getting-the-timestamp-of-a-file",
+    "interpretation": "Microsoft describes filesystem timestamp variability and possible NTFS delayed lastaccess updates; this is not proof of selectedfilesystem, actualcause, or authority to alter metadata/updatepolicy."
+  }
+}
