@@ -1,0 +1,942 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "THIRTEEN_IMMUTABLE_CPU_SCHEDULER_TIMER_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+    "disposition": "RCU_EXECUTION_GATES_AND_DEFERRED_LIFETIMES_TRACED_WHOLE_TIMING_CONTRACT_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "kernel_commit": "b5177517cae440940348af0406903f607ea73a46",
+    "source_receipt_sha256": "a724bf3ab47b68830c76a5ae30c76a553bb2aa08e95363f6899e4b35609dba80",
+    "source_pins": [
+      {
+        "path": "include/cpu.hpp",
+        "bytes": 9392,
+        "sha256": "3fc890328b70558200269f330988f43c7640976559a34f836036c05b08c524b6",
+        "git_sha1": "29cec74dc4c8adf11ed22de99c10ad310b825cd4",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "include/ec.hpp",
+        "bytes": 13919,
+        "sha256": "3ba130a227fad37c77260f4116f4f7d10e726112bffe581152dc9355c8169726",
+        "git_sha1": "7c3acfc074bac3a5af26d1ae915408ca1adb0b43",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "include/hazards.hpp",
+        "bytes": 1047,
+        "sha256": "dbecb4d55a340b7ce110ab8698e340486f483937a4c2e9066e404049227bdf3c",
+        "git_sha1": "cad54a55d06eec962e922a774fd5fc8233547313",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "include/hip.hpp",
+        "bytes": 5679,
+        "sha256": "ad730e0d68c03a3fa3374c591858eda03c317e942cb4eea29e9319fadac18b44",
+        "git_sha1": "0f2d342bdcea84332b73a22c3aca4fefbbfc5b94",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "include/lapic.hpp",
+        "bytes": 9116,
+        "sha256": "45841ff4bb8998d98ab66dbb671515b20d260225823d0f8142d5033ccd579507",
+        "git_sha1": "a8b85c103b6f00ff46a5a1f5816a238f28e9f169",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "include/sc.hpp",
+        "bytes": 3504,
+        "sha256": "f715151fde399dcb18ec455f6b66a9a028df5c52bbeea1c09725518dabd939fd",
+        "git_sha1": "a049fbf9997a3c8b6e41276545c7d3e68f18a4e5",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "include/timeout.hpp",
+        "bytes": 1245,
+        "sha256": "c66d2627584ef585e8331d4fb3f8a21f99f8e2b434690efc995a87c1592474d2",
+        "git_sha1": "9571f80a2d51d81e5fc3ff54b28247eec73e0172",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "src/cpu.cpp",
+        "bytes": 13572,
+        "sha256": "72ba9b0842ea5ac64cefdefd3daa2efdfd4a0d64dda41f7118239ea750f1bb39",
+        "git_sha1": "c17c63fb799c6493d845e99e9846441ac6d59881",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "src/ec.cpp",
+        "bytes": 21392,
+        "sha256": "f38981b205b6a162abe5fd935033b1fafb29c00799702af4ade2160b9619d15c",
+        "git_sha1": "6b15d03d59eb374f1066ddb16f78c5f477bad515",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "src/hip.cpp",
+        "bytes": 13142,
+        "sha256": "8ab0d66f4caafdee7bb046f3cbae09bf249d4b7a9098b66eb519a91bffae06c2",
+        "git_sha1": "a826f74373763576bd28dd273372bd987b20d40b",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "src/lapic.cpp",
+        "bytes": 9750,
+        "sha256": "a3b554d66a413f829db70e8b67f5d68830fd8d8547fb3fe325c1225dbcb5f79e",
+        "git_sha1": "1b6940371c7e73e9035b5aa1c09d0b2296aa7cad",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "src/sc.cpp",
+        "bytes": 7439,
+        "sha256": "9ac5b00a04566276787dbace0abd930fcdc7db9f6377f65e0d14c8741731d2ce",
+        "git_sha1": "2924e1b9a47969f6717a5ff48ca2bb920aa47737",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      },
+      {
+        "path": "src/timeout.cpp",
+        "bytes": 1969,
+        "sha256": "dcaf18dd4279c3de7cd504a3132e78a65e37ec89c514e8ffd49ead4f132d9b1c",
+        "git_sha1": "4b104d00ceb5782354dda446f36015082b13f5fe",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "repository": "https://github.com/alex-ab/NOVA"
+      }
+    ],
+    "total_bytes": 111166,
+    "facts": [
+      {
+        "paths": [
+          "src/ec.cpp",
+          "include/hazards.hpp"
+        ],
+        "fact": "HZD_RCU dispatch calls Rcu::quiet. User-return and VM-return paths check hazards; idle checks them before halt/mwait with interrupts enabled. This closes concrete quiescence callsites, not every latency condition: hazard processing still depends on actually reaching these paths and executing on the relevant CPU.",
+        "functions": [
+          "Ec::handle_hazard",
+          "Ec::ret_user_sysexit",
+          "Ec::ret_user_iret",
+          "Ec::ret_user_vmresume",
+          "Ec::idle"
+        ]
+      },
+      {
+        "paths": [
+          "src/lapic.cpp",
+          "include/lapic.hpp",
+          "src/ec.cpp"
+        ],
+        "fact": "The timer handler invokes Timeout::check if expired and then Rcu::update. VEC_IPI_IDL routes to Ec::idl_handler, which calls Rcu::update(false) only when current continuation is Ec::idle. IPI send targets CPU/APIC topology. Successful IPI issuance or timer configuration is not an observed interrupt delivery, quiescent acknowledgment, completed batch or finalizer deadline.",
+        "functions": [
+          "Lapic::handle_timer",
+          "Lapic::lvt_vector",
+          "Lapic::ipi_vector",
+          "Ec::idl_handler"
+        ]
+      },
+      {
+        "paths": [
+          "include/cpu.hpp",
+          "src/cpu.cpp",
+          "include/hip.hpp",
+          "src/hip.cpp"
+        ],
+        "fact": "Preemption control disables/enables interrupts; a preemption point briefly permits interrupts. CPU initialization registers a CPU through Hip::add_cpu on initial boot. HIP membership checks a bounded CPU descriptor flag. Runtime online-count/descriptor consistency, interrupt masking durations, startup/hotplug/suspend behavior and actual hardware remain configuration/timing obligations; this partial source is not a proof every batch participant responds within a numerical interval.",
+        "functions": [
+          "Cpu::preempt_disable",
+          "Cpu::preempt_enable",
+          "Cpu::preemption_point",
+          "Cpu::init",
+          "Hip::add_cpu",
+          "Hip::cpu_online"
+        ]
+      },
+      {
+        "paths": [
+          "src/sc.cpp",
+          "include/sc.hpp",
+          "src/timeout.cpp",
+          "include/timeout.hpp"
+        ],
+        "fact": "Scheduling selects the highest ready priority, tracks remaining budget and programs the budget timeout; disabled scheduling contexts may require repeated scheduling and RCU release. Timeout::check triggers all expired entries; callbacks and their count affect handler work. A timeslice/budget is not a global service, RPC, RCU or cleanup deadline, nor does it prove priority starvation or callback latency absent a complete bounded workload and hardware contract.",
+        "functions": [
+          "Sc::ready_enqueue",
+          "Sc::schedule_wo_activate",
+          "Sc::schedule",
+          "Timeout::check"
+        ]
+      },
+      {
+        "paths": [
+          "src/sc.cpp",
+          "src/ec.cpp",
+          "include/ec.hpp"
+        ],
+        "fact": "SC pre_free disables execution and sets scheduling hazard locally or sends remote recall IPI. Remote removal retains deferred reference state and uses a remote queue; its handler examines disable/partner/return-capability/continuation conditions before scheduling or RCU. free/free_xcpu delete only after removal/refcount eligibility. Pending cross-CPU work, partner references and deferred callbacks therefore survive a logical disable and need explicit accounting and completion witnesses.",
+        "functions": [
+          "Sc::pre_free",
+          "Sc::remove",
+          "Sc::free",
+          "Sc::free_xcpu",
+          "Sc::remote_enqueue",
+          "Sc::rrq_handler",
+          "Sc::rke_handler"
+        ]
+      },
+      {
+        "paths": [
+          "include/ec.hpp",
+          "src/ec.cpp"
+        ],
+        "fact": "EC pre_free removes UTCB mappings, flushes CPU state and may enqueue cross-CPU EC/SC finalization. free destroys only after reference release. Destruction includes return-capability, FPU/UTCB and virtualization-state cleanup; cross-CPU return signals the caller after scheduling transitions. These are real lifecycle paths, not a single synchronous all-free operation, and do not close all object/cache/device/provider debt.",
+        "functions": [
+          "Ec::pre_free",
+          "Ec::free",
+          "Ec::~Ec",
+          "Ec::xcpu_return",
+          "Ec::xcpu_revert",
+          "Ec::flush_from_cpu"
+        ]
+      },
+      {
+        "paths": [
+          "include/lapic.hpp",
+          "src/lapic.cpp",
+          "src/timeout.cpp"
+        ],
+        "fact": "LAPIC setup depends on CPU deadline support/command-line policy and calibrated or measured TSC/bus frequencies. Timer programming uses either countdown or TSC-deadline mode. Timeout code explicitly handles a TSC stopping in sleep by reprogramming the timer. Those mechanisms require an exact supported platform/clock/interrupt configuration before deriving a wall-clock progress bound.",
+        "functions": [
+          "Lapic::init",
+          "Lapic::set_timer",
+          "Timeout::check",
+          "Timeout::sync"
+        ]
+      },
+      {
+        "paths": [
+          "src/ec.cpp"
+        ],
+        "fact": "Bootstrap adjusts root quota for kernel use, transfers four pages per online CPU into a reserve and sets a root nontransferable reserve. Halt preparation flushes VM/FPU state then shutdown follows. These source literals and shutdown paths must be included in full domain geometry; they neither establish a project-wide peak nor make shutdown/reboot a physical cleanup proof.",
+        "functions": [
+          "Ec::root_invoke",
+          "Ec::hlt_prepare",
+          "Ec::hlt_handler"
+        ]
+      }
+    ],
+    "source_inventory_summary": {
+      "combined_partial_files": 39,
+      "combined_partial_bytes": 312656,
+      "complete_vendor_closure": false,
+      "new_text_bytes": 111166,
+      "prior_partial_bytes": 201490,
+      "prior_partial_files_context_only": 26,
+      "new_files": 13
+    },
+    "conclusion": "Concrete timer/IPI/hazard/scheduling paths drive RCU progression and deferred EC/SC lifetimes. They do not convert a quantum, queue threshold, stop request or issued IPI into a finite whole-epoch cleanup guarantee. One supported topology must bound execution gates, interrupt delivery, queue/callback work, all references and physical backing together.",
+    "remaining_obligations": [
+      "Freeze CPU membership, architecture/configuration, timer/TSC/LAPIC and all interrupt masking/lock/scheduling bounds with actual platform support.",
+      "Bound all pending callbacks, remote queues, references and finalizer work; reserve cleanup execution/resources and retain accounting until actual completion.",
+      "Close complete kernel/core/VMM/provider/device/DMA/storage authority and resource paths, including automatic quota transfer/retry and failed startup.",
+      "Bind exact selected native/guest/form source/build/binary/resolver identities without treating these partial text callsites as actual host evidence."
+    ],
+    "limitations": [
+      "Only thirteen new saved UTF8 source texts were read and independently hashed as DATA; no source compile/import/execution, native API/process/VM/kernel binary/install/provision/host/probe/test.",
+      "Prior26source files were not rehashed or rereviewed; combined39files312656bytes remain partial kernel/core/patch context, not whole vendor/configuration/ABI/binary/provider closure.",
+      "No runtime failure, actual stall/leak, universal impossibility or numerical cleanup deadline was observed or proved.",
+      "No isolated progress watchdog/PASS token, selected topology/license, Ready/operational grant or new mandatory owner input. Rejected binary task not reattempted."
+    ],
+    "operational_authorization": false,
+    "ready_approval": false,
+    "selected_mechanism": false
+  },
+  "full_prior_reclamation_reports": {
+    "eq083-nova-quota-reclamation-source-reviewer-initial13-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "THIRTEEN_IMMUTABLE_KERNEL_AND_PATCH_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+      "disposition": "QUOTA_ACCOUNTING_AND_DEFERRED_RECLAMATION_PATHS_CONFIRMED_FINITE_WHOLE_DOMAIN_PENDING",
+      "findings": [],
+      "newtests": 0,
+      "new_tests": 0,
+      "kernel_commit": "b5177517cae440940348af0406903f607ea73a46",
+      "genode_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "source_receipt_sha256": "816840304dca998691cd578bfcdd70ae2fd86214d86af06c9beeb4cdac116888",
+      "source_pins": [
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 1421,
+          "sha256": "bf2f1e3f87a0385a10e0dab6cda323120f894843999edbafb9f468bf38bb0c9a",
+          "git_sha1": "16d39879fb586573e31015335b79cbfdc63aec14",
+          "path": "include/kobject.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 5811,
+          "sha256": "57e738aaaee6e46a7a8ecb1ae86189d2628b5d37424f6404d1e8a1f61eed6da8",
+          "git_sha1": "b8ed2621bbbc17df262c41764de4c6169710bac5",
+          "path": "include/pd.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 1099,
+          "sha256": "753bfc1b41268d54249393fed0ed90564ee5658e7995de6f9bd17c38259928b6",
+          "git_sha1": "8e3020ce14f6d95d9c9ca29b38754782f104f7b1",
+          "path": "include/qpd.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 3950,
+          "sha256": "7efaac8bcedc0e016f2d68184d2a746fc84a94debc09efb839d5711a7534671a",
+          "git_sha1": "c00b0e38b416ec625ab0c53e62160c773c0ca8d6",
+          "path": "include/quota.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 3545,
+          "sha256": "b893e9724f4ca63b3b7f082ffdc2a701699766828e2c78676fc2fb89ab01dd34",
+          "git_sha1": "a8849455db8278c734e5fb40907ea00b67f6e484",
+          "path": "include/rcu.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 8739,
+          "sha256": "4363bb57ae074485bb4ba6a6064385d404d1696de9c79bb0d5fd039719f213df",
+          "git_sha1": "c45670b8e14afeffc11b4e8a9d48e0a63bbf5c33",
+          "path": "include/syscall.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 14670,
+          "sha256": "80513e06fd6c665b7347371649219aacff8c29687bdd69ef3811e3f4b427cdf3",
+          "git_sha1": "c1a5f366110dcb3136112f8bd66e7a3256fbb8cd",
+          "path": "src/pd.cpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 2568,
+          "sha256": "aabbc297b1f8e7d054a7cfdbc7125265ae8aaf20f6ab6afb35e20d3f7550d60e",
+          "git_sha1": "a56f102c94bbd8a49b279b90499ec3e46de0e9f6",
+          "path": "src/rcu.cpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 42192,
+          "sha256": "3b34a18059c9b5d3d9ee89720f2ef90f8a6538ab1a9743519d97e778055c875c",
+          "git_sha1": "3957b2b99b1b931af11efec0f895727caa30f749",
+          "path": "src/syscall.cpp"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 145,
+          "sha256": "7aa00b313b2ecdc664eeea592976d08b9af2e3f23bbef2dcd4846d27eed70caa",
+          "git_sha1": "468bfa5eff79a54d56a097810865871849be0f01",
+          "path": "repos/base-nova/patches/README"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 792,
+          "sha256": "f8ff83856176c9bf2017abbefecaae33eae62d15c88888d3e10fb9f9af3c0f86",
+          "git_sha1": "888fe1705a566c2b75ddc65e98e250d1f3c63375",
+          "path": "repos/base-nova/patches/allow_ioapic_access.patch"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 1268,
+          "sha256": "687ac709e7c8c72c6769d97c5162c659c5d52f6359a48539026b4b81b7aa1ba1",
+          "git_sha1": "e303485915ebba8428f4edac00032d8990958707",
+          "path": "repos/base-nova/patches/allow_iommu_access.patch"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 749,
+          "sha256": "0a94bc0fb7d9d2b72178b3a5c56b75774eb7c85c95737ce61d9c278bcce8a18f",
+          "git_sha1": "b112ab71ed905019a577c9488d41224d39255a28",
+          "path": "repos/base-nova/patches/syscall_msi.patch"
+        }
+      ],
+      "total_bytes": 86949,
+      "facts": [
+        {
+          "fact": "Quota tracks used, over, upli and notr. alloc increments usage; free reduces usage or records excess free credit in over and adjusts limit. boot deducts static kernel usage from the root limit. free_up moves remaining limit, usage and credits into another account and reconciles outstanding usage/credit. Thus account destruction is not simply usage zero or an unconditional newly-free physical pool; delayed-accounting debt must be followed.",
+          "functions": [
+            "Quota::alloc",
+            "Quota::free",
+            "Quota::boot",
+            "Quota::free_up"
+          ],
+          "paths": [
+            "include/quota.hpp"
+          ]
+        },
+        {
+          "fact": "transfer_to checks source limit and available balance including notr by default, debits source limit and credits destination, with over/used reconciliation. set_limit transfers upper budget then sets lower nontransferable reserve. PD-control validates PD capability types and returns failure for insufficient transfer. This is an explicit quota-transfer mechanism, not a per-transfer amount proving total epoch cap. Full initialization, call authority, allocator enforcement and arithmetic/concurrency invariants remain required.",
+          "functions": [
+            "Quota::transfer_to",
+            "Quota::set_limit",
+            "Ec::sys_pd_ctrl"
+          ],
+          "paths": [
+            "include/quota.hpp",
+            "src/syscall.cpp"
+          ]
+        },
+        {
+          "fact": "A temporary guard obtains needed quota from its reference account with check_notr false and returns guard accounting via free_up on destruction. The local check/reserve mechanism and ordinary nontransferable reserve are distinct; the complete graph must include guarded allocation, temporary overlap and the bypassed reserve check rather than treating notr as an absolute barrier for every path. Buddy/slab allocator implementations are not in this selection.",
+          "functions": [
+            "Quota_guard::check",
+            "Quota_guard::~Quota_guard"
+          ],
+          "paths": [
+            "include/quota.hpp"
+          ]
+        },
+        {
+          "fact": "Syscall checks may invoke OOM handling or return QUO_OOM. PD creation validates lower/upper values, checks source quota, allocates a PD, transfers limits and inserts its capability; failures delete the PD. PD deletion returns its account into the owning PD and frees its slab entry. Constructor/cache/page-table/refcount details outside selected files still matter to whole physical peak and failed-start cleanup.",
+          "functions": [
+            "Ec::check",
+            "Ec::sys_create_pd",
+            "Pd::operator delete"
+          ],
+          "paths": [
+            "src/syscall.cpp",
+            "src/pd.cpp",
+            "include/pd.hpp"
+          ]
+        },
+        {
+          "fact": "call runs an optional pre-finalizer and enqueues deferred work. RCU uses per-CPU next/current/done queues, batch state and online-CPU quiescent counting before invoking finalizers. update can send idle IPIs when both queues are populated and a queue count exceeds2000; that threshold is not an admission cap. No clock deadline is present here. Progress requires update/quiet callsites, scheduling, interrupt and finalizer behavior beyond this partial source; no actual stall or leak was observed.",
+          "functions": [
+            "Rcu::call",
+            "Rcu::start_batch",
+            "Rcu::quiet",
+            "Rcu::update",
+            "Rcu::invoke_batch"
+          ],
+          "paths": [
+            "include/rcu.hpp",
+            "src/rcu.cpp"
+          ]
+        },
+        {
+          "fact": "Revoke traverses/demotes mapping trees and queues removed nodes via RCU. Remote revoke retains/releases PD references and may enqueue a semaphore notification before returning success. PD pre_free revokes memory/PIO/object spaces and releases device RIDs; later free deletes only when references allow. The destructor clears page/IOMMU/nested/local tables and caches. Referenced implementations and hardware synchronization are not all included: success is not proof that all finalizers, DMA or physical backing have settled within a numeric bound.",
+          "functions": [
+            "Ec::sys_revoke",
+            "Pd::revoke",
+            "Pd::pre_free",
+            "Pd::free",
+            "Pd::~Pd"
+          ],
+          "paths": [
+            "src/syscall.cpp",
+            "src/pd.cpp",
+            "include/pd.hpp",
+            "include/kobject.hpp"
+          ]
+        },
+        {
+          "paths": [
+            "repos/base-nova/patches/README",
+            "repos/base-nova/patches/allow_ioapic_access.patch",
+            "repos/base-nova/patches/allow_iommu_access.patch",
+            "repos/base-nova/patches/syscall_msi.patch"
+          ],
+          "fact": "README identifies patches required for the Genode-adjusted kernel. IOAPIC and Intel-IOMMU patches comment out removal of relevant device memory regions to permit platform-driver access. IOMMU patch skips interrupt-cache invalidation when current queue base differs from the kernel-owned queue. MSI patch adds a nonzero dev guard to device-cap validation. These are textual changes to device-authority paths, not proof of a configured denial boundary, safe DMA quiescence or an applied/build-tested patch set."
+        },
+        {
+          "paths": [
+            "include/qpd.hpp"
+          ],
+          "fact": "QPD decodes scheduling quantum and priority; it is not the memory-quota object. Keeping that distinction prevents an inspected scheduling descriptor from being counted as evidence of memory or cleanup enforcement."
+        }
+      ],
+      "conclusion": "The declared kernel implements explicit budget transfer/reserve/accounting and deferred RCU destruction. These mechanisms narrow the candidate analysis but do not establish a frozen all-domain total or bounded physical cleanup. Core quota donation policies, allocator implementations, RCU progress and every VMM/provider/device/storage owner must be bound together in one actual topology.",
+      "remaining_obligations": [
+        "Complete allocator, slab/page-table, mapping-database, refcount, semaphore and RCU update/quiet callsite source closure and supported timing/resource contracts.",
+        "Bind initial kernel/root/core budgets and all core-to-child upgrades to a conserved fixed domain, including guard debt and deferred retired objects.",
+        "Bind exact applied patches/configuration/build/ABI and device-driver/IOMMU ownership; no selected physical host or native binary proof exists here.",
+        "Close VMM/guest/provider/broker storage bytes/nodes/queues/shared backing and bounded termination, DMA drain, finalizer completion and residual cleanup.",
+        "Establish exact Windows/Linux interpreter/native artifacts and all required installed forms before Ready and operational admission."
+      ],
+      "limitations": [
+        "Only13saved UTF8 source-text files86949bytes were independently hashed as DATA and read. No compilation/import/execution, code/kernel/binary acquisition, patch application, build, boot, install, API/native/process/VM/host/probe/test.",
+        "Immediate patch set completeness is receipt scope; full repository/configuration and patched binary were not independently reconstructed. Prior Genode9files96989bytes were not rehashed or rereviewed.",
+        "Source failure branches, pending frees and missing deadlines are not observed runtime failures, leaks, vendor bugs or universal impossibility.",
+        "No per-transfer/local parameter is promoted to total epoch cap, finite cleanup, license applicability, selected topology, Ready or operational grant.",
+        "No rejected binary task reattempt and no new mandatory owner input."
+      ],
+      "selected_mechanism": false,
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-nova-quota-reclamation-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "SEVENTEEN_IMMUTABLE_KERNEL_ALLOCATOR_AND_PATCH_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+      "disposition": "QUOTA_ACCOUNTING_AND_DEFERRED_RECLAMATION_PATHS_CONFIRMED_FINITE_WHOLE_DOMAIN_PENDING",
+      "findings": [],
+      "newtests": 0,
+      "new_tests": 0,
+      "kernel_commit": "b5177517cae440940348af0406903f607ea73a46",
+      "genode_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "source_receipt_sha256": "816840304dca998691cd578bfcdd70ae2fd86214d86af06c9beeb4cdac116888",
+      "source_pins": [
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 1421,
+          "sha256": "bf2f1e3f87a0385a10e0dab6cda323120f894843999edbafb9f468bf38bb0c9a",
+          "git_sha1": "16d39879fb586573e31015335b79cbfdc63aec14",
+          "path": "include/kobject.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 5811,
+          "sha256": "57e738aaaee6e46a7a8ecb1ae86189d2628b5d37424f6404d1e8a1f61eed6da8",
+          "git_sha1": "b8ed2621bbbc17df262c41764de4c6169710bac5",
+          "path": "include/pd.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 1099,
+          "sha256": "753bfc1b41268d54249393fed0ed90564ee5658e7995de6f9bd17c38259928b6",
+          "git_sha1": "8e3020ce14f6d95d9c9ca29b38754782f104f7b1",
+          "path": "include/qpd.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 3950,
+          "sha256": "7efaac8bcedc0e016f2d68184d2a746fc84a94debc09efb839d5711a7534671a",
+          "git_sha1": "c00b0e38b416ec625ab0c53e62160c773c0ca8d6",
+          "path": "include/quota.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 3545,
+          "sha256": "b893e9724f4ca63b3b7f082ffdc2a701699766828e2c78676fc2fb89ab01dd34",
+          "git_sha1": "a8849455db8278c734e5fb40907ea00b67f6e484",
+          "path": "include/rcu.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 8739,
+          "sha256": "4363bb57ae074485bb4ba6a6064385d404d1696de9c79bb0d5fd039719f213df",
+          "git_sha1": "c45670b8e14afeffc11b4e8a9d48e0a63bbf5c33",
+          "path": "include/syscall.hpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 14670,
+          "sha256": "80513e06fd6c665b7347371649219aacff8c29687bdd69ef3811e3f4b427cdf3",
+          "git_sha1": "c1a5f366110dcb3136112f8bd66e7a3256fbb8cd",
+          "path": "src/pd.cpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 2568,
+          "sha256": "aabbc297b1f8e7d054a7cfdbc7125265ae8aaf20f6ab6afb35e20d3f7550d60e",
+          "git_sha1": "a56f102c94bbd8a49b279b90499ec3e46de0e9f6",
+          "path": "src/rcu.cpp"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "bytes": 42192,
+          "sha256": "3b34a18059c9b5d3d9ee89720f2ef90f8a6538ab1a9743519d97e778055c875c",
+          "git_sha1": "3957b2b99b1b931af11efec0f895727caa30f749",
+          "path": "src/syscall.cpp"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 145,
+          "sha256": "7aa00b313b2ecdc664eeea592976d08b9af2e3f23bbef2dcd4846d27eed70caa",
+          "git_sha1": "468bfa5eff79a54d56a097810865871849be0f01",
+          "path": "repos/base-nova/patches/README"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 792,
+          "sha256": "f8ff83856176c9bf2017abbefecaae33eae62d15c88888d3e10fb9f9af3c0f86",
+          "git_sha1": "888fe1705a566c2b75ddc65e98e250d1f3c63375",
+          "path": "repos/base-nova/patches/allow_ioapic_access.patch"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 1268,
+          "sha256": "687ac709e7c8c72c6769d97c5162c659c5d52f6359a48539026b4b81b7aa1ba1",
+          "git_sha1": "e303485915ebba8428f4edac00032d8990958707",
+          "path": "repos/base-nova/patches/allow_iommu_access.patch"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "bytes": 749,
+          "sha256": "0a94bc0fb7d9d2b72178b3a5c56b75774eb7c85c95737ce61d9c278bcce8a18f",
+          "git_sha1": "b112ab71ed905019a577c9488d41224d39255a28",
+          "path": "repos/base-nova/patches/syscall_msi.patch"
+        },
+        {
+          "sha256": "64f57bd2369667af438e89ae801ed023bdbe4b3b3b8b2b03dafdc8af1d5f0f7d",
+          "bytes": 3357,
+          "repository": "https://github.com/alex-ab/NOVA",
+          "path": "include/buddy.hpp",
+          "git_sha1": "dc4c9e0d4d4a6089a3dd75b397180a2caa977f3f",
+          "commit": "b5177517cae440940348af0406903f607ea73a46"
+        },
+        {
+          "sha256": "57d98777cf8cdf2f569f3704f1bfcae59c8a443b68d81c257fac7d0c4420196e",
+          "bytes": 2677,
+          "repository": "https://github.com/alex-ab/NOVA",
+          "path": "include/slab.hpp",
+          "git_sha1": "955fe87f8afa77c76b6ab3804b6682602a420f8d",
+          "commit": "b5177517cae440940348af0406903f607ea73a46"
+        },
+        {
+          "sha256": "c453c5c0cc58cba51989033d3f06744c8d14a3bfaa1315d6af0b9e9ee52b29d0",
+          "bytes": 6744,
+          "repository": "https://github.com/alex-ab/NOVA",
+          "path": "src/buddy.cpp",
+          "git_sha1": "b81ac552221d1d1e9e473c12461457953bd3f96b",
+          "commit": "b5177517cae440940348af0406903f607ea73a46"
+        },
+        {
+          "sha256": "094b6678b082a15b4d5eebb9865b14912ade3b4c52432b9aa67c4fe50a40527b",
+          "bytes": 4774,
+          "repository": "https://github.com/alex-ab/NOVA",
+          "path": "src/slab.cpp",
+          "git_sha1": "0440c5852d6bf3e33d0e4c19404ee7b0ee942130",
+          "commit": "b5177517cae440940348af0406903f607ea73a46"
+        }
+      ],
+      "total_bytes": 104501,
+      "facts": [
+        {
+          "fact": "Quota tracks used, over, upli and notr. alloc increments usage; free reduces usage or records excess free credit in over and adjusts limit. boot deducts static kernel usage from the root limit. free_up moves remaining limit, usage and credits into another account and reconciles outstanding usage/credit. Thus account destruction is not simply usage zero or an unconditional newly-free physical pool; delayed-accounting debt must be followed.",
+          "functions": [
+            "Quota::alloc",
+            "Quota::free",
+            "Quota::boot",
+            "Quota::free_up"
+          ],
+          "paths": [
+            "include/quota.hpp"
+          ]
+        },
+        {
+          "fact": "transfer_to checks source limit and available balance including notr by default, debits source limit and credits destination, with over/used reconciliation. set_limit transfers upper budget then sets lower nontransferable reserve. PD-control validates PD capability types and returns failure for insufficient transfer. This is an explicit quota-transfer mechanism, not a per-transfer amount proving total epoch cap. Full initialization, call authority, allocator enforcement and arithmetic/concurrency invariants remain required.",
+          "functions": [
+            "Quota::transfer_to",
+            "Quota::set_limit",
+            "Ec::sys_pd_ctrl"
+          ],
+          "paths": [
+            "include/quota.hpp",
+            "src/syscall.cpp"
+          ]
+        },
+        {
+          "fact": "A temporary guard obtains needed quota from its reference account with check_notr false and returns guard accounting via free_up on destruction. The local check/reserve mechanism and ordinary nontransferable reserve are distinct; the complete graph must include guarded allocation, temporary overlap and the bypassed reserve check rather than treating notr as an absolute barrier for every path. The supplemental allocator selection below closes this local source gap, but not all allocation callsite admission.",
+          "functions": [
+            "Quota_guard::check",
+            "Quota_guard::~Quota_guard"
+          ],
+          "paths": [
+            "include/quota.hpp"
+          ]
+        },
+        {
+          "fact": "Syscall checks may invoke OOM handling or return QUO_OOM. PD creation validates lower/upper values, checks source quota, allocates a PD, transfers limits and inserts its capability; failures delete the PD. PD deletion returns its account into the owning PD and frees its slab entry. Constructor/cache/page-table/refcount details outside selected files still matter to whole physical peak and failed-start cleanup.",
+          "functions": [
+            "Ec::check",
+            "Ec::sys_create_pd",
+            "Pd::operator delete"
+          ],
+          "paths": [
+            "src/syscall.cpp",
+            "src/pd.cpp",
+            "include/pd.hpp"
+          ]
+        },
+        {
+          "fact": "call runs an optional pre-finalizer and enqueues deferred work. RCU uses per-CPU next/current/done queues, batch state and online-CPU quiescent counting before invoking finalizers. update can send idle IPIs when both queues are populated and a queue count exceeds2000; that threshold is not an admission cap. No clock deadline is present here. Progress requires update/quiet callsites, scheduling, interrupt and finalizer behavior beyond this partial source; no actual stall or leak was observed.",
+          "functions": [
+            "Rcu::call",
+            "Rcu::start_batch",
+            "Rcu::quiet",
+            "Rcu::update",
+            "Rcu::invoke_batch"
+          ],
+          "paths": [
+            "include/rcu.hpp",
+            "src/rcu.cpp"
+          ]
+        },
+        {
+          "fact": "Revoke traverses/demotes mapping trees and queues removed nodes via RCU. Remote revoke retains/releases PD references and may enqueue a semaphore notification before returning success. PD pre_free revokes memory/PIO/object spaces and releases device RIDs; later free deletes only when references allow. The destructor clears page/IOMMU/nested/local tables and caches. Referenced implementations and hardware synchronization are not all included: success is not proof that all finalizers, DMA or physical backing have settled within a numeric bound.",
+          "functions": [
+            "Ec::sys_revoke",
+            "Pd::revoke",
+            "Pd::pre_free",
+            "Pd::free",
+            "Pd::~Pd"
+          ],
+          "paths": [
+            "src/syscall.cpp",
+            "src/pd.cpp",
+            "include/pd.hpp",
+            "include/kobject.hpp"
+          ]
+        },
+        {
+          "paths": [
+            "repos/base-nova/patches/README",
+            "repos/base-nova/patches/allow_ioapic_access.patch",
+            "repos/base-nova/patches/allow_iommu_access.patch",
+            "repos/base-nova/patches/syscall_msi.patch"
+          ],
+          "fact": "README identifies patches required for the Genode-adjusted kernel. IOAPIC and Intel-IOMMU patches comment out removal of relevant device memory regions to permit platform-driver access. IOMMU patch skips interrupt-cache invalidation when current queue base differs from the kernel-owned queue. MSI patch adds a nonzero dev guard to device-cap validation. These are textual changes to device-authority paths, not proof of a configured denial boundary, safe DMA quiescence or an applied/build-tested patch set."
+        },
+        {
+          "paths": [
+            "include/qpd.hpp"
+          ],
+          "fact": "QPD decodes scheduling quantum and priority; it is not the memory-quota object. Keeping that distinction prevents an inspected scheduling descriptor from being counted as evidence of memory or cleanup enforcement."
+        },
+        {
+          "paths": [
+            "include/buddy.hpp",
+            "src/buddy.cpp"
+          ],
+          "functions": [
+            "Buddy::Buddy",
+            "Buddy::_alloc",
+            "Buddy::alloc",
+            "Buddy::_free"
+          ],
+          "fact": "Buddy initializes a finite physical pool with block-head/index overhead and page-rounded free range. _alloc holds allocator lock, selects/splits an order-aligned block, optionally fills memory, then charges2^order pages via quota.alloc. It does not itself check quota.hit_limit before allocating. alloc searches pools and panics on exhausted physical availability. _free returns quota before coalescing under allocator lock. This is backing geometry and accounting source, not a proof all callsites pre-reserve or that a quota balance equals every instantaneous physical byte."
+        },
+        {
+          "paths": [
+            "include/slab.hpp",
+            "src/slab.cpp"
+          ],
+          "functions": [
+            "Slab_cache::grow",
+            "Slab_cache::alloc",
+            "Slab_cache::free",
+            "Slab::destroy"
+          ],
+          "fact": "Slab growth allocates a full buddy page; per-element size includes rounded payload/link/alignment and page header overhead. Allocation holds cache lock and grows when no current slab exists, without its own quota admission check. Element release can retain an empty slab for reuse; selected extra empty slabs are destroyed and whole-cache free destroys pages. Live-element count therefore differs from page allocation, retained empties and deferred-finalizer overlap. Source assertions/call order do not provide a deadline or a complete resource-conservation proof."
+        }
+      ],
+      "conclusion": "The declared kernel implements explicit budget transfer/reserve/accounting and deferred RCU destruction. These mechanisms narrow the candidate analysis but do not establish a frozen all-domain total or bounded physical cleanup. Core quota donation policies, allocator implementations, RCU progress and every VMM/provider/device/storage owner must be bound together in one actual topology. Supplemental Buddy/slab text shows quota charging and page-granular backing, but no allocator-local quota-hit rejection; full callsite reservation and retained/deferred page debt must be proved rather than assumed.",
+      "remaining_obligations": [
+        "Complete allocator admission at every callsite, all slab/page-table/mapping-database/refcount/semaphore interactions and RCU update/quiet callsites with supported timing/resource contracts. Buddy/slab charge backing but do not themselves reject on quota.hit_limit.",
+        "Bind initial kernel/root/core budgets and all core-to-child upgrades to a conserved fixed domain, including guard debt and deferred retired objects.",
+        "Bind exact applied patches/configuration/build/ABI and device-driver/IOMMU ownership; no selected physical host or native binary proof exists here.",
+        "Close VMM/guest/provider/broker storage bytes/nodes/queues/shared backing and bounded termination, DMA drain, finalizer completion and residual cleanup.",
+        "Establish exact Windows/Linux interpreter/native artifacts and all required installed forms before Ready and operational admission."
+      ],
+      "limitations": [
+        "Seventeen saved UTF8 text files104501bytes were independently hashed as DATA and read across the initial13 and supplemental4. No compilation/import/execution, source/kernel/binary acquisition, patch application, build, boot, install, API/native/process/VM/host/probe/test.",
+        "Immediate patch set completeness is receipt scope; full repository/configuration and patched binary were not independently reconstructed. Prior Genode9files96989bytes were not rehashed or rereviewed.",
+        "Source failure branches, pending frees and missing deadlines are not observed runtime failures, leaks, vendor bugs or universal impossibility.",
+        "No per-transfer/local parameter is promoted to total epoch cap, finite cleanup, license applicability, selected topology, Ready or operational grant.",
+        "No rejected binary task reattempt and no new mandatory owner input."
+      ],
+      "selected_mechanism": false,
+      "operational_authorization": false,
+      "ready_approval": false,
+      "allocator_source_receipt_sha256": "ca3b1167913f3655df016269767682233d0842c2c77eaaebc308de1a556c32d0",
+      "initial13_report_sha256": "f26ee62f16700b7e1154f167bd58f92249f4161382a3be866d2b976a1a00833c",
+      "source_inventory_summary": {
+        "new_kernel_core_patch_files": 17,
+        "prior_genode_core_files_context_only": 9,
+        "combined_partial_files": 26,
+        "combined_partial_bytes": 201490,
+        "prior_genode_core_bytes": 96989,
+        "complete_vendor_closure": false,
+        "new_text_bytes": 104501
+      }
+    },
+    "eq083-kernel-reclamation-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "bases": {
+        "equity-features": "a966f9cdea4d9e9adefec621608b6767114bd4ed",
+        "equity-feature-workers": "94675775953754c094af344f305606a89c83c090"
+      },
+      "disposition": "APPROVED",
+      "findings": [],
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_KERNEL_RECLAMATION_RESEARCH.md": {
+            "sha256": "218a00b018780d1275f546cdc27d66247048cac499fe7c282c152a836ebf5b90",
+            "bytes": 6967
+          },
+          "docs/stories/EQ-083_KERNEL_RECLAMATION_INPUTS.json": {
+            "sha256": "d033a9c82f9f8f4a8ca762cb33540c077688823f55f1f4fa5c6c50a3361112ad",
+            "bytes": 7541
+          },
+          "docs/stories/EQ-083_KERNEL_RECLAMATION_EVIDENCE.json": {
+            "sha256": "8591a8f10d7281ff20221672043cc72d4df7bd5c61cdfced9b1833f3e1529817",
+            "bytes": 49542
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "cb9535fca740aa25d57548842d376a026ab136410e31926a93c8bcd238e2ab1e",
+            "bytes": 528039
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "cc4a4bbeaec78c808ddd8314b730df7482bd0ab1db31cb70dc0e4b6222fd65ba",
+            "bytes": 787290
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_KERNEL_RECLAMATION_RESEARCH.md": {
+            "sha256": "218a00b018780d1275f546cdc27d66247048cac499fe7c282c152a836ebf5b90",
+            "bytes": 6967
+          },
+          "docs/EQ083_KERNEL_RECLAMATION_INPUTS.json": {
+            "sha256": "d033a9c82f9f8f4a8ca762cb33540c077688823f55f1f4fa5c6c50a3361112ad",
+            "bytes": 7541
+          },
+          "docs/EQ083_KERNEL_RECLAMATION_EVIDENCE.json": {
+            "sha256": "8591a8f10d7281ff20221672043cc72d4df7bd5c61cdfced9b1833f3e1529817",
+            "bytes": 49542
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "2285fb4e9413fb494e13efe779deab60fbf22392ad1726e6ea4e374fe6292be3",
+            "bytes": 390708
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "53aee59411929730fe88e2ea9659f8c863a57ea8e81a01a43089cfb746b2e235",
+            "bytes": 501846
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases/five documentation paths perrepo, unchanged other tracked source/history and preserved continuity suffixes.",
+        "Three assets mirrored exactly; full initial13 and combined17 reports and all three prior current-quota reports/tooling histories preserved exactly.",
+        "All17source metadata path/repository/commit/length/rawSHA/GitSHA pins match saved report104501bytes; no raw source rehash.",
+        "Quota funding/transfer/reserve/deferred debt separated from frozen whole physical peak; Buddy postallocation charging and Slab retained backing remain callsite/global proof obligations.",
+        "RCU quiet/update/CPU/finalizer progress does not imply numeric deadline,2000threshold not admission cap, no actual runtime failure inferred.",
+        "Immediate patch-directory texts do not become applied/configured complete vendor/runtime/driver assurance; license/ABI/topology unselected.",
+        "No Ready/operational/implementation claim or mandatory new owner input."
+      ],
+      "limitations": [
+        "Completed reports reused; no source/research/rawsourcehash/native/host/probe/test rerun.",
+        "No quota arithmetic, concurrency, whole allocator or physical cleanup qualification is granted.",
+        "Prepared changes lack new commit attribution until final publication readback."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-kernel-reclamation-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "59acd2454e2247f1f0283a862232a8a70da7bcc2",
+        "equity-feature-workers": "6368ca8725e497adc2e8b767ecf9975804bd61a0"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_KERNEL_RECLAMATION_RESEARCH.md": {
+            "sha256": "218a00b018780d1275f546cdc27d66247048cac499fe7c282c152a836ebf5b90",
+            "bytes": 6967
+          },
+          "docs/stories/EQ-083_KERNEL_RECLAMATION_INPUTS.json": {
+            "sha256": "d033a9c82f9f8f4a8ca762cb33540c077688823f55f1f4fa5c6c50a3361112ad",
+            "bytes": 7541
+          },
+          "docs/stories/EQ-083_KERNEL_RECLAMATION_EVIDENCE.json": {
+            "sha256": "8591a8f10d7281ff20221672043cc72d4df7bd5c61cdfced9b1833f3e1529817",
+            "bytes": 49542
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "cb9535fca740aa25d57548842d376a026ab136410e31926a93c8bcd238e2ab1e",
+            "bytes": 528039
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "cc4a4bbeaec78c808ddd8314b730df7482bd0ab1db31cb70dc0e4b6222fd65ba",
+            "bytes": 787290
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_KERNEL_RECLAMATION_RESEARCH.md": {
+            "sha256": "218a00b018780d1275f546cdc27d66247048cac499fe7c282c152a836ebf5b90",
+            "bytes": 6967
+          },
+          "docs/EQ083_KERNEL_RECLAMATION_INPUTS.json": {
+            "sha256": "d033a9c82f9f8f4a8ca762cb33540c077688823f55f1f4fa5c6c50a3361112ad",
+            "bytes": 7541
+          },
+          "docs/EQ083_KERNEL_RECLAMATION_EVIDENCE.json": {
+            "sha256": "8591a8f10d7281ff20221672043cc72d4df7bd5c61cdfced9b1833f3e1529817",
+            "bytes": 49542
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "2285fb4e9413fb494e13efe779deab60fbf22392ad1726e6ea4e374fe6292be3",
+            "bytes": 390708
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "53aee59411929730fe88e2ea9659f8c863a57ea8e81a01a43089cfb746b2e235",
+            "bytes": 501846
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git LF bytes match reviewed_git_files and reviewed prepared byte pins after only line-ending normalization; no CR.",
+        "Exact five-document changes perrepo and direct reviewed parent bases; clean paired codex/eq083-resilience branches.",
+        "Three mirrored assets, exact old knowledge/handoff suffixes and other tracked source/history outside allowed paths unchanged.",
+        "Atul author identity and absence of Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "e3b3a6066cd60d391245e3e693b175de5ea9f5c8b34fda4ffbb91d5f99618442",
+      "limitations": [
+        "Published documentation byte/scope/attribution readback only; no semantic/source/research/native/host/probe/test rerun.",
+        "No runtime, physical resource/cleanup enforcement, selected configuration, full topology, operational or Ready approval."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Concrete CPU/interrupt/scheduler/RCU gates and deferred EC/SC lifetimes only; whole physical peak and finite teardown remain pending",
+  "tool_history": "Author broad context rendering truncated; narrowed source DATA reads used. A guessed static inline preemption_point substring raised ValueError after other source functions printed, before writes; corrected actual static void declaration at cpu.hpp line241 before claims. A receipt Get-Content rendering exposed long source lines and truncated output; subsequent JSON-field rendering narrowed DATA. No runtime/source execution or product failure. Prior initial13 and combined17 source reports remain preserved in full."
+}

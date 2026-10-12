@@ -1,0 +1,123 @@
+{
+  "schema": "eq083.nova-kernel-progress-research.v1",
+  "bases": {
+    "equity-features": "59acd2454e2247f1f0283a862232a8a70da7bcc2",
+    "equity-feature-workers": "6368ca8725e497adc2e8b767ecf9975804bd61a0"
+  },
+  "source_metadata": {
+    "scope": "13 new selected CPU/execution/scheduling/timer source-text files as DATA; no source compile/import/execution or full kernel/config/binary/host/timing proof",
+    "kernel_commit": "b5177517cae440940348af0406903f607ea73a46",
+    "total_bytes": 111166,
+    "new_tests": 0,
+    "files": [
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "include/cpu.hpp",
+        "bytes": 9392,
+        "git_sha1": "29cec74dc4c8adf11ed22de99c10ad310b825cd4",
+        "sha256": "3fc890328b70558200269f330988f43c7640976559a34f836036c05b08c524b6"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "include/ec.hpp",
+        "bytes": 13919,
+        "git_sha1": "7c3acfc074bac3a5af26d1ae915408ca1adb0b43",
+        "sha256": "3ba130a227fad37c77260f4116f4f7d10e726112bffe581152dc9355c8169726"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "include/hazards.hpp",
+        "bytes": 1047,
+        "git_sha1": "cad54a55d06eec962e922a774fd5fc8233547313",
+        "sha256": "dbecb4d55a340b7ce110ab8698e340486f483937a4c2e9066e404049227bdf3c"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "include/hip.hpp",
+        "bytes": 5679,
+        "git_sha1": "0f2d342bdcea84332b73a22c3aca4fefbbfc5b94",
+        "sha256": "ad730e0d68c03a3fa3374c591858eda03c317e942cb4eea29e9319fadac18b44"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "include/lapic.hpp",
+        "bytes": 9116,
+        "git_sha1": "a8b85c103b6f00ff46a5a1f5816a238f28e9f169",
+        "sha256": "45841ff4bb8998d98ab66dbb671515b20d260225823d0f8142d5033ccd579507"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "include/sc.hpp",
+        "bytes": 3504,
+        "git_sha1": "a049fbf9997a3c8b6e41276545c7d3e68f18a4e5",
+        "sha256": "f715151fde399dcb18ec455f6b66a9a028df5c52bbeea1c09725518dabd939fd"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "include/timeout.hpp",
+        "bytes": 1245,
+        "git_sha1": "9571f80a2d51d81e5fc3ff54b28247eec73e0172",
+        "sha256": "c66d2627584ef585e8331d4fb3f8a21f99f8e2b434690efc995a87c1592474d2"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "src/cpu.cpp",
+        "bytes": 13572,
+        "git_sha1": "c17c63fb799c6493d845e99e9846441ac6d59881",
+        "sha256": "72ba9b0842ea5ac64cefdefd3daa2efdfd4a0d64dda41f7118239ea750f1bb39"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "src/ec.cpp",
+        "bytes": 21392,
+        "git_sha1": "6b15d03d59eb374f1066ddb16f78c5f477bad515",
+        "sha256": "f38981b205b6a162abe5fd935033b1fafb29c00799702af4ade2160b9619d15c"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "src/hip.cpp",
+        "bytes": 13142,
+        "git_sha1": "a826f74373763576bd28dd273372bd987b20d40b",
+        "sha256": "8ab0d66f4caafdee7bb046f3cbae09bf249d4b7a9098b66eb519a91bffae06c2"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "src/lapic.cpp",
+        "bytes": 9750,
+        "git_sha1": "1b6940371c7e73e9035b5aa1c09d0b2296aa7cad",
+        "sha256": "a3b554d66a413f829db70e8b67f5d68830fd8d8547fb3fe325c1225dbcb5f79e"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "src/sc.cpp",
+        "bytes": 7439,
+        "git_sha1": "2924e1b9a47969f6717a5ff48ca2bb920aa47737",
+        "sha256": "9ac5b00a04566276787dbace0abd930fcdc7db9f6377f65e0d14c8741731d2ce"
+      },
+      {
+        "repository": "https://github.com/alex-ab/NOVA",
+        "commit": "b5177517cae440940348af0406903f607ea73a46",
+        "path": "src/timeout.cpp",
+        "bytes": 1969,
+        "git_sha1": "4b104d00ceb5782354dda446f36015082b13f5fe",
+        "sha256": "dcaf18dd4279c3de7cd504a3132e78a65e37ec89c514e8ffd49ead4f132d9b1c"
+      }
+    ]
+  },
+  "new_tests": 0,
+  "scope": "13 selected immutable CPU, scheduler, execution and timer UTF8 source texts as DATA; not a complete timing, resource, patched vendor, configuration, binary or host proof",
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}
