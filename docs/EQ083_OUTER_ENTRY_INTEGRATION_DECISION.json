@@ -1,0 +1,43 @@
+{
+  "reviewer": "/root/r7_policy_review",
+  "heads": {
+    "equity-features": "affb13e58d4e031c9160fe9c3d821f4f5ed61f7c",
+    "equity-feature-workers": "737103edafcb225823df805d93826a3e12eed89b"
+  },
+  "disposition": "SOURCE_INTEGRATION_DECISION_ONLY_OPERATIONAL_PREREQUISITES_UNRESOLVED",
+  "new_operational_authorization": false,
+  "new_qualification": false,
+  "source_conclusion": "The separate capture emission resolves the self-hash/root-layout problem, but it cannot be the initial preimport authority gate: the5621 capture module imports five helpers from90045 core before its capture functions can run. A complete outer owner must independently verify and own all three literal source files and their already-authorized interpreter/stdlib/native boundary before normal module imports. Registering ModuleType objects or a token does not satisfy this prerequisite.",
+  "existing_source_can_supply": [
+    "WindowsHookChild60040 supplies mocked/reviewed suspended JOB_LIST/HANDLE_LIST launch, limits readback, borrowed-root duplication, cleanup settlement and retained handle boundaries; it does not issue host/native provenance or continuous writer authority.",
+    "OwnedHookBridge41378 supplies fixed original-source loader and bounded raw input/output adaptation; WindowsHookResultController supplies signalled retained process plus jobactive0 before/after raw output validation. Neither admits the parent or child import environment.",
+    "Framework90045 and collector13978 supply byte-map/bootstrap/temp-event/capture semantics; capture5621 is a separate third file that leaves the old two-file framework root unchanged. fixed_bootstrap_child_sequence still explicitly expects an unimplemented issuer and registered loader.",
+    "Existing source-only source-sdist gate/materializers and raw24-operation ledger can be wired into one fixed transaction with no default extractall, ambient runner or wheel-form replacement. Their expected maps and physical roots must be issued externally to those operations, not accepted from arbitrary callers."
+  ],
+  "finite_next_source_package": [
+    "One externally pinned owner manifest and one controller/outer-entry transaction source, covering exact selected OS/interpreter/form, project/source/archive identities, all root roles, fixed CLI/environment, callback identities, allowed imports/writes and per-operation resource caps. Keep any absent authority input a hard denial; no supplied PASS map or admission boolean.",
+    "Implement a minimal preimport raw-file/owned-root verification phase in the outer owner before loading core, collector or capture. Then load only those exact files, register the actual fixed pip loader in the issuer namespace and call existing capture/child sequence. Source review can check this ordering and failure graph with fakes; it cannot supply physical evidence.",
+    "Integrate the reviewed launcher, bridge and result controller with the exact24 hook ledger, whole raw reply validation before set conversion, sdist whole-member gate before materialization, selected-sdist repeat-wheel provenance, and all failure stop/settle/handle-close/nofollow-root-cleanup paths. Freeze the actual outer entry, rather than another isolated registered-token wrapper.",
+    "Review that whole source package once with end-to-end synthetic failure injection. Leave its operational admission denied until every missing physical prerequisite below is resolved; do not run bootstrap, hooks or R04/R05/R07 merely because isolated source helpers are approved."
+  ],
+  "unavoidable_missing_prerequisites": [
+    "Strict Windows discovery remains NONADMITTED: unresolved mapped backing identities and observed full metadata drift have not become a trusted physical file/native resolver contract. Discovery records and source hashes cannot replace that contract.",
+    "The424 native declaration outputs remain independently UNVERIFIED after automatic safety-review rejection. Do not reattempt the rejected binary operation or relabel saved JSON/receipt-map evidence as native truth. Complete native DLL/API-set/SxS/ELF/symbol-provider closure is consequently unavailable under the present evidence and constraints.",
+    "No named existing Linux3.12.10 host has been selected/admitted; Linux remains false. Windows source mocks cannot supply Linux physical interpreter/native evidence.",
+    "Every actual parent/child interpreter, stdlib/importer, selected distribution and vendored namespace requires immutable provenance and resolver/source-origin authority before operation. Accepted archive facts do not prove fresh installed-host mappings or future dynamic import resolution.",
+    "Existing CPU/job-memory/process limits and bounded I/O do not enforce all requested continuous filesystem writers, disk/handle/IPC/resource ownership. The supported enforcement boundary and complete residual/failed-attempt cleanup need a concrete source and physical contract.",
+    "Original selected source-sdist/generated member maps and repeat-built-wheel identities, actual fresh bothOS/four-form results and full24/seven-Ready evidence remain pending. R07 and mismatch parent source approvals are not actual qualification."
+  ],
+  "decision": "Stop adding isolated source wrappers. The next useful source change is the single integrated controller/outer-entry/owner-literal transaction with explicit preimport dependency ordering and hard-denied missing physical contracts. It can advance implementation review, but cannot truthfully authorize execution or claim a complete issuer under current prerequisites. If the requirement remains whole physical native authority before every operation, the evidence constraints must be resolved explicitly; no source-token construction can remove the conflict.",
+  "continuous_writer_resource_boundary": {
+    "existing_windows_primitive_sufficient": false,
+    "source_basis": "Implemented WindowsHookChild job flags/readback cover CPU time, active processes, job memory and kill-on-close. HANDLE_LIST fixes inherited handles. No code in this boundary enforces cumulative storage bytes/file count or denies writes by processes outside the job. Endpoint captures and supplied temporary events are observations, not enforcement.",
+    "source_implementation_still_possible": "Freeze a concrete additional OS confinement/storage-enforcement mechanism and integrate it into the one outer-entry package: exact allowed identity/root namespace, continuous write/file-count/byte limits, outside-writer exclusion, accounting/denial and all-failure residual cleanup. No particular new mechanism has been selected or proved by this review.",
+    "positive_operation_boundary": "A positive path under the full requested contract requires that additional frozen mechanism plus reviewed physical admission and applicable operational authorization. Existing source approvals and readonly baseline authorization do not supply it; remain denied rather than invent a pass token."
+  },
+  "scope": [
+    "Read existing Git/workspace source text, JSON and prior integration-gap/self-hash reports only. No old audit, probe, checkpoint or helper rerun; no complete module import.",
+    "No actual observer/hash-baseline/archive/binary/native/API/host/process/filesystem capture/build/install/SDK/crypto/TLS operation. No rejected-task workaround or new operational grant.",
+    "EQ094 remains after actual EQ093 acceptance. This report neither changes status nor grants hosting or release authority."
+  ]
+}
