@@ -1,0 +1,833 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "FORTY_ONE_IMMUTABLE_PORT_PATCH_AND_SUPPORT_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+    "disposition": "PATCH_ORDER_AND_VCPU_EVENT_DRIVER_LIFETIMES_TRACED_WHOLE_RELEASE_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "source_receipt_sha256": "0e8423ad06297ffa862c654bf644b6776693285fa5492fdc57798c4643ee63dd",
+    "source_pins": [
+      {
+        "path": "repos/ports/src/virtualbox7/patches/audio.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/audio.patch",
+        "sha256": "0c9b6a3e682d1a3ba586392f486113368b888753757757d6353feafe2467be93",
+        "bytes": 1160,
+        "git_sha1": "d547b5860f6d94af8b4f77992781f84bd7af3cd0"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/avx.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/avx.patch",
+        "sha256": "92d5d0f7d0bcebbd63bbef0f11815d1ba35a2a2f78ba058e8e0f61dbca407c7e",
+        "bytes": 4048,
+        "git_sha1": "b2ee8806e41cd9cd9f64a3a54078106b6d09e292"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/devsvga.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/devsvga.patch",
+        "sha256": "22bcf4b66db9e1a59064a962c335b62aac04c71c3f13586cdbbad92f73ab9259",
+        "bytes": 380,
+        "git_sha1": "623d07fdfca2101c3f88492f2f4bc578b8190d60"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/disk_geometry.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/disk_geometry.patch",
+        "sha256": "f1f3f021235226a3b04e426510ab596c4b2a67e91b770d8291357682caec18c2",
+        "bytes": 894,
+        "git_sha1": "810f1ac5aa5f9456fb4469213b68801b9f0f4071"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/display.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/display.patch",
+        "sha256": "0443153a6b0ca96e72bca3986104c1dc9984c422c6537e7577f4639279b38212",
+        "bytes": 1700,
+        "git_sha1": "99eb820874c0232947435a71e9da9c50bee2dc41"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/drvtap.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/drvtap.patch",
+        "sha256": "138fa4c9cd00b9ff29635f9df64f720ad845d08e6f82ea7e7354728048d0e0ea",
+        "bytes": 1497,
+        "git_sha1": "71a1a120f38f8cc082eb66d38d13839968f38fa8"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/exec_state.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/exec_state.patch",
+        "sha256": "34548770008260b79c05b38ab939862c72b1cd32baab036b1eefbd0213dc366b",
+        "bytes": 1275,
+        "git_sha1": "59872e543bb775566d900bd80572f0c30523bdee"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/full_encrypted.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/full_encrypted.patch",
+        "sha256": "272be9d0bfbc44eed6581eb2ffeb014ac4240d0e6614874f291792261d1dabbc",
+        "bytes": 916,
+        "git_sha1": "3745881a46d630ab440094193d9e7c4812784be0"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/gcc14.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/gcc14.patch",
+        "sha256": "f96580ab2aeaa5111bf0257f6e68388e6bf24bc61951c118ca6aad687f0c79ed",
+        "bytes": 322,
+        "git_sha1": "905abca5d878de327cb026a03bb1c17b523af554"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/htype.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/htype.patch",
+        "sha256": "e3f923361114b7d15f0947e840e8c462e66c2ff6f624590a0e8eb3cb262f4f20",
+        "bytes": 862,
+        "git_sha1": "944fdf21f3fdc77a4bd88f9550a0aef811b0749b"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/ich9.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/ich9.patch",
+        "sha256": "73e4f6cdbae1286e120e0e004c0f0a0a44e8406b10540bf5a2c01ed13b91a19e",
+        "bytes": 874,
+        "git_sha1": "eac88de28890b94dc964744ba3084020b90ad18f"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/log_level.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/log_level.patch",
+        "sha256": "b058703d3406ea763026cd5613b72e21cd46086f71dea75f53b9d6c0675d6f8c",
+        "bytes": 709,
+        "git_sha1": "610240090ea71ae0794f711cd96517ad63aee792"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/mousebuttons.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/mousebuttons.patch",
+        "sha256": "c280559311478e66676e831e2f6c414a50e3ff86eb3a21647a1328cda625d6ab",
+        "bytes": 7582,
+        "git_sha1": "ac64984ca5a334f76e311986e921f73b4abb4ca2"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/native_api.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/native_api.patch",
+        "sha256": "279d5619dbe2edaf167bfd284b7b2d536361bc77dc8ad53b750a058262bb7f52",
+        "bytes": 305,
+        "git_sha1": "531e2986e17792e0c9517406b0a7a9da599a5f7a"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/network.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/network.patch",
+        "sha256": "9c169cecf9872771914f001122e4ed574d18b9d385687f09b61a33d88c0488c0",
+        "bytes": 5735,
+        "git_sha1": "839ca64ed2d194a3b666277c659f4d4c19300946"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/ohci.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/ohci.patch",
+        "sha256": "798846c0247049fdfe11fc8987355f71a7c97c5372357799bb40f44d6860bb60",
+        "bytes": 2230,
+        "git_sha1": "65e58d72f5e4bce1b11c88a34616772d91fe0e58"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/pdmdriver.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/pdmdriver.patch",
+        "sha256": "0fb835308b3593e102312694c17f15f172cd7c6d1c3c67284724fe17d114b834",
+        "bytes": 452,
+        "git_sha1": "d930d029188ddacdfa79b44842668d209eb614db"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/qemu-xhci.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/qemu-xhci.patch",
+        "sha256": "de0c335ae5d09d731f106614e9a0cf2129b97c6846852fd294dfa99f9ac47aed",
+        "bytes": 1315,
+        "git_sha1": "a91c33d18869445b3387b86ad2b3f205a1478498"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/rdrand.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/rdrand.patch",
+        "sha256": "6a1a750fddd5a1515370c5f77716fe3a3ff6582c1743ce86278c497bd650b917",
+        "bytes": 1372,
+        "git_sha1": "3d0dcffc11b3e9e5fa201f773d6b077b7010d666"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/rttimer.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/rttimer.patch",
+        "sha256": "92590caa10ab0a5b9c0becc2463b735b34b37d666527290d7ea560f850fce3a6",
+        "bytes": 1511,
+        "git_sha1": "4f903d324bf996e55f99a589e0f9cc5d147f975f"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/series",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/series",
+        "sha256": "39c35d3b0d4ab5f90a28be7519964cffa46caff5cd29201e19ce46f01a54e479",
+        "bytes": 457,
+        "git_sha1": "0d19e2a868e8686c3c28a48e0ff9615df72bca0a"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/setjmp.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/setjmp.patch",
+        "sha256": "e7d09c7308374d13364a28f48c6ca51e78719e71bcfeabc22ca1bfac78cb8628",
+        "bytes": 698,
+        "git_sha1": "ab31fca8f812506fb213e56889f6d8c5c47e571e"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/shaderlib.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/shaderlib.patch",
+        "sha256": "de0910be1f4aeec27613ab98f36264e0db032e040bc9425ca8cebe31c30a89c2",
+        "bytes": 1996,
+        "git_sha1": "0783a75d2c224156e8a24b39c9fbf62447e738b2"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/sharedclipboard.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/sharedclipboard.patch",
+        "sha256": "96aa911fca45457c1aaca6ec6da0c15faf7eda54a23a062a3ff4cdf8aa307537",
+        "bytes": 1394,
+        "git_sha1": "69507361cc35de4151b371fe5c4fe260e76b71cf"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/smp_sipi.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/smp_sipi.patch",
+        "sha256": "f3f8ef176c10a19999e25c4daa2183047ccea15aed7cfba30291fe03670ae297",
+        "bytes": 1249,
+        "git_sha1": "b2bfa41ed141bdc396c574992c55d8dc02d2d882"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/stack_size.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/stack_size.patch",
+        "sha256": "e434615efb67b57ade7f142c27460c10672e8308498bdf0befdb2d7cd87a33ca",
+        "bytes": 926,
+        "git_sha1": "480a572ccc7925808dad334790d3b8861455f80c"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/sup_ioctl_query_func_size.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/sup_ioctl_query_func_size.patch",
+        "sha256": "4b3d02e7f3b8956127aea9e797e44cad466bec2c9b56bc6dda60cc2e2309c952",
+        "bytes": 947,
+        "git_sha1": "31779bb471e87385248b0953c18b59bebaf8de69"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/tm_poke.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/tm_poke.patch",
+        "sha256": "e1aa5ce2134960c0c79a7a8d417f78b01ddd83a312aab2523babf4dab0bcf3dd",
+        "bytes": 5336,
+        "git_sha1": "1ac7b6be3f3a9742685a33dec404a13a4b406a8e"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/tpm.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/tpm.patch",
+        "sha256": "610e1d1a8d4426b071a628447954e3377e79a27d9e5e2d2ce95e5eec4866594c",
+        "bytes": 1951,
+        "git_sha1": "12872b1275295a985e363efdd2dc1e71d2e7aa54"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/tsc_mode.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/tsc_mode.patch",
+        "sha256": "70dbdfdcb939f22e0a432c549c74685f2fc4eafc7f30d3e316bd521e40e3f38e",
+        "bytes": 559,
+        "git_sha1": "3ea6212ec651add378efa181d682f433d05a2771"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/patches/vmdk.patch",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/vmdk.patch",
+        "sha256": "ea56c14c98ca77e56f9d564b471ea8af08d741171de862b678ea664997d77254",
+        "bytes": 718,
+        "git_sha1": "c26a41896b87c4116b8935a5f651ca06f91ae19c"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/drivers.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/drivers.cc",
+        "sha256": "389393126e15cf4d1b0acdf65f17cef032aa0fa2e9210ba6faa759fb48ad0167",
+        "bytes": 1439,
+        "git_sha1": "bf4b101fe11262ce363c7ee3369cb6b145fb0379"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/pdm.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pdm.cc",
+        "sha256": "8e3d201486c920aa03033b22c6b578e7caa15522825da4547c1fcde6709f5b7e",
+        "bytes": 3646,
+        "git_sha1": "7101caab9c5bc4fc1d5a8aadc13727c9a35541c8"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_drv.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_drv.cc",
+        "sha256": "348728e59f49a9ffd1ca96832164c5925f355b8d0c4da4bec019de6b8a171d2a",
+        "bytes": 1608,
+        "git_sha1": "891c54c0958c070935d4d778323f644546b916f9"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_sem.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_sem.cc",
+        "sha256": "3b6e0b1143cf2360e80ba042ba885fd7f05483d593f457ffa81294ddf6e7843b",
+        "bytes": 3565,
+        "git_sha1": "ff47155d6112782d2aa9f1274884a79c15a627a0"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_vcpu.cc",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vcpu.cc",
+        "sha256": "129077d85c5b9e71149873be032bb9f009212ffbc8b4d22cd27500e20be0090b",
+        "bytes": 23875,
+        "git_sha1": "d8f0f0ba0a5e1bdbe49b8fae8190e8a90881bd43"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_vcpu.h",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vcpu.h",
+        "sha256": "f3d09828e0c4891b9450bbc9fb5a9ecc0d64494f0c6dbf7b4243c54f2734f66d",
+        "bytes": 1158,
+        "git_sha1": "e8a274c30a8c3d42f704f4e969c0aa23befdf73a"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/stub_macros.h",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/stub_macros.h",
+        "sha256": "53007ef2cff868bbc62b5a8d3bdee887465b91e3d482df99999989e1d6900670",
+        "bytes": 929,
+        "git_sha1": "3b5bceb13a23d52e1052fd391d30d060ac350573"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/attempt.h",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/attempt.h",
+        "sha256": "a1a0bf08ad66430c36c9699bb36b4242324234871f230df030b2086ec735c4ed",
+        "bytes": 788,
+        "git_sha1": "9937ff3bef100a388d8f17e0aa0a7cbe22f368b2"
+      },
+      {
+        "path": "repos/ports/lib/mk/spec/x86_64/virtualbox7-storage.mk",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/lib/mk/spec/x86_64/virtualbox7-storage.mk",
+        "sha256": "4dc9e00121075684f6448467bb8057a753d9eda850206cdc48409913bcd4ee6b",
+        "bytes": 212,
+        "git_sha1": "a123be05b3fa1e052ed895e83edf17f3e6a537d9"
+      },
+      {
+        "path": "repos/ports/lib/mk/spec/x86_64/virtualbox7-runtime.mk",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/lib/mk/spec/x86_64/virtualbox7-runtime.mk",
+        "sha256": "bd6dfe5c24005d48b8ba6bb60f8aee71bc4016e67e8635f29ab02600a0b15ff3",
+        "bytes": 8201,
+        "git_sha1": "18bed3662109071192acce27e1f55ee134e473cf"
+      }
+    ],
+    "total_bytes": 96791,
+    "patch_series_order": [
+      "drvtap.patch",
+      "qemu-xhci.patch",
+      "network.patch",
+      "smp_sipi.patch",
+      "tm_poke.patch",
+      "exec_state.patch",
+      "rttimer.patch",
+      "devsvga.patch",
+      "shaderlib.patch",
+      "audio.patch",
+      "sup_ioctl_query_func_size.patch",
+      "disk_geometry.patch",
+      "stack_size.patch",
+      "avx.patch",
+      "rdrand.patch",
+      "mousebuttons.patch",
+      "log_level.patch",
+      "vmdk.patch",
+      "setjmp.patch",
+      "display.patch",
+      "gcc14.patch",
+      "tsc_mode.patch",
+      "htype.patch",
+      "native_api.patch",
+      "full_encrypted.patch",
+      "pdmdriver.patch",
+      "tpm.patch",
+      "ich9.patch",
+      "ohci.patch",
+      "sharedclipboard.patch"
+    ],
+    "facts": [
+      {
+        "fact": "All30named patch files match the saved series ordering and immediate31-text patch-directory inventory. Exact text identities are verified; patches were not applied, compiled or reconciled with full original vendor files. Patch completeness in this directory is not full effective build/configuration/license or ABI closure.",
+        "paths": [
+          "repos/ports/src/virtualbox7/patches/series"
+        ]
+      },
+      {
+        "fact": "Selected patches change guest CPU feature handling, EMT stack from1MiB to1MiB-minus16KiB, Genode setjmp selection, minimum query-function structure size and native-API support declaration. These affect actual port ABI/runtime geometry and must be joined to exact compiler/vendor/configuration sources; neither a flag nor declared support proves our guest/native artifacts.",
+        "paths": [
+          "repos/ports/src/virtualbox7/patches/avx.patch",
+          "repos/ports/src/virtualbox7/patches/rdrand.patch",
+          "repos/ports/src/virtualbox7/patches/stack_size.patch",
+          "repos/ports/src/virtualbox7/patches/setjmp.patch",
+          "repos/ports/src/virtualbox7/patches/sup_ioctl_query_func_size.patch",
+          "repos/ports/src/virtualbox7/patches/native_api.patch"
+        ]
+      },
+      {
+        "fact": "Patches add forced-action CPU pokes, implement timer-interval change with callback-local update or stop/start, broaden NEM notification beyond selected remote-state tests, force WAIT_SIPI transitions and exclude native-API TSC mode on Genode. These are event/timing behavior, not numeric latency, callback cancellation or finite whole teardown guarantees.",
+        "paths": [
+          "repos/ports/src/virtualbox7/patches/tm_poke.patch",
+          "repos/ports/src/virtualbox7/patches/rttimer.patch",
+          "repos/ports/src/virtualbox7/patches/exec_state.patch",
+          "repos/ports/src/virtualbox7/patches/smp_sipi.patch",
+          "repos/ports/src/virtualbox7/patches/tsc_mode.patch"
+        ]
+      },
+      {
+        "fact": "Disk geometry is calculated instead of using the BIOS geometry query branch. VMDK patch removes FreeBSD-specific raw descriptor/image paths on Genode. Storage makefile includes vendor Storage cpp files except VDIfTcpNet. Full format/provider/cache/async I/O constructors and frees remain outside these selected text snippets; no continuous bytes/nodes/retired-object quota is established.",
+        "paths": [
+          "repos/ports/src/virtualbox7/patches/disk_geometry.patch",
+          "repos/ports/src/virtualbox7/patches/vmdk.patch",
+          "repos/ports/lib/mk/spec/x86_64/virtualbox7-storage.mk"
+        ]
+      },
+      {
+        "fact": "Audio patch disables a recording-start read section; network adds receive-readiness callbacks and early driver attachment; OHCI adds an operational bus-stop PowerOff callback and Genode request processing; shared clipboard conditionally skips a data-event signal, with reference/lifetime concerns documented in the patch. These are source comments/behavior changes, not executed failures or proof all queues, events and external writers drain.",
+        "paths": [
+          "repos/ports/src/virtualbox7/patches/audio.patch",
+          "repos/ports/src/virtualbox7/patches/network.patch",
+          "repos/ports/src/virtualbox7/patches/ohci.patch",
+          "repos/ports/src/virtualbox7/patches/sharedclipboard.patch"
+        ]
+      },
+      {
+        "fact": "vCPU owns a VM-connection wrapper and halt-event handle, creates the event and switches to hardware at construction. Pause posts an exit signal or marks forced flags; halt waits at least1ms and resets its event, wake signals it. Exit constructs a temporary state reference across an EMT switch then destructs that reference. No explicit derived destructor/release method here closes the halt event or proves VM-session detached/quiescent; member/base/vendor destroy paths remain to trace. This is missing closure, not a demonstrated leak.",
+        "functions": [
+          "Sup::Vcpu_impl::_handle_exit",
+          "halt",
+          "pause",
+          "wake_up",
+          "run",
+          "Vcpu_impl",
+          "create_vmx",
+          "create_svm"
+        ],
+        "paths": [
+          "repos/ports/src/virtualbox7/sup_vcpu.cc",
+          "repos/ports/src/virtualbox7/sup_vcpu.h"
+        ]
+      },
+      {
+        "fact": "Semaphore create/close/signal delegate to IPRT event functions. Multi wait translates milliseconds and indefinite sentinel to relative interruptible flags; relative nanoseconds are converted to milliseconds. Several nanosecond wait variants use STOP, which logs/backtraces then sleeps forever. A supported selected call graph must exclude or control those paths; timeout/resolution constants do not establish cancel/drain/destruction of all workers. No such path was run.",
+        "paths": [
+          "repos/ports/src/virtualbox7/sup_sem.cc",
+          "repos/ports/src/virtualbox7/stub_macros.h"
+        ]
+      },
+      {
+        "fact": "PDM maps known registration symbols to statically linked drivers, with dummy success registrations for some modules; unexpected RC symbol enters a loop and R0 dummy asserts. Driver registry includes disk/SCSI/DVD/network/audio/USB/pipes/TCP/UDP/rawfile/serial/TPM paths. Missing CPU frequency sleeps forever, virtualization selection uses platform ROM, and attempt throws Fatal on failed HRESULT. Registration/status checking does not prove every callback lifetime, actual supported feature path or cleanup.",
+        "paths": [
+          "repos/ports/src/virtualbox7/pdm.cc",
+          "repos/ports/src/virtualbox7/drivers.cc",
+          "repos/ports/src/virtualbox7/sup_drv.cc",
+          "repos/ports/src/virtualbox7/attempt.h"
+        ]
+      },
+      {
+        "fact": "Runtime composition selects upstream generic/common, POSIX file/async/thread/event/native-loader and FreeBSD memory sources, with explicit filters. This gives concrete next dependencies for event/thread/file teardown, but their complete bodies and provider backends are not present. Full vendor runtime cannot be inferred from makefile filenames.",
+        "paths": [
+          "repos/ports/lib/mk/spec/x86_64/virtualbox7-runtime.mk"
+        ]
+      }
+    ],
+    "source_inventory_summary": {
+      "combined_partial_bytes": 498502,
+      "new_text_bytes": 96791,
+      "prior_partial_files_context_only": 55,
+      "complete_vendor_closure": false,
+      "combined_partial_files": 96,
+      "prior_partial_bytes": 401711,
+      "new_files": 41
+    },
+    "conclusion": "The exact patch series and selected support code expose real port-specific ABI, notification, storage and vCPU/event lifetimes. Neither complete patch-directory reading nor pause/timeout/status supplies applied vendor semantics, whole resource conservation or bounded cleanup. Underlying VM connection, IPRT workers/events, device callbacks and storage providers must join the same kernel/core/RCU owner graph.",
+    "remaining_obligations": [
+      "Reconcile exact ordered patches with permitted original vendor source and generated/build configuration before interpreting effective ABI or library/lifetime behavior.",
+      "Trace actual VM_connection vCPU destructor/session detach, halt-event destruction, full vendor VM destroy and pthread/IPRT worker/event queues including failure and partial initialization.",
+      "Close all registered device, async storage, clipboard/network/USB and provider callback ownership with reserved resources and finite supported cancellation/drain/release.",
+      "Prove complete kernel/core/GMM/session/driver/provider budget conservation including retained/deferred backing and outside writers, then exact guest/interpreter/native fourforms/source-build-ABI-resolver-license closure."
+    ],
+    "limitations": [
+      "Only41newsaved UTF8 source texts were read and independently hashed as DATA; no code compile/apply/import/execute, vendor/archive/binary/image/kernel acquisition, build/boot/install/native API/process/VM/host/probe/test.",
+      "Prior55texts not rehashed or rereviewed;96PARTIAL498502bytes are not whole vendor/applied patch/configuration/ABI/binary/guest/license/host/provider closure.",
+      "Source STOP/assert/loop/error branches and comments are not actual runtime failures, attacks, leaks or universal incompatibility/impossibility.",
+      "No dependency/topology/configuration selected, no Ready/operations/new mandatory owner input. Rejected binary task not reattempted."
+    ],
+    "tool_only_history": [
+      "Batched source read output truncated; explicit narrow vCPU/semaphore/patch ranges supplied relevant bodies before conclusions."
+    ],
+    "operational_authorization": false,
+    "ready_approval": false,
+    "selected_mechanism": false
+  },
+  "full_prior_vmm_graph_reports": {
+    "eq083-vmm-graph-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "SIXTEEN_IMMUTABLE_GENODE_VMM_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+      "disposition": "CURRENT_VMM_BUILD_ROUTES_ALLOCATION_AND_EXIT_PATHS_TRACED_WHOLE_SUBSYSTEM_PENDING",
+      "findings": [],
+      "newtests": 0,
+      "new_tests": 0,
+      "repository": "https://codeberg.org/genodelabs/genode",
+      "research_release": "26.08",
+      "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "source_receipt_sha256": "63c2c8db89a299f050499807cbc8deedb8feded620d624a0bbc7d6e21722d89c",
+      "source_pins": [
+        {
+          "git_sha1": "104d7a8a0123bf277f45fbb65bee6b3b68a23ae2",
+          "sha256": "e88520dbd9efd0967bba0575e611788ce7c7657859617e301bc5b1576affacf9",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/ports/virtualbox7.port",
+          "path": "repos/ports/ports/virtualbox7.port",
+          "bytes": 16448
+        },
+        {
+          "git_sha1": "e36550b01cf61b9220b801ffba91c5d285215917",
+          "sha256": "afab2b665724c50268034f23275769f1c1956750b589f8efcbf51b3cd99bb5d8",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/ports/virtualbox7.hash",
+          "path": "repos/ports/ports/virtualbox7.hash",
+          "bytes": 41
+        },
+        {
+          "git_sha1": "b4788b01d885cf0933cb6fb4f9453a6b5dc0094d",
+          "sha256": "0eb471978fbd2d651c97093c6e3284be03ea406b96eef47a0ca1bd4343f871b2",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/README",
+          "path": "repos/ports/src/virtualbox7/README",
+          "bytes": 2212
+        },
+        {
+          "git_sha1": "34c99174c0e1f4fc87eb6f59001c80bd581c2ebf",
+          "sha256": "0894b818737d01d3cd7548c0a8773575d3fb8638ed24c8f36d49347cb3ffa17f",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/target.mk",
+          "path": "repos/ports/src/virtualbox7/target.mk",
+          "bytes": 2110
+        },
+        {
+          "git_sha1": "9cad938271a8d1ae18dac9fac106743d29a84910",
+          "sha256": "14e729a547177b04d667e75367821b9b9ba6322864f2beec8ce889665f69be77",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/lib/mk/virtualbox7-common.inc",
+          "path": "repos/ports/lib/mk/virtualbox7-common.inc",
+          "bytes": 5683
+        },
+        {
+          "git_sha1": "8dd9af9beccb23e522c7ebcb81386a96276aa65d",
+          "sha256": "4f4257003115e8361b021f575ecbd4b03d393edcc1ca7aeebb50c51032fb2b71",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/run/virtualbox7.run",
+          "path": "repos/ports/run/virtualbox7.run",
+          "bytes": 8773
+        },
+        {
+          "git_sha1": "81da6134488052146239da2e81684247ec3aafd0",
+          "sha256": "35055abef5e86ca094db294b3bd1fad701c5d8189645b748687180754a11695d",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/run/virtualbox7.vbox",
+          "path": "repos/ports/run/virtualbox7.vbox",
+          "bytes": 3263
+        },
+        {
+          "git_sha1": "d139bd9eaac407ab85d278cb4e8b45fc42ba90d9",
+          "sha256": "f9ab63f0c7c8b73bec92af2e52988da5a5eca65e7ee675d0c76c6ec741eb7112",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/main.cc",
+          "path": "repos/ports/src/virtualbox7/main.cc",
+          "bytes": 23834
+        },
+        {
+          "git_sha1": "a6cbfe63c4512887ea1d38b8eb4d97ca880f2de3",
+          "sha256": "7c1e1f49cc820617c100a5bf41b15ecb397436fd4cd10c3d5787640768a6d809",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_gmm.cc",
+          "path": "repos/ports/src/virtualbox7/sup_gmm.cc",
+          "bytes": 6183
+        },
+        {
+          "git_sha1": "c0fa586993a1062d312276fe4820967fa0ad553b",
+          "sha256": "79671984ab34b26d2c901e558a9daa27f9cf9a7e235a90d88645c518c5fefa9a",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_gmm.h",
+          "path": "repos/ports/src/virtualbox7/sup_gmm.h",
+          "bytes": 4974
+        },
+        {
+          "git_sha1": "ea47bce66a69d0d89d6510455b651f9c4dc155cc",
+          "sha256": "246f54d02efa8dba3fc85ee626d801f8935ee96ee1edd4341dce86571b207b10",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vm.cc",
+          "path": "repos/ports/src/virtualbox7/sup_vm.cc",
+          "bytes": 2851
+        },
+        {
+          "git_sha1": "4b251cbabfff6a40e22a6e62e04a02aa8809d5d0",
+          "sha256": "4949648a74fd33b5e6679d2458a175d1cc24e39157550529a66ab334e676de70",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vm.h",
+          "path": "repos/ports/src/virtualbox7/sup_vm.h",
+          "bytes": 1103
+        },
+        {
+          "git_sha1": "1c076294ade0a9bd9dc4d78fc20e52565593e39e",
+          "sha256": "75ad4a546609d8cac169305d53ed27df84afb64d76fecfa1874d61cd4fb95204",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pthread.cc",
+          "path": "repos/ports/src/virtualbox7/pthread.cc",
+          "bytes": 6532
+        },
+        {
+          "git_sha1": "bfb1cec714a7019d65effd38605052484696e330",
+          "sha256": "986b88bfb00f9c8eebb819cf81cc06e810c53a33e5b1a724023ed02867e89bfd",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pthread_emt.h",
+          "path": "repos/ports/src/virtualbox7/pthread_emt.h",
+          "bytes": 691
+        },
+        {
+          "git_sha1": "ebd5d54be983abcc9ca2452798387644b263c226",
+          "sha256": "d27b42ea039fb5d7513844a7b00a3aeae739e03a0662b1e9eb8b965f856b68b6",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/services/services.cc",
+          "path": "repos/ports/src/virtualbox7/services/services.cc",
+          "bytes": 1194
+        },
+        {
+          "git_sha1": "01c9e4066aabf7fd0fc55384955ba88e691f6c47",
+          "sha256": "ae9449f0c9943b91dd59636251f7ef4c32dbf9eea1074e744be1fc5450d56a00",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/libc.cc",
+          "path": "repos/ports/src/virtualbox7/libc.cc",
+          "bytes": 3163
+        }
+      ],
+      "total_bytes": 89055,
+      "facts": [
+        {
+          "paths": [
+            "repos/ports/ports/virtualbox7.port",
+            "repos/ports/ports/virtualbox7.hash"
+          ],
+          "fact": "The port declares VirtualBox7.2.14/GPLv3, upstream VirtualBox-7.2.14.tar.bz2 SHA384f293184c52fd51bc941c17d753b4019446f53a6b07c828adfb3e61fe0a500 and SDK7.2.14-174565.zip SHA7f388e22957f126535df297a3a6f258b293a39b73548485ba3257141175a3189, source filtering/generation and local integration. The companion hash is a port identity declaration, not independently acquired archive or built binary proof. Per-file integration headers also declare GPLv2-or-later; complete license/distribution applicability is not settled."
+        },
+        {
+          "paths": [
+            "repos/ports/src/virtualbox7/target.mk",
+            "repos/ports/lib/mk/virtualbox7-common.inc"
+          ],
+          "fact": "Target requires x86_64 and composes many VMM/device/storage/runtime/crypto/TPM libraries. Flags include64bit guests, native NEM, asynchronous completion, shared clipboard, guest control, USB, hardware virtualization and EFI. Common include declares bundled dependency versions and FreeBSD libc headers. These are actual Genode build declarations, not proof every feature is enabled safely in a selected graph, libraries audited, or exact guest CPython/native forms compatible."
+        },
+        {
+          "paths": [
+            "repos/ports/run/virtualbox7.run",
+            "repos/ports/run/virtualbox7.vbox"
+          ],
+          "fact": "The run scenario gives vbox1 RAM3000M/caps1800 but routes VM and default services to parent, GUI/clipboard/report services through other components and optional NIC through a router. It uses ROM/TAR disk inputs, optional RAM overlay, log/RTC/pipe/serial endpoints. The sample Ubuntu_64 guest has RAM2048,two CPUs, writable shared-folder and bidirectional clipboard declarations. These sample numbers/routes are not our frozen closed owner subtree, a total resource bound, or a file/node quota."
+        },
+        {
+          "fact": "GMM uses128MiB RAM slices in a32GiB virtual map, with range-allocator metadata in a libc allocator. New slice attachment loops, requesting8KiB RM RAM or2caps on shortage; other errors free the new dataspace. Pool growth ignores shrink requests; _alloc_pages can grow/recurse after fragmentation. free returns a logical range to the pool, not its RAM dataspace. Fixed map geometry does not bound all VMM/RM/kernel/provider costs, and these retry paths do not contain independent deadlines.",
+          "paths": [
+            "repos/ports/src/virtualbox7/sup_gmm.h",
+            "repos/ports/src/virtualbox7/sup_gmm.cc"
+          ],
+          "functions": [
+            "Sup::Gmm::_add_one_slice",
+            "Sup::Gmm::_update_pool_size",
+            "Sup::Gmm::_alloc_pages",
+            "Sup::Gmm::free"
+          ]
+        },
+        {
+          "fact": "VM allocation creates a page-aligned variable CPU-sized VM structure and a separate SUPPAGE metadata array; CPU records and vCPU registration add ownership. Full upstream destruction and free callsites are not provided by this small wrapper. No absence of a local destructor is promoted to a demonstrated leak; original vendor, support and process/session teardown sources remain necessary.",
+          "paths": [
+            "repos/ports/src/virtualbox7/sup_vm.cc",
+            "repos/ports/src/virtualbox7/sup_vm.h"
+          ],
+          "functions": [
+            "Sup::Vm::create",
+            "Sup::Vm::init"
+          ]
+        },
+        {
+          "fact": "Emulation threads use dedicated entrypoints,64KiB entrypoint stack plus configured secondary EMT stack, construction signal and blocking completion wait. Factory retains registered entrypoints; other threads delegate to libc pthread creation. The inspected entrypoint destructor body is empty and this file provides no complete bounded pthread join/cancel/drain policy. Member/libc/upstream lifetimes must be traced; no actual hanging or leak was executed.",
+          "paths": [
+            "repos/ports/src/virtualbox7/pthread.cc",
+            "repos/ports/src/virtualbox7/pthread_emt.h"
+          ],
+          "functions": [
+            "Pthread::Entrypoint",
+            "Pthread::Factory::create",
+            "create_emt_thread",
+            "pthread_create"
+          ]
+        },
+        {
+          "fact": "Startup polls state while Starting with1000ms sleep and no local elapsed/count limit. A PoweredOff event removes capslock ROM/monitors and submits exit; exit reports to parent. This is an event/parent lifecycle, not an independent witness that all guest/device/threads/session/kernel/storage backing is released within a project deadline.",
+          "paths": [
+            "repos/ports/src/virtualbox7/main.cc"
+          ],
+          "functions": [
+            "Main::_power_up_machine",
+            "Main::_power_down_machine",
+            "Main::_handle_exit"
+          ]
+        },
+        {
+          "paths": [
+            "repos/ports/src/virtualbox7/services/services.cc",
+            "repos/ports/src/virtualbox7/libc.cc",
+            "repos/ports/src/virtualbox7/README"
+          ],
+          "fact": "Service integration stores environment access for shared objects. statfs delegates to statvfs but substitutes illustrative nonzero block/free values when underlying fields are zero and warns about bogus shared-folder values; it cannot attest a hard backing quota. README documents GUI sessions and secure-boot/NVRAM configuration, including Windows11 options. Those declarations neither select a guest nor validate exact native artifact forms, side-effect isolation or disk/node lifetime."
+        }
+      ],
+      "source_inventory_summary": {
+        "combined_partial_bytes": 401711,
+        "new_text_bytes": 89055,
+        "new_files": 16,
+        "prior_partial_files_context_only": 39,
+        "prior_partial_bytes": 312656,
+        "combined_partial_files": 55,
+        "complete_vendor_closure": false
+      },
+      "conclusion": "The exact Genode port declares a real x64 VirtualBox7.2.14 integration, but sample routes and allocations are not the proposed single closed provider/owner domain. RM upgrades, retained GMM backing, vendor/thread lifetimes and parent exit must join the previously identified kernel/core donation and RCU obligations. Stock sample budgets and reported filesystem free space cannot replace physical reservation and finite teardown.",
+      "remaining_obligations": [
+        "Freeze exact supported port/configuration, all linked vendor/library/device/upstream sources and build/ABI/license identities without acquiring or executing them under this research scope.",
+        "Replace sample outside routes with one supported complete authority graph or include every parent/sibling/broker in reservations and failure control; deny or fully account shared folders, clipboard, logs, network, devices and reconfiguration.",
+        "Close GMM/RM/kernel upgrades, aligned slices/metadata/stacks/VCPU/session overlap and whole-file/node/retired backing budgets before acceptance.",
+        "Trace actual full VM/thread/libc/device shutdown and process/session/RCU cleanup, finite startup and failure controller conditions; parent exit is not allfree evidence.",
+        "Establish exact Windows/Linux images and CPython3.12x64 wheel/sdist fourforms/native resolver/source build closure before Ready/operations."
+      ],
+      "limitations": [
+        "Only16new saved UTF8 source texts were independently hashed and read as DATA; no source compile/import/execution, archive/binary/VM/kernel acquisition, install, patch application, API/native/host/probe/test.",
+        "Prior39texts not rehashed or rereviewed;55PARTIAL401711bytes are not entire vendor/configuration/guest/native forms/ABI/license/binary/host proof.",
+        "Missing local deadline/full teardown closure is source scope, not observed resource failure, leak, vendor bug or universal impossibility.",
+        "No selected dependency/topology/guest, implementation, Ready/operational approval or new mandatory human input. Rejected binary task not reattempted."
+      ],
+      "tool_only_history": [
+        "Initial batched keyword/source reading output was truncated; explicit narrow ranges supplied the relevant allocation/configuration/lifecycle bodies. No source operation or runtime failure occurred."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false,
+      "selected_mechanism": false
+    },
+    "eq083-vmm-graph-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "bases": {
+        "equity-features": "93e682e9d6849fc3511c0a22b9ad14d9a31a3a6f",
+        "equity-feature-workers": "02cc8d569cbf0825097965f69d72edf1cf899a12"
+      },
+      "disposition": "APPROVED",
+      "findings": [],
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_VMM_GRAPH_RESEARCH.md": {
+            "bytes": 9372,
+            "sha256": "37171f6f3ead864de593ecde72e2e2250fceaf85249258195f5ca2e87e22887b"
+          },
+          "docs/stories/EQ-083_VMM_GRAPH_INPUTS.json": {
+            "bytes": 7255,
+            "sha256": "dccb1613a2f11a11a13514d715df06a153cca7f82d2820ce9d2cc9eadb96d470"
+          },
+          "docs/stories/EQ-083_VMM_GRAPH_EVIDENCE.json": {
+            "bytes": 36565,
+            "sha256": "4c63fb042c3dedd4da41a3d586c840cb4e5c0d949bf965224eae1984b40a5760"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 528919,
+            "sha256": "150ce6c70f0a4c24a2ecc29cb68c366b1aea0ab6476cd5b2df368cebb31eb732"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 788170,
+            "sha256": "c5e8092faa04971b99be82999862f3ebfaa6059387dfdfd6bc2920f5a6038a3e"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_VMM_GRAPH_RESEARCH.md": {
+            "bytes": 9372,
+            "sha256": "37171f6f3ead864de593ecde72e2e2250fceaf85249258195f5ca2e87e22887b"
+          },
+          "docs/EQ083_VMM_GRAPH_INPUTS.json": {
+            "bytes": 7255,
+            "sha256": "dccb1613a2f11a11a13514d715df06a153cca7f82d2820ce9d2cc9eadb96d470"
+          },
+          "docs/EQ083_VMM_GRAPH_EVIDENCE.json": {
+            "bytes": 36565,
+            "sha256": "4c63fb042c3dedd4da41a3d586c840cb4e5c0d949bf965224eae1984b40a5760"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 391588,
+            "sha256": "cc99d9d6d1d277ff199bc7ba7e66a33c47fcb39358fbc85b3b3e2e4085b7127b"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 502726,
+            "sha256": "48ce9dc5bb048a620dc2cf29dfb5cf5b97c5ddd5f6394ebf7f20f63c257f6039"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases and five documentation paths each; unchanged other tracked source/history and preserved continuity suffixes.",
+        "Three assets mirrored exactly; complete eight-fact source report and all embedded prior kernel-progress reports/tool history preserved.",
+        "All16metadata pins89055bytes match saved report;55partial401711 scope not complete vendor/binary/host closure.",
+        "Port/build/license/archive identities are declarations, not acquired artifacts or rights/ABI admission; sample budgets/routes do not become ONE closedgraph.",
+        "Retained GMM backing/RM upgrades/VM and secondary-stack constructor waits/startup polling/poweroff-parentexit are not finite allresource cleanup witnesses.",
+        "Private explicit configuration is labeled project inference, not already supported enforced policy; whole coreCPUdeviceproviderstorage/guest-nativeforms obligations remain pending.",
+        "No Ready/operations/implementation selection or mandatory new owner input; strict denied host/unverified binary histories retained."
+      ],
+      "limitations": [
+        "Saved source report reused; no new source text/research/rawhash/native/host/probe/test rerun.",
+        "Additional illustrative build/configuration labels in author prose do not supply independently measured effective configuration, current ABI or cleanup evidence.",
+        "New prepared commit attribution awaits final published readback."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-vmm-graph-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "640fc1dd2995515f765201d8f9603839d97fdeb7",
+        "equity-feature-workers": "729a635523e789a55e625e751200a1bc077fcc32"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_VMM_GRAPH_RESEARCH.md": {
+            "sha256": "37171f6f3ead864de593ecde72e2e2250fceaf85249258195f5ca2e87e22887b",
+            "bytes": 9372
+          },
+          "docs/stories/EQ-083_VMM_GRAPH_INPUTS.json": {
+            "sha256": "dccb1613a2f11a11a13514d715df06a153cca7f82d2820ce9d2cc9eadb96d470",
+            "bytes": 7255
+          },
+          "docs/stories/EQ-083_VMM_GRAPH_EVIDENCE.json": {
+            "sha256": "4c63fb042c3dedd4da41a3d586c840cb4e5c0d949bf965224eae1984b40a5760",
+            "bytes": 36565
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "150ce6c70f0a4c24a2ecc29cb68c366b1aea0ab6476cd5b2df368cebb31eb732",
+            "bytes": 528919
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "c5e8092faa04971b99be82999862f3ebfaa6059387dfdfd6bc2920f5a6038a3e",
+            "bytes": 788170
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_VMM_GRAPH_RESEARCH.md": {
+            "sha256": "37171f6f3ead864de593ecde72e2e2250fceaf85249258195f5ca2e87e22887b",
+            "bytes": 9372
+          },
+          "docs/EQ083_VMM_GRAPH_INPUTS.json": {
+            "sha256": "dccb1613a2f11a11a13514d715df06a153cca7f82d2820ce9d2cc9eadb96d470",
+            "bytes": 7255
+          },
+          "docs/EQ083_VMM_GRAPH_EVIDENCE.json": {
+            "sha256": "4c63fb042c3dedd4da41a3d586c840cb4e5c0d949bf965224eae1984b40a5760",
+            "bytes": 36565
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "cc99d9d6d1d277ff199bc7ba7e66a33c47fcb39358fbc85b3b3e2e4085b7127b",
+            "bytes": 391588
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "48ce9dc5bb048a620dc2cf29dfb5cf5b97c5ddd5f6394ebf7f20f63c257f6039",
+            "bytes": 502726
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git LF sizeSHA pins match reviewed_git_files and reviewed prepared bytes after only line-ending normalization; no CR.",
+        "Exact five documentation changes perrepo, direct reviewed parent bases and clean paired codex/eq083-resilience branches.",
+        "Three assets mirrored, exact old knowledge/handoff suffixes and other tracked source/history outside allowed paths unchanged.",
+        "Full Atul author and committer identity and no Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "3e900930408a29d99adaf9a5392f8c9128f4bf34fee28a4cc96c92585056d0a4",
+      "limitations": [
+        "Published docs readback only; no semantic/source/research/native/host/probe/test rerun.",
+        "No whole-topology, physical resource/cleanup enforcement, runtime/operational or Ready authority."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Complete immediate patch text order and selected runtime-storage-vcpu paths only; whole resource and compatibility closure pending",
+  "tool_history": "Author guessed source rendering upper line883 exceeded actual882lines, raising IndexError before prints/writes; corrected actual length and narrowed full vCPU functions before claims. Read-only directory metadata request yielded a shell session then completed normally. No source/native/product failure. No prior source rehash or probe rerun."
+}
