@@ -1,0 +1,88 @@
+{
+  "schema": "eq083-host-preflight-authorized-failure-v1",
+  "admitted": false,
+  "owner_authorization": "Owner directly replied yes please to scoped reviewed read-only preflight before Ready and actual fresh installation maps during Test after Ready, October11 2026 America/New_York",
+  "execution": {
+    "source_heads": {
+      "canonical": "d399a2a8f4602d5268cd9898384892244f584d23",
+      "worker": "34f58af3fe8555b80aeb6208b8748f333675f9cd"
+    },
+    "source_bytes": 30467,
+    "source_sha256": "713932e5ce0320213599ff7a213d683c3fdce727b64db0e26b91e4d4c2692d15",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Direct human reply yes please to reviewed readonly preflight before Ready and fresh installation maps during Test, October 11 2026 America/New_York",
+    "exit_code": 1,
+    "elapsed_seconds": 0.2559452,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 1522,
+    "stderr_sha256": "8f870c5e2c7ee081cb6c8ec2e1d687cc3ecb74fff2832e5213b77380b956b0af",
+    "admitted": false,
+    "scope": "Read-only Windows base host discovery; no Ready/form/resolver/security admission",
+    "interpreter": "Existing Windows CPython3.12.10 x64 base interpreter; direct -I-B-S, private exact path in invocation receipt"
+  },
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6115785490",
+  "diagnosis": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "d399a2a8f4602d5268cd9898384892244f584d23",
+      "equity-feature-workers": "34f58af3fe8555b80aeb6208b8748f333675f9cd"
+    },
+    "source": {
+      "bytes": 30467,
+      "sha256": "713932e5ce0320213599ff7a213d683c3fdce727b64db0e26b91e4d4c2692d15"
+    },
+    "disposition": "DIAGNOSED_FAILED_INCOMPLETE",
+    "findings": [],
+    "exit_code": 1,
+    "elapsed_seconds": 0.2559452,
+    "raw_log_sha256": "8f870c5e2c7ee081cb6c8ec2e1d687cc3ecb74fff2832e5213b77380b956b0af",
+    "evidence": {
+      "invocation_receipt_bytes": 983,
+      "invocation_receipt_sha256": "54da7370e0477f41a2fad1c3be20ffe2cec617b9c55bb6c6449584afbf638aa3",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 1522,
+      "stderr_sha256": "8f870c5e2c7ee081cb6c8ec2e1d687cc3ecb74fff2832e5213b77380b956b0af",
+      "failing_function": "windows_sections",
+      "source_line": 372,
+      "api": "K32GetMappedFileNameW",
+      "return_value": 0,
+      "win32_error": 1006,
+      "phase": "first native observation, before backing-file SHA and Python-origin phases"
+    },
+    "diagnosis": {
+      "established": "First section walk filename query failed and source propagated the Windows API error exactly through windows_coverage / observe_windows_sections / discovery. The current source deliberately refuses unresolvable image/mapped sections including unsupported reserved/pagefile mappings.",
+      "not_established": [
+        "Exact failing section address, allocation/state/type/protection or backing path.",
+        "Whether error describes an actual changed filesystem volume, unsupported section category, mapping race or other host condition.",
+        "A accepted product defect or a required relaxation of whole-map coverage.",
+        "Any completed host-discovery report, backing-file SHA phase, cleanup proof, admission or PASS."
+      ],
+      "correction_proposal": "Freeze a narrow source-only diagnostic branch that captures get_last_error immediately when mapped returns zero, records bounded primitive current query address/section fields and API/error stage to private stderr, then raises/fails unchanged. Never skip unresolved rows or emit an admitted/complete map. Source review must precede any new authorized observation; no unchanged retry recommended."
+    },
+    "primary_source": {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-getmappedfilenamew",
+      "claim": "The API checks whether an address is in a memory-mapped file; zero means failure and GetLastError supplies extended error information. This contract does not classify the observed section or establish filesystem cause from error text alone."
+    },
+    "checks": [
+      "Verified preserved invocation/source identities and exact raw stderr/stdout lengths and SHA256; immutable Git source AST parsed, failing call/zero-return/last-error line verified.",
+      "Inspected section_row semantics and first-observation call chain read-only; original source approval and failed invocation remain distinct."
+    ],
+    "tool_only_history": [
+      "Initial read-only guess eq083-host-preflight-windows-author.invocation.json was absent; rg selected actual eq083-host-preflight-windows-author-invocation.json. No API/source/product mutation.",
+      "Reviewer diagnostic used a wrong neighboring line offset; corrected to exact bounded source branch search while retaining verified failing line372. Source-only assertion failure, no product/runtime invocation."
+    ],
+    "limitations": [
+      "Read-only source/log/receipt diagnosis only. No observer/platform/preflight/process/native invocation or unchanged rerun, whole-source/product/SSL/crypto/SDK import, installation/copy/setup actions.",
+      "Private raw paths, addresses, PID and traceback remain internal; public diagnosis must be sanitized.",
+      "Actual owner-authorized author run remains FAILED exit1/stdout0; no discovery/PASS/cleanup/admission/Ready/fresh-form/Linux/release inference."
+    ]
+  },
+  "scope": "Actual failed first Windows native observation, no discovery report or baseline hashes. No Linux/form/Ready/fullresolver/release admission.",
+  "next": "Publish and independently review bounded private mapping failure diagnostics then one changed-source scoped diagnostic invocation. No omission, retry, relaxation or unchanged rerun."
+}
