@@ -1,0 +1,110 @@
+{
+  "schema": "eq083.owner-authority-research.v1",
+  "bases": {
+    "equity-features": "dbe1e3e9c8926135cb84ab2b193c230a5bc929a4",
+    "equity-feature-workers": "09121e963596782de7c6fe1ff10e38917cdb770f"
+  },
+  "source_metadata": {
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "scope": "13 selected immutable descriptor/mapping/allocator/child/parent/connection/configuration texts as DATA only; not complete init policy, provider, kernel, vendor, build, guest ABI or finite physical teardown proof",
+    "total_bytes": 105707,
+    "new_tests": 0,
+    "files": [
+      {
+        "path": "repos/libports/src/lib/libc/internal/fds.h",
+        "git_sha1": "87c6fce2326004ed2cadb0b948e9ff1cde2ab4b4",
+        "bytes": 5418,
+        "sha256": "482916a030201609cae0e4ef4cd85086f4357953a4d906886bc883455f781f77",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/fds.h"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/fds.cc",
+        "git_sha1": "1e30485069abf13ded397123bee89c9cd9a469af",
+        "bytes": 1145,
+        "sha256": "a9dd5a8a285544e50f8f4fd31dd2bec1bcaf2d7cbd625653ceff74d202a8f053",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/fds.cc"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/internal/mmap_registry.h",
+        "git_sha1": "7a88a39f3d532860f661d3535a5eaf51e17baf58",
+        "bytes": 2646,
+        "sha256": "072ed11cd3479adb9812ee626106746780f1a4bf8f1bda106bd45c80ef7ba219",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/mmap_registry.h"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/internal/malloc_ram_allocator.h",
+        "git_sha1": "a5270b34eb03e1a073bec50cf293703a823e7e68",
+        "bytes": 1924,
+        "sha256": "5d121e17ee2c41a6af066eafeb8695e5067ff3c45ea5a99eb77f6d44dfe5da98",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/malloc_ram_allocator.h"
+      },
+      {
+        "path": "repos/libports/include/libc/allocator.h",
+        "git_sha1": "3bb1633b008fe126c325c229e35162f62362128f",
+        "bytes": 974,
+        "sha256": "7b4b5e9c68a53ce9be0ac47256c26f40fa5a3be6bf6ace2a4f6599a4fe88fee4",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/include/libc/allocator.h"
+      },
+      {
+        "path": "repos/base/src/lib/base/child.cc",
+        "git_sha1": "b08e4db7ba7e7bdb4d10c76faf318a3652a3099d",
+        "bytes": 30748,
+        "sha256": "8b3784854877db36b4ceb3a06f018723ba6410828ef74d2d1a52d1b5e29b4ab2",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/child.cc"
+      },
+      {
+        "path": "repos/base/src/lib/base/child_process.cc",
+        "git_sha1": "61aedf02cbe68fff70cdacac0b55fca64054d1b9",
+        "bytes": 6957,
+        "sha256": "1b75f9ebaf885eceae5657b589e1df72dc20fdf3852a1b5e595b3921fb010234",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/child_process.cc"
+      },
+      {
+        "path": "repos/base/include/base/child.h",
+        "git_sha1": "f3f383c4b6b5c56d55d1e532d936f849a9b1318b",
+        "bytes": 24857,
+        "sha256": "d7eea98923acc3b4c99fb7c901180b3196e78ef469d348ae1b88cc9c3bbfe758",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/child.h"
+      },
+      {
+        "path": "repos/base/include/base/connection.h",
+        "git_sha1": "11cf1e2fb2106749031a5401ac2910854393bd3d",
+        "bytes": 5723,
+        "sha256": "b9ef980709e58debcaf1b990c212740f44f8625122fe4d921c8ea9200d36ce6f",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/connection.h"
+      },
+      {
+        "path": "repos/os/src/init/main.cc",
+        "git_sha1": "40830045dd822ac203285688dadd8de641194502",
+        "bytes": 2511,
+        "sha256": "7d464e3c0ddac1e4a17467e57a2a5c7b590f4ac26c693eef8be35585a45b156f",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/init/main.cc"
+      },
+      {
+        "path": "repos/os/src/init/config.xsd",
+        "git_sha1": "7cd81ea39db6c7e22962933f3f967a10a9d0f933",
+        "bytes": 8118,
+        "sha256": "8fbae1eb5894151e794a7b7b012227dd3490f5fa3fd98f4d4d844999eb3a0d50",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/init/config.xsd"
+      },
+      {
+        "path": "repos/base/include/parent/parent.h",
+        "git_sha1": "efb2fbd0a6338d1687fcf44c179bda42f02ce566",
+        "bytes": 12195,
+        "sha256": "2843b48404408ddfaf9e1842eda2246b7888e3f513f3efdf13f2c1e345ce13bb",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/parent/parent.h"
+      },
+      {
+        "path": "repos/base/include/parent/client.h",
+        "git_sha1": "e160c4b938119ce828a7e1f8647ae4e40fcc5779",
+        "bytes": 2491,
+        "sha256": "56b92fd35b528c1570c20bc7717c1d59522efd6ed378f2fe62456f006d081ac8",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/parent/client.h"
+      }
+    ]
+  },
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}
