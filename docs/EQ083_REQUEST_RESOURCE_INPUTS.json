@@ -1,0 +1,45 @@
+{
+  "schema": "eq083.request-resource-source-research.v1",
+  "bases": {
+    "equity-features": "65802bca736681b85d2a5172bda09fd289761a45",
+    "equity-feature-workers": "e36b7e4988a1b4fdb6a1302ee681918258eba525"
+  },
+  "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+  "sources": {
+    "src/dll/fs.c": {
+      "bytes": 19225,
+      "git_blob_sha1": "a3549df4ddcca342b490d8304a3406a664a904ff",
+      "sha256": "6d57f68ff5cfabe90eade3ee230cd6a2a1ed155816c63125018195b8c61f79b8",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/dll/fs.c"
+    },
+    "src/dll/fsctl.c": {
+      "bytes": 30977,
+      "git_blob_sha1": "b8df14738152fe05197fa12421337ae2457c4aae",
+      "sha256": "8a6356761209d9d16110be211d5deb5e8fec1e05a54ce0813bb4ce3b0f30519a",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/dll/fsctl.c"
+    },
+    "src/sys/fsctl.c": {
+      "bytes": 32318,
+      "git_blob_sha1": "37cdf89961b83edf94d0896d3a6d3f2206e9cacd",
+      "sha256": "a249e32a77f760f1ff80a6f4bb1b336ac572cfdfba14ef43842e6f2ec124b72f",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/fsctl.c"
+    },
+    "src/sys/ioq.c": {
+      "bytes": 26897,
+      "git_blob_sha1": "a7820bbf747705d689013c580dfd8e04a8a26ad0",
+      "sha256": "3d26fb9304f8e954a09ac65e51b1bc681e6f1150d790dd64acde80adc8d029c8",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/ioq.c"
+    },
+    "src/sys/volume.c": {
+      "bytes": 62359,
+      "git_blob_sha1": "02f15fe6d999472d078aaeb883f12b12235813ee",
+      "sha256": "d13842a6633c49383f5242f522984c72a8d66e35d4d6f5acf85ef1ae2b04e52c",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/volume.c"
+    }
+  },
+  "scope": "Five additional immutable upstream C TEXT identities; 15-file partial combined inventory730963bytes, not entire source/binary/ABI/host closure",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "dependency_selected": false,
+  "new_operational_authorization": false
+}
