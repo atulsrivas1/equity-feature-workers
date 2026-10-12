@@ -1,0 +1,32 @@
+{
+  "schema": "eq083.cleanup-lifetime-source-research.v1",
+  "bases": {
+    "equity-features": "136b0a748285792dd0a659c95852d79849aac808",
+    "equity-feature-workers": "1b96494af34490610b2feda4c61f0e39c7adaed0"
+  },
+  "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+  "sources": {
+    "src/sys/iop.c": {
+      "bytes": 14580,
+      "git_blob_sha1": "c00ac277dfc51d4173eba1ed9974de77423b874e",
+      "sha256": "ee03d709aeb017e4349733c7e1578bff430c592009f64d350c4086c20d5b7973",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/iop.c"
+    },
+    "src/sys/cleanup.c": {
+      "bytes": 9482,
+      "git_blob_sha1": "5ac3ffa06490206570bea5ede15eb4a28f9f8f66",
+      "sha256": "5c7c3e6eda7af609afdc873059e232093441cf119907c3a7acd22339f1e49a28",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/cleanup.c"
+    },
+    "src/sys/close.c": {
+      "bytes": 4809,
+      "git_blob_sha1": "b6999f0dcd5a4fa88c562c73a454cd945e9bada9",
+      "sha256": "6c0fbdc343c2618a3e08fd7d997807e1b94fc8b5be739cd7fdd08f1abad47712",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/close.c"
+    }
+  },
+  "scope": "Three new upstream C source TEXT identities only; 18-file combined partial inventory759834bytes NOTwhole vendor/build/ABI/native-host closure",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}
