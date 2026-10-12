@@ -1,0 +1,112 @@
+{
+  "schema": "eq083-host-preflight-diagnostic-execution-v1",
+  "admitted": false,
+  "disposition": "FAILED_INCOMPLETE_DISCOVERY",
+  "owner_permission": "Direct yes please: reviewed readonly baseline preReady and actual fresh installation maps duringTest afterguardedReady",
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6115909674",
+  "invocation": {
+    "source_heads": {
+      "equity-features": "67ed805295ffb7d728d0a6735fe8de73f582b439",
+      "equity-feature-workers": "9425df567c3ce4ff7485bcace88935685683ab07"
+    },
+    "source_bytes": 31037,
+    "source_sha256": "5bf64b4c41cb795c47c7009fbea05f9f655b5a68fd3834712ccdbde4bb74ca84",
+    "interpreter": "Existing Windows CPython3.12.10 x64 BASE, direct -I-B-S; exact private invocation path retained outsideGit",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Direct human yes please to reviewed readonly baseline preReady and actual fresh installation maps Test after Ready; bounded reviewed diagnostic correction same scope",
+    "exit_code": 1,
+    "elapsed_seconds": 0.2378337,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 1770,
+    "stderr_sha256": "1c94183bd989adfbd192524d7ebc0acdaedea977c404027519b5eda540235ecf",
+    "admitted": false,
+    "scope": "Readonly Windows baseline diagnostic; no product/form/resolver/Ready admission"
+  },
+  "independent_failure_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "67ed805295ffb7d728d0a6735fe8de73f582b439",
+      "equity-feature-workers": "9425df567c3ce4ff7485bcace88935685683ab07"
+    },
+    "source": {
+      "bytes": 31037,
+      "sha256": "5bf64b4c41cb795c47c7009fbea05f9f655b5a68fd3834712ccdbde4bb74ca84"
+    },
+    "disposition": "DIAGNOSED_FAILED_INCOMPLETE",
+    "findings": [],
+    "exit_code": 1,
+    "elapsed_seconds": 0.2378337,
+    "raw_log_sha256": "1c94183bd989adfbd192524d7ebc0acdaedea977c404027519b5eda540235ecf",
+    "evidence": {
+      "invocation_receipt_bytes": 1021,
+      "invocation_receipt_sha256": "8f1eca24bf5bb0e0e898719dfba59782da2c6423af41462ff9228563b241787d",
+      "stderr_bytes": 1770,
+      "stderr_sha256": "1c94183bd989adfbd192524d7ebc0acdaedea977c404027519b5eda540235ecf",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exception_notes": 1,
+      "json_note_bytes": 237,
+      "api": "K32GetMappedFileNameW",
+      "api_return": 0,
+      "win32_error": 1006,
+      "section_state": 4096,
+      "section_state_name": "MEM_COMMIT",
+      "section_kind": 262144,
+      "section_kind_name": "MEM_MAPPED",
+      "section_protect": 4,
+      "allocation_protect": 4,
+      "section_size": 4096,
+      "private_location_values": "Intentionally not copied to public-facing report; retained in internal raw diagnostic."
+    },
+    "diagnosis": {
+      "established": "At the first native capture, GetMappedFileName returned zero for one4096-byte committed mapped region with protection4/allocationProtect4. One bounded JSON note captures current primitive section metadata and API error1006; failed invocation produced no stdout or completed discovery.",
+      "not_established": [
+        "Backing filename, whether region is pagefile-backed or another mapping category, actual volume mutation or transient cause.",
+        "Identity/security/authority of the mapped object or complete inventory of all later mappings.",
+        "Completed backing-file hash or Python-origin snapshot phases, physical cleanup/PASS/discovery/admission.",
+        "A accepted product defect or justified exclusion from future authority closure."
+      ],
+      "next_source_design": "A separate explicitly nonadmitted discovery inventory may retain every unresolved region with its primitive query/section metadata and exact error in a closed unresolved classification. It must not omit entries, assert complete backing-file identity or mark inventory as trusted/admitted. Keep strict future issuer/resolver admission rejecting any unresolved or unauthorised mapping until a separately frozen reviewed resolution contract establishes identity and policy. Discovery failure diagnostics and admission semantics remain separate; no new invocation is proposed by this report."
+    },
+    "continuity": {
+      "original_failure_report": "eq083-host-preflight-windows-failure-reviewer-report.json",
+      "original_stderr_sha256": "8f870c5e2c7ee081cb6c8ec2e1d687cc3ecb74fff2832e5213b77380b956b0af",
+      "original_status": "FAILED/no discovery; unchanged",
+      "new_status": "Distinct reviewed diagnostic invocation FAILED/no discovery; original source approval and failed runs not counted as PASS."
+    },
+    "checks": [
+      "Verified exact source Git bytes/SHA/AST, invocation fullheads/sourceSHA/exit/time, stdout/stderr hashes/sizes, exactly one bounded exception note and complete closed primitive fields.",
+      "Captured query_address equals section base and scalar types exactint; location values remain private. No source/path/pagefile inference made.",
+      "Original failed evidence retained separately; diagnostic source review remains source-only."
+    ],
+    "limitations": [
+      "Read-only immutable source/log/receipt parsing only; no actual observer/platform/process/API/preflight/native/TLS rerun or source/product/SSL/SDK imports, setup/install/copy/probe.",
+      "Only one failing region captured; no complete or trusted host map, loaded-memory hash, resource/cleanup/security/locking/Ready/fresh-form/Linux/release proof.",
+      "Raw addresses and paths internal only. WinError text is not evidence of physical volume mutation."
+    ],
+    "tool_only_history": [
+      "Reviewer initially expected canonical/worker receipt labels; actual diagnostic receipt uses full repository keys. Corrected exact shape and checked both fullheads; read-only assertion failure, no runtime invocation."
+    ]
+  },
+  "original_failure": "HOST_PREFLIGHT_FAILURE.json preserved unchanged",
+  "established_section": {
+    "error_code": 1006,
+    "state": 4096,
+    "kind": 262144,
+    "protect": 4,
+    "allocation_protect": 4,
+    "size": 4096
+  },
+  "privacy": "Raw addresses/allocation/PID/paths private only; rawstderrhash binds complete diagnostic",
+  "next": "Complete SOURCE-only unresolved-mapping discovery/authority design; preserve all mappings, fail closed for issuer/host-form authority. No actual new observation before exact source review. Linux existinghost selection still pending.",
+  "limitations": [
+    "First Windows native filename observation failed before backingfile hashing/Pythonorigin capture; no complete map, PASS, Ready, Linux, installedform or resolver admission.",
+    "MEM_COMMIT/MEM_MAPPED/PAGE_READWRITE fields established; no proven backingfile/pagefile identity/volume mutation/source or product defect.",
+    "No unchanged rerun, no omission/relaxed success, no installation/product/collector/pip/SDKcrypto/nativeworker/TLS/certificate/key operations."
+  ]
+}
