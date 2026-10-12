@@ -1,0 +1,628 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "THIRTEEN_IMMUTABLE_BACKING_SESSION_AND_PACKET_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+    "disposition": "BACKING_POOL_SESSION_PACKET_AND_MAPPING_OWNERSHIP_TRACED_WHOLE_PHYSICAL_RELEASE_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "source_receipt_sha256": "e5068b9fd384cf83da4d0e63d18494ffcb14ee2a335bf72916cc9d2d0ae3ae2d",
+    "source_pins": [
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/fs.cc",
+        "bytes": 57522,
+        "path": "repos/libports/src/lib/libc/fs.cc",
+        "sha256": "cda14af6ff84f029309f7012268b1f6709cf9643e6aff55baa2760faf7bb7eb1",
+        "git_sha1": "a6c4be97d52542916888b24a4d56ab488f5e2420"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/fs.h",
+        "bytes": 3771,
+        "path": "repos/libports/src/lib/libc/internal/fs.h",
+        "sha256": "2f0bcfc67c4db9d01865723680b4b5b54036b3a652291d3d32e5e616d4d00ec2",
+        "git_sha1": "53e447c29df41bbf7ab79bb337dd0a1fd477d8ed"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/libc_mem_alloc.cc",
+        "bytes": 5875,
+        "path": "repos/libports/src/lib/libc/libc_mem_alloc.cc",
+        "sha256": "a290201b54e1f75d2ea8fe7af11e04ef0c3ba672d4b1e8c9769be11687732c58",
+        "git_sha1": "f068d03d54d5dbacc3906a06959e43b20a02cc90"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/ram_fs/chunk.h",
+        "bytes": 10837,
+        "path": "repos/os/include/ram_fs/chunk.h",
+        "sha256": "9b12b685d30cf10ef92a103e09abe4b8f22afda8b0f3fa2fc47899e58155f1aa",
+        "git_sha1": "ab884fbe1e0d64767e47cc34d7d45f2ff5c5c3aa"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/ram_fs/param.h",
+        "bytes": 1054,
+        "path": "repos/os/include/ram_fs/param.h",
+        "sha256": "f8bfbf2ac6f032823b815e2c6087604e65f63610057cb47f46935f3d73a88e29",
+        "git_sha1": "288fec135d43253e3bc2f138bc11f62fffb3e98a"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/server/vfs/main.cc",
+        "bytes": 25952,
+        "path": "repos/os/src/server/vfs/main.cc",
+        "sha256": "de81a8003b2a034543876e98ca36711a41a902bdcca957c0c34e4c29aa7ad3a0",
+        "git_sha1": "9ccce840f8b0fcf419a495f4a30c924c4b71627e"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/server/vfs/node.h",
+        "bytes": 25021,
+        "path": "repos/os/src/server/vfs/node.h",
+        "sha256": "816f32da15c0b4a2774bf0ebd2df97862d0be027df969a7759ba1e3a7935d109",
+        "git_sha1": "8ccca7a43733b99440d2a9f7a5b208a8990b7084"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/file_system_session/connection.h",
+        "bytes": 3019,
+        "path": "repos/os/include/file_system_session/connection.h",
+        "sha256": "c5bdd7fb8d2f77ecbd666a35c0758aaa8b75df5bc11ae2bd3c6cf5917568a8dc",
+        "git_sha1": "d5889436770b810797c04f22fdb5ce688d8bd37e"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/file_system_session/file_system_session.h",
+        "bytes": 15315,
+        "path": "repos/os/include/file_system_session/file_system_session.h",
+        "sha256": "470923ae41655558c57d99086dbe32b934ac08eebd159b95521fb07ab914cb7a",
+        "git_sha1": "66881359d400cc020f1ce680bcec27213fd5aac5"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/block_session/connection.h",
+        "bytes": 12457,
+        "path": "repos/os/include/block_session/connection.h",
+        "sha256": "df9c0e03f638b452fb7d2de6c7b7aedcb6a2840b979568f78242b101a8ba937a",
+        "git_sha1": "3b959fd237d84bc3dc035d677dd40bff32908465"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/block_session/block_session.h",
+        "bytes": 6303,
+        "path": "repos/os/include/block_session/block_session.h",
+        "sha256": "6c6f8665e1243616b57f1a2cf3494f2eb3138e1f00bd8621dc6cdc8d4eeadcff",
+        "git_sha1": "ff10c9945950debb80de92c4b840ea5a7de47502"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/packet_allocator.h",
+        "bytes": 5636,
+        "path": "repos/os/include/os/packet_allocator.h",
+        "sha256": "1c422a7aaf36b382c14bca75127270c7ca00372672a9034e5f1d3f47231056da",
+        "git_sha1": "756571ecefa1da694b2e82189136104866658255"
+      },
+      {
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/packet_stream.h",
+        "bytes": 27464,
+        "path": "repos/os/include/os/packet_stream.h",
+        "sha256": "142e7bf3f57645d45138dad6cc548ad2d6c8dc04bfd7154f80c60a4b41bfa55b",
+        "git_sha1": "92849c2ef2c2bbc6117b75795fc8972216d37eaf"
+      }
+    ],
+    "total_bytes": 200226,
+    "facts": [
+      {
+        "functions": [
+          "Libc::Fs::destroy",
+          "Libc::Fs::fsync",
+          "Libc::Fs::ftruncate"
+        ],
+        "paths": [
+          "repos/libports/src/lib/libc/fs.cc",
+          "repos/libports/src/lib/libc/internal/fs.h"
+        ],
+        "fact": "Open-file destroy fsyncs then monitors closing until blocking work ends and handle.detach stops returning RETRY before freeing metadata. Sync progresses timestamp then handle sync; truncate synchronizes modifications then monitors resize, treating resource/retry states as incomplete. These paths have no explicit per-call timeout argument and depend on provider/monitor progress; close/fsync is not an independent bounded cancellation or whole physical free witness."
+      },
+      {
+        "functions": [
+          "Libc::Fs::mmap",
+          "Libc::Fs::munmap",
+          "Libc::Fs::wait_aio"
+        ],
+        "paths": [
+          "repos/libports/src/lib/libc/fs.cc"
+        ],
+        "fact": "Private file mappings allocate memory and read file content; shared mapping creates another open-file reference to keep the file alive. Unmap releases private allocation or follows shared mapping ownership. wait_aio declares timeout_ms unused and manages descriptor jobs/extra AIO handles. The earlier caller arithmetic is therefore not a demonstrated enforced wait deadline; effective runtime binding, job progress, cancellation and retained mapping/file debt need one contract."
+      },
+      {
+        "functions": [
+          "Dataspace_pool::expand",
+          "Dataspace_pool::~Dataspace_pool",
+          "Mem_alloc_impl::alloc",
+          "Mem_alloc_impl::free"
+        ],
+        "paths": [
+          "repos/libports/src/lib/libc/libc_mem_alloc.cc"
+        ],
+        "fact": "Allocation expands page-rounded RAM backing with alignment, Dataspace and AVL/slab metadata; chunk growth is exponential up to a per-chunk ceiling. Ordinary free returns a local range but does not shrink the backing pool. Pool destruction removes metadata, detaches ranges and frees RAM caps. Whole lifetime includes retained chunks, expansion failure/overlap and caller destruction; a chunk ceiling is not total memory capacity or numeric release time."
+      },
+      {
+        "fact": "RAM content has4096-byte leaves and hierarchical indices; geometry represents up to2GiB on32-bit or8GiB on64-bit per logical tree. Zero/sparse entries differ from allocated backing. Truncate destroys selected later entries while retaining partial chunks, and index destruction walks owned entries. This geometry is not a global bytes/node quota; allocation errors, metadata, open-deleted owners and copy/export overlap remain charged until actual release.",
+        "paths": [
+          "repos/os/include/ram_fs/chunk.h",
+          "repos/os/include/ram_fs/param.h"
+        ]
+      },
+      {
+        "functions": [
+          "Session_resources",
+          "Session_component::_close",
+          "Session_component::~Session_component",
+          "Root::_create_session"
+        ],
+        "paths": [
+          "repos/os/src/server/vfs/main.cc"
+        ],
+        "fact": "Per-session RAM/cap guards fund packet dataspace and heap. Root rejects absent/oversized transfer buffer, applies label/root and writable policy, creates session then warns if observed construction usage exceeds donated quotas. Destruction loops over node close and removes active-session membership; guards can be upgraded. Session-buffer funding and root confinement are concrete, but postcreation diagnostics are not a global backing/node admission proof or finite drain deadline."
+      },
+      {
+        "fact": "Server file nodes retain file handles and packet/payload/response state, accept read-ready separately, and use resize/sync/read/write completion state. File destructor clears response handler; truncate warns if resize incomplete. Base/member handles and active queues must be reconciled with provider detach and completion. Local node deletion does not independently attest canceled device requests or all external physical release.",
+        "paths": [
+          "repos/os/src/server/vfs/node.h"
+        ]
+      },
+      {
+        "fact": "Filesystem connection initially donates transfer-buffer plus overhead and retries resource errors with two-cap or8KiB upgrades, using UPGRADE_ATTEMPTS=~0U. Session interface exposes distinct node RPCs and packet operations. These nested upgrades and RPC liveness belong in the total donor graph; the retry constant is neither a project operation-count policy nor a wall-clock bound.",
+        "paths": [
+          "repos/os/include/file_system_session/connection.h",
+          "repos/os/include/file_system_session/file_system_session.h"
+        ]
+      },
+      {
+        "fact": "Block job construction enters a pending queue. Destruction removes a pending job but only warns when an in-progress job is prematurely destroyed. Acknowledged split operations can resubmit using the same payload; final completion clears tag, invokes policy completion and releases packet. Therefore job destructor/pending removal is not a supported hard cancellation or device-drain witness.",
+        "paths": [
+          "repos/os/include/block_session/connection.h",
+          "repos/os/include/block_session/block_session.h"
+        ]
+      },
+      {
+        "fact": "Packet allocator manages rounded blocks within supplied backing; release_packet returns packet space. Source destruction attempts allocator range removal and can warn on bad state. Submit/ack queues, signal handlers and lease ownership are separate from shared dataspace/server/device teardown. Finite local buffer and queue geometry does not establish every request payload/cache/metadata peak, numeric drain time or backing-file node limit.",
+        "paths": [
+          "repos/os/include/os/packet_allocator.h",
+          "repos/os/include/os/packet_stream.h"
+        ]
+      }
+    ],
+    "source_inventory_summary": {
+      "prior_partial_files_context_only": 122,
+      "new_text_bytes": 200226,
+      "combined_partial_bytes": 1525079,
+      "complete_vendor_closure": false,
+      "new_files": 13,
+      "combined_partial_files": 135,
+      "prior_partial_bytes": 1324853
+    },
+    "conclusion": "The new source closes concrete backing-pool, descriptor, session, sparse-node and packet lease callsites. It also shows retained pools, unused AIO timeout input, quota upgrades and in-progress block-job lifetime obligations. Complete bounded physical cleanup and conservation require these paths together with every caller, provider, donor, kernel/VMM/device and failed constructor; packet capacity/local free is insufficient.",
+    "remaining_obligations": [
+      "Close complete file-handle detach/shared mapping/AIO helpers and monitor progress, all allocator expansion failure and pool destruction callsites.",
+      "Freeze session/label/root/writable policies and every nested quota donor/upgrade under a fixed total with independent backing and node/retired-object reservations.",
+      "Close actual server active node/packet acknowledgment, Block connection/device queues and premature-job failure policy with supported finite cancellation/drain.",
+      "Join complete corekernelRCUCPU/GMMVMM/providerwriter storage resource/lifetime proof with exact Windows/Linux guest/native forms/source-build-ABI-license-resolver identities."
+    ],
+    "limitations": [
+      "Only13new saved UTF8 text files were read and independently hashed as DATA; no compile/import/execute or source acquisition, native API/process/VM/host/install/binary/image/archive/probe/test.",
+      "Prior122texts not rehashed or rereviewed;135PARTIAL1525079bytes are not complete provider/kernel/vendor/configuration/ABI/guest/sourcebinary/host or timing proof.",
+      "Static warnings/retries/unused timeout and retained debt are not executed runtime failures, leaks, attacks or universal impossibility.",
+      "No numeric total/drain deadline from packet capacity/local free, no selected mechanism/Ready/operations/new mandatory owner input; rejected task not reattempted."
+    ],
+    "tool_only_history": [
+      "Broad source outputs truncated; narrowed explicit close/destructor/mapping/packet and sparse-function ranges supplied relevant text."
+    ],
+    "operational_authorization": false,
+    "ready_approval": false,
+    "selected_mechanism": false
+  },
+  "full_prior_provider_runtime_reports": {
+    "eq083-provider-runtime-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "THIRTEEN_IMMUTABLE_GENODE_LIBC_VFS_PROVIDER_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+      "disposition": "PROVIDER_AND_LIBC_CROSSCALL_LIFETIMES_TRACED_WHOLE_PHYSICAL_CLOSURE_PENDING",
+      "findings": [],
+      "newtests": 0,
+      "new_tests": 0,
+      "repository": "https://codeberg.org/genodelabs/genode",
+      "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "source_receipt_sha256": "079cfca6106ea6dbcae8ac4f646d08552c98cd1960f4090e5cbecebed35556d8",
+      "source_pins": [
+        {
+          "sha256": "d243b238789d14213b6edeb3236fe0fdd22fccfb4970f94860aae3bb15513477",
+          "bytes": 29726,
+          "git_sha1": "7833d3338e108cd859a3f8209ef1f2954c1257fa",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/file_operations.cc",
+          "path": "repos/libports/src/lib/libc/file_operations.cc"
+        },
+        {
+          "sha256": "866b2989301f8365a8c89f8e7908cb4085a085f3127ceb3a49a28f266a16497f",
+          "bytes": 2416,
+          "git_sha1": "7eb7427acb5e486a9f9e23feafd7a2b59a1c7636",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/file.h",
+          "path": "repos/libports/src/lib/libc/internal/file.h"
+        },
+        {
+          "sha256": "7fd84c4a12d240fee86464b4f38e8caa3b169b6631320896f71cbd88b3f9d390",
+          "bytes": 15400,
+          "git_sha1": "baa84a9d0e008acbb7d6757d9e489f44333c4813",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/kernel.cc",
+          "path": "repos/libports/src/lib/libc/kernel.cc"
+        },
+        {
+          "sha256": "de33dd81c55e9b5e5ac54244e656ef22f8b06488f318c3aeb9084d817c12ec65",
+          "bytes": 17577,
+          "git_sha1": "2b983a7e245e2507108c4d94fb511fc35e9bc8b9",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/kernel.h",
+          "path": "repos/libports/src/lib/libc/internal/kernel.h"
+        },
+        {
+          "sha256": "3205f69373a0612b60421fdb2470736fa3c3e0d2e28dc11c072f4b783ad69dda",
+          "bytes": 4009,
+          "git_sha1": "ac6cef1207c98cac3b9d92b1126e60b3f3adc1c1",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/monitor.h",
+          "path": "repos/libports/src/lib/libc/internal/monitor.h"
+        },
+        {
+          "sha256": "ab5929c3bc0312521e838299bfbf169fa90c0088fef92e25915d22da7498d341",
+          "bytes": 32774,
+          "git_sha1": "3ffc253c5c81b314cafae19f358931cbba90f20c",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/pthread.cc",
+          "path": "repos/libports/src/lib/libc/pthread.cc"
+        },
+        {
+          "sha256": "c1bcea5e5380cad45eadc319749494def7a5819d003ea4bc757cb857b64cde8b",
+          "bytes": 6733,
+          "git_sha1": "d3ed4c726a9493bafd68c2bd6074cc242de82b63",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/malloc.cc",
+          "path": "repos/libports/src/lib/libc/malloc.cc"
+        },
+        {
+          "sha256": "c3ffc4887bb32694740b77f294cbb2999bd6790082a2f0a65f9902a39615d7a2",
+          "bytes": 3506,
+          "git_sha1": "91a330ff2bf22b13613fec205cbed19a853f4167",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/mem_alloc.h",
+          "path": "repos/libports/src/lib/libc/internal/mem_alloc.h"
+        },
+        {
+          "sha256": "5b1244eccc3f60ad2a746447e1a68216ef7f01747f16ebc9b009fbbaf5cad48f",
+          "bytes": 21954,
+          "git_sha1": "a873bc27aebafe64cdbe6b7326a28fa3b97d5a12",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/ram_file_system.h",
+          "path": "repos/os/src/lib/vfs/ram_file_system.h"
+        },
+        {
+          "sha256": "51377c708c4235a2642e379abcbf1c5dbbeea562f28491e26c81d09cf603b490",
+          "bytes": 26320,
+          "git_sha1": "661b5d495f13c8edf79eb33152fca711c243c9f0",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/fs_file_system.h",
+          "path": "repos/os/src/lib/vfs/fs_file_system.h"
+        },
+        {
+          "sha256": "b943dbce76e9e240d1a711aaba26b422a1c3659792fe03e16d5f13f5f0f05bda",
+          "bytes": 20624,
+          "git_sha1": "229a43604d44f01971bf42462c5473ffaaa6232e",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/block_file_system.h",
+          "path": "repos/os/src/lib/vfs/block_file_system.h"
+        },
+        {
+          "sha256": "bf5bd41cf415e985cbe35b25461cde7ea46ec2ea48458f765887a282fd163dcf",
+          "bytes": 19144,
+          "git_sha1": "cd1457a05a1069b52763454d059f5af609fbeea6",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/tar_file_system.h",
+          "path": "repos/os/src/lib/vfs/tar_file_system.h"
+        },
+        {
+          "sha256": "47dfb4a31574438a7072297312cab6f4761f05f609ca07aca9ec8256041de456",
+          "bytes": 4501,
+          "git_sha1": "5f6a7c2ba91884fa54b04bfa4cb57bbf69f6151a",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/log_file_system.h",
+          "path": "repos/os/src/lib/vfs/log_file_system.h"
+        }
+      ],
+      "total_bytes": 204684,
+      "facts": [
+        {
+          "paths": [
+            "repos/libports/src/lib/libc/file_operations.cc",
+            "repos/libports/src/lib/libc/internal/file.h"
+          ],
+          "functions": [
+            "close",
+            "write",
+            "fsync",
+            "ftruncate"
+          ],
+          "fact": "Libc descriptor wrappers dispatch to filesystem/socket helpers. Close destroys open file/directory/socket/kqueue state and AIO handles then descriptor bookkeeping; fsync delegates through open-file state. Writes, truncate and open-file finalization therefore need the lower filesystem/helper ownership contract, not only a successful libc return. File/internal-file declarations do not contain the complete fs helper bodies."
+        },
+        {
+          "paths": [
+            "repos/libports/src/lib/libc/file_operations.cc"
+          ],
+          "functions": [
+            "mmap",
+            "munmap",
+            "msync",
+            "aio_cancel",
+            "aio_fsync",
+            "aio_suspend"
+          ],
+          "fact": "Anonymous mappings use mem_alloc, register their ranges and unmap via allocator free; file mappings delegate to fs. msync is unimplemented, AIO cancel returns EBADF and AIO fsync EINVAL as unsupported in this source. AIO waiting delegates to fs state. Vendor POSIX cancellation behavior cannot be imported unchanged into this Genode implementation; exact selected branch/caller/provider semantics must be reconciled."
+        },
+        {
+          "paths": [
+            "repos/libports/src/lib/libc/internal/monitor.h",
+            "repos/libports/src/lib/libc/internal/kernel.h",
+            "repos/libports/src/lib/libc/kernel.cc"
+          ],
+          "functions": [
+            "Monitor::monitor",
+            "Monitor::Pool::monitor",
+            "Kernel::_suspend_main"
+          ],
+          "fact": "Monitor tracks jobs until function completion or blockade timeout, default timeout0. Main suspension arms a timer only for positive timeouts and switches contexts/signals. Async registration survives until job destruction. Timeout or wakeup is a job/execution condition, not automatic cancellation or draining of an external storage request/callback; event-loop/timer/caller resources must remain in the same graph."
+        },
+        {
+          "paths": [
+            "repos/libports/src/lib/libc/pthread.cc"
+          ],
+          "functions": [
+            "Pthread::cancel",
+            "Pthread::join",
+            "pthread_cancel",
+            "pthread_join",
+            "pthread_exit",
+            "Pthread_cleanup::cleanup"
+          ],
+          "fact": "Cancel marks _exiting and triggers monitor examination; join monitors _exiting without a local timeout, then the public join destroys the Pthread object. pthread_exit calls thread-local/TLS destructors and repeats key-destructor passes while any were called. Deferred cleanup keeps a previous cleanup-thread object until later cleanup. Logical canceled/exiting state is not independent physical execution/stack quiescence or a numeric total teardown proof."
+        },
+        {
+          "paths": [
+            "repos/libports/src/lib/libc/malloc.cc",
+            "repos/libports/src/lib/libc/internal/mem_alloc.h",
+            "repos/libports/src/lib/libc/kernel.cc"
+          ],
+          "fact": "Malloc accounts extra alignment and metadata, selecting slab sizes or backing-store allocations. Memory allocator declares RAM dataspaces/region maps/range metadata, growing chunk sizes and a dataspace-pool destructor whose body is outside these files. Kernel constructs allocator/heap owners. Logical object free, slab reuse and physical dataspace release need complete implementation and callsite accounting; no full instantaneous byte cap is proved by payload sizes."
+        },
+        {
+          "paths": [
+            "repos/os/src/lib/vfs/ram_file_system.h"
+          ],
+          "functions": [
+            "File::write",
+            "File::truncate",
+            "File_system::unlink",
+            "File_system::_try_complete_unlink",
+            "File_system::close",
+            "File_system::dataspace"
+          ],
+          "fact": "RAM files use hierarchical chunk backing and separate logical length; truncate may discard chunks or merely change length. Unlink marks a node and defers removal while an I/O handle is open; final close can complete unlink. Dataspace export allocates additional backing for file contents. Nodes, open-deleted files, sparse/logical lengths, chunk metadata, copy overlap and watchers require explicit reservations; this provider alone is not a selected global node/byte policy."
+        },
+        {
+          "paths": [
+            "repos/os/src/lib/vfs/fs_file_system.h"
+          ],
+          "functions": [
+            "Fs_vfs_handle::write",
+            "Fs_vfs_handle::sync",
+            "File_system::close"
+          ],
+          "fact": "Filesystem-session writes allocate bounded individual packets, submit them and report retry when stream capacity is unavailable. Sync tracks queued/ack state and releases packet ownership after acknowledgement. Close calls the remote file-session close then destroys the local handle. Individual packet capacity is not total provider storage/node/callback limit; remote server, session upgrade, queue, close and backing lifetimes need closure."
+        },
+        {
+          "paths": [
+            "repos/os/src/lib/vfs/block_file_system.h"
+          ],
+          "functions": [
+            "Write_handler::write",
+            "Sync_handler::sync",
+            "Block_vfs_handle::ftruncate"
+          ],
+          "fact": "Block operations use session geometry and pending/finished jobs, including read-modify-write for partial blocks. Writes enforce advertised block bounds; sync queues a whole-device SYNC job and retries until completion. Truncate returns success for this continuous device view. These semantics do not define file-node quotas, hard-cancel latency or physical release of provider/device queues."
+        },
+        {
+          "paths": [
+            "repos/os/src/lib/vfs/tar_file_system.h",
+            "repos/os/src/lib/vfs/log_file_system.h"
+          ],
+          "fact": "TAR provider is read-only for mutation operations, retaining archive/node/handle backing whose complete construction/lifetime belongs in the input graph. LOG writes flush bounded line chunks through a log session, destructor and sync flush remaining text, and truncate returns success to support redirection. Log-session sinks and downstream allocations are separate owners; bounded line buffer or read-only archive policy is not all-domain resource or timing closure."
+        },
+        {
+          "paths": [
+            "repos/libports/src/lib/libc/kernel.cc"
+          ],
+          "functions": [
+            "close_file_descriptors_on_exit"
+          ],
+          "fact": "Exit descriptor cleanup loops until no descriptor remains and invokes close. It supplies a concrete cleanup call chain but no local elapsed/iteration deadline or proof every provider, AIO, thread, allocator/kernel object and external writer physically released after parent exit. Failure policy and reserved cleanup execution remain mandatory."
+        },
+        {
+          "paths": [
+            "repos/libports/src/lib/libc/file_operations.cc"
+          ],
+          "functions": [
+            "aio_read",
+            "aio_write",
+            "lio_listio",
+            "aio_suspend"
+          ],
+          "fact": "The selected libc does export these AIO functions; absence of support cannot be generalized from cancel/fsync alone. aio_suspend computes an int timeout using the literal tv_sec*1000 + tv_nsec*1,000,000 expression. Exact unit/range/overflow behavior and effective symbol binding against port-local STOP overrides require source/build reconciliation before any numerical wait contract. This is unexecuted timing-contract source evidence, not a selected fix or runtime failure."
+        }
+      ],
+      "source_inventory_summary": {
+        "prior_partial_files_context_only": 109,
+        "new_files": 13,
+        "new_text_bytes": 204684,
+        "prior_partial_bytes": 1120169,
+        "complete_vendor_closure": false,
+        "combined_partial_bytes": 1324853,
+        "combined_partial_files": 122
+      },
+      "conclusion": "The actual Genode libc/provider paths differ materially from generic vendor POSIX assumptions. Unsupported AIO cancel/sync, logical pthread cancellation, monitor waits, retained open-deleted RAM nodes, session packet acknowledgments, block jobs and log sinks must join one conserved resource and independently finite cleanup graph. No file quota, post-exit allfree or whole deadline follows from the inspected wrappers.",
+      "remaining_obligations": [
+        "Close actual fs helper, mmap/mem_alloc implementation, allocator/heap/slab/session connection and callback/dependency source bodies, including partial constructors and deferred frees.",
+        "Bind every node/chunk/dataspace export/open-deleted/packet/block/log backing owner and remote service into one fixed budget and writer authority graph.",
+        "Reconcile exact vendor/runtime callers and effective symbol binding, including port-local STOP overrides versus these AIO exports and exact aio_suspend arithmetic, with Genode pthread/monitor semantics; establish physical thread/request/device stop/drain/destruction and finite failure policy.",
+        "Join fullkernelcoreGMMVMMdriverprovider accounting/RCUCPU progress/storage quotas with exact Windows/Linux guest/native fourforms/source-build-ABI-resolver-license evidence."
+      ],
+      "limitations": [
+        "Only13new savedUTF8texts were read and independently hashed as DATA; no compile/import/execute, binary/image/archive acquisition, install, native API/process/VM/host/probe/test.",
+        "Prior109texts not rehashed or rereviewed;122PARTIAL1324853bytes are not complete libc/provider/kernel/vendor/config/ABI/guest/sourcebinary/host closure.",
+        "Static unsupported functions, waits and retained lifetimes are not an observed runtime bug, leak, attack, incompatibility or universal impossibility.",
+        "No guessed numerical deadline/file quota/postexitfree, selected topology, Ready/operations or new mandatory owner input; rejected task not reattempted."
+      ],
+      "tool_only_history": [
+        "Broad source/range outputs truncated; narrowed relevant function bodies were read. No operation or source change resulted."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false,
+      "selected_mechanism": false
+    },
+    "eq083-provider-runtime-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "bases": {
+        "equity-features": "2fea1c06514c7f2361705109f3a7a54747398cb4",
+        "equity-feature-workers": "8f11027e50ebc560d689bc4ef6678b99b7ad9c27"
+      },
+      "disposition": "APPROVED",
+      "findings": [],
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_PROVIDER_RUNTIME_RESEARCH.md": {
+            "bytes": 8653,
+            "sha256": "d620dc35038ad587622ffe20d6737830cdd66ddea0b5488e02b85844ca30f698"
+          },
+          "docs/stories/EQ-083_PROVIDER_RUNTIME_INPUTS.json": {
+            "bytes": 6166,
+            "sha256": "9885a9eb7481ee6df190ca1d80801df242d304deb954348deef64133adac2a12"
+          },
+          "docs/stories/EQ-083_PROVIDER_RUNTIME_EVIDENCE.json": {
+            "bytes": 40009,
+            "sha256": "b1a011edf4bff5d2395bee71025fe7dbeff4412878c051d808d8f65ea0c5f02a"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 530164,
+            "sha256": "9e42ca445bf90c4054e13515ee201d41522d1fec49937ff3755d3ed8d24f1adc"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 789415,
+            "sha256": "009e9a97ee72c4680017137d940f16e8040e30ab95a21b54302be262f94b5128"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_PROVIDER_RUNTIME_RESEARCH.md": {
+            "bytes": 8653,
+            "sha256": "d620dc35038ad587622ffe20d6737830cdd66ddea0b5488e02b85844ca30f698"
+          },
+          "docs/EQ083_PROVIDER_RUNTIME_INPUTS.json": {
+            "bytes": 6166,
+            "sha256": "9885a9eb7481ee6df190ca1d80801df242d304deb954348deef64133adac2a12"
+          },
+          "docs/EQ083_PROVIDER_RUNTIME_EVIDENCE.json": {
+            "bytes": 40009,
+            "sha256": "b1a011edf4bff5d2395bee71025fe7dbeff4412878c051d808d8f65ea0c5f02a"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 392833,
+            "sha256": "dc29e1b3b587ea2c2a61e0a80e257f017a525f7d961f2d6486a35eb5f4004067"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 503971,
+            "sha256": "8ba8513211803c000b46be719fa7468b01441994f798b7b494d7bdf281aca9e9"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases and five documentation paths each, outside source/history unchanged and old knowledge/handoff suffixes retained.",
+        "Three assets mirror exactly; full eleven-fact source report and all prior three vendor-worker reports preserve saved content.",
+        "13metadata204684bytes match saved report;122PARTIAL scope not full libc/provider/kernel/vendor/sourcebinary/guest/host closure.",
+        "AIO exports versus port STOP/effective binding and exact timeout arithmetic remain source-contract obligations, not blanket absence or numeric deadline proof.",
+        "Allocator retained/copy overlap, pthread cancellation/join, open-unlink debt, session acknowledgments, block jobs and log flush separated from physical allfree or quota authority.",
+        "Full samegraph coreVMMprovider/device/storage/license/nativeforms and independently finitecleanup obligations remain pending; no Ready/ops/newinput claim."
+      ],
+      "limitations": [
+        "Saved reports reused; no source/research/rawhash/native/host/probe/test/download/publication rerun.",
+        "Additional illustrative allocator/Block geometry in author prose does not grant newly measured enforcement or physical release evidence.",
+        "New prepared commit attribution awaits final published readback."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-provider-runtime-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "f15a52100578d7f5ce57c88439fb85c776b2fd36",
+        "equity-feature-workers": "70d81833afe473c04bc1c2e5171ba31e377ebf5e"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_PROVIDER_RUNTIME_RESEARCH.md": {
+            "sha256": "d620dc35038ad587622ffe20d6737830cdd66ddea0b5488e02b85844ca30f698",
+            "bytes": 8653
+          },
+          "docs/stories/EQ-083_PROVIDER_RUNTIME_INPUTS.json": {
+            "sha256": "9885a9eb7481ee6df190ca1d80801df242d304deb954348deef64133adac2a12",
+            "bytes": 6166
+          },
+          "docs/stories/EQ-083_PROVIDER_RUNTIME_EVIDENCE.json": {
+            "sha256": "b1a011edf4bff5d2395bee71025fe7dbeff4412878c051d808d8f65ea0c5f02a",
+            "bytes": 40009
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "9e42ca445bf90c4054e13515ee201d41522d1fec49937ff3755d3ed8d24f1adc",
+            "bytes": 530164
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "009e9a97ee72c4680017137d940f16e8040e30ab95a21b54302be262f94b5128",
+            "bytes": 789415
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_PROVIDER_RUNTIME_RESEARCH.md": {
+            "sha256": "d620dc35038ad587622ffe20d6737830cdd66ddea0b5488e02b85844ca30f698",
+            "bytes": 8653
+          },
+          "docs/EQ083_PROVIDER_RUNTIME_INPUTS.json": {
+            "sha256": "9885a9eb7481ee6df190ca1d80801df242d304deb954348deef64133adac2a12",
+            "bytes": 6166
+          },
+          "docs/EQ083_PROVIDER_RUNTIME_EVIDENCE.json": {
+            "sha256": "b1a011edf4bff5d2395bee71025fe7dbeff4412878c051d808d8f65ea0c5f02a",
+            "bytes": 40009
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "dc29e1b3b587ea2c2a61e0a80e257f017a525f7d961f2d6486a35eb5f4004067",
+            "bytes": 392833
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "8ba8513211803c000b46be719fa7468b01441994f798b7b494d7bdf281aca9e9",
+            "bytes": 503971
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git LF sizeSHA pins match reviewed_git_files and reviewed prepared bytes after only line-ending normalization; no CR.",
+        "Exact five documentation changes perrepo, direct reviewed parent bases and clean paired codex/eq083-resilience branches.",
+        "Three assets mirrored, exact old knowledge/handoff suffixes and other tracked source/history outside allowed paths unchanged.",
+        "Full Atul author and committer identity and no Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "c448a257e31563b52c68fe439a4899eb8336172faa02564aa8efe71956608eb8",
+      "limitations": [
+        "Published docs readback only; no semantic/source/research/native/host/probe/test rerun.",
+        "No whole qualification, resource/cleanup enforcement, runtime/operational or Ready authority."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Selected current filesystem/backing/server/session/packet stages; no actual native/timing qualification",
+  "tool_history": "Guessed old ram_fs server and base packet_stream_tx directory API paths unavailable; actual tree navigation resolved current vfs server and os packet headers before claims, no absence inference. One author tool interpreter path typo eq083077-service-dev was rejected before any Python code or writes; corrected existing eq077-service-dev for DATA rendering. Keyword context was bounded then narrowed actual wait_aio, dataspace pool free and session destruction before claims. No native/product failure."
+}
