@@ -1,0 +1,133 @@
+{
+  "schema": "eq083.vmm-whole-graph-source-research.v1",
+  "bases": {
+    "equity-features": "93e682e9d6849fc3511c0a22b9ad14d9a31a3a6f",
+    "equity-feature-workers": "02cc8d569cbf0825097965f69d72edf1cf899a12"
+  },
+  "source_metadata": {
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_release": "26.08",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "scope": "16 selected immutable VMM port/build/configuration/resource/lifetime source texts as DATA only; not vendor/configuration/license/ABI/binary/guest/current-host closure; no source execution or operational admission",
+    "total_bytes": 89055,
+    "new_tests": 0,
+    "files": [
+      {
+        "path": "repos/ports/ports/virtualbox7.port",
+        "git_sha1": "104d7a8a0123bf277f45fbb65bee6b3b68a23ae2",
+        "bytes": 16448,
+        "sha256": "e88520dbd9efd0967bba0575e611788ce7c7657859617e301bc5b1576affacf9",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/ports/virtualbox7.port"
+      },
+      {
+        "path": "repos/ports/ports/virtualbox7.hash",
+        "git_sha1": "e36550b01cf61b9220b801ffba91c5d285215917",
+        "bytes": 41,
+        "sha256": "afab2b665724c50268034f23275769f1c1956750b589f8efcbf51b3cd99bb5d8",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/ports/virtualbox7.hash"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/README",
+        "git_sha1": "b4788b01d885cf0933cb6fb4f9453a6b5dc0094d",
+        "bytes": 2212,
+        "sha256": "0eb471978fbd2d651c97093c6e3284be03ea406b96eef47a0ca1bd4343f871b2",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/README"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/target.mk",
+        "git_sha1": "34c99174c0e1f4fc87eb6f59001c80bd581c2ebf",
+        "bytes": 2110,
+        "sha256": "0894b818737d01d3cd7548c0a8773575d3fb8638ed24c8f36d49347cb3ffa17f",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/target.mk"
+      },
+      {
+        "path": "repos/ports/lib/mk/virtualbox7-common.inc",
+        "git_sha1": "9cad938271a8d1ae18dac9fac106743d29a84910",
+        "bytes": 5683,
+        "sha256": "14e729a547177b04d667e75367821b9b9ba6322864f2beec8ce889665f69be77",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/lib/mk/virtualbox7-common.inc"
+      },
+      {
+        "path": "repos/ports/run/virtualbox7.run",
+        "git_sha1": "8dd9af9beccb23e522c7ebcb81386a96276aa65d",
+        "bytes": 8773,
+        "sha256": "4f4257003115e8361b021f575ecbd4b03d393edcc1ca7aeebb50c51032fb2b71",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/run/virtualbox7.run"
+      },
+      {
+        "path": "repos/ports/run/virtualbox7.vbox",
+        "git_sha1": "81da6134488052146239da2e81684247ec3aafd0",
+        "bytes": 3263,
+        "sha256": "35055abef5e86ca094db294b3bd1fad701c5d8189645b748687180754a11695d",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/run/virtualbox7.vbox"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/main.cc",
+        "git_sha1": "d139bd9eaac407ab85d278cb4e8b45fc42ba90d9",
+        "bytes": 23834,
+        "sha256": "f9ab63f0c7c8b73bec92af2e52988da5a5eca65e7ee675d0c76c6ec741eb7112",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/main.cc"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_gmm.cc",
+        "git_sha1": "a6cbfe63c4512887ea1d38b8eb4d97ca880f2de3",
+        "bytes": 6183,
+        "sha256": "7c1e1f49cc820617c100a5bf41b15ecb397436fd4cd10c3d5787640768a6d809",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_gmm.cc"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_gmm.h",
+        "git_sha1": "c0fa586993a1062d312276fe4820967fa0ad553b",
+        "bytes": 4974,
+        "sha256": "79671984ab34b26d2c901e558a9daa27f9cf9a7e235a90d88645c518c5fefa9a",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_gmm.h"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_vm.cc",
+        "git_sha1": "ea47bce66a69d0d89d6510455b651f9c4dc155cc",
+        "bytes": 2851,
+        "sha256": "246f54d02efa8dba3fc85ee626d801f8935ee96ee1edd4341dce86571b207b10",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vm.cc"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/sup_vm.h",
+        "git_sha1": "4b251cbabfff6a40e22a6e62e04a02aa8809d5d0",
+        "bytes": 1103,
+        "sha256": "4949648a74fd33b5e6679d2458a175d1cc24e39157550529a66ab334e676de70",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vm.h"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/pthread.cc",
+        "git_sha1": "1c076294ade0a9bd9dc4d78fc20e52565593e39e",
+        "bytes": 6532,
+        "sha256": "75ad4a546609d8cac169305d53ed27df84afb64d76fecfa1874d61cd4fb95204",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pthread.cc"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/pthread_emt.h",
+        "git_sha1": "bfb1cec714a7019d65effd38605052484696e330",
+        "bytes": 691,
+        "sha256": "986b88bfb00f9c8eebb819cf81cc06e810c53a33e5b1a724023ed02867e89bfd",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pthread_emt.h"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/services/services.cc",
+        "git_sha1": "ebd5d54be983abcc9ca2452798387644b263c226",
+        "bytes": 1194,
+        "sha256": "d27b42ea039fb5d7513844a7b00a3aeae739e03a0662b1e9eb8b965f856b68b6",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/services/services.cc"
+      },
+      {
+        "path": "repos/ports/src/virtualbox7/libc.cc",
+        "git_sha1": "01c9e4066aabf7fd0fc55384955ba88e691f6c47",
+        "bytes": 3163,
+        "sha256": "ae9449f0c9943b91dd59636251f7ef4c32dbf9eea1074e744be1fc5450d56a00",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/libc.cc"
+      }
+    ]
+  },
+  "new_tests": 0,
+  "scope": "16 selected immutable Genode VirtualBox7 port/build/example/memory/thread/lifecycle texts as DATA; not full vendor/patch/build/sourcebinary/guest/ABI/license/host closure",
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}
