@@ -1,0 +1,1173 @@
+"""Uninvoked qualification source. No admission or cleanup authority implied."""
+import hashlib
+import os
+import stat
+import sys
+import unicodedata
+import zlib
+
+ARCHIVE_CAP = 32 * 1024 * 1024
+TAR_CAP = 128 * 1024 * 1024
+FILE_CAP = 16 * 1024 * 1024
+TOTAL_CAP = 64 * 1024 * 1024
+MEMBER_CAP = 4096
+
+
+def require(value, message):
+    if not value:
+        raise ValueError(message)
+
+
+def spelling(name):
+    require(type(name) is str and 0 < len(name) <= 1024, "member name bound")
+    require(unicodedata.normalize("NFC", name) == name, "noncanonical Unicode")
+    parts = name.split("/")
+    for part in parts:
+        require(0 < len(part) <= 255 and part not in (".", ".."), "member component")
+        require(not part.endswith((".", " ")), "ambiguous member suffix")
+        require(not any(ord(c) < 32 or c in '\\:< >"|?*' for c in part),
+                "member character")
+        require(not any(0xd800 <= ord(c) <= 0xdfff for c in part), "member surrogate")
+        stem = part.split(".")[0].upper()
+        require(stem not in {"CON", "PRN", "AUX", "NUL"} and
+                stem not in {f"COM{i}" for i in range(1, 10)} and
+                stem not in {f"LPT{i}" for i in range(1, 10)}, "reserved member")
+    return parts
+
+
+def octal(raw):
+    require(type(raw) is bytes and not raw[0] & 128, "binary tar integer unsupported")
+    text = raw.rstrip(b"\0 ").lstrip(b" ")
+    require(text and all(c in b"01234567" for c in text), "tar octal")
+    return int(text, 8)
+
+
+def field(raw):
+    before, separator, after = raw.partition(b"\0")
+    require(not separator or not any(after), "tar field hidden suffix")
+    return before.decode("utf-8", "strict")
+
+
+def pax(raw):
+    require(len(raw) <= 65536, "PAX size")
+    values = {}
+    offset = 0
+    while offset < len(raw):
+        end = raw.find(b" ", offset, offset + 16)
+        require(end > offset, "PAX length prefix")
+        digits = raw[offset:end]
+        require(digits.isdigit() and digits[0] != 48, "PAX length spelling")
+        size = int(digits)
+        require(size > end - offset + 2 and offset + size <= len(raw), "PAX range")
+        row = raw[end + 1:offset + size]
+        require(row.endswith(b"\n") and b"=" in row, "PAX row")
+        key, value = row[:-1].split(b"=", 1)
+        key = key.decode("ascii");value = value.decode("utf-8", "strict")
+        require(key in {"path", "mtime"} and key not in values, "PAX key")
+        if key == "path":spelling(value)
+        else:require(value and all(c in "0123456789.-" for c in value), "PAX time")
+        values[key] = value
+        offset += size
+    return values
+
+
+def gate_archive(raw, archive_sha256, root_name, expected):
+    """Expected full file map must come from separately frozen owner source.
+
+    Returns verified immutable payloads; does not attest their import safety or
+    host path ownership. Every generated file including PKG-INFO must be pinned.
+    """
+    require(type(raw) is bytes and 0 < len(raw) <= ARCHIVE_CAP, "archive bound")
+    require(hashlib.sha256(raw).hexdigest() == archive_sha256, "archive identity")
+    require(len(spelling(root_name)) == 1, "source root component")
+    require(type(expected) is dict and 0 < len(expected) <= MEMBER_CAP, "expected map")
+    for name, claim in expected.items():
+        spelling(name)
+        require(type(claim) is dict and set(claim) == {"bytes", "sha256"}, "expected claim")
+        require(type(claim["bytes"]) is int and 0 <= claim["bytes"] <= FILE_CAP,
+                "expected file size")
+        require(type(claim["sha256"]) is str and len(claim["sha256"]) == 64 and
+                all(c in "0123456789abcdef" for c in claim["sha256"]), "expected digest")
+    decoder = zlib.decompressobj(16 + zlib.MAX_WBITS)
+    tar = decoder.decompress(raw, TAR_CAP + 1)
+    require(len(tar) <= TAR_CAP and decoder.eof and not decoder.unconsumed_tail and
+            not decoder.unused_data, "gzip EOF/bound/multiple streams")
+    require(len(tar) % 512 == 0, "tar block geometry")
+    offset = 0; count = 0; total = 0; seen = {}; files = {}; directories = set()
+    pending = None; headers = []; namespace = {}
+    while offset < len(tar):
+        header = tar[offset:offset + 512];offset += 512
+        if not any(header):
+            require(pending is None and len(tar) - offset >= 512 and
+                    not any(tar[offset:]), "tar two-block EOF/trailing data")
+            break
+        count += 1;require(count <= MEMBER_CAP, "tar header count")
+        require(sum(header[:148]) + 8 * 32 + sum(header[156:]) == octal(header[148:156]),
+                "tar header checksum")
+        require(header[257:265] == b"ustar\x0000", "tar USTAR layout")
+        size = octal(header[124:136]);require(size <= FILE_CAP, "tar file size")
+        end = offset + size; padded = (end + 511) // 512 * 512
+        require(padded <= len(tar) and not any(tar[end:padded]), "tar payload/padding")
+        payload = tar[offset:end];offset = padded
+        kind = header[156:157]
+        require(kind in (b"0", b"\0", b"5", b"x"), "tar links/special type")
+        require(not any(header[157:257]), "tar link field")
+        name = field(header[:100]);prefix = field(header[345:500])
+        if prefix:name = prefix + "/" + name
+        headers.append(dict(sha256=hashlib.sha256(header).hexdigest(), kind=kind.hex(),
+                            name=name, bytes=size))
+        if kind == b"x":
+            require(pending is None, "consecutive PAX")
+            pending = pax(payload);continue
+        if pending is not None:
+            name = pending.get("path", name)
+            pending = None
+        if kind == b"5":
+            require(size == 0, "directory payload")
+            name = name[:-1] if name.endswith("/") else name
+        parts = spelling(name)
+        require(parts[0] == root_name, "source archive root")
+        for depth in range(1, len(parts) + 1):
+            ancestor = "/".join(parts[:depth]); folded = ancestor.casefold()
+            require(folded not in namespace or namespace[folded] == ancestor,
+                    "inferred/explicit namespace collision")
+            namespace[folded] = ancestor
+        key = name.casefold()
+        require(key not in seen, "duplicate/colliding tar path")
+        seen[key] = name
+        if kind == b"5":directories.add(name);continue
+        require(len(parts) > 1, "root file forbidden")
+        relative = "/".join(parts[1:])
+        require(relative in expected, "extra/unexpected source file")
+        claim = expected[relative]
+        require(size == claim["bytes"] and hashlib.sha256(payload).hexdigest() ==
+                claim["sha256"], "source member identity")
+        total += size;require(total <= TOTAL_CAP, "source total size")
+        files[relative] = payload
+    else:raise ValueError("tar EOF absent")
+    require(set(files) == set(expected), "missing source file")
+    permitted_dirs = {root_name}
+    for name in files:
+        parts = name.split("/")
+        for i in range(1, len(parts)):permitted_dirs.add(root_name + "/" + "/".join(parts[:i]))
+    require(directories <= permitted_dirs, "unrelated directory")
+    for name in seen:
+        require(not any(name.startswith(f.casefold() + "/") for f in
+                        (root_name + "/" + x for x in files)), "file/directory prefix collision")
+    return dict(files=files, headers=headers, admitted=False)
+
+
+def close_preserving(fd):
+    primary = sys.exc_info()[1]
+    try:os.close(fd)
+    except BaseException as cleanup:
+        if primary is not None:raise primary from cleanup
+        raise
+
+
+def write_relative(parent, parts, payload):
+    if len(parts) > 1:
+        try:os.mkdir(parts[0], 0o700, dir_fd=parent)
+        except FileExistsError:pass
+        child = os.open(parts[0], os.O_RDONLY | os.O_DIRECTORY |
+                        os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parent)
+        try:write_relative(child, parts[1:], payload)
+        finally:close_preserving(child)
+    else:
+        output = os.open(parts[0], os.O_WRONLY | os.O_CREAT | os.O_EXCL |
+                         os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=parent)
+        try:
+            require(stat.S_ISREG(os.fstat(output).st_mode), "created file type")
+            offset = 0
+            while offset < len(payload):
+                written = os.write(output, payload[offset:offset + 65536])
+                require(type(written) is int and 0 < written <= min(65536, len(payload) - offset),
+                        "file write count")
+                offset += written
+            require(os.fstat(output).st_size == len(payload), "written file size")
+        finally:close_preserving(output)
+
+
+def materialize_linux(raw, archive_sha256, root_name, expected, root_fd):
+    """Future outer owner supplies an exclusively owned empty directory FD.
+
+    No cleanup/deletion here. Any error leaves partial output for the outer
+    owner to stop/reap/join before its separately reviewed owned cleanup.
+    Windows deliberately unsupported until native handle-relative code exists.
+    """
+    verified = gate_archive(raw, archive_sha256, root_name, expected)
+    require(os.name == "posix" and type(root_fd) is int and root_fd >= 0,
+            "Linux directory FD required")
+    require(stat.S_ISDIR(os.fstat(root_fd).st_mode) and not os.listdir(root_fd),
+            "empty directory required")
+    files = verified["files"]
+    for name, payload in sorted(files.items()):
+        parts = spelling(name)
+        write_relative(root_fd, parts, payload)
+    return dict(files=len(files), admitted=False)
+
+# Windows API binding is instantiated ONLY by the future admitted outer owner.
+import ctypes as C
+
+
+class UnicodeString(C.Structure):
+    _fields_ = [("Length", C.c_uint16), ("MaximumLength", C.c_uint16),
+                ("Buffer", C.c_void_p)]
+
+
+class ObjectAttributes(C.Structure):
+    _fields_ = [("Length", C.c_uint32), ("RootDirectory", C.c_void_p),
+                ("ObjectName", C.POINTER(UnicodeString)), ("Attributes", C.c_uint32),
+                ("SecurityDescriptor", C.c_void_p), ("SecurityQualityOfService", C.c_void_p)]
+
+
+class IOStatus(C.Structure):
+    _fields_ = [("StatusOrPointer", C.c_void_p), ("Information", C.c_size_t)]
+
+
+class AttributeTag(C.Structure):
+    _fields_ = [("Attributes", C.c_uint32), ("ReparseTag", C.c_uint32)]
+
+
+class StandardInfo(C.Structure):
+    _fields_ = [("AllocationSize", C.c_int64), ("EndOfFile", C.c_int64),
+                ("NumberOfLinks", C.c_uint32), ("DeletePending", C.c_ubyte),
+                ("Directory", C.c_ubyte)]
+
+
+class DirectoryInfo(C.Structure):
+    _fields_ = [("NextEntryOffset", C.c_uint32), ("FileIndex", C.c_uint32),
+                ("CreationTime", C.c_int64), ("LastAccessTime", C.c_int64),
+                ("LastWriteTime", C.c_int64), ("ChangeTime", C.c_int64),
+                ("EndOfFile", C.c_int64), ("AllocationSize", C.c_int64),
+                ("FileAttributes", C.c_uint32), ("FileNameLength", C.c_uint32),
+                ("EaSize", C.c_uint32), ("ShortNameLength", C.c_int8),
+                ("ShortName", C.c_uint16 * 12), ("FileId", C.c_int64),
+                ("FileName", C.c_uint16 * 1)]
+
+
+class WindowsFiles:
+    def __init__(self):
+        require(os.name == "nt" and C.sizeof(C.c_void_p) == 8, "Windows x64 required")
+        require(tuple(C.sizeof(x) for x in (UnicodeString, ObjectAttributes, IOStatus,
+                                          AttributeTag, StandardInfo)) == (16, 48, 16, 8, 24),
+                "Windows ABI structure geometry")
+        require(C.sizeof(DirectoryInfo) == 112 and DirectoryInfo.FileNameLength.offset == 60
+                and DirectoryInfo.FileName.offset == 104, "directory ABI geometry")
+        self.nt = C.WinDLL("ntdll.dll", use_last_error=True)
+        self.k = C.WinDLL("kernel32.dll", use_last_error=True)
+        self.nt.NtCreateFile.argtypes = [C.POINTER(C.c_void_p), C.c_uint32,
+            C.POINTER(ObjectAttributes), C.POINTER(IOStatus), C.c_void_p,
+            C.c_uint32, C.c_uint32, C.c_uint32, C.c_uint32, C.c_void_p, C.c_uint32]
+        self.nt.NtCreateFile.restype = C.c_int32
+        self.k.GetFileInformationByHandleEx.argtypes = [C.c_void_p, C.c_int32, C.c_void_p, C.c_uint32]
+        self.k.GetFileInformationByHandleEx.restype = C.c_int32
+        for method in (self.k.ReadFile, self.k.WriteFile):
+            method.argtypes = [C.c_void_p, C.c_void_p, C.c_uint32,
+                               C.POINTER(C.c_uint32), C.c_void_p]
+            method.restype = C.c_int32
+        self.k.SetFilePointerEx.argtypes = [C.c_void_p, C.c_int64, C.POINTER(C.c_int64), C.c_uint32]
+        self.k.SetFilePointerEx.restype = C.c_int32
+        self.k.CloseHandle.argtypes = [C.c_void_p];self.k.CloseHandle.restype = C.c_int32
+
+    def close(self, handle):
+        require(self.k.CloseHandle(handle) != 0, "owned handle close failure")
+
+    def close_primary(self, handle):
+        primary = sys.exc_info()[1]
+        try:self.close(handle)
+        except BaseException as cleanup:
+            if primary is not None:raise primary from cleanup
+            raise
+
+    def inspect(self, handle, directory, size=None):
+        tag = AttributeTag();info = StandardInfo()
+        require(self.k.GetFileInformationByHandleEx(handle, 9, C.byref(tag), C.sizeof(tag)) != 0,
+                "attribute query failed")
+        require(not tag.Attributes & 0x400 and tag.ReparseTag == 0, "reparse object")
+        require(bool(tag.Attributes & 0x10) == directory, "attribute directory type")
+        require(self.k.GetFileInformationByHandleEx(handle, 1, C.byref(info), C.sizeof(info)) != 0,
+                "standard query failed")
+        require(info.Directory in (0, 1) and bool(info.Directory) == directory and
+                info.DeletePending == 0 and info.NumberOfLinks == 1, "object type/link/deletion state")
+        if size is not None:require(info.EndOfFile == size, "materialized byte count")
+
+    def empty_root(self, handle):
+        self.inspect(handle, True)
+        buffer = C.create_string_buffer(65536)
+        C.set_last_error(0)
+        status = self.k.GetFileInformationByHandleEx(handle, 11, buffer, len(buffer))
+        if not status:
+            require(C.get_last_error() == 18, "empty root enumeration failed")
+            return
+        raw = buffer.raw;offset = 0;names = []
+        while True:
+            require(offset + DirectoryInfo.FileName.offset <= len(raw), "directory record bound")
+            next_offset = int.from_bytes(raw[offset:offset + 4], "little")
+            length = int.from_bytes(raw[offset + DirectoryInfo.FileNameLength.offset:offset + DirectoryInfo.FileNameLength.offset + 4], "little")
+            limit = offset + next_offset if next_offset else len(raw)
+            require(length > 0 and length % 2 == 0 and offset + DirectoryInfo.FileName.offset + length <= limit <= len(raw),
+                    "directory name bounds")
+            name = raw[offset + DirectoryInfo.FileName.offset:offset + DirectoryInfo.FileName.offset + length].decode("utf-16-le", "strict")
+            require(name in (".", "..") and name not in names, "root is not empty")
+            names.append(name);require(len(names) <= 2, "root record count")
+            if not next_offset:break
+            require(next_offset % 8 == 0 and next_offset >= DirectoryInfo.FileName.offset, "directory offset")
+            offset += next_offset
+        C.set_last_error(0)
+        require(not self.k.GetFileInformationByHandleEx(handle, 10, buffer, len(buffer)) and
+                C.get_last_error() == 18, "root enumeration not exhausted")
+
+    def create(self, parent, component, directory):
+        require(len(spelling(component)) == 1, "relative single component required")
+        encoded = component.encode("utf-16-le", "strict")
+        require(len(encoded) <= 510, "native component byte bound")
+        buffer = C.create_string_buffer(encoded + b"\0\0")
+        string = UnicodeString(len(encoded), len(encoded) + 2, C.cast(buffer, C.c_void_p))
+        attributes = ObjectAttributes(C.sizeof(ObjectAttributes), parent, C.pointer(string),
+                                      0x1000, None, None)  # OBJ_DONT_REPARSE, no inheritance
+        result = C.c_void_p();ios = IOStatus()
+        # No OPEN_IF/overwrite fallback. Directory creates omit file data rights.
+        rights = 0x100000 | 0x80 | (0x20 if directory else 3)
+        options = 0x20 | (1 if directory else 0x40)  # synchronous nonalert + exact type
+        status = self.nt.NtCreateFile(C.byref(result), rights, C.byref(attributes),
+            C.byref(ios), None, 0x10 if directory else 0x80, 0, 2, options, None, 0)
+        handle = result.value
+        owned = (status >= 0 and type(handle) is int and
+                 0 < handle < (1 << 64) - 1 and handle != parent)
+        try:
+            require(status == 0, "exclusive relative create failed")
+            require(type(handle) is int and 0 < handle < (1 << 64) - 1 and
+                    handle != parent and ios.Information == 2, "created handle/result")
+            self.inspect(handle, directory, None if directory else 0)
+        except BaseException:
+            if owned:self.close_primary(handle)
+            raise
+        return handle
+
+    def write_verify(self, handle, payload):
+        offset = 0
+        while offset < len(payload):
+            piece = payload[offset:offset + 65536];buffer = C.create_string_buffer(piece)
+            written = C.c_uint32()
+            require(self.k.WriteFile(handle, buffer, len(piece), C.byref(written), None) != 0,
+                    "materializer write failed")
+            require(0 < written.value <= len(piece), "materializer short write count")
+            offset += written.value
+        self.inspect(handle, False, len(payload))
+        position = C.c_int64(-1)
+        require(self.k.SetFilePointerEx(handle, 0, C.byref(position), 0) != 0 and
+                position.value == 0, "readback seek failed")
+        observed = hashlib.sha256();offset = 0
+        while offset < len(payload):
+            count = min(65536, len(payload) - offset);buffer = C.create_string_buffer(count)
+            read = C.c_uint32()
+            require(self.k.ReadFile(handle, buffer, count, C.byref(read), None) != 0 and
+                    0 < read.value <= count, "materializer readback failed")
+            observed.update(buffer.raw[:read.value]);offset += read.value
+        buffer = C.create_string_buffer(1);read = C.c_uint32()
+        require(self.k.ReadFile(handle, buffer, 1, C.byref(read), None) != 0 and read.value == 0,
+                "materializer readback EOF")
+        require(observed.digest() == hashlib.sha256(payload).digest(), "materialized SHA mismatch")
+        self.inspect(handle, False, len(payload))
+
+
+def materialize_windows(raw, archive_sha256, root_name, expected, root_handle):
+    verified = gate_archive(raw, archive_sha256, root_name, expected)
+    require(type(root_handle) is int and 0 < root_handle < (1 << 64) - 1, "borrowed root handle")
+    api = WindowsFiles();api.empty_root(root_handle)
+    directories = {"": root_handle};owned = []
+    try:
+        for name, payload in sorted(verified["files"].items()):
+            parts = spelling(name);parent = root_handle
+            for depth, component in enumerate(parts[:-1], 1):
+                prefix = "/".join(parts[:depth])
+                if prefix not in directories:
+                    require(len(owned) < 4096, "directory handle cap")
+                    child = api.create(parent, component, True)
+                    try:owned.append(child)
+                    except BaseException:api.close_primary(child);raise
+                    directories[prefix] = child
+                parent = directories[prefix]
+            handle = api.create(parent, parts[-1], False)
+            try:api.write_verify(handle, payload)
+            finally:api.close_primary(handle)
+    finally:
+        primary = sys.exc_info()[1];failures = []
+        for handle in reversed(owned):
+            try:api.close(handle)
+            except BaseException as error:failures.append(error)
+        if failures:
+            if primary is not None:raise primary from failures[0]
+            raise failures[0]
+    return dict(files=len(verified["files"]), admitted=False)
+
+"""Qualification SOURCE only: pure hook JSON boundary, never a physical issuer.
+
+No filesystem/package/backend/process operations. The future owned runner must
+call these checks on bounded original bytes before ProjectBuilder reads output
+or converts requirement lists to sets. This module alone authorizes no operation.
+"""
+import json
+import math
+
+MAX_JSON_BYTES = 65536
+MAX_JSON_DEPTH = 8
+MAX_JSON_NODES = 1024
+BACKEND_ENV = {"_PYPROJECT_HOOKS_BUILD_BACKEND": "setuptools.build_meta"}
+PROJECTS = ("client", "mcp", "service", "workers")
+OPERATIONS = (
+    ("original", "get_requires_for_build_sdist"),
+    ("original", "build_sdist"),
+    ("sdist-first", "get_requires_for_build_wheel"),
+    ("sdist-first", "build_wheel"),
+    ("sdist-repeat", "get_requires_for_build_wheel"),
+    ("sdist-repeat", "build_wheel"),
+)
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def unique_object(pairs):
+    value = {}
+    for key, item in pairs:
+        require(key not in value, "duplicate JSON object key")
+        value[key] = item
+    return value
+
+
+def reject_constant(value):
+    raise ValueError("nonfinite JSON constant")
+
+
+def parse_control(raw):
+    require(type(raw) is bytes and 0 < len(raw) <= MAX_JSON_BYTES,
+            "control byte bound/type")
+    require(not raw.startswith(b"\xef\xbb\xbf"), "control BOM")
+    text = raw.decode("utf-8", "strict")
+    # Bound nesting before json.loads recursion or allocation; quoted brackets
+    # do not count, including escaped quotes and backslashes.
+    depth = 0
+    quoted = False
+    escaped = False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            require(depth <= MAX_JSON_DEPTH, "control nesting bound")
+        elif char in "]}":
+            depth -= 1
+            require(depth >= 0, "control nesting underflow")
+    require(not quoted and depth == 0, "control incomplete syntax")
+    value = json.loads(text, object_pairs_hook=unique_object,
+                       parse_constant=reject_constant)
+    nodes = 0
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        nodes += 1
+        require(nodes <= MAX_JSON_NODES, "control node bound")
+        if type(item) is dict:
+            pending.extend(item.values())
+            pending.extend(item.keys())
+        elif type(item) is list:
+            pending.extend(item)
+        elif type(item) is str:
+            require(not any(0xd800 <= ord(c) <= 0xdfff for c in item),
+                    "control unpaired surrogate")
+        elif type(item) is float:
+            require(math.isfinite(item), "control nonfinite numeric overflow")
+    require(type(value) is dict, "control object required")
+    return value
+
+
+def validate_input(raw, hook, output_directory=None):
+    value = parse_control(raw)
+    require(set(value) == {"kwargs"} and type(value["kwargs"]) is dict,
+            "hook input closed envelope")
+    require(hook in {x[1] for x in OPERATIONS}, "hook selection")
+    expected = {"config_settings": None}
+    if hook == "build_sdist":
+        require(type(output_directory) is str and output_directory,
+                "fixed owner output directory required")
+        expected["sdist_directory"] = output_directory
+    elif hook == "build_wheel":
+        require(type(output_directory) is str and output_directory,
+                "fixed owner output directory required")
+        expected.update(wheel_directory=output_directory, metadata_directory=None)
+    else:
+        require(output_directory is None, "query output directory forbidden")
+    require(value["kwargs"] == expected, "hook kwargs mismatch")
+    return value
+
+
+def validate_output(raw, hook, expected_basename=None):
+    value = parse_control(raw)
+    require(hook in {x[1] for x in OPERATIONS}, "hook selection")
+    require(set(value) == {"unsupported", "return_val", "warnings"},
+            "hook output closed success envelope")
+    require(value["unsupported"] is False, "unsupported hook")
+    require(type(value["warnings"]) is list and not value["warnings"],
+            "unexpected hook warnings")
+    returned = value["return_val"]
+    if hook.startswith("get_requires_for_build_"):
+        require(expected_basename is None, "query basename forbidden")
+        require(type(returned) is list, "raw requirement list required")
+        # Inspect every raw item BEFORE any set conversion. Every nonempty list
+        # is rejected for these fixed roots; no dependency resolver fallback.
+        seen = set()
+        for item in returned:
+            require(type(item) is str and 0 < len(item) <= 4096,
+                    "requirement item type/bound")
+            require(item not in seen, "duplicate raw requirement")
+            seen.add(item)
+        require(not returned, "unexpected dynamic build requirements")
+    else:
+        require(type(expected_basename) is str and 0 < len(expected_basename) <= 255,
+                "owner expected basename required")
+        require(all(ord(c) < 128 and (c.isalnum() or c in "._-")
+                    for c in expected_basename), "artifact basename spelling")
+        require(expected_basename[0].isalnum() and ".." not in expected_basename,
+                "artifact basename traversal")
+        suffix = ".tar.gz" if hook == "build_sdist" else ".whl"
+        require(expected_basename.endswith(suffix), "artifact suffix")
+        require(type(returned) is str and returned == expected_basename,
+                "artifact basename mismatch")
+    return value
+
+
+class HookLedger:
+    """One finite source proposal; not process ownership or resource proof.
+
+    Advance only after owned child actual exit, full raw output validation and
+    operation-specific archive/materialization evidence in the future runner.
+    This class deliberately accepts no supplied PASS token for those gates.
+    """
+    def __init__(self):
+        self.position = 0
+        self.active = None
+        self.failed = False
+
+    def begin(self, project, source_role, hook):
+        try:
+            require(not self.failed and self.active is None, "ledger not idle")
+            require(self.position < len(PROJECTS) * len(OPERATIONS), "ledger exhausted")
+            expected = (PROJECTS[self.position // len(OPERATIONS)],
+                        *OPERATIONS[self.position % len(OPERATIONS)])
+            require((project, source_role, hook) == expected, "ledger operation mismatch")
+        except BaseException:
+            self.failed = True
+            raise
+        self.active = expected
+        return expected
+
+    def finish_raw(self, raw, expected_basename=None):
+        try:
+            require(not self.failed and self.active is not None, "ledger no active hook")
+            result = validate_output(raw, self.active[2], expected_basename)
+        except BaseException:
+            self.failed = True
+            raise
+        self.active = None
+        self.position += 1
+        return result
+
+    def abort(self):
+        self.failed = True
+
+    def raw_complete(self):
+        return (not self.failed and self.active is None and
+                self.position == len(PROJECTS) * len(OPERATIONS))
+
+
+CONTROL_NAMES = ("input.json", "output.json")
+
+
+def validate_runner_fields(command, cwd, extra_environment, expected_command, expected_cwd):
+    """Pure private-owner comparison only; no launch/origin/admission authority."""
+    require(type(command) is list and type(expected_command) is list and
+            len(command) == len(expected_command) == 4 and
+            all(type(x) is str and x and "\0" not in x for x in command + expected_command),
+            "fixed four-field hook command")
+    require(command == expected_command and type(cwd) is str and cwd == expected_cwd,
+            "fixed owner command/cwd mismatch")
+    require(command[2] in {x[1] for x in OPERATIONS}, "fixed hook selection")
+    require(type(extra_environment) is dict and extra_environment == BACKEND_ENV,
+            "backend environment mismatch")
+    return tuple(command)
+
+
+def linux_control_read(root_fd, name):
+    require(os.name == "posix" and type(root_fd) is int and root_fd >= 0 and
+            type(name) is str and name in CONTROL_NAMES, "control reader selector")
+    require(stat.S_ISDIR(os.fstat(root_fd).st_mode), "control root directory")
+    descriptor = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC |
+                         os.O_NONBLOCK, dir_fd=root_fd)
+    try:
+        before = os.fstat(descriptor)
+        require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and
+                0 < before.st_size <= MAX_JSON_BYTES, "control regular file/bound")
+        chunks = [];count = 0
+        while True:
+            part = os.read(descriptor, min(4096, MAX_JSON_BYTES + 1 - count))
+            require(type(part) is bytes, "control read type")
+            if not part:break
+            count += len(part);require(count <= MAX_JSON_BYTES, "control read growth")
+            chunks.append(part)
+        after = os.fstat(descriptor)
+        # All stat tuple fields plus explicit nanoseconds: no atime drift waiver.
+        require(tuple(before) == tuple(after) and
+                (before.st_atime_ns, before.st_mtime_ns, before.st_ctime_ns) ==
+                (after.st_atime_ns, after.st_mtime_ns, after.st_ctime_ns), "control stat drift")
+        require(count == before.st_size, "control EOF byte count")
+        return b"".join(chunks)
+    finally:close_preserving(descriptor)
+
+
+def linux_control_write(root_fd, name, raw):
+    require(os.name == "posix" and type(root_fd) is int and root_fd >= 0 and
+            type(name) is str and name in CONTROL_NAMES and type(raw) is bytes and 0 < len(raw) <= MAX_JSON_BYTES,
+            "control writer selector/bound")
+    require(stat.S_ISDIR(os.fstat(root_fd).st_mode), "control root directory")
+    descriptor = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL |
+                         os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=root_fd)
+    try:
+        before = os.fstat(descriptor)
+        require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == 0,
+                "new control regular file")
+        offset = 0
+        while offset < len(raw):
+            written = os.write(descriptor, raw[offset:offset + 4096])
+            require(type(written) is int and 0 < written <= min(4096, len(raw) - offset),
+                    "control write count")
+            offset += written
+        after = os.fstat(descriptor)
+        require(after.st_size == len(raw) and after.st_nlink == 1 and
+                (before.st_dev, before.st_ino, before.st_mode) ==
+                (after.st_dev, after.st_ino, after.st_mode), "control created identity/size")
+    finally:close_preserving(descriptor)
+
+
+class WindowsControlFiles(WindowsFiles):
+    def open_read(self, parent, name):
+        require(type(name) is str and name in CONTROL_NAMES and type(parent) is int and
+                0 < parent < (1 << 64) - 1, "control native reader selector")
+        encoded = name.encode("utf-16-le")
+        buffer = C.create_string_buffer(encoded + b"\0\0")
+        string = UnicodeString(len(encoded), len(encoded) + 2, C.cast(buffer, C.c_void_p))
+        attributes = ObjectAttributes(C.sizeof(ObjectAttributes), parent, C.pointer(string),
+                                      0x1000, None, None)
+        result = C.c_void_p();ios = IOStatus()
+        status = self.nt.NtCreateFile(C.byref(result), 0x100081, C.byref(attributes),
+            C.byref(ios), None, 0x80, 0, 1, 0x60, None, 0)  # FILE_OPEN, non-directory sync
+        handle = result.value
+        owned = (status >= 0 and type(handle) is int and
+                 0 < handle < (1 << 64) - 1 and handle != parent)
+        try:
+            require(status == 0 and owned and ios.Information == 1, "control opened result")
+            self.inspect(handle, False)
+        except BaseException:
+            if owned:self.close_primary(handle)
+            raise
+        return handle
+
+    def read_bounded(self, handle):
+        info = StandardInfo()
+        require(self.k.GetFileInformationByHandleEx(handle, 1, C.byref(info), C.sizeof(info)) != 0,
+                "control size query")
+        size = info.EndOfFile
+        require(0 < size <= MAX_JSON_BYTES, "control byte size")
+        self.inspect(handle, False, size)
+        pieces = [];count = 0
+        while count <= MAX_JSON_BYTES:
+            requested = min(4096, MAX_JSON_BYTES + 1 - count)
+            buffer = C.create_string_buffer(requested);read = C.c_uint32()
+            require(self.k.ReadFile(handle, buffer, requested, C.byref(read), None) != 0 and
+                    read.value <= requested, "control read result")
+            if read.value == 0:break
+            count += read.value;require(count <= MAX_JSON_BYTES, "control file growth")
+            pieces.append(buffer.raw[:read.value])
+        require(count == size, "control EOF size")
+        self.inspect(handle, False, size)
+        return b"".join(pieces)
+
+    def read_control(self, parent, name):
+        handle = self.open_read(parent, name)
+        try:return self.read_bounded(handle)
+        finally:self.close_primary(handle)
+
+    def write_control(self, parent, name, raw):
+        require(type(name) is str and name in CONTROL_NAMES and type(raw) is bytes and
+                0 < len(raw) <= MAX_JSON_BYTES, "control native write bound")
+        handle = self.create(parent, name, False)
+        try:self.write_verify(handle, raw)
+        finally:self.close_primary(handle)
+
+
+def check_input_bytes(raw, expected_sha256, hook, output_directory=None):
+    require(type(raw) is bytes and hashlib.sha256(raw).hexdigest() == expected_sha256,
+            "original input byte identity")
+    return validate_input(raw, hook, output_directory)
+
+
+def check_output_bytes(raw, hook, expected_basename=None):
+    # Retain original full bytes; never normalize, delete duplicate keys or set
+    # convert before this exact validation and original-byte evidence recording.
+    value = validate_output(raw, hook, expected_basename)
+    return dict(raw=raw, sha256=hashlib.sha256(raw).hexdigest(), value=value, admitted=False)
+
+ORIGINAL_HOOK_SHA256 = "e74d67a39a68a301ddec69516ec217081ccb4d00673c41f3e56ac6ca5d11065f"
+
+
+def encode_closed_reply(value, hook, expected_basename=None):
+    # Check exact Python shape BEFORE json.dumps can allocate for an unexpected
+    # backend value. Valid shapes here contain only a bounded basename or [].
+    require(type(value) is dict and all(type(k) is str for k in value) and
+            set(value) == {"unsupported", "return_val", "warnings"}, "raw reply envelope")
+    require(value["unsupported"] is False and type(value["warnings"]) is list and
+            len(value["warnings"]) == 0, "raw reply failure/warnings")
+    require(type(hook) is str and hook in {x[1] for x in OPERATIONS}, "raw reply hook")
+    returned = value["return_val"]
+    if hook.startswith("get_requires_for_build_"):
+        require(expected_basename is None and type(returned) is list and len(returned) == 0,
+                "raw dynamic requirements must be empty")
+    else:
+        require(type(returned) is str and type(expected_basename) is str and
+                0 < len(returned) <= 255 and returned == expected_basename,
+                "raw build basename type/bound/identity")
+    raw = json.dumps(value, ensure_ascii=True, allow_nan=False, indent=2).encode("ascii")
+    require(len(raw) <= MAX_JSON_BYTES, "encoded reply byte cap")
+    validate_output(raw, hook, expected_basename)
+    return raw
+
+
+def load_original_hook_source(raw, script_origin):
+    """Future child-only code loading AFTER outer preimport physical admission.
+
+    This is an actual fixed-source loader proposal, not an executed load or an
+    issuer. No arbitrary backend/module/code selector is exposed remotely.
+    """
+    require(type(raw) is bytes and len(raw) == 12856 and
+            hashlib.sha256(raw).hexdigest() == ORIGINAL_HOOK_SHA256, "original hook source bytes")
+    require(type(script_origin) is str and script_origin and "\0" not in script_origin,
+            "fixed owner script origin")
+    namespace = {"__name__": "_eq083_original_hook", "__file__": script_origin}
+    code = compile(raw, script_origin, "exec", dont_inherit=True)
+    exec(code, namespace)
+    return namespace
+
+
+class OwnedHookBridge:
+    """Trusted qualification child shim. Physical root/child ownership external.
+
+    Use one new object in one already-owned admitted child for each fixed hook.
+    Never invoke a backend in the author/controller process.
+    """
+    def __init__(self, root, control_directory, input_sha256, hook,
+                 output_directory=None, expected_basename=None):
+        require(type(control_directory) is str and control_directory and
+                "\0" not in control_directory, "fixed control directory")
+        require(type(hook) is str and hook in {x[1] for x in OPERATIONS}, "fixed bridge hook")
+        require(type(input_sha256) is str and len(input_sha256) == 64 and
+                all(c in "0123456789abcdef" for c in input_sha256), "fixed input byte digest")
+        self.root = root
+        self.directory = control_directory
+        self.input_sha256 = input_sha256
+        self.hook = hook
+        self.output_directory = output_directory
+        self.expected_basename = expected_basename
+        self.read_count = 0;self.write_count = 0;self.failed = False
+        self.output_raw = None
+        self.api = WindowsControlFiles() if os.name == "nt" else None
+
+    def read_json(self, path):
+        try:
+            require(not self.failed and self.read_count == 0 and self.write_count == 0 and
+                    type(path) is str and path == os.path.join(self.directory, "input.json"),
+                    "original hook input path/order")
+            self.read_count += 1
+            raw = (self.api.read_control(self.root, "input.json") if self.api is not None
+                   else linux_control_read(self.root, "input.json"))
+            return check_input_bytes(raw, self.input_sha256, self.hook, self.output_directory)
+        except BaseException:
+            self.failed = True
+            raise
+
+    def write_json(self, value, path, **kwargs):
+        try:
+            require(not self.failed and self.read_count == 1 and self.write_count == 0 and
+                    type(path) is str and path == os.path.join(self.directory, "output.json") and
+                    type(kwargs) is dict and kwargs == {"indent": 2}, "original hook output path/order")
+            self.write_count += 1
+            raw = encode_closed_reply(value, self.hook, self.expected_basename)
+            if self.api is not None:self.api.write_control(self.root, "output.json", raw)
+            else:linux_control_write(self.root, "output.json", raw)
+            self.output_raw = raw
+        except BaseException:
+            self.failed = True
+            raise
+
+    def run_original_main(self, raw_source, script_origin):
+        """Called ONLY inside owned child; load fixed original bytes internally."""
+        namespace = None;patched = False
+        try:
+            require(not self.failed and self.read_count == self.write_count == 0,
+                    "bridge already used")
+            namespace = load_original_hook_source(raw_source, script_origin)
+            child_sys = namespace["sys"]
+            original_argv = child_sys.argv
+            original_read = namespace["read_json"];original_write = namespace["write_json"]
+            patched = True
+            namespace["read_json"] = self.read_json;namespace["write_json"] = self.write_json
+            child_sys.argv = [script_origin, self.hook, self.directory]
+            namespace["main"]()
+            require(not self.failed and self.read_count == self.write_count == 1 and
+                    type(self.output_raw) is bytes, "hook single raw reply incomplete")
+            return dict(raw=self.output_raw, sha256=hashlib.sha256(self.output_raw).hexdigest(),
+                        admitted=False)
+        except BaseException:
+            self.failed = True
+            raise
+        finally:
+            if patched:
+                primary = sys.exc_info()[1]
+                cleanup = None
+                try:
+                    child_sys.argv = original_argv
+                except BaseException as error:
+                    cleanup = error
+                try:
+                    namespace["read_json"] = original_read
+                except BaseException as error:
+                    if cleanup is None:cleanup = error
+                try:
+                    namespace["write_json"] = original_write
+                except BaseException as error:
+                    if cleanup is None:cleanup = error
+                if cleanup is not None:
+                    self.failed = True
+                    if primary is not None:raise primary from cleanup
+                    raise cleanup
+
+import time
+
+
+class WindowsHookResultController:
+    """Future parent-only result collection from already retained owned handles.
+
+    This does not launch or admit a child. The outer owner must exclude further
+    assignment to the job and every writer before using this controller.
+    Borrowed process/job/root handles remain owned by that outer owner.
+    """
+    def __init__(self, process, job, root, hook, expected_basename=None):
+        require(sys.platform == "win32" and C.sizeof(C.c_void_p) == 8,
+                "Windows controller ABI")
+        require(all(type(h) is int and 0 < h < 2**64 - 1 for h in (process, job, root)) and
+                len({process, job, root}) == 3, "distinct borrowed controller handles")
+        require(type(hook) is str and hook in {x[1] for x in OPERATIONS}, "controller hook")
+        self.process = process;self.job = job;self.root = root
+        self.hook = hook;self.expected_basename = expected_basename
+        self.used = False;self.failed = False;self.last_clock = None
+        self.kernel = C.WinDLL("kernel32", use_last_error=True)
+        from ctypes import wintypes as w
+        self.DWORD = w.DWORD;self.BOOL = w.BOOL
+        class Accounting(C.Structure):
+            _fields_ = [(n, C.c_longlong) for n in
+                        ("user", "kernel", "period_user", "period_kernel")] + [
+                        (n, w.DWORD) for n in ("faults", "total", "active", "terminated")]
+        self.Accounting = Accounting
+        for name, args, result in (
+            ("WaitForSingleObject", [w.HANDLE, w.DWORD], w.DWORD),
+            ("GetExitCodeProcess", [w.HANDLE, C.POINTER(w.DWORD)], w.BOOL),
+            ("IsProcessInJob", [w.HANDLE, w.HANDLE, C.POINTER(w.BOOL)], w.BOOL),
+            ("QueryInformationJobObject", [w.HANDLE, C.c_int, C.c_void_p, w.DWORD,
+                                          C.c_void_p], w.BOOL),
+            ("TerminateJobObject", [w.HANDLE, w.UINT], w.BOOL)):
+            fn = getattr(self.kernel, name);fn.argtypes = args;fn.restype = result
+        self.files = WindowsControlFiles()
+
+    def _clock(self):
+        value = time.monotonic_ns()
+        require(type(value) is int and value >= 0 and
+                (self.last_clock is None or value >= self.last_clock), "controller clock")
+        self.last_clock = value
+        return value
+
+    def _observe(self):
+        contained = self.BOOL()
+        require(self.kernel.IsProcessInJob(self.process, self.job, C.byref(contained)) and
+                contained.value, "controller retained process job membership")
+        status = self.kernel.WaitForSingleObject(self.process, 0)
+        require(status in (0, 258), "controller process wait status")
+        value = self.Accounting()
+        require(self.kernel.QueryInformationJobObject(self.job, 1, C.byref(value),
+                C.sizeof(value), None), "controller job accounting query")
+        require(0 <= value.active <= 2, "controller job active bound")
+        if status == 258 or value.active != 0:return None
+        code = self.DWORD()
+        require(self.kernel.GetExitCodeProcess(self.process, C.byref(code)),
+                "controller exit code query")
+        return int(code.value)
+
+    def _settle(self, seconds):
+        require(type(seconds) is int and seconds in (6, 30), "controller settle budget")
+        deadline = self._clock() + seconds * 1000000000
+        for _ in range(4001):
+            require(self._clock() <= deadline, "controller settle deadline")
+            code = self._observe()
+            require(self._clock() <= deadline, "controller late settle")
+            if code is not None:return code
+            time.sleep(.01)
+        raise ValueError("controller settle iteration cap")
+
+    def collect_original_output(self):
+        active = False
+        try:
+            require(not self.used and not self.failed, "controller already terminal")
+            self.used = True;active = True
+            code = self._settle(30)
+            require(code == 0, "original hook actual child exit")
+            # Reading occurs only AFTER the retained process is signalled and
+            # the retained job has zero active processes. No caller PASS token.
+            raw = self.files.read_control(self.root, "output.json")
+            result = check_output_bytes(raw, self.hook, self.expected_basename)
+            require(self._observe() == 0, "controller quiescence changed during read")
+            return result
+        except BaseException as primary:
+            self.failed = True
+            if active:
+                cleanup = None
+                try:
+                    require(self.kernel.TerminateJobObject(self.job, 99),
+                            "controller failed job termination")
+                except BaseException as error:
+                    cleanup = error
+                try:
+                    self._settle(6)
+                except BaseException as error:
+                    if cleanup is None:cleanup = error
+                if cleanup is not None:raise primary from cleanup
+            raise
+
+import ctypes,os,subprocess,sys,time
+
+class WindowsHookChild:
+ def __init__(self,argv,cwd,environment,root,expected_argv,expected_cwd,expected_environment):
+  from ctypes import wintypes as w
+  if sys.platform!='win32' or ctypes.sizeof(ctypes.c_void_p)!=8:raise ValueError('owned Windows hook only')
+  if (type(argv) is not list or type(expected_argv) is not tuple or len(argv)!=7 or len(expected_argv)!=7
+      or any(type(v) is not str or not v or '\x00' in v or len(v)>4096 for v in [*argv,*expected_argv])
+      or tuple(argv)!=expected_argv or argv[1:4]!=['-I','-B','-S']
+      or argv[5] not in {v[1] for v in OPERATIONS}):raise ValueError('fixed hook outer entry argv')
+  if (type(cwd) is not str or type(expected_cwd) is not str or not cwd or '\x00' in cwd
+      or len(cwd)>4096 or cwd!=expected_cwd):raise ValueError('fixed hook cwd')
+  if (type(environment) is not dict or type(expected_environment) is not dict
+      or any(type(k) is not str or type(v) is not str or not k or '=' in k or '\x00' in k+v
+             or len(k)>128 or len(v)>4096 for d in (environment,expected_environment) for k,v in d.items())
+      or environment!=expected_environment or any(k.casefold()=='eq083_control_root_handle' for k in environment)
+      or len(environment)>32 or len({k.casefold() for k in environment})!=len(environment)):
+   raise ValueError('fixed hook closed environment')
+  if type(root) is not int or not 0<root<2**64-1:raise ValueError('borrowed parent root')
+  self.kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+  self.job=self.process=self.thread=self.entry=None
+  self.stdin=self.stdout=self.stderr=None
+  self.pid=self.entry_pid=None;self.returncode=None;self.ownership_closed=False
+  class Basic(ctypes.Structure):
+      _fields_ = [('process_time',ctypes.c_longlong),('job_time',ctypes.c_longlong),('flags',w.DWORD),
+          ('min_ws',ctypes.c_size_t),('max_ws',ctypes.c_size_t),('active',w.DWORD),
+          ('affinity',ctypes.c_size_t),('priority',w.DWORD),('scheduling',w.DWORD)]
+  class IO(ctypes.Structure):
+      _fields_ = [(name,ctypes.c_ulonglong) for name in ('read_op','write_op','other_op','read_bytes','write_bytes','other_bytes')]
+  class Extended(ctypes.Structure):
+      _fields_ = [('basic',Basic),('io',IO),('process_memory',ctypes.c_size_t),
+          ('job_memory',ctypes.c_size_t),('peak_process_memory',ctypes.c_size_t),('peak_job_memory',ctypes.c_size_t)]
+  class Startup(ctypes.Structure):
+      _fields_ = [('cb',w.DWORD),('reserved',w.LPWSTR),('desktop',w.LPWSTR),('title',w.LPWSTR),
+          ('x',w.DWORD),('y',w.DWORD),('xs',w.DWORD),('ys',w.DWORD),('xc',w.DWORD),('yc',w.DWORD),
+          ('fill',w.DWORD),('flags',w.DWORD),('show',w.WORD),('cb_reserved',w.WORD),
+          ('reserved2',ctypes.POINTER(ctypes.c_byte)),('stdin',w.HANDLE),('stdout',w.HANDLE),('stderr',w.HANDLE)]
+  class StartupExtended(ctypes.Structure):
+      _fields_ = [('startup',Startup),('attributes',ctypes.c_void_p)]
+  class Process(ctypes.Structure):
+      _fields_ = [('process',w.HANDLE),('thread',w.HANDLE),('pid',w.DWORD),('tid',w.DWORD)]
+  class Security(ctypes.Structure):
+      _fields_ = [('length',w.DWORD),('descriptor',ctypes.c_void_p),('inherit',w.BOOL)]
+  signatures = {
+      'CreateJobObjectW':([ctypes.c_void_p,w.LPCWSTR],w.HANDLE),
+      'SetInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD],w.BOOL),
+      'QueryInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD,ctypes.c_void_p],w.BOOL),
+      'CreateFileW':([w.LPCWSTR,w.DWORD,w.DWORD,ctypes.c_void_p,w.DWORD,w.DWORD,w.HANDLE],w.HANDLE),
+      'GetCurrentProcess':([],w.HANDLE),
+      'DuplicateHandle':([w.HANDLE,w.HANDLE,w.HANDLE,ctypes.POINTER(w.HANDLE),w.DWORD,w.BOOL,w.DWORD],w.BOOL),
+      'OpenProcess':([w.DWORD,w.BOOL,w.DWORD],w.HANDLE),
+      'GetProcessId':([w.HANDLE],w.DWORD),
+      'InitializeProcThreadAttributeList':([ctypes.c_void_p,w.DWORD,w.DWORD,ctypes.POINTER(ctypes.c_size_t)],w.BOOL),
+      'UpdateProcThreadAttribute':([ctypes.c_void_p,w.DWORD,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p],w.BOOL),
+      'DeleteProcThreadAttributeList':([ctypes.c_void_p],None),
+      'CreateProcessW':([w.LPCWSTR,w.LPWSTR,ctypes.c_void_p,ctypes.c_void_p,w.BOOL,w.DWORD,
+          ctypes.c_void_p,w.LPCWSTR,ctypes.POINTER(Startup),ctypes.POINTER(Process)],w.BOOL),
+      'IsProcessInJob':([w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)],w.BOOL),
+      'ResumeThread':([w.HANDLE],w.DWORD), 'WaitForSingleObject':([w.HANDLE,w.DWORD],w.DWORD),
+      'GetExitCodeProcess':([w.HANDLE,ctypes.POINTER(w.DWORD)],w.BOOL),
+      'TerminateJobObject':([w.HANDLE,w.UINT],w.BOOL), 'CloseHandle':([w.HANDLE],w.BOOL)}
+  for name, (args, result) in signatures.items():
+      function = getattr(self.kernel, name)
+      function.argtypes, function.restype = args, result
+  def check(value):
+   if not value:raise OSError(ctypes.get_last_error(),'owned hook ownership')
+  handles=[w.HANDLE() for _ in range(4)]
+  input_read,output_write,error_write,child_root=handles
+  attributes=None;initialized=False;child=Process();constructor_cleanup=None
+  try:
+   job=self.kernel.CreateJobObjectW(None,None)
+   if not job or job==2**64-1 or job==root:raise ValueError('owned hook invalid job/borrowed alias')
+   self.job=job
+   limits=Extended();limits.basic.flags=0x4|0x8|0x200|0x2000
+   limits.basic.job_time,limits.basic.active,limits.job_memory=100000000,2,1073741824
+   check(self.kernel.SetInformationJobObject(self.job,9,ctypes.byref(limits),ctypes.sizeof(limits)))
+   observed=Extended();check(self.kernel.QueryInformationJobObject(self.job,9,ctypes.byref(observed),ctypes.sizeof(observed),None))
+   if (observed.basic.flags,observed.basic.job_time,observed.basic.active,observed.job_memory)!=(limits.basic.flags,100000000,2,1073741824):raise ValueError('owned hook limits readback')
+   security=Security(ctypes.sizeof(Security),None,True)
+   for slot,rights in ((input_read,0x80000000),(output_write,0x40000000),(error_write,0x40000000)):
+    handle=self.kernel.CreateFileW('NUL',rights,3,ctypes.byref(security),3,0x80,None)
+    if not handle or handle==2**64-1:raise OSError(ctypes.get_last_error(),'owned hook NUL handle')
+    if handle==root or handle==self.job or any(h.value==handle for h in handles):
+     raise ValueError('owned hook NUL returned borrowed/owned alias')
+    slot.value=handle
+   current=self.kernel.GetCurrentProcess()
+   duplicated=self.kernel.DuplicateHandle(current,root,current,ctypes.byref(child_root),0,True,2)
+   if not duplicated:
+    child_root.value=None;raise OSError(ctypes.get_last_error(),'owned hook root duplicate')
+   if (not child_root.value or child_root.value==2**64-1 or child_root.value in
+       (root,self.job,input_read.value,output_write.value,error_write.value)):
+    child_root.value=None;raise ValueError('owned hook root duplicate alias/sentinel')
+   self.child_root_value=int(child_root.value)
+   size=ctypes.c_size_t();self.kernel.InitializeProcThreadAttributeList(None,2,0,ctypes.byref(size))
+   if not size.value or size.value>65536:raise ValueError('owned hook attributes bound')
+   attributes=ctypes.create_string_buffer(size.value);check(self.kernel.InitializeProcThreadAttributeList(attributes,2,0,ctypes.byref(size)));initialized=True
+   jobs=(w.HANDLE*1)(self.job);inherited=(w.HANDLE*4)(input_read.value,output_write.value,error_write.value,child_root.value)
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x2000d,jobs,ctypes.sizeof(jobs),None,None))
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x20002,inherited,ctypes.sizeof(inherited),None,None))
+   startup=StartupExtended();startup.startup.cb=ctypes.sizeof(startup);startup.startup.flags=0x100
+   startup.startup.stdin,startup.startup.stdout,startup.startup.stderr=input_read.value,output_write.value,error_write.value
+   startup.attributes=ctypes.cast(attributes,ctypes.c_void_p)
+   command_text=subprocess.list2cmdline(argv)
+   if len(command_text.encode('utf-16-le'))//2+1>32760:raise ValueError('owned hook command bound')
+   child_environment=dict(environment,EQ083_CONTROL_ROOT_HANDLE=str(self.child_root_value))
+   block_text=''.join(k+'='+v+'\0' for k,v in sorted(child_environment.items(),key=lambda item:item[0].casefold()))+'\0'
+   if len(block_text.encode('utf-16-le'))//2>32767:raise ValueError('owned hook environment bound')
+   block=ctypes.create_unicode_buffer(block_text)
+   command=ctypes.create_unicode_buffer(command_text)
+   check(self.kernel.CreateProcessW(argv[0],command,None,None,True,4|0x80000|0x400|0x8000000,block,cwd,ctypes.byref(startup.startup),ctypes.byref(child)))
+   # Protect returned handles before any bookkeeping container allocation.
+   self.process=child.process;self.thread=child.thread
+   if (not self.process or self.process==2**64-1 or self.process==root or self.process==self.job
+       or self.process==input_read.value or self.process==output_write.value
+       or self.process==error_write.value or self.process==child_root.value):self.process=None
+   if (not self.thread or self.thread==2**64-1 or self.thread==root or self.thread==self.job
+       or self.thread==input_read.value or self.thread==output_write.value
+       or self.thread==error_write.value or self.thread==child_root.value
+       or self.thread==self.process):self.thread=None
+   if self.process is None or self.thread is None:raise ValueError('owned hook process handles alias/sentinel')
+   self.pid=int(child.pid)
+   if not 0<self.pid<=4294967295 or self.kernel.GetProcessId(self.process)!=self.pid:
+    raise ValueError('owned hook process PID binding')
+   contained=w.BOOL();check(self.kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
+   if not contained.value:raise ValueError('owned hook launcher membership')
+   for handle in handles:check(self.kernel.CloseHandle(handle));handle.value=None
+   if self.kernel.ResumeThread(self.thread)!=1:raise OSError(ctypes.get_last_error(),'owned hook resume count')
+  except BaseException:
+   try:self.close()
+   except BaseException as error:constructor_cleanup=error
+   raise
+  finally:
+   primary=sys.exc_info()[1]
+   for handle in handles:
+    if handle.value:
+     try:
+      if not self.kernel.CloseHandle(handle):raise ValueError('owned hook setup handle close')
+     except BaseException as error:
+      if constructor_cleanup is None:constructor_cleanup=error
+     handle.value=None
+   if initialized:
+    try:self.kernel.DeleteProcThreadAttributeList(attributes)
+    except BaseException as error:
+     if constructor_cleanup is None:constructor_cleanup=error
+   if constructor_cleanup is not None:
+    if primary is not None:raise primary from constructor_cleanup
+    try:self.close()
+    except BaseException as error:raise constructor_cleanup from error
+    raise constructor_cleanup
+
+ def poll(self):
+  from ctypes import wintypes as w
+  if self.process is None:return self.returncode
+  status=self.kernel.WaitForSingleObject(self.process,0)
+  if status==258:return None
+  if status!=0:raise OSError(ctypes.get_last_error(),'owned hook poll')
+  code=w.DWORD()
+  if not self.kernel.GetExitCodeProcess(self.process,ctypes.byref(code)):raise OSError(ctypes.get_last_error(),'owned hook exit code')
+  self.returncode=int(code.value);return self.returncode
+
+ def wait(self,timeout):
+  if type(timeout) not in (int,float) or not 0<timeout<=4:raise ValueError('owned hook wait bound')
+  until=time.monotonic()+timeout
+  while True:
+   value=self.poll()
+   if value is not None:return value
+   if time.monotonic()>=until:raise subprocess.TimeoutExpired('owned hook',timeout)
+   time.sleep(.01)
+
+ def active(self):
+  from ctypes import wintypes as w
+  class Accounting(ctypes.Structure):
+   _fields_=[('user',ctypes.c_longlong),('kernel',ctypes.c_longlong),('period_user',ctypes.c_longlong),('period_kernel',ctypes.c_longlong),('page_faults',w.DWORD),('total',w.DWORD),('active',w.DWORD),('terminated',w.DWORD)]
+  value=Accounting()
+  if not self.kernel.QueryInformationJobObject(self.job,1,ctypes.byref(value),ctypes.sizeof(value),None):raise OSError(ctypes.get_last_error(),'owned hook job accounting')
+  if not 0<=value.active<=2:raise ValueError('owned hook job process bound')
+  return int(value.active)
+
+ def kill(self):
+  if self.job and not self.kernel.TerminateJobObject(self.job,99):raise OSError(ctypes.get_last_error(),'owned hook terminate job')
+
+ def close(self):
+  errors=[];settled=False
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(error);return None
+  try:
+   if self.job:
+    clean(self.kill)
+    if self.process is not None:clean(lambda:self.wait(3))
+    until=clean(lambda:time.monotonic()+3)
+    if until is not None:
+     for _ in range(4001):
+      count=clean(self.active)
+      if count==0:settled=True;break
+      now=clean(time.monotonic)
+      if count is None or now is None or now>=until:
+       errors.append(ValueError('job active unconfirmed'));break
+      if clean(lambda:(time.sleep(.01),True)[1]) is not True:break
+     else:errors.append(ValueError('job cleanup iteration cap'))
+  finally:
+   for pipe in (self.stdin,self.stdout,self.stderr):
+    if pipe is not None and clean(lambda pipe=pipe:pipe.closed) is not True:clean(pipe.close)
+   for name in ('entry','thread','process','job'):
+    handle=clean(lambda name=name:getattr(self,name))
+    if handle:
+     result=clean(lambda handle=handle:self.kernel.CloseHandle(handle))
+     if not result:errors.append(ValueError('handle close unconfirmed'))
+     clean(lambda name=name:setattr(self,name,None))
+  if errors:raise errors[0]
+  self.ownership_closed=settled
