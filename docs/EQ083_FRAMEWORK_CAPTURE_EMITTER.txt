@@ -1,0 +1,52 @@
+"""Pure fixed source emission; never import, write or admit these modules."""
+import ast
+import hashlib
+
+SOURCE_PINS = {'capture': (101761, 'c585790e8e3a6ea2a16ffc00cc5b2f9101f13dc45e702f1cfdda1ed6663172d1'), 'framework': (90045, 'aa1cbb56f459576a6b8b34c419084fd4d6275d797f783505f09276795e363396'), 'collector': (13978, 'e82fff551280650d17f4455edc3de7638ece5a8b90652df9ce5e8e6159c29882')}
+CAPTURE_NAMES = ('fixed_framework_capture_layout', 'verify_framework_source_capture',
+                 'compare_framework_source_captures')
+
+def emit_capture_sources(capture, framework, collector):
+    sources = {'capture': capture, 'framework': framework, 'collector': collector}
+    for role, data in sources.items():
+        size, sha = SOURCE_PINS[role]
+        if type(data) is not bytes or len(data) != size or hashlib.sha256(data).hexdigest() != sha:
+            raise ValueError('whole fixed source role identity')
+    text = capture.decode('utf-8', errors='strict')
+    tree = ast.parse(text)
+    selected = {}
+    pin = None
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef) and node.name in CAPTURE_NAMES:
+            if node.name in selected:
+                raise ValueError('duplicate capture definition')
+            selected[node.name] = node
+        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'FRAMEWORK_CAPTURE_PINS' for t in node.targets):
+            if pin is not None:
+                raise ValueError('duplicate capture byte pins')
+            pin = node
+    if set(selected) != set(CAPTURE_NAMES) or pin is None:
+        raise ValueError('complete fixed capture definitions')
+    segments = [ast.get_source_segment(text, pin)] + [ast.get_source_segment(text, selected[name]) for name in CAPTURE_NAMES]
+    if any(type(segment) is not str for segment in segments):
+        raise ValueError('exact source segment absent')
+    module = ('"""EQ083 outer-entry capture checks SOURCE ONLY; no physical admission."""\n\n'
+              'import hashlib\n'
+              'from _eq083_fixed_bootstrap import (fixed_bootstrap_temp_layout, owned_absolute,\n'
+              '                                    digest, snapshot_identity, MAX_DEPTH)\n\n'
+              + '\n\n'.join(segments)
+              + "\n\nif __name__ == '__main__':\n    raise SystemExit('SOURCE ONLY: outer physical issuer and host admission unresolved')\n").encode('utf-8')
+    derived = ast.parse(module)
+    retained = {node.name: node for node in derived.body if isinstance(node, ast.FunctionDef)}
+    if set(retained) != set(CAPTURE_NAMES) or any(ast.dump(selected[name], include_attributes=False) != ast.dump(retained[name], include_attributes=False) for name in CAPTURE_NAMES):
+        raise ValueError('capture definition AST changed')
+    # Two physical roots are intentional: the captured framework still has exactly two files.
+    # The outer owner must independently pin/capture the third file BEFORE its import.
+    files = {'bootstrap-framework/_eq083_fixed_bootstrap.py': framework,
+             'bootstrap-framework/_eq083_fixed_collector.py': collector,
+             'outer-entry/_eq083_framework_capture.py': module}
+    return dict(admitted=False, scope='SOURCE_EMISSION_ONLY_OUTER_ROOT_HOST_ISSUER_PENDING',
+                files=files, observed={name: dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest()) for name, data in files.items()})
+
+if __name__ == '__main__':
+    raise SystemExit('SOURCE ONLY: no registered physical issuer')

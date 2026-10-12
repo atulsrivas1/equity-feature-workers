@@ -1,0 +1,82 @@
+"""EQ083 outer-entry capture checks SOURCE ONLY; no physical admission."""
+
+import hashlib
+from _eq083_fixed_bootstrap import (fixed_bootstrap_temp_layout, owned_absolute,
+                                    digest, snapshot_identity, MAX_DEPTH)
+
+FRAMEWORK_CAPTURE_PINS = {
+    '_eq083_fixed_bootstrap.py': (90045, 'aa1cbb56f459576a6b8b34c419084fd4d6275d797f783505f09276795e363396'),
+    '_eq083_fixed_collector.py': (13978, 'e82fff551280650d17f4455edc3de7638ece5a8b90652df9ce5e8e6159c29882'),
+}
+
+def fixed_framework_capture_layout(bootstrap_recipe, wheel_path):
+    layout = fixed_bootstrap_temp_layout(bootstrap_recipe)
+    system = layout['system']
+    root = owned_absolute(layout['workspace'], system) / 'bootstrap-framework'
+    for value in (layout['venv'], layout['temp'], layout['base'], layout['resolved'], wheel_path):
+        other = owned_absolute(value, system)
+        if root == other or root in other.parents or other in root.parents:
+            raise ValueError('framework source root ownership overlap')
+    return dict(admitted=False, scope='FRAMEWORK_LAYOUT_ONLY_PHYSICAL_ISSUER_HOST_PENDING',
+                system=system, root=str(root), files=tuple(sorted(FRAMEWORK_CAPTURE_PINS)))
+
+def verify_framework_source_capture(capture, bootstrap_recipe, wheel_path):
+    layout = fixed_framework_capture_layout(bootstrap_recipe, wheel_path)
+    keys = {'scope', 'admitted', 'root', 'system', 'files', 'observed', 'file_identities', 'directories', 'ancestors', 'total_bytes'}
+    if type(capture) is not dict or set(capture) != keys or capture['admitted'] is not False or type(capture['scope']) is not str or capture['scope'] != 'TREE_CAPTURE_ONLY_RECIPE_HOST_AND_GENERATED_MAP_PENDING':
+        raise ValueError('closed original collector framework capture')
+    system = layout['system']
+    if type(capture['root']) is not str or type(capture['system']) is not str or capture['root'] != layout['root'] or capture['system'] != system:
+        raise ValueError('fixed framework root/system binding')
+    for key in ('files', 'observed', 'file_identities'):
+        if type(capture[key]) is not dict or set(capture[key]) != set(FRAMEWORK_CAPTURE_PINS) or any(type(name) is not str for name in capture[key]):
+            raise ValueError('complete exact framework source files')
+    identities, total = set(), 0
+    for name, expected in FRAMEWORK_CAPTURE_PINS.items():
+        data, observation = capture['files'][name], capture['observed'][name]
+        if type(data) is not bytes or len(data) != expected[0] or hashlib.sha256(data).hexdigest() != expected[1]:
+            raise ValueError('whole reviewed framework source bytes')
+        if type(observation) is not dict or set(observation) != {'bytes', 'sha256'} or type(observation['bytes']) is not int or type(observation['sha256']) is not str or observation != digest(data):
+            raise ValueError('strict entire framework observation')
+        pin = snapshot_identity(capture['file_identities'][name], 'file', system)
+        if pin[4] != len(data) or pin[:2] in identities:
+            raise ValueError('framework source size/identity alias')
+        identities.add(pin[:2]); total += len(data)
+    if type(capture['total_bytes']) is not int or capture['total_bytes'] != total:
+        raise ValueError('strict full framework byte total')
+    directories = capture['directories']
+    if type(directories) is not dict or any(type(name) is not str for name in directories) or set(directories) != {''}:
+        raise ValueError('framework root only; no extra empty directories')
+    row = directories['']
+    if type(row) is not tuple or len(row) != 2 or type(row[1]) is not tuple or any(type(name) is not str for name in row[1]) or row[1] != layout['files']:
+        raise ValueError('complete sorted framework root names')
+    root_pin = snapshot_identity(row[0], 'directory', system)
+    if root_pin[:2] in identities:
+        raise ValueError('framework directory/file identity alias')
+    identities.add(root_pin[:2])
+    root = owned_absolute(layout['root'], system)
+    paths = tuple(str(path) for path in tuple(reversed(root.parents)) + (root,))
+    ancestors = capture['ancestors']
+    if type(ancestors) is not tuple or len(ancestors) != len(paths) or len(paths) > MAX_DEPTH:
+        raise ValueError('full framework ancestor inventory')
+    seen = set()
+    for row, path in zip(ancestors, paths):
+        if type(row) is not tuple or len(row) != 2 or type(row[0]) is not str or row[0] != path:
+            raise ValueError('ordered exact framework ancestors')
+        pin = snapshot_identity(row[1], 'directory', system)
+        if pin[:2] in seen or path != str(root) and pin[:2] in identities:
+            raise ValueError('framework ancestor identity alias')
+        if path == str(root) and pin != root_pin:
+            raise ValueError('framework root ancestor identity mismatch')
+        seen.add(pin[:2])
+    return dict(admitted=False, scope='FRAMEWORK_CAPTURE_ONLY_PHYSICAL_ISSUER_ORIGIN_HOST_PENDING', layout=layout, capture=capture)
+
+def compare_framework_source_captures(before, after, bootstrap_recipe, wheel_path):
+    left = verify_framework_source_capture(before, bootstrap_recipe, wheel_path)
+    right = verify_framework_source_capture(after, bootstrap_recipe, wheel_path)
+    if left != right:
+        raise ValueError('framework full source capture drift')
+    return dict(admitted=False, scope='FRAMEWORK_CAPTURE_COMPARISON_ONLY_PHYSICAL_ISSUER_ORIGIN_HOST_PENDING', before=left, after=right)
+
+if __name__ == '__main__':
+    raise SystemExit('SOURCE ONLY: outer physical issuer and host admission unresolved')
