@@ -1,0 +1,59 @@
+{
+  "full_independent_primary_research": {
+    "reviewer": "/root/r7_policy_review",
+    "disposition": "PRIMARY_KERNEL_DOCUMENTATION_RESEARCH_SCOPED_CONTROLS_WHOLE_DOMAIN_UNESTABLISHED",
+    "scope": "PRIMARY_KERNEL_DOCUMENTATION_ONLY_NO_OPERATIONS",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "facts": [
+      {
+        "source": "https://docs.kernel.org/admin-guide/cgroup-v2.html",
+        "sections": [
+          "Memory",
+          "memory.max",
+          "Memory Ownership",
+          "PID",
+          "cgroup.kill",
+          "cgroup.stat",
+          "HugeTLB",
+          "memory.swap.max",
+          "memory.zswap.max"
+        ],
+        "fact": "Memory accounting includes anonymous/page-cache/tmpfs, dentries/inodes, sockets and kernel classes, but is not completely watertight. memory.max can temporarily overrun; reclaim/OOM does not imply every allocation succeeds or terminates promptly. Charges persist with the instantiating group after task migration. Swap, zswap and HugeTLB require distinct policies; HugeTLB pool allocation is not universally covered. pids limits creation, not organizational attachment. cgroup.kill targets the subtree, including concurrent forks; populated zero means no live tasks, not all resources freed. Deleted dying groups can retain resources for an undefined duration."
+      },
+      {
+        "source": "https://docs.kernel.org/filesystems/tmpfs.html",
+        "sections": [
+          "Sizing",
+          "noswap",
+          "Internal mount"
+        ],
+        "fact": "size limits allocated bytes and nr_inodes limits inodes for one instance; zero disables those bounds. Extended attributes also consume inode accounting. Limits can change on remount and cannot shrink below current usage. noswap disables that mount's swapping, with original setting retained on remount. Files use page cache and optionally swap. Internal shared-memory mounts and other instances are separate. Unmount loses contents; this statement does not prove bounded physical reclamation or account all host/kernel overhead."
+      },
+      {
+        "source": "https://docs.kernel.org/virt/kvm/api.html",
+        "section": "4.35 KVM_SET_USER_MEMORY_REGION",
+        "fact": "A guest memory slot maps a userspace address and size; its backing may be anonymous memory, ordinary files or hugetlbfs. Userspace backing changes propagate to the guest. Guest-slot size therefore does not itself cover the whole VMM, host kernel, devices, IPC, storage or other mappings. This API is memory mapping, not a total-resource admission contract."
+      }
+    ],
+    "qualified_conclusion": "These provide more concrete scoped controls than a generic parameter wrapper, but combining them has not established the requested strict whole-domain peak and finite reclamation contract. No universal impossibility or observed failure is inferred.",
+    "candidate_obligations": [
+      "Freeze kernel/config/controller/backing policies and initial membership; exclude unauthorized migration, attachment, limit/remount changes and alternate writable domains.",
+      "Bind every provider, VMM, child, broker and shared-object lifetime to explicit ownership. Resolve external host costs and overlap before deriving literal budgets.",
+      "Retain mappings, descriptors, deleted-open storage and asynchronous debt until actual final release; exit or logical emptiness is insufficient.",
+      "Review one supported complete outer-owner transaction, numerical bounds, failure ordering, source/native provenance and per-form qualification before execution."
+    ],
+    "limitations": [
+      "Current documentation, not an immutable selected kernel/configuration or named installed Linux host. No host selection/provisioning permission inferred.",
+      "No host/config/cgroup writes, mounting, setup, VM/native calls, process, probes/tests, source/binary execution or rejected binary-task reattempt. Old Windows research/audits not rerun; prior reports unchanged.",
+      "No strict all-instantaneous-bytes, kill-accepted-to-all-free, complete storage/node/topology, physical issuer, Ready or operational approval."
+    ],
+    "new_owner_input_required": false,
+    "candidate_selected": false,
+    "mechanism_admitted": false,
+    "operational_authorization": false
+  },
+  "new_tests": 0,
+  "scope": "Primary kernel documentation resource-class and lifetime contract only, no actual host or quota enforcement"
+}
