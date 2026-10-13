@@ -1,0 +1,29 @@
+# R7 approved support-contract reset
+
+Owner approval: October 13, 2026 (America/New_York), following a concrete recommendation to finish EQ083/EQ084 under an operator-controlled service contract and separate unresolved whole-platform enforcement. This supersedes the owner-approved parking restriction for bounded R7 work. It is an explicit change in guarantees, not a finding that the rejected platform approaches passed.
+
+## Supported R7 contract
+
+R7 qualifies the accepted calculation/I/O/worker/service/public-client/MCP composition on declared Windows/Linux Python environments. Operators control installed code, immutable logical adapter/sink registrations, configuration, dependencies and approved synthetic or explicitly licensed datasets. Remote callers remain untrusted: authentication, authorization, schemas, quotas, token retirement, expiry, redacted errors and precision checks stay mandatory. Requests cannot supply executable code, filesystem paths, SQL, arbitrary providers, URLs, credentials or TLS policy.
+
+Cancellation and timeouts retain their declared cooperative and platform semantics. Running capacity remains held until actual execution release; terminal state alone is insufficient. Require observed supervised child exit, exact scheduler close result and declared thread/socket/capture cleanup witnesses for tested cases. Possibly sent mutations retain unknown outcomes, explicit manual stable-key followup and no automatic replay. Partial output can expose a prefix; incomplete frames are rejected without replacement. A stuck synchronous callback/DNS operation cannot be described as interruptible merely because a timeout or EOF exists. Unknown or failed cleanup is recorded and prevents successful replacement/reuse for that qualification case; no actual kernel/provider-wide physical reclamation claim follows.
+
+Keep the service's implemented admission/accounting/process limits and test their actual behavior under supported assumptions. Describe their scope and limitations; neither a quota nor process exit proves whole-platform physical ownership. Shared untrusted plugins, arbitrary uploaded code, hostile host/kernel behavior and guaranteed finite settlement of every physical writer are outside this revised R7 contract.
+
+## Explicit separated work
+
+[374: SEC-001](https://github.com/atulsrivas1/equity-features/issues/374) owns total physical memory/storage-byte/node enforcement, every donor/execution/device/provider writer and finite whole-platform settlement/sourcebinary/ABI/license closure. It is Backlog, future release unset, and no longer a prerequisite for EQ083/EQ084 or R7 milestone8. Preserve all previous source research, unsupported candidates, rejected binary tasks, FAILED/REWORK and scoped proofs on PR371/worker42. Do not delete, relabel them successful, rerun unchanged failures or bypass an automatic rejection. The owner approval does not grant security implementation, kernel/vendor SDK/image acquisition, build/boot/provisioning, host admin, private providers, spending or public exposure.
+
+## EQ083 completion
+
+Retain original R01-R24: frozen snapshots/versions/expected original producers; unavailable/precision/coverage; real HTTP/client/official-reference MCP; authentication/authorization/retirement/original expiry; queued/running/cancel/failure/ambiguous mutations/explicit epochs; TLS/framing/EOF/partial output; trusted clock/counter/output/cooperative limits; receipt-boundary fidelity; approved synthetic audit/supervisor entries; fresh Windows/Linux wheel-sdist/light-native parent and child installation; actual archive/RECORD/source/core typing and consumer proofs; exact review/currentCI/paired publication/actualmain release acceptance. Reinterpret R19/R21 only within the supported operator-controlled contract above, without weakening behavioral, privacy, mathematical or observed-cleanup assertions.
+
+Existing scoped Windows proofs, including later TLS correction/pass, are design inputs and historical evidence, not fresh composed acceptance. Prepare a requirement-to-case inventory identifying proved feasibility, known fixture defects and genuine remaining gaps. Select portable trusted qualification harnesses and a conventional installed artifact/source provenance recipe. Do not inherit the unimplemented hypervisor/kernel/sourcebinary physical-issuer gates. Publish and review any revised harness/entry before new execution. Apply the separately reviewed observer race correction only as an explicit qualification-test change under the revised Ready/source review; preserve its failed run. Complete fresh supported forms and actual-main evidence before closing #93.
+
+## EQ084 completion
+
+After accepted #93, qualify one concretely approved staging deployment using allowed datasets and fixed registrations. Real deployment/versioned configuration, authenticated access, rollback, bounded load, negative security tests, backup/restoration, recovery drills and runbook evidence are required. Local loopback tests, source documentation and Actions artifacts do not prove hosted operations. First prepare the staging architecture, deployment recipe, operation list and cost/access/data boundary; request only missing named environment/issuer/credentials/network/permission/budget facts once concrete. No public exposure or spending is authorized by this scope reset alone.
+
+## Delivery and continuity
+
+Eight accepted R7 stories remain unchanged; #93/#94 stay open and R7 remains incomplete until their revised gates pass. Existing R7 local-review authorization covers this scoped continuation; no hosted/human review claim or CI/installed/publication waiver. Resume one story at a time after concrete Ready admission. R7 automation remains PAUSED; owner authorized active work, not a new scheduled task. No automatic restart/notification loop is introduced. Forecast unset. Live Project is status authority.

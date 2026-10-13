@@ -1,3 +1,5 @@
+R7 owner-approved scope reset October13: EQ083/EQ084 resume under trusted operator-controlled/cooperative service qualification. Strong whole-platform enforcement moved to SEC-001 #374, Backlog/future release; no R7 prerequisite. Original24 behavioral/delivery requirements, eightaccepted stories and all failure/rejection history retained. Revised scope/plan prepared, separate review and concrete Ready inputs pending; no new runtime/test/native/deployment proof. R7automation remainsPAUSED.
+
 ## EQ085 qualified default-branch delivery
 
 The full measured protocol and unchanged qualification tool are delivered by paired PR372/43. Independent actual-main tree/public UTF8/attribution review and all fifteen main jobs across eight workflows passed. Windows and Linux each produced fresh wheel/sdist smoke reports with complete result/status/quality/evidence/input parity and independent goldens. The actual server ZIPs, every entry, package/archive/source maps and unchanged reviewed inputs were read back separately per OS. No cross-OS timing equivalence or native ABI/physical ownership claim follows.

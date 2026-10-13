@@ -1,0 +1,11 @@
+# EQ083 revised qualification resume plan
+
+Scope authority: R7_SCOPE_RESET.md / owner approval October13. Stage: preparation; no new test/native execution or final acceptance. Preserve old draftPR371/42 and all history; revised work starts from accepted current mains with reviewed qualified package inputs.
+
+1. Inventory original R01-R24 and actual latest scoped execution records using targeted reads, particularly remaining snapshot/config/version rejection, unavailable/coverage, corrected TLS and fresh installed composition. Do not enumerate adjacent OS/kernel source.
+2. Freeze a portable HTTP/public RemoteClient/official MCP ClientSession harness over the actual accepted audited/supervised native service. Specify trusted fixture ownership, exact statuses/counters, full original producer parity, privacy, cooperative gates/observed exit/cleanup and unknown outcomes. Preserve accepted process containment; no untrusted callback or arbitrary native code admission.
+3. Reuse the accepted perOS foundation/service/client/MCP build/qualification flows for immutable package/dependency/source archive pins, RECORD and installed-origin/no-shadow proof. Add dedicated four-form composition coverage; no whole-host binary/source/ABI/physical owner claim. Identify required Python/native/reference dependency versions from current supported recipes and record perOS actual versions.
+4. Review concrete plan/inputs and qualification-only observer correction before Ready->Inprogress; review source before executing revised owners. Then implement final resilience tests/builder/workflow, execute fresh bothOS forms, independently review exact current evidence/findings, publish guarded paired changes and qualify actualmain before #93 acceptance.
+5. Prepare EQ084 staging operation packet while EQ083 qualification runs, without starting hosted operations or breaking the #93 dependency. Named platform/access/network/cost/data authorization is a real input once the packet is concrete.
+
+No new deadline estimate, numerical/API/runtime correction, package version, provider/private data or deployment grant is implied. Qualify a bounded correction separately if actual tests reveal a defect. Future SEC-001 is not an R7 blocker and is not started by this resume plan.
