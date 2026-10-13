@@ -1,0 +1,135 @@
+{
+  "scope": "UNINVOKED qualification-only cooperative20/supervisor25 correction within unchanged accepted30 cap;36-send/7ACK semantics retained. Null candidate commit fields resolve only through final current qualification Git snapshot; original source provenance retained.",
+  "inputs": [
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "harness_path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+      "harness_path": "schemas/remote-v1.1.schema.json",
+      "bytes": 30039,
+      "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+      "harness_path": "schemas/mcp-tools.json",
+      "bytes": 104088,
+      "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_jobs.py",
+      "harness_path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_service.py",
+      "harness_path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "harness_path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "82e88703135d517825d09ae75d63fe15d4760a78",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+      "harness_path": "schemas/remote-v1.schema.json",
+      "bytes": 28666,
+      "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_REMAINING_OWNER.txt",
+      "harness_path": "docs/EQ083_REMAINING_OWNER.txt",
+      "bytes": 6022,
+      "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b",
+      "original_commit": "e367a9b06bae24230c9177b6e749f5f8ea6dd3ff",
+      "original_sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "e367a9b06bae24230c9177b6e749f5f8ea6dd3ff",
+      "path": "docs/EQ083_REMAINING_FIXTURE_INPUTS.json",
+      "harness_path": "docs/EQ083_REMAINING_FIXTURE_INPUTS.json",
+      "bytes": 7383,
+      "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "5a4f718a4e4251b191f1f0bf9eecf6593d06733f",
+      "path": "docs/EQ083_REMAINING_REFERENCE_ENTRY.txt",
+      "harness_path": "docs/EQ083_REMAINING_REFERENCE_ENTRY.txt",
+      "bytes": 4461,
+      "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt",
+      "harness_path": "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt",
+      "bytes": 20063,
+      "sha256": "2ea0cad0e95faceb6e8e98c031aeab315f99e7dc0d3063f90c801253dcb6a6ff",
+      "original_commit": null,
+      "original_sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
+    }
+  ],
+  "reference_entry": {
+    "bytes": 4461,
+    "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594"
+  },
+  "remaining_entry": {
+    "bytes": 6022,
+    "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b"
+  },
+  "request_ledger": {
+    "direct": 11,
+    "client": 12,
+    "mcp": 13,
+    "total": 36,
+    "controls": 7,
+    "raw_reads": 6,
+    "source_entries": 1,
+    "polls": 0,
+    "baseline_mcp_provider": 5,
+    "faults_mcp_provider": 8,
+    "ack_requests": [
+      1,
+      12,
+      12,
+      15,
+      18,
+      30,
+      36
+    ],
+    "ack_raw_reads": [
+      0,
+      0,
+      0,
+      3,
+      6,
+      6,
+      6
+    ]
+  }
+}

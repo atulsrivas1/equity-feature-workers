@@ -1,0 +1,562 @@
+{
+  "scope": "UNINVOKED portable source candidate under approved cooperative R7; current null commits require current qualification Git source snapshot, original pins retained; source review before execution.",
+  "inputs": [
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "harness_path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+      "harness_path": "schemas/remote-v1.1.schema.json",
+      "bytes": 30039,
+      "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+      "harness_path": "schemas/mcp-tools.json",
+      "bytes": 104088,
+      "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_jobs.py",
+      "harness_path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_service.py",
+      "harness_path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "harness_path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "82e88703135d517825d09ae75d63fe15d4760a78",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+      "harness_path": "schemas/remote-v1.schema.json",
+      "bytes": 28666,
+      "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_TLS_REFERENCE_ENTRY.txt",
+      "harness_path": "docs/EQ083_TLS_REFERENCE_ENTRY.txt",
+      "bytes": 5840,
+      "sha256": "ef068da5993ab036cc11a887ab94ee9a2319bab7110d2308ef3dd0a43c12ba2d",
+      "original_commit": "2ceb179f9330ef7d75ee0ac378a6c3a7795d84fe",
+      "original_sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_TLS_OWNER_ENTRY.txt",
+      "harness_path": "docs/EQ083_TLS_OWNER_ENTRY.txt",
+      "bytes": 7338,
+      "sha256": "1ca2544cbb46b8aabd521b1bbf8e44830790c3d6302ab16317bb82a6ce0222ea",
+      "original_commit": null,
+      "original_sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_TLS_SESSION_TRANSPORT.txt",
+      "harness_path": "docs/EQ083_TLS_SESSION_TRANSPORT.txt",
+      "bytes": 26616,
+      "sha256": "5fa3082e9e35cbdfffb567804d4e95a80e0f89676784c9a5fe52e4051d98ec98",
+      "original_commit": "2ceb179f9330ef7d75ee0ac378a6c3a7795d84fe",
+      "original_sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_TLS_PROBE.txt",
+      "harness_path": "docs/EQ083_TLS_PROBE.txt",
+      "bytes": 49425,
+      "sha256": "3e244fcbdfdbdae7408ffe7645cb9a48a7a287f8578be62a3015dd325b05da75",
+      "original_commit": null,
+      "original_sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "c67cab68c73e0d99809f46c53961dae9f5bdaff3",
+      "path": "docs/EQ083_REFERENCE_PROCESS.txt",
+      "harness_path": "docs/EQ083_REFERENCE_PROCESS.txt",
+      "bytes": 11944,
+      "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "tests/resilience/certificate_pins.py",
+      "harness_path": "resilience/certificate_pins.py",
+      "bytes": 2163,
+      "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+    }
+  ],
+  "reference_entry": {
+    "bytes": 5840,
+    "sha256": "ef068da5993ab036cc11a887ab94ee9a2319bab7110d2308ef3dd0a43c12ba2d",
+    "review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107495742"
+  },
+  "owner_entry": {
+    "bytes": 7338,
+    "sha256": "1ca2544cbb46b8aabd521b1bbf8e44830790c3d6302ab16317bb82a6ce0222ea",
+    "review": "Renewed exact compaction source review pending; prior9985 source review6107465135 did not check admission cap"
+  },
+  "session_transport": {
+    "bytes": 26566,
+    "sha256": "25b1d54334dd74fbeddf01a7dcf6b1d0d32878216132dc79be2a29be407f3761",
+    "review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107669120",
+    "limits": {
+      "outgoing_frames": 8,
+      "outgoing_frame_bytes": 16384,
+      "incoming_frames": 8,
+      "incoming_frame_bytes": 65536,
+      "incoming_total": 524288,
+      "queues": 9,
+      "stderr": 4096,
+      "pid": 128,
+      "closed": 256,
+      "startup_seconds": 4,
+      "process_wait_seconds": 3,
+      "reader_join_seconds": 2,
+      "job_active_limit": 2,
+      "job_cpu_seconds": 10,
+      "job_memory_bytes": 1073741824
+    }
+  },
+  "request_ledger": {
+    "schema": "eq083.tls-dialogue.outside-design.v1",
+    "scope": "Source-derived outside design only, not frozen, reviewed, executed or Ready",
+    "common_baseline": {
+      "raw": 3,
+      "typed": 4,
+      "official_sdk_mcp": 5,
+      "http": 12,
+      "source": 1,
+      "native": "One actual audited original trades producer, entire producer and native SDK golden SHA; no stripped metadata",
+      "process": "Observe baseline MCP actual entry OS exit before fault process"
+    },
+    "common_followup": {
+      "raw": 2,
+      "typed": 2,
+      "new_official_sdk_mcp": 2,
+      "http": 6,
+      "source": 1,
+      "operation": "Explicit same-key calculate and full result/summary only, no replay or second compute"
+    },
+    "cases": [
+      {
+        "name": "verified-full-result",
+        "http_total": 18,
+        "accepts": 18,
+        "handshake_success": 18,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "fault": "None; full baseline and explicit followup"
+      },
+      {
+        "name": "untrusted-certificate",
+        "http_total": 18,
+        "accepts": 21,
+        "handshake_success": 18,
+        "handshake_failure": 3,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "raw_fault_attempts": 1,
+        "typed_fault_provider": 1,
+        "mcp_fault_provider": 1,
+        "fault": "Three explicit same-key calculate calls, each one TLS handshake and zero WSGI dispatch; default public trust rejects owned self-signed certificate before any HTTP send",
+        "controls_http": [
+          1,
+          12,
+          12,
+          12,
+          18
+        ]
+      },
+      {
+        "name": "hostname-mismatch",
+        "http_total": 18,
+        "accepts": 21,
+        "handshake_success": 18,
+        "handshake_failure": 3,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "raw_fault_attempts": 1,
+        "typed_fault_provider": 1,
+        "mcp_fault_provider": 1,
+        "fault": "Same fixed origin127.0.0.1 and trust store containing both owned certs; check_hostname stays true. Owner switches per-connection server context to SAN127.0.0.2, then restores valid context",
+        "controls_http": [
+          1,
+          12,
+          12,
+          12,
+          18
+        ]
+      },
+      {
+        "name": "extra-response-byte",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Fault MCP explicit same-key attach BEFORE arm adds1 actual HTTP; then raw/typed/MCP result reads each actually dispatch. Consume and close actual service response, append one byte with original Content-Length. No cached/fabricated producer",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "truncated-response-byte",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Same pre-arm MCP attach and three actual result dispatches; consume/close entire original response, forward all but last byte, preserve original declared length",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "duplicate-content-length",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Same pre-arm MCP attach and three actual result dispatches; append duplicate actual original Content-Length header, preserve actual producer body",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "actual-owner-denial",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "MCP fault process attaches original nativeA job using A provider BEFORE arm, then fixed provider rotates to B after arm and reads same A reference; actual HTTP403 invalidates local reference. Raw/typedB read actual nativeA result IDs403. Immutable MCP profile stays identical; token callback is trusted owner state. Foreign process unknown_reference0 is distinct",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      }
+    ],
+    "physical_caps": {
+      "accepts": 24,
+      "service_dispatch": 24,
+      "handshake_seconds": 2,
+      "accepted_connection_timeout_before_handshake": true,
+      "http_body": 262144,
+      "http_header": 8192,
+      "native_output": 768,
+      "control": 128,
+      "control_read": 129,
+      "ack": 1024
+    },
+    "controls": [
+      "settled",
+      "baseline",
+      "arm",
+      "restored",
+      "final"
+    ],
+    "pending": [
+      "Exact five controls/counters/handshake and response close source",
+      "Certificate identities from separately reviewed and actually completed local generation",
+      "TLS owner/ref/parent/copier published and separately reviewed before any TLS/socket/native execution",
+      "Generic schema and canonical SDK content checks",
+      "Full original snapshot after all repetitions AND actual native/server/process close"
+    ],
+    "limitations": "Attempt/provider/handshake/WSGI dispatch/native source are separate counters. TLS cert failure connect/statusNone is not mutation outcome_unknown because no HTTP bytes were sent. Read framing failure decode/statusNone is protocol invalid_response and not autoretryable. Server audit emitted is not remote receipt. No scheduler/HTTP owner replacement, hostname bypass, system trust installation, public hosting or TLS proof from fake-wire tests. Timing is cooperative, not hard DNS or callback termination. Counts remain proposed until exact source review and actual run."
+  },
+  "process_source": {
+    "scope": "Windows64 atomic owned reference job, reviewed source approval required before execution",
+    "bytes": 11944,
+    "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e",
+    "review": {
+      "disposition": "APPROVED corrected Windows reference process helper source only",
+      "heads": {
+        "equity-features": "6069348f7a6c575ef62f591387700eb7c159c68d",
+        "equity-feature-workers": "c67cab68c73e0d99809f46c53961dae9f5bdaff3"
+      },
+      "source_bytes": 11944,
+      "source_sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e",
+      "constructor_cases": [
+        {
+          "fault": null,
+          "outcome": "owned and closed",
+          "resumed": true,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CreateJobObjectW",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "SetInformationJobObject",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "QueryInformationJobObject",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CreatePipe",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "SetHandleInformation",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "InitializeProcThreadAttributeList",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "UpdateProcThreadAttribute",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CreateProcessW",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "IsProcessInJob",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "ResumeThread",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CloseHandle",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        }
+      ],
+      "fdopen_fault": true,
+      "entry_cases": [
+        {
+          "pid": true,
+          "rejected_before_open": true
+        },
+        {
+          "pid": 0,
+          "rejected_before_open": true
+        },
+        {
+          "pid": -1,
+          "rejected_before_open": true
+        },
+        {
+          "pid": 4294967296,
+          "rejected_before_open": true
+        },
+        {
+          "pid": "2002",
+          "rejected_before_open": true
+        },
+        {
+          "fault": "OpenProcess",
+          "original_exception": true,
+          "resources_closed": true
+        },
+        {
+          "fault": "IsProcessInJob",
+          "original_exception": true,
+          "resources_closed": true
+        },
+        {
+          "fault": "GetProcessId",
+          "original_exception": true,
+          "resources_closed": true
+        }
+      ],
+      "launcher_pid_admitted_as_entry": false,
+      "cleanup_cases": [
+        {
+          "fault": "TerminateJobObject",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 0
+        },
+        {
+          "fault": "WaitForSingleObject",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 0
+        },
+        {
+          "fault": "QueryInformationJobObject",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 0
+        },
+        {
+          "fault": "CloseHandle",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 1
+        }
+      ],
+      "findings": [],
+      "checks": [
+        "Three exact UTF8 mirrored assets; source AST/compile and accepted containment pin checked.",
+        "Exact five allowed docs paths per repo, protected runtime/test/build/workflow/schema inputs unchanged; Atul attribution and no coauthors.",
+        "Mock suspended creation asserts JOB_LIST+HANDLE_LIST before create, only three inheritable child ends and distinct launcher/entry positive PID normal case.",
+        "Valid constructor plus eleven API fault locations and fdopen ownership transfer failure clean mock resources and preserve original injected error.",
+        "Malformed PID types/ranges and substituted launcher PID rejected before OpenProcess; distinct valid entry admitted; entry open/membership/id-query failures preserve original and close temporary handle.",
+        "Termination/wait/job accounting/handle-close faults fail fixed cleanup outcome without ownership_closed claim."
+      ],
+      "limits": [
+        "Only exact source execution with fake WinDLL functions, fake CRT adoption and fake streams; no real Win32 API, subprocess, installed product/reference/native/setup/socket/copy/install/probe invocation.",
+        "Mock cleanup faults cannot establish actual OS cleanup; a failed CloseHandle may retain a native resource and the helper correctly fails rather than claiming confirmed close.",
+        "Windows-only source; integrated parent/copier and Linux ownership design still require separate review. No actual fault PASS, Ready/full24/forms/artifact/release qualification.",
+        "One read-only git show attempt was initially issued from parent directory and failed before reads; exact repo-qualified Git inspection used afterward."
+      ]
+    }
+  },
+  "certificate_inputs": {
+    "scope": "Trusted per-form private pin manifest digest passed by fixed parent; pins loader validates all4files beforeSSL. No staticoldprivatepaths/certificates or public keybytes."
+  }
+}

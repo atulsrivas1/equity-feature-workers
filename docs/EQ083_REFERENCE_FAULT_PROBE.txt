@@ -1,0 +1,676 @@
+"""Frozen EQ083 trusted reference fault three-lane parent; trusted installed harness only."""
+import subprocess,queue
+import sys,json,hashlib,math,socket,re,time,threading,tempfile,ctypes,errno
+from pathlib import Path
+from datetime import timedelta
+import anyio
+from jsonschema import Draft202012Validator
+from mcp import ClientSession,StdioServerParameters
+from mcp.client.stdio import stdio_client
+from mcp.shared.exceptions import McpError
+import mcp,equity_feature_io_sdk,equity_feature_client,equity_feature_mcp,equity_feature_service
+from equity_feature_client import RemoteClient,Request,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation,JobExpectation,ResultView
+from equity_feature_client.native import convert_result
+from equity_feature_io_sdk import encode_result
+from equity_feature_service._containment import OwnedEpochSupervisor
+from equity_feature_service._entry import OwnedEntryInventory,OwnedEntryProfile
+
+import ctypes,os,subprocess,sys,time
+
+class WindowsReferenceChild:
+ def __init__(self,argv):
+  from ctypes import wintypes as w
+  if sys.platform!='win32' or ctypes.sizeof(ctypes.c_void_p)!=8:raise ValueError('owned Windows reference only')
+  if type(argv) is not list or len(argv)!=12 or argv[:2]!=[sys.executable,'-I'] or any(type(v) is not str or not v or '\x00' in v for v in argv):raise ValueError('owned reference argv')
+  self.kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+  self.job=self.process=self.thread=self.entry=None
+  self.stdin=self.stdout=self.stderr=None
+  self.pid=self.entry_pid=None;self.returncode=None;self.ownership_closed=False
+  class Basic(ctypes.Structure):
+      _fields_ = [('process_time',ctypes.c_longlong),('job_time',ctypes.c_longlong),('flags',w.DWORD),
+          ('min_ws',ctypes.c_size_t),('max_ws',ctypes.c_size_t),('active',w.DWORD),
+          ('affinity',ctypes.c_size_t),('priority',w.DWORD),('scheduling',w.DWORD)]
+  class IO(ctypes.Structure):
+      _fields_ = [(name,ctypes.c_ulonglong) for name in ('read_op','write_op','other_op','read_bytes','write_bytes','other_bytes')]
+  class Extended(ctypes.Structure):
+      _fields_ = [('basic',Basic),('io',IO),('process_memory',ctypes.c_size_t),
+          ('job_memory',ctypes.c_size_t),('peak_process_memory',ctypes.c_size_t),('peak_job_memory',ctypes.c_size_t)]
+  class Startup(ctypes.Structure):
+      _fields_ = [('cb',w.DWORD),('reserved',w.LPWSTR),('desktop',w.LPWSTR),('title',w.LPWSTR),
+          ('x',w.DWORD),('y',w.DWORD),('xs',w.DWORD),('ys',w.DWORD),('xc',w.DWORD),('yc',w.DWORD),
+          ('fill',w.DWORD),('flags',w.DWORD),('show',w.WORD),('cb_reserved',w.WORD),
+          ('reserved2',ctypes.POINTER(ctypes.c_byte)),('stdin',w.HANDLE),('stdout',w.HANDLE),('stderr',w.HANDLE)]
+  class StartupExtended(ctypes.Structure):
+      _fields_ = [('startup',Startup),('attributes',ctypes.c_void_p)]
+  class Process(ctypes.Structure):
+      _fields_ = [('process',w.HANDLE),('thread',w.HANDLE),('pid',w.DWORD),('tid',w.DWORD)]
+  class Security(ctypes.Structure):
+      _fields_ = [('length',w.DWORD),('descriptor',ctypes.c_void_p),('inherit',w.BOOL)]
+  signatures = {
+      'CreateJobObjectW':([ctypes.c_void_p,w.LPCWSTR],w.HANDLE),
+      'SetInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD],w.BOOL),
+      'QueryInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD,ctypes.c_void_p],w.BOOL),
+      'CreatePipe':([ctypes.POINTER(w.HANDLE),ctypes.POINTER(w.HANDLE),ctypes.c_void_p,w.DWORD],w.BOOL),
+      'SetHandleInformation':([w.HANDLE,w.DWORD,w.DWORD],w.BOOL),
+      'OpenProcess':([w.DWORD,w.BOOL,w.DWORD],w.HANDLE),
+      'GetProcessId':([w.HANDLE],w.DWORD),
+      'InitializeProcThreadAttributeList':([ctypes.c_void_p,w.DWORD,w.DWORD,ctypes.POINTER(ctypes.c_size_t)],w.BOOL),
+      'UpdateProcThreadAttribute':([ctypes.c_void_p,w.DWORD,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p],w.BOOL),
+      'DeleteProcThreadAttributeList':([ctypes.c_void_p],None),
+      'CreateProcessW':([w.LPCWSTR,w.LPWSTR,ctypes.c_void_p,ctypes.c_void_p,w.BOOL,w.DWORD,
+          ctypes.c_void_p,w.LPCWSTR,ctypes.POINTER(Startup),ctypes.POINTER(Process)],w.BOOL),
+      'IsProcessInJob':([w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)],w.BOOL),
+      'ResumeThread':([w.HANDLE],w.DWORD), 'WaitForSingleObject':([w.HANDLE,w.DWORD],w.DWORD),
+      'GetExitCodeProcess':([w.HANDLE,ctypes.POINTER(w.DWORD)],w.BOOL),
+      'TerminateJobObject':([w.HANDLE,w.UINT],w.BOOL), 'CloseHandle':([w.HANDLE],w.BOOL)}
+  for name, (args, result) in signatures.items():
+      function = getattr(self.kernel, name)
+      function.argtypes, function.restype = args, result
+  def check(value):
+   if not value:raise OSError(ctypes.get_last_error(),'owned reference ownership')
+  handles=[w.HANDLE() for _ in range(6)]
+  input_read,input_write,output_read,output_write,error_read,error_write=handles
+  attributes=None;initialized=False;child=Process()
+  try:
+   self.job=self.kernel.CreateJobObjectW(None,None);check(self.job)
+   limits=Extended();limits.basic.flags=0x4|0x8|0x200|0x2000
+   limits.basic.job_time,limits.basic.active,limits.job_memory=100000000,2,1073741824
+   check(self.kernel.SetInformationJobObject(self.job,9,ctypes.byref(limits),ctypes.sizeof(limits)))
+   observed=Extended();check(self.kernel.QueryInformationJobObject(self.job,9,ctypes.byref(observed),ctypes.sizeof(observed),None))
+   if (observed.basic.flags,observed.basic.job_time,observed.basic.active,observed.job_memory)!=(limits.basic.flags,100000000,2,1073741824):raise ValueError('owned reference limits readback')
+   security=Security(ctypes.sizeof(Security),None,True)
+   for read,write,parent_end in ((input_read,input_write,input_write),(output_read,output_write,output_read),(error_read,error_write,error_read)):
+    check(self.kernel.CreatePipe(ctypes.byref(read),ctypes.byref(write),ctypes.byref(security),4096));check(self.kernel.SetHandleInformation(parent_end,1,0))
+   size=ctypes.c_size_t();self.kernel.InitializeProcThreadAttributeList(None,2,0,ctypes.byref(size))
+   if not size.value or size.value>65536:raise ValueError('owned reference attributes bound')
+   attributes=ctypes.create_string_buffer(size.value);check(self.kernel.InitializeProcThreadAttributeList(attributes,2,0,ctypes.byref(size)));initialized=True
+   jobs=(w.HANDLE*1)(self.job);inherited=(w.HANDLE*3)(input_read.value,output_write.value,error_write.value)
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x2000d,jobs,ctypes.sizeof(jobs),None,None))
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x20002,inherited,ctypes.sizeof(inherited),None,None))
+   startup=StartupExtended();startup.startup.cb=ctypes.sizeof(startup);startup.startup.flags=0x100
+   startup.startup.stdin,startup.startup.stdout,startup.startup.stderr=input_read.value,output_write.value,error_write.value
+   startup.attributes=ctypes.cast(attributes,ctypes.c_void_p)
+   command_text=subprocess.list2cmdline(argv)
+   if len(command_text.encode('utf-16-le'))//2+1>32760:raise ValueError('owned reference command bound')
+   environment={key:os.environ[key] for key in ('SystemRoot','WINDIR','TEMP','TMP') if key in os.environ}
+   block=ctypes.create_unicode_buffer(''.join(k+'='+v+'\0' for k,v in sorted(environment.items()))+'\0')
+   command=ctypes.create_unicode_buffer(command_text)
+   check(self.kernel.CreateProcessW(argv[0],command,None,None,True,4|0x80000|0x400|0x8000000,block,None,ctypes.byref(startup.startup),ctypes.byref(child)))
+   self.process,self.thread,self.pid=child.process,child.thread,int(child.pid)
+   contained=w.BOOL();check(self.kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
+   if not contained.value:raise ValueError('owned reference launcher membership')
+   for handle in (input_read,output_write,error_write):check(self.kernel.CloseHandle(handle));handle.value=None
+   import msvcrt
+   def adopt(handle,flags,mode):
+    fd=msvcrt.open_osfhandle(handle.value,flags|os.O_BINARY);handle.value=None
+    try:return os.fdopen(fd,mode,buffering=0)
+    except BaseException:os.close(fd);raise
+   self.stdin=adopt(input_write,os.O_WRONLY,'wb');self.stdout=adopt(output_read,os.O_RDONLY,'rb');self.stderr=adopt(error_read,os.O_RDONLY,'rb')
+   if self.kernel.ResumeThread(self.thread)==0xffffffff:raise OSError(ctypes.get_last_error(),'owned reference resume')
+  except BaseException:
+   try:self.close()
+   except BaseException:pass
+   raise
+  finally:
+   active_exception=sys.exc_info()[0] is not None;errors=[]
+   for handle in handles:
+    if handle.value:
+     try:
+      if not self.kernel.CloseHandle(handle):errors.append('handle')
+     except BaseException:errors.append('handle')
+     handle.value=None
+   if initialized:
+    try:self.kernel.DeleteProcThreadAttributeList(attributes)
+    except BaseException:errors.append('attributes')
+   if errors and not active_exception:
+    try:self.close()
+    except BaseException:pass
+    raise ValueError('owned reference setup handles')
+
+ def poll(self):
+  from ctypes import wintypes as w
+  if self.process is None:return self.returncode
+  status=self.kernel.WaitForSingleObject(self.process,0)
+  if status==258:return None
+  if status!=0:raise OSError(ctypes.get_last_error(),'owned reference poll')
+  code=w.DWORD()
+  if not self.kernel.GetExitCodeProcess(self.process,ctypes.byref(code)):raise OSError(ctypes.get_last_error(),'owned reference exit code')
+  self.returncode=int(code.value);return self.returncode
+
+ def wait(self,timeout):
+  if type(timeout) not in (int,float) or not 0<timeout<=4:raise ValueError('owned reference wait bound')
+  until=time.monotonic()+timeout
+  while True:
+   value=self.poll()
+   if value is not None:return value
+   if time.monotonic()>=until:raise subprocess.TimeoutExpired('owned reference',timeout)
+   time.sleep(.01)
+
+ def verify_entry(self,pid):
+  from ctypes import wintypes as w
+  if self.entry is not None or type(pid) is not int or not 0<pid<=4294967295 or pid==self.pid:raise ValueError('owned reference entry PID')
+  handle=self.kernel.OpenProcess(0x1000|0x100000,False,pid)
+  if not handle:raise OSError(ctypes.get_last_error(),'owned reference entry open')
+  try:
+   contained=w.BOOL()
+   if not self.kernel.IsProcessInJob(handle,self.job,ctypes.byref(contained)):raise OSError(ctypes.get_last_error(),'owned reference entry query')
+   if not contained.value or self.kernel.GetProcessId(handle)!=pid:raise ValueError('owned reference entry membership')
+   self.entry,self.entry_pid=handle,pid;handle=None
+  finally:
+   active_exception=sys.exc_info()[0] is not None
+   if handle:
+    try:
+     if not self.kernel.CloseHandle(handle):raise OSError(ctypes.get_last_error(),'owned reference entry handle')
+    except BaseException:
+     if not active_exception:raise
+
+ def entry_exited(self):
+  if self.entry is None:raise ValueError('owned reference entry unbound')
+  status=self.kernel.WaitForSingleObject(self.entry,0)
+  if status not in (0,258):raise OSError(ctypes.get_last_error(),'owned reference entry wait')
+  return status==0
+
+ def active(self):
+  from ctypes import wintypes as w
+  class Accounting(ctypes.Structure):
+   _fields_=[('user',ctypes.c_longlong),('kernel',ctypes.c_longlong),('period_user',ctypes.c_longlong),('period_kernel',ctypes.c_longlong),('page_faults',w.DWORD),('total',w.DWORD),('active',w.DWORD),('terminated',w.DWORD)]
+  value=Accounting()
+  if not self.kernel.QueryInformationJobObject(self.job,1,ctypes.byref(value),ctypes.sizeof(value),None):raise OSError(ctypes.get_last_error(),'owned reference job accounting')
+  if not 0<=value.active<=2:raise ValueError('owned reference job process bound')
+  return int(value.active)
+
+ def kill(self):
+  if self.job and not self.kernel.TerminateJobObject(self.job,99):raise OSError(ctypes.get_last_error(),'owned reference terminate job')
+
+ def close(self):
+  errors=[];settled=False
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(type(error).__name__);return None
+  try:
+   if self.job:
+    clean(self.kill)
+    if self.process is not None:clean(lambda:self.wait(3))
+    until=time.monotonic()+3
+    while True:
+     count=clean(self.active)
+     if count==0:settled=True;break
+     if count is None or time.monotonic()>=until:errors.append('job active unconfirmed');break
+     time.sleep(.01)
+    if self.entry is not None and clean(self.entry_exited) is not True:errors.append('entry exit unconfirmed')
+  finally:
+   for pipe in (self.stdin,self.stdout,self.stderr):
+    if pipe is not None and not pipe.closed:clean(pipe.close)
+   for name in ('entry','thread','process','job'):
+    handle=getattr(self,name)
+    if handle:
+     result=clean(lambda handle=handle:self.kernel.CloseHandle(handle))
+     if not result:errors.append('handle close unconfirmed')
+     setattr(self,name,None)
+  if errors:raise ValueError('owned reference cleanup failed')
+  self.ownership_closed=settled
+
+"""Uninvoked qualification source: one fixed trusted Linux reference process.
+
+Direct-child exit and pipe closure only; parent must join its bounded readers.
+No all-descendant, resource-budget, kernel or provider settlement assertion.
+"""
+import hashlib
+import math
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+
+class LinuxReferenceChild:
+    def __init__(self, argv, expected_entry_sha256):
+        if sys.platform != 'linux' or not sys.flags.isolated:
+            raise ValueError('owned isolated Linux reference only')
+        if (type(argv) is not list or len(argv) not in (12, 13)
+                or argv[:2] != [sys.executable, '-I']
+                or any(type(value) is not str or not value or '\x00' in value for value in argv)):
+            raise ValueError('owned reference arguments')
+        if (type(expected_entry_sha256) is not str or len(expected_entry_sha256) != 64
+                or any(char not in '0123456789abcdef' for char in expected_entry_sha256)):
+            raise ValueError('owned entry digest')
+        entry = Path(argv[2])
+        if not entry.is_absolute() or entry.is_symlink() or not entry.is_file():
+            raise ValueError('owned entry file')
+        with entry.open('rb') as stream:
+            source = stream.read(8193)
+        if not source or len(source) > 8192 or hashlib.sha256(source).hexdigest() != expected_entry_sha256:
+            raise ValueError('owned entry source')
+        if sum(len(value.encode('utf-8')) + 1 for value in argv) > 32760:
+            raise ValueError('owned command bound')
+        self.process = None
+        self.stdin = self.stdout = self.stderr = None
+        self.pid = self.entry_pid = self.returncode = None
+        self.ownership_closed = False
+        environment = {name: os.environ[name] for name in ('TMPDIR', 'LANG', 'LC_ALL') if name in os.environ}
+        try:
+            self.process = subprocess.Popen(
+                argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                bufsize=0, close_fds=True, start_new_session=True, env=environment,
+            )
+            self.pid = self.process.pid
+            for name in ('stdin', 'stdout', 'stderr'):
+                setattr(self, name, getattr(self.process, name))
+            if type(self.pid) is not int or self.pid <= 0 or any(
+                    pipe is None for pipe in (self.stdin, self.stdout, self.stderr)):
+                raise ValueError('owned reference startup')
+        except BaseException:
+            try:
+                self.close()
+            except BaseException:
+                pass
+            raise
+
+    def poll(self):
+        if self.process is None:
+            return self.returncode
+        self.returncode = self.process.poll()
+        return self.returncode
+
+    def wait(self, timeout):
+        if type(timeout) not in (int, float) or not math.isfinite(timeout) or not 0 < timeout <= 4:
+            raise ValueError('owned wait bound')
+        if self.process is None:
+            if self.returncode is None:
+                raise ValueError('owned process unavailable')
+            return self.returncode
+        self.returncode = self.process.wait(timeout=timeout)
+        return self.returncode
+
+    def verify_entry(self, pid):
+        # Linux uses the installed interpreter directly, without the Windows venv redirector.
+        if self.entry_pid is not None or type(pid) is not int or pid <= 0 or pid != self.pid:
+            raise ValueError('owned direct entry PID')
+        if self.poll() is not None:
+            raise ValueError('owned entry no longer live')
+        self.entry_pid = pid
+
+    def entry_exited(self):
+        if self.entry_pid is None:
+            raise ValueError('owned entry unbound')
+        return self.poll() is not None
+
+    def active(self):
+        # Only this retained direct child. This is deliberately not process-group accounting.
+        if self.process is None and self.pid is None:
+            return 0
+        return int(self.poll() is None)
+
+    def kill(self):
+        # Popen retains the unreaped child identity; do not signal a possibly reused group ID.
+        if self.process is not None and self.poll() is None:
+            self.process.kill()
+
+    def close(self):
+        if self.ownership_closed:
+            return
+        failures = []
+        def attempt(callback):
+            try:
+                return callback()
+            except BaseException as error:
+                failures.append(error)
+                return None
+        if self.process is not None:
+            attempt(self.kill)
+            attempt(lambda: self.wait(3))
+            settled = attempt(self.poll) is not None
+        else:
+            settled = self.pid is None
+        pipes = []
+        for name in ('stdin', 'stdout', 'stderr'):
+            for owner in (self, self.process):
+                if owner is not None:
+                    pipe = attempt(lambda owner=owner, name=name: getattr(owner, name))
+                    if pipe is not None and all(pipe is not previous for previous in pipes):
+                        pipes.append(pipe)
+        for pipe in pipes:
+            attempt(pipe.close)
+            if attempt(lambda pipe=pipe: pipe.closed) is not True:
+                failures.append(ValueError('owned pipe still open'))
+        if not settled:
+            failures.append(ValueError('owned direct child exit unconfirmed'))
+        if failures:
+            raise ValueError('owned reference cleanup failed') from failures[0]
+        self.ownership_closed = True
+
+
+def reference_child(argv):
+ name='docs/'+Path(argv[2]).name
+ if name not in assets:raise ValueError('owned fixed reference source')
+ expected_sha=hashlib.sha256(assets[name]).hexdigest()
+ if sys.platform=='win32':return WindowsReferenceChild(argv)
+ if sys.platform=='linux':return LinuxReferenceChild(argv,expected_sha)
+ raise ValueError('unsupported reference platform')
+
+if len(sys.argv)!=2:raise ValueError('owned parent arguments')
+root=Path(sys.argv[1]).resolve()
+assert sys.flags.isolated==1 and sys.platform in ('win32','linux') and not (root/'packages').exists()
+assert all('site-packages' in Path(v.__file__).resolve().parts for v in (mcp,equity_feature_io_sdk,equity_feature_client,equity_feature_mcp,equity_feature_service))
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+def pinned(path,size,digest):
+ with (root/path).open('rb') as stream:value=stream.read(size+1)
+ assert len(value)==size and hashlib.sha256(value).hexdigest()==digest
+ return value
+with (root/'docs/EQ083_REFERENCE_FAULT_PARENT_INPUTS.json').open('rb') as stream:manifest_bytes=stream.read(65537)
+assert len(manifest_bytes)<=65536
+manifest=json.loads(manifest_bytes)
+assert set(manifest)=={'scope','inputs','reference_entry','owner_entry','fault_entry','request_ledger','process_source'}
+assert 1<=len(manifest['inputs'])<=32 and len({v['harness_path'] for v in manifest['inputs']})==len(manifest['inputs'])
+assets={item['harness_path']:pinned(item['harness_path'],item['bytes'],item['sha256']) for item in manifest['inputs']}
+assert hashlib.sha256(assets['docs/EQ083_REFERENCE_PROCESS.txt']).hexdigest()=='49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e'
+fixture=json.loads(assets['docs/EQ081_CLIENT_FIXTURES.json'])
+remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']))
+remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
+tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
+assert len(tools)==7
+owner_source=pinned('docs/EQ083_REFERENCE_FAULT_OWNER.txt',5139,'d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347')
+pinned('docs/EQ083_REFERENCE_FAULT_ENTRY.txt',7919,'b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57')
+pinned('docs/EQ083_VERSION_REFERENCE_ENTRY.txt',3707,'2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41')
+def completed(path,limit):
+ marker=path.with_name(path.name+'.complete')
+ if not marker.exists():return None
+ assert marker.is_dir()
+ with path.open('rb') as stream:data=stream.read(limit+1)
+ assert len(data)<=limit
+ return json.loads(data)
+def wait_completed(path,limit,seconds):
+ deadline=time.monotonic()+seconds
+ while True:
+  value=completed(path,limit)
+  if value is not None:return value
+  assert time.monotonic()<deadline
+  time.sleep(.01)
+def exited(pid):
+ assert type(pid) is int and pid>0
+ if sys.platform=='linux':
+  try:value=(Path('/proc')/str(pid)/'stat').read_text(encoding='ascii')
+  except OSError as error:
+   if error.errno in (errno.ENOENT,errno.ESRCH):return True
+   raise
+  return value.rsplit(')',1)[1].strip().split()[0]=='Z'
+ kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+ kernel.OpenProcess.argtypes=[ctypes.c_uint32,ctypes.c_int,ctypes.c_uint32];kernel.OpenProcess.restype=ctypes.c_void_p
+ kernel.WaitForSingleObject.argtypes=[ctypes.c_void_p,ctypes.c_uint32];kernel.WaitForSingleObject.restype=ctypes.c_uint32
+ kernel.CloseHandle.argtypes=[ctypes.c_void_p];kernel.CloseHandle.restype=ctypes.c_int
+ handle=kernel.OpenProcess(0x100000,False,pid)
+ if not handle:
+  code=ctypes.get_last_error()
+  if code==87:return True
+  raise OSError(code,'owned process inspection')
+ try:
+  status=kernel.WaitForSingleObject(handle,0)
+  assert status in (0,258)
+  return status==0
+ finally:assert kernel.CloseHandle(handle)
+def pairs(items):
+ value={}
+ for key,item in items:
+  assert key not in value;value[key]=item
+ return value
+def number(value):
+ result=float(value);assert math.isfinite(result);return result
+def parse(raw):return json.loads(raw.decode('utf-8','strict'),object_pairs_hook=pairs,parse_float=number,parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite')))
+case=fixture['native_cases'][0];producer=case['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+def verify(value):
+ assert value==producer and hashlib.sha256(canonical(value)).hexdigest()==case['producer_payload_sha256']
+ native=convert_result(ResultView(canonical(dict(schema='equity.remote',version='1.1',request_id='native-proof',kind='result',payload=value))),expected)
+ assert native.ok and hashlib.sha256(encode_result(native.view)).hexdigest()==case['native_sha256']
+def value(outcome):assert outcome.ok;return outcome.view.payload_json()
+def denied(outcome):
+ assert not outcome.ok and outcome.view is None
+ f=outcome.failure;assert (f.category,f.code,f.phase,f.status)==('authorization','remote_denial','decode',403)
+modes=('provider-runtime','provider-interrupt','clock-before-bool','clock-before-negative','clock-before-float','clock-before-none','clock-after','active-eof-runtime','active-eof-interrupt','partial-output')
+
+def publish(path,value,limit):
+ data=canonical(value);assert len(data)<=limit and not path.exists() and not path.with_name(path.name+'.complete').exists()
+ pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
+
+def structured(name,response):
+ assert set(response)=={'content','structuredContent','isError'}
+ value=response['structuredContent'];assert type(value) is dict and len(canonical(value))<=16384
+ assert response['content']==[dict(type='text',text=canonical(value).decode('ascii'))] and response['isError']==(not value['ok'])
+ Draft202012Validator(next(v['outputSchema'] for v in tools if v['name']==name)).validate(value)
+ assert b'eq083-synthetic-private-token-path' not in canonical(response) and b'Bearer' not in canonical(response) and b'A'*43 not in canonical(response)
+ return value
+
+for mode in modes:
+ with tempfile.TemporaryDirectory(prefix='eq083-reference-fault-') as directory:
+  ready,stop,control,ack=(Path(directory)/name for name in ('ready','stop','control','ack'))
+  profile=OwnedEntryProfile('eq083-reference-fault',owner_source,hashlib.sha256(owner_source).hexdigest(),(str(root/'tests/service'),str(ready),str(stop),str(control),str(ack),mode),True)
+  supervisor=OwnedEpochSupervisor(OwnedEntryInventory((profile,)));results=[];errors=[]
+  def launch():
+   try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=25,output_limit=768))
+   except BaseException as error:errors.append(type(error).__name__)
+  thread=threading.Thread(target=launch);thread.start()
+  direct_count=client_count=sdk_count=fault_http=sequence=0;acks=[];saved=None;owner=None;complete=None;reference_exits=[];sdk_references=[]
+  try:
+   address=wait_completed(ready,128,4);assert set(address)=={'port'} and type(address['port']) is int and 1<=address['port']<=65535 and thread.is_alive()
+   port=address['port'];origin='http://127.0.0.1:'+str(port)
+   def direct(payload,kind,status=200,principal='A',version='1.1'):
+    global direct_count
+    assert direct_count<5;direct_count+=1
+    request_id='eq083-http-'+str(direct_count)
+    if version=='9.0':encoded=canonical(dict(schema='equity.remote',version=version,request_id=request_id,kind='request',payload=payload))
+    else:encoded=Request(version,request_id,payload).encoded
+    assert len(encoded)<=16384
+    wire=b'POST /v1/request HTTP/1.0\r\nHost: 127.0.0.1:'+str(port).encode()+b'\r\nAuthorization: Bearer '+principal.encode('ascii')*43+b'\r\nContent-Type: application/json\r\nContent-Length: '+str(len(encoded)).encode()+b'\r\nConnection: close\r\n\r\n'+encoded
+    with socket.create_connection(('127.0.0.1',port),timeout=5) as connection:
+     connection.settimeout(5);connection.sendall(wire);response=bytearray();boundary=None
+     while True:
+      chunk=connection.recv(1024)
+      if not chunk:break
+      response.extend(chunk)
+      if boundary is None:
+       location=response.find(b'\r\n\r\n')
+       if location>=0:boundary=location+4;assert boundary<=8192
+       else:assert len(response)<=8192
+      if boundary is not None:assert len(response)-boundary<=262144
+    assert boundary is not None
+    header=bytes(response[:boundary-4]);body=bytes(response[boundary:]);lines=header.split(b'\r\n')
+    assert re.fullmatch(rb'HTTP/1\.[01] '+str(status).encode('ascii')+rb' [\x20-\x7e]*',lines[0])
+    headers={}
+    for line in lines[1:]:
+     name,separator,value=line.partition(b':');assert separator
+     name=name.decode('ascii').lower();assert name not in headers
+     headers[name]=value.strip().decode('ascii')
+    assert headers['content-type']=='application/json' and headers['cache-control']=='no-store' and headers['x-content-type-options']=='nosniff'
+    assert 'transfer-encoding' not in headers and 'content-encoding' not in headers
+    assert re.fullmatch(r'0|[1-9][0-9]*',headers['content-length']) and int(headers['content-length'])==len(body)
+    value=parse(body);(remote_v1 if value['version']=='1.0' else remote).validate(value)
+    assert (value['version'],value['request_id'],value['kind'])==(('1.0',None,'error') if version=='9.0' else (version,request_id,kind))
+    if status!=200:assert 'content-disposition' not in headers
+    if status==200 and payload['operation']=='artifact_read':assert headers['content-disposition']=='attachment; filename="result-'+hashlib.sha256(payload['result_id'].encode('ascii')).hexdigest()+'.json"'
+    return value['payload']
+   def provider():
+    global client_count
+    assert client_count<6;client_count+=1;return 'A'*43
+   owner=RemoteClient(origin,provider,attempts=1,budget=5)
+   def calc():return dict(operation='calculate',context=expected.context_json(),scope=expected.scope.payload_json(),idempotency_key='eq083-reference-fault-original',command_digest=expected.command_digest)
+   def action(name):
+    global sequence,saved
+    assert name==('settled','baseline','after_fault','final')[sequence];sequence+=1
+    publish(control.with_name(control.name+'.'+str(sequence)),dict(sequence=sequence,action=name),128)
+    v=wait_completed(ack.with_name(ack.name+'.'+str(sequence)),512,4)
+    assert set(v)=={'sequence','action','mode','requests','snapshot'}
+    assert type(v['sequence']) is int and v['sequence']==sequence and v['action']==name and v['mode']==mode
+    totals=(1,12,12+fault_http,18+fault_http)
+    assert type(v['requests']) is int and v['requests']==totals[sequence-1]==direct_count+client_count+sdk_count+fault_http
+    s=v['snapshot'];assert set(s)=={'job','result','state','expiry','held','sizes','reads','running','queue','sink_entries'}
+    assert all(type(s[k]) is str and re.fullmatch('[0-9a-f]{32}-[0-9a-f]{32}',s[k]) for k in ('job','result')) and s['state']=='succeeded'
+    assert type(s['expiry']) is int and s['expiry']==300000000100 and type(s['held']) is int
+    assert type(s['sizes']) is list and len(s['sizes'])==4 and all(type(n) is int and n>0 for n in s['sizes']) and 0<s['held']==sum(s['sizes'])<=262144
+    assert s['running'] is None and all(type(s[k]) is int and s[k]==n for k,n in [('reads',1),('queue',0),('sink_entries',1)])
+    if saved is None:saved=s
+    else:assert s==saved
+    acks.append(v)
+   first=direct(calc(),'job');action('settled');assert first['job_id']==saved['job']
+   job=JobExpectation(saved['job'],expected.command_digest)
+   result_payload=dict(operation='result_read',result_id=saved['result'],cursor=None)
+   export_payload=dict(operation='artifact_read',result_id=saved['result'],cursor=None)
+   verify(direct(result_payload,'result'));verify(direct(export_payload,'result'))
+   complete=value(owner.calculate(expected,'eq083-reference-fault-original',request_id='typed-baseline-calculate'))
+   assert (complete['job_id'],complete['result_id'],complete['state'],complete['command_digest'])==(saved['job'],saved['result'],'succeeded',expected.command_digest)
+   assert value(owner.job_status(job,request_id='typed-baseline-status'))==complete
+   verify(value(owner.result_read(saved['result'],expected,request_id='typed-baseline-result')))
+   verify(value(owner.artifact_read(saved['result'],expected,request_id='typed-baseline-export')))
+   async def sdk(label,baseline):
+    global sdk_count
+    pid=Path(directory)/(label+'-pid')
+    params=StdioServerParameters(command=sys.executable,args=['-I',str(root/'docs/EQ083_VERSION_REFERENCE_ENTRY.txt'),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid),case['case']],encoding='utf-8',encoding_error_handler='strict')
+    count=0
+    async def call(session,name,args):
+     nonlocal count
+     global sdk_count
+     response=await session.call_tool(name,args)
+     v=structured(name,response.model_dump(exclude_none=True));assert v['ok'];count+=1;sdk_count+=1;assert count<=(5 if baseline else 2)
+     return v['payload']
+    async with stdio_client(params) as (read,write):
+     async with ClientSession(read,write,read_timeout_seconds=timedelta(seconds=10)) as session:
+      init=await session.initialize();assert init.protocolVersion=='2025-11-25' and init.capabilities.model_dump(exclude_none=True)==dict(tools=dict(listChanged=False))
+      listed=await session.list_tools();assert [v.name for v in listed.tools]==[v['name'] for v in tools]
+      for actual,frozen in zip(listed.tools,tools):assert actual.inputSchema==frozen['inputSchema'] and actual.outputSchema==frozen['outputSchema']
+      admitted=await call(session,'equity_calculate',dict(profile='command',idempotency_key='eq083-reference-fault-original'));assert admitted['data']==complete
+      ref=admitted['reference'];sdk_references.append(ref)
+      if baseline:assert (await call(session,'equity_job_status',dict(reference=ref)))['data']==complete
+      verify((await call(session,'equity_result_summary',dict(reference=ref)))['data'])
+      if baseline:
+       exported=await call(session,'equity_artifact_reference',dict(reference=ref));assert exported['operation']=='artifact_read'
+       verify((await call(session,'equity_result_summary',dict(reference=exported['reference'])))['data'])
+    marker=wait_completed(pid,128,3);assert set(marker)=={'pid'}
+    closed=wait_completed(pid.with_name(pid.name+'.closed'),128,3);assert closed==dict(pid=marker['pid'],provider_calls=count,marker='eq083-mcp-closed')
+    until=time.monotonic()+3
+    while not exited(marker['pid']):assert time.monotonic()<until;time.sleep(.01)
+    reference_exits.append(marker['pid'])
+   anyio.run(sdk,'baseline',True);assert (direct_count,client_count,sdk_count)==(3,4,5);action('baseline')
+   fault_pid,arm,entered,release=(Path(directory)/name for name in ('fault-pid','arm','entered','release'))
+   command=[sys.executable,'-I',str(root/'docs/EQ083_REFERENCE_FAULT_ENTRY.txt'),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(fault_pid),case['case'],mode,str(arm),str(entered),str(release)]
+   started=[];readers=[]
+   process=reference_child(command)
+   try:
+    output=queue.Queue(maxsize=262210);reader_errors=[];stderr=bytearray();received=bytearray();sent=0
+    def reader():
+     count=0
+     try:
+      while True:
+       b=process.stdout.read(1)
+       if not b:break
+       count+=1;assert count<=262208;output.put_nowait(b)
+     except BaseException as error:reader_errors.append(type(error).__name__)
+     finally:output.put_nowait(None)
+    def err_reader():
+     try:
+      while True:
+       b=process.stderr.read(1024)
+       if not b:break
+       stderr.extend(b);assert len(stderr)<=4096
+     except BaseException as error:reader_errors.append(type(error).__name__)
+    readers=[threading.Thread(target=reader),threading.Thread(target=err_reader)]
+    for r in readers:r.start();started.append(r)
+    def send(method,params=None,notification=False):
+     global sent
+     sent+=1;assert sent<=6
+     v=dict(jsonrpc='2.0',method=method)
+     if not notification:v['id']=str(sent)
+     if params is not None:v['params']=params
+     raw=canonical(v)+b'\n';assert len(raw)<=16384
+     assert process.stdin.write(raw)==len(raw);process.stdin.flush();return str(sent)
+    def frame(ident):
+     data=bytearray();until=time.monotonic()+5
+     while True:
+      remaining=until-time.monotonic();assert remaining>0
+      b=output.get(timeout=remaining);assert b is not None;data.extend(b);received.extend(b);assert len(data)<=65536
+      if b==b'\n':break
+     v=parse(bytes(data));assert set(v)=={'jsonrpc','id','result'} and v['jsonrpc']=='2.0' and v['id']==ident
+     return v['result']
+    def remainder():
+     data=bytearray();until=time.monotonic()+5
+     while True:
+      remaining=until-time.monotonic();assert remaining>0
+      b=output.get(timeout=remaining)
+      if b is None:break
+      data.extend(b);received.extend(b);assert len(data)<=65536
+     return bytes(data)
+    def tool(name,args):return send('tools/call',dict(name=name,arguments=args))
+    marker=wait_completed(fault_pid,128,4);assert type(marker) is dict and set(marker)=={'pid'}
+    assert type(marker['pid']) is int and 0<marker['pid']<=4294967295
+    process.verify_entry(marker['pid']);actual_entry_pid=marker['pid']
+    assert process.poll() is None and process.entry_exited() is False
+    init=frame(send('initialize',dict(protocolVersion='2025-11-25',capabilities={},clientInfo=dict(name='eq083-fault-observer',version='1'))))
+    assert init['protocolVersion']=='2025-11-25' and init['capabilities']==dict(tools=dict(listChanged=False))
+    send('notifications/initialized',notification=True)
+    listed=frame(send('tools/list',{}));assert set(listed)=={'tools'} and [v['name'] for v in listed['tools']]==[v['name'] for v in tools]
+    for actual,frozen in zip(listed['tools'],tools):assert actual['inputSchema']==frozen['inputSchema'] and actual['outputSchema']==frozen['outputSchema']
+    ref=None
+    if mode=='clock-after':
+     admitted=structured('equity_calculate',frame(tool('equity_calculate',dict(profile='command',idempotency_key='eq083-reference-fault-original'))));assert admitted['ok'] and admitted['payload']['data']==complete
+     ref=admitted['payload']['reference'];fault_http=1
+    publish(arm,dict(armed=True),64)
+    name='equity_result_summary' if mode=='clock-after' else 'equity_calculate' if mode=='partial-output' else 'equity_discover'
+    args=dict(reference=ref) if mode=='clock-after' else dict(profile='command',idempotency_key='eq083-reference-fault-original') if mode=='partial-output' else {}
+    ident=tool(name,args)
+    if mode.startswith('active-eof-'):
+     entry=wait_completed(entered,256,2);assert entry==dict(pid=actual_entry_pid,provider_calls=1,marker='eq083-provider-entered')
+     process.stdin.close();time.sleep(.05);assert process.poll() is None and process.entry_exited() is False
+     publish(release,dict(armed=True),64)
+    if mode.startswith('provider-') or mode.startswith('active-eof-'):
+     failure=structured(name,frame(ident));assert failure==dict(ok=False,failure=dict(source='client',category='credentials',code='provider_failed',phase='provider',status=None))
+     if not process.stdin.closed:process.stdin.close()
+     assert remainder()==b''
+    else:
+     prefix=remainder()
+     if mode=='partial-output':assert len(prefix)==64 and b'\n' not in prefix and prefix.startswith(b'{"id":"4","jsonrpc":"2.0","result":');fault_http=1
+     else:assert prefix==b'';fault_http=2 if mode=='clock-after' else 0
+    process.wait(timeout=3);assert process.returncode==0 and process.entry_exited() is True
+    closed=wait_completed(fault_pid.with_name(fault_pid.name+'.closed'),512,3)
+    assert set(closed)=={'pid','provider_calls','marker','mode','server_closed','client_closed','records','reservations','clock_fault','clock_samples','gate_released','full_frames','partial_bytes','partial_length','partial_sha256'}
+    providers=2 if mode=='clock-after' else 0 if mode.startswith('clock-before-') else 1
+    assert closed['pid']==actual_entry_pid and type(closed['provider_calls']) is int and closed['provider_calls']==providers and closed['marker']=='eq083-reference-fault-closed' and closed['mode']==mode
+    assert closed['server_closed'] is True and closed['client_closed'] is True and type(closed['records']) is int and closed['records']==0 and type(closed['reservations']) is int and closed['reservations']==0
+    assert closed['clock_fault']==mode.startswith('clock-') and type(closed['clock_fault']) is bool and type(closed['clock_samples']) is int and 0<=closed['clock_samples']<=64
+    assert closed['gate_released']==mode.startswith('active-eof-') and type(closed['gate_released']) is bool
+    assert type(closed['full_frames']) is int and closed['full_frames']==(3 if mode.startswith('provider-') or mode.startswith('active-eof-') or mode=='clock-after' else 2)
+    assert closed['partial_bytes']==(64 if mode=='partial-output' else 0) and type(closed['partial_bytes']) is int and type(closed['partial_length']) is int
+    if mode=='partial-output':assert 64<closed['partial_length']<=65536 and re.fullmatch('[0-9a-f]{64}',closed['partial_sha256'])
+    else:assert closed['partial_length']==0 and closed['partial_sha256'] is None
+    assert b'eq083-synthetic-private-token-path' not in received and b'A'*43 not in received and b'Bearer' not in received
+    reference_exits.append(actual_entry_pid)
+   finally:
+    active_exception=sys.exc_info()[0] is not None;cleanup_errors=[]
+    def clean(callback):
+     try:callback()
+     except BaseException as error:cleanup_errors.append(type(error).__name__)
+    if not process.stdin.closed:clean(process.stdin.close)
+    try:process.wait(timeout=4)
+    except BaseException as error:
+     cleanup_errors.append(type(error).__name__)
+     clean(process.kill);clean(lambda:process.wait(timeout=3))
+    clean(process.close)
+    for r in started:clean(lambda r=r:r.join(3))
+    for pipe in (process.stdin,process.stdout,process.stderr):
+     if not pipe.closed:clean(pipe.close)
+    def inspect_cleanup():
+     if process.ownership_closed is not True or process.returncode is None or any(r.is_alive() for r in started):raise ValueError('owned cleanup incomplete')
+    clean(inspect_cleanup)
+    if cleanup_errors and not active_exception:raise ValueError('owned fault cleanup failed')
+   assert all(not r.is_alive() for r in readers) and not reader_errors and not stderr
+   action('after_fault')
+   assert direct(calc(),'job')==complete;verify(direct(result_payload,'result'))
+   assert value(owner.calculate(expected,'eq083-reference-fault-original',request_id='typed-followup-calculate'))==complete
+   verify(value(owner.result_read(saved['result'],expected,request_id='typed-followup-result')))
+   anyio.run(sdk,'followup',False);assert (direct_count,client_count,sdk_count)==(5,6,7)
+   assert len(reference_exits)==3 and len(sdk_references)==2 and sdk_references[0]!=sdk_references[1];action('final')
+  finally:
+   if owner is not None:owner.close()
+   stop.write_bytes(b'1');thread.join(6)
+  assert not thread.is_alive() and not errors and len(results)==1
+  assert (results[0].reason,results[0].exit_code)==('exited',0),(results[0].reason,results[0].exit_code,results[0].output)
+  assert json.loads(results[0].output)==dict(marker='eq083-reference-fault-http-exited',mode=mode,requests=18+fault_http,sequence=4,snapshot_sha256=hashlib.sha256(canonical(saved)).hexdigest())
+  print(json.dumps(dict(marker='eq083-three-lane-reference-fault',mode=mode,direct=direct_count,client=client_count,sdk=sdk_count,fault_http=fault_http,total=18+fault_http,source_reads=1,acknowledgements=acks,native_exit=True,reference_exits=3,fault_closed=closed,fault_entry_exit=True,platform=sys.platform,fault_direct_or_launcher_exit=True,fault_owned_reference_active_zero=True),sort_keys=True,separators=(',',':')))

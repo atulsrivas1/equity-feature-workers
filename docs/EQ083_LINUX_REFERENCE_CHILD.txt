@@ -1,0 +1,128 @@
+"""Uninvoked qualification source: one fixed trusted Linux reference process.
+
+Direct-child exit and pipe closure only; parent must join its bounded readers.
+No all-descendant, resource-budget, kernel or provider settlement assertion.
+"""
+import hashlib
+import math
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+
+class LinuxReferenceChild:
+    def __init__(self, argv, expected_entry_sha256):
+        if sys.platform != 'linux' or not sys.flags.isolated:
+            raise ValueError('owned isolated Linux reference only')
+        if (type(argv) is not list or len(argv) not in (12, 13)
+                or argv[:2] != [sys.executable, '-I']
+                or any(type(value) is not str or not value or '\x00' in value for value in argv)):
+            raise ValueError('owned reference arguments')
+        if (type(expected_entry_sha256) is not str or len(expected_entry_sha256) != 64
+                or any(char not in '0123456789abcdef' for char in expected_entry_sha256)):
+            raise ValueError('owned entry digest')
+        entry = Path(argv[2])
+        if not entry.is_absolute() or entry.is_symlink() or not entry.is_file():
+            raise ValueError('owned entry file')
+        with entry.open('rb') as stream:
+            source = stream.read(8193)
+        if not source or len(source) > 8192 or hashlib.sha256(source).hexdigest() != expected_entry_sha256:
+            raise ValueError('owned entry source')
+        if sum(len(value.encode('utf-8')) + 1 for value in argv) > 32760:
+            raise ValueError('owned command bound')
+        self.process = None
+        self.stdin = self.stdout = self.stderr = None
+        self.pid = self.entry_pid = self.returncode = None
+        self.ownership_closed = False
+        environment = {name: os.environ[name] for name in ('TMPDIR', 'LANG', 'LC_ALL') if name in os.environ}
+        try:
+            self.process = subprocess.Popen(
+                argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                bufsize=0, close_fds=True, start_new_session=True, env=environment,
+            )
+            self.pid = self.process.pid
+            for name in ('stdin', 'stdout', 'stderr'):
+                setattr(self, name, getattr(self.process, name))
+            if type(self.pid) is not int or self.pid <= 0 or any(
+                    pipe is None for pipe in (self.stdin, self.stdout, self.stderr)):
+                raise ValueError('owned reference startup')
+        except BaseException:
+            try:
+                self.close()
+            except BaseException:
+                pass
+            raise
+
+    def poll(self):
+        if self.process is None:
+            return self.returncode
+        self.returncode = self.process.poll()
+        return self.returncode
+
+    def wait(self, timeout):
+        if type(timeout) not in (int, float) or not math.isfinite(timeout) or not 0 < timeout <= 4:
+            raise ValueError('owned wait bound')
+        if self.process is None:
+            if self.returncode is None:
+                raise ValueError('owned process unavailable')
+            return self.returncode
+        self.returncode = self.process.wait(timeout=timeout)
+        return self.returncode
+
+    def verify_entry(self, pid):
+        # Linux uses the installed interpreter directly, without the Windows venv redirector.
+        if self.entry_pid is not None or type(pid) is not int or pid <= 0 or pid != self.pid:
+            raise ValueError('owned direct entry PID')
+        if self.poll() is not None:
+            raise ValueError('owned entry no longer live')
+        self.entry_pid = pid
+
+    def entry_exited(self):
+        if self.entry_pid is None:
+            raise ValueError('owned entry unbound')
+        return self.poll() is not None
+
+    def active(self):
+        # Only this retained direct child. This is deliberately not process-group accounting.
+        if self.process is None and self.pid is None:
+            return 0
+        return int(self.poll() is None)
+
+    def kill(self):
+        # Popen retains the unreaped child identity; do not signal a possibly reused group ID.
+        if self.process is not None and self.poll() is None:
+            self.process.kill()
+
+    def close(self):
+        if self.ownership_closed:
+            return
+        failures = []
+        def attempt(callback):
+            try:
+                return callback()
+            except BaseException as error:
+                failures.append(error)
+                return None
+        if self.process is not None:
+            attempt(self.kill)
+            attempt(lambda: self.wait(3))
+            settled = attempt(self.poll) is not None
+        else:
+            settled = self.pid is None
+        pipes = []
+        for name in ('stdin', 'stdout', 'stderr'):
+            for owner in (self, self.process):
+                if owner is not None:
+                    pipe = attempt(lambda owner=owner, name=name: getattr(owner, name))
+                    if pipe is not None and all(pipe is not previous for previous in pipes):
+                        pipes.append(pipe)
+        for pipe in pipes:
+            attempt(pipe.close)
+            if attempt(lambda pipe=pipe: pipe.closed) is not True:
+                failures.append(ValueError('owned pipe still open'))
+        if not settled:
+            failures.append(ValueError('owned direct child exit unconfirmed'))
+        if failures:
+            raise ValueError('owned reference cleanup failed') from failures[0]
+        self.ownership_closed = True

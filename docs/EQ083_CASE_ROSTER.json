@@ -1,0 +1,1234 @@
+{
+  "stage": "IMPLEMENTATION_SOURCE_CANDIDATES_UNINVOKED_AFTER_ACTUAL_READY",
+  "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+  "source_assets": {
+    "docs/EQ083_R07_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 4797,
+      "sha256": "f3a9fb12bf13c745bb20b33e62e7e06e11ce8b49a39ef0fc5e838054b2ad765f",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_R07_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 16745,
+      "sha256": "403cd2a8f751fda87c94f532c08f7ee5392a8003a7a6cb38e6a29615c187eb8a",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_REFERENCE_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 3332,
+      "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_REMAINING_FIXTURE_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 7383,
+      "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_AUTHORITY_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 4927,
+      "sha256": "5c1f29f87553d7354632ad3f5f25938f85d5e905a5c3c7febd8e39bef79e3376",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_AUTHORITY_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 19756,
+      "sha256": "ebd4f4fc0b45328e931b09fe443fd840e500e1304aab95ffb7ca0634900da5d7",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_AUTHORITY_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 4645,
+      "sha256": "3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_STATE_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 3965,
+      "sha256": "9305b0eddaf5a1635d49c3519b966bc0568c9eb9bc9ad1a685c6adc8259185cc",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_STATE_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 18066,
+      "sha256": "a0b631b3553432820ea785341ee64d1ca282cb749546bcf0cf08b3dfb4bb7c21",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_STATE_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 5821,
+      "sha256": "25cf443dc80b53999453c8382d69b8ad859ff7dc131795ed59461cefd7729772",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_EPOCH_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 3938,
+      "sha256": "2ca9302ddf1771a7c172d5a6c50204731a7bd4a83da8e35403fbff4c0eed327e",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_EPOCH_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 19548,
+      "sha256": "826c9a6557ffbea0bdac34a4e8f8c9c792d4e6d450d4593ab6231b3fa5a2c030",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_EPOCH_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 6118,
+      "sha256": "4562705ced6f7650be30072ec1062762bed035c3912e279225c67397f3fa4442",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_UNKNOWN_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 4176,
+      "sha256": "1f3e9fdde9eb70c64311cc4d81be94dc16ded3a1e224ef15a8fd462955e55a22",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_UNKNOWN_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 20317,
+      "sha256": "e32f5a51a86de93014b7424a9eef0f993cc309fa1840f8199be4ddb9faa7f3b5",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_UNKNOWN_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 7926,
+      "sha256": "5bab47a923af9e7e5d260da0ca2a3c37f7beaedb4de52360d2570c2371075487",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_VERSION_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 3964,
+      "sha256": "218b1b885af2fadb52eb126eb2e12d6d7230315c1d1e0dc3f5787cc88f9c43a7",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_VERSION_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 21077,
+      "sha256": "721a462d9b37df45063d8e67e2977b842f9f14723ee356b3e8d7dc17a7ea2059",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_VERSION_REFERENCE_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 3707,
+      "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_VERSION_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 5947,
+      "sha256": "3e1098a213cdd5d70db0d5fdee42c1b017efc3e02cee556bd448c669eba5a77a",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_REFERENCE_FAULT_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 14476,
+      "sha256": "a8f066de2b81fe038950f58eec1f6bd4868138740ac0f971145f867ce773eb2a",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_REFERENCE_FAULT_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 36601,
+      "sha256": "35c5c218461e536ff9b257ab9a48e90d6d88999b8f4984249371eff0f39a92f8",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_REFERENCE_FAULT_OWNER.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 5139,
+      "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_REFERENCE_FAULT_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 7919,
+      "sha256": "b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_REFERENCE_PROCESS.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 11944,
+      "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_TLS_PARENT_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 23685,
+      "sha256": "63aba48d1fa2625005905f1b859d9f518886be110d6557e8372a398b0f951988",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    },
+    "docs/EQ083_TLS_PROBE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 43762,
+      "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a",
+      "materialization": "HISTORICAL_ONLY_PRIVATE_PATH_BOUND_DERIVE_NEW_SOURCE_BEFORE_EXECUTION"
+    },
+    "docs/EQ083_TLS_REFERENCE_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 5916,
+      "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231",
+      "materialization": "HISTORICAL_ONLY_PRIVATE_PATH_BOUND_DERIVE_NEW_SOURCE_BEFORE_EXECUTION"
+    },
+    "docs/EQ083_TLS_OWNER_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 7687,
+      "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746",
+      "materialization": "HISTORICAL_ONLY_PRIVATE_PATH_BOUND_DERIVE_NEW_SOURCE_BEFORE_EXECUTION"
+    },
+    "docs/EQ083_TLS_SESSION_TRANSPORT.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 20709,
+      "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50",
+      "materialization": "HISTORICAL_ONLY_PRIVATE_PATH_BOUND_DERIVE_NEW_SOURCE_BEFORE_EXECUTION"
+    },
+    "docs/EQ083_REMAINING_PARENT_CORRECTIVE_INPUTS.json": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 4899,
+      "sha256": "ad524cc0599dcb797d7ca258c7ffa0e9e194d7c8c671c725403158df24c47f11",
+      "materialization": "COOPERATIVE_BOUND_CORRECTED_CANDIDATE_SOURCE_REVIEW_REQUIRED_BEFORE_EXECUTION",
+      "original_bytes": 4493,
+      "original_sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54"
+    },
+    "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 20063,
+      "sha256": "2ea0cad0e95faceb6e8e98c031aeab315f99e7dc0d3063f90c801253dcb6a6ff",
+      "materialization": "COOPERATIVE_BOUND_CORRECTED_CANDIDATE_SOURCE_REVIEW_REQUIRED_BEFORE_EXECUTION",
+      "original_bytes": 20063,
+      "original_sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
+    },
+    "docs/EQ083_REMAINING_OWNER.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 6022,
+      "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b",
+      "materialization": "COOPERATIVE_BOUND_CORRECTED_CANDIDATE_SOURCE_REVIEW_REQUIRED_BEFORE_EXECUTION",
+      "original_bytes": 6022,
+      "original_sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+    },
+    "docs/EQ083_REMAINING_REFERENCE_ENTRY.txt": {
+      "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "bytes": 4461,
+      "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594",
+      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+    }
+  },
+  "dialogue_groups": {
+    "R07": {
+      "parent": "docs/EQ083_R07_PROBE.txt",
+      "manifest": "docs/EQ083_R07_PARENT_INPUTS.json",
+      "request_ledger": [
+        {
+          "lane": "rawHTTP first job",
+          "operations": [
+            "calculate:first",
+            "job_status:first <=20",
+            "discover",
+            "slice:raw",
+            "result_read:first",
+            "artifact_read:first"
+          ],
+          "maximum": 25
+        },
+        {
+          "lane": "publicClient same first key",
+          "operations": [
+            "calculate:same-first",
+            "job_status:first",
+            "discover",
+            "slice_raw",
+            "result_read:first",
+            "artifact_read:first"
+          ],
+          "maximum": 6
+        },
+        {
+          "lane": "referenceMCP same first key",
+          "operations": [
+            "equity_calculate:same-first",
+            "equity_job_status:first",
+            "equity_result_summary:first",
+            "equity_artifact_reference:first",
+            "equity_result_summary:export-followup",
+            "equity_discover",
+            "equity_slice:raw"
+          ],
+          "maximum": 7,
+          "initialization_backend_calls": 0
+        },
+        {
+          "lane": "rawHTTP second explicit job",
+          "operations": [
+            "calculate:second",
+            "job_status:second <=20",
+            "result_read:second"
+          ],
+          "maximum": 22
+        }
+      ],
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 3332,
+          "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+        },
+        "family_entry": {
+          "bytes": 1853,
+          "sha256": "19a03bc41a70162e6998b140977e4b1b642aff5b287eed7e9608eaee01050e64"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 640,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": null,
+        "ack_bytes": null,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 64
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "trades",
+        "bars",
+        "quotes",
+        "large_ns"
+      ]
+    },
+    "AUTHORITY": {
+      "parent": "docs/EQ083_AUTHORITY_PROBE.txt",
+      "manifest": "docs/EQ083_AUTHORITY_PARENT_INPUTS.json",
+      "request_ledger": {
+        "baseline": {
+          "rawHTTP": 25,
+          "publicClientA": 4,
+          "publicClientB": 2,
+          "referenceMCPA": 5,
+          "referenceMCPB": 1,
+          "total": 37,
+          "detail": "RawHTTP calculate1/status<=20/result1/export1 plus authenticatedB discover1/nativeA result4031. TypedA samekey calculate/status/result/export4; typedB discover/result4032. ReferenceA samekey calculate/status/result/export/export-followup5; referenceB discover1 and unknown opaqueA reference0."
+        },
+        "before_boundary": {
+          "rawHTTP": 2,
+          "publicClientA": 3,
+          "referenceMCPA": 2,
+          "total": 7
+        },
+        "ttl_after": {
+          "rawHTTP": 4,
+          "publicClientA": 4,
+          "referenceMCPA": 1,
+          "localReferenceFailures": 2,
+          "total": 9,
+          "maximum": 53
+        },
+        "grant_after": {
+          "rawHTTP": 4,
+          "publicClientA": 4,
+          "publicClientB": 1,
+          "referenceMCPA": 1,
+          "localReferenceFailures": 2,
+          "total": 10,
+          "maximum": 54
+        },
+        "retired": {
+          "rawHTTP": 2,
+          "publicClientA": 2,
+          "referenceMCPA": 1,
+          "total": 5
+        },
+        "restored": {
+          "rawHTTP": 4,
+          "publicClientA": 4,
+          "referenceMCPA": 0,
+          "localReferenceFailures": 2,
+          "total": 8,
+          "maximum": 50
+        }
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 3332,
+          "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+        },
+        "authority_entry": {
+          "bytes": 4645,
+          "sha256": "3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 64
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "ttl",
+        "grant",
+        "retire"
+      ]
+    },
+    "STATE": {
+      "parent": "docs/EQ083_STATE_PROBE.txt",
+      "manifest": "docs/EQ083_STATE_PARENT_INPUTS.json",
+      "request_ledger": {
+        "cancel": {
+          "direct": 12,
+          "client": 12,
+          "mcp": 12,
+          "total": 36,
+          "controls": 6,
+          "source_entries": 1,
+          "sink_factory_entries": 1
+        },
+        "failure": {
+          "direct": 4,
+          "client": 4,
+          "mcp": 4,
+          "total": 12,
+          "controls": 3,
+          "source_entries": 1,
+          "sink_factory_entries": 1
+        }
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 3332,
+          "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+        },
+        "state_entry": {
+          "bytes": 5821,
+          "sha256": "25cf443dc80b53999453c8382d69b8ad859ff7dc131795ed59461cefd7729772"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 64
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "cancel",
+        "failure"
+      ]
+    },
+    "EPOCH": {
+      "parent": "docs/EQ083_EPOCH_PROBE.txt",
+      "manifest": "docs/EQ083_EPOCH_PARENT_INPUTS.json",
+      "request_ledger": {
+        "direct": 10,
+        "client": 11,
+        "mcp": [
+          6,
+          6
+        ],
+        "total": 33,
+        "per_epoch": [
+          13,
+          20
+        ],
+        "controls": 4,
+        "polls": 0,
+        "source_entries": [
+          1,
+          1
+        ],
+        "sink_factory_entries": [
+          1,
+          1
+        ]
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 3332,
+          "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+        },
+        "epoch_entry": {
+          "bytes": 6118,
+          "sha256": "4562705ced6f7650be30072ec1062762bed035c3912e279225c67397f3fa4442"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 60
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "old_to_new_explicit"
+      ]
+    },
+    "UNKNOWN": {
+      "parent": "docs/EQ083_UNKNOWN_PROBE.txt",
+      "manifest": "docs/EQ083_UNKNOWN_PARENT_INPUTS.json",
+      "request_ledger": {
+        "calculate": {
+          "http": [
+            6,
+            0,
+            0
+          ],
+          "client": [
+            3,
+            6,
+            0
+          ],
+          "mcp": [
+            3,
+            0,
+            7
+          ]
+        },
+        "cancel": {
+          "http": [
+            6,
+            0,
+            0
+          ],
+          "client": [
+            3,
+            4,
+            0
+          ],
+          "mcp": [
+            3,
+            0,
+            5
+          ]
+        },
+        "controls": {
+          "calculate": 5,
+          "cancel": 6
+        },
+        "polls": 0,
+        "source_entries_per_case": 1
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 3332,
+          "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+        },
+        "unknown_entry": {
+          "bytes": 7926,
+          "sha256": "5bab47a923af9e7e5d260da0ca2a3c37f7beaedb4de52360d2570c2371075487"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 16
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "calculate-http",
+        "calculate-client",
+        "calculate-mcp",
+        "cancel-http",
+        "cancel-client",
+        "cancel-mcp"
+      ]
+    },
+    "VERSION": {
+      "parent": "docs/EQ083_VERSION_PROBE.txt",
+      "manifest": "docs/EQ083_VERSION_PARENT_INPUTS.json",
+      "request_ledger": {
+        "direct": 16,
+        "client": 16,
+        "mcp": 10,
+        "total": 42,
+        "controls": 4,
+        "polls": 0,
+        "source_entries": 1,
+        "raw_reads": 7,
+        "ack_requests": [
+          1,
+          33,
+          36,
+          42
+        ],
+        "ack_raw_reads": [
+          0,
+          1,
+          4,
+          7
+        ]
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 3707,
+          "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+        },
+        "version_entry": {
+          "bytes": 5947,
+          "sha256": "3e1098a213cdd5d70db0d5fdee42c1b017efc3e02cee556bd448c669eba5a77a"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 48
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "one_native_original_42send_version_snapshot_vectors"
+      ]
+    },
+    "REFERENCE_FAULT": {
+      "parent": "docs/EQ083_REFERENCE_FAULT_PROBE.txt",
+      "manifest": "docs/EQ083_REFERENCE_FAULT_PARENT_INPUTS.json",
+      "request_ledger": {
+        "provider-runtime": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 1,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "provider-interrupt": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 1,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "clock-before-bool": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 0,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "clock-before-negative": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 0,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "clock-before-float": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 0,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "clock-before-none": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 0,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "clock-after": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 2,
+          "fault_http": 2,
+          "total_http": 20,
+          "ack_requests": [
+            1,
+            12,
+            14,
+            20
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "active-eof-runtime": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 1,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "active-eof-interrupt": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 1,
+          "fault_http": 0,
+          "total_http": 18,
+          "ack_requests": [
+            1,
+            12,
+            12,
+            18
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        },
+        "partial-output": {
+          "raw": 5,
+          "typed": 6,
+          "baseline_mcp": 5,
+          "followup_mcp": 2,
+          "fault_provider": 1,
+          "fault_http": 1,
+          "total_http": 19,
+          "ack_requests": [
+            1,
+            12,
+            13,
+            19
+          ],
+          "native_source": 1,
+          "sink_factory": 1
+        }
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 3707,
+          "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+        },
+        "owner_entry": {
+          "bytes": 5139,
+          "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+        },
+        "fault_entry": {
+          "bytes": 7919,
+          "sha256": "b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 24
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "provider-runtime",
+        "provider-interrupt",
+        "clock-before-bool",
+        "clock-before-negative",
+        "clock-before-float",
+        "clock-before-none",
+        "clock-after",
+        "active-eof-runtime",
+        "active-eof-interrupt",
+        "partial-output"
+      ]
+    },
+    "TLS": {
+      "parent": "docs/EQ083_TLS_PROBE.txt",
+      "manifest": "docs/EQ083_TLS_PARENT_INPUTS.json",
+      "request_ledger": {
+        "schema": "eq083.tls-dialogue.outside-design.v1",
+        "scope": "Source-derived outside design only, not frozen, reviewed, executed or Ready",
+        "common_baseline": {
+          "raw": 3,
+          "typed": 4,
+          "official_sdk_mcp": 5,
+          "http": 12,
+          "source": 1,
+          "native": "One actual audited original trades producer, entire producer and native SDK golden SHA; no stripped metadata",
+          "process": "Observe baseline MCP actual entry OS exit before fault process"
+        },
+        "common_followup": {
+          "raw": 2,
+          "typed": 2,
+          "new_official_sdk_mcp": 2,
+          "http": 6,
+          "source": 1,
+          "operation": "Explicit same-key calculate and full result/summary only, no replay or second compute"
+        },
+        "cases": [
+          {
+            "name": "verified-full-result",
+            "http_total": 18,
+            "accepts": 18,
+            "handshake_success": 18,
+            "handshake_failure": 0,
+            "raw_typed_sdk_http": [
+              5,
+              6,
+              7
+            ],
+            "fault": "None; full baseline and explicit followup"
+          },
+          {
+            "name": "untrusted-certificate",
+            "http_total": 18,
+            "accepts": 21,
+            "handshake_success": 18,
+            "handshake_failure": 3,
+            "raw_typed_sdk_http": [
+              5,
+              6,
+              7
+            ],
+            "raw_fault_attempts": 1,
+            "typed_fault_provider": 1,
+            "mcp_fault_provider": 1,
+            "fault": "Three explicit same-key calculate calls, each one TLS handshake and zero WSGI dispatch; default public trust rejects owned self-signed certificate before any HTTP send",
+            "controls_http": [
+              1,
+              12,
+              12,
+              12,
+              18
+            ]
+          },
+          {
+            "name": "hostname-mismatch",
+            "http_total": 18,
+            "accepts": 21,
+            "handshake_success": 18,
+            "handshake_failure": 3,
+            "raw_typed_sdk_http": [
+              5,
+              6,
+              7
+            ],
+            "raw_fault_attempts": 1,
+            "typed_fault_provider": 1,
+            "mcp_fault_provider": 1,
+            "fault": "Same fixed origin127.0.0.1 and trust store containing both owned certs; check_hostname stays true. Owner switches per-connection server context to SAN127.0.0.2, then restores valid context",
+            "controls_http": [
+              1,
+              12,
+              12,
+              12,
+              18
+            ]
+          },
+          {
+            "name": "extra-response-byte",
+            "http_total": 22,
+            "accepts": 22,
+            "handshake_success": 22,
+            "handshake_failure": 0,
+            "raw_typed_sdk_http": [
+              6,
+              7,
+              9
+            ],
+            "fault_mcp_provider": 2,
+            "fault_http": 4,
+            "fault": "Fault MCP explicit same-key attach BEFORE arm adds1 actual HTTP; then raw/typed/MCP result reads each actually dispatch. Consume and close actual service response, append one byte with original Content-Length. No cached/fabricated producer",
+            "controls_http": [
+              1,
+              12,
+              13,
+              16,
+              22
+            ]
+          },
+          {
+            "name": "truncated-response-byte",
+            "http_total": 22,
+            "accepts": 22,
+            "handshake_success": 22,
+            "handshake_failure": 0,
+            "raw_typed_sdk_http": [
+              6,
+              7,
+              9
+            ],
+            "fault_mcp_provider": 2,
+            "fault_http": 4,
+            "fault": "Same pre-arm MCP attach and three actual result dispatches; consume/close entire original response, forward all but last byte, preserve original declared length",
+            "controls_http": [
+              1,
+              12,
+              13,
+              16,
+              22
+            ]
+          },
+          {
+            "name": "duplicate-content-length",
+            "http_total": 22,
+            "accepts": 22,
+            "handshake_success": 22,
+            "handshake_failure": 0,
+            "raw_typed_sdk_http": [
+              6,
+              7,
+              9
+            ],
+            "fault_mcp_provider": 2,
+            "fault_http": 4,
+            "fault": "Same pre-arm MCP attach and three actual result dispatches; append duplicate actual original Content-Length header, preserve actual producer body",
+            "controls_http": [
+              1,
+              12,
+              13,
+              16,
+              22
+            ]
+          },
+          {
+            "name": "actual-owner-denial",
+            "http_total": 22,
+            "accepts": 22,
+            "handshake_success": 22,
+            "handshake_failure": 0,
+            "raw_typed_sdk_http": [
+              6,
+              7,
+              9
+            ],
+            "fault_mcp_provider": 2,
+            "fault_http": 4,
+            "fault": "MCP fault process attaches original nativeA job using A provider BEFORE arm, then fixed provider rotates to B after arm and reads same A reference; actual HTTP403 invalidates local reference. Raw/typedB read actual nativeA result IDs403. Immutable MCP profile stays identical; token callback is trusted owner state. Foreign process unknown_reference0 is distinct",
+            "controls_http": [
+              1,
+              12,
+              13,
+              16,
+              22
+            ]
+          }
+        ],
+        "physical_caps": {
+          "accepts": 24,
+          "service_dispatch": 24,
+          "handshake_seconds": 2,
+          "accepted_connection_timeout_before_handshake": true,
+          "http_body": 262144,
+          "http_header": 8192,
+          "native_output": 768,
+          "control": 128,
+          "control_read": 129,
+          "ack": 1024
+        },
+        "controls": [
+          "settled",
+          "baseline",
+          "arm",
+          "restored",
+          "final"
+        ],
+        "pending": [
+          "Exact five controls/counters/handshake and response close source",
+          "Certificate identities from separately reviewed and actually completed local generation",
+          "TLS owner/ref/parent/copier published and separately reviewed before any TLS/socket/native execution",
+          "Generic schema and canonical SDK content checks",
+          "Full original snapshot after all repetitions AND actual native/server/process close"
+        ],
+        "limitations": "Attempt/provider/handshake/WSGI dispatch/native source are separate counters. TLS cert failure connect/statusNone is not mutation outcome_unknown because no HTTP bytes were sent. Read framing failure decode/statusNone is protocol invalid_response and not autoretryable. Server audit emitted is not remote receipt. No scheduler/HTTP owner replacement, hostname bypass, system trust installation, public hosting or TLS proof from fake-wire tests. Timing is cooperative, not hard DNS or callback termination. Counts remain proposed until exact source review and actual run."
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 5916,
+          "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231",
+          "review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107495742"
+        },
+        "owner_entry": {
+          "bytes": 7687,
+          "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746",
+          "review": "Renewed exact compaction source review pending; prior9985 source review6107465135 did not check admission cap"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 24,
+        "accepted_connection_handshake_seconds": 2,
+        "accepted_connections": 24,
+        "stderr_bytes": 4096,
+        "incoming_total_bytes": 524288,
+        "incoming_frames": 8,
+        "outgoing_frames": 8,
+        "queue_slots": 9,
+        "reader_join_seconds": 2
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "verified-full-result",
+        "untrusted-certificate",
+        "hostname-mismatch",
+        "extra-response-byte",
+        "truncated-response-byte",
+        "duplicate-content-length",
+        "actual-owner-denial"
+      ]
+    },
+    "REMAINING": {
+      "parent": "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt",
+      "manifest": "docs/EQ083_REMAINING_PARENT_CORRECTIVE_INPUTS.json",
+      "request_ledger": {
+        "direct": 11,
+        "client": 12,
+        "mcp": 13,
+        "total": 36,
+        "controls": 7,
+        "raw_reads": 6,
+        "source_entries": 1,
+        "polls": 0,
+        "baseline_mcp_provider": 5,
+        "faults_mcp_provider": 8,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          15,
+          18,
+          30,
+          36
+        ],
+        "ack_raw_reads": [
+          0,
+          0,
+          0,
+          3,
+          6,
+          6,
+          6
+        ]
+      },
+      "entry_pins": {
+        "reference_entry": {
+          "bytes": 4461,
+          "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594"
+        },
+        "remaining_entry": {
+          "bytes": 6022,
+          "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b"
+        }
+      },
+      "bounds": {
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
+        "combined_output_bytes": 768,
+        "owner_stop_join_seconds": 6,
+        "http_request_bytes": 16384,
+        "http_header_bytes": 8192,
+        "http_body_bytes": 262144,
+        "reference_frame_bytes": 65536,
+        "ready_bytes": 128,
+        "control_bytes": 128,
+        "ack_bytes": 1024,
+        "parent_startup_seconds": 4,
+        "reference_inspection_seconds": 3,
+        "supervised_exit_required": true,
+        "scheduler_close_required": true,
+        "owner_http_cap": 36
+      },
+      "source_bound_not_complete_physical_budget": true,
+      "cases": [
+        "snapshot-read",
+        "receipt-read",
+        "snapshot-calculate",
+        "configdigest-calculate",
+        "configalgorithm-calculate",
+        "featurealgorithm-calculate"
+      ]
+    }
+  },
+  "limitations": [
+    "Every seed remains uninvoked; historical Windows-only wrappers must be revised to selected Linux helper/crypto certificate recipe and separately published/source-reviewed before execution.",
+    "Historical manifest scope strings are preserved provenance, not current whole-platform admission authority.",
+    "All timeouts retain cooperative/platform semantics, and unknown cleanup denies case success/reuse.",
+    "Fixed response/status assertions are in the exact pinned source ledgers, not a scalar-only invented expectedresult.",
+    "Original36send remaining parent and R07 missinginput assertions preserved; full accepted component suites/precision/typing remain required.",
+    "Four historical Windows TLS sources retain the old absolute private certificate directory. Their immutable Git pins remain design provenance; raw blobs are not republished. Derive/review exact fresh Linux/Windows trusted per-form certificate/root source after Ready; no archived TLS execution is admitted.",
+    "Original remaining35 supervisor is outside accepted30 API cap and was never executed. Source-only20/25 correction requires renewed review; all earlier source approval/findings retained as provenance, not current Ready approval."
+  ],
+  "portable_candidate_assets": {
+    "docs/EQ083_CERTIFICATE_HELPER.txt": {
+      "bytes": 4493,
+      "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+    },
+    "docs/EQ083_LINUX_REFERENCE_CHILD.txt": {
+      "bytes": 5554,
+      "sha256": "906f780d8cfb5cc1c08da64deaf0f6fb087f423bf47e719fcc21bbbdcba50153"
+    },
+    "docs/EQ083_REFERENCE_FAULT_PROBE.txt": {
+      "bytes": 42586,
+      "sha256": "77cbbe0e94c568f7cbbe640ce6ba350df65b58d94200606b5265e2de6af47c6e"
+    },
+    "docs/EQ083_TLS_OWNER_ENTRY.txt": {
+      "bytes": 7338,
+      "sha256": "1ca2544cbb46b8aabd521b1bbf8e44830790c3d6302ab16317bb82a6ce0222ea"
+    },
+    "docs/EQ083_TLS_PROBE.txt": {
+      "bytes": 49425,
+      "sha256": "3e244fcbdfdbdae7408ffe7645cb9a48a7a287f8578be62a3015dd325b05da75"
+    },
+    "docs/EQ083_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 5840,
+      "sha256": "ef068da5993ab036cc11a887ab94ee9a2319bab7110d2308ef3dd0a43c12ba2d"
+    },
+    "docs/EQ083_TLS_SESSION_TRANSPORT.txt": {
+      "bytes": 26616,
+      "sha256": "5fa3082e9e35cbdfffb567804d4e95a80e0f89676784c9a5fe52e4051d98ec98"
+    },
+    "docs/EQ083_REFERENCE_FAULT_PARENT_INPUTS.json": {
+      "bytes": 14675,
+      "sha256": "3cccfbafc488413ade8f106237844c353216551c48d4f76302a0548c2c3d5c4f"
+    }
+  },
+  "portable_candidate_scope": "Current qualification snapshot; historical source_assets retain their original immutable provenance. No execution or fresh qualification inferred."
+}

@@ -1,0 +1,83 @@
+import sys,time,json,threading
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+mode=sys.argv[6]
+if mode not in ('cancel','failure'):raise ValueError('owned state mode')
+ready,stop,control,ack=(Path(v) for v in sys.argv[2:6])
+gate=threading.Event()
+def transform(value):
+ if mode=='failure':raise RuntimeError('owned private native callback text')
+ return value
+scheduler,service,tokens,clock,facts=setup(gate=gate,cooperative=False,transform=transform,actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
+requests=0;sequence=0;released=False
+def publish(path,value):
+ data=json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
+ if len(data)>1024:raise ValueError('owned state acknowledgement bounds')
+ temporary=path.with_name(path.name+'.pending')
+ temporary.write_bytes(data);temporary.replace(path);path.with_name(path.name+'.complete').mkdir()
+def app(environ,start_response):
+ global requests
+ if requests>=64:raise ValueError('owned state request cap')
+ requests+=1
+ return service(environ,start_response)
+def observe(action):
+ global released
+ if action=='running':
+  if not facts['entered'].wait(3):raise ValueError('owned source entry unconfirmed')
+ with scheduler.condition:
+  jobs=tuple(scheduler.jobs.values())
+  if not 1<=len(jobs)<=2:raise ValueError('owned state job count')
+  states=sorted(j.state for j in jobs)
+  if action=='running':
+   if len(jobs)!=1 or states!=['running'] or scheduler._running!=jobs[0].job_id or facts['reads']!=1 or not jobs[0].held:raise ValueError('owned running barrier')
+  elif action=='queued':
+   if mode!='cancel' or states!=['queued','running'] or len(scheduler.queue)!=1 or facts['reads']!=1 or not all(j.held for j in jobs):raise ValueError('owned queue barrier')
+  elif action=='queued_cancelled':
+   if mode!='cancel' or states!=['cancelled','running'] or scheduler.queue or facts['reads']!=1 or any(j.held or j.expires_ns<=0 for j in jobs if j.state=='cancelled'):raise ValueError('owned queued cancellation barrier')
+  elif action=='cancel_requested':
+   if mode!='cancel' or states!=['cancel_requested','cancelled'] or scheduler._running is None or scheduler.queue or facts['reads']!=1 or not any(j.held for j in jobs if j.state=='cancel_requested'):raise ValueError('owned active cancellation barrier')
+  elif action=='release':
+   expected=['cancel_requested','cancelled'] if mode=='cancel' else ['running']
+   if released or states!=expected or scheduler._running is None or facts['reads']!=1:raise ValueError('owned release order')
+   released=True;gate.set()
+  elif action=='terminal':
+   if not released:raise ValueError('owned terminal before release')
+   until=time.monotonic()+3
+   while scheduler._running is not None:
+    remaining=until-time.monotonic()
+    if remaining<=0:raise ValueError('owned physical release unconfirmed')
+    scheduler.condition.wait(remaining)
+   states=sorted(j.state for j in jobs)
+   expected=['cancelled','cancelled'] if mode=='cancel' else ['failed']
+   if states!=expected or scheduler.queue or facts['reads']!=1 or any(j.held or j.expires_ns<=0 or j.result_id is not None for j in jobs):raise ValueError('owned terminal capacity barrier')
+  else:raise ValueError('owned state action')
+  return {'sequence':sequence+1,'action':action,'requests':requests,'reads':facts['reads'],'entered':facts['entered'].is_set(),'released':released,'running':scheduler._running,'queue':len(scheduler.queue),'jobs':[{'id':j.job_id,'state':j.state,'held':j.held,'expiry':j.expires_ns} for j in sorted(jobs,key=lambda j:j.job_id)]}
+server=qualification_server(service);server.set_app(app);server.timeout=.05
+publish(ready,{'port':server.server_port})
+actions={'cancel':('running','queued','queued_cancelled','cancel_requested','release','terminal'),'failure':('running','release','terminal')}
+deadline=time.monotonic()+20
+try:
+ while requests<64:
+  if stop.exists() or time.monotonic()>=deadline:break
+  slot=control.with_name(control.name+'.'+str(sequence+1))
+  if sequence<16 and slot.with_name(slot.name+'.complete').is_dir():
+   with slot.open('rb') as stream:data=stream.read(129)
+   if len(data)>128:raise ValueError('owned state control bounds')
+   value=json.loads(data)
+   if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or value['sequence']!=sequence+1 or sequence>=len(actions[mode]) or value['action']!=actions[mode][sequence]:raise ValueError('owned state control order')
+   result=observe(value['action']);sequence+=1
+   publish(ack.with_name(ack.name+'.'+str(sequence)),result)
+  server.handle_request()
+ if sequence!=len(actions[mode]):raise ValueError('owned state dialogue incomplete')
+finally:
+ gate.set();server.server_close()
+ if scheduler.close(2) is not True:raise ValueError('owned state final exit unconfirmed')
+with scheduler.condition:
+ if len(scheduler.jobs)!=(2 if mode=='cancel' else 1):raise ValueError('owned final job count')
+ final_expiries=[j.expires_ns for j in sorted(scheduler.jobs.values(),key=lambda j:j.job_id)]
+ if any(type(v) is not int or not 0<v<=9223372036854775807 for v in final_expiries):raise ValueError('owned final expiry bounds')
+print(json.dumps({'marker':'eq083-state-http-exited','mode':mode,'reads':facts['reads'],'requests':requests,'sequence':sequence,'sink_entries':len(facts['sink_threads']),'final_expiries':final_expiries},sort_keys=True,separators=(',',':')),flush=True)
