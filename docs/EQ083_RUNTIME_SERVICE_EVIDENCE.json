@@ -1,0 +1,714 @@
+{
+  "full_independent_source_research": {
+    "source_files": [
+      {
+        "sha256": "a2f81ee25cf684c92a0cebe12678bd6324b2a9ad2c57a6694023877c4b1081b9",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/runtime.cc",
+        "bytes": 857,
+        "path": "repos/base/src/lib/base/runtime.cc",
+        "git_sha1": "6a134a55b6d80febcc9f4cddd71fa872d9aa14bd"
+      },
+      {
+        "sha256": "1492883138de9561759be0be8cd3adbb53aea27ad300d2e8a6b0f111d9a01095",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/runtime.h",
+        "bytes": 2143,
+        "path": "repos/base/src/include/base/internal/runtime.h",
+        "git_sha1": "8e4cdcef0a7b42e4d538256eca480fe20a11a739"
+      },
+      {
+        "sha256": "d19fada69a3b7578483f819dcf65faba45d5c5eb8ea7133bd1ec3d1b0ac195ce",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_parent_client.h",
+        "bytes": 5547,
+        "path": "repos/base/src/include/base/internal/expanding_parent_client.h",
+        "git_sha1": "29ddb14072617405f574e252ee4a9a0bb2822b48"
+      },
+      {
+        "sha256": "f74641111dde8cc0dc6b3bbbb4f76131c72543675e59f4c7c458c9c58827dedf",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_pd_session_client.h",
+        "bytes": 3006,
+        "path": "repos/base/src/include/base/internal/expanding_pd_session_client.h",
+        "git_sha1": "9de285fc905878c32edd31608835591a449935f8"
+      },
+      {
+        "sha256": "fa0bfb047f29c4c77872c1efb987ad9baee422b9cafd5e3579423639c39cc7e1",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_cpu_session_client.h",
+        "bytes": 1978,
+        "path": "repos/base/src/include/base/internal/expanding_cpu_session_client.h",
+        "git_sha1": "4c5eb0284ba7c9ad9ce3cabbed8413d91d1887aa"
+      },
+      {
+        "sha256": "20f84f97beedaa9e6ad020bad6885a8a174b821f3b8f82b971d8d2425dfcc7e2",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_region_map_client.h",
+        "bytes": 1488,
+        "path": "repos/base/src/include/base/internal/expanding_region_map_client.h",
+        "git_sha1": "b06b37f85df2600667c4d9251d763067501575e3"
+      },
+      {
+        "sha256": "5239c1f9ddc3a27141e1e44e43cb0e91b1a23246578f32cafbf5ec5a48add782",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/upgradeable_client.h",
+        "bytes": 1205,
+        "path": "repos/base/src/include/base/internal/upgradeable_client.h",
+        "git_sha1": "3137e22af869121f606af388920cff5e8800a8a8"
+      },
+      {
+        "sha256": "16245ba41b16e75e861c6b32d3ad98457a7de885cf2c25a0ed0a584712d8d1c0",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/service.h",
+        "bytes": 15202,
+        "path": "repos/base/include/base/service.h",
+        "git_sha1": "1c957185c698abefbbdf3190a1215f4d4cb0c14c"
+      },
+      {
+        "sha256": "6ed8c21c3fcf75c792a57e609b3441ddce535e81efd87f3a8053de84afff02fd",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/heap.h",
+        "bytes": 6439,
+        "path": "repos/base/include/base/heap.h",
+        "git_sha1": "0bca2ae032ec984ffe2830bdfe52e3023de68b4a"
+      },
+      {
+        "sha256": "113d155885d5920693778002cf21db7bdc672a8ac5975ae4670e5e412f92f3d6",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/heap.cc",
+        "bytes": 9231,
+        "path": "repos/base/src/lib/base/heap.cc",
+        "git_sha1": "b50ae558a4afcedad211657f9593037f06eedbbb"
+      },
+      {
+        "sha256": "2dee3a937aaf60f60514b65834509a7ccbe2cd8bb38d8794e13fc77fd52b21cd",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/sliced_heap.cc",
+        "bytes": 3277,
+        "path": "repos/base/src/lib/base/sliced_heap.cc",
+        "git_sha1": "3f4709ce05e0fb26c1348194a1c8efa19d396872"
+      },
+      {
+        "sha256": "022b24bc8c380d821e4336a2ad305993da259dc6e469fa88d45cae56da887d27",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/root_proxy.cc",
+        "bytes": 7165,
+        "path": "repos/base/src/lib/base/root_proxy.cc",
+        "git_sha1": "ec26eda7a27440078186391b90269231088c19ce"
+      },
+      {
+        "sha256": "ef51fb6b753cf9de00bccb71deefef4783e6dd4a638f3da58d21aefa82e45bd3",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/session_requester.h",
+        "bytes": 2553,
+        "path": "repos/os/include/os/session_requester.h",
+        "git_sha1": "3ce7c004ae3518b7efd79a27bbe8641b86a53d16"
+      },
+      {
+        "sha256": "648d2700efec104da98a22346b1ebfb7af7b17b042c95d91147f38dfe7779118",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/dynamic_rom_session.h",
+        "bytes": 6459,
+        "path": "repos/os/include/os/dynamic_rom_session.h",
+        "git_sha1": "85cbc3c2793d5c000d2173c3861b3c78a64ffda7"
+      },
+      {
+        "sha256": "db5a1210bbb378da2cf6548ef9ffc6c0e29d2dade6b341e2f05dbf8c1a3f41f1",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/child_policy_dynamic_rom.h",
+        "bytes": 6229,
+        "path": "repos/os/include/os/child_policy_dynamic_rom.h",
+        "git_sha1": "95b20d2751c7d408eaa13c576448aee30148376d"
+      }
+    ],
+    "findings": [],
+    "scope": "IMMUTABLE_UTF8_SOURCE_TEXT_DATA_REVIEW_ONLY",
+    "source_count": 15,
+    "disposition": "RUNTIME_RETRY_SERVICE_PHASE_AND_BACKING_OWNERSHIP_TRACED_WHOLE_GRAPH_PENDING",
+    "receipt_sha256": "5b322c461efd034b3c069f6b3405a95ee30fc41eaf44bf4a0c3f704c55d5b2cc",
+    "tool_only_history": [
+      "Author guessed base/include/base/internal API path returned404 and corrected actual base/src/include/base/internal; no source absence or native failure inference.",
+      "Long source bodies read in bounded, line-preserving text views; no source code executed."
+    ],
+    "new_tests": 0,
+    "newtests": 0,
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "partial_scope": {
+      "whole_closure": false,
+      "prior_rehashed": false,
+      "combined_files": 186,
+      "prior_bytes": 1795265,
+      "combined_bytes": 1868044,
+      "prior_files": 171
+    },
+    "remaining_obligations": [
+      "Concrete platform Env session/upgrade/close and PD/core/kernel/parent signal/RPC implementations",
+      "Complete source/config donor-authority and writer graph with frozen physical budgets covering retained pools, metadata, rounding, partial construction, overlap and deferred provider debt",
+      "Independent reserved stop/cancel/reap/join/close control with supported finite progress and actual physical settlement, including devices/providers/VMM/kernel",
+      "Declared vendor archives/patch/effective build and native binary/ABI/resolver/license mapping, Windows and Linux CPython x64 four forms, complete physical issuer and Ready gates"
+    ],
+    "source_bytes": 72779,
+    "facts": [
+      {
+        "fact": "Common Runtime constructs expanding parent/PD/CPU/RM clients, requests environment session capabilities, attaches writable trace control and installs stack RAM/RM globals. init_runtime initializes log, RPC cap allocation, cap slab and signal receiver; init_parent_resource_requests installs fallback signaling.",
+        "boundary": "These common-runtime clients and globals are not a concrete Env session/close implementation or complete platform/kernel/accounting closure.",
+        "paths": [
+          "repos/base/src/lib/base/runtime.cc",
+          "repos/base/src/include/base/internal/runtime.h"
+        ],
+        "id": "F1",
+        "lines": "runtime.cc 20-40; runtime.h 34-68"
+      },
+      {
+        "fact": "Parent fallback resource response waits for a signal, or sleeps forever when the receiver is absent. CUSTOM resource signaling submits and returns; default installs fallback and waits. PD upgrade is translated into resource_request; other upgrades retry indefinitely on resource shortage. Exit forwards to parent and then sleeps forever.",
+        "boundary": "No finite timeout, cancellation or fixed donor budget is provided by these paths. Actual parent policy, signal delivery and independent failure control must be part of the owner graph.",
+        "paths": [
+          "repos/base/src/include/base/internal/expanding_parent_client.h"
+        ],
+        "id": "F2",
+        "lines": "78-85, 110-154, 157-209"
+      },
+      {
+        "fact": "PD RAM allocation retries shortage and requests size+4096 RAM or four caps; DENIED terminates that loop. RAM/cap transfer retries EXCEEDED via parent requests. CPU thread creation retries with 8KiB/two-cap upgrades until valid or denied. RM attach retries shortages through PD upgrades. Upgradeable_client delegates parent upgrade without independently checking its result.",
+        "boundary": "These increments are requests, not a whole physical reserve or deadline. Invalid/non-shortage results and lower transfer/allocation semantics remain distinct.",
+        "paths": [
+          "repos/base/src/include/base/internal/expanding_pd_session_client.h",
+          "repos/base/src/include/base/internal/expanding_cpu_session_client.h",
+          "repos/base/src/include/base/internal/expanding_region_map_client.h",
+          "repos/base/src/include/base/internal/upgradeable_client.h"
+        ],
+        "id": "F3",
+        "lines": "PD 41-109; CPU 41-61; RM 37-45; upgradeable 37-45"
+      },
+      {
+        "fact": "Service inherits default quota accounts; local factory creation sets AVAILABLE or denial/resource phases. Local upgrade and close invoke a matching RPC object callback, then change phase; missing dynamic_cast object only warns before those phase changes. Try_parent_service calls concrete Env.try_session/upgrade/close and owns a parent-side ID. Parent_service makes up to ten initiation attempts, issuing resource requests and restoring the prior phase after resource errors.",
+        "boundary": "Local single-session factories have no-op destroy/upgrade by design. A successful phase or ten attempts does not prove lower object destruction, bounded wait or whole backing release; actual factory and Env implementations must be selected.",
+        "paths": [
+          "repos/base/include/base/service.h"
+        ],
+        "id": "F4",
+        "lines": "37-110, 152-203, 228-286, 298-447"
+      },
+      {
+        "fact": "Async_service uses server-side metadata factory, ensures a server ID, marks async client notification and returns Ok before provider completion; wakeup delegates. Child_service uses a PD client for quota transfer, returning OK without a transfer for invalid destination caps and exposing the PD cap for account operations.",
+        "boundary": "Metadata admission, wakeup, invalid-account no-op and transfer return must not be promoted to actual provider drain or physical settlement.",
+        "paths": [
+          "repos/base/include/base/service.h"
+        ],
+        "id": "F5",
+        "lines": "453-566"
+      },
+      {
+        "fact": "Root proxy retains a registry of at most32 services, separate entrypoint/session-request ROM, sliced heap and session slab. Create calls original Root_client.session, then allocates tracking metadata and delivers the capability; upgrade invokes original root then sends OK; close invokes original root.close, destroys metadata then sends CLOSED. Requests process upgrades, closes, then creates. Announce uses a static proxy bound to the initialized Env.",
+        "boundary": "Root RPC completion is lower implementation dependent. Successful root session creation precedes tracking allocation/delivery, so partial-stage failure accounting remains necessary; no local scope shown here proves full constructor-failure unwind, provider writer quiescence or finite close.",
+        "paths": [
+          "repos/base/src/lib/base/root_proxy.cc"
+        ],
+        "id": "F6",
+        "lines": "48-106, 110-150, 155-260, 263-279"
+      },
+      {
+        "fact": "Heap defaults to UNLIMITED. Requested-size quota check precedes allocation; small allocations use retained AVL/chunk backing, adding slab/dataspace metadata and page rounding. Large allocations use separately tracked rounded dataspaces and metadata. Chunk parameter doubles up to256KiB, while request_size multiplies it by sizeof(umword_t). Small free returns the local range and decreases bookkeeping without releasing its pool dataspace; big free removes/detaches/releases the dataspace. Destructor releases allocator metadata before backing pool destruction.",
+        "boundary": "consumed/requested quota and chunk parameter are not whole physical peak. Retained slack, rounding, metadata, nested allocation, partial stage unwind and lower detach/free completion require complete reservations and defined bounded lifetime.",
+        "paths": [
+          "repos/base/include/base/heap.h",
+          "repos/base/src/lib/base/heap.cc"
+        ],
+        "id": "F7",
+        "lines": "heap.h 95-133; heap.cc 38-145, 148-249, 253-345"
+      },
+      {
+        "fact": "Sliced heap allocates a page-rounded RAM dataspace for requested bytes plus Block metadata, attaches it, records the block under mutex and retains allocation/attachment ownership. Free removes metadata under lock, detaches and releases RAM afterward; destructor iterates all blocks. Local consumed includes rounded allocation size.",
+        "boundary": "This local ownership sequence does not establish all underlying physical finalization or a finite deadline; attachment failures and allocator/RM contracts remain part of the same graph.",
+        "paths": [
+          "repos/base/src/lib/base/sliced_heap.cc",
+          "repos/base/include/base/heap.h"
+        ],
+        "id": "F8",
+        "lines": "sliced_heap.cc 27-85, 89-130"
+      },
+      {
+        "fact": "Session_requester produces current create/upgrade/close requests into dynamic ROM. Dynamic_rom_session seals an attached dataspace, calls its retained producer and doubles buffer size after production failure without a local finite attempt/cap; out-of-RAM/caps returns true under a source-commented pretend-up-to-date convention, while dataspace may be invalid. Updates/version signals remain active. Child_policy_dynamic_rom_file retains foreground/background buffers, reallocates background on demand and swaps them when the client obtains a dataspace; session close changes phase, while actual buffer/RPC ownership is tied to the policy object.",
+        "boundary": "Read-only/sealed client ROM does not make the retained producer/config authority immutable. Foreground/background overlap, retained buffers, producer faults, version progression and lower allocation/release must remain in the physical graph and selected policy.",
+        "paths": [
+          "repos/os/include/os/session_requester.h",
+          "repos/os/include/os/dynamic_rom_session.h",
+          "repos/os/include/os/child_policy_dynamic_rom.h"
+        ],
+        "id": "F9",
+        "lines": "requester 31-53, 68-91; dynamic_rom_session 119-182, 220-265; child_policy_dynamic_rom 86-121, 132-211"
+      }
+    ],
+    "limitations": [
+      "Only saved UTF8 source DATA/hash/JSON reads; no C/C++ compile/import/execution, native/API/stat/host/process/VM operations, probes/tests or rejected binary verification.",
+      "Prior171 texts and reports remain unchanged context, not rehashed/rereviewed;186 files remain a partial graph, not whole closure.",
+      "No executed runtime bug, hang, leak, attack, impossibility, total numeric budget or cleanup deadline inferred from source stage/retry observations.",
+      "No selected topology/policy/dependency/license/host, Ready/runtime/operational authorization or new required human input."
+    ],
+    "reviewer": "r7_policy_review independent reviewer"
+  },
+  "full_prior_sandbox_authority_reports": {
+    "eq083-sandbox-authority-source-reviewer-report.json": {
+      "scope": "IMMUTABLE_UTF8_SOURCE_TEXT_DATA_REVIEW_ONLY",
+      "receipt_sha256": "5a08d23ad5e9ab7ff38258b61449ada84e9c90cf6aa518603692b5bde848d824",
+      "source_bytes": 164479,
+      "reviewer": "r7_policy_review independent reviewer",
+      "source_files": [
+        {
+          "path": "repos/os/src/lib/sandbox/alias.h",
+          "git_sha1": "62fd9beb5fb97cd0373cf9f3c0280f67b48697e0",
+          "bytes": 1005,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/alias.h",
+          "sha256": "7b081f6ae5643a0f8149e4bdd178428fd75bcaa5a25ff680fd98d9a1817e7120"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/child.cc",
+          "git_sha1": "d9e0a75956f3e950d1b98b23fc86dab264c631dd",
+          "bytes": 26339,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/child.cc",
+          "sha256": "5ab96dfc6e5a19d3f6726eedce89e929aeac9338f2891c78617105bebfa5aeef"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/child.h",
+          "git_sha1": "6f28e47a12fa59b82414fcd3cf1b5d3a82c01042",
+          "bytes": 21964,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/child.h",
+          "sha256": "8a72d59bd02cf8c112f8fb33eb767853aa4f7428e470f0ac88266ab23c0b3950"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/child_registry.h",
+          "git_sha1": "315e6bfdc2b456ae14230a529487cb33043c8ace",
+          "bytes": 2319,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/child_registry.h",
+          "sha256": "952137af4b54c1fc279a5fd121eba2d32c89385a0c5fd8cb000e02273a038bd3"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/config_model.cc",
+          "git_sha1": "94158dcf6d6efbf156987a449a74d85dd5383416",
+          "bytes": 10910,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/config_model.cc",
+          "sha256": "358b324d8a94d1e3d0933e8bf5d32cbb36b7135a8a93f6d65f10f85b161c063a"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/config_model.h",
+          "git_sha1": "2c9021858000e1c1719cc4dee62b09f882ee96eb",
+          "bytes": 6572,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/config_model.h",
+          "sha256": "c8eb3e29e0aab07339e0473fe56b79db1adcfd4f25583eed346043a8aa3da42c"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/heartbeat.h",
+          "git_sha1": "d9f5e4c06bae62172dd6bf4a9819171f3505884f",
+          "bytes": 1788,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/heartbeat.h",
+          "sha256": "fe00d949f66a79dd34f2f91a18fde4031516b5ada75477f7ade3f2205ce38d6b"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/library.cc",
+          "git_sha1": "25637c1cb1ec336e19847bc7104ca828190dee00",
+          "bytes": 18434,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/library.cc",
+          "sha256": "433488bd23c23dd5e9307a5375f1b890e932203a75dbf5dace5eb122224c5fc8"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/name_registry.h",
+          "git_sha1": "26eafb4b1354c6ed3b932f405e7622a6fcc580f2",
+          "bytes": 825,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/name_registry.h",
+          "sha256": "9e3c4970bb5688cdcb6912ad5bc6456ab441e582e39326e68234cd8d670eebdb"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/report.h",
+          "git_sha1": "2d088c800e9448437de390fe0b3659305b713310",
+          "bytes": 2470,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/report.h",
+          "sha256": "19e2980721848a300cb08de0b0f77c3340e112ab27b8ee7f81e4731ae655bcca"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/route_model.h",
+          "git_sha1": "4e317e9ca0e7f4a0b16f170f317ef0d0c28db4d8",
+          "bytes": 6227,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/route_model.h",
+          "sha256": "493b42ea9881c365243bd6ab9b118a31a833b41c6246ce825bcef49483d3d979"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/server.cc",
+          "git_sha1": "599bb541a31dd877bf01522e1821c344d4165bd9",
+          "bytes": 14165,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/server.cc",
+          "sha256": "46ffa2361d756ddb402fe38ab2986e67016d0ef506154e3cb2d4570116d2b0a5"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/server.h",
+          "git_sha1": "339cb3cbb46a6be5071acb6ab512dfbff1b88d07",
+          "bytes": 3029,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/server.h",
+          "sha256": "74d82f41c0e169ec6b6aacaa495e43ba4beb6219c1894e485070530ab8fc4e52"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/service.h",
+          "git_sha1": "0b23fb84b87c009a9a4df7fba522a1e71d81c5b2",
+          "bytes": 4058,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/service.h",
+          "sha256": "4da363753af8ffb323886e5f96e497ecafb8efa1966cf36b9f1371bb686042ae"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/state_reporter.h",
+          "git_sha1": "48806b0ec9f57d31580b407e84c3a32cddf19a3f",
+          "bytes": 4886,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/state_reporter.h",
+          "sha256": "962974784c5b1051c57c9da92ea1befb03751efa25022fbbb2787a265143e779"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/types.h",
+          "git_sha1": "61ae5a18d02bee0bf86e323d093fc2e522a3c183",
+          "bytes": 2452,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/types.h",
+          "sha256": "1e0841dca3ea9ef2b1993e954d87795b770a4666933a2258aa8ab65e956e6fff"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/utils.h",
+          "git_sha1": "2179dac459da0e8d39556f03cb25cee19a89a45f",
+          "bytes": 6330,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/utils.h",
+          "sha256": "0e00d79d326dd008ea3a487e4fbde93fa4f6184ec0841f3572564e400ad69d8f"
+        },
+        {
+          "path": "repos/os/src/lib/sandbox/verbose.h",
+          "git_sha1": "debcea2d79cbba8c739547fe9c7efc86a46082c9",
+          "bytes": 712,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/verbose.h",
+          "sha256": "e5a998d597f4b339b2f12a21f2af3e7969415e6353914deda7cb367f04888bd1"
+        },
+        {
+          "path": "repos/os/include/sandbox/sandbox.h",
+          "git_sha1": "edd210d74750e0d2312f60af56d3634c73fc7927",
+          "bytes": 6982,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/sandbox/sandbox.h",
+          "sha256": "efc44ffc8913438f5f7ada6789a32f80834d671e827655b82c0068d88943e06d"
+        },
+        {
+          "path": "repos/base/include/base/quota_transfer.h",
+          "git_sha1": "67c3c8f4ebf7393de0a56eb0c95dd5d4b6d2d7e5",
+          "bytes": 3988,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/quota_transfer.h",
+          "sha256": "2a489ba8fb3c81847bdc19192f42f9717ae197695b9848e4ef963780ff62d0b2"
+        },
+        {
+          "path": "repos/base/include/base/session_state.h",
+          "git_sha1": "3552adb23f766a19a4d6a5b45c2d92bdfc230ac6",
+          "bytes": 8729,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/session_state.h",
+          "sha256": "e7eccd82145104a602d94eff78ccf25ae2fcc01b830065fbea20531e078126e3"
+        },
+        {
+          "path": "repos/base/src/lib/base/session_state.cc",
+          "git_sha1": "fd2e23e3b706ae01262ffb24b373960070418572",
+          "bytes": 5555,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/session_state.cc",
+          "sha256": "609d822f997891b2a4a821007e3732f4500297930a15cda8559549af9c976f00"
+        },
+        {
+          "path": "repos/base/include/base/env.h",
+          "git_sha1": "0f12d9f1cff602b4cdf9347c8528fe747fae570f",
+          "bytes": 4740,
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/env.h",
+          "sha256": "4e117d2a12c864094707aebc08eae61d6c60f5018c952d9275418abc72fc96ef"
+        }
+      ],
+      "partial_scope": {
+        "prior_rehashed": false,
+        "combined_files": 171,
+        "prior_files": 148,
+        "whole_closure": false,
+        "prior_bytes": 1630786,
+        "combined_bytes": 1795265
+      },
+      "facts": [
+        {
+          "id": "F1",
+          "lines": "config_model.cc 322-422; config_model.h 157-229; library.cc 415-498",
+          "paths": [
+            "repos/os/src/lib/sandbox/config_model.cc",
+            "repos/os/src/lib/sandbox/config_model.h",
+            "repos/os/src/lib/sandbox/library.cc"
+          ],
+          "boundary": "This is dynamic configuration machinery, not an immutable project configuration guarantee or a bounded total update/retirement deadline.",
+          "fact": "Configuration updates rebuild mutable preservation, affinity, verbosity, routes, defaults, starts and services via a list model; start removal abandons the child. Library re-evaluates dependencies, retires abandoned children, starts configured children, applies restarts until no restart is scheduled, then revalidates server routes and redistributes resources."
+        },
+        {
+          "id": "F2",
+          "lines": "route_model.h 182-276; utils.h 59-162; child.cc 514-651; server.cc 85-136, 432-471",
+          "paths": [
+            "repos/os/src/lib/sandbox/route_model.h",
+            "repos/os/src/lib/sandbox/utils.h",
+            "repos/os/src/lib/sandbox/child.cc",
+            "repos/os/src/lib/sandbox/server.cc"
+          ],
+          "boundary": "Selected immutable ROM/config producer and all allowed parent/local/provider edges are still needed to exclude replenishment and writers outside the owner graph.",
+          "fact": "Route rules use checksums as mismatch prefilters then full service/label matching; targets are tried in order. Parent/local/named-child/any-child routes and alias rewrites exist; missing or abandoned targets deny, and ambiguous any-child routes deny. Changed server routes cause close requests. Config and session-request ROM are special local routes."
+        },
+        {
+          "id": "F3",
+          "lines": "library.cc 99-127; types.h 88-102; child.cc 197-288, 470-510; child.h 238-300",
+          "paths": [
+            "repos/os/src/lib/sandbox/library.cc",
+            "repos/os/src/lib/sandbox/types.h",
+            "repos/os/src/lib/sandbox/child.cc",
+            "repos/os/src/lib/sandbox/child.h"
+          ],
+          "boundary": "Availability/preservation is local accounting, not a frozen whole peak budget. Effective transfer semantics, all donor accounts and failed transfer bookkeeping require complete source/config binding.",
+          "fact": "Quota limit is current Sandbox PD availability minus preservation (default 40*sizeof(long)*1024 RAM and 20 caps). Initial child quota deducts environment and metadata costs and is clamped to availability; transfers log allocation exceptions. Later upgrade takes min(configured increment, current limit); assigned bookkeeping increases before transfer_quota and transfer result is not inspected in that function. A future update can try remaining configured demand."
+        },
+        {
+          "id": "F4",
+          "lines": "child.cc 292-364, 761-767; child.h 383-395, 785-788",
+          "paths": [
+            "repos/os/src/lib/sandbox/child.cc",
+            "repos/os/src/lib/sandbox/child.h"
+          ],
+          "boundary": "Four local attempts do not bound RPC latency, release provider backing or enforce cooperative yield; no new numerical whole-cleanup guarantee follows.",
+          "fact": "Downgrade makes at most four transfer attempts per quota kind and decrements assigned quota only for an OK return; remaining demand emits cooperative yield. Resource_request stores requested RAM/caps and triggers a report; replenishment occurs through configured assignment updates, not automatically in that handler. Yield response invokes another downgrade."
+        },
+        {
+          "id": "F5",
+          "lines": "library.cc 302-348; child.h 627-643, 737-764; child_registry.h 74-104",
+          "paths": [
+            "repos/os/src/lib/sandbox/library.cc",
+            "repos/os/src/lib/sandbox/child.h",
+            "repos/os/src/lib/sandbox/child_registry.h"
+          ],
+          "boundary": "Retirement eligibility and report absence are not all-provider completion, restored balances, physical release or a fixed deadline; lower CPU/PD/session semantics remain part of the same graph.",
+          "fact": "Retired child services become unavailable and close_all_sessions is called; child allocation is destroyed only when environment sessions report closed. Creation defers if an existing same-name/version child exists or more than one such abandoned child exists. Child exit can propagate or mark exited and request closes. Registry iteration handles local removal, and abandoned children are omitted from normal child reporting."
+        },
+        {
+          "id": "F6",
+          "lines": "quota_transfer.h 65-78, 96-149; service.h 131-165",
+          "paths": [
+            "repos/base/include/base/quota_transfer.h",
+            "repos/os/src/lib/sandbox/service.h"
+          ],
+          "boundary": "Transactional helper intent is not a universal success/failure/rollback-settlement guarantee. INVALID, exceptions, lower account semantics and physical backing must remain explicit in selected admission and failure accounting.",
+          "fact": "Quota_transfer considers invalid endpoint caps a no-op success and otherwise treats a result other than EXCEEDED as ok. Acknowledgement suppresses rollback; unacknowledged successful valid transfers attempt reverse transfer on destruction. Account.try_transfer calls transfer without checking its result. Routed_service returns INVALID when its PD accessor cannot supply a PD, and forwards actual transfer results otherwise."
+        },
+        {
+          "id": "F7",
+          "lines": "server.cc 140-204, 208-381, 407-471",
+          "paths": [
+            "repos/os/src/lib/sandbox/server.cc",
+            "repos/os/src/lib/sandbox/server.h"
+          ],
+          "boundary": "Forwarded reply or metadata destruction is not proof of successful reverse transfer, actual backing release or a complete finite provider drain.",
+          "fact": "Forwarded sessions reserve metadata costs, transfer quotas and acknowledge in create/upgrade paths; exceptions have denial/warning paths, whereas returned transfer status is not explicitly tested there. Missing service leaves creation pending. Close requests and CLOSED callbacks withdraw quota using try_transfer, destroy session metadata and send a parent response. ROM session-request updates and policy revalidation drive processing."
+        },
+        {
+          "id": "F8",
+          "lines": "sandbox.h 125-170, 199-220; library.cc 506-615",
+          "paths": [
+            "repos/os/include/sandbox/sandbox.h",
+            "repos/os/src/lib/sandbox/library.cc"
+          ],
+          "boundary": "This exact selected-text mismatch is an effective local-service denial-policy obligation, not an executed runtime denial failure, selected reachable-path claim or universal vendor bug. No admission may rely on deny being proven effective from these texts alone.",
+          "fact": "Local service upgrade and close callbacks permit DEFERRED. Closed-session callbacks are collected outside server-id iteration to avoid destruction under the iteration lock. Request::deny literally sets _denied=false (line170), while requested-session processing enters SERVICE_DENIED only if request._denied is true (library.cc 518-520)."
+        },
+        {
+          "id": "F9",
+          "lines": "session_state.h 85-116, 158-229, 279-348; session_state.cc 57-110, 133-168; state_reporter.h 106-187; heartbeat.h 41-85",
+          "paths": [
+            "repos/base/include/base/session_state.h",
+            "repos/base/src/lib/base/session_state.cc",
+            "repos/os/src/lib/sandbox/state_reporter.h",
+            "repos/os/src/lib/sandbox/heartbeat.h",
+            "repos/os/src/lib/sandbox/report.h"
+          ],
+          "boundary": "ID removal, CLOSED phase, reported quota or missed heartbeat is not independently observed writer quiescence, all-account settlement or kernel/provider free completion.",
+          "fact": "Session phases distinguish create/available/handed-out/upgrade/close-requested/closed. Destroy removes client and server IDs, sets CLOSED and destroys factory metadata; this logical state prevents further use of a vanished service. Slab batch backing and metadata cost are separate allocations. Reporting and periodic heartbeat sample/notify state; timer periods are not physical reclamation deadlines."
+        },
+        {
+          "id": "F10",
+          "lines": "env.h 74-127, 129-160; sandbox.h 52-72; library.cc 224-258",
+          "paths": [
+            "repos/base/include/base/env.h",
+            "repos/os/include/sandbox/sandbox.h",
+            "repos/os/src/lib/sandbox/library.cc"
+          ],
+          "boundary": "Concrete lower Env, service, PD/kernel implementation and selected intrinsics are missing from this unit. Interface promises do not prove real duration, all resources reclaimed, or current host/build/guest authority.",
+          "fact": "Env is an abstract interface: session may upgrade quota and issue parent resource requests, close is documented to block until gone, and static-constructor/runtime facilities have component-global side effects. Default Sandbox PD intrinsics use Env PD as reference account and a region-map client; custom intrinsics can replace this."
+        }
+      ],
+      "new_tests": 0,
+      "disposition": "SANDBOX_ROUTING_REPLENISHMENT_AND_RETIREMENT_TRACED_WHOLE_PHYSICAL_GRAPH_PENDING",
+      "implementation_directory_scope": "Entire immediate eighteen-file repos/os/src/lib/sandbox inventory declared by receipt, plus public Sandbox interface, quota-transfer/session-state and abstract Env. This is not the complete lower implementation/build graph.",
+      "limitations": [
+        "Source UTF8 DATA and read-only JSON/hash review only; no C/C++ compilation/import/execution, APIs/native/stat/host/process/VM operations, probes or tests. No rejected binary-task reattempt.",
+        "Prior148 texts/reports retained unchanged and not rehashed or rereviewed; all171 texts remain a partial source graph.",
+        "No actual runtime bug, hang, leak, attack, impossibility, global numerical cap or whole physical deadline is inferred. Source-level unverified branches are obligations, not observed failures.",
+        "No selected topology/policy/dependency/license applicability/host, Ready qualification, operational authority or new required human input."
+      ],
+      "tool_only_history": [
+        "No new failed tool operation; long source rendering was split into bounded bodies and comment-free line-preserving views to inspect implementations as data."
+      ],
+      "newtests": 0,
+      "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "remaining_obligations": [
+        "Frozen immutable configuration authority and effective complete route/donor/writer graph, including selected local denial semantics",
+        "Concrete Env/Async_service/PD-account transfer and rollback outcomes, provider backing and asynchronous close completion",
+        "Whole reservations for root/core/kernel/VMM/libc/provider metadata, geometry, overlap, queues, retired references and failed settlement; finite supported timing and physical finalization",
+        "Source/archive/patch/generated-build/native binary/effective-symbol binding, both OS CPython x64 four forms, full resolver/license/host issuer and all Ready gates"
+      ],
+      "findings": [],
+      "source_count": 23
+    },
+    "eq083-sandbox-authority-docs-reviewer-report.json": {
+      "disposition": "APPROVED",
+      "reviewer": "r7_policy_review independent reviewer",
+      "limitations": [
+        "Prepared documentation semantic and byte review only; no source rehash/research/native/host/probe/test rerun.",
+        "Exactly five changed docs per repository; source/history continuity follows precise working-tree scope. Final immutable publication attribution remains to be checked separately.",
+        "No selected topology, dependency, license, host, immutable configuration or complete implementation/Ready/runtime/operational approval.",
+        "All171 source texts remain partial graph; prior148 are preserved history, not replayed checks. Technical incompleteness is not new required owner input."
+      ],
+      "newtests": 0,
+      "bases": {
+        "equity-features": "e524648851290f764873733fcd6d564413a9d475",
+        "equity-feature-workers": "f9368d821a4fd65adcc62b849753c81c46716c56"
+      },
+      "prepared_files": {
+        "equity-feature-workers": {
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "4e6146d5599f0af9a67651ffc10cc5893ad947a4da816e17ba0d3c6fb6d75a22",
+            "bytes": 505165
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "9e283f5170f731f761a4aee9ce687f6c8990637c3f3649191c03eb3d8c296e75",
+            "bytes": 394027
+          },
+          "docs/EQ083_SANDBOX_AUTHORITY_RESEARCH.md": {
+            "sha256": "853a00daa01ee689354d9ee684c2785fc0395d6191197198b8f1f1fdd3a477f1",
+            "bytes": 9629
+          },
+          "docs/EQ083_SANDBOX_AUTHORITY_INPUTS.json": {
+            "sha256": "0dfb33a817843a8050cef68fdb097d10b458b3004f503b59eb767fab30f7227f",
+            "bytes": 9754
+          },
+          "docs/EQ083_SANDBOX_AUTHORITY_EVIDENCE.json": {
+            "sha256": "2a86bb33b1ac5fccb99f3e82585e5c9d5fd49a3a7fe950ca7f0b9438262797fa",
+            "bytes": 45576
+          }
+        },
+        "equity-features": {
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "6877f22bf718b0b6afd3e96aff98b49c97a495f1bca1d4b1c983d77b34111a28",
+            "bytes": 790609
+          },
+          "docs/stories/EQ-083_SANDBOX_AUTHORITY_RESEARCH.md": {
+            "sha256": "853a00daa01ee689354d9ee684c2785fc0395d6191197198b8f1f1fdd3a477f1",
+            "bytes": 9629
+          },
+          "docs/stories/EQ-083_SANDBOX_AUTHORITY_INPUTS.json": {
+            "sha256": "0dfb33a817843a8050cef68fdb097d10b458b3004f503b59eb767fab30f7227f",
+            "bytes": 9754
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "6f61ea2690a7b093b7d658610e1a693c8dcef590fa54bb164b2ed78698d66a35",
+            "bytes": 531358
+          },
+          "docs/stories/EQ-083_SANDBOX_AUTHORITY_EVIDENCE.json": {
+            "sha256": "2a86bb33b1ac5fccb99f3e82585e5c9d5fd49a3a7fe950ca7f0b9438262797fa",
+            "bytes": 45576
+          }
+        }
+      },
+      "source_review_sha256": "f85dc8e785bc0a0e333aa93cce790d1d32b80d0c453237e9cc615e8ffa0c60c5",
+      "new_tests": 0,
+      "scope": "PREPARED_SOURCE_RESEARCH_DOCUMENTATION_ONLY",
+      "findings": [],
+      "semantic_review": "The prepared research correctly preserves the ten source facts: dynamic configuration and routing, local quota-preservation clamps, unchecked upgrade result/rollback status obligations, four local downgrade attempts and cooperative yield, matched-name/version retirement count rather than global cap, asynchronous provider closures and metadata-only phase changes, literal Request::deny false versus SERVICE_DENIED true discrepancy, abstract lower Env and report/heartbeat timing limits. Immediate eighteen-file directory scope is not full transitive closure. No executed discrepancy failure, immutable policy, physical release deadline or outside writer exclusion is claimed.",
+      "checks": [
+        {
+          "repo": "equity-features",
+          "exact_base": true,
+          "old_continuity_suffix": true,
+          "metadata_only_source_identities": true,
+          "five_doc_scope": true,
+          "full_source_report_and_three_prior_reports_preserved": true
+        },
+        {
+          "repo": "equity-feature-workers",
+          "exact_base": true,
+          "old_continuity_suffix": true,
+          "metadata_only_source_identities": true,
+          "five_doc_scope": true,
+          "full_source_report_and_three_prior_reports_preserved": true
+        }
+      ]
+    },
+    "eq083-sandbox-authority-final-readback-reviewer-report.json": {
+      "heads": {
+        "equity-features": "fc2edbe630aafe82abdb89d9b8f0ddbcd7ca1209",
+        "equity-feature-workers": "d7963274d3736fb46df6227d275b903eb3f0e11f"
+      },
+      "checks": [
+        "All ten immutable Git LF file lengths/SHA256 match reviewed_git_files and approved prepared bytes after CRLF-to-LF normalization.",
+        "Exactly five documentation paths changed per repository; no tracked source changes, paired clean codex/eq083-resilience branches and exact approved bases as commit parents.",
+        "Three research assets mirror exactly; old PROJECT_KNOWLEDGE and SESSION_HANDOFF suffixes preserved.",
+        "Full expected Atul Srivastava author/committer identities and noreply email verified; no Co-authored-by trailer."
+      ],
+      "prepared_review_sha256": "1803b30648dd690fb353a6c5db9abf383c6e25b0ffebc868e6f5be7a287c8f1a",
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_SANDBOX_AUTHORITY_EVIDENCE.json": {
+            "bytes": 45576,
+            "sha256": "2a86bb33b1ac5fccb99f3e82585e5c9d5fd49a3a7fe950ca7f0b9438262797fa"
+          },
+          "docs/stories/EQ-083_SANDBOX_AUTHORITY_INPUTS.json": {
+            "bytes": 9754,
+            "sha256": "0dfb33a817843a8050cef68fdb097d10b458b3004f503b59eb767fab30f7227f"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 531358,
+            "sha256": "6f61ea2690a7b093b7d658610e1a693c8dcef590fa54bb164b2ed78698d66a35"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 790609,
+            "sha256": "6877f22bf718b0b6afd3e96aff98b49c97a495f1bca1d4b1c983d77b34111a28"
+          },
+          "docs/stories/EQ-083_SANDBOX_AUTHORITY_RESEARCH.md": {
+            "bytes": 9629,
+            "sha256": "853a00daa01ee689354d9ee684c2785fc0395d6191197198b8f1f1fdd3a477f1"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_SANDBOX_AUTHORITY_RESEARCH.md": {
+            "bytes": 9629,
+            "sha256": "853a00daa01ee689354d9ee684c2785fc0395d6191197198b8f1f1fdd3a477f1"
+          },
+          "docs/EQ083_SANDBOX_AUTHORITY_EVIDENCE.json": {
+            "bytes": 45576,
+            "sha256": "2a86bb33b1ac5fccb99f3e82585e5c9d5fd49a3a7fe950ca7f0b9438262797fa"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 394027,
+            "sha256": "9e283f5170f731f761a4aee9ce687f6c8990637c3f3649191c03eb3d8c296e75"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 505165,
+            "sha256": "4e6146d5599f0af9a67651ffc10cc5893ad947a4da816e17ba0d3c6fb6d75a22"
+          },
+          "docs/EQ083_SANDBOX_AUTHORITY_INPUTS.json": {
+            "bytes": 9754,
+            "sha256": "0dfb33a817843a8050cef68fdb097d10b458b3004f503b59eb767fab30f7227f"
+          }
+        }
+      },
+      "bases": {
+        "equity-features": "e524648851290f764873733fcd6d564413a9d475",
+        "equity-feature-workers": "f9368d821a4fd65adcc62b849753c81c46716c56"
+      },
+      "limitations": [
+        "Final documentation byte/attribution readback only; no semantic/source/research/native/host/probe/CI/test rerun.",
+        "Preserves scoped Sandbox source facts and partial graph obligations; no complete physical cleanup, selected immutable configuration or whole-topology qualification.",
+        "No Ready/runtime/operational approval or new input request."
+      ],
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "new_tests": 0,
+      "disposition": "APPROVED",
+      "newtests": 0,
+      "findings": [],
+      "attribution": {
+        "equity-features": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): trace Sandbox routing and retired resource settlement\n",
+        "equity-feature-workers": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): trace Sandbox routing and retired resource settlement\n"
+      },
+      "reviewer": "r7_policy_review independent reviewer"
+    }
+  },
+  "new_tests": 0,
+  "scope": "Selected common runtime/service/backing source stages; actual complete platform/account/physical release pending",
+  "tool_history": "Prior late guessed repos/base/include/base/internal API404 corrected by actual tree navigation to repos/base/src/include/base/internal before new source reads; no absence proof or product/native failure. Source contexts narrowed full expanding clients, heap, service, proxy and dynamic ROM bodies before claims. New heartbeat arrived during ongoing same task; work continued without duplicate reads/comments/commits."
+}
