@@ -465,5 +465,271 @@
       ]
     }
   ],
-  "wheel_record_spelling_correction": "Require original exactstr ZIP spelling equal exposed filename beforecanonicalpath checks; rejectcontrolchars; rootRECORD audit applies everypublishedwheel includingproducts."
+  "wheel_record_spelling_correction": "Require original exactstr ZIP spelling equal exposed filename beforecanonicalpath checks; rejectcontrolchars; rootRECORD audit applies everypublishedwheel includingproducts.",
+  "first_local_author_acl_failure": {
+    "head": "0bd282359d883148f49824ec3d9e9d6bdff27e83",
+    "exit_code": 1,
+    "seconds": 88.65599999995902,
+    "log_bytes": 136610,
+    "log_sha256": "14dd7d233d51cbbd20b8ed51f7b968d4153c8c77a1e9a50b943f4f65e5d30590",
+    "output_name": "resilience-author-0bd2823",
+    "full_qualification": false,
+    "private_ops_executed": false
+  },
+  "acl_failure_diagnosis": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "disposition": "FAILED_ACL_SETUP_CAUSE_UNDETERMINED_SOURCE_DIAGNOSIS",
+    "scope": "SAVED_FAILURE_AND_PRIMARY_API_DOCUMENTATION_REVIEW_ONLY",
+    "findings": [],
+    "receipt": {
+      "head": "0bd282359d883148f49824ec3d9e9d6bdff27e83",
+      "exit_code": 1,
+      "seconds": 88.65599999995902,
+      "log_bytes": 136610,
+      "log_sha256": "14dd7d233d51cbbd20b8ed51f7b968d4153c8c77a1e9a50b943f4f65e5d30590",
+      "output_name": "resilience-author-0bd2823",
+      "full_qualification": false,
+      "private_ops_executed": false
+    },
+    "receipt_sha256": "e755d9879682ae0b08e9f714403f9c81aa5d7fe753ca0e54e13d5f71c171251c",
+    "source_head": "0bd282359d883148f49824ec3d9e9d6bdff27e83",
+    "actual_observation": [
+      "Saved log hash and length match receipt. Qualification entered first wheel-form private_directory secure setup; generic helper returncode rejection occurred before the subsequent venv/install/certificate/dialogue calls.",
+      "PowerShell stdout/stderr were discarded. The log does not distinguish descriptor construction, protection, owner assignment, Set-Acl persistence or final reread predicate failure.",
+      "Author subsequent read-only ACL and in-memory construction observations are separate author evidence, not reviewer API observations. They do not establish the missing stderr or original failing PowerShell statement."
+    ],
+    "primary_sources": {
+      "DirectorySecurity_constructor": "https://learn.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.directorysecurity.-ctor?view=netframework-4.8.1",
+      "Set_Acl": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-acl?view=powershell-5.1",
+      "Get_Acl": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/get-acl?view=powershell-5.1",
+      "Protection": "https://learn.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=net-10.0"
+    },
+    "documented_facts": [
+      {
+        "source": "DirectorySecurity_constructor",
+        "fact": "The parameterless constructor creates an empty descriptor not based on a directory. Documentation permits populating and applying it. The directory/sections overload retrieves existing access control information. This does not prove missing group caused this failure."
+      },
+      {
+        "source": "Set_Acl",
+        "fact": "Set-Acl applies the supplied security descriptor as a model. Official examples retrieve an existing descriptor with Get-Acl, change protection or access rules, then persist it."
+      },
+      {
+        "source": "Protection",
+        "fact": "Protecting access rules and not preserving inherited rules removes inherited access rules. Remaining explicit rules must also be removed to obtain the proposed single-user DACL; preserving the primary group metadata must not preserve group ACE access."
+      }
+    ],
+    "recommended_source_candidate": {
+      "descriptor": "Get-Acl -LiteralPath on the exact newly owned directory; retain valid existing group/context; require current-user owner or set the current-user owner under existing permitted access. No group access rule is retained merely because group metadata exists.",
+      "dacl": "SetAccessRuleProtection(true,false); snapshot and remove all remaining access rules; add exactly one current-user FullControl inheritable Allow rule. Persist using literal target; reread owner/current-user SID, protected flag, rule count exactly1, rights/type/inheritance/propagation. Any deviation or API error denies use before keys or installation.",
+      "diagnostics": "Freeze explicit stage labels and a bounded private diagnostic channel before the changed smoke. Reuse the approved bounded-capture primitive or another reviewed bounded channel; do not replace DEVNULL with unbounded PIPE capture. Public logs should expose only fixed failure stage/category and diagnostic SHA, not raw host path/SID/full error. Preserve exact bounded raw error privately and maintain primary-error cleanup priority.",
+      "testing": "Before real changed-source invocation, inert cases should cover existing inherited+explicit entries, group preservation without group ACEs, each read/mutation/persistence/reread failure, malformed or noncanonical descriptor denial, private output overflow/timeout and cleanup priority. Real smoke is required to establish actual API behavior; source review cannot assert it.",
+      "operation_limit": "Only the newly owned qualification directory is in scope. No administrative privilege change, ancestor/account ACL modification, privacy relaxation, certificate generation or native qualification is authorized by this diagnosis."
+    },
+    "remaining_cause": "UNKNOWN; missing descriptor group/context is an unconfirmed hypothesis. No product bug, filesystem fault, permission absence, Set-Acl error category or key exposure inferred.",
+    "continuity": [
+      "Actual failed source remains failed; no unchanged rerun or pass. Corrective source freeze and review precede changed helper smoke and full fresh qualification.",
+      "Reported status-sync readback assertion is a separate tool mutation/readback failure; actual Project/status reconciliation belongs to author and is not validated by this native/source report."
+    ],
+    "new_tests": 0,
+    "new_acl_or_native_operations": 0,
+    "tool_only_history": [
+      "Two .NET API views returned web tool Internal Error; constructor facts were retrieved from the official netframework4.8.1 page. No absence inference or host operation resulted."
+    ]
+  },
+  "acl_failure_diagnosis_sha256": "eb95122684f5234cac58944f9cc06bd6750f25e1edcff627d9eb6dff9c34e721",
+  "acl_corrective_scope": "Cause remains undetermined; use supported existing descriptor/context, protect/remove inherited rules then clearallremainingexplicitaccessrules, addsolecurrent-userFullControlACE, identicalstrictreadback. Bounded4096inflightcapture/privatestage-type-HResultdiagnostics; no user/SID/message/secret data or privacy relaxation.",
+  "changed_acl_smoke_failure": {
+    "scope": "freshemptyownedprivateACLsmoke",
+    "native": false,
+    "certificates": false,
+    "private_ops": false,
+    "exit_code": 1,
+    "error_type": "ValueError",
+    "error": "owned private ACL verification",
+    "retained_owned_root": "resilience-acl-smoke-wo9t5jhk",
+    "diagnostic": "owned_acl:existing_descriptor:CommandNotFoundException:-2146233087:-2146233087\r\n",
+    "diagnostic_sha256": "5db257afe544bbf040d1957ce16a106397703ab434f061161b6857cb4ade9872",
+    "seconds": 0.5150000000139698,
+    "review_sha256": "391e718157177e3e74925d88a468c1dabd2a06ebbf39a2528282d71e5cbdfc1d"
+  },
+  "acl_explicit_module_correction": "Observed CommandNotFoundException at Get-Acl existing_descriptor stage; explicitly load packaged Microsoft.PowerShell.Security via fixed PSHOME manifest beforecommands. No conclusion on why implicit autoload differed; same strictsoleUserACE/protection/ownershipreadback.",
+  "module_bound_acl_smoke_failure": {
+    "scope": "freshemptyownedprivateACLsmoke",
+    "native": false,
+    "certificates": false,
+    "private_ops": false,
+    "exit_code": 1,
+    "error_type": "ValueError",
+    "error": "owned private ACL verification",
+    "retained_owned_root": "resilience-acl-module-smoke-9zgeyv5_",
+    "diagnostic": "owned_acl:apply:PrivilegeNotHeldException:-2147024891:0\r\n",
+    "diagnostic_sha256": "53b6f16715dec554f743efc77e9b2303538fd95771a9a0713aa937dbc65fe771",
+    "seconds": 0.5,
+    "review_sha256": "84bbe264a3d8c69ac30e964c0132d91828c0faed9260f4d038e94f79258910dc"
+  },
+  "dacl_only_contract_review": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "disposition": "DACL_ONLY_CORRECTIVE_DIRECTION_SUPPORTED_EXACT_SOURCE_REVIEW_PENDING",
+    "scope": "SAVED_SMOKE_FAILURE_AND_PRIMARY_API_CONTRACT_ONLY",
+    "findings": [],
+    "saved_failure": {
+      "scope": "freshemptyownedprivateACLsmoke",
+      "native": false,
+      "certificates": false,
+      "private_ops": false,
+      "exit_code": 1,
+      "error_type": "ValueError",
+      "error": "owned private ACL verification",
+      "retained_owned_root": "resilience-acl-module-smoke-9zgeyv5_",
+      "diagnostic": "owned_acl:apply:PrivilegeNotHeldException:-2147024891:0\r\n",
+      "diagnostic_sha256": "53b6f16715dec554f743efc77e9b2303538fd95771a9a0713aa937dbc65fe771",
+      "seconds": 0.5,
+      "review_sha256": "84bbe264a3d8c69ac30e964c0132d91828c0faed9260f4d038e94f79258910dc"
+    },
+    "failure_receipt_sha256": "3af6351d70bf653f5416624f2570c6832370063d62e2eec6d0515c163201edde",
+    "facts": [
+      {
+        "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontrolsections?view=net-10.0",
+        "fact": "Access selects DACL, distinct from Audit/SACL, Owner and Group sections; applies to .NET Framework as well as current .NET."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.getaccesscontrol?view=netframework-4.7.2",
+        "fact": "The includeSections overload retrieves specified ACL information into DirectorySecurity."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.setaccesscontrol?view=netframework-4.8.1",
+        "fact": "SetAccessControl applies modified DirectorySecurity ACLs and does not persist an unmodified object. Its documented update pattern retrieves, modifies and persists the descriptor."
+      },
+      {
+        "url": "https://learn.microsoft.com/windows/win32/api/aclapi/nf-aclapi-setnamedsecurityinfoa",
+        "fact": "DACL setting requires WRITE_DAC or ownership; owner setting has distinct WRITE_OWNER/take-ownership and token eligibility rules, with SeRestore relevant to arbitrary owner eligibility. Certain SACL/scope flags require SeSecurity. This diagnostic does not establish which native flags or privilege caused the observed exception."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.nativeobjectsecurity.persist?view=net-10.0",
+        "fact": "Persist section selection must match the intended initialized sections; loading Access then persisting All can create unpredictable owner/group/audit values."
+      },
+      {
+        "url": "https://raw.githubusercontent.com/dotnet/runtime/main/src/libraries/System.IO.FileSystem.AccessControl/src/System/Security/AccessControl/FileSystemSecurity.cs",
+        "fact": "Current upstream .NET source GetAccessControlSectionsFromChanges/Persist selects Access/Audit/Owner/Group from separate modified flags. This is source context, not a frozen proof of the actual legacy PS5 .NET Framework binary implementation."
+      }
+    ],
+    "required_source_contract": [
+      "Read existing Owner separately and require exact current-user SID; reject mismatch without taking ownership.",
+      "Construct DirectoryInfo for the exact new owned root; retrieve Access only, protect/remove inherited rules, clear remaining explicit Access rules, add sole current-user inheritable FullControl Allow. Do not SetOwner, SetGroup, audit rules or broad SDDL/binary descriptor replacement.",
+      "Persist through the documented DirectoryInfo.SetAccessControl modified-access path, then independently reread Owner and Access and retain all strict privacy predicates. Do not substitute Set-Acl All-section persistence for the narrow path.",
+      "Fixed explicit Security module binding and bounded sanitized diagnostics remain. All failures deny keys/install; no privilege enablement/admin prompt/account/ancestor change.",
+      "Exact changed source must be frozen/reviewed before a new empty-root helper smoke; observed secure/verify success is required before full builder retry."
+    ],
+    "cause_limits": [
+      "Observed module-bound smoke reached apply and reported PrivilegeNotHeldException with HResult -2147024891. This is not an identification of SeRestorePrivilege, SeSecurityPrivilege, native flags, missing group or actual environment policy.",
+      "No owner mismatch, product bug, key exposure or universal inability to change DACL inferred. Existing failed sources/roots remain preserved."
+    ],
+    "new_tests": 0,
+    "new_acl_native_operations": 0,
+    "source_approval_granted": false,
+    "tool_only_history": [
+      "Guessed referencesource raw paths returned404 and API directory request was inaccessible. No absence inference. Current official .NET source and Microsoft API docs were used with explicit legacy-binary limitation."
+    ]
+  },
+  "dacl_only_contract_review_sha256": "d84dafd3f50699e7f0c306789f442cbb0586cb9ae37e5c865db085c03b97d8c4",
+  "dacl_only_source_correction": "Use existing legacyDirectoryInfo .NET methods: verify existingOwner, readAccess only, protect/clear/addsoleUserAccess, persistmodifiedDACLonly; rereadOwner+Access strict. No owner/group/audit change or privilegeenable; no cmdletmoduleautoload dependency. Missingprivilege remainsunnamed, no exactrootcauseinferred.",
+  "dacl_only_corrective_source_review": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "disposition": "APPROVED",
+    "scope": "EXACT_DACL_ONLY_HELPER_SOURCE_AND_INERT_GATE_REVIEW",
+    "findings": [],
+    "prepared_files": {
+      "eq085-workers": {
+        "CHANGELOG.md": {
+          "bytes": 63798,
+          "sha256": "b4b98721decdd7d3499297faf8e8d113d612987167effd41b824415baae62056"
+        },
+        "docs/EQ083_PORTABLE_SOURCE_REVIEW_HISTORY.json": {
+          "bytes": 41863,
+          "sha256": "1ce61adee8dfb893fc0b93e986acf9589eaab8c7470f5e8f2da244a9975c1766"
+        },
+        "docs/PROJECT_KNOWLEDGE.md": {
+          "bytes": 305473,
+          "sha256": "9158b2eb9eb75cb71415d245e89aef07d62a327c0c0cc694fb7d81eaa9447dda"
+        },
+        "docs/SESSION_HANDOFF.md": {
+          "bytes": 416611,
+          "sha256": "c7696f48d6459495f77d3f02e5d65c87f3309fbb86bd20a79f6b251e61f9c6db"
+        },
+        "tests/resilience/private_directory.py": {
+          "bytes": 4269,
+          "sha256": "977053ddb521cf59336048d79926a2d0887dfad0321d6af1e52680fdf9c97ebb"
+        }
+      },
+      "eq085-features": {
+        "docs/CHANGELOG.md": {
+          "bytes": 83079,
+          "sha256": "1e00acb156a25228d9d8dabb2bddffa909ac726663eea2c85198605de42d98c4"
+        },
+        "docs/PROJECT_KNOWLEDGE.md": {
+          "bytes": 442814,
+          "sha256": "0d921007d18dc0b5dda19a1af585ab5cfd2f28d1c157f092b56b00a4615cffe0"
+        },
+        "docs/SESSION_HANDOFF.md": {
+          "bytes": 702065,
+          "sha256": "4a82edc445c93a6673809843ecc2d627967fd4f82ab6a2385bb2f529fd973bc7"
+        },
+        "docs/stories/EQ-083_PORTABLE_SOURCE_REVIEW_HISTORY.json": {
+          "bytes": 41863,
+          "sha256": "1ce61adee8dfb893fc0b93e986acf9589eaab8c7470f5e8f2da244a9975c1766"
+        }
+      }
+    },
+    "source": {
+      "bytes": 4269,
+      "sha256": "977053ddb521cf59336048d79926a2d0887dfad0321d6af1e52680fdf9c97ebb"
+    },
+    "closure_sha256": "435fca724037de594bf9fa70ce84b6eb6b1980124948f9f695c76f06d13b1246",
+    "current_inert_controls": 4,
+    "cases": [
+      [
+        "normal",
+        false
+      ],
+      [
+        "reject",
+        false
+      ],
+      [
+        "capture",
+        true
+      ],
+      [
+        "normal",
+        true
+      ]
+    ],
+    "checks": [
+      "All9 exact frozen GitLF pins",
+      "Existing Owner-only read/current-user check occurs before any access mutation",
+      "Access-only descriptor retrieval, protect/clear/add sole owner rule, modified-access SetAccessControl path; no Owner/Group/Audit setter or All-section selection",
+      "Separate read-only Access|Owner reread retains all owner/count/rights/inheritance/propagation/protection guards",
+      "Legacy DirectoryInfo methods avoid Security-module/Get-Acl/Set-Acl command binding dependency",
+      "Sanitized bounded diagnostics and10second4096byte capture/failure-priority behavior retained",
+      "Complete module-smoke failure and DACL-only primary contract embedded exactly in identical mirrored history"
+    ],
+    "approval_boundary": "Approve ONLY the first changed helper secure+verify smoke on a newly created empty owned directory. Actual successful strict reread outcome must be preserved and reviewed before full builder retry; no native/certificate invocation granted by this source disposition.",
+    "limits": [
+      "Embedded PowerShell is source reviewed, not executed or modeled as actual Windows ACL API calls. Four current Python AST-selected fake capture/Path controls only; prior19 are not recounted.",
+      "No ACL mutation/account/ancestor/privilege operation, actual process/native/product/crypto/certificate/builder/workflow run by reviewer.",
+      "DACL-only direction follows primary API contracts but does not establish the exact missing privilege from the prior apply failure.",
+      "Original failures remain failed. Fresh bothOS forms/currentCI/artifact/release acceptance pending."
+    ]
+  },
+  "dacl_only_successful_owned_smoke": {
+    "scope": "freshemptyownedprivateACLsmoke",
+    "native": false,
+    "certificates": false,
+    "private_ops": false,
+    "exit_code": 0,
+    "secure_and_verify": true,
+    "owned_empty_cleanup": true,
+    "seconds": 0.8910000000614673,
+    "review_sha256": "6fe042c956b08a77ac4fcfb3a93d973c32bd9012ae8f6728dbe646d4ac885eb5"
+  }
 }
