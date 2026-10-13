@@ -1,0 +1,3247 @@
+{
+  "artifacts": {
+    "Linux": {
+      "artifact": {
+        "archive_download_url": "https://api.github.com/repos/atulsrivas1/equity-feature-workers/actions/artifacts/11788278030/zip",
+        "created_at": "2026-10-13T04:08:23Z",
+        "digest": "sha256:fd1da50ec8757f7da9e84254dee31266a56b0c6d6f403345eca88288648aa8d6",
+        "expired": false,
+        "expires_at": "2026-11-12T04:08:22Z",
+        "id": 11788278030,
+        "name": "foundation-ee83e01d542817df9319a24f194059ffe4529b1f-ubuntu-24.04",
+        "node_id": "MDg6QXJ0aWZhY3QxMTc4ODI3ODAzMA==",
+        "size_in_bytes": 690199,
+        "updated_at": "2026-10-13T04:08:23Z",
+        "url": "https://api.github.com/repos/atulsrivas1/equity-feature-workers/actions/artifacts/11788278030",
+        "workflow_run": {
+          "head_branch": "main",
+          "head_repository_id": 1408067204,
+          "head_sha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+          "id": 38344452751,
+          "repository_id": 1408067204
+        }
+      },
+      "entries": {
+        "eq085-profile-sdist.json": {
+          "bytes": 1571811,
+          "sha256": "1f00eb81acc0e3a0a98dd8cb8ce4c833dff0ef29a18cc3a0f6d2bb71806549ed"
+        },
+        "eq085-profile-wheel.json": {
+          "bytes": 1570697,
+          "sha256": "497a8e28adc1b9b4dc585954d344249f51f01926421b10e415212d473db14f94"
+        },
+        "equity_feature_acquisition-0.1.0a0-py3-none-any.whl": {
+          "bytes": 13037,
+          "sha256": "9b6dca40280850599db8e194fe280cd651aa06b7132998d55e61861dfdd2d1e3"
+        },
+        "equity_feature_contracts-0.0.4a4-py3-none-any.whl": {
+          "bytes": 69728,
+          "sha256": "acaa84fc0340c4640ced2b7cdbef04d5ba7cfaec20cd0525b866b415147635cc"
+        },
+        "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": {
+          "bytes": 27770,
+          "sha256": "2abcd7084371e82e7ec887353a1159ed900616d764df36baafe49a2b57c9c676"
+        },
+        "equity_feature_duckdb_sink-0.1.0a0-py3-none-any.whl": {
+          "bytes": 20177,
+          "sha256": "dd8f175dba3ef547401341102d7e7ae1bc41ec3c53a67cfbaaec91c29a52bc7d"
+        },
+        "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": {
+          "bytes": 16572,
+          "sha256": "6bed73224f033f4d67ad7d519bce76c5b8d3f6076766ccc0726b6a36a9bf3bde"
+        },
+        "equity_feature_files-0.1.0a0-py3-none-any.whl": {
+          "bytes": 15074,
+          "sha256": "f12cf7759f4669a7b007434ce062b1325bb1cd3b83c3b2e868dc6ce14117a5ee"
+        },
+        "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": {
+          "bytes": 11458,
+          "sha256": "ef4deb9adc03b0e77075a36236fc20fe30d9373218386a60dc769d0145c09c99"
+        },
+        "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": {
+          "bytes": 18687,
+          "sha256": "71c2316ab93d3382b24701ce6f4990b1355f90b8f66e562c8b1d34e539d60783"
+        },
+        "equity_feature_parquet-0.1.0a1-py3-none-any.whl": {
+          "bytes": 17738,
+          "sha256": "2cdca449df56260aa64becfe4ee856b752e906c766426a74dacab849b48f899c"
+        },
+        "equity_feature_workers-0.1.0a13-py3-none-any.whl": {
+          "bytes": 71053,
+          "sha256": "a4eae3ca4ae6e37d277e941958199b47b0dd0ce150064c0952c2d0269e042faf"
+        },
+        "equity_feature_workers-0.1.0a13.tar.gz": {
+          "bytes": 57653,
+          "sha256": "0382656756abe5d89f21a5e705d4a41451a8a64d5da652ea58e846a2e3cd9e21"
+        },
+        "equity_features-0.0.4a4-py3-none-any.whl": {
+          "bytes": 65151,
+          "sha256": "cf8965e1600a3d8ef10dbefcfdea21f2d48ad8c8f80e0268abe12c365b1cd26e"
+        },
+        "manifest.json": {
+          "bytes": 22883,
+          "sha256": "3a5cf447def11832cfc0da9b81b1d938f164c1bfba847b6f002e3ad58e3a695b"
+        }
+      },
+      "manifest": {
+        "artifacts": {
+          "equity_feature_workers-0.1.0a13-py3-none-any.whl": "a4eae3ca4ae6e37d277e941958199b47b0dd0ce150064c0952c2d0269e042faf",
+          "equity_feature_workers-0.1.0a13.tar.gz": "0382656756abe5d89f21a5e705d4a41451a8a64d5da652ea58e846a2e3cd9e21"
+        },
+        "builder_sha256": "9de657127669eeef2a4e3581b20bf55714535eb95b6839aef3763b0ef7612aba",
+        "commit": "ee83e01d542817df9319a24f194059ffe4529b1f",
+        "dependency_artifacts": {
+          "equity_feature_acquisition-0.1.0a0-py3-none-any.whl": "9b6dca40280850599db8e194fe280cd651aa06b7132998d55e61861dfdd2d1e3",
+          "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "acaa84fc0340c4640ced2b7cdbef04d5ba7cfaec20cd0525b866b415147635cc",
+          "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "2abcd7084371e82e7ec887353a1159ed900616d764df36baafe49a2b57c9c676",
+          "equity_feature_duckdb_sink-0.1.0a0-py3-none-any.whl": "dd8f175dba3ef547401341102d7e7ae1bc41ec3c53a67cfbaaec91c29a52bc7d",
+          "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "6bed73224f033f4d67ad7d519bce76c5b8d3f6076766ccc0726b6a36a9bf3bde",
+          "equity_feature_files-0.1.0a0-py3-none-any.whl": "f12cf7759f4669a7b007434ce062b1325bb1cd3b83c3b2e868dc6ce14117a5ee",
+          "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "ef4deb9adc03b0e77075a36236fc20fe30d9373218386a60dc769d0145c09c99",
+          "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "71c2316ab93d3382b24701ce6f4990b1355f90b8f66e562c8b1d34e539d60783",
+          "equity_feature_parquet-0.1.0a1-py3-none-any.whl": "2cdca449df56260aa64becfe4ee856b752e906c766426a74dacab849b48f899c",
+          "equity_features-0.0.4a4-py3-none-any.whl": "cf8965e1600a3d8ef10dbefcfdea21f2d48ad8c8f80e0268abe12c365b1cd26e"
+        },
+        "dependency_commits": {
+          "equity-feature-io": "19aa266b9debb92a6c5eb707baafeb9ae7a82942",
+          "equity-features": "20c08c7370581d03c8a0404579667f68d67ac88b"
+        },
+        "epoch": 1700000000,
+        "forms": [
+          {
+            "acquisition_full": {
+              "acquisition_version": "0.1.0a0",
+              "default_denied": true,
+              "files_version": "0.1.0a0",
+              "negative_public_typing": 2,
+              "owned_csv_command": true,
+              "verified_readback": true
+            },
+            "acquisition_light": {
+              "default_denied": true,
+              "light_import": true,
+              "optional_demo_unavailable": true
+            },
+            "acquisition_oracle_sha256": "fa23dfa521034a3b8a3f111edc58c3736f80ad2cf2c053885f0fb95d97f26805",
+            "acquisition_tests_sha256": "8adba7d8b4abbd5b46eafb81a56e2ca5d29132136bc9c2a55dbb273ca2b8eda5",
+            "core_after_sha256": "2f7137e921b12625db6237458b93ba968eefcdfc74fdf648929af5e30dda0105",
+            "core_before_sha256": "2f7137e921b12625db6237458b93ba968eefcdfc74fdf648929af5e30dda0105",
+            "eq085_installed_profile_smoke_passed": true,
+            "eq085_profile_report_sha256": "497a8e28adc1b9b4dc585954d344249f51f01926421b10e415212d473db14f94",
+            "form": "wheel",
+            "independent_bar_goldens": true,
+            "installed_barrier_tests_passed": true,
+            "installed_catalog_example_passed": true,
+            "installed_catalog_tests_passed": true,
+            "installed_claim_example_passed": true,
+            "installed_claim_tests_passed": true,
+            "installed_command_tests_passed": true,
+            "installed_console_demo_passed": true,
+            "installed_diagnostic_example_passed": true,
+            "installed_diagnostic_tests_passed": true,
+            "installed_manifest_tests_passed": true,
+            "installed_optional_backend_versions": {
+              "duckdb": "1.5.6",
+              "equity-feature-duckdb-sink": "0.1.0a0",
+              "equity-feature-parquet": "0.1.0a1",
+              "pyarrow": "20.0.0"
+            },
+            "installed_optional_source_versions": {
+              "equity-feature-duckdb": "0.1.0a8",
+              "numpy": "2.2.6"
+            },
+            "installed_pilot_example_passed": true,
+            "installed_pilot_tests_passed": true,
+            "installed_publication_tests_passed": true,
+            "installed_required_input_tests_passed": true,
+            "installed_supervisor_tests_passed": true,
+            "installed_typing": true,
+            "inward_dependencies": true,
+            "packages": [
+              "equity-feature-workers"
+            ],
+            "source_imports": false
+          },
+          {
+            "acquisition_full": {
+              "acquisition_version": "0.1.0a0",
+              "default_denied": true,
+              "files_version": "0.1.0a0",
+              "negative_public_typing": 2,
+              "owned_csv_command": true,
+              "verified_readback": true
+            },
+            "acquisition_light": {
+              "default_denied": true,
+              "light_import": true,
+              "optional_demo_unavailable": true
+            },
+            "acquisition_oracle_sha256": "fa23dfa521034a3b8a3f111edc58c3736f80ad2cf2c053885f0fb95d97f26805",
+            "acquisition_tests_sha256": "8adba7d8b4abbd5b46eafb81a56e2ca5d29132136bc9c2a55dbb273ca2b8eda5",
+            "core_after_sha256": "2f7137e921b12625db6237458b93ba968eefcdfc74fdf648929af5e30dda0105",
+            "core_before_sha256": "2f7137e921b12625db6237458b93ba968eefcdfc74fdf648929af5e30dda0105",
+            "eq085_installed_profile_smoke_passed": true,
+            "eq085_profile_report_sha256": "1f00eb81acc0e3a0a98dd8cb8ce4c833dff0ef29a18cc3a0f6d2bb71806549ed",
+            "form": "sdist",
+            "independent_bar_goldens": true,
+            "installed_barrier_tests_passed": true,
+            "installed_catalog_example_passed": true,
+            "installed_catalog_tests_passed": true,
+            "installed_claim_example_passed": true,
+            "installed_claim_tests_passed": true,
+            "installed_command_tests_passed": true,
+            "installed_console_demo_passed": true,
+            "installed_diagnostic_example_passed": true,
+            "installed_diagnostic_tests_passed": true,
+            "installed_manifest_tests_passed": true,
+            "installed_optional_backend_versions": {
+              "duckdb": "1.5.6",
+              "equity-feature-duckdb-sink": "0.1.0a0",
+              "equity-feature-parquet": "0.1.0a1",
+              "pyarrow": "20.0.0"
+            },
+            "installed_optional_source_versions": {
+              "equity-feature-duckdb": "0.1.0a8",
+              "numpy": "2.2.6"
+            },
+            "installed_pilot_example_passed": true,
+            "installed_pilot_tests_passed": true,
+            "installed_publication_tests_passed": true,
+            "installed_required_input_tests_passed": true,
+            "installed_supervisor_tests_passed": true,
+            "installed_typing": true,
+            "inward_dependencies": true,
+            "packages": [
+              "equity-feature-workers"
+            ],
+            "source_imports": false
+          }
+        ],
+        "machine": "x86_64",
+        "probe_sha256": "5c55b7f603c6d0f819658a7a530d24fef5e4b00958db4f93141f27d6c4ea04de",
+        "python": "3.12.15",
+        "schema": "foundation1",
+        "source_sha256": {
+          ".github/workflows/foundation.yml": "c796a58b0ea4f4636b7784b2cce1ecdd09cb33c68a61b620030c023d1c83ff5e",
+          "packages/client/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/client/README.md": "a07bb6a81362a9ebb4cb8570068853bf30e93e28ecea70dfac010aedd18bef1f",
+          "packages/client/pyproject.toml": "a1007362b96d7efe069640b2e62918820a91bbbb3443b399d5fbb58dba922304",
+          "packages/client/src/equity_feature_client/__init__.py": "daa44178a847be89b3e71de48b81b73e81dbc004edff6c1ad1dfa926976913e4",
+          "packages/client/src/equity_feature_client/_response.py": "8cd9f5c34658a81600e8b69f6cce6c6d52b0e0818aab21df4ce7ca1a13023a8c",
+          "packages/client/src/equity_feature_client/_transport.py": "c35439a8fbad8bad4fdd5d14a1f2062b49b77fbd537d9bef993f14ed5766ce21",
+          "packages/client/src/equity_feature_client/_wire.py": "d9d4fc6b59ce580db9b439798f2f49959c298f4f3357d5c92037ceb622a46a6d",
+          "packages/client/src/equity_feature_client/client.py": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233",
+          "packages/client/src/equity_feature_client/models.py": "b895015595a0f38efeb0a48185b677b3116ce92306f0a7b36684b9d315156f05",
+          "packages/client/src/equity_feature_client/native.py": "cff814d907af69652a7d048e25e4701aac21c9904ce1b08b8e2008cf3385de24",
+          "packages/client/src/equity_feature_client/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2",
+          "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0",
+          "packages/mcp/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/mcp/README.md": "56888eeef86f87e181e3e6e887ac70e1416d332a243a685d62b55e0b315ca143",
+          "packages/mcp/pyproject.toml": "69d47ec3b18c26d44560a238b82ee5f7089b9debe0fb3201d04003b5a676e814",
+          "packages/mcp/src/equity_feature_mcp/__init__.py": "d3fc175cad2be076126119be52671498b29301c1928a9d7dc20917598a39fd0c",
+          "packages/mcp/src/equity_feature_mcp/_ledger.py": "cbde00e3f4c80d0c603c057584a0942342ec78e4ebfb3af52c6708f1495c3a69",
+          "packages/mcp/src/equity_feature_mcp/_wire.py": "83f8d5149d3e8d2342cb3c4d95784eadd06a45a046f02c57ef46a47d41f25c47",
+          "packages/mcp/src/equity_feature_mcp/models.py": "1c712e14161c885c1932ddf3fc5c14e3566dfac971776a952816c370fe6c4212",
+          "packages/mcp/src/equity_feature_mcp/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/mcp/src/equity_feature_mcp/schemas/protocol.json": "967b2c78642caf757fbde5deb9f38742468b70606bc1348cd782b02e8f0ec70d",
+          "packages/mcp/src/equity_feature_mcp/schemas/tools.json": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0",
+          "packages/mcp/src/equity_feature_mcp/server.py": "8d314f299ec8b9fa4903e8e94fc1ec685dafdcc331fc2c9f57425afbb78ba84b",
+          "packages/service/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/service/README.md": "ab957d6cf5d8d61b264d084d989811e86ab987b514aa7277e06c085e2185acf7",
+          "packages/service/pyproject.toml": "925f4bd88d3cbe04b5b1a3409709866c02b7f7211b3842958bf34e640c05241b",
+          "packages/service/src/equity_feature_service/__init__.py": "c9378960be3af975f8f7f97c427828356dd1fd635e94f8e4c73d2064e2042bac",
+          "packages/service/src/equity_feature_service/_audit.py": "6dcb31bb3551813df30b81e8bbbfa8d41fab06eb8d71975d9abb1937dc87e1c6",
+          "packages/service/src/equity_feature_service/_cache.py": "18f33e3668ad910e2cf61deb5aac01b7c83277677417c1e925a1df879ee590fc",
+          "packages/service/src/equity_feature_service/_containment.py": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd",
+          "packages/service/src/equity_feature_service/_entry.py": "66d6982313a84627916be6145f9b611b4237c6641a6b542e9a8f2e459abb6b7e",
+          "packages/service/src/equity_feature_service/codec.py": "954db659f0b0e0edc4a917b0d28a76cc35479464c1cff45df730fedcdcf175ca",
+          "packages/service/src/equity_feature_service/datasets.py": "41db66b5f84bdc79fe88f4f5eae9f8d380e3affa12086bcf1021e2ec3ae3914f",
+          "packages/service/src/equity_feature_service/duckdb.py": "887540795f24b78fdb96ca2c48e5f1572669f50f130f79689fc17437412f971c",
+          "packages/service/src/equity_feature_service/jobs.py": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68",
+          "packages/service/src/equity_feature_service/loopback.py": "69cd65d929765961927c74a12ccfb199a53bf5a5435253559a61a8c06aeb321a",
+          "packages/service/src/equity_feature_service/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/service/src/equity_feature_service/schemas/remote-v1.1.schema.json": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2",
+          "packages/service/src/equity_feature_service/schemas/remote-v1.schema.json": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0",
+          "packages/service/src/equity_feature_service/service.py": "5b7f55009f92b5a2647b278b3192c543cd463038e5755e563152674878cc0960",
+          "packages/workers/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/workers/README.md": "6bbe56ef10dc79c7a2c138ace79023d3cea3ecc76e35eb05d3b02c062b6b4a6a",
+          "packages/workers/pyproject.toml": "5db341c048458a36ae2c08267824216d5ff36a8218a6b950b774b593d5769ae8",
+          "packages/workers/src/equity_feature_workers/__init__.py": "0c4cf7430ea6a7d6e56960210b84e0d940942f4af0cc32a84a19bb32fd800b74",
+          "packages/workers/src/equity_feature_workers/acquisition.py": "6ae242f908ad65daf8e52027411371cd3d4d5443f37cba953eda5d8d5a8d3332",
+          "packages/workers/src/equity_feature_workers/acquisition_demo.py": "ec68280e9134e9cca2382ccbc907e640229efa69b3b3c237a4e0a83601567786",
+          "packages/workers/src/equity_feature_workers/barriers.py": "41d2be6c29475c0f0fa1a1c550a3dfa4200c9e105a88d6cc1d393640b2427cd9",
+          "packages/workers/src/equity_feature_workers/breadth_commands.py": "0b055f8e53e8de84574617583677c4c175a22dc9669ab12de1b2aabb785d9648",
+          "packages/workers/src/equity_feature_workers/catalog.py": "5bc4b309c844fad9b0463aeef224aab1e24c47a9fa436acbe0d4e9ebd4890ca6",
+          "packages/workers/src/equity_feature_workers/claims.py": "88b7f1fa702a69d9d76fff5cbce1a64744ed328860b1ec97f0eeefca1e65b5f4",
+          "packages/workers/src/equity_feature_workers/cli.py": "aadb95c320173983010f8e4840ca121b8f7f463a6bfa8cc7491476e04283cb93",
+          "packages/workers/src/equity_feature_workers/commands.py": "73e2db3acb10d419c90a7024ff5a353997522926ed91317092c247dd9eacc4ec",
+          "packages/workers/src/equity_feature_workers/diagnostics.py": "e45bfd0f7eb0ffa76c718c3fa0782f4c0fed0d2d31f4a62d24c2c6a052e72a13",
+          "packages/workers/src/equity_feature_workers/generations.py": "6bca5e1d58a6d6a4d47b6f7a2e9565074a5e5fa9695ab1854808503f39acc3bc",
+          "packages/workers/src/equity_feature_workers/manifests.py": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+          "packages/workers/src/equity_feature_workers/publication.py": "a90bdafb224805fb3346e75948547635aeeef7a4e6c9de13c7895a8aa0b9f7de",
+          "packages/workers/src/equity_feature_workers/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/workers/src/equity_feature_workers/required_inputs.py": "a7423f1ca2c619210a8fb5b462b436bec3825ec9532ddec1654cd96b2bac9116",
+          "packages/workers/src/equity_feature_workers/supervisor.py": "59b24de70e3873ab2d3c8a5f5d9be155d7ee1984605ac07318fb561858dbdbfe",
+          "requirements-dev.txt": "77c5c3db6b91c3240c7be485e3c5bb7983aa23fdb6835789c3dabc0ebd2dc81c",
+          "tests/acquisition_oracle.json": "fa23dfa521034a3b8a3f111edc58c3736f80ad2cf2c053885f0fb95d97f26805",
+          "tests/acquisition_probe.py": "32a94012e47667a64480694ee1011044f536d15d89435a57e0e050eb55d431bb",
+          "tests/barrier_fixture.py": "9dd77c2ec9469d0caf948e3a652a622d1ae8e05605cfb3d90d1bcf8c81f7e22b",
+          "tests/barrier_oracle.json": "e3dddf9b07b54280124eebe1ef5db97b6b851ab836534b71dcc898bfaf850a75",
+          "tests/catalog_example.py": "81901cc22284e3a4d29c9fd0b96c2047ce5813f7a4569248e037f2d3c3ad149d",
+          "tests/catalog_oracle.json": "379ccb0af4e4d994df619971fc77dc46556b18b1ad03c6c169024dae5e05caea",
+          "tests/claims_example.py": "de4886bd4daaebb34462fd3cd33089b7f6915ab69b0c69df6fccd387838e631b",
+          "tests/claims_oracle.json": "615e06f6a92724bf5817990a62b829347a7cf350f90d4079573a4974cf05e1ee",
+          "tests/client/test_authority_http.py": "c35e6d6ebca1ce967ed0c17505b0ccff51399982dafb6b011e326dbe7477c8d5",
+          "tests/client/test_client.py": "184aabc8b060bcfdb916853bd9a7d444760dd3fb92401d06b6eb7197c6703b5a",
+          "tests/client/test_models.py": "f83a57911b0f6a455b5f9be7a44b5b84011f68fe0d442b4142bdaf9fe9989aa7",
+          "tests/client/test_native.py": "a46d269477c2a63d86720ae87c9ff28c8723f584c092789e980cc3196730ba11",
+          "tests/client/test_owned_http.py": "9e37ef11248cc15bcf878504a87ea1d81c48153c59b0c61cad50dbe35ade56bc",
+          "tests/client/test_public_tls.py": "b8f9a524e3adff9088e0add14299f206a7d6a1499e89dd66841d6d4e38e49555",
+          "tests/client/test_transport.py": "e94bda70d838f4a8c9f556b12b0f8d90a318e6685863fc16977f8bae7797e3e7",
+          "tests/diagnostic_oracle.json": "3e0e5e2f9d38d9a2321233448914ca43b5ec32b30df5bd709ac8fd300a43abd3",
+          "tests/diagnostics_example.py": "ddaf471a19bfa33d715bd9b3e88a7cfdff23742380f2be52c1a387cae4e5e71f",
+          "tests/make_manifest_oracle.py": "5fa02096255ad1244eba7251f1da3eaf4b614172fba91de420dcdc256b5f6d87",
+          "tests/manifest_example.py": "bf88eb1d618d5b1b876c01d59ce3a2abe8e6262a366aa464932bc5b7fb0349c7",
+          "tests/manifest_fixture.py": "1bceaf0c329b8f4e447a33ee16940c95c2671f6ce96468301820bd7d236de5d1",
+          "tests/manifest_golden.json": "8d4c28a152c1884b16137fde4064cf6434b73ede9331e568c8b0aabccb6cb232",
+          "tests/mcp/test_ledger.py": "486f0a58418f8054e79968024c59201abebb64b8e2f2eb7bdf67269de3ed6d54",
+          "tests/mcp/test_native_authority.py": "fec6d856552a04457441276955f1fa4f67d5fdce3360a0a02a070a95e0039c12",
+          "tests/mcp/test_native_families.py": "a5d8a27d753b831a12f0e95e5e9222633e1961e65bd546f64fdf1e9255570bb5",
+          "tests/mcp/test_native_states.py": "8a7272b98b6b8bb8f905fbac916beb0460ead39d6c43ab84629769b68b673e51",
+          "tests/mcp/test_profiles.py": "f78aa2710407a7575e68756c5df05f5237e89af1be26b27d1a4fded8cfed2389",
+          "tests/mcp/test_protocol_boundary.py": "5ebb5b8f5c9ca050bd66aae07736510846ccab6b41419d20e06e735dfe4a2f88",
+          "tests/mcp/test_server.py": "ca2c3025caf706ecc9e7d9065a3e440ce7191b971123b9d7ca95aa766bed94bb",
+          "tests/mcp/test_tls_boundary.py": "37127d595d8a04c01a2d75f796dcb5f198ae448b186ad703022c6833fbf3cd19",
+          "tests/mcp/test_transport_fixtures.py": "529422eace53aa6d8aa9d8143014850cdd697bbe444881d98ccfbe5ac9796574",
+          "tests/mcp/test_wire.py": "aa6bfa40d3095d2f63ce13fcd15c2116a7030044490d5c04c8f87bc6ba6c2874",
+          "tests/pilot_fixture.py": "9e5a03483fed797a0c1c6e441991cfd66ede618f4ae26b26bfac48605ba12843",
+          "tests/pilot_memory.py": "685301f36aec8b998934abaab0c5bff2f19e756ffad3e5ed4a45742387a3d606",
+          "tests/pilot_oracle.json": "aa4920a1b3954a1803a752a7b9760417bff8c7300504d982822c51335add303a",
+          "tests/pilot_process.py": "2e473b3bc9edf56ef37c37bc0560feed8377fd8812142e9f1d7f424993e6997f",
+          "tests/probe_foundation.py": "5c55b7f603c6d0f819658a7a530d24fef5e4b00958db4f93141f27d6c4ea04de",
+          "tests/publication_fixture.py": "3ebdb52b3f523c5941b7a8f2af39cc30a3c7d69478f0b94f46c9f37680894255",
+          "tests/publication_oracle.json": "99a920394fb47c12a5d43f264b87ad7179ef7a192735752e858850114f5cde31",
+          "tests/qualification/test_mcp_records.py": "fb05fb2d79032c1e9b6843120967023332c891f631fdd5d22b06c50d5dac9575",
+          "tests/required_fixture.py": "cf56a4760beda18de52491cc35000cbba94b03d34542b699fd86a345c55c00cd",
+          "tests/required_oracle.json": "565d94bd1ba5127a16acc7d9d07a7082d2308eb2888def98e0dce40340ff2b60",
+          "tests/service/fixtures/approved-config.json": "d0626575709844b924fb5a0d7572bb2b82f5cb28287e643f36b7b508b5918c4e",
+          "tests/service/fixtures/cache_identity.json": "aa9d6b9625ee7787c4fd62243297fad4c25b6d3f5b7cf99871f70c6f49b0c65f",
+          "tests/service/fixtures/calculate.json": "4d49e8473e68e195664c78e66e24279854df1294dfd8fe16f8384d31559a0be5",
+          "tests/service/fixtures/delivery_native.json": "2ca65b4f548fe634e5acf7c7848cd4ae9de87420dbe35c3272d4937ba2df315a",
+          "tests/service/fixtures/jobs_native.json": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7",
+          "tests/service/fixtures/service_decisions.json": "36b60bb8d6702e7e6759ded67a465eed10910f52efbf163fd27d8bb7938d1ef7",
+          "tests/service/test_audit.py": "d4df0a1489ff703bf47b1b910c2c53ad275af8a2a403aa022a83d5fb13b035f3",
+          "tests/service/test_bootstrap_imports.py": "fb19a6dff2ef831054e78889149b48473c38a991403d907ef94d5da6db1a8f44",
+          "tests/service/test_cache.py": "8f11a42dbea71ca5ba3eb3ae81b7577072e8ade1e51f906e6bd0116128f0270e",
+          "tests/service/test_containment.py": "482da13290648ad273dffd398727261d74600ec160e52fc5c0dc3333f9d21dbf",
+          "tests/service/test_decisions.py": "1fce98d3b8c41a41ce3748f7fed7e07226e4f89340c0313b6fba4054a677d473",
+          "tests/service/test_delivery.py": "8c05b5fbc70beab51887425fd81f97c4ab464d1c578848bd421f848283f20761",
+          "tests/service/test_duckdb.py": "8b72b927b7ddcb2e8f0c398ae63b9ae8cb3cf724420e3bf27dcd46a4dfd219e6",
+          "tests/service/test_jobs.py": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f",
+          "tests/service/test_owned_entry.py": "9905cc468f8dec0907d7c04b60799130b7ab982bf0230babca9e85aa1beccfa3",
+          "tests/service/test_service.py": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90",
+          "tests/supervisor_fixture.py": "efe8db41324cc7afc37d3abeba19de8ac9961131b123d29791bc28141cdc1610",
+          "tests/supervisor_oracle.json": "00d5e92ed5d7fd99e90fecc11d71b5dc78ace4c05f0920776f3db7d0c69338ba",
+          "tests/test_acquisition.py": "8adba7d8b4abbd5b46eafb81a56e2ca5d29132136bc9c2a55dbb273ca2b8eda5",
+          "tests/test_barriers.py": "74f46761a3d6d25d600f45093cf529ca4952f56be8dcb905262e7b63621a8ce6",
+          "tests/test_catalog.py": "98691c0285dbe30cf66cba50d6639ae4dc788a22cdac9e7110faa6eeb144590f",
+          "tests/test_claims.py": "fe3ac4bab4d5456f57fca2a0cf7531700da61e8a285f5d5491dafa956f9841b8",
+          "tests/test_commands.py": "2e45f5654e3fc7f66ef38490e6f9a1c05a42676c46ec3a6f8a7c117fa02c5ac5",
+          "tests/test_diagnostics.py": "c832ffeabb10cebe5391776485b1b1d5bab945a5e104f9f1da9458ea554b0ca2",
+          "tests/test_manifests.py": "c03fa655ccea1cc0d94b40e80129851d25624831143b0d38cb338c7a5fcb951c",
+          "tests/test_pilot.py": "8943a6740ceb5dceb4ce03cfe29ccfc659021357fd13bf5a49b01c9a7582ed4d",
+          "tests/test_profile_evidence.py": "0d1a3950a45c1a6335a9dcfb07a00084103352298d6d995d197877c9a66e0322",
+          "tests/test_provenance.py": "7565f51e70db63b79d6594b12f44b89f714fb7f758fcfee81e29c8aca2866d77",
+          "tests/test_publication.py": "bff765ce6fd85eb295a708a8911cbe0312e3553cfbce99841b8295e0ffcafb10",
+          "tests/test_required_inputs.py": "d33034bdef9d101a12ee6dde06231bf272b72d93c9f0bf85f6feb4a9e197faa5",
+          "tests/test_supervisor.py": "155c0f8d59c765c2dc93541a403739a881b1cc03789e96c2ef0a4722cb2df48f",
+          "tools/benchmark_pipeline.py": "93706b47578c7e31223b60cd3b02db4af6fc184173f728b241af29408dda5985",
+          "tools/benchmark_supervisor.py": "5d196a373d39389bc55cf0c5184bc210e178f0e9b60c6de7a56e09e48f94a2e9",
+          "tools/build_client.py": "5edd15d1f7e842298a6eecbb7097d0fe78d7f9e53598995ba837dcdd3689993e",
+          "tools/build_foundation.py": "9de657127669eeef2a4e3581b20bf55714535eb95b6839aef3763b0ef7612aba",
+          "tools/build_mcp.py": "10790320bb5ab930c3ba20c004a78137daec12035b48b916c5dae3dfdbedb4bc",
+          "tools/build_service.py": "56d3560c2b8b1d207940e1a45ab12cfc3145d0d3a17034aa77501365518381af",
+          "tools/probe_eq080_host.py": "5642c0f17d3f35e2cba620d4872b71d2c9b33b61a236019a4bcaf18e3a0102b1",
+          "tools/profile_pipeline.py": "1918cfbecba83752baca47cc46bb0792c6172ab0adb79ac74e6df78856e4a4e9",
+          "tools/qualify_job_native.py": "8eff6dbefeb79ccd07cbc7a18f6f66a4019ed8da82480086dd1e5380558274a6",
+          "tools/requirements-mcp-reference.txt": "f37fbdad94f5742ee96f7d44bbd9acd10c617ad3386ecd1423a31f8798c36205",
+          "tools/requirements-service.txt": "75de0d72695732f0b552b48059c3f46c4ac06277a4622e8e325d4ee37a1553ae"
+        },
+        "system": "Linux"
+      },
+      "scope": "Actual declared-head native artifact; both fresh installed forms/report and archive digest readback; independent delivery acceptance remains separate",
+      "zip_sha256": "fd1da50ec8757f7da9e84254dee31266a56b0c6d6f403345eca88288648aa8d6"
+    },
+    "Windows": {
+      "artifact": {
+        "archive_download_url": "https://api.github.com/repos/atulsrivas1/equity-feature-workers/actions/artifacts/11787939625/zip",
+        "created_at": "2026-10-13T04:16:53Z",
+        "digest": "sha256:65f3a06942c82a509c5b8b03decc104513a3452847274a60c89104c15db3902b",
+        "expired": false,
+        "expires_at": "2026-11-12T04:16:53Z",
+        "id": 11787939625,
+        "name": "foundation-ee83e01d542817df9319a24f194059ffe4529b1f-windows-latest",
+        "node_id": "MDg6QXJ0aWZhY3QxMTc4NzkzOTYyNQ==",
+        "size_in_bytes": 668325,
+        "updated_at": "2026-10-13T04:16:53Z",
+        "url": "https://api.github.com/repos/atulsrivas1/equity-feature-workers/actions/artifacts/11787939625",
+        "workflow_run": {
+          "head_branch": "main",
+          "head_repository_id": 1408067204,
+          "head_sha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+          "id": 38344452751,
+          "repository_id": 1408067204
+        }
+      },
+      "entries": {
+        "eq085-profile-sdist.json": {
+          "bytes": 1547441,
+          "sha256": "2318df624715e2b0532352523efdda0b0fd20afcbd5eb352547713c55b65704f"
+        },
+        "eq085-profile-wheel.json": {
+          "bytes": 1548870,
+          "sha256": "a013b276850ff2c5813d5725a756925c3c1e4fbca9878621f311c83c4e746377"
+        },
+        "equity_feature_acquisition-0.1.0a0-py3-none-any.whl": {
+          "bytes": 13075,
+          "sha256": "54097268c067f2b794e6145a4ff40604afe1f90619ad3ddd97b2953d6a450abc"
+        },
+        "equity_feature_contracts-0.0.4a4-py3-none-any.whl": {
+          "bytes": 70077,
+          "sha256": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2"
+        },
+        "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": {
+          "bytes": 27794,
+          "sha256": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc"
+        },
+        "equity_feature_duckdb_sink-0.1.0a0-py3-none-any.whl": {
+          "bytes": 20213,
+          "sha256": "fc0f132f477ddc595daccbdd5342b357aca5bcf689e2c70a7d3fe967b00da4c9"
+        },
+        "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": {
+          "bytes": 16579,
+          "sha256": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8"
+        },
+        "equity_feature_files-0.1.0a0-py3-none-any.whl": {
+          "bytes": 15086,
+          "sha256": "36346e2c945bff70b46bc0bb11ff5f9f350e9df88cb3bc626a2e5039b37998f8"
+        },
+        "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": {
+          "bytes": 11470,
+          "sha256": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549"
+        },
+        "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": {
+          "bytes": 18702,
+          "sha256": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb"
+        },
+        "equity_feature_parquet-0.1.0a1-py3-none-any.whl": {
+          "bytes": 17752,
+          "sha256": "4119622e8603e1c0a53bae82ed5c97ef29cfa1119c5a02b36a2d9da0f6d3f445"
+        },
+        "equity_feature_workers-0.1.0a13-py3-none-any.whl": {
+          "bytes": 71072,
+          "sha256": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324"
+        },
+        "equity_feature_workers-0.1.0a13.tar.gz": {
+          "bytes": 57951,
+          "sha256": "d1b5a702812bbac6270eb54ab20eb21ac7bc1100d522412cee9107a92e594b0e"
+        },
+        "equity_features-0.0.4a4-py3-none-any.whl": {
+          "bytes": 65462,
+          "sha256": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0"
+        },
+        "manifest.json": {
+          "bytes": 23171,
+          "sha256": "a0f8e8731fc0a5647e47d44478a3ed2c7bca87c1ba26f358241d47599be48897"
+        }
+      },
+      "manifest": {
+        "artifacts": {
+          "equity_feature_workers-0.1.0a13-py3-none-any.whl": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324",
+          "equity_feature_workers-0.1.0a13.tar.gz": "d1b5a702812bbac6270eb54ab20eb21ac7bc1100d522412cee9107a92e594b0e"
+        },
+        "builder_sha256": "9de657127669eeef2a4e3581b20bf55714535eb95b6839aef3763b0ef7612aba",
+        "commit": "ee83e01d542817df9319a24f194059ffe4529b1f",
+        "dependency_artifacts": {
+          "equity_feature_acquisition-0.1.0a0-py3-none-any.whl": "54097268c067f2b794e6145a4ff40604afe1f90619ad3ddd97b2953d6a450abc",
+          "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2",
+          "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc",
+          "equity_feature_duckdb_sink-0.1.0a0-py3-none-any.whl": "fc0f132f477ddc595daccbdd5342b357aca5bcf689e2c70a7d3fe967b00da4c9",
+          "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8",
+          "equity_feature_files-0.1.0a0-py3-none-any.whl": "36346e2c945bff70b46bc0bb11ff5f9f350e9df88cb3bc626a2e5039b37998f8",
+          "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549",
+          "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb",
+          "equity_feature_parquet-0.1.0a1-py3-none-any.whl": "4119622e8603e1c0a53bae82ed5c97ef29cfa1119c5a02b36a2d9da0f6d3f445",
+          "equity_features-0.0.4a4-py3-none-any.whl": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0"
+        },
+        "dependency_commits": {
+          "equity-feature-io": "19aa266b9debb92a6c5eb707baafeb9ae7a82942",
+          "equity-features": "20c08c7370581d03c8a0404579667f68d67ac88b"
+        },
+        "epoch": 1700000000,
+        "forms": [
+          {
+            "acquisition_full": {
+              "acquisition_version": "0.1.0a0",
+              "default_denied": true,
+              "files_version": "0.1.0a0",
+              "negative_public_typing": 2,
+              "owned_csv_command": true,
+              "verified_readback": true
+            },
+            "acquisition_light": {
+              "default_denied": true,
+              "light_import": true,
+              "optional_demo_unavailable": true
+            },
+            "acquisition_oracle_sha256": "fa23dfa521034a3b8a3f111edc58c3736f80ad2cf2c053885f0fb95d97f26805",
+            "acquisition_tests_sha256": "8adba7d8b4abbd5b46eafb81a56e2ca5d29132136bc9c2a55dbb273ca2b8eda5",
+            "core_after_sha256": "2a7391860fb4c8adf07d7b06d0de6c19f538479c8cffe2e4063e025e88e8766f",
+            "core_before_sha256": "2a7391860fb4c8adf07d7b06d0de6c19f538479c8cffe2e4063e025e88e8766f",
+            "eq085_installed_profile_smoke_passed": true,
+            "eq085_profile_report_sha256": "a013b276850ff2c5813d5725a756925c3c1e4fbca9878621f311c83c4e746377",
+            "form": "wheel",
+            "independent_bar_goldens": true,
+            "installed_barrier_tests_passed": true,
+            "installed_catalog_example_passed": true,
+            "installed_catalog_tests_passed": true,
+            "installed_claim_example_passed": true,
+            "installed_claim_tests_passed": true,
+            "installed_command_tests_passed": true,
+            "installed_console_demo_passed": true,
+            "installed_diagnostic_example_passed": true,
+            "installed_diagnostic_tests_passed": true,
+            "installed_manifest_tests_passed": true,
+            "installed_optional_backend_versions": {
+              "duckdb": "1.5.6",
+              "equity-feature-duckdb-sink": "0.1.0a0",
+              "equity-feature-parquet": "0.1.0a1",
+              "pyarrow": "20.0.0"
+            },
+            "installed_optional_source_versions": {
+              "equity-feature-duckdb": "0.1.0a8",
+              "numpy": "2.2.6"
+            },
+            "installed_pilot_example_passed": true,
+            "installed_pilot_tests_passed": true,
+            "installed_publication_tests_passed": true,
+            "installed_required_input_tests_passed": true,
+            "installed_supervisor_tests_passed": true,
+            "installed_typing": true,
+            "inward_dependencies": true,
+            "packages": [
+              "equity-feature-workers"
+            ],
+            "source_imports": false
+          },
+          {
+            "acquisition_full": {
+              "acquisition_version": "0.1.0a0",
+              "default_denied": true,
+              "files_version": "0.1.0a0",
+              "negative_public_typing": 2,
+              "owned_csv_command": true,
+              "verified_readback": true
+            },
+            "acquisition_light": {
+              "default_denied": true,
+              "light_import": true,
+              "optional_demo_unavailable": true
+            },
+            "acquisition_oracle_sha256": "fa23dfa521034a3b8a3f111edc58c3736f80ad2cf2c053885f0fb95d97f26805",
+            "acquisition_tests_sha256": "8adba7d8b4abbd5b46eafb81a56e2ca5d29132136bc9c2a55dbb273ca2b8eda5",
+            "core_after_sha256": "2a7391860fb4c8adf07d7b06d0de6c19f538479c8cffe2e4063e025e88e8766f",
+            "core_before_sha256": "2a7391860fb4c8adf07d7b06d0de6c19f538479c8cffe2e4063e025e88e8766f",
+            "eq085_installed_profile_smoke_passed": true,
+            "eq085_profile_report_sha256": "2318df624715e2b0532352523efdda0b0fd20afcbd5eb352547713c55b65704f",
+            "form": "sdist",
+            "independent_bar_goldens": true,
+            "installed_barrier_tests_passed": true,
+            "installed_catalog_example_passed": true,
+            "installed_catalog_tests_passed": true,
+            "installed_claim_example_passed": true,
+            "installed_claim_tests_passed": true,
+            "installed_command_tests_passed": true,
+            "installed_console_demo_passed": true,
+            "installed_diagnostic_example_passed": true,
+            "installed_diagnostic_tests_passed": true,
+            "installed_manifest_tests_passed": true,
+            "installed_optional_backend_versions": {
+              "duckdb": "1.5.6",
+              "equity-feature-duckdb-sink": "0.1.0a0",
+              "equity-feature-parquet": "0.1.0a1",
+              "pyarrow": "20.0.0"
+            },
+            "installed_optional_source_versions": {
+              "equity-feature-duckdb": "0.1.0a8",
+              "numpy": "2.2.6"
+            },
+            "installed_pilot_example_passed": true,
+            "installed_pilot_tests_passed": true,
+            "installed_publication_tests_passed": true,
+            "installed_required_input_tests_passed": true,
+            "installed_supervisor_tests_passed": true,
+            "installed_typing": true,
+            "inward_dependencies": true,
+            "packages": [
+              "equity-feature-workers"
+            ],
+            "source_imports": false
+          }
+        ],
+        "machine": "AMD64",
+        "probe_sha256": "5c55b7f603c6d0f819658a7a530d24fef5e4b00958db4f93141f27d6c4ea04de",
+        "python": "3.12.10",
+        "schema": "foundation1",
+        "source_sha256": {
+          ".github/workflows/foundation.yml": "c796a58b0ea4f4636b7784b2cce1ecdd09cb33c68a61b620030c023d1c83ff5e",
+          "packages/client/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/client/README.md": "a07bb6a81362a9ebb4cb8570068853bf30e93e28ecea70dfac010aedd18bef1f",
+          "packages/client/pyproject.toml": "a1007362b96d7efe069640b2e62918820a91bbbb3443b399d5fbb58dba922304",
+          "packages/client/src/equity_feature_client/__init__.py": "daa44178a847be89b3e71de48b81b73e81dbc004edff6c1ad1dfa926976913e4",
+          "packages/client/src/equity_feature_client/_response.py": "8cd9f5c34658a81600e8b69f6cce6c6d52b0e0818aab21df4ce7ca1a13023a8c",
+          "packages/client/src/equity_feature_client/_transport.py": "c35439a8fbad8bad4fdd5d14a1f2062b49b77fbd537d9bef993f14ed5766ce21",
+          "packages/client/src/equity_feature_client/_wire.py": "d9d4fc6b59ce580db9b439798f2f49959c298f4f3357d5c92037ceb622a46a6d",
+          "packages/client/src/equity_feature_client/client.py": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233",
+          "packages/client/src/equity_feature_client/models.py": "b895015595a0f38efeb0a48185b677b3116ce92306f0a7b36684b9d315156f05",
+          "packages/client/src/equity_feature_client/native.py": "cff814d907af69652a7d048e25e4701aac21c9904ce1b08b8e2008cf3385de24",
+          "packages/client/src/equity_feature_client/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2",
+          "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0",
+          "packages/mcp/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/mcp/README.md": "56888eeef86f87e181e3e6e887ac70e1416d332a243a685d62b55e0b315ca143",
+          "packages/mcp/pyproject.toml": "69d47ec3b18c26d44560a238b82ee5f7089b9debe0fb3201d04003b5a676e814",
+          "packages/mcp/src/equity_feature_mcp/__init__.py": "d3fc175cad2be076126119be52671498b29301c1928a9d7dc20917598a39fd0c",
+          "packages/mcp/src/equity_feature_mcp/_ledger.py": "cbde00e3f4c80d0c603c057584a0942342ec78e4ebfb3af52c6708f1495c3a69",
+          "packages/mcp/src/equity_feature_mcp/_wire.py": "83f8d5149d3e8d2342cb3c4d95784eadd06a45a046f02c57ef46a47d41f25c47",
+          "packages/mcp/src/equity_feature_mcp/models.py": "1c712e14161c885c1932ddf3fc5c14e3566dfac971776a952816c370fe6c4212",
+          "packages/mcp/src/equity_feature_mcp/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/mcp/src/equity_feature_mcp/schemas/protocol.json": "967b2c78642caf757fbde5deb9f38742468b70606bc1348cd782b02e8f0ec70d",
+          "packages/mcp/src/equity_feature_mcp/schemas/tools.json": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0",
+          "packages/mcp/src/equity_feature_mcp/server.py": "8d314f299ec8b9fa4903e8e94fc1ec685dafdcc331fc2c9f57425afbb78ba84b",
+          "packages/service/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/service/README.md": "ab957d6cf5d8d61b264d084d989811e86ab987b514aa7277e06c085e2185acf7",
+          "packages/service/pyproject.toml": "925f4bd88d3cbe04b5b1a3409709866c02b7f7211b3842958bf34e640c05241b",
+          "packages/service/src/equity_feature_service/__init__.py": "c9378960be3af975f8f7f97c427828356dd1fd635e94f8e4c73d2064e2042bac",
+          "packages/service/src/equity_feature_service/_audit.py": "6dcb31bb3551813df30b81e8bbbfa8d41fab06eb8d71975d9abb1937dc87e1c6",
+          "packages/service/src/equity_feature_service/_cache.py": "18f33e3668ad910e2cf61deb5aac01b7c83277677417c1e925a1df879ee590fc",
+          "packages/service/src/equity_feature_service/_containment.py": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd",
+          "packages/service/src/equity_feature_service/_entry.py": "66d6982313a84627916be6145f9b611b4237c6641a6b542e9a8f2e459abb6b7e",
+          "packages/service/src/equity_feature_service/codec.py": "954db659f0b0e0edc4a917b0d28a76cc35479464c1cff45df730fedcdcf175ca",
+          "packages/service/src/equity_feature_service/datasets.py": "41db66b5f84bdc79fe88f4f5eae9f8d380e3affa12086bcf1021e2ec3ae3914f",
+          "packages/service/src/equity_feature_service/duckdb.py": "887540795f24b78fdb96ca2c48e5f1572669f50f130f79689fc17437412f971c",
+          "packages/service/src/equity_feature_service/jobs.py": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68",
+          "packages/service/src/equity_feature_service/loopback.py": "69cd65d929765961927c74a12ccfb199a53bf5a5435253559a61a8c06aeb321a",
+          "packages/service/src/equity_feature_service/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/service/src/equity_feature_service/schemas/remote-v1.1.schema.json": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2",
+          "packages/service/src/equity_feature_service/schemas/remote-v1.schema.json": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0",
+          "packages/service/src/equity_feature_service/service.py": "5b7f55009f92b5a2647b278b3192c543cd463038e5755e563152674878cc0960",
+          "packages/workers/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "packages/workers/README.md": "6bbe56ef10dc79c7a2c138ace79023d3cea3ecc76e35eb05d3b02c062b6b4a6a",
+          "packages/workers/pyproject.toml": "5db341c048458a36ae2c08267824216d5ff36a8218a6b950b774b593d5769ae8",
+          "packages/workers/src/equity_feature_workers/__init__.py": "0c4cf7430ea6a7d6e56960210b84e0d940942f4af0cc32a84a19bb32fd800b74",
+          "packages/workers/src/equity_feature_workers/acquisition.py": "6ae242f908ad65daf8e52027411371cd3d4d5443f37cba953eda5d8d5a8d3332",
+          "packages/workers/src/equity_feature_workers/acquisition_demo.py": "ec68280e9134e9cca2382ccbc907e640229efa69b3b3c237a4e0a83601567786",
+          "packages/workers/src/equity_feature_workers/barriers.py": "41d2be6c29475c0f0fa1a1c550a3dfa4200c9e105a88d6cc1d393640b2427cd9",
+          "packages/workers/src/equity_feature_workers/breadth_commands.py": "0b055f8e53e8de84574617583677c4c175a22dc9669ab12de1b2aabb785d9648",
+          "packages/workers/src/equity_feature_workers/catalog.py": "5bc4b309c844fad9b0463aeef224aab1e24c47a9fa436acbe0d4e9ebd4890ca6",
+          "packages/workers/src/equity_feature_workers/claims.py": "88b7f1fa702a69d9d76fff5cbce1a64744ed328860b1ec97f0eeefca1e65b5f4",
+          "packages/workers/src/equity_feature_workers/cli.py": "aadb95c320173983010f8e4840ca121b8f7f463a6bfa8cc7491476e04283cb93",
+          "packages/workers/src/equity_feature_workers/commands.py": "73e2db3acb10d419c90a7024ff5a353997522926ed91317092c247dd9eacc4ec",
+          "packages/workers/src/equity_feature_workers/diagnostics.py": "e45bfd0f7eb0ffa76c718c3fa0782f4c0fed0d2d31f4a62d24c2c6a052e72a13",
+          "packages/workers/src/equity_feature_workers/generations.py": "6bca5e1d58a6d6a4d47b6f7a2e9565074a5e5fa9695ab1854808503f39acc3bc",
+          "packages/workers/src/equity_feature_workers/manifests.py": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+          "packages/workers/src/equity_feature_workers/publication.py": "a90bdafb224805fb3346e75948547635aeeef7a4e6c9de13c7895a8aa0b9f7de",
+          "packages/workers/src/equity_feature_workers/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "packages/workers/src/equity_feature_workers/required_inputs.py": "a7423f1ca2c619210a8fb5b462b436bec3825ec9532ddec1654cd96b2bac9116",
+          "packages/workers/src/equity_feature_workers/supervisor.py": "59b24de70e3873ab2d3c8a5f5d9be155d7ee1984605ac07318fb561858dbdbfe",
+          "requirements-dev.txt": "77c5c3db6b91c3240c7be485e3c5bb7983aa23fdb6835789c3dabc0ebd2dc81c",
+          "tests/acquisition_oracle.json": "fa23dfa521034a3b8a3f111edc58c3736f80ad2cf2c053885f0fb95d97f26805",
+          "tests/acquisition_probe.py": "32a94012e47667a64480694ee1011044f536d15d89435a57e0e050eb55d431bb",
+          "tests/barrier_fixture.py": "9dd77c2ec9469d0caf948e3a652a622d1ae8e05605cfb3d90d1bcf8c81f7e22b",
+          "tests/barrier_oracle.json": "e3dddf9b07b54280124eebe1ef5db97b6b851ab836534b71dcc898bfaf850a75",
+          "tests/catalog_example.py": "81901cc22284e3a4d29c9fd0b96c2047ce5813f7a4569248e037f2d3c3ad149d",
+          "tests/catalog_oracle.json": "379ccb0af4e4d994df619971fc77dc46556b18b1ad03c6c169024dae5e05caea",
+          "tests/claims_example.py": "de4886bd4daaebb34462fd3cd33089b7f6915ab69b0c69df6fccd387838e631b",
+          "tests/claims_oracle.json": "615e06f6a92724bf5817990a62b829347a7cf350f90d4079573a4974cf05e1ee",
+          "tests/client/test_authority_http.py": "c35e6d6ebca1ce967ed0c17505b0ccff51399982dafb6b011e326dbe7477c8d5",
+          "tests/client/test_client.py": "184aabc8b060bcfdb916853bd9a7d444760dd3fb92401d06b6eb7197c6703b5a",
+          "tests/client/test_models.py": "f83a57911b0f6a455b5f9be7a44b5b84011f68fe0d442b4142bdaf9fe9989aa7",
+          "tests/client/test_native.py": "a46d269477c2a63d86720ae87c9ff28c8723f584c092789e980cc3196730ba11",
+          "tests/client/test_owned_http.py": "9e37ef11248cc15bcf878504a87ea1d81c48153c59b0c61cad50dbe35ade56bc",
+          "tests/client/test_public_tls.py": "b8f9a524e3adff9088e0add14299f206a7d6a1499e89dd66841d6d4e38e49555",
+          "tests/client/test_transport.py": "e94bda70d838f4a8c9f556b12b0f8d90a318e6685863fc16977f8bae7797e3e7",
+          "tests/diagnostic_oracle.json": "3e0e5e2f9d38d9a2321233448914ca43b5ec32b30df5bd709ac8fd300a43abd3",
+          "tests/diagnostics_example.py": "ddaf471a19bfa33d715bd9b3e88a7cfdff23742380f2be52c1a387cae4e5e71f",
+          "tests/make_manifest_oracle.py": "5fa02096255ad1244eba7251f1da3eaf4b614172fba91de420dcdc256b5f6d87",
+          "tests/manifest_example.py": "bf88eb1d618d5b1b876c01d59ce3a2abe8e6262a366aa464932bc5b7fb0349c7",
+          "tests/manifest_fixture.py": "1bceaf0c329b8f4e447a33ee16940c95c2671f6ce96468301820bd7d236de5d1",
+          "tests/manifest_golden.json": "8d4c28a152c1884b16137fde4064cf6434b73ede9331e568c8b0aabccb6cb232",
+          "tests/mcp/test_ledger.py": "486f0a58418f8054e79968024c59201abebb64b8e2f2eb7bdf67269de3ed6d54",
+          "tests/mcp/test_native_authority.py": "fec6d856552a04457441276955f1fa4f67d5fdce3360a0a02a070a95e0039c12",
+          "tests/mcp/test_native_families.py": "a5d8a27d753b831a12f0e95e5e9222633e1961e65bd546f64fdf1e9255570bb5",
+          "tests/mcp/test_native_states.py": "8a7272b98b6b8bb8f905fbac916beb0460ead39d6c43ab84629769b68b673e51",
+          "tests/mcp/test_profiles.py": "f78aa2710407a7575e68756c5df05f5237e89af1be26b27d1a4fded8cfed2389",
+          "tests/mcp/test_protocol_boundary.py": "5ebb5b8f5c9ca050bd66aae07736510846ccab6b41419d20e06e735dfe4a2f88",
+          "tests/mcp/test_server.py": "ca2c3025caf706ecc9e7d9065a3e440ce7191b971123b9d7ca95aa766bed94bb",
+          "tests/mcp/test_tls_boundary.py": "37127d595d8a04c01a2d75f796dcb5f198ae448b186ad703022c6833fbf3cd19",
+          "tests/mcp/test_transport_fixtures.py": "529422eace53aa6d8aa9d8143014850cdd697bbe444881d98ccfbe5ac9796574",
+          "tests/mcp/test_wire.py": "aa6bfa40d3095d2f63ce13fcd15c2116a7030044490d5c04c8f87bc6ba6c2874",
+          "tests/pilot_fixture.py": "9e5a03483fed797a0c1c6e441991cfd66ede618f4ae26b26bfac48605ba12843",
+          "tests/pilot_memory.py": "685301f36aec8b998934abaab0c5bff2f19e756ffad3e5ed4a45742387a3d606",
+          "tests/pilot_oracle.json": "aa4920a1b3954a1803a752a7b9760417bff8c7300504d982822c51335add303a",
+          "tests/pilot_process.py": "2e473b3bc9edf56ef37c37bc0560feed8377fd8812142e9f1d7f424993e6997f",
+          "tests/probe_foundation.py": "5c55b7f603c6d0f819658a7a530d24fef5e4b00958db4f93141f27d6c4ea04de",
+          "tests/publication_fixture.py": "3ebdb52b3f523c5941b7a8f2af39cc30a3c7d69478f0b94f46c9f37680894255",
+          "tests/publication_oracle.json": "99a920394fb47c12a5d43f264b87ad7179ef7a192735752e858850114f5cde31",
+          "tests/qualification/test_mcp_records.py": "fb05fb2d79032c1e9b6843120967023332c891f631fdd5d22b06c50d5dac9575",
+          "tests/required_fixture.py": "cf56a4760beda18de52491cc35000cbba94b03d34542b699fd86a345c55c00cd",
+          "tests/required_oracle.json": "565d94bd1ba5127a16acc7d9d07a7082d2308eb2888def98e0dce40340ff2b60",
+          "tests/service/fixtures/approved-config.json": "d0626575709844b924fb5a0d7572bb2b82f5cb28287e643f36b7b508b5918c4e",
+          "tests/service/fixtures/cache_identity.json": "aa9d6b9625ee7787c4fd62243297fad4c25b6d3f5b7cf99871f70c6f49b0c65f",
+          "tests/service/fixtures/calculate.json": "4d49e8473e68e195664c78e66e24279854df1294dfd8fe16f8384d31559a0be5",
+          "tests/service/fixtures/delivery_native.json": "2ca65b4f548fe634e5acf7c7848cd4ae9de87420dbe35c3272d4937ba2df315a",
+          "tests/service/fixtures/jobs_native.json": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7",
+          "tests/service/fixtures/service_decisions.json": "36b60bb8d6702e7e6759ded67a465eed10910f52efbf163fd27d8bb7938d1ef7",
+          "tests/service/test_audit.py": "d4df0a1489ff703bf47b1b910c2c53ad275af8a2a403aa022a83d5fb13b035f3",
+          "tests/service/test_bootstrap_imports.py": "fb19a6dff2ef831054e78889149b48473c38a991403d907ef94d5da6db1a8f44",
+          "tests/service/test_cache.py": "8f11a42dbea71ca5ba3eb3ae81b7577072e8ade1e51f906e6bd0116128f0270e",
+          "tests/service/test_containment.py": "482da13290648ad273dffd398727261d74600ec160e52fc5c0dc3333f9d21dbf",
+          "tests/service/test_decisions.py": "1fce98d3b8c41a41ce3748f7fed7e07226e4f89340c0313b6fba4054a677d473",
+          "tests/service/test_delivery.py": "8c05b5fbc70beab51887425fd81f97c4ab464d1c578848bd421f848283f20761",
+          "tests/service/test_duckdb.py": "8b72b927b7ddcb2e8f0c398ae63b9ae8cb3cf724420e3bf27dcd46a4dfd219e6",
+          "tests/service/test_jobs.py": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f",
+          "tests/service/test_owned_entry.py": "9905cc468f8dec0907d7c04b60799130b7ab982bf0230babca9e85aa1beccfa3",
+          "tests/service/test_service.py": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90",
+          "tests/supervisor_fixture.py": "efe8db41324cc7afc37d3abeba19de8ac9961131b123d29791bc28141cdc1610",
+          "tests/supervisor_oracle.json": "00d5e92ed5d7fd99e90fecc11d71b5dc78ace4c05f0920776f3db7d0c69338ba",
+          "tests/test_acquisition.py": "8adba7d8b4abbd5b46eafb81a56e2ca5d29132136bc9c2a55dbb273ca2b8eda5",
+          "tests/test_barriers.py": "74f46761a3d6d25d600f45093cf529ca4952f56be8dcb905262e7b63621a8ce6",
+          "tests/test_catalog.py": "98691c0285dbe30cf66cba50d6639ae4dc788a22cdac9e7110faa6eeb144590f",
+          "tests/test_claims.py": "fe3ac4bab4d5456f57fca2a0cf7531700da61e8a285f5d5491dafa956f9841b8",
+          "tests/test_commands.py": "2e45f5654e3fc7f66ef38490e6f9a1c05a42676c46ec3a6f8a7c117fa02c5ac5",
+          "tests/test_diagnostics.py": "c832ffeabb10cebe5391776485b1b1d5bab945a5e104f9f1da9458ea554b0ca2",
+          "tests/test_manifests.py": "c03fa655ccea1cc0d94b40e80129851d25624831143b0d38cb338c7a5fcb951c",
+          "tests/test_pilot.py": "8943a6740ceb5dceb4ce03cfe29ccfc659021357fd13bf5a49b01c9a7582ed4d",
+          "tests/test_profile_evidence.py": "0d1a3950a45c1a6335a9dcfb07a00084103352298d6d995d197877c9a66e0322",
+          "tests/test_provenance.py": "7565f51e70db63b79d6594b12f44b89f714fb7f758fcfee81e29c8aca2866d77",
+          "tests/test_publication.py": "bff765ce6fd85eb295a708a8911cbe0312e3553cfbce99841b8295e0ffcafb10",
+          "tests/test_required_inputs.py": "d33034bdef9d101a12ee6dde06231bf272b72d93c9f0bf85f6feb4a9e197faa5",
+          "tests/test_supervisor.py": "155c0f8d59c765c2dc93541a403739a881b1cc03789e96c2ef0a4722cb2df48f",
+          "tools/benchmark_pipeline.py": "93706b47578c7e31223b60cd3b02db4af6fc184173f728b241af29408dda5985",
+          "tools/benchmark_supervisor.py": "5d196a373d39389bc55cf0c5184bc210e178f0e9b60c6de7a56e09e48f94a2e9",
+          "tools/build_client.py": "5edd15d1f7e842298a6eecbb7097d0fe78d7f9e53598995ba837dcdd3689993e",
+          "tools/build_foundation.py": "9de657127669eeef2a4e3581b20bf55714535eb95b6839aef3763b0ef7612aba",
+          "tools/build_mcp.py": "10790320bb5ab930c3ba20c004a78137daec12035b48b916c5dae3dfdbedb4bc",
+          "tools/build_service.py": "56d3560c2b8b1d207940e1a45ab12cfc3145d0d3a17034aa77501365518381af",
+          "tools/probe_eq080_host.py": "5642c0f17d3f35e2cba620d4872b71d2c9b33b61a236019a4bcaf18e3a0102b1",
+          "tools/profile_pipeline.py": "1918cfbecba83752baca47cc46bb0792c6172ab0adb79ac74e6df78856e4a4e9",
+          "tools/qualify_job_native.py": "8eff6dbefeb79ccd07cbc7a18f6f66a4019ed8da82480086dd1e5380558274a6",
+          "tools/requirements-mcp-reference.txt": "f37fbdad94f5742ee96f7d44bbd9acd10c617ad3386ecd1423a31f8798c36205",
+          "tools/requirements-service.txt": "75de0d72695732f0b552b48059c3f46c4ac06277a4622e8e325d4ee37a1553ae"
+        },
+        "system": "Windows"
+      },
+      "scope": "Actual declared-head native artifact; both fresh installed forms/report and archive digest readback; independent delivery acceptance remains separate",
+      "zip_sha256": "65f3a06942c82a509c5b8b03decc104513a3452847274a60c89104c15db3902b"
+    }
+  },
+  "ci": {
+    "equity-feature-workers": {
+      "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+      "runs": [
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:05:46Z",
+                "conclusion": "success",
+                "databaseId": 115122485495,
+                "name": "service (windows-latest)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:25Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:25Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:34Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:37Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:34Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:38Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:37Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:14Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt -r tools/requirements-service.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:38Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:36Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_service.py --core-root ../core --io-root ../io",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:02:14Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:37Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:05:36Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:37Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:05:37Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:39Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 14,
+                    "startedAt": "2026-10-13T04:05:37Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:42Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 15,
+                    "startedAt": "2026-10-13T04:05:39Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:44Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 16,
+                    "startedAt": "2026-10-13T04:05:42Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:44Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:05:44Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344453091/job/115122485495"
+              },
+              {
+                "completedAt": "2026-10-13T04:03:38Z",
+                "conclusion": "success",
+                "databaseId": 115122485670,
+                "name": "service (ubuntu-24.04)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:24Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:39Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt -r tools/requirements-service.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:34Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_service.py --core-root ../core --io-root ../io",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:39Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:35Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:03:34Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:35Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:03:35Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:35Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 14,
+                    "startedAt": "2026-10-13T04:03:35Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:35Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 15,
+                    "startedAt": "2026-10-13T04:03:35Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:35Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 16,
+                    "startedAt": "2026-10-13T04:03:35Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:35Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:03:35Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344453091/job/115122485670"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344453091"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344453091,
+            "event": "push",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344453091",
+            "workflowName": "Optional service qualification"
+          }
+        },
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:08:27Z",
+                "conclusion": "success",
+                "databaseId": 115122483991,
+                "name": "foundation (ubuntu-24.04)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:24Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:28Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:28Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:28Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:36Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:28Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:51Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install --no-deps ../core/packages/contracts ../core/packages/features ../io/packages/io-contracts ../io/packages/io-sdk ../io/packages/acquisition ../io/packages/files ../io/packages/duckdb ../io/packages/parquet ../io/packages/duckdb-sink ../io/examples/third_party ./packages/workers",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:36Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:23Z",
+                    "conclusion": "success",
+                    "name": "Run python -m unittest discover -s tests -p test_*.py",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:01:51Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:08:22Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_foundation.py --core-root ../core --io-root ../io",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:03:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:08:23Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 10,
+                    "startedAt": "2026-10-13T04:08:22Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:08:23Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:08:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:08:23Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 18,
+                    "startedAt": "2026-10-13T04:08:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:08:23Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 19,
+                    "startedAt": "2026-10-13T04:08:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:08:24Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 20,
+                    "startedAt": "2026-10-13T04:08:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:08:24Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 21,
+                    "startedAt": "2026-10-13T04:08:24Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452751/job/115122483991"
+              },
+              {
+                "completedAt": "2026-10-13T04:17:01Z",
+                "conclusion": "success",
+                "databaseId": 115122484308,
+                "name": "foundation (windows-latest)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:24Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:29Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:29Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:35Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:35Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:35Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:05Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:35Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:50Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install --no-deps ../core/packages/contracts ../core/packages/features ../io/packages/io-contracts ../io/packages/io-sdk ../io/packages/acquisition ../io/packages/files ../io/packages/duckdb ../io/packages/parquet ../io/packages/duckdb-sink ../io/examples/third_party ./packages/workers",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:02:05Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:05:51Z",
+                    "conclusion": "success",
+                    "name": "Run python -m unittest discover -s tests -p test_*.py",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:02:50Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:16:53Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_foundation.py --core-root ../core --io-root ../io",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:05:51Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:16:53Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 10,
+                    "startedAt": "2026-10-13T04:16:53Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:16:54Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:16:53Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:16:56Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 18,
+                    "startedAt": "2026-10-13T04:16:54Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:16:58Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 19,
+                    "startedAt": "2026-10-13T04:16:56Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:17:00Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 20,
+                    "startedAt": "2026-10-13T04:16:58Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:17:00Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 21,
+                    "startedAt": "2026-10-13T04:17:00Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452751/job/115122484308"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452751"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344452751,
+            "event": "push",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452751",
+            "workflowName": "Typed foundation checks"
+          }
+        },
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:01:30Z",
+                "conclusion": "success",
+                "databaseId": 115122484245,
+                "name": "host-probe (ubuntu-24.04)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:25Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:25Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run python -I tools/probe_eq080_host.py",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452720/job/115122484245"
+              },
+              {
+                "completedAt": "2026-10-13T04:01:33Z",
+                "conclusion": "success",
+                "databaseId": 115122484592,
+                "name": "host-probe (windows-latest)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:24Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:28Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:28Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:28Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:30Z",
+                    "conclusion": "success",
+                    "name": "Run python -I tools/probe_eq080_host.py",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:28Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:30Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:01:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452720/job/115122484592"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452720"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344452720,
+            "event": "push",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452720",
+            "workflowName": "EQ080 pre-code OS feasibility"
+          }
+        },
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:03:55Z",
+                "conclusion": "success",
+                "databaseId": 115122483990,
+                "name": "client (windows-latest)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:25Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:25Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:34Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:37Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:34Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:37Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:37Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:05Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt -r tools/requirements-service.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:37Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:45Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_client.py --core-root ../core --io-root ../io",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:02:05Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:47Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:03:45Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:47Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:03:47Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:49Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 14,
+                    "startedAt": "2026-10-13T04:03:47Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:51Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 15,
+                    "startedAt": "2026-10-13T04:03:49Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:53Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 16,
+                    "startedAt": "2026-10-13T04:03:51Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:53Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:03:53Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452718/job/115122483990"
+              },
+              {
+                "completedAt": "2026-10-13T04:02:26Z",
+                "conclusion": "success",
+                "databaseId": 115122484262,
+                "name": "client (ubuntu-24.04)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:25Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:25Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:39Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt -r tools/requirements-service.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:21Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_client.py --core-root ../core --io-root ../io",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:39Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:22Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:02:21Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:22Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:02:22Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:22Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 14,
+                    "startedAt": "2026-10-13T04:02:22Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:23Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 15,
+                    "startedAt": "2026-10-13T04:02:22Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:23Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 16,
+                    "startedAt": "2026-10-13T04:02:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:23Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:02:23Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452718/job/115122484262"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452718"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344452718,
+            "event": "push",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452718",
+            "workflowName": "Optional Python client qualification"
+          }
+        },
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:04:37Z",
+                "conclusion": "success",
+                "databaseId": 115122483806,
+                "name": "mcp (windows-latest)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:25Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:25Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:34Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:36Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:34Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:37Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:36Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:07Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt -r tools/requirements-service.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:37Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:28Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_mcp.py --core-root ../core --io-root ../io",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:02:07Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:30Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:04:28Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:30Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:04:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:32Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 14,
+                    "startedAt": "2026-10-13T04:04:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:34Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 15,
+                    "startedAt": "2026-10-13T04:04:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:36Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 16,
+                    "startedAt": "2026-10-13T04:04:34Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:36Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:04:36Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452687/job/115122483806"
+              },
+              {
+                "completedAt": "2026-10-13T04:02:32Z",
+                "conclusion": "success",
+                "databaseId": 115122484049,
+                "name": "mcp (ubuntu-24.04)",
+                "startedAt": "2026-10-13T04:01:23Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:24Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:23Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:25Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:24Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:26Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:25Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:26Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:27Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:35Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt -r tools/requirements-service.txt",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:27Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_mcp.py --core-root ../core --io-root ../io",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:35Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:29Z",
+                    "conclusion": "success",
+                    "name": "Run actions/upload-artifact@v4",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:02:27Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:29Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:02:29Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:30Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 14,
+                    "startedAt": "2026-10-13T04:02:29Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:30Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 15,
+                    "startedAt": "2026-10-13T04:02:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:30Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 16,
+                    "startedAt": "2026-10-13T04:02:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:30Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 17,
+                    "startedAt": "2026-10-13T04:02:30Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452687/job/115122484049"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452687"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344452687,
+            "event": "push",
+            "headSha": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452687",
+            "workflowName": "Optional bounded MCP qualification"
+          }
+        }
+      ]
+    },
+    "equity-features": {
+      "head": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+      "runs": [
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:01:35Z",
+                "conclusion": "success",
+                "databaseId": 115122508383,
+                "name": "check",
+                "startedAt": "2026-10-13T04:01:28Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:30Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:29Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Verify planning documents and story coverage",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Verify exact session mathematics and boundary fixtures",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Verify quote sampling, state and temporal reference fixtures",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Verify historical initialization, windows and gap references",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Verify context denominators, alignment and universe references",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Verify timing and action admission policy references",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Verify pure package source imports and metadata",
+                    "number": 10,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Verify licensing and distribution naming consistency",
+                    "number": 11,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Verify immutable registry metadata against accepted scope",
+                    "number": 12,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 23,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 24,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 25,
+                    "startedAt": "2026-10-13T04:01:32Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460520/job/115122508383"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460520"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344460520,
+            "event": "push",
+            "headSha": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460520",
+            "workflowName": "Documentation checks"
+          }
+        },
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:01:58Z",
+                "conclusion": "success",
+                "databaseId": 115122507702,
+                "name": "wire (windows-latest)",
+                "startedAt": "2026-10-13T04:01:31Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:32Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:43Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:33Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:44Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:43Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:51Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r tools/requirements-transport.txt",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:44Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:55Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/verify_remote_transport.py",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:51Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:55Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:01:55Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:56Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 10,
+                    "startedAt": "2026-10-13T04:01:55Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:56Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 11,
+                    "startedAt": "2026-10-13T04:01:56Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460350/job/115122507702"
+              },
+              {
+                "completedAt": "2026-10-13T04:01:42Z",
+                "conclusion": "success",
+                "databaseId": 115122507905,
+                "name": "wire (ubuntu-24.04)",
+                "startedAt": "2026-10-13T04:01:29Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:30Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:29Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:36Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r tools/requirements-transport.txt",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:40Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/verify_remote_transport.py",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:36Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:40Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:01:40Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:40Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 10,
+                    "startedAt": "2026-10-13T04:01:40Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:40Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 11,
+                    "startedAt": "2026-10-13T04:01:40Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460350/job/115122507905"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460350"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344460350,
+            "event": "push",
+            "headSha": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460350",
+            "workflowName": "Remote transport reference checks"
+          }
+        },
+        {
+          "details": {
+            "conclusion": "success",
+            "headSha": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "jobs": [
+              {
+                "completedAt": "2026-10-13T04:03:52Z",
+                "conclusion": "success",
+                "databaseId": 115122507985,
+                "name": "compatibility (ubuntu-24.04)",
+                "startedAt": "2026-10-13T04:01:28Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:30Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:29Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:30Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:31Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:39Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:42Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install --no-build-isolation -e packages/contracts -e packages/features -e examples/external_consumer",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:01:39Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:42Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip check",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:01:42Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:42Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/verify_imports.py",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:01:42Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:42Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/verify_compatibility.py",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:01:42Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:50Z",
+                    "conclusion": "success",
+                    "name": "Run python -m mypy --strict packages/contracts/src packages/features/src examples/in_memory_adapter.py examples/external_consumer/src examples/typed_caller.py",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:01:42Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:11Z",
+                    "conclusion": "success",
+                    "name": "Run python -m unittest discover -s tests/unit",
+                    "number": 10,
+                    "startedAt": "2026-10-13T04:01:50Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:12Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/check_boundary.py",
+                    "number": 11,
+                    "startedAt": "2026-10-13T04:02:11Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:49Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_foundation.py",
+                    "number": 12,
+                    "startedAt": "2026-10-13T04:02:12Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:50Z",
+                    "conclusion": "success",
+                    "name": "Retain verified experimental foundation artifacts",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:03:49Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:50Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 25,
+                    "startedAt": "2026-10-13T04:03:50Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:50Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 26,
+                    "startedAt": "2026-10-13T04:03:50Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:03:50Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 27,
+                    "startedAt": "2026-10-13T04:03:50Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460344/job/115122507985"
+              },
+              {
+                "completedAt": "2026-10-13T04:04:37Z",
+                "conclusion": "success",
+                "databaseId": 115122508128,
+                "name": "compatibility (windows-latest)",
+                "startedAt": "2026-10-13T04:01:28Z",
+                "status": "completed",
+                "steps": [
+                  {
+                    "completedAt": "2026-10-13T04:01:30Z",
+                    "conclusion": "success",
+                    "name": "Set up job",
+                    "number": 1,
+                    "startedAt": "2026-10-13T04:01:29Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:38Z",
+                    "conclusion": "success",
+                    "name": "Run actions/checkout@v4",
+                    "number": 2,
+                    "startedAt": "2026-10-13T04:01:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:01:38Z",
+                    "conclusion": "success",
+                    "name": "Run actions/setup-python@v5",
+                    "number": 3,
+                    "startedAt": "2026-10-13T04:01:38Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:25Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install -r requirements-dev.txt",
+                    "number": 4,
+                    "startedAt": "2026-10-13T04:01:38Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:30Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip install --no-build-isolation -e packages/contracts -e packages/features -e examples/external_consumer",
+                    "number": 5,
+                    "startedAt": "2026-10-13T04:02:25Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:30Z",
+                    "conclusion": "success",
+                    "name": "Run python -m pip check",
+                    "number": 6,
+                    "startedAt": "2026-10-13T04:02:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:31Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/verify_imports.py",
+                    "number": 7,
+                    "startedAt": "2026-10-13T04:02:30Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:32Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/verify_compatibility.py",
+                    "number": 8,
+                    "startedAt": "2026-10-13T04:02:31Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:38Z",
+                    "conclusion": "success",
+                    "name": "Run python -m mypy --strict packages/contracts/src packages/features/src examples/in_memory_adapter.py examples/external_consumer/src examples/typed_caller.py",
+                    "number": 9,
+                    "startedAt": "2026-10-13T04:02:32Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:53Z",
+                    "conclusion": "success",
+                    "name": "Run python -m unittest discover -s tests/unit",
+                    "number": 10,
+                    "startedAt": "2026-10-13T04:02:38Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:02:54Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/check_boundary.py",
+                    "number": 11,
+                    "startedAt": "2026-10-13T04:02:53Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:33Z",
+                    "conclusion": "success",
+                    "name": "Run python tools/build_foundation.py",
+                    "number": 12,
+                    "startedAt": "2026-10-13T04:02:54Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:34Z",
+                    "conclusion": "success",
+                    "name": "Retain verified experimental foundation artifacts",
+                    "number": 13,
+                    "startedAt": "2026-10-13T04:04:33Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:34Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/setup-python@v5",
+                    "number": 25,
+                    "startedAt": "2026-10-13T04:04:34Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:36Z",
+                    "conclusion": "success",
+                    "name": "Post Run actions/checkout@v4",
+                    "number": 26,
+                    "startedAt": "2026-10-13T04:04:34Z",
+                    "status": "completed"
+                  },
+                  {
+                    "completedAt": "2026-10-13T04:04:36Z",
+                    "conclusion": "success",
+                    "name": "Complete job",
+                    "number": 27,
+                    "startedAt": "2026-10-13T04:04:36Z",
+                    "status": "completed"
+                  }
+                ],
+                "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460344/job/115122508128"
+              }
+            ],
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460344"
+          },
+          "run": {
+            "conclusion": "success",
+            "databaseId": 38344460344,
+            "event": "push",
+            "headSha": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "status": "completed",
+            "url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460344",
+            "workflowName": "Foundation package checks"
+          }
+        }
+      ]
+    }
+  },
+  "heads": {
+    "equity-feature-workers": "ee83e01d542817df9319a24f194059ffe4529b1f",
+    "equity-features": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0"
+  },
+  "raw_measurement": {
+    "bytes": 4759842,
+    "sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49"
+  },
+  "reviews": {
+    "eq085-actual-main-artifacts-reviewer-report.json": {
+      "report": {
+        "artifacts": [
+          {
+            "archives_equal_candidate_and_source": true,
+            "artifact_id": 11788278030,
+            "expires_at": "2026-11-12T04:08:22Z",
+            "forms": [
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "wheel",
+                "installed_payload_matches": true,
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "497a8e28adc1b9b4dc585954d344249f51f01926421b10e415212d473db14f94"
+              },
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "sdist",
+                "installed_payload_matches": true,
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "1f00eb81acc0e3a0a98dd8cb8ce4c833dff0ef29a18cc3a0f6d2bb71806549ed"
+              }
+            ],
+            "os": "Linux",
+            "source_head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "workflow_run": 38344452751,
+            "zip_bytes": 690199,
+            "zip_file": "eq085-main-Linux-11788278030.zip",
+            "zip_sha256": "fd1da50ec8757f7da9e84254dee31266a56b0c6d6f403345eca88288648aa8d6"
+          },
+          {
+            "archives_equal_candidate_and_source": true,
+            "artifact_id": 11787939625,
+            "expires_at": "2026-11-12T04:16:53Z",
+            "forms": [
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "wheel",
+                "installed_payload_matches": true,
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "a013b276850ff2c5813d5725a756925c3c1e4fbca9878621f311c83c4e746377"
+              },
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "sdist",
+                "installed_payload_matches": true,
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "2318df624715e2b0532352523efdda0b0fd20afcbd5eb352547713c55b65704f"
+              }
+            ],
+            "os": "Windows",
+            "source_head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "workflow_run": 38344452751,
+            "zip_bytes": 668325,
+            "zip_file": "eq085-main-Windows-11787939625.zip",
+            "zip_sha256": "65f3a06942c82a509c5b8b03decc104513a3452847274a60c89104c15db3902b"
+          }
+        ],
+        "checks": [
+          "Exact fifteen completed-success jobs across eight current main workflows bound to paired implementation main heads.",
+          "Both actual server ZIPs verified by fullbyte SHA/length/digest/main run/head/unexpired receipt, all fifteen entries perOS and raw manifests checked.",
+          "All twelve package archive pins perOS and full source/harness/builder/probe/dependency maps equal candidate0ea and sourcef1.",
+          "All eleven pure-wheel complete RECORD maps independently reconcile every original member size and SHA, canonical blank self row; all installed Python hashes in every report map to original payload bytes.",
+          "Four fresh actual main wheel/sdist reports retain full independent goldens/parity/origins and installed-version identities; forty profile records finite bounded with nonadditive flag and independently summed self category totals."
+        ],
+        "ci_receipt": {
+          "file": "eq085-main-current-readback.json",
+          "sha256": "11805f8e86a044d71dfffa90b81ad43165571eb415d684fe6f6c4c140e4c8e8b"
+        },
+        "coverage": {
+          "fresh_forms": 4,
+          "profiles": 40,
+          "record_payload_rows": 304,
+          "successful_jobs": 15,
+          "wheel_python_members": 192,
+          "workflows": 8
+        },
+        "current_jobs": [
+          {
+            "conclusion": "success",
+            "head": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "name": "check",
+            "repository": "equity-features",
+            "run_url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460520"
+          },
+          {
+            "conclusion": "success",
+            "head": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "name": "wire (windows-latest)",
+            "repository": "equity-features",
+            "run_url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460350"
+          },
+          {
+            "conclusion": "success",
+            "head": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "name": "wire (ubuntu-24.04)",
+            "repository": "equity-features",
+            "run_url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460350"
+          },
+          {
+            "conclusion": "success",
+            "head": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "name": "compatibility (ubuntu-24.04)",
+            "repository": "equity-features",
+            "run_url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460344"
+          },
+          {
+            "conclusion": "success",
+            "head": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0",
+            "name": "compatibility (windows-latest)",
+            "repository": "equity-features",
+            "run_url": "https://github.com/atulsrivas1/equity-features/actions/runs/38344460344"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "service (windows-latest)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344453091"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "service (ubuntu-24.04)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344453091"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "foundation (ubuntu-24.04)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452751"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "foundation (windows-latest)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452751"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "host-probe (ubuntu-24.04)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452720"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "host-probe (windows-latest)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452720"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "client (windows-latest)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452718"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "client (ubuntu-24.04)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452718"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "mcp (windows-latest)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452687"
+          },
+          {
+            "conclusion": "success",
+            "head": "ee83e01d542817df9319a24f194059ffe4529b1f",
+            "name": "mcp (ubuntu-24.04)",
+            "repository": "equity-feature-workers",
+            "run_url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38344452687"
+          }
+        ],
+        "disposition": "APPROVED",
+        "findings": [],
+        "heads": {
+          "equity-feature-workers": "ee83e01d542817df9319a24f194059ffe4529b1f",
+          "equity-features": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0"
+        },
+        "limits": [
+          "Offline evidence verification only; no execution/reinstall/benchmark or native binary/ABI/host audit.",
+          "Qualifies frozen implementation mains49a7/ee83; final additive delivery metadata requires own review/final-head CI and public readback before Done.",
+          "Actual new report times/source_head remain fresh observations, no performance ranking/generalized speedup/R7 claim."
+        ],
+        "new_tests": 0,
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "reviewer_native_benchmark_runs": 0,
+        "scope": "ACTUAL_IMPLEMENTATION_MAIN_BOTH_OS_INSTALLED_ARTIFACT_AND_CURRENT_CI_ACCEPTANCE",
+        "tool_only_history": [
+          "Readback rendering depth-limited/truncated before narrow direct data checks; no saved evidence altered."
+        ]
+      },
+      "sha256": "f28649aac3f7d09d721c88a15f610262b6ea905e05179cff2f961f7a7c338635"
+    },
+    "eq085-actual-main-publication-reviewer-report.json": {
+      "report": {
+        "benchmark_runs": 0,
+        "checks": [
+          "Both exact actual remote main heads fetched as Git metadata; whole-tree identities equal approved candidates.",
+          "All nineteen public GitLF files match approved lengths/SHA, have no CR and decode strict UTF8.",
+          "Atul author/GitHub committer/no coauthor trailer independently checked both merges; clean paired working branches.",
+          "Whole-tree equivalence preserves all reviewed source/tests/builder/package/harness and evidence bytes, including mirrored docs."
+        ],
+        "commits": {
+          "equity-feature-workers": {
+            "author": "Atul Srivastava",
+            "author_email": "102820540+atulsrivas1@users.noreply.github.com",
+            "committer": "GitHub",
+            "committer_email": "noreply@github.com",
+            "no_coauthors": true,
+            "remote_main_verified": true,
+            "reviewed_tree": "eac1e20cdabb53af58ebf48b0e02a806abbb8b22",
+            "tree": "eac1e20cdabb53af58ebf48b0e02a806abbb8b22"
+          },
+          "equity-features": {
+            "author": "Atul Srivastava",
+            "author_email": "102820540+atulsrivas1@users.noreply.github.com",
+            "committer": "GitHub",
+            "committer_email": "noreply@github.com",
+            "no_coauthors": true,
+            "remote_main_verified": true,
+            "reviewed_tree": "2319e89a81023ca57b9f0421bfbad3c7f3d91c25",
+            "tree": "2319e89a81023ca57b9f0421bfbad3c7f3d91c25"
+          }
+        },
+        "disposition": "APPROVED",
+        "evidence_files": [
+          "eq085_measured_heads.json",
+          "eq085-candidate-release.json",
+          "eq085-final-docs-reviewer-report.json",
+          "eq085-final-candidate-artifacts-reviewer-report.json"
+        ],
+        "findings": [],
+        "heads": {
+          "equity-feature-workers": "ee83e01d542817df9319a24f194059ffe4529b1f",
+          "equity-features": "49a7b635eb0c7cf0e1759f4b8e157fe8afd240c0"
+        },
+        "limits": [
+          "Publication readback only; actual main checks/foundation artifacts are still pending separate review, so no native acceptance, Released/Done or final delivery completion claimed.",
+          "No benchmark, package execution/reinstall, native binary/ABI/host audit or CI rerun; EQ083 parked unchanged."
+        ],
+        "new_tests": 0,
+        "public_git_files": {
+          "equity-feature-workers": {
+            "CHANGELOG.md": {
+              "bytes": 56498,
+              "sha256": "6ae8fefe566e525bbef461f2389a0d3d45649de173d11a36fe082e727c93b605"
+            },
+            "README.md": {
+              "bytes": 94060,
+              "sha256": "9b8df58392a97946746afc9eeb2a5dfe4aa316a759e4674026cd70b0b8b47782"
+            },
+            "docs/EQ085_ANALYSIS.md": {
+              "bytes": 6199,
+              "sha256": "ee8c0f7301a76c14442a86448d6d441d2b09231e92bd7624471f4fe306623dba"
+            },
+            "docs/EQ085_MEASURED.json": {
+              "bytes": 4759842,
+              "sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49"
+            },
+            "docs/EQ085_SOURCE_QUALIFICATION.json": {
+              "bytes": 91073,
+              "sha256": "199d17c0bc6118661e2bbf478cca67736a1f8a7d37dad2cb14c1a65524d1f264"
+            },
+            "docs/EQ085_SUMMARY.json": {
+              "bytes": 56558,
+              "sha256": "e2824e96f59510263d4c6ad9890ba3aaa8e421b4f48756178974416284117c5b"
+            },
+            "docs/PROFILING.md": {
+              "bytes": 3623,
+              "sha256": "95be49d3dbf1f49d8753c99685cc88a6e9d81ab70043ee5896e3cd5457745615"
+            },
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "bytes": 295807,
+              "sha256": "9c98486bac6a8a268a80d0cc7fb42136cf8b54dbb0220b7a5dbc704dc77abde0"
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "bytes": 406945,
+              "sha256": "c9012e2664b653d49de6610ad939847977e9ce09eeeb0727942ef7edf3cae447"
+            }
+          },
+          "equity-features": {
+            "README.md": {
+              "bytes": 14697,
+              "sha256": "87e75b3fcc6fbb1a3699912c097ce1a09fe4e60ab538603e571c80274ca0cfc9"
+            },
+            "docs/CHANGELOG.md": {
+              "bytes": 75779,
+              "sha256": "ecce4d31b6d8012a59eb2b4670409b272bac43e85f59e39bd4ef5fe02df5ddbc"
+            },
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "bytes": 433139,
+              "sha256": "d2db6706a8dd1c9d529dd37a0aa3ea76dc33b88917382e07dec02c1c1d0b8c4d"
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "bytes": 692390,
+              "sha256": "a0ffa4d5af0c4da9ff1addb48c607929c119d09e223625b8366bc74e32ba9ea2"
+            },
+            "docs/api/PROFILING.md": {
+              "bytes": 3623,
+              "sha256": "95be49d3dbf1f49d8753c99685cc88a6e9d81ab70043ee5896e3cd5457745615"
+            },
+            "docs/knowledge/LESSONS.md": {
+              "bytes": 284182,
+              "sha256": "9b6d9a9d41486f0da6f5ae627ce86228ac246adc543f4c09c9ee14ce1261698b"
+            },
+            "docs/stories/EQ-085_ANALYSIS.md": {
+              "bytes": 6199,
+              "sha256": "ee8c0f7301a76c14442a86448d6d441d2b09231e92bd7624471f4fe306623dba"
+            },
+            "docs/stories/EQ-085_MEASURED.json": {
+              "bytes": 4759842,
+              "sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49"
+            },
+            "docs/stories/EQ-085_SOURCE_QUALIFICATION.json": {
+              "bytes": 91073,
+              "sha256": "199d17c0bc6118661e2bbf478cca67736a1f8a7d37dad2cb14c1a65524d1f264"
+            },
+            "docs/stories/EQ-085_SUMMARY.json": {
+              "bytes": 56558,
+              "sha256": "e2824e96f59510263d4c6ad9890ba3aaa8e421b4f48756178974416284117c5b"
+            }
+          }
+        },
+        "reviewed_heads": {
+          "equity-feature-workers": "0ea56ac8d2a1d14cbf1ee44532da104020416d07",
+          "equity-features": "b6377a9f2a2262a1e27e5cfb51422f22514d552c"
+        },
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "scope": "ACTUAL_MAIN_PUBLICATION_TREE_AND_PUBLIC_GIT_READBACK_ONLY",
+        "tool_only_history": [
+          "Local origin/main refs initially stale; actual remote main heads independently read, then ordinary git fetch updated metadata before immutable readback. No source or working-tree change."
+        ]
+      },
+      "sha256": "aa4db53a437c762bb96fbed0b2b3ffcd87039b79d515cce7a9dd8ec27ab126db"
+    },
+    "eq085-final-candidate-artifacts-reviewer-report.json": {
+      "report": {
+        "artifacts": [
+          {
+            "artifact_id": 11787747222,
+            "forms": [
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "wheel",
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "a3e27c3858ef94959fd684f81a07bc560930f4dcf3af630f0079d15ea13e9e78"
+              },
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "sdist",
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "bbe565b9be0dc8bb448e82bb1234b0384c568064d05d4ff61580d24e63d63cbf"
+              }
+            ],
+            "os": "Linux",
+            "package_archives_equal_prior": true,
+            "source_head": "0ea56ac8d2a1d14cbf1ee44532da104020416d07",
+            "workflow_run": 38342906835,
+            "zip_bytes": 691298,
+            "zip_file": "eq085-candidate-Linux-11787747222.zip",
+            "zip_sha256": "5fbdc4e6210e92107fe8cf91d813ce32e8faf04e5107d00fe09343c7a1527cd3"
+          },
+          {
+            "artifact_id": 11788161740,
+            "forms": [
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "wheel",
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "38055bcfe6c366dc0331c7e78b9b01ec04d6d9d5f569ca172d5857ed4a9348b3"
+              },
+              {
+                "baseline_samples": 6,
+                "core_cases": 1,
+                "form": "sdist",
+                "pipeline_cases": 2,
+                "profile_records": 10,
+                "report_sha256": "38cfae84105fd57d0e358ab5df82bc633c676f83fda018c846d2a82d5de96fad"
+              }
+            ],
+            "os": "Windows",
+            "package_archives_equal_prior": true,
+            "source_head": "0ea56ac8d2a1d14cbf1ee44532da104020416d07",
+            "workflow_run": 38342906835,
+            "zip_bytes": 667623,
+            "zip_file": "eq085-candidate-Windows-11788161740.zip",
+            "zip_sha256": "d73a64006fbaf13c5476599b8c9fda2c36838213338f44cc336383b5a3d4ccd9"
+          }
+        ],
+        "checks": [
+          "Both saved server artifact receipts bind candidate head/run/digest/length/unexpired; all thirty outer member bytes and raw manifests independently checked.",
+          "Twelve package archives perOS and complete harness/source/builder/probe/dependency maps equal prior f1 qualification exactly.",
+          "Four fresh wheel/sdist smoke reports retain two sinks, three baselines each and core goldens/full parity; exact installed source/version/protocol identities equal prior perOS maps.",
+          "Actual new report SHA, timing/profile records retained; no equality assumption for duration/timestamps."
+        ],
+        "ci_evidence": "Parent reports canonical10/worker20 current checks SUCCESS and run38342906835 foundation bothOS SUCCESS. Saved server metadata independently ties artifact run/head; reviewer did not query live CI.",
+        "disposition": "APPROVED",
+        "findings": [],
+        "heads": {
+          "equity-feature-workers": "0ea56ac8d2a1d14cbf1ee44532da104020416d07",
+          "equity-features": "b6377a9f2a2262a1e27e5cfb51422f22514d552c"
+        },
+        "limits": [
+          "Offline saved JSON/ZIP bytes only; no execution/reinstall/native ABI/binary host scan.",
+          "Candidate evidence only. Merge and actual-main acceptance remain pending; no R7 or widerR8 completion."
+        ],
+        "new_tests": 0,
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "reviewer_native_benchmark_runs": 0,
+        "scope": "OFFLINE_FINAL_CANDIDATE_BOTH_OS_ARTIFACT_REVIEW",
+        "tool_only_history": [
+          "Broad readback rendering truncated then narrowed. Initial sample comparison expected baseline wrapper incorrectly; source schema has bare baseline samples, corrected without evidence modification."
+        ],
+        "total_profile_records": 40
+      },
+      "sha256": "3fe5d0c8ae5b83297522fbbcc22bdfcc91a86b20d64c7d9c3cacef853e9cf637"
+    },
+    "eq085-final-docs-reviewer-report.json": {
+      "report": {
+        "checks": [
+          "All nineteen immutable GitLF whole-byte lengths/SHA256 match eq085_measured_heads.json, no CR bytes.",
+          "Canonical ten and worker nine changed paths exactly match doc-only manifest; no source/test/builder/package change relative reviewed source heads.",
+          "Direct commit parents are reviewed source heads; both clean local branches and actual origin branch heads equal requested immutable heads.",
+          "Both author and committer are Atul Srivastava with project email; no Co-authored-by trailers.",
+          "Five measured/summary/analysis/qualification/methodology mirrors equal; old PK/handoff suffix bytes retained.",
+          "Qualification adds complete full evidence reviewer report, verified exact JSON equality; other reviews previously checked full equality.",
+          "Analysis preserves baseline versus diagnostic import/setup boundaries, opaque native/nonadditive limits, independent conversion/aggregate scopes, hypothesis-only targets and final-main pending status."
+        ],
+        "disposition": "APPROVED",
+        "findings": [],
+        "heads": {
+          "equity-feature-workers": "0ea56ac8d2a1d14cbf1ee44532da104020416d07",
+          "equity-features": "b6377a9f2a2262a1e27e5cfb51422f22514d552c"
+        },
+        "limits": [
+          "Documentation immutable readback only; no benchmark/native run, reinstall, CI rerun or binary/host ABI audit.",
+          "APPROVED documents and retained observed measurements are not final-main acceptance, release or Done. EQ083 parked/R7 automation paused unchanged."
+        ],
+        "new_tests": 0,
+        "published_files": {
+          "equity-feature-workers": {
+            "CHANGELOG.md": {
+              "bytes": 56498,
+              "sha256": "6ae8fefe566e525bbef461f2389a0d3d45649de173d11a36fe082e727c93b605"
+            },
+            "README.md": {
+              "bytes": 94060,
+              "sha256": "9b8df58392a97946746afc9eeb2a5dfe4aa316a759e4674026cd70b0b8b47782"
+            },
+            "docs/EQ085_ANALYSIS.md": {
+              "bytes": 6199,
+              "sha256": "ee8c0f7301a76c14442a86448d6d441d2b09231e92bd7624471f4fe306623dba"
+            },
+            "docs/EQ085_MEASURED.json": {
+              "bytes": 4759842,
+              "sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49"
+            },
+            "docs/EQ085_SOURCE_QUALIFICATION.json": {
+              "bytes": 91073,
+              "sha256": "199d17c0bc6118661e2bbf478cca67736a1f8a7d37dad2cb14c1a65524d1f264"
+            },
+            "docs/EQ085_SUMMARY.json": {
+              "bytes": 56558,
+              "sha256": "e2824e96f59510263d4c6ad9890ba3aaa8e421b4f48756178974416284117c5b"
+            },
+            "docs/PROFILING.md": {
+              "bytes": 3623,
+              "sha256": "95be49d3dbf1f49d8753c99685cc88a6e9d81ab70043ee5896e3cd5457745615"
+            },
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "bytes": 295807,
+              "sha256": "9c98486bac6a8a268a80d0cc7fb42136cf8b54dbb0220b7a5dbc704dc77abde0"
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "bytes": 406945,
+              "sha256": "c9012e2664b653d49de6610ad939847977e9ce09eeeb0727942ef7edf3cae447"
+            }
+          },
+          "equity-features": {
+            "README.md": {
+              "bytes": 14697,
+              "sha256": "87e75b3fcc6fbb1a3699912c097ce1a09fe4e60ab538603e571c80274ca0cfc9"
+            },
+            "docs/CHANGELOG.md": {
+              "bytes": 75779,
+              "sha256": "ecce4d31b6d8012a59eb2b4670409b272bac43e85f59e39bd4ef5fe02df5ddbc"
+            },
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "bytes": 433139,
+              "sha256": "d2db6706a8dd1c9d529dd37a0aa3ea76dc33b88917382e07dec02c1c1d0b8c4d"
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "bytes": 692390,
+              "sha256": "a0ffa4d5af0c4da9ff1addb48c607929c119d09e223625b8366bc74e32ba9ea2"
+            },
+            "docs/api/PROFILING.md": {
+              "bytes": 3623,
+              "sha256": "95be49d3dbf1f49d8753c99685cc88a6e9d81ab70043ee5896e3cd5457745615"
+            },
+            "docs/knowledge/LESSONS.md": {
+              "bytes": 284182,
+              "sha256": "9b6d9a9d41486f0da6f5ae627ce86228ac246adc543f4c09c9ee14ce1261698b"
+            },
+            "docs/stories/EQ-085_ANALYSIS.md": {
+              "bytes": 6199,
+              "sha256": "ee8c0f7301a76c14442a86448d6d441d2b09231e92bd7624471f4fe306623dba"
+            },
+            "docs/stories/EQ-085_MEASURED.json": {
+              "bytes": 4759842,
+              "sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49"
+            },
+            "docs/stories/EQ-085_SOURCE_QUALIFICATION.json": {
+              "bytes": 91073,
+              "sha256": "199d17c0bc6118661e2bbf478cca67736a1f8a7d37dad2cb14c1a65524d1f264"
+            },
+            "docs/stories/EQ-085_SUMMARY.json": {
+              "bytes": 56558,
+              "sha256": "e2824e96f59510263d4c6ad9890ba3aaa8e421b4f48756178974416284117c5b"
+            }
+          }
+        },
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "reviewer_native_benchmark_runs": 0,
+        "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+        "tool_only_history": [
+          "Prior supplemental docs review encountered concurrent publication; this review explicitly binds immutable Git bytes and actual remote heads."
+        ]
+      },
+      "sha256": "46057c94846e97690d8949b1dea20875f4d1f6ca3a3c09747acdc02c0d0e5052"
+    },
+    "eq085-full-evidence-reviewer-report.json": {
+      "report": {
+        "analysis_verdict": "Evidence supports two concrete next comparison hypotheses: semantics-preserving ASCII validation fast path with nonASCII/surrogate/canonical parity, and validated canonical materialization preserving ownership/precision/metadata. No optimization is implemented or predicted. Rust acceleration is not selected for these end-to-end fixtures, without claiming no benefit for other workloads. Repeated connection/reverification attribution requires caller-specific unchanged semantic boundaries.",
+        "author_execution": "Full serial session9010 exit0 supplied by parent; saved log contains six verified cases plus complete report publication.",
+        "checks": [
+          "Exact raw measured bytes/SHA retained and mirrored; current committed five harness/oracle/fixture pins and unchanged core helper payload match previously reviewed smoke/CI evidence.",
+          "Full installed measured-package identities match independently audited smoke/provenance setup (83 recorded files from8packages;96 all11 project payloads previously checked). No arbitrary installed-version equivalence inferred.",
+          "All six references,18baseline and6diagnostic sample identity/rows/tasks/input/versions/full digest parity+independentgolden flags checked; three workload sink-pair digests match. Median/min/max and raw repeated arrays recomputed and match SUMMARY.",
+          "Three core cases128uniform/16384uniform/16384skew, k8, sourcechecked goldens/mutation/codec/conversion identities retained; integer volume/notional/count ratios independently checked from saved golden values; all seven conversion/aggregate/codec three-repeat summaries recomputed.",
+          "Thirty profile records checked for finite nonnegative durations/count limits, function cap, nonadditive cumulative metadata, exact category self sums and sanitized source labels. Summary diagnostic categories/top rows and target counts match original data.",
+          "Six published ASCII surrogate validator _string/generator counts agree with actual codec.py source and profiles; generator seconds and three core conversion/aggregate/codec tables are scoped to their independent boundaries.",
+          "Analysis and method mirrors explicitly distinguish profiler-call imports/setup from baseline internal timer, opaque native/unclassified observations and whole-lifetime peaks/visiblebuffer limitations; no speedup or physicalI/O estimate from profile overhead."
+        ],
+        "coverage": {
+          "core_cases": 3,
+          "core_diagnostic_records": 24,
+          "excluded_references": 6,
+          "pipeline_cases": 6,
+          "separate_pipeline_profiles": 6,
+          "total_profile_records": 30,
+          "unprofiled_samples": 18
+        },
+        "disposition": "APPROVED",
+        "findings": [],
+        "heads": {
+          "equity-feature-workers": "f1b228c94acf6dff7bbcf3e25210fba317f4234f",
+          "equity-features": "a0c5f88ac7cab0f89e34ec6bd660e3763bc6b977"
+        },
+        "limits": [
+          "Saved evidence/pure data/source text review only, no full benchmark rerun or independent reinstall. Author measurements distinct from reviewer observation of saved result.",
+          "Source-push bothOS fresh workerwheel/sdist compatibility evidence separately reviewed; final measured commit/head coverage, default-branch merge and main acceptance artifacts/release/readback remain pending. Not Done.",
+          "Three repetitions describe this warmed owned synthetic host, not production/private/hosted capacity, cross-platform ranking, exact copy count, exclusive native CPU/memory or storage device performance.",
+          "EQ083 parked/R7automationPAUSED unaffected; no old physical-source or rejected binary task reattempt."
+        ],
+        "new_tests": 0,
+        "pipeline_metrics": [
+          {
+            "baseline_median_ns": 4844471500,
+            "generator_calls": 2589332,
+            "generator_self_seconds": 1.3081726,
+            "sink": "parquet",
+            "string_calls": 164852,
+            "workload": "small"
+          },
+          {
+            "baseline_median_ns": 16647390600,
+            "generator_calls": 2719324,
+            "generator_self_seconds": 1.6116356,
+            "sink": "duckdb",
+            "string_calls": 175140,
+            "workload": "small"
+          },
+          {
+            "baseline_median_ns": 20785580300,
+            "generator_calls": 10377872,
+            "generator_self_seconds": 5.205903200000001,
+            "sink": "parquet",
+            "string_calls": 659408,
+            "workload": "large"
+          },
+          {
+            "baseline_median_ns": 57763440100,
+            "generator_calls": 10898736,
+            "generator_self_seconds": 5.7902443,
+            "sink": "duckdb",
+            "string_calls": 700560,
+            "workload": "large"
+          },
+          {
+            "baseline_median_ns": 20609062200,
+            "generator_calls": 10311746,
+            "generator_self_seconds": 5.0444247,
+            "sink": "parquet",
+            "string_calls": 659408,
+            "workload": "skew"
+          },
+          {
+            "baseline_median_ns": 55568335000,
+            "generator_calls": 10829758,
+            "generator_self_seconds": 5.6754667,
+            "sink": "duckdb",
+            "string_calls": 700560,
+            "workload": "skew"
+          }
+        ],
+        "prepared_measured_assets": {
+          "ANALYSIS.md": {
+            "bytes": 6199,
+            "sha256": "ee8c0f7301a76c14442a86448d6d441d2b09231e92bd7624471f4fe306623dba"
+          },
+          "MEASURED.json": {
+            "bytes": 4759842,
+            "sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49"
+          },
+          "SUMMARY.json": {
+            "bytes": 56558,
+            "sha256": "e2824e96f59510263d4c6ad9890ba3aaa8e421b4f48756178974416284117c5b"
+          }
+        },
+        "prior_reviews": [
+          "eq085-readiness-reviewer-report.json",
+          "eq085-profile-source-reviewer-report.json",
+          "eq085-smoke-evidence-reviewer-report.json",
+          "eq085-source-native-artifacts-reviewer-report.json"
+        ],
+        "raw_log_sha256": "d1ec63d7ea6b0f64a568aa2cf7589ef3a74d6c9aff708cc4f87b0457a0f69a94",
+        "raw_report": {
+          "bytes": 4759842,
+          "sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49"
+        },
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "reviewer_native_benchmark_runs": 0,
+        "scope": "OFFLINE_COMPLETE_AUTHOR_MEASUREMENT_AND_ANALYSIS_EVIDENCE_REVIEW",
+        "tool_only_history": [
+          "Reviewer guessed summary diagnostics field then corrected actual diagnostic_targets; broad rendering truncated before narrowed numeric/data comparisons. No product or measurement failure."
+        ]
+      },
+      "sha256": "cc87df1be4fdb4a25d432b96cb6fb49f2b8bdf9b7eb3861ebe879ef749653dfd"
+    }
+  },
+  "schema": "eq085-delivery1",
+  "scope": "Frozen genuinely qualified implementation mains and actual native artifacts; later additive documentation identities do not regenerate this receipt.",
+  "story": "EQ085 #96"
+}

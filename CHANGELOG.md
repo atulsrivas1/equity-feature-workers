@@ -1,3 +1,5 @@
+EQ085 qualified main delivery: complete measured evidence, fifteen actual main jobs, bothOS fresh wheel/sdist smoke and current artifact/tree readback passed independent review. Frozen same-story delivery receipt added; no numerical/runtime package change. Final acceptance is recorded on issue96; R8 remains open and R7 parked.
+
 ## EQ085 synthetic attribution tooling
 
 Added an external developer profiler with separate unprofiled baseline and
