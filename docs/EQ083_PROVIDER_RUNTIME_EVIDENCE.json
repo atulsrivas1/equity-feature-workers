@@ -1,0 +1,669 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "THIRTEEN_IMMUTABLE_GENODE_LIBC_VFS_PROVIDER_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+    "disposition": "PROVIDER_AND_LIBC_CROSSCALL_LIFETIMES_TRACED_WHOLE_PHYSICAL_CLOSURE_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "source_receipt_sha256": "079cfca6106ea6dbcae8ac4f646d08552c98cd1960f4090e5cbecebed35556d8",
+    "source_pins": [
+      {
+        "sha256": "d243b238789d14213b6edeb3236fe0fdd22fccfb4970f94860aae3bb15513477",
+        "bytes": 29726,
+        "git_sha1": "7833d3338e108cd859a3f8209ef1f2954c1257fa",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/file_operations.cc",
+        "path": "repos/libports/src/lib/libc/file_operations.cc"
+      },
+      {
+        "sha256": "866b2989301f8365a8c89f8e7908cb4085a085f3127ceb3a49a28f266a16497f",
+        "bytes": 2416,
+        "git_sha1": "7eb7427acb5e486a9f9e23feafd7a2b59a1c7636",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/file.h",
+        "path": "repos/libports/src/lib/libc/internal/file.h"
+      },
+      {
+        "sha256": "7fd84c4a12d240fee86464b4f38e8caa3b169b6631320896f71cbd88b3f9d390",
+        "bytes": 15400,
+        "git_sha1": "baa84a9d0e008acbb7d6757d9e489f44333c4813",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/kernel.cc",
+        "path": "repos/libports/src/lib/libc/kernel.cc"
+      },
+      {
+        "sha256": "de33dd81c55e9b5e5ac54244e656ef22f8b06488f318c3aeb9084d817c12ec65",
+        "bytes": 17577,
+        "git_sha1": "2b983a7e245e2507108c4d94fb511fc35e9bc8b9",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/kernel.h",
+        "path": "repos/libports/src/lib/libc/internal/kernel.h"
+      },
+      {
+        "sha256": "3205f69373a0612b60421fdb2470736fa3c3e0d2e28dc11c072f4b783ad69dda",
+        "bytes": 4009,
+        "git_sha1": "ac6cef1207c98cac3b9d92b1126e60b3f3adc1c1",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/monitor.h",
+        "path": "repos/libports/src/lib/libc/internal/monitor.h"
+      },
+      {
+        "sha256": "ab5929c3bc0312521e838299bfbf169fa90c0088fef92e25915d22da7498d341",
+        "bytes": 32774,
+        "git_sha1": "3ffc253c5c81b314cafae19f358931cbba90f20c",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/pthread.cc",
+        "path": "repos/libports/src/lib/libc/pthread.cc"
+      },
+      {
+        "sha256": "c1bcea5e5380cad45eadc319749494def7a5819d003ea4bc757cb857b64cde8b",
+        "bytes": 6733,
+        "git_sha1": "d3ed4c726a9493bafd68c2bd6074cc242de82b63",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/malloc.cc",
+        "path": "repos/libports/src/lib/libc/malloc.cc"
+      },
+      {
+        "sha256": "c3ffc4887bb32694740b77f294cbb2999bd6790082a2f0a65f9902a39615d7a2",
+        "bytes": 3506,
+        "git_sha1": "91a330ff2bf22b13613fec205cbed19a853f4167",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/mem_alloc.h",
+        "path": "repos/libports/src/lib/libc/internal/mem_alloc.h"
+      },
+      {
+        "sha256": "5b1244eccc3f60ad2a746447e1a68216ef7f01747f16ebc9b009fbbaf5cad48f",
+        "bytes": 21954,
+        "git_sha1": "a873bc27aebafe64cdbe6b7326a28fa3b97d5a12",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/ram_file_system.h",
+        "path": "repos/os/src/lib/vfs/ram_file_system.h"
+      },
+      {
+        "sha256": "51377c708c4235a2642e379abcbf1c5dbbeea562f28491e26c81d09cf603b490",
+        "bytes": 26320,
+        "git_sha1": "661b5d495f13c8edf79eb33152fca711c243c9f0",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/fs_file_system.h",
+        "path": "repos/os/src/lib/vfs/fs_file_system.h"
+      },
+      {
+        "sha256": "b943dbce76e9e240d1a711aaba26b422a1c3659792fe03e16d5f13f5f0f05bda",
+        "bytes": 20624,
+        "git_sha1": "229a43604d44f01971bf42462c5473ffaaa6232e",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/block_file_system.h",
+        "path": "repos/os/src/lib/vfs/block_file_system.h"
+      },
+      {
+        "sha256": "bf5bd41cf415e985cbe35b25461cde7ea46ec2ea48458f765887a282fd163dcf",
+        "bytes": 19144,
+        "git_sha1": "cd1457a05a1069b52763454d059f5af609fbeea6",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/tar_file_system.h",
+        "path": "repos/os/src/lib/vfs/tar_file_system.h"
+      },
+      {
+        "sha256": "47dfb4a31574438a7072297312cab6f4761f05f609ca07aca9ec8256041de456",
+        "bytes": 4501,
+        "git_sha1": "5f6a7c2ba91884fa54b04bfa4cb57bbf69f6151a",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/log_file_system.h",
+        "path": "repos/os/src/lib/vfs/log_file_system.h"
+      }
+    ],
+    "total_bytes": 204684,
+    "facts": [
+      {
+        "paths": [
+          "repos/libports/src/lib/libc/file_operations.cc",
+          "repos/libports/src/lib/libc/internal/file.h"
+        ],
+        "functions": [
+          "close",
+          "write",
+          "fsync",
+          "ftruncate"
+        ],
+        "fact": "Libc descriptor wrappers dispatch to filesystem/socket helpers. Close destroys open file/directory/socket/kqueue state and AIO handles then descriptor bookkeeping; fsync delegates through open-file state. Writes, truncate and open-file finalization therefore need the lower filesystem/helper ownership contract, not only a successful libc return. File/internal-file declarations do not contain the complete fs helper bodies."
+      },
+      {
+        "paths": [
+          "repos/libports/src/lib/libc/file_operations.cc"
+        ],
+        "functions": [
+          "mmap",
+          "munmap",
+          "msync",
+          "aio_cancel",
+          "aio_fsync",
+          "aio_suspend"
+        ],
+        "fact": "Anonymous mappings use mem_alloc, register their ranges and unmap via allocator free; file mappings delegate to fs. msync is unimplemented, AIO cancel returns EBADF and AIO fsync EINVAL as unsupported in this source. AIO waiting delegates to fs state. Vendor POSIX cancellation behavior cannot be imported unchanged into this Genode implementation; exact selected branch/caller/provider semantics must be reconciled."
+      },
+      {
+        "paths": [
+          "repos/libports/src/lib/libc/internal/monitor.h",
+          "repos/libports/src/lib/libc/internal/kernel.h",
+          "repos/libports/src/lib/libc/kernel.cc"
+        ],
+        "functions": [
+          "Monitor::monitor",
+          "Monitor::Pool::monitor",
+          "Kernel::_suspend_main"
+        ],
+        "fact": "Monitor tracks jobs until function completion or blockade timeout, default timeout0. Main suspension arms a timer only for positive timeouts and switches contexts/signals. Async registration survives until job destruction. Timeout or wakeup is a job/execution condition, not automatic cancellation or draining of an external storage request/callback; event-loop/timer/caller resources must remain in the same graph."
+      },
+      {
+        "paths": [
+          "repos/libports/src/lib/libc/pthread.cc"
+        ],
+        "functions": [
+          "Pthread::cancel",
+          "Pthread::join",
+          "pthread_cancel",
+          "pthread_join",
+          "pthread_exit",
+          "Pthread_cleanup::cleanup"
+        ],
+        "fact": "Cancel marks _exiting and triggers monitor examination; join monitors _exiting without a local timeout, then the public join destroys the Pthread object. pthread_exit calls thread-local/TLS destructors and repeats key-destructor passes while any were called. Deferred cleanup keeps a previous cleanup-thread object until later cleanup. Logical canceled/exiting state is not independent physical execution/stack quiescence or a numeric total teardown proof."
+      },
+      {
+        "paths": [
+          "repos/libports/src/lib/libc/malloc.cc",
+          "repos/libports/src/lib/libc/internal/mem_alloc.h",
+          "repos/libports/src/lib/libc/kernel.cc"
+        ],
+        "fact": "Malloc accounts extra alignment and metadata, selecting slab sizes or backing-store allocations. Memory allocator declares RAM dataspaces/region maps/range metadata, growing chunk sizes and a dataspace-pool destructor whose body is outside these files. Kernel constructs allocator/heap owners. Logical object free, slab reuse and physical dataspace release need complete implementation and callsite accounting; no full instantaneous byte cap is proved by payload sizes."
+      },
+      {
+        "paths": [
+          "repos/os/src/lib/vfs/ram_file_system.h"
+        ],
+        "functions": [
+          "File::write",
+          "File::truncate",
+          "File_system::unlink",
+          "File_system::_try_complete_unlink",
+          "File_system::close",
+          "File_system::dataspace"
+        ],
+        "fact": "RAM files use hierarchical chunk backing and separate logical length; truncate may discard chunks or merely change length. Unlink marks a node and defers removal while an I/O handle is open; final close can complete unlink. Dataspace export allocates additional backing for file contents. Nodes, open-deleted files, sparse/logical lengths, chunk metadata, copy overlap and watchers require explicit reservations; this provider alone is not a selected global node/byte policy."
+      },
+      {
+        "paths": [
+          "repos/os/src/lib/vfs/fs_file_system.h"
+        ],
+        "functions": [
+          "Fs_vfs_handle::write",
+          "Fs_vfs_handle::sync",
+          "File_system::close"
+        ],
+        "fact": "Filesystem-session writes allocate bounded individual packets, submit them and report retry when stream capacity is unavailable. Sync tracks queued/ack state and releases packet ownership after acknowledgement. Close calls the remote file-session close then destroys the local handle. Individual packet capacity is not total provider storage/node/callback limit; remote server, session upgrade, queue, close and backing lifetimes need closure."
+      },
+      {
+        "paths": [
+          "repos/os/src/lib/vfs/block_file_system.h"
+        ],
+        "functions": [
+          "Write_handler::write",
+          "Sync_handler::sync",
+          "Block_vfs_handle::ftruncate"
+        ],
+        "fact": "Block operations use session geometry and pending/finished jobs, including read-modify-write for partial blocks. Writes enforce advertised block bounds; sync queues a whole-device SYNC job and retries until completion. Truncate returns success for this continuous device view. These semantics do not define file-node quotas, hard-cancel latency or physical release of provider/device queues."
+      },
+      {
+        "paths": [
+          "repos/os/src/lib/vfs/tar_file_system.h",
+          "repos/os/src/lib/vfs/log_file_system.h"
+        ],
+        "fact": "TAR provider is read-only for mutation operations, retaining archive/node/handle backing whose complete construction/lifetime belongs in the input graph. LOG writes flush bounded line chunks through a log session, destructor and sync flush remaining text, and truncate returns success to support redirection. Log-session sinks and downstream allocations are separate owners; bounded line buffer or read-only archive policy is not all-domain resource or timing closure."
+      },
+      {
+        "paths": [
+          "repos/libports/src/lib/libc/kernel.cc"
+        ],
+        "functions": [
+          "close_file_descriptors_on_exit"
+        ],
+        "fact": "Exit descriptor cleanup loops until no descriptor remains and invokes close. It supplies a concrete cleanup call chain but no local elapsed/iteration deadline or proof every provider, AIO, thread, allocator/kernel object and external writer physically released after parent exit. Failure policy and reserved cleanup execution remain mandatory."
+      },
+      {
+        "paths": [
+          "repos/libports/src/lib/libc/file_operations.cc"
+        ],
+        "functions": [
+          "aio_read",
+          "aio_write",
+          "lio_listio",
+          "aio_suspend"
+        ],
+        "fact": "The selected libc does export these AIO functions; absence of support cannot be generalized from cancel/fsync alone. aio_suspend computes an int timeout using the literal tv_sec*1000 + tv_nsec*1,000,000 expression. Exact unit/range/overflow behavior and effective symbol binding against port-local STOP overrides require source/build reconciliation before any numerical wait contract. This is unexecuted timing-contract source evidence, not a selected fix or runtime failure."
+      }
+    ],
+    "source_inventory_summary": {
+      "prior_partial_files_context_only": 109,
+      "new_files": 13,
+      "new_text_bytes": 204684,
+      "prior_partial_bytes": 1120169,
+      "complete_vendor_closure": false,
+      "combined_partial_bytes": 1324853,
+      "combined_partial_files": 122
+    },
+    "conclusion": "The actual Genode libc/provider paths differ materially from generic vendor POSIX assumptions. Unsupported AIO cancel/sync, logical pthread cancellation, monitor waits, retained open-deleted RAM nodes, session packet acknowledgments, block jobs and log sinks must join one conserved resource and independently finite cleanup graph. No file quota, post-exit allfree or whole deadline follows from the inspected wrappers.",
+    "remaining_obligations": [
+      "Close actual fs helper, mmap/mem_alloc implementation, allocator/heap/slab/session connection and callback/dependency source bodies, including partial constructors and deferred frees.",
+      "Bind every node/chunk/dataspace export/open-deleted/packet/block/log backing owner and remote service into one fixed budget and writer authority graph.",
+      "Reconcile exact vendor/runtime callers and effective symbol binding, including port-local STOP overrides versus these AIO exports and exact aio_suspend arithmetic, with Genode pthread/monitor semantics; establish physical thread/request/device stop/drain/destruction and finite failure policy.",
+      "Join fullkernelcoreGMMVMMdriverprovider accounting/RCUCPU progress/storage quotas with exact Windows/Linux guest/native fourforms/source-build-ABI-resolver-license evidence."
+    ],
+    "limitations": [
+      "Only13new savedUTF8texts were read and independently hashed as DATA; no compile/import/execute, binary/image/archive acquisition, install, native API/process/VM/host/probe/test.",
+      "Prior109texts not rehashed or rereviewed;122PARTIAL1324853bytes are not complete libc/provider/kernel/vendor/config/ABI/guest/sourcebinary/host closure.",
+      "Static unsupported functions, waits and retained lifetimes are not an observed runtime bug, leak, attack, incompatibility or universal impossibility.",
+      "No guessed numerical deadline/file quota/postexitfree, selected topology, Ready/operations or new mandatory owner input; rejected task not reattempted."
+    ],
+    "tool_only_history": [
+      "Broad source/range outputs truncated; narrowed relevant function bodies were read. No operation or source change resulted."
+    ],
+    "operational_authorization": false,
+    "ready_approval": false,
+    "selected_mechanism": false
+  },
+  "full_prior_vendor_worker_reports": {
+    "eq083-vendor-worker-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "THIRTEEN_OFFICIAL_TAGGED_VENDOR_WORKER_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+      "disposition": "VENDOR_ALLOCATION_CANCEL_DRAIN_DESTROY_PATHS_TRACED_WHOLE_PHYSICAL_RELEASE_PENDING",
+      "findings": [],
+      "newtests": 0,
+      "new_tests": 0,
+      "repository": "https://github.com/VirtualBox/virtualbox",
+      "research_tag": {
+        "ref": "refs/tags/v7.2.14",
+        "node_id": "REF_kwDOOrL_T7FyZWZzL3RhZ3MvdjcuMi4xNA",
+        "url": "https://api.github.com/repos/VirtualBox/virtualbox/git/refs/tags/v7.2.14",
+        "object": {
+          "sha": "51d188f0a2a40015663041baa29f7aa0c10af5e5",
+          "type": "commit",
+          "url": "https://api.github.com/repos/VirtualBox/virtualbox/git/commits/51d188f0a2a40015663041baa29f7aa0c10af5e5"
+        }
+      },
+      "research_commit": "51d188f0a2a40015663041baa29f7aa0c10af5e5",
+      "source_receipt_sha256": "15c0d96be0182ebeb4aa0fda459ce0b579a8197ff3127197ab7984997fadc64b",
+      "source_pins": [
+        {
+          "path": "COPYING",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/COPYING",
+          "sha256": "8d684127eb278ec9a4e80a8c34320645d8579712ef6e893fe7393393fbbf59a4",
+          "git_sha1": "65dcfb4a4698d43a54c1c11bbf2def150a09a524",
+          "bytes": 36037
+        },
+        {
+          "path": "Version.kmk",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/Version.kmk",
+          "sha256": "79722c17a028e73c106bdf946b3c0ac05ba142d6afecabc3f89bebcb34d24e5f",
+          "git_sha1": "3ad6cdb5c17e2bdad466d32d1ead7db6233df6c3",
+          "bytes": 1870
+        },
+        {
+          "path": "src/VBox/Devices/Storage/DrvVD.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Devices/Storage/DrvVD.cpp",
+          "sha256": "ec6c598dfc79755c9f9bfdd72e636f24c0b8134e81ef4dcef62927f89c7407e7",
+          "git_sha1": "5a4d5c9a06fe1ec6c9cc72386d9d3d75493bd0c3",
+          "bytes": 212270
+        },
+        {
+          "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp",
+          "sha256": "b06080d44a487a194432fcbbdebde78afa13fa4a92b895deb4d7833b1d72813f",
+          "git_sha1": "8c25f0bbcb0dd3c70f7b26256d4e95b94998889d",
+          "bytes": 68773
+        },
+        {
+          "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp",
+          "sha256": "f8940782af1c3aa098c9605d9ac7d99a595d86659e16d936d305c53e85c9896e",
+          "git_sha1": "f382a233eef6439ea1a9a7c50cf5db118487d0c7",
+          "bytes": 49141
+        },
+        {
+          "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp",
+          "sha256": "6f9f518b7aa32e091b3264e3065452d706e435ac8fbb9c85ae3126d25b595f9d",
+          "git_sha1": "89fa987634b535987b22939e6176e4986314fd45",
+          "bytes": 10674
+        },
+        {
+          "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp",
+          "sha256": "e4abe9947fc94e965f76470c564ac57e2faa4b2492ed559e5396e66938c6fe33",
+          "git_sha1": "6c18d7d40f2aff1c3dc0a78b0f37e50a8fe0e1b5",
+          "bytes": 68046
+        },
+        {
+          "path": "src/VBox/VMM/VMMR3/PDMR3Thread.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3Thread.cpp",
+          "sha256": "7f39f2c374778a0d425779379bed4c4155928d143f71ecd204ec7ec98d7e2572",
+          "git_sha1": "941a1a4e9a0d6dbddf83cafb0e507d0fc9b3021c",
+          "bytes": 36894
+        },
+        {
+          "path": "src/VBox/Runtime/r3/posix/fileaio-posix.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/fileaio-posix.cpp",
+          "sha256": "3c0962c8e3baa067f21351d51be93126afa8d874351c3934338891ecf24f1b7d",
+          "git_sha1": "d4f69852765cfd39de0b87818ae49e0486462b54",
+          "bytes": 38019
+        },
+        {
+          "path": "src/VBox/Runtime/r3/posix/fileio-posix.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/fileio-posix.cpp",
+          "sha256": "0d90076c421d510b9d0e7a9498ab45b9820fbc872fb9947a73979532eacc1adf",
+          "git_sha1": "d11c9fea4ec835693726807f82d204a52bd12ad2",
+          "bytes": 29246
+        },
+        {
+          "path": "src/VBox/Runtime/r3/posix/semevent-posix.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/semevent-posix.cpp",
+          "sha256": "396244d0f649210b6b0dbef6b272c1698d4dac47b389db5919ef2f13915f5a32",
+          "git_sha1": "6f5b112c0a0cb41d49f3dc615dbd79285f63328e",
+          "bytes": 22945
+        },
+        {
+          "path": "src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp",
+          "sha256": "c39a483a331cb7b7a93f73675cb1b4ea14c33a7a3f0f8d642f016526bf955afa",
+          "git_sha1": "fceb86b091a162a6fb82fa88bac6a8372e68ba62",
+          "bytes": 21637
+        },
+        {
+          "path": "src/VBox/Runtime/r3/posix/thread-posix.cpp",
+          "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/thread-posix.cpp",
+          "sha256": "0712f691cfc75b08b8dcd39cc58635bf38bf6377fb5d5998e47fe52c09ac11d0",
+          "git_sha1": "5e24500266c879d51f508744b7e95bdb1ef285bb",
+          "bytes": 26115
+        }
+      ],
+      "total_bytes": 621667,
+      "facts": [
+        {
+          "fact": "Version.kmk declares7.2.14 with publisher/config override boundaries and COPYING supplies vendor license text. The saved official tag refers directly to commit51d188f0a2a40015663041baa29f7aa0c10af5e5. Matching version is not complete equality with Genode tarball SHA384f293184c52fd51bc941c17d753b4019446f53a6b07c828adfb3e61fe0a500, SDK/generated sources or ordered patch build. Complete license applicability remains separate.",
+          "paths": [
+            "COPYING",
+            "Version.kmk"
+          ]
+        },
+        {
+          "functions": [
+            "drvvdAsyncIOReadSync",
+            "drvvdAsyncIOWriteSync",
+            "drvvdAsyncIOFlushSync",
+            "drvvdMediaExIoReqCancel",
+            "drvvdIoReqCancelAll"
+          ],
+          "paths": [
+            "src/VBox/Devices/Storage/DrvVD.cpp"
+          ],
+          "fact": "Storage backend allocates request/event state; sync wrappers around asynchronous submission wait indefinitely for completion. Media cancellation changes eligible request state atomically and may decrement active count; it does not by itself cancel every physical backend operation. Driver destruction calls poweroff/unmount cleanup then destroys locks/caches/buffers/configuration records. VD/block-cache/provider bodies remain transitive obligations."
+        },
+        {
+          "functions": [
+            "PDMR3AsyncCompletionTaskCancel",
+            "PDMR3AsyncCompletionEpClose",
+            "pdmR3AsyncCompletionTerm"
+          ],
+          "paths": [
+            "src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp"
+          ],
+          "fact": "TaskCancel returns VERR_NOT_IMPLEMENTED in this tag. Endpoint close invokes its class callback then drops template reference, unlinks and frees endpoint metadata; class termination follows its endpoint lifecycle. This makes class-specific completion/drain semantics mandatory. A generic void close or canceled logical request is not a whole physical completion witness."
+        },
+        {
+          "functions": [
+            "pdmacFileEpAddTask",
+            "pdmacFileAioMgrWaitForBlockingEvent",
+            "pdmacFileAioMgrCloseEndpoint",
+            "pdmacFileAioMgrShutdown",
+            "pdmacFileAioMgrDestroy",
+            "pdmacFileEpClose"
+          ],
+          "paths": [
+            "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp"
+          ],
+          "fact": "New tasks are atomically prepended and managers awakened. Add/close/shutdown blocking events wait indefinitely for manager acknowledgement. Endpoint close waits for tasks then releases cached tasks/ranges/file; manager destroy performs shutdown before removing events/context/heap. Allocation, queued work, worker acknowledgement and final frees are one lifetime chain; there is no independent whole-operation deadline in this handshake."
+        },
+        {
+          "functions": [
+            "pdmacFileAioMgrNormal",
+            "pdmacFileAioMgrNormalDestroy"
+          ],
+          "paths": [
+            "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp"
+          ],
+          "fact": "Normal manager can grow its active-request context, attempts an unlimited request count, and allocates a replacement request-handle array before freeing the old one. It waits for active AIO completion indefinitely while processing blocking events and endpoints. Request cache, new tasks, alignment buffers, locked ranges and replacement overlap need complete backing reservations; context count/bandwidth state is not a global byte/node cap."
+        },
+        {
+          "functions": [
+            "pdmacFileAioMgrFailsafeProcessEndpointTaskList",
+            "pdmacFileAioMgrFailsafe"
+          ],
+          "paths": [
+            "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp"
+          ],
+          "fact": "Failsafe mode processes task lists using synchronous file flush/read/write and file growth, retaining pending tasks when rate policy prevents progress. Close/shutdown are worker states and signal a blocking-event waiter. Failsafe is not a hard-cancel or finite-storage guarantee: synchronous backend latency, write growth, rate delays, callbacks and provider final release remain part of the same domain."
+        },
+        {
+          "functions": [
+            "RTFileAioReqCancel",
+            "RTFileAioCtxWait",
+            "RTFileAioReqDestroy",
+            "RTFileAioCtxDestroy"
+          ],
+          "paths": [
+            "src/VBox/Runtime/r3/posix/fileaio-posix.cpp"
+          ],
+          "fact": "POSIX cancellation calls aio_cancel. AIO_CANCELED wakes a context and waits indefinitely for acknowledgement before marking completed; ALLDONE and NOTCANCELED return distinct completion/in-progress statuses. Context waiting uses aio_suspend with timed or indefinite modes and request reconciliation. Request/context destruction depends on eligible state. These branches do not guarantee immediate backend cancellation or bounded drain, especially without the selected OS/libc implementation."
+        },
+        {
+          "functions": [
+            "PDMR3ThreadDestroy",
+            "pdmR3ThreadDestroyAll"
+          ],
+          "paths": [
+            "src/VBox/VMM/VMMR3/PDMR3Thread.cpp"
+          ],
+          "fact": "Destroy moves thread toward terminating, wakes/signals it and waits60s or150ms based on earlier success; only successful thread wait proceeds to unlink and resource destruction. The state-transition loop and wake callbacks precede that wait. A finite one-thread wait is not a total cleanup deadline or successful termination; caller policy must retain failed/live debt and all other workers/resources."
+        },
+        {
+          "functions": [
+            "RTSemEventDestroy",
+            "RTSemEventMultiDestroy",
+            "rtThreadNativeMain",
+            "rtThreadNativeDestroy"
+          ],
+          "paths": [
+            "src/VBox/Runtime/r3/posix/semevent-posix.cpp",
+            "src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp",
+            "src/VBox/Runtime/r3/posix/thread-posix.cpp"
+          ],
+          "fact": "Event destruction marks invalid, broadcasts and retries busy condition/mutex destruction up to30 times with1ms sleeps per loop; errors return before free. This is attempt-count structure, not scheduler/callback elapsed-time proof. Native thread wrapper invokes common thread main then pthread_exit; native destroy here clears TLS. Common thread/refcount and Genode libc behavior remain separate from a full physical thread/stack release witness."
+        },
+        {
+          "functions": [
+            "RTFileClose",
+            "RTFileFlush"
+          ],
+          "paths": [
+            "src/VBox/Runtime/r3/posix/fileio-posix.cpp"
+          ],
+          "fact": "Close delegates to OS close and propagates errors. Flush delegates to fsync, with EINVAL returning a not-supported classification. Neither wrapper contains a timeout or proves provider/device durability or reclamation. Whole storage writer/node/backing ownership requires the selected VFS/filesystem/driver and failure policies, not merely these wrapper returns."
+        }
+      ],
+      "source_inventory_summary": {
+        "prior_partial_bytes": 498502,
+        "complete_vendor_closure": false,
+        "new_files": 13,
+        "prior_partial_files_context_only": 96,
+        "new_text_bytes": 621667,
+        "combined_partial_bytes": 1120169,
+        "combined_partial_files": 109
+      },
+      "conclusion": "The tagged vendor sources show concrete allocated/cached/queued state, logical cancellation, worker handshakes, waits and conditional final frees. Those paths must be analyzed together with the Genode port, provider and kernel/core/RCU graph. No stock cancellation or timeout parameter establishes a complete fixed peak or finite teardown, and this source selection is not the applied Genode implementation.",
+      "remaining_obligations": [
+        "Reconcile full original Genode archive and SDK/generated/ordered patched source with the official tag; do not infer whole archive equality from version.",
+        "Close all actual allocation callsites, caches, AIO replacement/retired overlap, request payloads and external provider backing under one conserved fixed total.",
+        "Trace transitive VD/block-cache/file format/AIO backend/libc pthread/common thread-refcounts and every callback through physical final release.",
+        "Establish supported finite cancellation/drain/failure control including unimplemented generic cancel, indefinite handshakes, busy-event failure and surviving/live worker debt.",
+        "Bind exact hardware/device/storage and Windows/Linux guest/interpreter/native fourforms/source-build-ABI-resolver/license configuration before Ready and operations."
+      ],
+      "limitations": [
+        "Only13saved UTF8 source texts were read and independently hashed as DATA; no compile/import/execute, archive/image/SDK/kernel/binary acquisition, build/patch/install/provision/API/native/process/VM/host/probe/test.",
+        "Prior96texts not rehashed or rereviewed;109PARTIAL1120169bytes do not close entire vendor/patched build/ABI/license/guest/provider/host proof.",
+        "Static waits/unimplemented paths/assertions/errors are not actual executed failure, leak, attack, incompatibility or universal impossibility.",
+        "Official tag and license/version text are research provenance, not selected dependency/configuration/license approval.",
+        "No Ready/operations/new mandatory owner input; rejected binary task not reattempted."
+      ],
+      "tool_only_history": [
+        "Some batched source snippets truncated; narrowed explicit function ranges supplied cancellation and close/destroy bodies. No actual operation occurred."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false,
+      "selected_mechanism": false
+    },
+    "eq083-vendor-worker-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "bases": {
+        "equity-features": "adbc6336f39b5a2ab270c00dd17ced59e125ac74",
+        "equity-feature-workers": "248d5cc0592b243f1923d9c483b9f5ea0956149f"
+      },
+      "disposition": "APPROVED",
+      "findings": [],
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_VENDOR_WORKER_RESEARCH.md": {
+            "bytes": 8484,
+            "sha256": "796306d07d23059796c7a8f56b7f466ad182b26bbb1736e74e74d165e7bd622c"
+          },
+          "docs/stories/EQ-083_VENDOR_WORKER_INPUTS.json": {
+            "bytes": 6539,
+            "sha256": "d6cf8df0a56ff059f4895efca75fe3d72d620fdab4cc43ab205e639146d03246"
+          },
+          "docs/stories/EQ-083_VENDOR_WORKER_EVIDENCE.json": {
+            "bytes": 51483,
+            "sha256": "e7419fb3a514be47e5ae3e0a16d08450ad014338c336fb3262df1a65f497b246"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 529759,
+            "sha256": "88a0a8eacdfb9615cf09d45f0288bae85cc23573de7c1f9310203b5ff1678abe"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 789010,
+            "sha256": "a5a4c5cd1f017caddfcfe987241672d7fc65f41b02ed71644cc02334ecda8c7f"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_VENDOR_WORKER_RESEARCH.md": {
+            "bytes": 8484,
+            "sha256": "796306d07d23059796c7a8f56b7f466ad182b26bbb1736e74e74d165e7bd622c"
+          },
+          "docs/EQ083_VENDOR_WORKER_INPUTS.json": {
+            "bytes": 6539,
+            "sha256": "d6cf8df0a56ff059f4895efca75fe3d72d620fdab4cc43ab205e639146d03246"
+          },
+          "docs/EQ083_VENDOR_WORKER_EVIDENCE.json": {
+            "bytes": 51483,
+            "sha256": "e7419fb3a514be47e5ae3e0a16d08450ad014338c336fb3262df1a65f497b246"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 392428,
+            "sha256": "0f007bed992f01842af8b17d01e84198882d13bd7ffbd6f62ae1ed4d76a88db3"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 503566,
+            "sha256": "5ed38ba05c9d95ae43f15b71c4744bea2c2711a3f182a97effc90aeddba23d92"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases and five docs each; outside tracked source/history unchanged and old knowledge/handoff suffixes preserved.",
+        "Mirrored three assets; full ten-fact source report and prior three VMM-release reports/tool history preserved exactly.",
+        "13metadata621667bytes match saved report;109PARTIAL scope and tag identity do not become whole Genode archive/patch/build/sourcebinary/ABI/license proof.",
+        "Cache maxima/rates/counters not literal whole budgets; cancel/taskwait/conditionaljoinfree versus actual final release remain distinct.",
+        "CPUcoreGMMRCUdeviceprovider/nativeforms and wholelicense/finitecleanup remain samegraph obligations; no runtimebug/universalimpossibility/Readyoperations/new owner-input inference."
+      ],
+      "limitations": [
+        "Reports reused; no source/research/rawtext rehash/native/host/probe/test/download/publication rerun.",
+        "Illustrative task-cache and license details in author prose provide no newly independently measured resource or legal applicability claim.",
+        "New prepared commit attribution awaits final publication readback."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-vendor-worker-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "2fea1c06514c7f2361705109f3a7a54747398cb4",
+        "equity-feature-workers": "8f11027e50ebc560d689bc4ef6678b99b7ad9c27"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_VENDOR_WORKER_RESEARCH.md": {
+            "bytes": 8484,
+            "sha256": "796306d07d23059796c7a8f56b7f466ad182b26bbb1736e74e74d165e7bd622c"
+          },
+          "docs/stories/EQ-083_VENDOR_WORKER_INPUTS.json": {
+            "bytes": 6539,
+            "sha256": "d6cf8df0a56ff059f4895efca75fe3d72d620fdab4cc43ab205e639146d03246"
+          },
+          "docs/stories/EQ-083_VENDOR_WORKER_EVIDENCE.json": {
+            "bytes": 51483,
+            "sha256": "e7419fb3a514be47e5ae3e0a16d08450ad014338c336fb3262df1a65f497b246"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 529759,
+            "sha256": "88a0a8eacdfb9615cf09d45f0288bae85cc23573de7c1f9310203b5ff1678abe"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 789010,
+            "sha256": "a5a4c5cd1f017caddfcfe987241672d7fc65f41b02ed71644cc02334ecda8c7f"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_VENDOR_WORKER_RESEARCH.md": {
+            "bytes": 8484,
+            "sha256": "796306d07d23059796c7a8f56b7f466ad182b26bbb1736e74e74d165e7bd622c"
+          },
+          "docs/EQ083_VENDOR_WORKER_INPUTS.json": {
+            "bytes": 6539,
+            "sha256": "d6cf8df0a56ff059f4895efca75fe3d72d620fdab4cc43ab205e639146d03246"
+          },
+          "docs/EQ083_VENDOR_WORKER_EVIDENCE.json": {
+            "bytes": 51483,
+            "sha256": "e7419fb3a514be47e5ae3e0a16d08450ad014338c336fb3262df1a65f497b246"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 392428,
+            "sha256": "0f007bed992f01842af8b17d01e84198882d13bd7ffbd6f62ae1ed4d76a88db3"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 503566,
+            "sha256": "5ed38ba05c9d95ae43f15b71c4744bea2c2711a3f182a97effc90aeddba23d92"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git LF sizeSHA pins match reviewed_git_files and reviewed prepared bytes after only line-ending normalization; no CR.",
+        "Exact five documentation changes perrepo, direct reviewed parent bases and clean paired codex/eq083-resilience branches.",
+        "Three assets mirrored, exact old knowledge/handoff suffixes and other tracked source/history outside allowed paths unchanged.",
+        "Full Atul author and committer identity and no Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "35305b82191fbb168ace57e5292e3f9dc6218e49b0d0da9c9ced04f7acfeb017",
+      "limitations": [
+        "Published docs readback only; no semantic/source/research/native/host/probe/test rerun.",
+        "No whole qualification, resource/cleanup enforcement, runtime/operational or Ready authority."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Selected current libc/VFS lifetimes joined to same vendor/provider graph; no actual linking/native/timing qualification",
+  "tool_history": "Keyword context output deliberately limited; narrowed actual RAM unlink/close, pthread cancel/join and FS/block/log sync paths before claims. No source download retries, old rehash, vendor-source execution or native/product failure. Current libc AIO bodies versus port overrides remain effective-binding obligations, not absence or implementation qualification."
+}

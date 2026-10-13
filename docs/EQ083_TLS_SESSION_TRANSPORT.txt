@@ -1,0 +1,358 @@
+import ctypes,os,subprocess,sys,time
+
+class WindowsReferenceChild:
+ def __init__(self,argv):
+  from ctypes import wintypes as w
+  if sys.platform!='win32' or ctypes.sizeof(ctypes.c_void_p)!=8:raise ValueError('owned Windows reference only')
+  if type(argv) is not list or len(argv)!=12 or argv[:2]!=[sys.executable,'-I'] or any(type(v) is not str or not v or '\x00' in v for v in argv):raise ValueError('owned reference argv')
+  self.kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+  self.job=self.process=self.thread=self.entry=None
+  self.stdin=self.stdout=self.stderr=None
+  self.pid=self.entry_pid=None;self.returncode=None;self.ownership_closed=False
+  class Basic(ctypes.Structure):
+      _fields_ = [('process_time',ctypes.c_longlong),('job_time',ctypes.c_longlong),('flags',w.DWORD),
+          ('min_ws',ctypes.c_size_t),('max_ws',ctypes.c_size_t),('active',w.DWORD),
+          ('affinity',ctypes.c_size_t),('priority',w.DWORD),('scheduling',w.DWORD)]
+  class IO(ctypes.Structure):
+      _fields_ = [(name,ctypes.c_ulonglong) for name in ('read_op','write_op','other_op','read_bytes','write_bytes','other_bytes')]
+  class Extended(ctypes.Structure):
+      _fields_ = [('basic',Basic),('io',IO),('process_memory',ctypes.c_size_t),
+          ('job_memory',ctypes.c_size_t),('peak_process_memory',ctypes.c_size_t),('peak_job_memory',ctypes.c_size_t)]
+  class Startup(ctypes.Structure):
+      _fields_ = [('cb',w.DWORD),('reserved',w.LPWSTR),('desktop',w.LPWSTR),('title',w.LPWSTR),
+          ('x',w.DWORD),('y',w.DWORD),('xs',w.DWORD),('ys',w.DWORD),('xc',w.DWORD),('yc',w.DWORD),
+          ('fill',w.DWORD),('flags',w.DWORD),('show',w.WORD),('cb_reserved',w.WORD),
+          ('reserved2',ctypes.POINTER(ctypes.c_byte)),('stdin',w.HANDLE),('stdout',w.HANDLE),('stderr',w.HANDLE)]
+  class StartupExtended(ctypes.Structure):
+      _fields_ = [('startup',Startup),('attributes',ctypes.c_void_p)]
+  class Process(ctypes.Structure):
+      _fields_ = [('process',w.HANDLE),('thread',w.HANDLE),('pid',w.DWORD),('tid',w.DWORD)]
+  class Security(ctypes.Structure):
+      _fields_ = [('length',w.DWORD),('descriptor',ctypes.c_void_p),('inherit',w.BOOL)]
+  signatures = {
+      'CreateJobObjectW':([ctypes.c_void_p,w.LPCWSTR],w.HANDLE),
+      'SetInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD],w.BOOL),
+      'QueryInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD,ctypes.c_void_p],w.BOOL),
+      'CreatePipe':([ctypes.POINTER(w.HANDLE),ctypes.POINTER(w.HANDLE),ctypes.c_void_p,w.DWORD],w.BOOL),
+      'SetHandleInformation':([w.HANDLE,w.DWORD,w.DWORD],w.BOOL),
+      'OpenProcess':([w.DWORD,w.BOOL,w.DWORD],w.HANDLE),
+      'GetProcessId':([w.HANDLE],w.DWORD),
+      'InitializeProcThreadAttributeList':([ctypes.c_void_p,w.DWORD,w.DWORD,ctypes.POINTER(ctypes.c_size_t)],w.BOOL),
+      'UpdateProcThreadAttribute':([ctypes.c_void_p,w.DWORD,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p],w.BOOL),
+      'DeleteProcThreadAttributeList':([ctypes.c_void_p],None),
+      'CreateProcessW':([w.LPCWSTR,w.LPWSTR,ctypes.c_void_p,ctypes.c_void_p,w.BOOL,w.DWORD,
+          ctypes.c_void_p,w.LPCWSTR,ctypes.POINTER(Startup),ctypes.POINTER(Process)],w.BOOL),
+      'IsProcessInJob':([w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)],w.BOOL),
+      'ResumeThread':([w.HANDLE],w.DWORD), 'WaitForSingleObject':([w.HANDLE,w.DWORD],w.DWORD),
+      'GetExitCodeProcess':([w.HANDLE,ctypes.POINTER(w.DWORD)],w.BOOL),
+      'TerminateJobObject':([w.HANDLE,w.UINT],w.BOOL), 'CloseHandle':([w.HANDLE],w.BOOL)}
+  for name, (args, result) in signatures.items():
+      function = getattr(self.kernel, name)
+      function.argtypes, function.restype = args, result
+  def check(value):
+   if not value:raise OSError(ctypes.get_last_error(),'owned reference ownership')
+  handles=[w.HANDLE() for _ in range(6)]
+  input_read,input_write,output_read,output_write,error_read,error_write=handles
+  attributes=None;initialized=False;child=Process()
+  try:
+   self.job=self.kernel.CreateJobObjectW(None,None);check(self.job)
+   limits=Extended();limits.basic.flags=0x4|0x8|0x200|0x2000
+   limits.basic.job_time,limits.basic.active,limits.job_memory=100000000,2,1073741824
+   check(self.kernel.SetInformationJobObject(self.job,9,ctypes.byref(limits),ctypes.sizeof(limits)))
+   observed=Extended();check(self.kernel.QueryInformationJobObject(self.job,9,ctypes.byref(observed),ctypes.sizeof(observed),None))
+   if (observed.basic.flags,observed.basic.job_time,observed.basic.active,observed.job_memory)!=(limits.basic.flags,100000000,2,1073741824):raise ValueError('owned reference limits readback')
+   security=Security(ctypes.sizeof(Security),None,True)
+   for read,write,parent_end in ((input_read,input_write,input_write),(output_read,output_write,output_read),(error_read,error_write,error_read)):
+    check(self.kernel.CreatePipe(ctypes.byref(read),ctypes.byref(write),ctypes.byref(security),4096));check(self.kernel.SetHandleInformation(parent_end,1,0))
+   size=ctypes.c_size_t();self.kernel.InitializeProcThreadAttributeList(None,2,0,ctypes.byref(size))
+   if not size.value or size.value>65536:raise ValueError('owned reference attributes bound')
+   attributes=ctypes.create_string_buffer(size.value);check(self.kernel.InitializeProcThreadAttributeList(attributes,2,0,ctypes.byref(size)));initialized=True
+   jobs=(w.HANDLE*1)(self.job);inherited=(w.HANDLE*3)(input_read.value,output_write.value,error_write.value)
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x2000d,jobs,ctypes.sizeof(jobs),None,None))
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x20002,inherited,ctypes.sizeof(inherited),None,None))
+   startup=StartupExtended();startup.startup.cb=ctypes.sizeof(startup);startup.startup.flags=0x100
+   startup.startup.stdin,startup.startup.stdout,startup.startup.stderr=input_read.value,output_write.value,error_write.value
+   startup.attributes=ctypes.cast(attributes,ctypes.c_void_p)
+   command_text=subprocess.list2cmdline(argv)
+   if len(command_text.encode('utf-16-le'))//2+1>32760:raise ValueError('owned reference command bound')
+   environment={key:os.environ[key] for key in ('SystemRoot','WINDIR','TEMP','TMP') if key in os.environ}
+   block=ctypes.create_unicode_buffer(''.join(k+'='+v+'\0' for k,v in sorted(environment.items()))+'\0')
+   command=ctypes.create_unicode_buffer(command_text)
+   check(self.kernel.CreateProcessW(argv[0],command,None,None,True,4|0x80000|0x400|0x8000000,block,None,ctypes.byref(startup.startup),ctypes.byref(child)))
+   self.process,self.thread,self.pid=child.process,child.thread,int(child.pid)
+   contained=w.BOOL();check(self.kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
+   if not contained.value:raise ValueError('owned reference launcher membership')
+   for handle in (input_read,output_write,error_write):check(self.kernel.CloseHandle(handle));handle.value=None
+   import msvcrt
+   def adopt(handle,flags,mode):
+    fd=msvcrt.open_osfhandle(handle.value,flags|os.O_BINARY);handle.value=None
+    try:return os.fdopen(fd,mode,buffering=0)
+    except BaseException:os.close(fd);raise
+   self.stdin=adopt(input_write,os.O_WRONLY,'wb');self.stdout=adopt(output_read,os.O_RDONLY,'rb');self.stderr=adopt(error_read,os.O_RDONLY,'rb')
+   if self.kernel.ResumeThread(self.thread)==0xffffffff:raise OSError(ctypes.get_last_error(),'owned reference resume')
+  except BaseException:
+   try:self.close()
+   except BaseException:pass
+   raise
+  finally:
+   active_exception=sys.exc_info()[0] is not None;errors=[]
+   for handle in handles:
+    if handle.value:
+     try:
+      if not self.kernel.CloseHandle(handle):errors.append('handle')
+     except BaseException:errors.append('handle')
+     handle.value=None
+   if initialized:
+    try:self.kernel.DeleteProcThreadAttributeList(attributes)
+    except BaseException:errors.append('attributes')
+   if errors and not active_exception:
+    try:self.close()
+    except BaseException:pass
+    raise ValueError('owned reference setup handles')
+
+ def poll(self):
+  from ctypes import wintypes as w
+  if self.process is None:return self.returncode
+  status=self.kernel.WaitForSingleObject(self.process,0)
+  if status==258:return None
+  if status!=0:raise OSError(ctypes.get_last_error(),'owned reference poll')
+  code=w.DWORD()
+  if not self.kernel.GetExitCodeProcess(self.process,ctypes.byref(code)):raise OSError(ctypes.get_last_error(),'owned reference exit code')
+  self.returncode=int(code.value);return self.returncode
+
+ def wait(self,timeout):
+  if type(timeout) not in (int,float) or not 0<timeout<=4:raise ValueError('owned reference wait bound')
+  until=time.monotonic()+timeout
+  while True:
+   value=self.poll()
+   if value is not None:return value
+   if time.monotonic()>=until:raise subprocess.TimeoutExpired('owned reference',timeout)
+   time.sleep(.01)
+
+ def verify_entry(self,pid):
+  from ctypes import wintypes as w
+  if self.entry is not None or type(pid) is not int or not 0<pid<=4294967295 or pid==self.pid:raise ValueError('owned reference entry PID')
+  handle=self.kernel.OpenProcess(0x1000|0x100000,False,pid)
+  if not handle:raise OSError(ctypes.get_last_error(),'owned reference entry open')
+  try:
+   contained=w.BOOL()
+   if not self.kernel.IsProcessInJob(handle,self.job,ctypes.byref(contained)):raise OSError(ctypes.get_last_error(),'owned reference entry query')
+   if not contained.value or self.kernel.GetProcessId(handle)!=pid:raise ValueError('owned reference entry membership')
+   self.entry,self.entry_pid=handle,pid;handle=None
+  finally:
+   active_exception=sys.exc_info()[0] is not None
+   if handle:
+    try:
+     if not self.kernel.CloseHandle(handle):raise OSError(ctypes.get_last_error(),'owned reference entry handle')
+    except BaseException:
+     if not active_exception:raise
+
+ def entry_exited(self):
+  if self.entry is None:raise ValueError('owned reference entry unbound')
+  status=self.kernel.WaitForSingleObject(self.entry,0)
+  if status not in (0,258):raise OSError(ctypes.get_last_error(),'owned reference entry wait')
+  return status==0
+
+ def active(self):
+  from ctypes import wintypes as w
+  class Accounting(ctypes.Structure):
+   _fields_=[('user',ctypes.c_longlong),('kernel',ctypes.c_longlong),('period_user',ctypes.c_longlong),('period_kernel',ctypes.c_longlong),('page_faults',w.DWORD),('total',w.DWORD),('active',w.DWORD),('terminated',w.DWORD)]
+  value=Accounting()
+  if not self.kernel.QueryInformationJobObject(self.job,1,ctypes.byref(value),ctypes.sizeof(value),None):raise OSError(ctypes.get_last_error(),'owned reference job accounting')
+  if not 0<=value.active<=2:raise ValueError('owned reference job process bound')
+  return int(value.active)
+
+ def kill(self):
+  if self.job and not self.kernel.TerminateJobObject(self.job,99):raise OSError(ctypes.get_last_error(),'owned reference terminate job')
+
+ def close(self):
+  errors=[];settled=False
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(type(error).__name__);return None
+  try:
+   if self.job:
+    clean(self.kill)
+    if self.process is not None:clean(lambda:self.wait(3))
+    until=time.monotonic()+3
+    while True:
+     count=clean(self.active)
+     if count==0:settled=True;break
+     if count is None or time.monotonic()>=until:errors.append('job active unconfirmed');break
+     time.sleep(.01)
+    if self.entry is not None and clean(self.entry_exited) is not True:errors.append('entry exit unconfirmed')
+  finally:
+   for pipe in (self.stdin,self.stdout,self.stderr):
+    if pipe is not None and not pipe.closed:clean(pipe.close)
+   for name in ('entry','thread','process','job'):
+    handle=getattr(self,name)
+    if handle:
+     result=clean(lambda handle=handle:self.kernel.CloseHandle(handle))
+     if not result:errors.append('handle close unconfirmed')
+     setattr(self,name,None)
+  if errors:raise ValueError('owned reference cleanup failed')
+  self.ownership_closed=settled
+
+from contextlib import asynccontextmanager
+import hashlib,json,queue,threading,math
+from pathlib import Path
+import anyio
+from mcp.types import JSONRPCMessage
+from mcp.shared.message import SessionMessage
+
+def tls_frame(raw):
+ if type(raw) is not bytes or not 1<len(raw)<=65536 or raw[-1:]!=b'\n' or b'\n' in raw[:-1]:raise ValueError('owned SDK physical frame')
+ def pairs(items):
+  result={}
+  for key,value in items:
+   if key in result:raise ValueError('owned SDK duplicate key')
+   result[key]=value
+  return result
+ def number(value):
+  result=float(value)
+  if not math.isfinite(result):raise ValueError('owned SDK nonfinite number')
+  return result
+ value=json.loads(raw.decode('utf-8','strict'),object_pairs_hook=pairs,parse_float=number,parse_constant=lambda value:(_ for _ in ()).throw(ValueError('owned SDK nonfinite')))
+ if type(value) is not dict or value.get('jsonrpc')!='2.0':raise ValueError('owned SDK JSONRPC frame')
+ return JSONRPCMessage.model_validate(value)
+
+@asynccontextmanager
+async def owned_tls_session_streams(root,origin,pid,mode,arm,role,observations):
+ """Qualification byte transport only; the official ClientSession owns protocol calls."""
+ root=Path(root).resolve();pid=Path(pid);arm=Path(arm)
+ modes=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+ import re
+ if mode not in modes or role not in ('baseline','fault','followup') or not re.fullmatch(r'https://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535:raise ValueError('owned SDK fixed selection')
+ if sys.flags.isolated!=1 or (root/'packages').exists():raise ValueError('owned SDK installed harness')
+ reference=root/'docs/EQ083_TLS_REFERENCE_ENTRY.txt'
+ with reference.open('rb') as stream:source=stream.read(5917)
+ if len(source)!=5916 or hashlib.sha256(source).hexdigest()!='298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231':raise ValueError('owned SDK reference identity')
+ certroot=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-tls-certificates-6197efe')
+ argv=[sys.executable,'-I',str(reference),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid),'trades',mode,str(arm),str(certroot),role]
+ process=None
+ started=[];errors=[];stderr=bytearray();frames=queue.Queue(maxsize=9);writes=queue.Queue(maxsize=9)
+ write_stop=threading.Event();read_count=write_count=0;entry=None;normal=False
+ read_sender,read_stream=anyio.create_memory_object_stream(0)
+ write_stream,write_receiver=anyio.create_memory_object_stream(0)
+ def stdout_reader():
+  nonlocal read_count
+  pending=bytearray();total=0
+  try:
+   while True:
+    chunk=process.stdout.read(1)
+    if not chunk:break
+    total+=1;pending.extend(chunk)
+    if total>524288 or len(pending)>65536:raise ValueError('owned SDK stdout bound')
+    if chunk==b'\n':
+     read_count+=1
+     if read_count>8:raise ValueError('owned SDK frame count')
+     frames.put_nowait(bytes(pending));pending.clear()
+   if pending:raise ValueError('owned SDK partial frame at EOF')
+  except BaseException as error:errors.append(type(error).__name__)
+  finally:
+   try:frames.put_nowait(None)
+   except BaseException as error:errors.append(type(error).__name__)
+ def stderr_reader():
+  try:
+   while True:
+    chunk=process.stderr.read(1024)
+    if not chunk:break
+    stderr.extend(chunk)
+    if len(stderr)>4096:raise ValueError('owned SDK stderr bound')
+  except BaseException as error:errors.append(type(error).__name__)
+ def stdin_writer():
+  nonlocal write_count
+  try:
+   while not write_stop.is_set():
+    try:raw=writes.get(timeout=.05)
+    except queue.Empty:continue
+    if raw is None:break
+    write_count+=1
+    if write_count>8 or not 1<len(raw)<=16384 or raw[-1:]!=b'\n':raise ValueError('owned SDK outgoing bound')
+    if process.stdin.write(raw)!=len(raw):raise ValueError('owned SDK short write')
+    process.stdin.flush()
+  except BaseException as error:errors.append(type(error).__name__)
+  finally:
+   try:process.stdin.close()
+   except BaseException as error:errors.append(type(error).__name__)
+ async def receive():
+  async with read_sender:
+   while True:
+    if errors:raise ValueError('owned SDK transport reader failure')
+    try:raw=frames.get_nowait()
+    except queue.Empty:
+     await anyio.sleep(.01);continue
+    if raw is None:return
+    await read_sender.send(SessionMessage(tls_frame(raw)))
+ async def send():
+  async with write_receiver:
+   async for message in write_receiver:
+    raw=(message.message.model_dump_json(by_alias=True,exclude_none=True)+'\n').encode('utf-8','strict')
+    if len(raw)>16384:raise ValueError('owned SDK outgoing length')
+    writes.put_nowait(raw)
+ try:
+  process=WindowsReferenceChild(argv)
+  for target in (stdout_reader,stderr_reader,stdin_writer):
+   thread=threading.Thread(target=target);thread.start();started.append(thread)
+  deadline=time.monotonic()+4
+  while not pid.with_name(pid.name+'.complete').is_dir():
+   if errors or process.poll() is not None or time.monotonic()>=deadline:raise ValueError('owned SDK marker unavailable')
+   await anyio.sleep(.01)
+  with pid.open('rb') as stream:data=stream.read(129)
+  if len(data)>128:raise ValueError('owned SDK marker bound')
+  marker=json.loads(data)
+  if type(marker) is not dict or set(marker)!={'pid'} or type(marker['pid']) is not int or not 0<marker['pid']<=4294967295:raise ValueError('owned SDK marker')
+  process.verify_entry(marker['pid']);entry=marker['pid']
+  if process.entry_exited() or process.poll() is not None:raise ValueError('owned SDK entry not live')
+  async with anyio.create_task_group() as tasks:
+   tasks.start_soon(receive);tasks.start_soon(send)
+   try:yield read_stream,write_stream
+   finally:
+    original=sys.exc_info()[0] is not None;inner_errors=[]
+    with anyio.CancelScope(shield=True):
+     try:await write_stream.aclose()
+     except BaseException as error:inner_errors.append(type(error).__name__)
+     for callback in (write_stop.set,tasks.cancel_scope.cancel):
+      try:callback()
+      except BaseException as error:inner_errors.append(type(error).__name__)
+    if inner_errors:
+     errors.extend(inner_errors)
+     if not original:raise ValueError('owned SDK inner cleanup failed')
+  normal=True
+ finally:
+  active_exception=sys.exc_info()[0] is not None;cleanup=[]
+  def clean(callback):
+   try:callback()
+   except BaseException as error:cleanup.append(type(error).__name__)
+  clean(write_stop.set)
+  if process is not None:
+   clean(lambda:process.wait(timeout=3))
+   if normal:
+    def inspect_exit():
+     if process.returncode!=0 or process.entry_exited() is not True:raise ValueError('owned SDK actual exit')
+    clean(inspect_exit)
+   clean(process.close)
+  for thread in started:clean(lambda thread=thread:thread.join(2))
+  for pipe in (() if process is None else (process.stdin,process.stdout,process.stderr)):
+   def close_pipe(pipe=pipe):
+    if not pipe.closed:pipe.close()
+   clean(close_pipe)
+  with anyio.CancelScope(shield=True):
+   for stream in (read_stream,read_sender,write_stream,write_receiver):
+    try:await stream.aclose()
+    except BaseException as error:cleanup.append(type(error).__name__)
+  def inspect_cleanup():
+   if process is not None and (process.ownership_closed is not True or process.returncode is None or any(thread.is_alive() for thread in started)):raise ValueError('owned SDK incomplete cleanup')
+  clean(inspect_cleanup)
+  if errors or stderr:cleanup.append('owned SDK wire reader failed')
+  if cleanup and not active_exception:raise ValueError('owned SDK cleanup failed')
+ if not normal:raise ValueError('owned SDK incomplete context')
+ closed=pid.with_name(pid.name+'.closed')
+ if not closed.with_name(closed.name+'.complete').is_dir():raise ValueError('owned SDK close witness absent')
+ with closed.open('rb') as stream:data=stream.read(257)
+ if len(data)>256:raise ValueError('owned SDK close witness bound')
+ witness=json.loads(data)
+ providers=5 if role=='baseline' else 2 if role=='followup' or mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial') else 1
+ if type(witness) is not dict or type(witness.get('pid')) is not int or type(witness.get('provider_calls')) is not int or witness!=dict(pid=entry,provider_calls=providers,marker='eq083-mcp-closed',role=role,mode=mode):raise ValueError('owned SDK close witness')
+ if read_count!=(7 if role=='baseline' else 4 if providers==2 else 3) or write_count!=read_count+1:raise ValueError('owned SDK complete frame ledger')
+ observations.append(dict(role=role,mode=mode,entry_exit=True,launcher_exit=True,job_empty=True,ownership_closed=True,provider_calls=providers,full_frames=read_count,closed=witness))

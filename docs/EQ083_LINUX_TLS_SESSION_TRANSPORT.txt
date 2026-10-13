@@ -1,0 +1,250 @@
+"""Proposed Linux qualification byte bridge; official ClientSession owns MCP calls."""
+import sys,os,signal,stat,subprocess,hashlib,json,re,queue,threading,time,math
+from contextlib import asynccontextmanager
+from pathlib import Path
+import anyio
+from mcp.types import JSONRPCMessage
+from mcp.shared.message import SessionMessage
+
+def bounded(path,cap,allow_empty=False):
+ with path.open('rb') as stream:data=stream.read(cap+1)
+ if not (0 if allow_empty else 1)<=len(data)<=cap:raise ValueError('certificate file bound')
+ return data
+
+def proc_identity(pid):
+ data=bounded(Path('/proc')/str(pid)/'stat',4096)
+ first,separator,tail=data.rpartition(b') ');fields=tail.split()
+ if not separator or len(fields)<20 or first.split(b' ',1)[0]!=str(pid).encode() or not fields[19].isdigit() or int(fields[19])<=0:raise ValueError('certificate process identity')
+ return dict(parent=int(fields[1]),group=int(fields[2]),session=int(fields[3]),start_ticks=fields[19].decode('ascii'))
+
+class LinuxReferenceChild:
+ def __init__(self,argv):
+  if sys.platform!='linux' or type(argv)is not list or len(argv)!=16 or argv[:2]!=[sys.executable,'-I']:raise ValueError('certificate Linux argv')
+  environment={key:os.environ[key] for key in ('HOME','TMPDIR','LANG','LC_ALL') if key in os.environ}
+  self.pid=self.stdin=self.stdout=self.stderr=None;self.identity=None;self.ownership_closed=False
+  self.process=subprocess.Popen(argv,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=environment,start_new_session=True,bufsize=0)
+  try:
+   self.pid=self.process.pid;self.stdin,self.stdout,self.stderr=self.process.stdin,self.process.stdout,self.process.stderr
+  except BaseException:
+   def attempt(callback):
+    try:callback()
+    except BaseException:pass
+   def kill_group():
+    if self.process.returncode is None:os.killpg(self.process.pid,signal.SIGKILL)
+   attempt(kill_group);attempt(lambda:self.process.kill());attempt(lambda:self.process.wait(timeout=3))
+   for name in ('stdin','stdout','stderr'):attempt(lambda name=name:getattr(self.process,name).close())
+   raise
+ @property
+ def returncode(self):return self.process.returncode
+ def poll(self):return self.process.poll()
+ def wait(self,timeout):
+  if type(timeout)not in(int,float) or not 0<timeout<=4:raise ValueError('certificate Linux wait bound')
+  return self.process.wait(timeout=timeout)
+ def verify_entry(self,marker):
+  observed=proc_identity(self.pid)
+  if observed!=dict(parent=os.getpid(),group=self.pid,session=self.pid,start_ticks=marker['start_ticks']):raise ValueError('certificate Linux retained identity')
+  self.identity=observed
+ def group_empty(self):
+  try:os.killpg(self.pid,0)
+  except ProcessLookupError:return True
+  return False
+ def kill(self):
+  if self.process.returncode is not None:return
+  current=proc_identity(self.pid)
+  if current['parent']!=os.getpid() or current['group']!=self.pid or current['session']!=self.pid or self.identity is not None and current!=self.identity:raise ValueError('certificate Linux termination identity')
+  try:os.killpg(self.pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+ def close(self):
+  errors=[]
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(type(error).__name__);return None
+  clean(self.kill);clean(lambda:self.wait(3))
+  for pipe in (self.stdin,self.stdout,self.stderr):clean(pipe.close)
+  if clean(self.group_empty)is not True:errors.append('certificate process group not empty')
+  if clean(self.poll)is None:errors.append('certificate child not reaped')
+  if errors:raise ValueError('certificate Linux cleanup failed')
+  self.ownership_closed=True
+
+def tls_frame(raw):
+ if type(raw) is not bytes or not 1<len(raw)<=65536 or raw[-1:]!=b'\n' or b'\n' in raw[:-1]:raise ValueError('owned SDK physical frame')
+ def pairs(items):
+  result={}
+  for key,value in items:
+   if key in result:raise ValueError('owned SDK duplicate key')
+   result[key]=value
+  return result
+ def number(value):
+  result=float(value)
+  if not math.isfinite(result):raise ValueError('owned SDK nonfinite number')
+  return result
+ value=json.loads(raw.decode('utf-8','strict'),object_pairs_hook=pairs,parse_float=number,parse_constant=lambda value:(_ for _ in ()).throw(ValueError('owned SDK nonfinite')))
+ if type(value) is not dict or value.get('jsonrpc')!='2.0':raise ValueError('owned SDK JSONRPC frame')
+ return JSONRPCMessage.model_validate(value)
+
+@asynccontextmanager
+async def owned_linux_tls_session_streams(root,origin,pid,mode,arm,role,certificate_root,receipt_sha,observations):
+ """Qualification byte transport only; the official ClientSession owns protocol calls."""
+ root=Path(root).resolve();pid=Path(pid);arm=Path(arm)
+ modes=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+ import re
+ if mode not in modes or role not in ('baseline','fault','followup') or not re.fullmatch(r'https://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535:raise ValueError('owned SDK fixed selection')
+ if sys.flags.isolated!=1 or sys.flags.optimize!=0 or sys.platform!='linux' or (root/'packages').exists():raise ValueError('owned SDK installed harness')
+ reference=root/'docs/EQ083_LINUX_TLS_REFERENCE_ENTRY.txt'
+ bootstrap=root/'docs/EQ083_LINUX_TLS_REFERENCE_BOOTSTRAP.txt'
+ for path,size,digest in ((reference,7870,'c4dbc1009641e4acae4b628a37256fb2ebde364dda5b53bf09a20ed7c94a81c8'),(bootstrap,6390,'549b01bcd1c31fb425ab55ba4df08b6233c22f2e170b7cc998a4693387d94d39')):
+  info=path.lstat()
+  if not path.is_absolute() or path.resolve()!=path or not stat.S_ISREG(info.st_mode) or info.st_uid!=os.geteuid() or info.st_mode&0o022:raise ValueError('owned SDK Linux source origin')
+  with path.open('rb') as stream:data=stream.read(8193)
+  if len(data)!=size or hashlib.sha256(data).hexdigest()!=digest:raise ValueError('owned SDK Linux source pin')
+ certificate_root=Path(certificate_root)
+ if not certificate_root.is_absolute() or certificate_root.resolve()!=certificate_root or len(str(certificate_root))>1024 or not re.fullmatch(r'[0-9a-f]{64}',receipt_sha):raise ValueError('owned SDK portable certificate binding')
+ boot_marker=pid.with_name(pid.name+'.bootstrap')
+ if any(not path.is_absolute() or '..' in path.parts or path.parent.resolve()!=path.parent or len(str(path))>1024 for path in (pid,arm,boot_marker)):raise ValueError('owned SDK Linux marker paths')
+ argv=[sys.executable,'-I',str(bootstrap),str(os.getpid()),str(boot_marker),str(reference),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid),'trades',mode,str(arm),str(certificate_root),role,receipt_sha]
+ process=None
+ started=[];errors=[];stderr=bytearray();frames=queue.Queue(maxsize=9);writes=queue.Queue(maxsize=9)
+ write_stop=threading.Event();read_count=write_count=0;entry=None;normal=False
+ read_sender,read_stream=anyio.create_memory_object_stream(0)
+ write_stream,write_receiver=anyio.create_memory_object_stream(0)
+ def stdout_reader():
+  nonlocal read_count
+  pending=bytearray();total=0
+  try:
+   while True:
+    chunk=process.stdout.read(1)
+    if not chunk:break
+    total+=1;pending.extend(chunk)
+    if total>524288 or len(pending)>65536:raise ValueError('owned SDK stdout bound')
+    if chunk==b'\n':
+     read_count+=1
+     if read_count>8:raise ValueError('owned SDK frame count')
+     frames.put_nowait(bytes(pending));pending.clear()
+   if pending:raise ValueError('owned SDK partial frame at EOF')
+  except BaseException as error:errors.append(type(error).__name__)
+  finally:
+   try:frames.put_nowait(None)
+   except BaseException as error:errors.append(type(error).__name__)
+ def stderr_reader():
+  try:
+   while True:
+    chunk=process.stderr.read(1024)
+    if not chunk:break
+    stderr.extend(chunk)
+    if len(stderr)>4096:raise ValueError('owned SDK stderr bound')
+  except BaseException as error:errors.append(type(error).__name__)
+ def stdin_writer():
+  nonlocal write_count
+  try:
+   while not write_stop.is_set():
+    try:raw=writes.get(timeout=.05)
+    except queue.Empty:continue
+    if raw is None:break
+    write_count+=1
+    if write_count>8 or not 1<len(raw)<=16384 or raw[-1:]!=b'\n':raise ValueError('owned SDK outgoing bound')
+    if process.stdin.write(raw)!=len(raw):raise ValueError('owned SDK short write')
+    process.stdin.flush()
+  except BaseException as error:errors.append(type(error).__name__)
+  finally:
+   try:process.stdin.close()
+   except BaseException as error:errors.append(type(error).__name__)
+ async def receive():
+  async with read_sender:
+   while True:
+    if errors:raise ValueError('owned SDK transport reader failure')
+    try:raw=frames.get_nowait()
+    except queue.Empty:
+     await anyio.sleep(.01);continue
+    if raw is None:return
+    await read_sender.send(SessionMessage(tls_frame(raw)))
+ async def send():
+  async with write_receiver:
+   async for message in write_receiver:
+    raw=(message.message.model_dump_json(by_alias=True,exclude_none=True)+'\n').encode('utf-8','strict')
+    if len(raw)>16384:raise ValueError('owned SDK outgoing length')
+    writes.put_nowait(raw)
+ try:
+  process=LinuxReferenceChild(argv)
+  for target in (stdout_reader,stderr_reader):
+   thread=threading.Thread(target=target);thread.start();started.append(thread)
+  deadline=time.monotonic()+4
+  while not boot_marker.with_name(boot_marker.name+'.complete').is_dir():
+   if errors or process.poll() is not None or time.monotonic()>=deadline:raise ValueError('owned SDK Linux bootstrap unavailable')
+   await anyio.sleep(.01)
+  with boot_marker.open('rb') as stream:data=stream.read(513)
+  if not 0<len(data)<=512:raise ValueError('owned SDK Linux bootstrap marker bound')
+  def pairs(items):
+   result={}
+   for key,value in items:
+    if key in result:raise ValueError('owned SDK Linux duplicate marker')
+    result[key]=value
+   return result
+  marker=json.loads(data,object_pairs_hook=pairs)
+  expected=dict(pid=process.pid,parent=os.getpid(),group=process.pid,session=process.pid,core=0,memory=4294967296,cpu=10,seccomp=2,no_new_privileges=1)
+  if type(marker)is not dict or set(marker)!=set(expected)|{'start_ticks'} or any(type(marker[key])is not int or marker[key]!=value for key,value in expected.items()) or type(marker['start_ticks'])is not str or not re.fullmatch(r'[1-9][0-9]{0,19}',marker['start_ticks']):raise ValueError('owned SDK Linux bootstrap marker')
+  process.verify_entry(marker)
+  if process.poll() is not None:raise ValueError('owned SDK Linux child not live before GO')
+  if process.stdin.write(b'GO\n')!=3:raise ValueError('owned SDK Linux short GO')
+  process.stdin.flush()
+  while not pid.with_name(pid.name+'.complete').is_dir():
+   if errors or process.poll() is not None or time.monotonic()>=deadline:raise ValueError('owned SDK reference marker unavailable')
+   await anyio.sleep(.01)
+  with pid.open('rb') as stream:data=stream.read(129)
+  if not 0<len(data)<=128:raise ValueError('owned SDK reference marker bound')
+  marker=json.loads(data,object_pairs_hook=pairs)
+  if type(marker)is not dict or set(marker)!={'pid'} or type(marker['pid'])is not int or marker['pid']!=process.pid:raise ValueError('owned SDK direct Linux reference PID')
+  if proc_identity(process.pid)!=process.identity or process.poll() is not None:raise ValueError('owned SDK Linux retained identity after imports')
+  entry=process.pid
+  thread=threading.Thread(target=stdin_writer);thread.start();started.append(thread)
+  async with anyio.create_task_group() as tasks:
+   tasks.start_soon(receive);tasks.start_soon(send)
+   try:yield read_stream,write_stream
+   finally:
+    original=sys.exc_info()[0] is not None;inner_errors=[]
+    with anyio.CancelScope(shield=True):
+     try:await write_stream.aclose()
+     except BaseException as error:inner_errors.append(type(error).__name__)
+     for callback in (write_stop.set,tasks.cancel_scope.cancel):
+      try:callback()
+      except BaseException as error:inner_errors.append(type(error).__name__)
+    if inner_errors:
+     errors.extend(inner_errors)
+     if not original:raise ValueError('owned SDK inner cleanup failed')
+  normal=True
+ finally:
+  active_exception=sys.exc_info()[0] is not None;cleanup=[]
+  def clean(callback):
+   try:callback()
+   except BaseException as error:cleanup.append(type(error).__name__)
+  clean(write_stop.set)
+  if process is not None:
+   clean(lambda:process.wait(timeout=3))
+   if normal:
+    def inspect_exit():
+     if process.returncode!=0:raise ValueError('owned SDK actual exit')
+    clean(inspect_exit)
+   clean(process.close)
+  for thread in started:clean(lambda thread=thread:thread.join(2))
+  for pipe in (() if process is None else (process.stdin,process.stdout,process.stderr)):
+   def close_pipe(pipe=pipe):
+    if not pipe.closed:pipe.close()
+   clean(close_pipe)
+  with anyio.CancelScope(shield=True):
+   for stream in (read_stream,read_sender,write_stream,write_receiver):
+    try:await stream.aclose()
+    except BaseException as error:cleanup.append(type(error).__name__)
+  def inspect_cleanup():
+   if process is not None and (process.ownership_closed is not True or process.returncode is None or any(thread.is_alive() for thread in started)):raise ValueError('owned SDK incomplete cleanup')
+  clean(inspect_cleanup)
+  if errors or stderr:cleanup.append('owned SDK wire reader failed')
+  if cleanup and not active_exception:raise ValueError('owned SDK cleanup failed')
+ if not normal:raise ValueError('owned SDK incomplete context')
+ closed=pid.with_name(pid.name+'.closed')
+ if not closed.with_name(closed.name+'.complete').is_dir():raise ValueError('owned SDK close witness absent')
+ with closed.open('rb') as stream:data=stream.read(257)
+ if len(data)>256:raise ValueError('owned SDK close witness bound')
+ witness=json.loads(data)
+ providers=5 if role=='baseline' else 2 if role=='followup' or mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial') else 1
+ if type(witness) is not dict or type(witness.get('pid')) is not int or type(witness.get('provider_calls')) is not int or witness!=dict(pid=entry,provider_calls=providers,marker='eq083-mcp-closed',role=role,mode=mode):raise ValueError('owned SDK close witness')
+ if read_count!=(7 if role=='baseline' else 4 if providers==2 else 3) or write_count!=read_count+1:raise ValueError('owned SDK complete frame ledger')
+ observations.append(dict(role=role,mode=mode,entry_exit=True,direct_child_exit=True,group_empty=True,ownership_closed=True,provider_calls=providers,full_frames=read_count,closed=witness))

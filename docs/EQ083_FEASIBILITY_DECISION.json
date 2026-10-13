@@ -1,0 +1,94 @@
+{
+  "schema": "eq083.candidate-feasibility-decision.v1",
+  "bases": {
+    "equity-features": "1a552f4dfc83c610a2b85ea61f4fdf60190a4e97",
+    "equity-feature-workers": "9a24eafd1f2a0e0a7814c7ad165eaec1a00cd9dc"
+  },
+  "candidate": "Configuration-only stock Genode26.08/NOVA/VirtualBox7 port as complete EQ083 physical owner",
+  "disposition": "REJECT_CONFIGURATION_ONLY_CANDIDATE_FOR_EQ083_SELECTION",
+  "complete_replacement_selected": false,
+  "acceptance_criteria_changed": false,
+  "product_source_changed": false,
+  "new_tests": 0,
+  "new_source_reads": 0,
+  "new_upstream_hash_checks": 0,
+  "prior_source_inventory": {
+    "files": 186,
+    "bytes": 1868044,
+    "partial": true,
+    "rehashed": false
+  },
+  "review": {
+    "disposition": "REJECT_CONFIGURATION_ONLY_CANDIDATE_FOR_EQ083_SELECTION",
+    "newtests": 0,
+    "candidate": "Configuration-only stock Genode26.08/NOVA/VirtualBox7 port as the complete EQ083 physical owner",
+    "research_stop": "Stop unsolicited adjacent-source enumeration for this configuration-only candidate. New source work is justified only by a concrete complete enforcement design and a named decisive evidence obligation whose outcome can accept or reject that design; do not add another token, counter, watchdog or status wrapper.",
+    "findings": [],
+    "limits": [
+      "Read saved reviewed reports/JSON only; no upstream reads, source rehash, source execution, native/host/API/process/VM/probe/test, CI or binary verification reattempt.",
+      "Existing source identities and results remain unchanged; no new runtime failure, vendor defect, hang/leak/attack, platform incompatibility or universal impossibility claimed.",
+      "No complete topology selected, no relaxed acceptance criteria, no Ready/all24/fresh-form/physical issuer or operational approval.",
+      "Acceptance remains at eight completed obligations as reported by parent; this decision supplies a selection boundary, not another completed acceptance test. #94 remains dependent on #93."
+    ],
+    "reasoning": [
+      "This is rejection of a particular insufficient selection contract, not a proof that every possible configuration or modified/external enforcement topology is impossible. A materially different complete enforcement design may be assessed on new decisive capability evidence.",
+      "A finite quota/request/iteration counter does not bound RPC, cancellation, provider/device completion or RCU scheduling latency. Local phase/ID/account bookkeeping does not establish all backing physically reclaimed.",
+      "Merely freezing configuration cannot by itself supply missing continuous storage byte/node caps, complete writer confinement, every allocator peak reservation and independent failure control; those mechanisms and their full lower contracts must be explicit.",
+      "Independent Windows/Linux CPython x64 four-form source/build/native/ABI/resolver/license compatibility and literal topology budgets are not established; version/release documentation is not that evidence."
+    ],
+    "agent_owned_route_forward": {
+      "required_contract": [
+        "Closed immutable donor and allocation authority covering boot/root/core/kernel/VMM/provider metadata, rounded geometry, caches, old/new overlap and all retired debt, with preallocation admission rather than requested-byte bookkeeping only",
+        "Hard allocated-storage byte and live/retired node limits plus confinement of every allowed process, device, DMA, mapped/cached and external writer edge",
+        "Independent reserved failure control with supported bounded stop/cancel/drain/reap/join/close behavior and truthful failure disposition, retaining resources until actual settlement",
+        "Complete selected source/archive/patch/build/native/guest interpreter and all four forms ABI/resolver/license contract on both OSs",
+        "Literal per-form total budgets and a finite named validation package with explicit pass/fail capability criteria"
+      ],
+      "deliverable": "One bounded complete-candidate contract and feasibility matrix, assessed before further implementation or runtime selection",
+      "selection_rule": "Select an alternative only after its complete capability contract meets the unchanged mandatory requirements. Existing stock Windows job/WinFsp/cgroup/HCS/seL4 research does not qualify a substitute by analogy.",
+      "owner_input": "No new owner input is required merely because technical work is incomplete. Research/design/integration remain agent work; ask only for an actually unavailable external fact or operation permission that a concrete supported design demonstrably requires."
+    },
+    "evidence": [
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-genode-current-quota-source-reviewer-report.json",
+        "basis": "Current core pager/PD/VM quota growth can draw from parent/core and retry recovery; selected immutable donor policy and lifetime cap were not established."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-quota-reclamation-source-reviewer-report.json",
+        "basis": "Quota funding is distinct from physical buddy/slab peak and deferred RCU completion; full allocation call-site reservations and progress bound remain absent."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-progress-source-reviewer-report.json",
+        "basis": "Quiet/update/timer/IPI execution gates establish conditional progress, not a whole cleanup deadline."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vmm-graph-source-reviewer-report.json",
+        "basis": "Example guest RAM and routes do not close the full graph; GMM backing is retained, can grow, and VM/EMT shutdown requires lower complete lifetimes."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vmm-release-source-reviewer-report.json",
+        "basis": "Selected patch texts and port stop/pause/wait paths are not applied build, all worker destruction, supported guest/native ABI or licensing closure."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vendor-worker-source-reviewer-report.json",
+        "basis": "VD/PDM/AIO cancel, flush, drain and destroy paths include indefinite waits or unsupported cancellation; local timed join is conditional and not whole final release."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-sandbox-authority-source-reviewer-report.json",
+        "basis": "Dynamic configuration, available quota, cooperative downgrade/yield, async closes and unchecked rollback outcomes do not establish immutable whole writer/resource authority or all retired settlement."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-runtime-service-source-reviewer-report.json",
+        "basis": "Expanding resource/upgrade waits, local/no-op/async service phases, retained heap backing, root proxy partial stages and continuing ROM producers require additional enforcement, not configuration-only inference."
+      }
+    ],
+    "heads": {
+      "equity-features": "1a552f4dfc83c610a2b85ea61f4fdf60190a4e97",
+      "equity-feature-workers": "9a24eafd1f2a0e0a7814c7ad165eaec1a00cd9dc"
+    },
+    "new_tests": 0,
+    "reviewer": "r7_policy_review independent reviewer",
+    "scope": "FEASIBILITY_DECISION_FROM_EXISTING_REVIEWED_RESEARCH_ONLY",
+    "decision": "Stronger rejection than merely pending admission is justified for this defined configuration-only proposal. Its proposed sufficient controls\u2014guest RAM, PD quotas, route configuration and stop/exit\u2014do not meet mandatory complete resource/writer ownership and bounded physical cleanup. Existing reviews expose specific replenishment, retained allocation, conditional progress and asynchronous or indefinite completion paths that the proposal has no supported enforcement contract to close. Do not select or implement it as EQ083 satisfaction on this evidence."
+  }
+}

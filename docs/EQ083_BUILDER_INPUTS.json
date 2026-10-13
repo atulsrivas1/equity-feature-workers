@@ -1,0 +1,465 @@
+{
+  "schema": "eq083.builder-design.v1",
+  "scope": "SOURCE-DERIVED DESIGN ONLY, no implementation/execution/fullReady",
+  "bases": {
+    "equity-features": "88dcc0254607733c7b0311681d6641949cda012f",
+    "equity-feature-workers": "474bb2e833033de309a49366223889178a2d08f4"
+  },
+  "source_inventory": {
+    "scope": "Outside source-derived fresh bothOS builder-WORKFLOW DESIGN inventory only; not written/published/reviewed/implemented/executed/Ready",
+    "worker_head": "474bb2e833033de309a49366223889178a2d08f4",
+    "assets": [
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_mcp.py",
+        "bytes": 13459,
+        "sha256": "10790320bb5ab930c3ba20c004a78137daec12035b48b916c5dae3dfdbedb4bc",
+        "functions": [
+          "reference_record",
+          "audit_mcp",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_client.py",
+        "bytes": 11830,
+        "sha256": "5edd15d1f7e842298a6eecbb7097d0fe78d7f9e53598995ba837dcdd3689993e",
+        "functions": [
+          "audit_client",
+          "wheel_record",
+          "provenance",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_service.py",
+        "bytes": 9766,
+        "sha256": "56d3560c2b8b1d207940e1a45ab12cfc3145d0d3a17034aa77501365518381af",
+        "functions": [
+          "audit",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/build_foundation.py",
+        "bytes": 15394,
+        "sha256": "f984e6d04cc0ca76c5ea41de816532f95033670481cc092ddcd17c89ff854778",
+        "functions": [
+          "run",
+          "sha",
+          "git",
+          "snapshot",
+          "normalize",
+          "inspect",
+          "build",
+          "install",
+          "fingerprint",
+          "qualify",
+          "main"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/qualify_job_native.py",
+        "bytes": 7240,
+        "sha256": "8eff6dbefeb79ccd07cbc7a18f6f66a4019ed8da82480086dd1e5380558274a6",
+        "functions": [
+          "flow"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "tools/requirements-mcp-reference.txt",
+        "bytes": 738,
+        "sha256": "f37fbdad94f5742ee96f7d44bbd9acd10c617ad3386ecd1423a31f8798c36205"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/mcp.yml",
+        "bytes": 1233,
+        "sha256": "4429fe49a5eff622d99984afbe75f9068c7bba8c587c73e4b7f80eed5911576b"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/client.yml",
+        "bytes": 1247,
+        "sha256": "e554bc8dc10603f68ca0063a5271c70a4b2c82a79a2be7d5927d363d1fc278a8"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/service.yml",
+        "bytes": 1245,
+        "sha256": "20f2a7c6b7c663e826ab431a89e8fc65d5c67de45b4d6d55f84359ca92e9d2c2"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": ".github/workflows/foundation.yml",
+        "bytes": 1631,
+        "sha256": "c796a58b0ea4f4636b7784b2cce1ecdd09cb33c68a61b620030c023d1c83ff5e"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_INPUTS.json",
+        "bytes": 35406,
+        "sha256": "fb18bb76e11634cc4a6d750730da7467155baa21e429f0989a550dbae82b1f0f"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_PLAN.md",
+        "bytes": 13470,
+        "sha256": "c9d1b076ab3f2a82e754ac6895fd06b7079723b8f1e9228a20183bb8230bc7a1"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_TLS_EXECUTION.json",
+        "bytes": 192750,
+        "sha256": "582d76468e26c6d491905bd2a2c1ec27210758f6f070869cf339d49f567e7241"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_TLS_PROBE.txt",
+        "bytes": 43762,
+        "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_TLS_SESSION_TRANSPORT.txt",
+        "bytes": 20709,
+        "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "docs/EQ083_OBSERVER_PATCH.txt",
+        "bytes": 907,
+        "sha256": "496400d3f254cc05e55fe735d8b09fcac09179defb37321d1b1bb5ff649f3a5d"
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "packages/service/src/equity_feature_service/_entry.py",
+        "bytes": 2770,
+        "sha256": "66d6982313a84627916be6145f9b611b4237c6641a6b542e9a8f2e459abb6b7e",
+        "functions": [
+          "canonical",
+          "startup_frame",
+          "startup_ack",
+          "validate_startup"
+        ]
+      },
+      {
+        "commit": "474bb2e833033de309a49366223889178a2d08f4",
+        "path": "packages/service/src/equity_feature_service/_containment.py",
+        "bytes": 28231,
+        "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd",
+        "functions": [
+          "_linux_limits",
+          "_launch_metadata",
+          "_epoch_clock"
+        ]
+      }
+    ],
+    "design_obligations": [
+      "Dedicated qualification bundle and exact24requirement coverage without new runtime package or generic competing service/client",
+      "Fresh Windows/Linux wheel AND sdist/light/native/reference environments; installed-I parentANDchild, pipcheck and no checkout shadow",
+      "Accepted complete perOS archive/source equivalence, source-sdist closure and whole RECORD validation, dependency/core/typing-positive-negative proofs",
+      "Full publicGit/currentserverZIP whole-tree every-entry/head-size-digest-unexpired proof; no merge-only or local-only acceptance",
+      "Portable fixed synthetic cert generation/source pins perOS before TLS; privatekeys excluded and no truststore mutation",
+      "Windows atomic reference lifecycle versus explicitly frozen Linux processgroup/ownedcontainment cleanup; no relabeling Windows source proof",
+      "Bounded trusted fixture/fault ledgers/all original producer snapshots/schemas/nativegoldenSHA; all priorfailures explicit",
+      "Approved DOCS-only Linux observer correction applied only after fullsevenReady admission",
+      "Freeze builder/source/entry/config/artifact/receipt identities with variable fields explicit and genuine qualified implementation then additive metadata, no selfreceiptloop"
+    ]
+  },
+  "proposed_paths": [
+    "tools/build_resilience.py",
+    "tests/resilience",
+    ".github/workflows/resilience.yml"
+  ],
+  "form_matrix": {
+    "os": [
+      "Windows",
+      "Linux"
+    ],
+    "artifacts": [
+      "wheel",
+      "sdist"
+    ],
+    "phases": [
+      "light",
+      "native-reference"
+    ],
+    "installation_selection": {
+      "wheel": "nine internal wheels",
+      "sdist_light": [
+        "client sdist",
+        "MCP sdist"
+      ],
+      "sdist_native": [
+        "retained client and MCP sdist installs",
+        "service sdist",
+        "worker sdist",
+        "six accepted dependency wheels: equity-feature-contracts, equity-features, equity-feature-io-contracts, equity-feature-io-sdk, equity-feature-duckdb, equity-feature-example-extensions",
+        "official reference wheels"
+      ],
+      "sdist_audit_only_wheels": [
+        "client",
+        "MCP",
+        "service",
+        "worker"
+      ],
+      "identity_checks": "per-component original sdist closure and built installed wheel RECORD before and after composition; no selected component replacement",
+      "dependency_distribution_names": [
+        "equity-feature-contracts",
+        "equity-features",
+        "equity-feature-io-contracts",
+        "equity-feature-io-sdk",
+        "equity-feature-duckdb",
+        "equity-feature-example-extensions"
+      ]
+    }
+  },
+  "new_certificate_backend": "existing qualification cryptography==50.0.2, new exact helper source/pins still pending",
+  "outstanding_ready_gates": [
+    "portable exact reference/bootstrap/certificate sources and source review",
+    "concrete bootstrap/buildwheel perOS closure pins",
+    "exact R04/R05/R07 full independent fixture coverage and pervector mapping",
+    "fullsevenReady independent exactreview before admission/implementation"
+  ],
+  "initial_design_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "1f93460c7a4d5401adc20f48f26ea49ac1960f90",
+      "equity-feature-workers": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b"
+    },
+    "bases": {
+      "equity-features": "88dcc0254607733c7b0311681d6641949cda012f",
+      "equity-feature-workers": "474bb2e833033de309a49366223889178a2d08f4"
+    },
+    "disposition": "REWORK",
+    "scope": "Architectural design/source review only; not Ready, implementation, runtime or release approval",
+    "design_bytes": 18391,
+    "design_sha256": "6ae832fe56bba869c11e1803ada12cd9dd40554bec9978df2923d8e88ce6a4f8",
+    "findings": [
+      {
+        "severity": "P2",
+        "title": "Freeze form-specific runtime installation instead of blanket internal wheels in the sdist phase",
+        "path": "docs/EQ083_BUILDER_DESIGN.md",
+        "line": 17,
+        "evidence": "The matrix promises rebuilt corresponding client/service/MCP/worker artifacts for wheel and sdist forms, then says each native-reference phase installs exact9internalwheels. Accepted build_mcp dependencies include client, service and worker wheels (lines130-134); qualify installs remaining dependencies after the light phase (lines89-91).",
+        "trigger": "Implement the specified sdist phase literally: install client/MCP from sdists for light checks, then install every accepted internal wheel for native-reference checks.",
+        "consequence": "The client wheel can replace the sdist-derived client and service/worker composition uses dependency wheels. Installed origins and complete wheel RECORD checks alone cannot prove the composed sdist form, so R22 fresh sdist qualification can be claimed without that form exercising the corresponding packages.",
+        "requested_correction": "Define an exact install selection for each form: client/service/MCP/worker from that form, accepted internal wheels only for other dependency packages. Keep accepted wheel hashes as audit/comparison inputs without reinstalling form-owned distributions. Verify installed distributions/file RECORD provenance after optional/reference installs, rejecting replacement or duplicate project names. If only MCP/client sdists are intended, explicitly narrow the form scope and retain actual service/worker sdist gates separately."
+      }
+    ],
+    "checks": [
+      "Exact design 18391 Git UTF8 bytes/SHA and both design/INPUTS mirrors equal",
+      "All 18 immutable accepted source assets exact bytes/SHA/UTF8; seven Python AST inventories match declared top-level functions",
+      "Both exact clean heads, literal four-doc changes per repo, diff-check, changed UTF8, Atul author/committer and no coauthor trailers; protected runtime/package/test/tool/workflow/example/schema inputs invariant",
+      "Live issue93 OPEN/unassigned/Project Backlog read-only API",
+      "Read-only accepted builder source: repeat snapshots, light absence before optional installation, installed -I parent/child, RECORD, no-packages harness, source/dependency receipt selection and current workflow patterns",
+      "Read-only accepted service requirement/reference pins and containment source: schema-only light dependencies; native/reference qualification wheels separate; hard CPU10/AS4GiB/PDEATHSIG/thread-only process restriction source",
+      "Design source assessment: complete ZIP/RECORD/source archive closure, public Git proof, receipt non-self-reference, Windows atomic ownership versus explicit Linux non-atomic prebootstrap window, private key exclusion and cooperative timeout limits",
+      "All R01-R24 mappings and seven Ready obligations inspected; exact R04/R05/R07 fixtures, portable helpers/Linux feasibility and perOS build-wheel closure still pending"
+    ],
+    "inspected_source_assets": [
+      {
+        "path": "tools/build_mcp.py",
+        "sha256": "10790320bb5ab930c3ba20c004a78137daec12035b48b916c5dae3dfdbedb4bc",
+        "bytes": 13459
+      },
+      {
+        "path": "tools/build_client.py",
+        "sha256": "5edd15d1f7e842298a6eecbb7097d0fe78d7f9e53598995ba837dcdd3689993e",
+        "bytes": 11830
+      },
+      {
+        "path": "tools/build_service.py",
+        "sha256": "56d3560c2b8b1d207940e1a45ab12cfc3145d0d3a17034aa77501365518381af",
+        "bytes": 9766
+      },
+      {
+        "path": "tools/build_foundation.py",
+        "sha256": "f984e6d04cc0ca76c5ea41de816532f95033670481cc092ddcd17c89ff854778",
+        "bytes": 15394
+      },
+      {
+        "path": "tools/qualify_job_native.py",
+        "sha256": "8eff6dbefeb79ccd07cbc7a18f6f66a4019ed8da82480086dd1e5380558274a6",
+        "bytes": 7240
+      },
+      {
+        "path": "tools/requirements-mcp-reference.txt",
+        "sha256": "f37fbdad94f5742ee96f7d44bbd9acd10c617ad3386ecd1423a31f8798c36205",
+        "bytes": 738
+      },
+      {
+        "path": ".github/workflows/mcp.yml",
+        "sha256": "4429fe49a5eff622d99984afbe75f9068c7bba8c587c73e4b7f80eed5911576b",
+        "bytes": 1233
+      },
+      {
+        "path": ".github/workflows/client.yml",
+        "sha256": "e554bc8dc10603f68ca0063a5271c70a4b2c82a79a2be7d5927d363d1fc278a8",
+        "bytes": 1247
+      },
+      {
+        "path": ".github/workflows/service.yml",
+        "sha256": "20f2a7c6b7c663e826ab431a89e8fc65d5c67de45b4d6d55f84359ca92e9d2c2",
+        "bytes": 1245
+      },
+      {
+        "path": ".github/workflows/foundation.yml",
+        "sha256": "c796a58b0ea4f4636b7784b2cce1ecdd09cb33c68a61b620030c023d1c83ff5e",
+        "bytes": 1631
+      },
+      {
+        "path": "docs/EQ083_INPUTS.json",
+        "sha256": "fb18bb76e11634cc4a6d750730da7467155baa21e429f0989a550dbae82b1f0f",
+        "bytes": 35406
+      },
+      {
+        "path": "docs/EQ083_PLAN.md",
+        "sha256": "c9d1b076ab3f2a82e754ac6895fd06b7079723b8f1e9228a20183bb8230bc7a1",
+        "bytes": 13470
+      },
+      {
+        "path": "docs/EQ083_TLS_EXECUTION.json",
+        "sha256": "582d76468e26c6d491905bd2a2c1ec27210758f6f070869cf339d49f567e7241",
+        "bytes": 192750
+      },
+      {
+        "path": "docs/EQ083_TLS_PROBE.txt",
+        "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a",
+        "bytes": 43762
+      },
+      {
+        "path": "docs/EQ083_TLS_SESSION_TRANSPORT.txt",
+        "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50",
+        "bytes": 20709
+      },
+      {
+        "path": "docs/EQ083_OBSERVER_PATCH.txt",
+        "sha256": "496400d3f254cc05e55fe735d8b09fcac09179defb37321d1b1bb5ff649f3a5d",
+        "bytes": 907
+      },
+      {
+        "path": "packages/service/src/equity_feature_service/_entry.py",
+        "sha256": "66d6982313a84627916be6145f9b611b4237c6641a6b542e9a8f2e459abb6b7e",
+        "bytes": 2770
+      },
+      {
+        "path": "packages/service/src/equity_feature_service/_containment.py",
+        "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd",
+        "bytes": 28231
+      }
+    ],
+    "remaining_ready_obligations": [
+      "Exact form-specific installation correction",
+      "Portable certificate and Linux bootstrap/reference source plus independent source review and feasibility",
+      "PerOS pinned bootstrap/build wheel maps, sizes, hashes and RECORD closure",
+      "Exact independent R04 snapshot/receipt, R05 algorithm/config, R07 unavailable/coverage cases and per-lane counters",
+      "Full seven-Ready final planning review and guarded Backlog -> Ready -> In progress before implementation"
+    ],
+    "limitations": [
+      "No builder/helper/owned source execution, imports of product/SDK, process/Win32/TLS/socket/native/copy/install/download operations",
+      "No CI, performance, fresh reinstall, Linux or current artifact qualification claim",
+      "Prior Windows TLS seven-case same-author-environment separate-process proof remains scoped; original failures and source review misses remain retained",
+      "The new outside remaining-fixture inventory is untracked planning advice and does not fill frozen fixture obligations"
+    ],
+    "live_issue": {
+      "assignees": [],
+      "projectItems": [
+        {
+          "status": {
+            "optionId": "4744133d",
+            "name": "Backlog"
+          },
+          "title": "Equity Features \u2014 Roadmap"
+        }
+      ],
+      "state": "OPEN",
+      "url": "https://github.com/atulsrivas1/equity-features/issues/93"
+    },
+    "tool_only_corrections": [
+      "Initial read guessed requirements-service.txt at repo root; path not found; corrected to tools/requirements-service.txt. No product execution or mutation."
+    ]
+  },
+  "remaining_fixture_inventory_sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d",
+  "renewed_design_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "9f2ebbc8ba7ac6a16e9d45a1bb30309523108560",
+      "equity-feature-workers": "a5d67ea7fc67917c20fa8b934473ef1d9a5c32d2"
+    },
+    "bases": {
+      "equity-features": "1f93460c7a4d5401adc20f48f26ea49ac1960f90",
+      "equity-feature-workers": "c7bfeae0c0cbe131d07fb078c7bbc105a835c89b"
+    },
+    "disposition": "REWORK",
+    "scope": "DESIGN ONLY: renewed architecture and source-derived fixture inventory review, not Ready/runtime approval",
+    "source_hashes": {
+      "BUILDER_DESIGN.md": {
+        "bytes": 20126,
+        "sha256": "f4e3cd7c6d9b06fa29e09597b7472dee2bffb945bbe0591652e5659c148110df"
+      },
+      "BUILDER_INPUTS.json": {
+        "bytes": 17130,
+        "sha256": "7919ad1ed658bd62d0b8a54ff637e3d5c9541577fcd68211f9436277cb228bb9"
+      },
+      "REMAINING_FIXTURE_INPUTS.json": {
+        "bytes": 7383,
+        "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+      }
+    },
+    "findings": [
+      {
+        "severity": "P2",
+        "path": "docs/EQ083_BUILDER_DESIGN.md",
+        "line": 17,
+        "title": "Retain all six non-form internal dependency wheels",
+        "trigger": "Implement the new sdist native-reference contract as written, using only five remaining accepted core/I/O dependency wheels.",
+        "evidence": "Accepted nine-wheel dependency set excludes MCP. Removing client/service/worker leaves contracts, features, IO contracts, IO SDK, duckdb adapter and example extensions: six. tests/service/test_jobs.py imports ExampleSink from equity_feature_example_extensions at line21.",
+        "consequence": "A five-wheel selection cannot preserve the complete accepted dependency closure; dropping example extensions prevents the owned native fixture, and no omitted dependency is identified.",
+        "requested_correction": "Replace five with six and freeze the exact six names, keeping MCP as the separately selected form artifact. Continue audit-only matching wheels for client/service/worker/MCP and exact pre/post form RECORD identity."
+      }
+    ],
+    "resolved_findings": [
+      "Original blanket nine-wheel installation/sdist replacement P2 resolved by explicit form-owned source distribution retention and pre/post RECORD identities"
+    ],
+    "checks": [
+      "Three exact Git UTF8 mirrors match canonical/worker",
+      "18 accepted builder assets plus seven remaining-fixture Git pins exact bytes/hash; Python AST parse only",
+      "Both bars unavailable columns/quality/evidence exactly match independently frozen full bars producer and SHA; no numerical/constructor execution",
+      "Source trace six planned routes: jobs dataset/scope guard403 before registration equality422; RawDataset.produce receipt/full-batch mismatch; public ProducerExpectation inventory consistency and command digest; client error-status mismatch yields read protocol or sent-mutation unknown at422; MCP forwards client failure",
+      "Exact clean heads, literal five-doc changes per repo, diffcheck, protected input invariance, Atul author/committer no coauthor",
+      "Original source report is retained as REWORK; form-owned sdist no-replacement rule and pre/post installed-wheel provenance correct original P2",
+      "Read-only accepted MCP receipt dependency enumeration: nine internal wheels, client/service/worker removed leaves six; MCP archive separate"
+    ],
+    "accepted_remaining_dependency_wheels": [
+      "equity_feature_contracts-0.0.4a4-py3-none-any.whl",
+      "equity_feature_duckdb-0.1.0a8-py3-none-any.whl",
+      "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl",
+      "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl",
+      "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl",
+      "equity_features-0.0.4a4-py3-none-any.whl"
+    ],
+    "fixture_scope": "Six proposed mismatch routes and two exact existing bars unavailable columns are source-derived credible planning inputs, not admitted executable case/ledger or new computation proof",
+    "remaining_ready_obligations": [
+      "Correct complete six-dependency form contract",
+      "Portable exact certificate/Linux bootstrap/reference sources and source review/feasibility",
+      "PerOS complete build/typing/bootstrap wheel file pins and RECORD closure",
+      "Concrete owner/reference/parent controls and all24 per-lane vector/expected-envelope/counter mapping",
+      "Full seven Ready exact review before guarded admission/implementation"
+    ],
+    "limitations": [
+      "No product/SDK imports, constructor/native/TLS/socket/process/helper/build/copy/install/probe execution or downloads",
+      "No current CI/artifact qualification, full24 proof, Ready/start or release approval",
+      "Earlier Windows same-env separate-process TLS proof and failed source/review/execution history remain scoped and retained"
+    ]
+  }
+}

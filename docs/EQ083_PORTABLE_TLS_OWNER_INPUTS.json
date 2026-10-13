@@ -1,0 +1,133 @@
+{
+  "schema": "eq083.portable-tls-owner-source.v1",
+  "scope": "PRE-EXECUTION SOURCE ONLY; new owner not executed/admitted/integrated, source review required",
+  "bases": {
+    "equity-features": "567f59c7202e78f256cab6da099d89a54b0ab639",
+    "equity-feature-workers": "a8b8b82196efb08832df0daa672b313a75624a75"
+  },
+  "source": {
+    "bytes": 8021,
+    "sha256": "921966565c7f218663541541d92643ce0903f77de1caeeffd3becf6bd2aabab9"
+  },
+  "source_pins": {
+    "docs/EQ083_TLS_OWNER_ENTRY.txt": {
+      "bytes": 7687,
+      "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746"
+    },
+    "docs/EQ083_PORTABLE_CERTIFICATE_AUTHORITY.txt": {
+      "bytes": 31786,
+      "sha256": "ededa5a073359b8445047ee12ddefc65acc6b9e3b60bed437a0caa36fb9680da"
+    },
+    "docs/EQ083_CERTIFICATE_ENV_INPUTS.json": {
+      "bytes": 587716,
+      "sha256": "6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532"
+    },
+    "docs/EQ083_TLS_PARENT_INPUTS.json": {
+      "bytes": 23685,
+      "sha256": "63aba48d1fa2625005905f1b859d9f518886be110d6557e8372a398b0f951988"
+    },
+    "docs/EQ083_LINUX_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 7870,
+      "sha256": "c4dbc1009641e4acae4b628a37256fb2ebde364dda5b53bf09a20ed7c94a81c8"
+    }
+  },
+  "compaction": {
+    "transform": "declared private owned z-identifiers alpha-renamed plus inter-token horizontal whitespace; no error labels/strings/control AST changed; blank lines retained",
+    "identifier_map": {
+      "z0": "a",
+      "z1": "b",
+      "z10": "e",
+      "z11": "g",
+      "z12": "h",
+      "z13": "i",
+      "z14": "j",
+      "z15": "l",
+      "z16": "m",
+      "z17": "o",
+      "z18": "p",
+      "z19": "q",
+      "z1a": "r",
+      "z1b": "s",
+      "z1c": "t",
+      "z1d": "u",
+      "z1e": "w",
+      "z1f": "x",
+      "z2": "y",
+      "z20": "z",
+      "z21": "A",
+      "z22": "B",
+      "z23": "C",
+      "z24": "D",
+      "z25": "E",
+      "z26": "F",
+      "z27": "G",
+      "z28": "H",
+      "z29": "I",
+      "z2a": "J",
+      "z2b": "K",
+      "z2c": "L",
+      "z2d": "M",
+      "z2e": "N",
+      "z2f": "O",
+      "z3": "P",
+      "z30": "Q",
+      "z31": "R",
+      "z32": "S",
+      "z33": "T",
+      "z34": "U",
+      "z35": "V",
+      "z36": "W",
+      "z37": "X",
+      "z38": "Y",
+      "z39": "Z"
+    },
+    "original": {
+      "bytes": 8448,
+      "sha256": "f7afba9e0b5241716e313155932ed1cef9f438cfe7ee80fe8cc411aeb508f5dd"
+    },
+    "compact": {
+      "bytes": 8021,
+      "sha256": "921966565c7f218663541541d92643ce0903f77de1caeeffd3becf6bd2aabab9"
+    },
+    "inverse_ast_equivalent": true,
+    "prior_whitespace_only_attempt": "Denied before writes because source remained above8192; no execution",
+    "scope": "AST compile only, no execution/admission"
+  },
+  "uncompacted_source": "import sys,time,json,hashlib,os,stat,re\nfrom pathlib import Path\nif len(sys.argv)!=9 or sys.flags.isolated!=1 or sys.flags.optimize!=0:raise ValueError('P1')\nimport ssl\nzd=Path(sys.argv[2]);zs=sys.argv[8]\nif not zd.is_absolute() or zd.resolve()!=zd or '..' in zd.parts or len(str(zd))>1024 or not re.fullmatch('[0-9a-f]{64}',zs):raise ValueError('P2')\ndef zpairs(items):\n d={}\n for k,v in items:\n  if k in d:raise ValueError('P3')\n  d[k]=v\n return d\nwith (zd/'certificate-record.json').open('rb') as f:zr=f.read(16385)\nif not 0<len(zr)<=16384 or hashlib.sha256(zr).hexdigest()!=zs:raise ValueError('P4')\nzr=json.loads(zr,object_pairs_hook=zpairs)\nif type(zr)is not dict or zr.get('schema')!='eq083.synthetic-certificate.v1' or zr.get('cryptography_version')!='50.0.2' or type(zr.get('entries'))is not list or len(zr['entries'])!=2:raise ValueError('P5')\nzc={}\nfor ze,(zn,za,zi) in zip(zr['entries'],(('valid','127.0.0.1',8301),('wrong','127.0.0.2',8302))):\n if type(ze)is not dict or (ze.get('role'),ze.get('address'),ze.get('serial'))!=(zn,za,zi) or type(ze['serial'])is not int:raise ValueError('P6')\n zc[zn]={}\n for zk,zf in (('cert','certificate'),('key','private_key')):\n  zv=ze.get(zf)\n  if type(zv)is not dict or set(zv)!={'name','bytes','sha256'} or zv['name']!=zn+'-'+zk+'.pem' or type(zv['bytes'])is not int or not 0<zv['bytes']<=8192 or type(zv['sha256'])is not str or not re.fullmatch('[0-9a-f]{64}',zv['sha256']):raise ValueError('P7')\n  zc[zn][zk]={'bytes':zv['bytes'],'sha256':zv['sha256']}\nz16={}\nfor zb,z24 in zc.items():\n for z2a,z36 in z24.items():\n  z23=zd/(zb+'-'+z2a+'.pem')\n  if z23.is_symlink():raise ValueError('T15')\n  with z23.open('rb') as z4a:z18=z4a.read(8193)\n  if len(z18)!=z36['bytes'] or hashlib.sha256(z18).hexdigest()!=z36['sha256']:raise ValueError('T16')\n z15=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);z15.minimum_version=ssl.TLSVersion.TLSv1_2\n z15.load_cert_chain(str(zd/(zb+'-cert.pem')),str(zd/(zb+'-key.pem')));z16[zb]=z15\nz2d=sys.argv[7]\nz2e=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')\nif z2d not in z2e:raise ValueError('T3')\nz26=z2d in ('extra-response-byte','truncated-response-byte','duplicate-content-length')\nz39=z26 or z2d=='actual-owner-denial'\nz20=4 if z39 else 0\nsys.path.insert(0,sys.argv[1])\nfrom test_jobs import setup\nfrom equity_feature_service._audit import OwnedAudit\nfrom equity_feature_service.loopback import qualification_server\nz3a,z49,z17,z1=(Path(v) for v in sys.argv[3:7])\nz3e,z42,z4e,z11,z1d=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))\nz42.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(z42.ledger.credentials))\nz3c=0;z40=0;z32=None\ndef z9(z51):return json.dumps(z51,sort_keys=True,separators=(',',':')).encode('ascii')\ndef z46(z52):\n with z3e.condition:\n  if len(z3e.jobs)!=1:raise ValueError('T17')\n  z29=next(iter(z3e.jobs.values()));z50=time.monotonic()+3\n  while z3e._running is not None or z29.expires_ns<=0:\n   z3b=z50-time.monotonic()\n   if not z52 or z3b<=0:raise ValueError('T27')\n   z3e.condition.wait(z3b)\n  z44=[len(z29.native),len(z29.wire),len(z29.envelope),len(z29.receipt)]\n  if z29.state!='succeeded' or z29.result_id is None or z3e.queue or z1d['reads']!=1 or not z1d['entered'].is_set() or len(z1d['sink_threads'])!=1:raise ValueError('T18')\n  if any(type(z43) is not int or z43<=0 for z43 in z44):raise ValueError('T19')\n  if type(z29.held) is not int or not 0<z29.held==sum(z44)<=262144 or z3e.total_retained!=z29.held or z3e.retained!={z29.principal:z29.held}:raise ValueError('T20')\n  if type(z29.expires_ns) is not int or not 0<z29.expires_ns<=9223372036854775807:raise ValueError('T21')\n  return dict(job=z29.job_id,result=z29.result_id,state=z29.state,expiry=z29.expires_ns,held=z29.held,sizes=z44,reads=z1d['reads'],running=z3e._running,queue=len(z3e.queue),sink_entries=len(z1d['sink_threads']))\ndef z37(z34,z51,z2c):\n z18=z9(z51)\n if len(z18)>z2c or z34.exists() or z34.with_name(z34.name+'.complete').exists():raise ValueError('T5')\n z35=z34.with_name(z34.name+'.pending');z35.write_bytes(z18);z35.replace(z34);z34.with_name(z34.name+'.complete').mkdir()\nz7=False;z4d=dict(accepts=0,success=0,failure=0);z14=[];z38=[];z4f=[];z21=[]\ndef z6(z1b,z47):\n global z3c\n if z3c>=24 or z40==5:raise ValueError('T6')\n z3c+=1\n if not z7 or not z26:return z42(z1b,z47)\n if len(z21)>=3:raise ValueError('T7')\n z27=[];z48=[]\n def za(z51,z22,z1c=None):\n  if z48 or z1c is not None or type(z51) is not str or z51!='200 OK' or type(z22) is not list:raise ValueError('T22')\n  z48.append(z51);z27.extend(z22)\n  def z25(z18):raise ValueError('T23')\n  return z25\n z28=z42(z1b,za);zf=[];z2b=0\n try:\n  for ze in z28:\n   if type(ze) is not bytes:raise ValueError('T28')\n   z2b+=len(ze)\n   if z2b>262144 or len(zf)>=4:raise ValueError('T29')\n   zf.append(ze)\n finally:\n  z12=getattr(z28,'close',None)\n  if z12 is not None:z12()\n z8=b''.join(zf)\n z1a=[z51 for z2f,z51 in z27 if z2f.lower()=='content-length']\n if len(z48)!=1 or len(z1a)!=1 or z1a[0]!=str(len(z8)) or not z8:raise ValueError('T8')\n if sum(len(z2f)+len(z51)+4 for z2f,z51 in z27)>8192:raise ValueError('T9')\n z53=dict(original_bytes=len(z8),original_sha256=hashlib.sha256(z8).hexdigest())\n if z2d=='extra-response-byte':z33=z8+b'x'\n elif z2d=='truncated-response-byte':z33=z8[:-1]\n else:z27.append(('Content-Length',z1a[0]));z33=z8\n z53['forwarded_bytes']=len(z33);z21.append(z53)\n z47(z48[0],z27)\n return [z33]\nz3=('settled','baseline','arm','restored','final')\ndef z30(z2):\n global z32,z7\n z4c=(1,12,13 if z39 else 12,16 if z39 else 12,18+z20)\n z4b=z4c[z40]\n z1f=3 if z2d in ('untrusted-certificate','hostname-mismatch') and z40>=3 else 0\n if z3c!=z4c[z40] or z4d!=dict(accepts=z4b+z1f,success=z4b,failure=z1f):raise ValueError('T10')\n if z4f:raise ValueError('T11')\n if any(z13.fileno()!=-1 for z13 in z14+z38):raise ValueError('T12')\n if z2=='settled':z32=z46(True)\n elif z32 is None or z46(False)!=z32:raise ValueError('T24')\n if z2=='arm':z7=True\n if z2=='restored':\n  if len(z21)!=(3 if z26 else 0):raise ValueError('T25')\n  z7=False\n return dict(sequence=z40+1,action=z2,mode=z2d,requests=z3c,tls=dict(z4d),faults=list(z21),snapshot=z32)\nz41=None;z19=time.monotonic()+20\ntry:\n z41=qualification_server(z42);z41.set_app(z6);z41.timeout=.05\n z31=z41.get_request\n def z0():\n  if z4d['accepts']>=24:raise ValueError('T26')\n  z13,z5=z31();z4d['accepts']+=1;z38.append(z13);z3f=None\n  try:\n   z13.settimeout(2)\n   z15=z16['wrong' if z7 and z2d=='hostname-mismatch' else 'valid']\n   z3f=z15.wrap_socket(z13,server_side=True,do_handshake_on_connect=False)\n   z14.append(z3f);z3f.settimeout(2);z3f.do_handshake();z4d['success']+=1\n   return z3f,z5\n  except BaseException:\n   z4d['failure']+=1\n   for z1e in (z3f,z13):\n    if z1e is not None:\n     try:z1e.close()\n     except BaseException:z4f.append('failed handshake socket close')\n   raise\n z41.get_request=z0\n z37(z3a,dict(port=z41.server_port),128)\n while z3c<=24:\n  if z49.exists() or time.monotonic()>=z19:break\n  z45=z17.with_name(z17.name+'.'+str(z40+1))\n  if z40<5 and z45.with_name(z45.name+'.complete').is_dir():\n   with z45.open('rb') as z4a:z18=z4a.read(129)\n   if len(z18)>128:raise ValueError('T30')\n   z51=json.loads(z18)\n   if type(z51) is not dict or set(z51)!={'sequence','action'} or type(z51['sequence']) is not int or z51['sequence']!=z40+1 or z51['action']!=z3[z40]:raise ValueError('T31')\n   z3d=z30(z51['action']);z40+=1;z37(z1.with_name(z1.name+'.'+str(z40)),z3d,1024)\n  z41.handle_request()\n if z40!=5:raise ValueError('T13')\nfinally:\n z4=sys.exc_info()[0] is not None;z10=list(z4f)\n if z41 is not None:\n  try:z41.server_close()\n  except BaseException:z10.append('server close')\n for z13 in z14+z38:\n  try:\n   z13.close()\n   if z13.fileno()!=-1:z10.append('connection close')\n  except BaseException:z10.append('connection close')\n try:\n  if z3e.close(2) is not True:z10.append('native exit unconfirmed')\n except BaseException:z10.append('native close')\n if z10 and not z4:raise ValueError('T14')\nif z46(False)!=z32:raise ValueError('T4')\nprint(z9(dict(marker='eq083-tls-http-exited',mode=z2d,requests=z3c,sequence=z40,snapshot_sha256=hashlib.sha256(z9(z32)).hexdigest())).decode('ascii'),flush=True)\n",
+  "uncompacted_scope": "8448-byte SOURCE PARITY ORACLE ONLY, never native source input/copied owner/external source loader; original reviewed7687+failed9985 histories preserved unchanged",
+  "authority_source_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "567f59c7202e78f256cab6da099d89a54b0ab639",
+      "equity-feature-workers": "a8b8b82196efb08832df0daa672b313a75624a75"
+    },
+    "source": {
+      "bytes": 31786,
+      "sha256": "ededa5a073359b8445047ee12ddefc65acc6b9e3b60bed437a0caa36fb9680da"
+    },
+    "disposition": "APPROVED",
+    "scope": "PRE-EXECUTION trusted portable certificate binding AUTHORITY SOURCE ONLY",
+    "findings": [],
+    "checks": [
+      "Exact31786 source SHA/UTF8/compile; three mirrored assets/seven priorpins/cap; all original helpers/classes and complete generation reader/try/finally AST preserved, only parser strengthening and binding refactor",
+      "Fifteen binding/snapshot cases: genuine synthetic bundle admits, immutable object/foreignseal deny, eight keybytes/pathidentity/extra/missing/complete/permission/read-race/receipt changes and three parent/flags changes deny; no key bytes stored in binding",
+      "Fourteen exact closed receipt/entry, nonboolserial, UTC secondprecision and actual backend-version guards exercised with inert locals/crypto-shaped objects",
+      "Exact cleanheads/five-owned-doc diff/protected runtime-package-test-tool-workflow-schema invariance/Atul-noCoauthors; existing parent/copy/ENV unchanged and Linuxfalse"
+    ],
+    "limitations": [
+      "Only AST/Git/JSON/source and extracted fake filesystem/crypto-shaped locals; no actual permission, product/platform/Win32/crypto/SSL/anyio/SDK imports or process/generation/native/TLS/copy/install/setup/probe execution",
+      "Private seal is an accidental-use convention in trusted qualification process, not a same-user/Python security boundary; no locking against concurrent owner mutation promised",
+      "Actual parser/signature/backend behavior and observed owned cleanup not executed by this review; inherited source AST and fake guard tests only",
+      "Exact integrated TLS owner/parent/copier and host/fresh perOS map admission/full24/sevenReady still pending; Linux literalENV remainsfalse; no execution/Ready/forms/TLS/release approval"
+    ],
+    "tool_only_corrections": [
+      "Initial reviewer plan path guessed PORTABLE_CERTIFICATE_AUTHORITY_PLAN; actual CERTIFICATE_AUTHORITY_PLAN read corrected without execution"
+    ]
+  },
+  "limits": {
+    "native_source_bytes": 8192,
+    "receipt_bytes": 16384,
+    "cert_key_bytes": 8192
+  },
+  "remaining": "Exact integrated portableTLS parent/copier and immutable trusted certificate authority linkage, Windows portable reference/bridge, perOS host/freshmaps/validators/all24/fullsevenReady BEFOREanyexecution"
+}

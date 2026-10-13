@@ -1,0 +1,175 @@
+{
+  "schema": "eq083.tls-session-transport.pre-execution.v1",
+  "bases": {
+    "equity-features": "3ece59f5d9ae5a6437fe6744a84ef99a82b60716",
+    "equity-feature-workers": "5e30fbe9057d7989a1dc67a4df65554438842f7c"
+  },
+  "source": {
+    "bytes": 20709,
+    "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+  },
+  "owned_process_source": {
+    "commit": "5e30fbe9057d7989a1dc67a4df65554438842f7c",
+    "path": "docs/EQ083_REFERENCE_PROCESS.txt",
+    "bytes": 11944,
+    "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+  },
+  "sdk_source_pins": [
+    {
+      "path": "mcp/client/stdio/__init__.py",
+      "bytes": 9403,
+      "sha256": "a23227cfe1e3456f16ab41311486a399cf547fcc6b645399bf9bf3a6dc6cf654",
+      "scope": "Read-only installed accepted mcp1.30.0 SDK source; not new execution evidence"
+    },
+    {
+      "path": "mcp/shared/message.py",
+      "bytes": 1550,
+      "sha256": "2bbc32fdf09a3e8ee9d2bf3fd8f776db701bd10f4330006e0a2b4adf1ab47102",
+      "scope": "Read-only installed accepted mcp1.30.0 SDK source; not new execution evidence"
+    },
+    {
+      "path": "mcp/types.py",
+      "bytes": 64908,
+      "sha256": "6824109cd1eabaf43c5dab829a83015b1b88ec9ae149765e6814afaf23f9bde5",
+      "scope": "Read-only installed accepted mcp1.30.0 SDK source; not new execution evidence"
+    }
+  ],
+  "reference": {
+    "bytes": 5916,
+    "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231",
+    "review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107495742"
+  },
+  "prior_source_pins": [
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/service/src/equity_feature_service/loopback.py",
+      "bytes": 1264,
+      "sha256": "69cd65d929765961927c74a12ccfb199a53bf5a5435253559a61a8c06aeb321a"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/client/src/equity_feature_client/_transport.py",
+      "bytes": 9468,
+      "sha256": "c35439a8fbad8bad4fdd5d14a1f2062b49b77fbd537d9bef993f14ed5766ce21"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/client/src/equity_feature_client/client.py",
+      "bytes": 12050,
+      "sha256": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/mcp/src/equity_feature_mcp/server.py",
+      "bytes": 13023,
+      "sha256": "8d314f299ec8b9fa4903e8e94fc1ec685dafdcc331fc2c9f57425afbb78ba84b"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "packages/mcp/src/equity_feature_mcp/models.py",
+      "bytes": 5230,
+      "sha256": "1c712e14161c885c1932ddf3fc5c14e3566dfac971776a952816c370fe6c4212"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/client/test_public_tls.py",
+      "bytes": 5551,
+      "sha256": "b8f9a524e3adff9088e0add14299f206a7d6a1499e89dd66841d6d4e38e49555"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/mcp/test_tls_boundary.py",
+      "bytes": 6677,
+      "sha256": "37127d595d8a04c01a2d75f796dcb5f198ae448b186ad703022c6833fbf3cd19"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ083_REFERENCE_FAULT_OWNER.txt",
+      "bytes": 5139,
+      "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ083_REFERENCE_PROCESS.txt",
+      "bytes": 11944,
+      "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ083_UNKNOWN_ENTRY.txt",
+      "bytes": 7926,
+      "sha256": "5bab47a923af9e7e5d260da0ca2a3c37f7beaedb4de52360d2570c2371075487"
+    },
+    {
+      "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    }
+  ],
+  "bounds": {
+    "outgoing_frames": 8,
+    "outgoing_frame_bytes": 16384,
+    "incoming_frames": 8,
+    "incoming_frame_bytes": 65536,
+    "incoming_total": 524288,
+    "queues": 9,
+    "stderr": 4096,
+    "pid": 128,
+    "closed": 256,
+    "startup_seconds": 4,
+    "process_wait_seconds": 3,
+    "reader_join_seconds": 2,
+    "job_active_limit": 2,
+    "job_cpu_seconds": 10,
+    "job_memory_bytes": 1073741824
+  },
+  "scope": "Source-only Windows qualification byte bridge to official public ClientSession. Exact TLS parent/copier/dialogue still pending before any execution",
+  "executed": false,
+  "reviewed": false,
+  "cleanup_correction": {
+    "prior_heads": {
+      "equity-features": "777f6a111558e5d685b00dae1e848feaa3e15a94",
+      "equity-feature-workers": "fb36f6dc91b2df2ca2504789c6f35f4cdb30854f"
+    },
+    "prior_source_bytes": 20219,
+    "prior_source_sha256": "66a0fb7471b9c0a993581cb192cd178c0a28a4df5eeb6cd702ece1c640f9c30f",
+    "review_report_sha256": "ad1b35b4fe72dcb6a414b050e9483cb09e55aae90a919e93c40ae460dc949659",
+    "finding": "P2 pipe/thread cleanup inspection can mask active exception or skip stream closes; every inspection now executes inside clean callback",
+    "executed": false
+  },
+  "context_cleanup_correction": {
+    "prior_heads": {
+      "equity-features": "2ec56dfffd5859aee81673702ba95f567ac938ac",
+      "equity-feature-workers": "d92c40befbaf4a0ac25145d233514ba2742b2c7e"
+    },
+    "prior_source_bytes": 20319,
+    "prior_source_sha256": "75d64fc25931b1eded48fd7775add1e365d614c1b92623d2b70678b80df29d69",
+    "review_report_sha256": "473771ba7d72e4fbe69defadfa2a8d1531661ac3ba3ecbaa0b91c7b6c3c70b15",
+    "finding": "P2 yielded-context stream close could mask active dialogue and skip explicit stop/cancel; each cleanup attempted and original preserved",
+    "executed": false
+  },
+  "stop_cleanup_correction": {
+    "prior_heads": {
+      "equity-features": "731d1a40433416baf59caf0b0c0123e4c45b685c",
+      "equity-feature-workers": "ae7a50cead5d7361d0f86d2e5001ae2c98a5388a"
+    },
+    "prior_source_bytes": 20704,
+    "prior_source_sha256": "df841289172cece3abd53830f00bc71bc6bcbc1f7dcd07f752c28aa3d969caa6",
+    "review_report_sha256": "22f3752fcba829925ff92b199b5a83c8aadf1cf10e02e2ae770dd30fb77386e1",
+    "finding": "P2 direct outer stop callback masks active original/skips ownedcleanup; now guarded by clean",
+    "executed": false
+  }
+}

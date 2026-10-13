@@ -1,0 +1,294 @@
+{
+  "schema": "eq083.reference-process.pre-execution.v1",
+  "bases": {
+    "equity-features": "188dce12a0ee7376100b069bd96b5f9b3e8f200f",
+    "equity-feature-workers": "99ce76f18dc812058365e4ffd037d1cc1c9c6135"
+  },
+  "source_pin": {
+    "commit": "99ce76f18dc812058365e4ffd037d1cc1c9c6135",
+    "path": "packages/service/src/equity_feature_service/_containment.py",
+    "bytes": 28231,
+    "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd"
+  },
+  "qualification_source": {
+    "bytes": 11944,
+    "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+  },
+  "scope": "Windows 64-bit qualification source only, not executed or reviewed; exact fault parent/copier integration and renewed review still required before any new native/socket/copy/probe execution",
+  "imports": [
+    "ctypes",
+    "os",
+    "subprocess",
+    "sys",
+    "time",
+    "ctypes.wintypes",
+    "msvcrt"
+  ],
+  "fixed_argv": {
+    "length": 12,
+    "executable": "sys.executable",
+    "flags": [
+      "-I"
+    ],
+    "reference_owner_arguments": 9
+  },
+  "job": {
+    "active_process_limit": 2,
+    "job_cpu_100ns": 100000000,
+    "job_memory_bytes": 1073741824,
+    "limit_flags": 8716,
+    "attribute_job_list": 131085,
+    "attribute_handle_list": 131074,
+    "creation_flags": 134743044
+  },
+  "bounds": {
+    "command_utf16_units_including_nul": 32760,
+    "attributes_bytes": 65536,
+    "pipe_buffer_bytes": 4096,
+    "initial_parent_handles": 6,
+    "child_inherited_handles": 3,
+    "wait_max_seconds": 4,
+    "cleanup_launcher_seconds": 3,
+    "cleanup_job_seconds": 3
+  },
+  "ownership": [
+    "CreateProcessW suspended with exact job and handle list attributes",
+    "Verify launcher membership before ResumeThread",
+    "Validate positive non-bool DWORD entry PID distinct from launcher PID and retain OpenProcess handle after same-job membership verification",
+    "Observe entry handle exit and separately launcher exit/reap",
+    "Failure cleanup terminates entire owned job and verifies active process count zero before closing job handle"
+  ],
+  "pid_diagnostic": "eq083-reference-fault-pid-diagnostic-reviewer-report.json",
+  "failed_execution": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6106903171",
+  "windows_only": true,
+  "linux_ownership_design_pending": true,
+  "runtime_unchanged": true,
+  "executed": false,
+  "reviewed": false,
+  "review_history": {
+    "initial_heads": {
+      "equity-features": "d9e8a36b00ac77d134302c9f3a516b17046891ed",
+      "equity-feature-workers": "03c71a21b2989827bbec8d0fd95f89206601aaf9"
+    },
+    "disposition": "REWORK",
+    "finding": "P2 launcher PID admitted as entry; exact guard added before OpenProcess",
+    "report": {
+      "disposition": "REWORK one entry identity guard; atomic ownership and ordinary constructor cleanup source paths otherwise pass inert review",
+      "heads": {
+        "equity-features": "d9e8a36b00ac77d134302c9f3a516b17046891ed",
+        "equity-feature-workers": "03c71a21b2989827bbec8d0fd95f89206601aaf9"
+      },
+      "source_bytes": 11927,
+      "source_sha256": "3c4683e781dc1db654b6878f3976550cc6f67b79351daf80137fdfb8f8e5f161",
+      "constructor_cases": [
+        {
+          "fault": null,
+          "outcome": "owned and closed",
+          "resumed": true,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CreateJobObjectW",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "SetInformationJobObject",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "QueryInformationJobObject",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CreatePipe",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "SetHandleInformation",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "InitializeProcThreadAttributeList",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "UpdateProcThreadAttribute",
+            2
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CreateProcessW",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "IsProcessInJob",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "ResumeThread",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        },
+        {
+          "fault": [
+            "CloseHandle",
+            1
+          ],
+          "outcome": "original exception",
+          "resumed": false,
+          "live_handles": 0,
+          "live_fds": 0
+        }
+      ],
+      "fdopen_fault": true,
+      "entry_cases": [
+        {
+          "pid": true,
+          "rejected_before_open": true
+        },
+        {
+          "pid": 0,
+          "rejected_before_open": true
+        },
+        {
+          "pid": -1,
+          "rejected_before_open": true
+        },
+        {
+          "pid": 4294967296,
+          "rejected_before_open": true
+        },
+        {
+          "pid": "2002",
+          "rejected_before_open": true
+        },
+        {
+          "fault": "OpenProcess",
+          "original_exception": true,
+          "resources_closed": true
+        },
+        {
+          "fault": "IsProcessInJob",
+          "original_exception": true,
+          "resources_closed": true
+        },
+        {
+          "fault": "GetProcessId",
+          "original_exception": true,
+          "resources_closed": true
+        }
+      ],
+      "launcher_pid_admitted_as_entry": true,
+      "cleanup_cases": [
+        {
+          "fault": "TerminateJobObject",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 0
+        },
+        {
+          "fault": "WaitForSingleObject",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 0
+        },
+        {
+          "fault": "QueryInformationJobObject",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 0
+        },
+        {
+          "fault": "CloseHandle",
+          "fixed_failure": true,
+          "ownership_not_claimed": true,
+          "remaining_mock_handles": 1
+        }
+      ],
+      "findings": [
+        {
+          "priority": 2,
+          "title": "Launcher PID admitted as actual entry PID",
+          "file": "docs/EQ083_REFERENCE_PROCESS.txt",
+          "function": "WindowsReferenceChild.verify_entry",
+          "evidence": "verify_entry(child.pid) accepts same-job launcher handle as entry; entry_pid equals launcher pid and entry_exited duplicates launcher observation.",
+          "correction": "For the frozen verified Windows redirector topology require entry PID != launcher PID before opening the entry handle; deny substituted launcher markers. Keep direct-executable topology separately explicit rather than assuming it is this two-process profile."
+        }
+      ],
+      "checks": [
+        "Three exact UTF8 mirrored assets; source AST/compile and accepted containment pin checked.",
+        "Exact five allowed docs paths per repo, protected runtime/test/build/workflow/schema inputs unchanged; Atul attribution and no coauthors.",
+        "Mock suspended creation asserts JOB_LIST+HANDLE_LIST before create, only three inheritable child ends and distinct launcher/entry positive PID normal case.",
+        "Valid constructor plus eleven API fault locations and fdopen ownership transfer failure clean mock resources and preserve original injected error.",
+        "Malformed PID types/ranges rejected before OpenProcess; entry open/membership/id-query failures preserve original and close temporary handle.",
+        "Termination/wait/job accounting/handle-close faults fail fixed cleanup outcome without ownership_closed claim."
+      ],
+      "limits": [
+        "Only exact source execution with fake WinDLL functions, fake CRT adoption and fake streams; no real Win32 API, subprocess, installed product/reference/native/setup/socket/copy/install/probe invocation.",
+        "Mock cleanup faults cannot establish actual OS cleanup; a failed CloseHandle may retain a native resource and the helper correctly fails rather than claiming confirmed close.",
+        "Windows-only source; integrated parent/copier and Linux ownership design still require separate review. No actual fault PASS, Ready/full24/forms/artifact/release qualification.",
+        "One read-only git show attempt was initially issued from parent directory and failed before reads; exact repo-qualified Git inspection used afterward."
+      ]
+    },
+    "renewed_review_pending": true
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "eq083-windows-native-file-identity-failed-execution-v1",
+  "admitted": false,
+  "disposition": "FAILED_NATIVE_POST_METADATA_COMPARISON",
+  "owner_permission": "Direct yesplease scoped source-reviewed readonlybaselinepreReady; actualfreshmapsTestafterguardedReady",
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6116822526",
+  "invocation": {
+    "source_heads": {
+      "equity-features": "b599ed130604ca8f0a34c34876b5f7c905941520",
+      "equity-feature-workers": "15e7954bd0d0c00c5a7433e8f8bb2107d344862f"
+    },
+    "source_bytes": 49213,
+    "source_sha256": "bb81622ba9102a3701d0cf3b1e6414e368e219e59e4ec15137c63e66464f5c58",
+    "interpreter": "Existing Windows CPython3.12.10 x64 BASE direct -I-B-S; exactprivatepath outsideGit",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Direct human yes please to reviewed readonly baseline preReady and actual fresh installation maps Test after Ready; bounded reviewed diagnostic correction same scope",
+    "exit_code": 1,
+    "elapsed_seconds": 0.2491202,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 1767,
+    "stderr_sha256": "c10a88d93d559d5316018ff79bef975de5cfe6837e1a6a2db7e1c2761e176cbc",
+    "admitted": false,
+    "scope": "Readonly Windows baseline diagnostic; no product/form/resolver/Ready admission"
+  },
+  "independent_failure_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "b599ed130604ca8f0a34c34876b5f7c905941520",
+      "equity-feature-workers": "15e7954bd0d0c00c5a7433e8f8bb2107d344862f"
+    },
+    "source": {
+      "bytes": 49213,
+      "sha256": "bb81622ba9102a3701d0cf3b1e6414e368e219e59e4ec15137c63e66464f5c58"
+    },
+    "disposition": "DIAGNOSED_FAILED_NATIVE_METADATA_DRIFT",
+    "findings": [],
+    "exit_code": 1,
+    "elapsed_seconds": 0.2491202,
+    "raw_log_sha256": "c10a88d93d559d5316018ff79bef975de5cfe6837e1a6a2db7e1c2761e176cbc",
+    "evidence": {
+      "invocation_receipt_bytes": 1021,
+      "invocation_receipt_sha256": "5c90aae902cae9083218d3d7dc08ac2f14a900d21455ca44f9138e1dada18582",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 1767,
+      "stderr_sha256": "c10a88d93d559d5316018ff79bef975de5cfe6837e1a6a2db7e1c2761e176cbc",
+      "failing_function": "actual_windows_file",
+      "failing_line": 235,
+      "error": "Windows native metadata drift",
+      "phase": "first discovery runtime_paths / native post-read metadata comparison",
+      "actual_differing_fields": "UNKNOWN/no note",
+      "post_comparison": "fd OR path against baseline, short-circuit"
+    },
+    "diagnosis": {
+      "established": "Trace reached the full native post-read comparison. Earlier initial fd/path native equality, exact CPython mode/creation-change bridge, bounded read EOF/size/borrowed-handle and Python same-interface postchecks did not raise in this invocation. One native postview differs from baseline; no differing fields or full snapshots were emitted.",
+      "not_established": [
+        "Whether AccessTime, allocation, identity, attributes, times or any other native field changed.",
+        "Whether fdpost differed and pathpost was skipped, or fdpost matched and pathpost differed.",
+        "A completed content SHA report, full inventory/Python-origin capture/PASS/Ready/form/resolver/nativeuniformbinding or physicalcleanup proof.",
+        "File mutation/read-induced metadata cause, hostile action or accepted product defect."
+      ],
+      "next_source_design": "Freeze a bounded private note containing complete closed native before/obtained-after views plus named differing fields and sampled-view markers, then reject unchanged. No field omission/tolerance/AccessTime normalization or re-read/retry. If evaluating both fdpost andpathpost once before comparison, declare fixed normal12-query count unchanged but the additional previously short-circuited path acquisition/3queries on fdpost mismatch. Keep at most2filehandles, originalerror priority and all close attempts. Alternatively preserve short-circuit and mark pathpost explicitly not sampled whenfdpost mismatches."
+    },
+    "continuity": {
+      "source_rework": "Original49036 full133+5REWORK preserved; two pre-execution source corrections passed165inert controls only.",
+      "runtime_qualification": "Initial stat-interface rejection not encountered here, but original actual failure remains FAILED; reaching later guard does not qualify whole binding or close runtime gate.",
+      "prior_controls": "165source controls and all earlier suites inherited history, not rerun during diagnosis."
+    },
+    "checks": [
+      "Read-only exact raw receipt/sourceheads/sourceSHA/exit/time/stdout+stderr hashes verified; source AST inspected and short-circuit branch identified.",
+      "OriginalREWORK2findings and corrective165scope retained and checked; no actual metadata reread."
+    ],
+    "tool_only_history": [],
+    "limitations": [
+      "Source/log/receipt diagnosis only, no actual stat/native handles/msvcrt/observer/platform/process/API/preflight/hashbaseline/whole-module or source-test rerun, setup/copy/install/native/TLS operation.",
+      "AccessTime drift is possible but unobserved. All full native field comparisons and conservative AccessTime denial remain required pending separately reviewed source changes and genuine evidence.",
+      "Private paths/PID/metadata identity remain internal; no complete discovery/cleanup/host authority/freshforms/Linux/Ready/release claim."
+    ]
+  },
+  "established": "Trace passed initial fd/path equivalent native identity and explicit CPython mode/ctime view binding, bounded samefd EOFsize/handle and Python same-interfacepost checks, then fullnativepost unequal. No returned completefilehash/discoveryrecord.",
+  "unknown": "Differing native fields and fdpost versuspathpost stage. AccessTime onlyhypothesis; original OR shortcircuit may skip pathpost.",
+  "next": "Exact SOURCE diagnostic retains shortcircuit: existingfdpost snapshotonce, diff->closedPRIVATEnote stagefd/pathnot_sampled+sameerror; otherwiseexistingpathpost once anddiff->notestagepath+sameerror. Purefullbeforeafter12key metadata note<=4096, no additional API on failure/no retries/tolerance/AccessTime dropping. Reviewsourcebeforeanychangedreadonlyrun.",
+  "limitations": [
+    "No completed discovery/PASS/cleanup/Ready/form/Linux/fullresolver or broader execution authority.",
+    "Original49036SOURCEtwoP2REWORK/full133+5; corrected49213SOURCE165fakecontrols; all39184/37723/1006actualfailed histories remainunchanged.",
+    "No newproduct/install/pip/collector/SDKcrypto/nativeworker/TLS/certificate-key operations; currentENVLinuxfalsekeysuntouched."
+  ]
+}

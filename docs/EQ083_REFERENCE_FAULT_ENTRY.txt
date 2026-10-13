@@ -1,0 +1,109 @@
+"""Frozen trusted EQ083 reference-client entry; not a public loader."""
+import sys,json,re,hashlib,os
+if sys.flags.isolated!=1:raise ValueError('owned isolated reference')
+from pathlib import Path
+if len(sys.argv)!=10:raise ValueError('owned arguments')
+origin,fixture,principal,pid_marker,case=sys.argv[1:6]
+if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535 or principal not in ('A','B'):raise ValueError('owned origin')
+if case not in ('trades','bars','quotes','trades-adjacent-large-ns'):raise ValueError('owned case')
+if len(fixture)>1024 or len(pid_marker)>1024:raise ValueError('owned path bounds')
+import equity_feature_client,equity_feature_mcp
+if not all('site-packages' in Path(v.__file__).resolve().parts for v in (equity_feature_client,equity_feature_mcp)):raise ValueError('owned installed modules')
+from equity_feature_client import RemoteClient,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation
+from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration,RawSliceRegistration
+with Path(fixture).open('rb') as stream:raw=stream.read(76772)
+if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29':raise ValueError('owned fixture')
+fixtures=json.loads(raw)
+index=next(n for n,v in enumerate(fixtures['native_cases']) if v['case']==case)
+producer=fixtures['native_cases'][index]['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+rawcase=fixtures['raw_cases'][-1 if index==3 else index];data=rawcase['expected_raw_payload'];scope=data['scope']
+rawexpected=RawExpectation(DatasetKey(**data['dataset']),ScopeKey(scope['instrument_id'],scope['session_id'],int(scope['start_ns']),int(scope['end_ns'])),rawcase['data_kind'],tuple(v['name'] for v in data['columns']))
+changed=expected.context_json();changed['registry_snapshot']='0'*64 if changed['registry_snapshot']!='0'*64 else '1'*64
+bad_registry=ProducerExpectation(changed,expected.scope,expected.executed_features,expected.backend_id,expected.backend_version)
+profile=MCPProfile('eq083-reference-fault-'+case,(RawSliceRegistration('raw',rawexpected),),(CommandRegistration('command',expected),CommandRegistration('bad-registry',bad_registry)),60)
+from time import monotonic,sleep
+arm,entered,release=(Path(v) for v in sys.argv[7:10])
+mode=sys.argv[6]
+modes=('provider-runtime','provider-interrupt','clock-before-bool','clock-before-negative','clock-before-float','clock-before-none','clock-after','active-eof-runtime','active-eof-interrupt','partial-output')
+if mode not in modes or any(len(str(v))>1024 for v in (arm,entered,release)):raise ValueError('owned fault arguments')
+clock_fault=False;gate_released=False;clock_samples=0
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+def publish(path,value,limit):
+ data=canonical(value)
+ if len(data)>limit or path.exists() or path.with_name(path.name+'.complete').exists():raise ValueError('owned fault marker')
+ temporary=path.with_name(path.name+'.pending');temporary.write_bytes(data);temporary.replace(path);path.with_name(path.name+'.complete').mkdir()
+def controlled(path):
+ complete=path.with_name(path.name+'.complete')
+ if not complete.exists():return False
+ if not complete.is_dir():raise ValueError('owned fault control directory')
+ with path.open('rb') as stream:data=stream.read(65)
+ value=json.loads(data)
+ if len(data)>64 or type(value) is not dict or set(value)!={'armed'} or value['armed'] is not True:raise ValueError('owned fault control payload')
+ return True
+def clock():
+ global clock_fault,clock_samples
+ clock_samples+=1
+ if clock_samples>64:raise ValueError('owned clock sample cap')
+ if mode.startswith('clock-before-') and controlled(arm):
+  clock_fault=True
+  return {'clock-before-bool':True,'clock-before-negative':-1,'clock-before-float':1.5,'clock-before-none':None}[mode]
+ return True if clock_fault else 1
+provider_calls=0
+def provider():
+ global provider_calls,clock_fault,gate_released
+ if provider_calls>=2:raise ValueError('owned fault provider cap')
+ provider_calls+=1
+ if mode.startswith('provider-'):
+  if not controlled(arm):raise ValueError('owned provider not armed')
+  if mode=='provider-interrupt':raise KeyboardInterrupt('eq083-synthetic-private-token-path')
+  raise RuntimeError('eq083-synthetic-private-token-path')
+ if mode.startswith('active-eof-'):
+  if not controlled(arm):raise ValueError('owned EOF not armed')
+  publish(entered,dict(pid=os.getpid(),provider_calls=provider_calls,marker='eq083-provider-entered'),256)
+  until=monotonic()+3
+  while not controlled(release):
+   if monotonic()>=until:raise ValueError('owned provider release timeout')
+   sleep(.01)
+  gate_released=True
+  if mode=='active-eof-interrupt':raise KeyboardInterrupt('eq083-synthetic-private-token-path')
+  raise RuntimeError('eq083-synthetic-private-token-path')
+ if mode=='clock-after' and provider_calls==2:
+  if not controlled(arm):raise ValueError('owned postresponse clock not armed')
+  clock_fault=True
+ return principal*43
+class Output:
+ def __init__(self,stream):self.stream=stream;self.full_frames=0;self.partial_bytes=0;self.partial_length=0;self.partial_sha=None
+ def write(self,frame):
+  if type(frame) is not bytes or not frame.endswith(b'\n') or len(frame)>65536:raise ValueError('owned frame bound')
+  if mode=='partial-output' and controlled(arm):
+   if self.full_frames!=2 or self.partial_bytes or len(frame)<=64:raise ValueError('owned partial output order')
+   self.partial_length=len(frame);self.partial_sha=hashlib.sha256(frame).hexdigest()
+   count=self.stream.write(frame[:64]);self.stream.flush()
+   if count!=64:raise ValueError('owned partial physical write')
+   self.partial_bytes=count
+   return count
+  if self.full_frames>=4:raise ValueError('owned full frame cap')
+  count=self.stream.write(frame)
+  if count!=len(frame):raise ValueError('owned full physical write')
+  self.full_frames+=1;return count
+ def flush(self):self.stream.flush()
+client=RemoteClient(origin,provider,attempts=3,retry_delay=0,budget=5)
+server=StdioServer(client,profile)
+if mode.startswith('clock-'):server._ledger._clock=clock
+marker=Path(pid_marker)
+publish(marker,dict(pid=os.getpid()),128)
+output=Output(sys.stdout.buffer)
+server.run_stdio(sys.stdin.buffer,output)
+if not server._closed or not client._closed or server._ledger._records or server._ledger._reservations:raise ValueError('owned fault close unconfirmed')
+if mode.startswith('clock-before-'):
+ if provider_calls!=0 or not clock_fault or not controlled(arm):raise ValueError('owned predispatch clock facts')
+elif mode=='clock-after':
+ if provider_calls!=2 or not clock_fault:raise ValueError('owned postresponse clock facts')
+elif mode=='partial-output':
+ if provider_calls!=1 or output.full_frames!=2 or output.partial_bytes!=64 or output.partial_length<=64:raise ValueError('owned partial output facts')
+elif mode.startswith('active-eof-'):
+ if provider_calls!=1 or not gate_released:raise ValueError('owned active provider facts')
+elif provider_calls!=1:raise ValueError('owned provider privacy facts')
+publish(marker.with_name(marker.name+'.closed'),dict(pid=os.getpid(),provider_calls=provider_calls,marker='eq083-reference-fault-closed',mode=mode,server_closed=True,client_closed=True,records=0,reservations=0,clock_fault=clock_fault,clock_samples=clock_samples,gate_released=gate_released,full_frames=output.full_frames,partial_bytes=output.partial_bytes,partial_length=output.partial_length,partial_sha256=output.partial_sha),512)

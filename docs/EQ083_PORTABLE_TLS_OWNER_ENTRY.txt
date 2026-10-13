@@ -1,0 +1,165 @@
+import sys,time,json,hashlib,os,stat,re
+from pathlib import Path
+if len(sys.argv)!=9 or sys.flags.isolated!=1 or sys.flags.optimize!=0:raise ValueError('P1')
+import ssl
+zd=Path(sys.argv[2]);zs=sys.argv[8]
+if not zd.is_absolute()or zd.resolve()!=zd or '..'in zd.parts or len(str(zd))>1024 or not re.fullmatch('[0-9a-f]{64}',zs):raise ValueError('P2')
+def zpairs(items):
+ d={}
+ for k,v in items:
+  if k in d:raise ValueError('P3')
+  d[k]=v
+ return d
+with(zd/'certificate-record.json').open('rb')as f:zr=f.read(16385)
+if not 0<len(zr)<=16384 or hashlib.sha256(zr).hexdigest()!=zs:raise ValueError('P4')
+zr=json.loads(zr,object_pairs_hook=zpairs)
+if type(zr)is not dict or zr.get('schema')!='eq083.synthetic-certificate.v1'or zr.get('cryptography_version')!='50.0.2'or type(zr.get('entries'))is not list or len(zr['entries'])!=2:raise ValueError('P5')
+zc={}
+for ze,(zn,za,zi)in zip(zr['entries'],(('valid','127.0.0.1',8301),('wrong','127.0.0.2',8302))):
+ if type(ze)is not dict or(ze.get('role'),ze.get('address'),ze.get('serial'))!=(zn,za,zi)or type(ze['serial'])is not int:raise ValueError('P6')
+ zc[zn]={}
+ for zk,zf in(('cert','certificate'),('key','private_key')):
+  zv=ze.get(zf)
+  if type(zv)is not dict or set(zv)!={'name','bytes','sha256'}or zv['name']!=zn+'-'+zk+'.pem'or type(zv['bytes'])is not int or not 0<zv['bytes']<=8192 or type(zv['sha256'])is not str or not re.fullmatch('[0-9a-f]{64}',zv['sha256']):raise ValueError('P7')
+  zc[zn][zk]={'bytes':zv['bytes'],'sha256':zv['sha256']}
+m={}
+for zb,D in zc.items():
+ for J,W in D.items():
+  C=zd/(zb+'-'+J+'.pem')
+  if C.is_symlink():raise ValueError('T15')
+  with C.open('rb')as z4a:p=z4a.read(8193)
+  if len(p)!=W['bytes']or hashlib.sha256(p).hexdigest()!=W['sha256']:raise ValueError('T16')
+ l=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);l.minimum_version=ssl.TLSVersion.TLSv1_2
+ l.load_cert_chain(str(zd/(zb+'-cert.pem')),str(zd/(zb+'-key.pem')));m[zb]=l
+M=sys.argv[7]
+N=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+if M not in N:raise ValueError('T3')
+F=M in('extra-response-byte','truncated-response-byte','duplicate-content-length')
+Z=F or M=='actual-owner-denial'
+z=4 if Z else 0
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+z3a,z49,o,b=(Path(v)for v in sys.argv[3:7])
+z3e,z42,z4e,g,u=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+z42.ledger.credentials=tuple(type(c).provision(c.principal,('A'if n==0 else 'B')*43,0,3600000000000)for n,c in enumerate(z42.ledger.credentials))
+z3c=0;z40=0;S=None
+def z9(z51):return json.dumps(z51,sort_keys=True,separators=(',',':')).encode('ascii')
+def z46(z52):
+ with z3e.condition:
+  if len(z3e.jobs)!=1:raise ValueError('T17')
+  I=next(iter(z3e.jobs.values()));z50=time.monotonic()+3
+  while z3e._running is not None or I.expires_ns<=0:
+   z3b=z50-time.monotonic()
+   if not z52 or z3b<=0:raise ValueError('T27')
+   z3e.condition.wait(z3b)
+  z44=[len(I.native),len(I.wire),len(I.envelope),len(I.receipt)]
+  if I.state!='succeeded'or I.result_id is None or z3e.queue or u['reads']!=1 or not u['entered'].is_set()or len(u['sink_threads'])!=1:raise ValueError('T18')
+  if any(type(z43)is not int or z43<=0 for z43 in z44):raise ValueError('T19')
+  if type(I.held)is not int or not 0<I.held==sum(z44)<=262144 or z3e.total_retained!=I.held or z3e.retained!={I.principal:I.held}:raise ValueError('T20')
+  if type(I.expires_ns)is not int or not 0<I.expires_ns<=9223372036854775807:raise ValueError('T21')
+  return dict(job=I.job_id,result=I.result_id,state=I.state,expiry=I.expires_ns,held=I.held,sizes=z44,reads=u['reads'],running=z3e._running,queue=len(z3e.queue),sink_entries=len(u['sink_threads']))
+def X(U,z51,L):
+ p=z9(z51)
+ if len(p)>L or U.exists()or U.with_name(U.name+'.complete').exists():raise ValueError('T5')
+ V=U.with_name(U.name+'.pending');V.write_bytes(p);V.replace(U);U.with_name(U.name+'.complete').mkdir()
+z7=False;z4d=dict(accepts=0,success=0,failure=0);j=[];Y=[];z4f=[];A=[]
+def z6(s,z47):
+ global z3c
+ if z3c>=24 or z40==5:raise ValueError('T6')
+ z3c+=1
+ if not z7 or not F:return z42(s,z47)
+ if len(A)>=3:raise ValueError('T7')
+ G=[];z48=[]
+ def za(z51,B,t=None):
+  if z48 or t is not None or type(z51)is not str or z51!='200 OK'or type(B)is not list:raise ValueError('T22')
+  z48.append(z51);G.extend(B)
+  def E(p):raise ValueError('T23')
+  return E
+ H=z42(s,za);zf=[];K=0
+ try:
+  for ze in H:
+   if type(ze)is not bytes:raise ValueError('T28')
+   K+=len(ze)
+   if K>262144 or len(zf)>=4:raise ValueError('T29')
+   zf.append(ze)
+ finally:
+  h=getattr(H,'close',None)
+  if h is not None:h()
+ z8=b''.join(zf)
+ r=[z51 for O,z51 in G if O.lower()=='content-length']
+ if len(z48)!=1 or len(r)!=1 or r[0]!=str(len(z8))or not z8:raise ValueError('T8')
+ if sum(len(O)+len(z51)+4 for O,z51 in G)>8192:raise ValueError('T9')
+ z53=dict(original_bytes=len(z8),original_sha256=hashlib.sha256(z8).hexdigest())
+ if M=='extra-response-byte':T=z8+b'x'
+ elif M=='truncated-response-byte':T=z8[:-1]
+ else:G.append(('Content-Length',r[0]));T=z8
+ z53['forwarded_bytes']=len(T);A.append(z53)
+ z47(z48[0],G)
+ return[T]
+P=('settled','baseline','arm','restored','final')
+def Q(y):
+ global S,z7
+ z4c=(1,12,13 if Z else 12,16 if Z else 12,18+z)
+ z4b=z4c[z40]
+ x=3 if M in('untrusted-certificate','hostname-mismatch')and z40>=3 else 0
+ if z3c!=z4c[z40]or z4d!=dict(accepts=z4b+x,success=z4b,failure=x):raise ValueError('T10')
+ if z4f:raise ValueError('T11')
+ if any(i.fileno()!=-1 for i in j+Y):raise ValueError('T12')
+ if y=='settled':S=z46(True)
+ elif S is None or z46(False)!=S:raise ValueError('T24')
+ if y=='arm':z7=True
+ if y=='restored':
+  if len(A)!=(3 if F else 0):raise ValueError('T25')
+  z7=False
+ return dict(sequence=z40+1,action=y,mode=M,requests=z3c,tls=dict(z4d),faults=list(A),snapshot=S)
+z41=None;q=time.monotonic()+20
+try:
+ z41=qualification_server(z42);z41.set_app(z6);z41.timeout=.05
+ R=z41.get_request
+ def a():
+  if z4d['accepts']>=24:raise ValueError('T26')
+  i,z5=R();z4d['accepts']+=1;Y.append(i);z3f=None
+  try:
+   i.settimeout(2)
+   l=m['wrong'if z7 and M=='hostname-mismatch'else 'valid']
+   z3f=l.wrap_socket(i,server_side=True,do_handshake_on_connect=False)
+   j.append(z3f);z3f.settimeout(2);z3f.do_handshake();z4d['success']+=1
+   return z3f,z5
+  except BaseException:
+   z4d['failure']+=1
+   for w in(z3f,i):
+    if w is not None:
+     try:w.close()
+     except BaseException:z4f.append('failed handshake socket close')
+   raise
+ z41.get_request=a
+ X(z3a,dict(port=z41.server_port),128)
+ while z3c<=24:
+  if z49.exists()or time.monotonic()>=q:break
+  z45=o.with_name(o.name+'.'+str(z40+1))
+  if z40<5 and z45.with_name(z45.name+'.complete').is_dir():
+   with z45.open('rb')as z4a:p=z4a.read(129)
+   if len(p)>128:raise ValueError('T30')
+   z51=json.loads(p)
+   if type(z51)is not dict or set(z51)!={'sequence','action'}or type(z51['sequence'])is not int or z51['sequence']!=z40+1 or z51['action']!=P[z40]:raise ValueError('T31')
+   z3d=Q(z51['action']);z40+=1;X(b.with_name(b.name+'.'+str(z40)),z3d,1024)
+  z41.handle_request()
+ if z40!=5:raise ValueError('T13')
+finally:
+ z4=sys.exc_info()[0]is not None;e=list(z4f)
+ if z41 is not None:
+  try:z41.server_close()
+  except BaseException:e.append('server close')
+ for i in j+Y:
+  try:
+   i.close()
+   if i.fileno()!=-1:e.append('connection close')
+  except BaseException:e.append('connection close')
+ try:
+  if z3e.close(2)is not True:e.append('native exit unconfirmed')
+ except BaseException:e.append('native close')
+ if e and not z4:raise ValueError('T14')
+if z46(False)!=S:raise ValueError('T4')
+print(z9(dict(marker='eq083-tls-http-exited',mode=M,requests=z3c,sequence=z40,snapshot_sha256=hashlib.sha256(z9(S)).hexdigest())).decode('ascii'),flush=True)

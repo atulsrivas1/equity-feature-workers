@@ -1,0 +1,184 @@
+"""Qualification SOURCE only: pure hook JSON boundary, never a physical issuer.
+
+No filesystem/package/backend/process operations. The future owned runner must
+call these checks on bounded original bytes before ProjectBuilder reads output
+or converts requirement lists to sets. This module alone authorizes no operation.
+"""
+import json
+
+MAX_JSON_BYTES = 65536
+MAX_JSON_DEPTH = 8
+MAX_JSON_NODES = 1024
+BACKEND_ENV = {"_PYPROJECT_HOOKS_BUILD_BACKEND": "setuptools.build_meta"}
+PROJECTS = ("client", "mcp", "service", "workers")
+OPERATIONS = (
+    ("original", "get_requires_for_build_sdist"),
+    ("original", "build_sdist"),
+    ("sdist-first", "get_requires_for_build_wheel"),
+    ("sdist-first", "build_wheel"),
+    ("sdist-repeat", "get_requires_for_build_wheel"),
+    ("sdist-repeat", "build_wheel"),
+)
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def unique_object(pairs):
+    value = {}
+    for key, item in pairs:
+        require(key not in value, "duplicate JSON object key")
+        value[key] = item
+    return value
+
+
+def reject_constant(value):
+    raise ValueError("nonfinite JSON constant")
+
+
+def parse_control(raw):
+    require(type(raw) is bytes and 0 < len(raw) <= MAX_JSON_BYTES,
+            "control byte bound/type")
+    require(not raw.startswith(b"\xef\xbb\xbf"), "control BOM")
+    text = raw.decode("utf-8", "strict")
+    # Bound nesting before json.loads recursion or allocation; quoted brackets
+    # do not count, including escaped quotes and backslashes.
+    depth = 0
+    quoted = False
+    escaped = False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            require(depth <= MAX_JSON_DEPTH, "control nesting bound")
+        elif char in "]}":
+            depth -= 1
+            require(depth >= 0, "control nesting underflow")
+    require(not quoted and depth == 0, "control incomplete syntax")
+    value = json.loads(text, object_pairs_hook=unique_object,
+                       parse_constant=reject_constant)
+    nodes = 0
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        nodes += 1
+        require(nodes <= MAX_JSON_NODES, "control node bound")
+        if type(item) is dict:
+            pending.extend(item.values())
+            pending.extend(item.keys())
+        elif type(item) is list:
+            pending.extend(item)
+        elif type(item) is str:
+            require(not any(0xd800 <= ord(c) <= 0xdfff for c in item),
+                    "control unpaired surrogate")
+    require(type(value) is dict, "control object required")
+    return value
+
+
+def validate_input(raw, hook, output_directory=None):
+    value = parse_control(raw)
+    require(set(value) == {"kwargs"} and type(value["kwargs"]) is dict,
+            "hook input closed envelope")
+    require(hook in {x[1] for x in OPERATIONS}, "hook selection")
+    expected = {"config_settings": None}
+    if hook == "build_sdist":
+        require(type(output_directory) is str and output_directory,
+                "fixed owner output directory required")
+        expected["sdist_directory"] = output_directory
+    elif hook == "build_wheel":
+        require(type(output_directory) is str and output_directory,
+                "fixed owner output directory required")
+        expected.update(wheel_directory=output_directory, metadata_directory=None)
+    else:
+        require(output_directory is None, "query output directory forbidden")
+    require(value["kwargs"] == expected, "hook kwargs mismatch")
+    return value
+
+
+def validate_output(raw, hook, expected_basename=None):
+    value = parse_control(raw)
+    require(hook in {x[1] for x in OPERATIONS}, "hook selection")
+    require(set(value) == {"unsupported", "return_val", "warnings"},
+            "hook output closed success envelope")
+    require(value["unsupported"] is False, "unsupported hook")
+    require(type(value["warnings"]) is list and not value["warnings"],
+            "unexpected hook warnings")
+    returned = value["return_val"]
+    if hook.startswith("get_requires_for_build_"):
+        require(expected_basename is None, "query basename forbidden")
+        require(type(returned) is list, "raw requirement list required")
+        # Inspect every raw item BEFORE any set conversion. Every nonempty list
+        # is rejected for these fixed roots; no dependency resolver fallback.
+        seen = set()
+        for item in returned:
+            require(type(item) is str and 0 < len(item) <= 4096,
+                    "requirement item type/bound")
+            require(item not in seen, "duplicate raw requirement")
+            seen.add(item)
+        require(not returned, "unexpected dynamic build requirements")
+    else:
+        require(type(expected_basename) is str and 0 < len(expected_basename) <= 255,
+                "owner expected basename required")
+        require(all(ord(c) < 128 and (c.isalnum() or c in "._-")
+                    for c in expected_basename), "artifact basename spelling")
+        require(expected_basename[0].isalnum() and ".." not in expected_basename,
+                "artifact basename traversal")
+        suffix = ".tar.gz" if hook == "build_sdist" else ".whl"
+        require(expected_basename.endswith(suffix), "artifact suffix")
+        require(type(returned) is str and returned == expected_basename,
+                "artifact basename mismatch")
+    return value
+
+
+class HookLedger:
+    """One finite source proposal; not process ownership or resource proof.
+
+    Advance only after owned child actual exit, full raw output validation and
+    operation-specific archive/materialization evidence in the future runner.
+    This class deliberately accepts no supplied PASS token for those gates.
+    """
+    def __init__(self):
+        self.position = 0
+        self.active = None
+        self.failed = False
+
+    def begin(self, project, source_role, hook):
+        try:
+            require(not self.failed and self.active is None, "ledger not idle")
+            require(self.position < len(PROJECTS) * len(OPERATIONS), "ledger exhausted")
+            expected = (PROJECTS[self.position // len(OPERATIONS)],
+                        *OPERATIONS[self.position % len(OPERATIONS)])
+            require((project, source_role, hook) == expected, "ledger operation mismatch")
+        except BaseException:
+            self.failed = True
+            raise
+        self.active = expected
+        return expected
+
+    def finish_raw(self, raw, expected_basename=None):
+        require(not self.failed and self.active is not None, "ledger no active hook")
+        try:
+            result = validate_output(raw, self.active[2], expected_basename)
+        except BaseException:
+            self.failed = True
+            raise
+        self.active = None
+        self.position += 1
+        return result
+
+    def abort(self):
+        self.failed = True
+
+    def raw_complete(self):
+        return (not self.failed and self.active is None and
+                self.position == len(PROJECTS) * len(OPERATIONS))

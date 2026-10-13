@@ -1,0 +1,57 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "disposition": "SOURCE_RESEARCH_CONDITIONAL_VIABILITY_NO_SELECTED_OR_ADMITTED_MECHANISM",
+    "scope": "Official upstream documentation/source text only",
+    "version_selected": false,
+    "new_tests": 0,
+    "physical_qualification": false,
+    "conclusion": "WinFsp exposes suitable interception points for implementing a bounded allocated-storage/live-node filesystem. The stock MEMFS example is not the requested global quota/outside-writer boundary. A custom, frozen callback/state/security/cache lifetime contract is required before integration; no current-host support, operational grant or complete issuer follows from this research.",
+    "upstream_memfs_observations": {
+      "source": "https://raw.githubusercontent.com/winfsp/winfsp/master/tst/memfs/memfs.cpp",
+      "facts": [
+        "Create checks MaxFileNodes against FileNodeMap count; SetFileSizeInternal checks per-file MaxFileSize before reallocating. No explicit global live allocation reservation ledger is present in these paths.",
+        "Cleanup deletes namespace entries, while Close dereferences nodes and deletion frees FileData at final reference release. Rename can remove a replaced target while references survive.",
+        "The default root security descriptor grants Everyone full access. Named streams, reparse points, EA/WSL/device-control and optional delayed I/O are example features, not a minimal qualification policy.",
+        "LargeHeap allocations round beyond advertised file allocation units; the default funnel initializes the heap without a finite maximum. Node/security/metadata allocations are separate.",
+        "Source licensing states GPLv3 or a commercial license; no licensing/provenance choice is made here."
+      ],
+      "inference": "Namespace count multiplied by per-file size cannot be treated as a bound on all live objects/backing memory. Deleted-open or replaced nodes must remain charged until actual final release; a heap ceiling alone does not cover every allocation."
+    },
+    "concurrency_and_lifetime_contract": {
+      "source": "https://raw.githubusercontent.com/winfsp/winfsp/master/inc/winfsp/winfsp.h",
+      "facts": "Fine guards serialize namespace mutations but permit concurrent I/O on different files. Coarse guards serialize filesystem accesses. Cleanup is not final Close, may precede further operations even for deleted files, and cannot return a failure status.",
+      "required_design": [
+        "One linearizable checked reservation ledger for every live node and rounded allocation, including directories, streams if allowed, pending creates, deleted-open/replaced nodes and asynchronous requests. Reserve before allocation or acceptance; commit once, rollback failures, release only after real final free.",
+        "Cover Create, Overwrite, Write/append, SetFileSize, Rename/replacement, delete disposition/Cleanup/Close and all additional allocation APIs. Disable unsupported streams/reparse/EA/WSL/device controls explicitly rather than leave uncharged paths.",
+        "Freeze checked arithmetic, allocation rounding, deterministic quota failure, refcount ownership and cancellation/unmount drain. Void Cleanup/Close cannot be the place to retroactively reject an already exceeded cap; internal failure must poison the owner and completion evidence."
+      ]
+    },
+    "cached_and_mapped_io": {
+      "source": "https://raw.githubusercontent.com/winfsp/winfsp/master/src/sys/write.c",
+      "facts": "Fast/cached writes may use the kernel cache. Cached EOF extension first sends SetInformation; paging writes are forwarded with ConstrainedIo and cannot extend EOF. An immediate callback-count policy therefore does not observe every application write or dirty mapped-page event.",
+      "required_design": "A current allocated-capacity quota can reserve all growth before cache acceptance and keep charges through mappings/lazy writes. It is distinct from cumulative bytes written, cache/dirty-page RAM, I/O counts or a universal mapping denial. Specify precisely which resource is bounded, then prove all section/EOF/allocation paths satisfy it or freeze a supported cache/mapping restriction. No such complete proof or configuration was performed.",
+      "cleanup_source": "https://raw.githubusercontent.com/winfsp/winfsp/master/src/sys/file.c",
+      "cleanup_fact": "The driver retains file-node context until Close to accommodate mapped views and write-behind when files are reopened. Process exit or an empty namespace alone cannot release storage charges or prove filesystem quiescence."
+    },
+    "outside_writer_and_confinement": {
+      "source": "https://raw.githubusercontent.com/winfsp/winfsp/master/inc/winfsp/fsctl.h",
+      "facts": "Create/rename requests carry access-token information; Write uses retained file contexts and may be paging I/O. The filesystem's authorization must bind opening contexts rather than assume every later write has the initiating user PID.",
+      "required_design": "Use a frozen restrictive volume/root security and actual process-identity/confinement contract. A mount name, private directory string, PID list or stock Everyone ACL does not exclude outside writers. AppContainer selective access remains a candidate for restricting child reach; it does not itself demonstrate that unrelated host processes cannot access the mount, or that all Python/backend reads and writes stay inside the intended roots.",
+      "appcontainer_primary": "https://learn.microsoft.com/en-us/windows/win32/secauthz/appcontainer-isolation"
+    },
+    "next_finite_source_work": [
+      "Freeze one custom filesystem adapter contract with explicit live-state invariants, every mutation callback, charging/rollback/final-release rules and minimal feature/caching policy; exercise concurrent reservation, delete-open, rename replacement and failure/drain state transitions with synthetic tests only after exact source review.",
+      "Integrate that adapter's lifetime/security/resource boundary into the one outer owner and process launcher, including filesystem host/driver identity and failure shutdown. Existing job limits must include all relevant owners; driver/cache memory is not assumed covered by the child job.",
+      "Keep native provenance/full resolver/actual host admission and operational setup absent until independently satisfied. Research an exact supported topology before identifying any concrete external fact that requires owner input; no premature input request."
+    ],
+    "source_receipt_limits": [
+      "Observed upstream master URLs as web text; no immutable release/version selected and no full-source byte-hash receipt or ABI verification claimed. Exact source/version/license/support pins belong to a future frozen candidate.",
+      "Only official repository/header/driver/example/docs and Microsoft AppContainer source documents were consulted. No third-party fork was used as evidence.",
+      "No driver/binary/library download, installation, compilation, native/API/process/mount/probe, host inventory, original archive/binary verification or rejected-task reattempt. No actual filesystem or concurrency test ran."
+    ]
+  },
+  "upstream_research_commit": "ebd50e1956dbf7c12db5b897fa9af5dce8f61675",
+  "scope": "Upstream official source research and original candidate transaction design, no selected/admitted mechanism or implementation",
+  "new_tests": 0
+}

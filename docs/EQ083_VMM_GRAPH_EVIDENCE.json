@@ -1,0 +1,647 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "SIXTEEN_IMMUTABLE_GENODE_VMM_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+    "disposition": "CURRENT_VMM_BUILD_ROUTES_ALLOCATION_AND_EXIT_PATHS_TRACED_WHOLE_SUBSYSTEM_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_release": "26.08",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "source_receipt_sha256": "63c2c8db89a299f050499807cbc8deedb8feded620d624a0bbc7d6e21722d89c",
+    "source_pins": [
+      {
+        "git_sha1": "104d7a8a0123bf277f45fbb65bee6b3b68a23ae2",
+        "sha256": "e88520dbd9efd0967bba0575e611788ce7c7657859617e301bc5b1576affacf9",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/ports/virtualbox7.port",
+        "path": "repos/ports/ports/virtualbox7.port",
+        "bytes": 16448
+      },
+      {
+        "git_sha1": "e36550b01cf61b9220b801ffba91c5d285215917",
+        "sha256": "afab2b665724c50268034f23275769f1c1956750b589f8efcbf51b3cd99bb5d8",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/ports/virtualbox7.hash",
+        "path": "repos/ports/ports/virtualbox7.hash",
+        "bytes": 41
+      },
+      {
+        "git_sha1": "b4788b01d885cf0933cb6fb4f9453a6b5dc0094d",
+        "sha256": "0eb471978fbd2d651c97093c6e3284be03ea406b96eef47a0ca1bd4343f871b2",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/README",
+        "path": "repos/ports/src/virtualbox7/README",
+        "bytes": 2212
+      },
+      {
+        "git_sha1": "34c99174c0e1f4fc87eb6f59001c80bd581c2ebf",
+        "sha256": "0894b818737d01d3cd7548c0a8773575d3fb8638ed24c8f36d49347cb3ffa17f",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/target.mk",
+        "path": "repos/ports/src/virtualbox7/target.mk",
+        "bytes": 2110
+      },
+      {
+        "git_sha1": "9cad938271a8d1ae18dac9fac106743d29a84910",
+        "sha256": "14e729a547177b04d667e75367821b9b9ba6322864f2beec8ce889665f69be77",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/lib/mk/virtualbox7-common.inc",
+        "path": "repos/ports/lib/mk/virtualbox7-common.inc",
+        "bytes": 5683
+      },
+      {
+        "git_sha1": "8dd9af9beccb23e522c7ebcb81386a96276aa65d",
+        "sha256": "4f4257003115e8361b021f575ecbd4b03d393edcc1ca7aeebb50c51032fb2b71",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/run/virtualbox7.run",
+        "path": "repos/ports/run/virtualbox7.run",
+        "bytes": 8773
+      },
+      {
+        "git_sha1": "81da6134488052146239da2e81684247ec3aafd0",
+        "sha256": "35055abef5e86ca094db294b3bd1fad701c5d8189645b748687180754a11695d",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/run/virtualbox7.vbox",
+        "path": "repos/ports/run/virtualbox7.vbox",
+        "bytes": 3263
+      },
+      {
+        "git_sha1": "d139bd9eaac407ab85d278cb4e8b45fc42ba90d9",
+        "sha256": "f9ab63f0c7c8b73bec92af2e52988da5a5eca65e7ee675d0c76c6ec741eb7112",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/main.cc",
+        "path": "repos/ports/src/virtualbox7/main.cc",
+        "bytes": 23834
+      },
+      {
+        "git_sha1": "a6cbfe63c4512887ea1d38b8eb4d97ca880f2de3",
+        "sha256": "7c1e1f49cc820617c100a5bf41b15ecb397436fd4cd10c3d5787640768a6d809",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_gmm.cc",
+        "path": "repos/ports/src/virtualbox7/sup_gmm.cc",
+        "bytes": 6183
+      },
+      {
+        "git_sha1": "c0fa586993a1062d312276fe4820967fa0ad553b",
+        "sha256": "79671984ab34b26d2c901e558a9daa27f9cf9a7e235a90d88645c518c5fefa9a",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_gmm.h",
+        "path": "repos/ports/src/virtualbox7/sup_gmm.h",
+        "bytes": 4974
+      },
+      {
+        "git_sha1": "ea47bce66a69d0d89d6510455b651f9c4dc155cc",
+        "sha256": "246f54d02efa8dba3fc85ee626d801f8935ee96ee1edd4341dce86571b207b10",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vm.cc",
+        "path": "repos/ports/src/virtualbox7/sup_vm.cc",
+        "bytes": 2851
+      },
+      {
+        "git_sha1": "4b251cbabfff6a40e22a6e62e04a02aa8809d5d0",
+        "sha256": "4949648a74fd33b5e6679d2458a175d1cc24e39157550529a66ab334e676de70",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vm.h",
+        "path": "repos/ports/src/virtualbox7/sup_vm.h",
+        "bytes": 1103
+      },
+      {
+        "git_sha1": "1c076294ade0a9bd9dc4d78fc20e52565593e39e",
+        "sha256": "75ad4a546609d8cac169305d53ed27df84afb64d76fecfa1874d61cd4fb95204",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pthread.cc",
+        "path": "repos/ports/src/virtualbox7/pthread.cc",
+        "bytes": 6532
+      },
+      {
+        "git_sha1": "bfb1cec714a7019d65effd38605052484696e330",
+        "sha256": "986b88bfb00f9c8eebb819cf81cc06e810c53a33e5b1a724023ed02867e89bfd",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pthread_emt.h",
+        "path": "repos/ports/src/virtualbox7/pthread_emt.h",
+        "bytes": 691
+      },
+      {
+        "git_sha1": "ebd5d54be983abcc9ca2452798387644b263c226",
+        "sha256": "d27b42ea039fb5d7513844a7b00a3aeae739e03a0662b1e9eb8b965f856b68b6",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/services/services.cc",
+        "path": "repos/ports/src/virtualbox7/services/services.cc",
+        "bytes": 1194
+      },
+      {
+        "git_sha1": "01c9e4066aabf7fd0fc55384955ba88e691f6c47",
+        "sha256": "ae9449f0c9943b91dd59636251f7ef4c32dbf9eea1074e744be1fc5450d56a00",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/libc.cc",
+        "path": "repos/ports/src/virtualbox7/libc.cc",
+        "bytes": 3163
+      }
+    ],
+    "total_bytes": 89055,
+    "facts": [
+      {
+        "paths": [
+          "repos/ports/ports/virtualbox7.port",
+          "repos/ports/ports/virtualbox7.hash"
+        ],
+        "fact": "The port declares VirtualBox7.2.14/GPLv3, upstream VirtualBox-7.2.14.tar.bz2 SHA384f293184c52fd51bc941c17d753b4019446f53a6b07c828adfb3e61fe0a500 and SDK7.2.14-174565.zip SHA7f388e22957f126535df297a3a6f258b293a39b73548485ba3257141175a3189, source filtering/generation and local integration. The companion hash is a port identity declaration, not independently acquired archive or built binary proof. Per-file integration headers also declare GPLv2-or-later; complete license/distribution applicability is not settled."
+      },
+      {
+        "paths": [
+          "repos/ports/src/virtualbox7/target.mk",
+          "repos/ports/lib/mk/virtualbox7-common.inc"
+        ],
+        "fact": "Target requires x86_64 and composes many VMM/device/storage/runtime/crypto/TPM libraries. Flags include64bit guests, native NEM, asynchronous completion, shared clipboard, guest control, USB, hardware virtualization and EFI. Common include declares bundled dependency versions and FreeBSD libc headers. These are actual Genode build declarations, not proof every feature is enabled safely in a selected graph, libraries audited, or exact guest CPython/native forms compatible."
+      },
+      {
+        "paths": [
+          "repos/ports/run/virtualbox7.run",
+          "repos/ports/run/virtualbox7.vbox"
+        ],
+        "fact": "The run scenario gives vbox1 RAM3000M/caps1800 but routes VM and default services to parent, GUI/clipboard/report services through other components and optional NIC through a router. It uses ROM/TAR disk inputs, optional RAM overlay, log/RTC/pipe/serial endpoints. The sample Ubuntu_64 guest has RAM2048,two CPUs, writable shared-folder and bidirectional clipboard declarations. These sample numbers/routes are not our frozen closed owner subtree, a total resource bound, or a file/node quota."
+      },
+      {
+        "fact": "GMM uses128MiB RAM slices in a32GiB virtual map, with range-allocator metadata in a libc allocator. New slice attachment loops, requesting8KiB RM RAM or2caps on shortage; other errors free the new dataspace. Pool growth ignores shrink requests; _alloc_pages can grow/recurse after fragmentation. free returns a logical range to the pool, not its RAM dataspace. Fixed map geometry does not bound all VMM/RM/kernel/provider costs, and these retry paths do not contain independent deadlines.",
+        "paths": [
+          "repos/ports/src/virtualbox7/sup_gmm.h",
+          "repos/ports/src/virtualbox7/sup_gmm.cc"
+        ],
+        "functions": [
+          "Sup::Gmm::_add_one_slice",
+          "Sup::Gmm::_update_pool_size",
+          "Sup::Gmm::_alloc_pages",
+          "Sup::Gmm::free"
+        ]
+      },
+      {
+        "fact": "VM allocation creates a page-aligned variable CPU-sized VM structure and a separate SUPPAGE metadata array; CPU records and vCPU registration add ownership. Full upstream destruction and free callsites are not provided by this small wrapper. No absence of a local destructor is promoted to a demonstrated leak; original vendor, support and process/session teardown sources remain necessary.",
+        "paths": [
+          "repos/ports/src/virtualbox7/sup_vm.cc",
+          "repos/ports/src/virtualbox7/sup_vm.h"
+        ],
+        "functions": [
+          "Sup::Vm::create",
+          "Sup::Vm::init"
+        ]
+      },
+      {
+        "fact": "Emulation threads use dedicated entrypoints,64KiB entrypoint stack plus configured secondary EMT stack, construction signal and blocking completion wait. Factory retains registered entrypoints; other threads delegate to libc pthread creation. The inspected entrypoint destructor body is empty and this file provides no complete bounded pthread join/cancel/drain policy. Member/libc/upstream lifetimes must be traced; no actual hanging or leak was executed.",
+        "paths": [
+          "repos/ports/src/virtualbox7/pthread.cc",
+          "repos/ports/src/virtualbox7/pthread_emt.h"
+        ],
+        "functions": [
+          "Pthread::Entrypoint",
+          "Pthread::Factory::create",
+          "create_emt_thread",
+          "pthread_create"
+        ]
+      },
+      {
+        "fact": "Startup polls state while Starting with1000ms sleep and no local elapsed/count limit. A PoweredOff event removes capslock ROM/monitors and submits exit; exit reports to parent. This is an event/parent lifecycle, not an independent witness that all guest/device/threads/session/kernel/storage backing is released within a project deadline.",
+        "paths": [
+          "repos/ports/src/virtualbox7/main.cc"
+        ],
+        "functions": [
+          "Main::_power_up_machine",
+          "Main::_power_down_machine",
+          "Main::_handle_exit"
+        ]
+      },
+      {
+        "paths": [
+          "repos/ports/src/virtualbox7/services/services.cc",
+          "repos/ports/src/virtualbox7/libc.cc",
+          "repos/ports/src/virtualbox7/README"
+        ],
+        "fact": "Service integration stores environment access for shared objects. statfs delegates to statvfs but substitutes illustrative nonzero block/free values when underlying fields are zero and warns about bogus shared-folder values; it cannot attest a hard backing quota. README documents GUI sessions and secure-boot/NVRAM configuration, including Windows11 options. Those declarations neither select a guest nor validate exact native artifact forms, side-effect isolation or disk/node lifetime."
+      }
+    ],
+    "source_inventory_summary": {
+      "combined_partial_bytes": 401711,
+      "new_text_bytes": 89055,
+      "new_files": 16,
+      "prior_partial_files_context_only": 39,
+      "prior_partial_bytes": 312656,
+      "combined_partial_files": 55,
+      "complete_vendor_closure": false
+    },
+    "conclusion": "The exact Genode port declares a real x64 VirtualBox7.2.14 integration, but sample routes and allocations are not the proposed single closed provider/owner domain. RM upgrades, retained GMM backing, vendor/thread lifetimes and parent exit must join the previously identified kernel/core donation and RCU obligations. Stock sample budgets and reported filesystem free space cannot replace physical reservation and finite teardown.",
+    "remaining_obligations": [
+      "Freeze exact supported port/configuration, all linked vendor/library/device/upstream sources and build/ABI/license identities without acquiring or executing them under this research scope.",
+      "Replace sample outside routes with one supported complete authority graph or include every parent/sibling/broker in reservations and failure control; deny or fully account shared folders, clipboard, logs, network, devices and reconfiguration.",
+      "Close GMM/RM/kernel upgrades, aligned slices/metadata/stacks/VCPU/session overlap and whole-file/node/retired backing budgets before acceptance.",
+      "Trace actual full VM/thread/libc/device shutdown and process/session/RCU cleanup, finite startup and failure controller conditions; parent exit is not allfree evidence.",
+      "Establish exact Windows/Linux images and CPython3.12x64 wheel/sdist fourforms/native resolver/source build closure before Ready/operations."
+    ],
+    "limitations": [
+      "Only16new saved UTF8 source texts were independently hashed and read as DATA; no source compile/import/execution, archive/binary/VM/kernel acquisition, install, patch application, API/native/host/probe/test.",
+      "Prior39texts not rehashed or rereviewed;55PARTIAL401711bytes are not entire vendor/configuration/guest/native forms/ABI/license/binary/host proof.",
+      "Missing local deadline/full teardown closure is source scope, not observed resource failure, leak, vendor bug or universal impossibility.",
+      "No selected dependency/topology/guest, implementation, Ready/operational approval or new mandatory human input. Rejected binary task not reattempted."
+    ],
+    "tool_only_history": [
+      "Initial batched keyword/source reading output was truncated; explicit narrow ranges supplied the relevant allocation/configuration/lifecycle bodies. No source operation or runtime failure occurred."
+    ],
+    "operational_authorization": false,
+    "ready_approval": false,
+    "selected_mechanism": false
+  },
+  "full_prior_kernel_progress_reports": {
+    "eq083-nova-progress-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "THIRTEEN_IMMUTABLE_CPU_SCHEDULER_TIMER_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+      "disposition": "RCU_EXECUTION_GATES_AND_DEFERRED_LIFETIMES_TRACED_WHOLE_TIMING_CONTRACT_PENDING",
+      "findings": [],
+      "newtests": 0,
+      "new_tests": 0,
+      "kernel_commit": "b5177517cae440940348af0406903f607ea73a46",
+      "source_receipt_sha256": "a724bf3ab47b68830c76a5ae30c76a553bb2aa08e95363f6899e4b35609dba80",
+      "source_pins": [
+        {
+          "path": "include/cpu.hpp",
+          "bytes": 9392,
+          "sha256": "3fc890328b70558200269f330988f43c7640976559a34f836036c05b08c524b6",
+          "git_sha1": "29cec74dc4c8adf11ed22de99c10ad310b825cd4",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "include/ec.hpp",
+          "bytes": 13919,
+          "sha256": "3ba130a227fad37c77260f4116f4f7d10e726112bffe581152dc9355c8169726",
+          "git_sha1": "7c3acfc074bac3a5af26d1ae915408ca1adb0b43",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "include/hazards.hpp",
+          "bytes": 1047,
+          "sha256": "dbecb4d55a340b7ce110ab8698e340486f483937a4c2e9066e404049227bdf3c",
+          "git_sha1": "cad54a55d06eec962e922a774fd5fc8233547313",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "include/hip.hpp",
+          "bytes": 5679,
+          "sha256": "ad730e0d68c03a3fa3374c591858eda03c317e942cb4eea29e9319fadac18b44",
+          "git_sha1": "0f2d342bdcea84332b73a22c3aca4fefbbfc5b94",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "include/lapic.hpp",
+          "bytes": 9116,
+          "sha256": "45841ff4bb8998d98ab66dbb671515b20d260225823d0f8142d5033ccd579507",
+          "git_sha1": "a8b85c103b6f00ff46a5a1f5816a238f28e9f169",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "include/sc.hpp",
+          "bytes": 3504,
+          "sha256": "f715151fde399dcb18ec455f6b66a9a028df5c52bbeea1c09725518dabd939fd",
+          "git_sha1": "a049fbf9997a3c8b6e41276545c7d3e68f18a4e5",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "include/timeout.hpp",
+          "bytes": 1245,
+          "sha256": "c66d2627584ef585e8331d4fb3f8a21f99f8e2b434690efc995a87c1592474d2",
+          "git_sha1": "9571f80a2d51d81e5fc3ff54b28247eec73e0172",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "src/cpu.cpp",
+          "bytes": 13572,
+          "sha256": "72ba9b0842ea5ac64cefdefd3daa2efdfd4a0d64dda41f7118239ea750f1bb39",
+          "git_sha1": "c17c63fb799c6493d845e99e9846441ac6d59881",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "src/ec.cpp",
+          "bytes": 21392,
+          "sha256": "f38981b205b6a162abe5fd935033b1fafb29c00799702af4ade2160b9619d15c",
+          "git_sha1": "6b15d03d59eb374f1066ddb16f78c5f477bad515",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "src/hip.cpp",
+          "bytes": 13142,
+          "sha256": "8ab0d66f4caafdee7bb046f3cbae09bf249d4b7a9098b66eb519a91bffae06c2",
+          "git_sha1": "a826f74373763576bd28dd273372bd987b20d40b",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "src/lapic.cpp",
+          "bytes": 9750,
+          "sha256": "a3b554d66a413f829db70e8b67f5d68830fd8d8547fb3fe325c1225dbcb5f79e",
+          "git_sha1": "1b6940371c7e73e9035b5aa1c09d0b2296aa7cad",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "src/sc.cpp",
+          "bytes": 7439,
+          "sha256": "9ac5b00a04566276787dbace0abd930fcdc7db9f6377f65e0d14c8741731d2ce",
+          "git_sha1": "2924e1b9a47969f6717a5ff48ca2bb920aa47737",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        },
+        {
+          "path": "src/timeout.cpp",
+          "bytes": 1969,
+          "sha256": "dcaf18dd4279c3de7cd504a3132e78a65e37ec89c514e8ffd49ead4f132d9b1c",
+          "git_sha1": "4b104d00ceb5782354dda446f36015082b13f5fe",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "repository": "https://github.com/alex-ab/NOVA"
+        }
+      ],
+      "total_bytes": 111166,
+      "facts": [
+        {
+          "paths": [
+            "src/ec.cpp",
+            "include/hazards.hpp"
+          ],
+          "fact": "HZD_RCU dispatch calls Rcu::quiet. User-return and VM-return paths check hazards; idle checks them before halt/mwait with interrupts enabled. This closes concrete quiescence callsites, not every latency condition: hazard processing still depends on actually reaching these paths and executing on the relevant CPU.",
+          "functions": [
+            "Ec::handle_hazard",
+            "Ec::ret_user_sysexit",
+            "Ec::ret_user_iret",
+            "Ec::ret_user_vmresume",
+            "Ec::idle"
+          ]
+        },
+        {
+          "paths": [
+            "src/lapic.cpp",
+            "include/lapic.hpp",
+            "src/ec.cpp"
+          ],
+          "fact": "The timer handler invokes Timeout::check if expired and then Rcu::update. VEC_IPI_IDL routes to Ec::idl_handler, which calls Rcu::update(false) only when current continuation is Ec::idle. IPI send targets CPU/APIC topology. Successful IPI issuance or timer configuration is not an observed interrupt delivery, quiescent acknowledgment, completed batch or finalizer deadline.",
+          "functions": [
+            "Lapic::handle_timer",
+            "Lapic::lvt_vector",
+            "Lapic::ipi_vector",
+            "Ec::idl_handler"
+          ]
+        },
+        {
+          "paths": [
+            "include/cpu.hpp",
+            "src/cpu.cpp",
+            "include/hip.hpp",
+            "src/hip.cpp"
+          ],
+          "fact": "Preemption control disables/enables interrupts; a preemption point briefly permits interrupts. CPU initialization registers a CPU through Hip::add_cpu on initial boot. HIP membership checks a bounded CPU descriptor flag. Runtime online-count/descriptor consistency, interrupt masking durations, startup/hotplug/suspend behavior and actual hardware remain configuration/timing obligations; this partial source is not a proof every batch participant responds within a numerical interval.",
+          "functions": [
+            "Cpu::preempt_disable",
+            "Cpu::preempt_enable",
+            "Cpu::preemption_point",
+            "Cpu::init",
+            "Hip::add_cpu",
+            "Hip::cpu_online"
+          ]
+        },
+        {
+          "paths": [
+            "src/sc.cpp",
+            "include/sc.hpp",
+            "src/timeout.cpp",
+            "include/timeout.hpp"
+          ],
+          "fact": "Scheduling selects the highest ready priority, tracks remaining budget and programs the budget timeout; disabled scheduling contexts may require repeated scheduling and RCU release. Timeout::check triggers all expired entries; callbacks and their count affect handler work. A timeslice/budget is not a global service, RPC, RCU or cleanup deadline, nor does it prove priority starvation or callback latency absent a complete bounded workload and hardware contract.",
+          "functions": [
+            "Sc::ready_enqueue",
+            "Sc::schedule_wo_activate",
+            "Sc::schedule",
+            "Timeout::check"
+          ]
+        },
+        {
+          "paths": [
+            "src/sc.cpp",
+            "src/ec.cpp",
+            "include/ec.hpp"
+          ],
+          "fact": "SC pre_free disables execution and sets scheduling hazard locally or sends remote recall IPI. Remote removal retains deferred reference state and uses a remote queue; its handler examines disable/partner/return-capability/continuation conditions before scheduling or RCU. free/free_xcpu delete only after removal/refcount eligibility. Pending cross-CPU work, partner references and deferred callbacks therefore survive a logical disable and need explicit accounting and completion witnesses.",
+          "functions": [
+            "Sc::pre_free",
+            "Sc::remove",
+            "Sc::free",
+            "Sc::free_xcpu",
+            "Sc::remote_enqueue",
+            "Sc::rrq_handler",
+            "Sc::rke_handler"
+          ]
+        },
+        {
+          "paths": [
+            "include/ec.hpp",
+            "src/ec.cpp"
+          ],
+          "fact": "EC pre_free removes UTCB mappings, flushes CPU state and may enqueue cross-CPU EC/SC finalization. free destroys only after reference release. Destruction includes return-capability, FPU/UTCB and virtualization-state cleanup; cross-CPU return signals the caller after scheduling transitions. These are real lifecycle paths, not a single synchronous all-free operation, and do not close all object/cache/device/provider debt.",
+          "functions": [
+            "Ec::pre_free",
+            "Ec::free",
+            "Ec::~Ec",
+            "Ec::xcpu_return",
+            "Ec::xcpu_revert",
+            "Ec::flush_from_cpu"
+          ]
+        },
+        {
+          "paths": [
+            "include/lapic.hpp",
+            "src/lapic.cpp",
+            "src/timeout.cpp"
+          ],
+          "fact": "LAPIC setup depends on CPU deadline support/command-line policy and calibrated or measured TSC/bus frequencies. Timer programming uses either countdown or TSC-deadline mode. Timeout code explicitly handles a TSC stopping in sleep by reprogramming the timer. Those mechanisms require an exact supported platform/clock/interrupt configuration before deriving a wall-clock progress bound.",
+          "functions": [
+            "Lapic::init",
+            "Lapic::set_timer",
+            "Timeout::check",
+            "Timeout::sync"
+          ]
+        },
+        {
+          "paths": [
+            "src/ec.cpp"
+          ],
+          "fact": "Bootstrap adjusts root quota for kernel use, transfers four pages per online CPU into a reserve and sets a root nontransferable reserve. Halt preparation flushes VM/FPU state then shutdown follows. These source literals and shutdown paths must be included in full domain geometry; they neither establish a project-wide peak nor make shutdown/reboot a physical cleanup proof.",
+          "functions": [
+            "Ec::root_invoke",
+            "Ec::hlt_prepare",
+            "Ec::hlt_handler"
+          ]
+        }
+      ],
+      "source_inventory_summary": {
+        "combined_partial_files": 39,
+        "combined_partial_bytes": 312656,
+        "complete_vendor_closure": false,
+        "new_text_bytes": 111166,
+        "prior_partial_bytes": 201490,
+        "prior_partial_files_context_only": 26,
+        "new_files": 13
+      },
+      "conclusion": "Concrete timer/IPI/hazard/scheduling paths drive RCU progression and deferred EC/SC lifetimes. They do not convert a quantum, queue threshold, stop request or issued IPI into a finite whole-epoch cleanup guarantee. One supported topology must bound execution gates, interrupt delivery, queue/callback work, all references and physical backing together.",
+      "remaining_obligations": [
+        "Freeze CPU membership, architecture/configuration, timer/TSC/LAPIC and all interrupt masking/lock/scheduling bounds with actual platform support.",
+        "Bound all pending callbacks, remote queues, references and finalizer work; reserve cleanup execution/resources and retain accounting until actual completion.",
+        "Close complete kernel/core/VMM/provider/device/DMA/storage authority and resource paths, including automatic quota transfer/retry and failed startup.",
+        "Bind exact selected native/guest/form source/build/binary/resolver identities without treating these partial text callsites as actual host evidence."
+      ],
+      "limitations": [
+        "Only thirteen new saved UTF8 source texts were read and independently hashed as DATA; no source compile/import/execution, native API/process/VM/kernel binary/install/provision/host/probe/test.",
+        "Prior26source files were not rehashed or rereviewed; combined39files312656bytes remain partial kernel/core/patch context, not whole vendor/configuration/ABI/binary/provider closure.",
+        "No runtime failure, actual stall/leak, universal impossibility or numerical cleanup deadline was observed or proved.",
+        "No isolated progress watchdog/PASS token, selected topology/license, Ready/operational grant or new mandatory owner input. Rejected binary task not reattempted."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false,
+      "selected_mechanism": false
+    },
+    "eq083-kernel-progress-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "bases": {
+        "equity-features": "59acd2454e2247f1f0283a862232a8a70da7bcc2",
+        "equity-feature-workers": "6368ca8725e497adc2e8b767ecf9975804bd61a0"
+      },
+      "disposition": "APPROVED",
+      "findings": [],
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_KERNEL_PROGRESS_RESEARCH.md": {
+            "bytes": 6470,
+            "sha256": "b429d4f37828101ff472900077257016b2e2848dadcfb729a2965a53e9ed0ed7"
+          },
+          "docs/stories/EQ-083_KERNEL_PROGRESS_INPUTS.json": {
+            "bytes": 5273,
+            "sha256": "04a470027cb2a8b49cac92a5c5b31a1cf9d738e85857f33f2300a3041a445422"
+          },
+          "docs/stories/EQ-083_KERNEL_PROGRESS_EVIDENCE.json": {
+            "bytes": 52058,
+            "sha256": "aeec7ca764e8a5e1ff855b99f5a3a2a2ff8a51a570fb41fe03a5dbf51566a5f8"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 528455,
+            "sha256": "83607ca79b5ea07e14f3d6e3521b5f9bcf2930d1461d139ce0af2eb29277c2f9"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 787706,
+            "sha256": "3c37e7734601f0b0a50b5c119a815d13e21cfed229cad0e6b8379140442c8c54"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_KERNEL_PROGRESS_RESEARCH.md": {
+            "bytes": 6470,
+            "sha256": "b429d4f37828101ff472900077257016b2e2848dadcfb729a2965a53e9ed0ed7"
+          },
+          "docs/EQ083_KERNEL_PROGRESS_INPUTS.json": {
+            "bytes": 5273,
+            "sha256": "04a470027cb2a8b49cac92a5c5b31a1cf9d738e85857f33f2300a3041a445422"
+          },
+          "docs/EQ083_KERNEL_PROGRESS_EVIDENCE.json": {
+            "bytes": 52058,
+            "sha256": "aeec7ca764e8a5e1ff855b99f5a3a2a2ff8a51a570fb41fe03a5dbf51566a5f8"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 391124,
+            "sha256": "113dd106b3e948d772efde749dc4f7d59692115d9fb23a90ec339bc8bc2dc6f9"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 502262,
+            "sha256": "963edfb1be01d8487a0c2e2d7fad99799b6814b81b26362f9427295efb77946d"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases and five documentation paths each; unchanged other tracked source/history and preserved old continuity suffixes.",
+        "Three assets mirror exactly; full eight-fact source report and every embedded prior reclamation report preserve saved JSON content.",
+        "All13new metadata pins111166bytes match saved report; earlier26context remains partial and is not rehashed or counted new.",
+        "Timer/IPI/hazard/idle/CPU/scheduling gates correctly distinguished from finite whole cleanup, quantum/IPI/shutdown not completion evidence.",
+        "All samegraph conservation, queue/callback/reference/device/storage/native-form timing obligations remain pending; no actual failure/impossibility inferred.",
+        "Strict nonadmitted host and independently unverified binary history preserved; no selected topology, Ready/operations/implementation or new owner-input requirement."
+      ],
+      "limitations": [
+        "Saved source report reused; no further source text research, rawsource rehash, native operations, probes or tests.",
+        "Documentation semantics do not prove numerical physical conservation, execution latency or whole resource topology.",
+        "Attribution of new prepared changes awaits final published readback."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-kernel-progress-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "93e682e9d6849fc3511c0a22b9ad14d9a31a3a6f",
+        "equity-feature-workers": "02cc8d569cbf0825097965f69d72edf1cf899a12"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_KERNEL_PROGRESS_RESEARCH.md": {
+            "sha256": "b429d4f37828101ff472900077257016b2e2848dadcfb729a2965a53e9ed0ed7",
+            "bytes": 6470
+          },
+          "docs/stories/EQ-083_KERNEL_PROGRESS_INPUTS.json": {
+            "sha256": "04a470027cb2a8b49cac92a5c5b31a1cf9d738e85857f33f2300a3041a445422",
+            "bytes": 5273
+          },
+          "docs/stories/EQ-083_KERNEL_PROGRESS_EVIDENCE.json": {
+            "sha256": "aeec7ca764e8a5e1ff855b99f5a3a2a2ff8a51a570fb41fe03a5dbf51566a5f8",
+            "bytes": 52058
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "83607ca79b5ea07e14f3d6e3521b5f9bcf2930d1461d139ce0af2eb29277c2f9",
+            "bytes": 528455
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "3c37e7734601f0b0a50b5c119a815d13e21cfed229cad0e6b8379140442c8c54",
+            "bytes": 787706
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_KERNEL_PROGRESS_RESEARCH.md": {
+            "sha256": "b429d4f37828101ff472900077257016b2e2848dadcfb729a2965a53e9ed0ed7",
+            "bytes": 6470
+          },
+          "docs/EQ083_KERNEL_PROGRESS_INPUTS.json": {
+            "sha256": "04a470027cb2a8b49cac92a5c5b31a1cf9d738e85857f33f2300a3041a445422",
+            "bytes": 5273
+          },
+          "docs/EQ083_KERNEL_PROGRESS_EVIDENCE.json": {
+            "sha256": "aeec7ca764e8a5e1ff855b99f5a3a2a2ff8a51a570fb41fe03a5dbf51566a5f8",
+            "bytes": 52058
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "113dd106b3e948d772efde749dc4f7d59692115d9fb23a90ec339bc8bc2dc6f9",
+            "bytes": 391124
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "963edfb1be01d8487a0c2e2d7fad99799b6814b81b26362f9427295efb77946d",
+            "bytes": 502262
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git LF sizeSHA pins match reviewed_git_files and reviewed prepared bytes after only line-ending normalization; no CR.",
+        "Exact five documentation changes perrepo, direct reviewed parent bases and clean paired codex/eq083-resilience branches.",
+        "Three assets mirrored, exact old knowledge/handoff suffixes and other tracked source/history outside allowed paths unchanged.",
+        "Atul full author identity and no Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "c1e7fd66b46f399e26396bb1ea2f87ef4fd07c8833832956e16ba39955b15747",
+      "limitations": [
+        "Published docs readback only; no semantic/source/research/native/host/probe/test rerun.",
+        "No whole-topology, physical resource/cleanup enforcement, runtime/operational or Ready authority."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Selected current VMM build/route/backing/execution lifecycle source domains together; no complete configuration or physical timing proof",
+  "tool_history": "Guessed unversioned repos/ports/src/virtualbox API path returned404; actual parent listing revealed version-specific virtualbox7 before claims, no absence inference. Combined source rendering truncated, then narrowed exact GMM functions and main startup/exit/configuration/port build lines. Mandatory document top rendering truncated long continuity paragraphs; current rules already read and latest scoped facts retained. No program/vendor source execution or native/product failure."
+}

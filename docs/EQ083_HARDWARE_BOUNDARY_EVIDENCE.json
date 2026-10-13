@@ -1,0 +1,90 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "disposition": "PRIMARY_DOCUMENTATION_RESEARCH_HARDWARE_ISOLATION_CANDIDATE_WHOLE_DOMAIN_UNESTABLISHED",
+    "scope": "MICROSOFT_PRIMARY_DOCUMENTATION_ONLY",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "facts": [
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/hyperv-container",
+        "fact": "Hyper-V isolated containers run in an optimized VM with their own kernel; process-isolated containers share the host kernel. The page describes hardware isolation and deliberately exposed host volumes/files, pipes, ports, network namespaces and devices. A selected topology must separately address such boundary crossings; the isolation label alone is not a complete writer/resource inventory."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/resource-controls",
+        "fact": "HCS MemoryMaximumInMB maps to VM memory under Hyper-V isolation and job memory for shared-kernel isolation. Controls apply to the utility VM and the contained job. The resource descriptions are high-level and implementation-dependent. CPU, memory and I/O controls have different scopes; storage bandwidth/IOPS controls are rates, not cumulative allocations or live-node counts. The page names StorageSandboxSize, but does not establish the requested exact whole-domain byte/node/storage-lifetime contract."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/memory-performance",
+        "fact": "Guest physical memory is virtualized separately. The root partition also needs memory for I/O virtualization, snapshots and management. Hence a guest/utility-VM memory cap is not evidence that all host-side allocations, management, caching and I/O costs are charged to that cap. Dynamic-memory and paging behavior also require a fixed selected policy."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-storage",
+        "fact": "Default ephemeral writes use per-container scratch space, while bind mounts and volumes enable persistent storage. The documented default C-drive size is virtual free size, configurable through the storage size option. This description cannot be promoted to independently established hard host backing-file, metadata, snapshot, global live-node or every-external-volume bounds. Stopping a container discards logical scratch changes; that statement alone is not observed final physical reclamation."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/storage-io-performance",
+        "fact": "Fixed virtual disks allocate backing space at creation; dynamic and differencing disks allocate blocks on demand and maintain metadata. Snapshot chains add further backing dependencies. Storage QoS provides IOPS thresholds for virtual disks. None of these descriptions establishes an exact aggregate live-file-node cap or automatically includes layers, metadata, snapshots and management outputs in a single byte budget."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/persistent-storage",
+        "fact": "For Hyper-V isolation, bind-mount host file access uses LocalSystem and a read-only/read-write permission model. Therefore an allowed host writable mount is a separate authority and storage domain requiring explicit accounting and access policy, rather than a resource automatically proved confined by the guest memory cap."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/architecture",
+        "fact": "Virtualization service providers reside in the root partition and clients in the guest, communicating through VM Bus. This confirms host-side service participation outside the guest kernel; it does not provide the requested numerical complete host cost or lifecycle contract."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/system-requirements",
+        "fact": "Supported Windows editions/features and installed Hyper-V role are prerequisites; nested hosts have additional virtualization requirements. No named current machine, platform/release, feature state, guest image or compatible deployment is selected or verified in this research."
+      }
+    ],
+    "additional_hcs_facts": [
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/api/hcs/schemareference",
+        "fact": "VirtualMachine_Memory specifies SizeInMB. AllowOvercommit enables Windows-pagefile backing rather than physically backed static allocation. These distinct backing policies must be frozen; the schema neither establishes complete root-partition overhead bounds nor independently enforced storage/node closure."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/api/hcs/reference/hcsmodifycomputesystem",
+        "fact": "The API can modify VM memory SizeInMB and mapped/network/storage resources. S_OK starts the operation; its completion result must be obtained separately. Therefore an initial configuration is not by itself proof of immutable limits; management authority and modification paths belong to the contract."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/virtualization/api/hcs/overview",
+        "fact": "The client must provision VHD, networking and Hyper-V sockets before HCS creation; HCS does not set up those resources. Compute systems and handles become unusable after stop except for exit-status queries. Their logical lifecycle does not independently prove disposal of all externally provisioned resources."
+      },
+      {
+        "sources": [
+          "https://learn.microsoft.com/en-us/virtualization/api/hcs/reference/hcsshutdowncomputesystem",
+          "https://learn.microsoft.com/en-us/virtualization/api/hcs/reference/hcsterminatecomputesystem"
+        ],
+        "fact": "Shutdown is clean and termination forceful, but both initial S_OK returns signify operation initiation; separate operation results determine completion. A bounded controller must handle timeout/failure/escalation, retain operation/system identities and clean every owned handle and external residual without converting initiation into completion. No such controller or physical cleanup was tested."
+      }
+    ],
+    "qualified_candidate_conclusion": "Separate guest kernel and VM controls are a substantive alternative to same-kernel AppContainer isolation. They remain a candidate, not a proven whole-domain solution. No generic guest-memory-to-all-host-resource or StorageSandboxSize-to-exact-global-file-quota implication is supported by these reads.",
+    "full_obligations": [
+      "Freeze supported host/utility VM/guest release and image/source provenance, every parent/child/provider/management component and all preimport/launch ownership; preserve required native and per-form source qualification rather than relabel earlier host evidence.",
+      "Define exact static/dynamic memory, paging, vCPU, wall/CPU time, request/IPC and host-side service/caching/management budgets. Identify separately enforceable root-partition domains before claiming aggregate resource closure.",
+      "Define original image/layer/scratch/metadata/virtual-disk/snapshot/log/output and persistent-volume byte budgets plus synchronized live/pending/orphan node and context accounting. Virtual free size and I/O rates are not substitutes for that hard allocated-byte/node contract.",
+      "Exclude or explicitly bound every host volume, pipe, network, device, broker and management interface. Retain physical identities, permissions and source/root authority through draining and failure cleanup.",
+      "Freeze one complete controller/outer transaction and compatible guest execution protocol, including stop, asynchronous service quiescence, owned handles, storage reclamation and readback. Endpoint observations and container exit cannot substitute for continuous enforcement.",
+      "Freeze HCS schema/version, memory backing and untrusted modification exclusion. Provisioned disks/networks/sockets, operation completion deadlines, shutdown/terminate escalation, system/operation/process handles and externally owned residuals require explicit all-failure ownership contracts.",
+      "Establish actual supported enforcement and later independent evidence under applicable authorization; research/design remains agent work, with owner input only for genuinely unavailable external facts after concrete preparation."
+    ],
+    "limitations": [
+      "Documentation research only; no tests, source execution, image/driver/binary download, installation, host/API observation, VM/container operation, mount, process, probe, archive or rejected binary-task verification.",
+      "No exact HCS implementation, guest image, native ABI, effective configuration, physical hard storage bound, global node cap, measured host overhead or cleanup was verified.",
+      "No named host/release/platform/dependency/license selection, scope change, whole physical issuer, Ready/form qualification or operational grant. Prior reports unchanged."
+    ],
+    "new_owner_input_required": false,
+    "candidate_selected": false,
+    "mechanism_admitted": false,
+    "operational_authorization": false
+  },
+  "new_tests": 0,
+  "tool_history": [
+    "Prior prepared confinement reviewer guessed read-only filename absent; corrected exact preparation path, full prior prepared report preserved. No product failure.",
+    "HCS schema page general open returned broad unrelated text; targeted sections located by find. No source/code operation."
+  ],
+  "scope": "Primary documentation candidate comparison only"
+}

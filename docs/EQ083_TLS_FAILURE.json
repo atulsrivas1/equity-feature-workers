@@ -1,0 +1,398 @@
+{
+  "scope": "ACTUAL installed Windows TLS feasibility FAILED before native owner launch, not TLS PASS",
+  "executed_heads": {
+    "equity-features": "61629003122782c36f6e05ce37e388936642af49",
+    "equity-feature-workers": "49ae489de8cbcf3ccdc522bd2291fcbdfe3d0a2f"
+  },
+  "parent_bytes": 43728,
+  "parent_sha256": "7697359a26b0e756fcb7edec7ef087871acc9d0d6c8d5c8826960b74950536af",
+  "copier_bytes": 5730,
+  "copier_sha256": "dffa08532e2c9116143b17dbe7714697ad2df6e32cd3308d940979006a5fae2b",
+  "source_approval": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107929105",
+  "failure_evidence": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107942878",
+  "harness": "eq083-tls-harness-49ae489",
+  "copier_exit": 0,
+  "parent_exit": 1,
+  "logs": {
+    "eq083-tls-harness-author.log": {
+      "bytes": 266,
+      "sha256": "3ae6ae7adc8db6c8261baa07d10909622fd7be2ed253f20986868649ba09dec2"
+    },
+    "eq083-three-lane-tls-author.log": {
+      "bytes": 893,
+      "sha256": "7a017ebfd8e5c44a56400962db6df7df1149addc4a2b47c05d7d8d9ea92563c8"
+    }
+  },
+  "reviewer_diagnostic": {
+    "disposition": "REWORK actual TLS author admission failure diagnosed; no runtime defect demonstrated",
+    "reviewed_heads": {
+      "equity-features": "61629003122782c36f6e05ce37e388936642af49",
+      "equity-feature-workers": "49ae489de8cbcf3ccdc522bd2291fcbdfe3d0a2f"
+    },
+    "owner_bytes": 9985,
+    "owner_sha256": "8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100",
+    "accepted_entry_source_sha256": "66d6982313a84627916be6145f9b611b4237c6641a6b542e9a8f2e459abb6b7e",
+    "author_failed_log_sha256": "7a017ebfd8e5c44a56400962db6df7df1149addc4a2b47c05d7d8d9ea92563c8",
+    "source_limit": 8192,
+    "excess_bytes": 1793,
+    "failure_line": 487,
+    "findings": [
+      {
+        "priority": "P2",
+        "title": "Frozen qualification owner exceeds accepted8192-byte admission limit",
+        "detail": "The9985-byte owner fails the exact public OwnedEntryProfile admission predicate before run_admitted, owner thread launch or TLS/native execution. Reviewer pre-execution approval missed this existing limit.",
+        "correction": "Compact the qualification owner below8192 UTF8 bytes while preserving behavior, original source history and closed pins. Do not change accepted runtime limit or introduce a loader/bypass."
+      }
+    ],
+    "inert_admission_boundaries": [
+      {
+        "source_bytes": 8192,
+        "accepted": true
+      },
+      {
+        "source_bytes": 8193,
+        "accepted": false
+      }
+    ],
+    "identifier_compaction_inventory": [
+      {
+        "identifier": "ValueError",
+        "name_occurrences": 31,
+        "maximum_name_only_byte_saving": 279
+      },
+      {
+        "identifier": "sequence",
+        "name_occurrences": 14,
+        "maximum_name_only_byte_saving": 98
+      },
+      {
+        "identifier": "scheduler",
+        "name_occurrences": 12,
+        "maximum_name_only_byte_saving": 96
+      },
+      {
+        "identifier": "server",
+        "name_occurrences": 10,
+        "maximum_name_only_byte_saving": 50
+      },
+      {
+        "identifier": "connection",
+        "name_occurrences": 10,
+        "maximum_name_only_byte_saving": 90
+      },
+      {
+        "identifier": "certroot",
+        "name_occurrences": 8,
+        "maximum_name_only_byte_saving": 56
+      },
+      {
+        "identifier": "requests",
+        "name_occurrences": 7,
+        "maximum_name_only_byte_saving": 49
+      },
+      {
+        "identifier": "original_snapshot",
+        "name_occurrences": 7,
+        "maximum_name_only_byte_saving": 112
+      },
+      {
+        "identifier": "cleanup",
+        "name_occurrences": 7,
+        "maximum_name_only_byte_saving": 42
+      },
+      {
+        "identifier": "secured",
+        "name_occurrences": 7,
+        "maximum_name_only_byte_saving": 42
+      },
+      {
+        "identifier": "context",
+        "name_occurrences": 6,
+        "maximum_name_only_byte_saving": 36
+      },
+      {
+        "identifier": "service",
+        "name_occurrences": 6,
+        "maximum_name_only_byte_saving": 36
+      },
+      {
+        "identifier": "headers",
+        "name_occurrences": 6,
+        "maximum_name_only_byte_saving": 36
+      },
+      {
+        "identifier": "faults",
+        "name_occurrences": 5,
+        "maximum_name_only_byte_saving": 25
+      },
+      {
+        "identifier": "status",
+        "name_occurrences": 5,
+        "maximum_name_only_byte_saving": 25
+      },
+      {
+        "identifier": "outgoing",
+        "name_occurrences": 5,
+        "maximum_name_only_byte_saving": 35
+      },
+      {
+        "identifier": "BaseException",
+        "name_occurrences": 5,
+        "maximum_name_only_byte_saving": 60
+      },
+      {
+        "identifier": "framing",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 24
+      },
+      {
+        "identifier": "reads_fault",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 40
+      },
+      {
+        "identifier": "connections",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 40
+      },
+      {
+        "identifier": "raw_connections",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 56
+      },
+      {
+        "identifier": "transport_cleanup",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 64
+      },
+      {
+        "identifier": "chunks",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 20
+      },
+      {
+        "identifier": "declared",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 28
+      },
+      {
+        "identifier": "action",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 20
+      },
+      {
+        "identifier": "stream",
+        "name_occurrences": 4,
+        "maximum_name_only_byte_saving": 20
+      },
+      {
+        "identifier": "contexts",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 21
+      },
+      {
+        "identifier": "control",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 18
+      },
+      {
+        "identifier": "pending",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 18
+      },
+      {
+        "identifier": "iterable",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 21
+      },
+      {
+        "identifier": "length",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 15
+      },
+      {
+        "identifier": "witness",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 18
+      },
+      {
+        "identifier": "targets",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 18
+      },
+      {
+        "identifier": "successes",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 24
+      },
+      {
+        "identifier": "failures",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 21
+      },
+      {
+        "identifier": "canonical",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 24
+      },
+      {
+        "identifier": "snapshot",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 21
+      },
+      {
+        "identifier": "remaining",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 24
+      },
+      {
+        "identifier": "failed",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 15
+      },
+      {
+        "identifier": "hashlib",
+        "name_occurrences": 3,
+        "maximum_name_only_byte_saving": 18
+      },
+      {
+        "identifier": "certificate_pins",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 30
+      },
+      {
+        "identifier": "fault_requests",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 26
+      },
+      {
+        "identifier": "actions",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 12
+      },
+      {
+        "identifier": "deadline",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 14
+      },
+      {
+        "identifier": "original_accept",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 28
+      },
+      {
+        "identifier": "active_exception",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 30
+      },
+      {
+        "identifier": "environ",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 12
+      },
+      {
+        "identifier": "start_response",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 26
+      },
+      {
+        "identifier": "publish",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 12
+      },
+      {
+        "identifier": "fields",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 10
+      },
+      {
+        "identifier": "address",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 12
+      },
+      {
+        "identifier": "result",
+        "name_occurrences": 2,
+        "maximum_name_only_byte_saving": 10
+      },
+      {
+        "identifier": "tokens",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 5
+      },
+      {
+        "identifier": "accepted_tls",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 11
+      },
+      {
+        "identifier": "forbidden_write",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 14
+      },
+      {
+        "identifier": "capture",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 6
+      },
+      {
+        "identifier": "qualification_server",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 19
+      },
+      {
+        "identifier": "OwnedAudit",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 9
+      },
+      {
+        "identifier": "getattr",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 6
+      },
+      {
+        "identifier": "enumerate",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 8
+      },
+      {
+        "identifier": "exc_info",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 7
+      },
+      {
+        "identifier": "observe",
+        "name_occurrences": 1,
+        "maximum_name_only_byte_saving": 6
+      }
+    ],
+    "owned_error_literal_occurrences": 31,
+    "owned_error_literal_total_bytes": 835,
+    "checks": [
+      "Exact installed accepted _entry.py bytes match immutableGit; actual failed log hash and traceback independently read.",
+      "Only AST-extracted __post_init__ predicate/canonical helper executed on inert profile objects;9985 rejection and8192/8193 inclusive boundary reproduced.",
+      "Parent constructor executes before owner launch thread setup/run_admitted; raw log shows no completed mode or native/TLS witness.",
+      "Identifier and diagnostic-literal inventory is source-only sizing advice, not a semantics-equivalence or execution claim."
+    ],
+    "limits": [
+      "No product import, native/TLS/socket/process/copy/setup/install/probe rerun or downloads. Original failed run remains FAILED, not PASS.",
+      "The previous source approval missed admission size; this diagnostic explicitly preserves that review limitation.",
+      "Exact proposed compacted owner/updated hash-manifest-parent requires separate full source review and admission predicate test before new execution.",
+      "Compaction must preserve protocol keyword names/JSON fields/fixture identities/limits/control and exception semantics; ASCII identifier reduction alone is only an upper-bound estimate.",
+      "No Ready/full24/Linux/artifact/release qualification."
+    ]
+  },
+  "admission": {
+    "owner_bytes": 9985,
+    "accepted_source_cap": 8192,
+    "error": "unadmitted_owned_entry",
+    "line": 487
+  },
+  "tool_only_history": "Checkpoint preparer initially assumed heads rather than actual reviewed_heads report field; KeyError before writes. Dependent publisher missing-file read also failed before any mutation. Corrected explicit report field; no new native/product failure.",
+  "execution_limitations": [
+    "Failure before owner launch; no native/TLS/reference/socket cleanup PASS inferred",
+    "Same verified author environment, not independently reinstalled",
+    "Original failed harness/log preserved; no unchanged rerun"
+  ],
+  "next": "Freeze exact qualification source correction within accepted8192 cap, renew owner/parent/copier source review before any new copy/native/TLS execution; no product limit change or source-loader bypass"
+}

@@ -1,0 +1,207 @@
+"""Uninvoked qualification source. No admission or cleanup authority implied."""
+import hashlib
+import os
+import stat
+import sys
+import unicodedata
+import zlib
+
+ARCHIVE_CAP = 32 * 1024 * 1024
+TAR_CAP = 128 * 1024 * 1024
+FILE_CAP = 16 * 1024 * 1024
+TOTAL_CAP = 64 * 1024 * 1024
+MEMBER_CAP = 4096
+
+
+def require(value, message):
+    if not value:
+        raise ValueError(message)
+
+
+def spelling(name):
+    require(type(name) is str and 0 < len(name) <= 1024, "member name bound")
+    require(unicodedata.normalize("NFC", name) == name, "noncanonical Unicode")
+    parts = name.split("/")
+    for part in parts:
+        require(0 < len(part) <= 255 and part not in (".", ".."), "member component")
+        require(not part.endswith((".", " ")), "ambiguous member suffix")
+        require(not any(ord(c) < 32 or c in '\\:< >"|?*' for c in part),
+                "member character")
+        require(not any(0xd800 <= ord(c) <= 0xdfff for c in part), "member surrogate")
+        stem = part.split(".")[0].upper()
+        require(stem not in {"CON", "PRN", "AUX", "NUL"} and
+                stem not in {f"COM{i}" for i in range(1, 10)} and
+                stem not in {f"LPT{i}" for i in range(1, 10)}, "reserved member")
+    return parts
+
+
+def octal(raw):
+    require(type(raw) is bytes and not raw[0] & 128, "binary tar integer unsupported")
+    text = raw.rstrip(b"\0 ").lstrip(b" ")
+    require(text and all(c in b"01234567" for c in text), "tar octal")
+    return int(text, 8)
+
+
+def field(raw):
+    before, separator, after = raw.partition(b"\0")
+    require(not separator or not any(after), "tar field hidden suffix")
+    return before.decode("utf-8", "strict")
+
+
+def pax(raw):
+    require(len(raw) <= 65536, "PAX size")
+    values = {}
+    offset = 0
+    while offset < len(raw):
+        end = raw.find(b" ", offset, offset + 16)
+        require(end > offset, "PAX length prefix")
+        digits = raw[offset:end]
+        require(digits.isdigit() and digits[0] != 48, "PAX length spelling")
+        size = int(digits)
+        require(size > end - offset + 2 and offset + size <= len(raw), "PAX range")
+        row = raw[end + 1:offset + size]
+        require(row.endswith(b"\n") and b"=" in row, "PAX row")
+        key, value = row[:-1].split(b"=", 1)
+        key = key.decode("ascii");value = value.decode("utf-8", "strict")
+        require(key in {"path", "mtime"} and key not in values, "PAX key")
+        if key == "path":spelling(value)
+        else:require(value and all(c in "0123456789.-" for c in value), "PAX time")
+        values[key] = value
+        offset += size
+    return values
+
+
+def gate_archive(raw, archive_sha256, root_name, expected):
+    """Expected full file map must come from separately frozen owner source.
+
+    Returns verified immutable payloads; does not attest their import safety or
+    host path ownership. Every generated file including PKG-INFO must be pinned.
+    """
+    require(type(raw) is bytes and 0 < len(raw) <= ARCHIVE_CAP, "archive bound")
+    require(hashlib.sha256(raw).hexdigest() == archive_sha256, "archive identity")
+    require(len(spelling(root_name)) == 1, "source root component")
+    require(type(expected) is dict and 0 < len(expected) <= MEMBER_CAP, "expected map")
+    for name, claim in expected.items():
+        spelling(name)
+        require(type(claim) is dict and set(claim) == {"bytes", "sha256"}, "expected claim")
+        require(type(claim["bytes"]) is int and 0 <= claim["bytes"] <= FILE_CAP,
+                "expected file size")
+        require(type(claim["sha256"]) is str and len(claim["sha256"]) == 64 and
+                all(c in "0123456789abcdef" for c in claim["sha256"]), "expected digest")
+    decoder = zlib.decompressobj(16 + zlib.MAX_WBITS)
+    tar = decoder.decompress(raw, TAR_CAP + 1)
+    require(len(tar) <= TAR_CAP and decoder.eof and not decoder.unconsumed_tail and
+            not decoder.unused_data, "gzip EOF/bound/multiple streams")
+    require(len(tar) % 512 == 0, "tar block geometry")
+    offset = 0; count = 0; total = 0; seen = {}; files = {}; directories = set()
+    pending = None; headers = []; namespace = {}
+    while offset < len(tar):
+        header = tar[offset:offset + 512];offset += 512
+        if not any(header):
+            require(pending is None and len(tar) - offset >= 512 and
+                    not any(tar[offset:]), "tar two-block EOF/trailing data")
+            break
+        count += 1;require(count <= MEMBER_CAP, "tar header count")
+        require(sum(header[:148]) + 8 * 32 + sum(header[156:]) == octal(header[148:156]),
+                "tar header checksum")
+        require(header[257:265] == b"ustar\x0000", "tar USTAR layout")
+        size = octal(header[124:136]);require(size <= FILE_CAP, "tar file size")
+        end = offset + size; padded = (end + 511) // 512 * 512
+        require(padded <= len(tar) and not any(tar[end:padded]), "tar payload/padding")
+        payload = tar[offset:end];offset = padded
+        kind = header[156:157]
+        require(kind in (b"0", b"\0", b"5", b"x"), "tar links/special type")
+        require(not any(header[157:257]), "tar link field")
+        name = field(header[:100]);prefix = field(header[345:500])
+        if prefix:name = prefix + "/" + name
+        headers.append(dict(sha256=hashlib.sha256(header).hexdigest(), kind=kind.hex(),
+                            name=name, bytes=size))
+        if kind == b"x":
+            require(pending is None, "consecutive PAX")
+            pending = pax(payload);continue
+        if pending is not None:
+            name = pending.get("path", name)
+            pending = None
+        if kind == b"5":
+            require(size == 0, "directory payload")
+            name = name[:-1] if name.endswith("/") else name
+        parts = spelling(name)
+        require(parts[0] == root_name, "source archive root")
+        for depth in range(1, len(parts) + 1):
+            ancestor = "/".join(parts[:depth]); folded = ancestor.casefold()
+            require(folded not in namespace or namespace[folded] == ancestor,
+                    "inferred/explicit namespace collision")
+            namespace[folded] = ancestor
+        key = name.casefold()
+        require(key not in seen, "duplicate/colliding tar path")
+        seen[key] = name
+        if kind == b"5":directories.add(name);continue
+        require(len(parts) > 1, "root file forbidden")
+        relative = "/".join(parts[1:])
+        require(relative in expected, "extra/unexpected source file")
+        claim = expected[relative]
+        require(size == claim["bytes"] and hashlib.sha256(payload).hexdigest() ==
+                claim["sha256"], "source member identity")
+        total += size;require(total <= TOTAL_CAP, "source total size")
+        files[relative] = payload
+    else:raise ValueError("tar EOF absent")
+    require(set(files) == set(expected), "missing source file")
+    permitted_dirs = {root_name}
+    for name in files:
+        parts = name.split("/")
+        for i in range(1, len(parts)):permitted_dirs.add(root_name + "/" + "/".join(parts[:i]))
+    require(directories <= permitted_dirs, "unrelated directory")
+    for name in seen:
+        require(not any(name.startswith(f.casefold() + "/") for f in
+                        (root_name + "/" + x for x in files)), "file/directory prefix collision")
+    return dict(files=files, headers=headers, admitted=False)
+
+
+def close_preserving(fd):
+    primary = sys.exc_info()[1]
+    try:os.close(fd)
+    except BaseException as cleanup:
+        if primary is not None:raise primary from cleanup
+        raise
+
+
+def write_relative(parent, parts, payload):
+    if len(parts) > 1:
+        try:os.mkdir(parts[0], 0o700, dir_fd=parent)
+        except FileExistsError:pass
+        child = os.open(parts[0], os.O_RDONLY | os.O_DIRECTORY |
+                        os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parent)
+        try:write_relative(child, parts[1:], payload)
+        finally:close_preserving(child)
+    else:
+        output = os.open(parts[0], os.O_WRONLY | os.O_CREAT | os.O_EXCL |
+                         os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=parent)
+        try:
+            require(stat.S_ISREG(os.fstat(output).st_mode), "created file type")
+            offset = 0
+            while offset < len(payload):
+                written = os.write(output, payload[offset:offset + 65536])
+                require(type(written) is int and 0 < written <= min(65536, len(payload) - offset),
+                        "file write count")
+                offset += written
+            require(os.fstat(output).st_size == len(payload), "written file size")
+        finally:close_preserving(output)
+
+
+def materialize_linux(raw, archive_sha256, root_name, expected, root_fd):
+    """Future outer owner supplies an exclusively owned empty directory FD.
+
+    No cleanup/deletion here. Any error leaves partial output for the outer
+    owner to stop/reap/join before its separately reviewed owned cleanup.
+    Windows deliberately unsupported until native handle-relative code exists.
+    """
+    verified = gate_archive(raw, archive_sha256, root_name, expected)
+    require(os.name == "posix" and type(root_fd) is int and root_fd >= 0,
+            "Linux directory FD required")
+    require(stat.S_ISDIR(os.fstat(root_fd).st_mode) and not os.listdir(root_fd),
+            "empty directory required")
+    files = verified["files"]
+    for name, payload in sorted(files.items()):
+        parts = spelling(name)
+        write_relative(root_fd, parts, payload)
+    return dict(files=len(files), admitted=False)

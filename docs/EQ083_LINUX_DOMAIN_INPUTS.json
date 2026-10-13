@@ -1,0 +1,12 @@
+{
+  "schema": "eq083.linux-alternative-domain-research.v1",
+  "bases": {
+    "equity-features": "7ebef126776c4e4ad029fde3c1501097fd5f3e9e",
+    "equity-feature-workers": "0b4fba624dd6c63e6bc1c5a7722a744849028a7f"
+  },
+  "scope": "Current primary Linux kernel documentation only; no selected kernel build/configuration/host/VM image/SDK/binary or implementation identity",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false,
+  "linux_host_selected": false
+}

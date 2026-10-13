@@ -1,0 +1,671 @@
+"""Frozen EQ083 owned TLS seven-case three-lane parent; trusted installed harness only."""
+import subprocess,queue,ssl
+import sys,json,hashlib,math,socket,re,time,threading,tempfile,ctypes,errno
+from pathlib import Path
+from datetime import timedelta
+import anyio
+from jsonschema import Draft202012Validator
+from mcp import ClientSession,StdioServerParameters
+from mcp.shared.exceptions import McpError
+import mcp,equity_feature_io_sdk,equity_feature_client,equity_feature_mcp,equity_feature_service
+from equity_feature_client import RemoteClient,Request,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation,JobExpectation,ResultView
+from equity_feature_client.native import convert_result
+from equity_feature_io_sdk import encode_result
+from equity_feature_service._containment import OwnedEpochSupervisor
+from equity_feature_service._entry import OwnedEntryInventory,OwnedEntryProfile
+
+import ctypes,os,subprocess,sys,time
+
+class WindowsReferenceChild:
+ def __init__(self,argv):
+  from ctypes import wintypes as w
+  if sys.platform!='win32' or ctypes.sizeof(ctypes.c_void_p)!=8:raise ValueError('owned Windows reference only')
+  if type(argv) is not list or len(argv)!=12 or argv[:2]!=[sys.executable,'-I'] or any(type(v) is not str or not v or '\x00' in v for v in argv):raise ValueError('owned reference argv')
+  self.kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+  self.job=self.process=self.thread=self.entry=None
+  self.stdin=self.stdout=self.stderr=None
+  self.pid=self.entry_pid=None;self.returncode=None;self.ownership_closed=False
+  class Basic(ctypes.Structure):
+      _fields_ = [('process_time',ctypes.c_longlong),('job_time',ctypes.c_longlong),('flags',w.DWORD),
+          ('min_ws',ctypes.c_size_t),('max_ws',ctypes.c_size_t),('active',w.DWORD),
+          ('affinity',ctypes.c_size_t),('priority',w.DWORD),('scheduling',w.DWORD)]
+  class IO(ctypes.Structure):
+      _fields_ = [(name,ctypes.c_ulonglong) for name in ('read_op','write_op','other_op','read_bytes','write_bytes','other_bytes')]
+  class Extended(ctypes.Structure):
+      _fields_ = [('basic',Basic),('io',IO),('process_memory',ctypes.c_size_t),
+          ('job_memory',ctypes.c_size_t),('peak_process_memory',ctypes.c_size_t),('peak_job_memory',ctypes.c_size_t)]
+  class Startup(ctypes.Structure):
+      _fields_ = [('cb',w.DWORD),('reserved',w.LPWSTR),('desktop',w.LPWSTR),('title',w.LPWSTR),
+          ('x',w.DWORD),('y',w.DWORD),('xs',w.DWORD),('ys',w.DWORD),('xc',w.DWORD),('yc',w.DWORD),
+          ('fill',w.DWORD),('flags',w.DWORD),('show',w.WORD),('cb_reserved',w.WORD),
+          ('reserved2',ctypes.POINTER(ctypes.c_byte)),('stdin',w.HANDLE),('stdout',w.HANDLE),('stderr',w.HANDLE)]
+  class StartupExtended(ctypes.Structure):
+      _fields_ = [('startup',Startup),('attributes',ctypes.c_void_p)]
+  class Process(ctypes.Structure):
+      _fields_ = [('process',w.HANDLE),('thread',w.HANDLE),('pid',w.DWORD),('tid',w.DWORD)]
+  class Security(ctypes.Structure):
+      _fields_ = [('length',w.DWORD),('descriptor',ctypes.c_void_p),('inherit',w.BOOL)]
+  signatures = {
+      'CreateJobObjectW':([ctypes.c_void_p,w.LPCWSTR],w.HANDLE),
+      'SetInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD],w.BOOL),
+      'QueryInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD,ctypes.c_void_p],w.BOOL),
+      'CreatePipe':([ctypes.POINTER(w.HANDLE),ctypes.POINTER(w.HANDLE),ctypes.c_void_p,w.DWORD],w.BOOL),
+      'SetHandleInformation':([w.HANDLE,w.DWORD,w.DWORD],w.BOOL),
+      'OpenProcess':([w.DWORD,w.BOOL,w.DWORD],w.HANDLE),
+      'GetProcessId':([w.HANDLE],w.DWORD),
+      'InitializeProcThreadAttributeList':([ctypes.c_void_p,w.DWORD,w.DWORD,ctypes.POINTER(ctypes.c_size_t)],w.BOOL),
+      'UpdateProcThreadAttribute':([ctypes.c_void_p,w.DWORD,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p],w.BOOL),
+      'DeleteProcThreadAttributeList':([ctypes.c_void_p],None),
+      'CreateProcessW':([w.LPCWSTR,w.LPWSTR,ctypes.c_void_p,ctypes.c_void_p,w.BOOL,w.DWORD,
+          ctypes.c_void_p,w.LPCWSTR,ctypes.POINTER(Startup),ctypes.POINTER(Process)],w.BOOL),
+      'IsProcessInJob':([w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)],w.BOOL),
+      'ResumeThread':([w.HANDLE],w.DWORD), 'WaitForSingleObject':([w.HANDLE,w.DWORD],w.DWORD),
+      'GetExitCodeProcess':([w.HANDLE,ctypes.POINTER(w.DWORD)],w.BOOL),
+      'TerminateJobObject':([w.HANDLE,w.UINT],w.BOOL), 'CloseHandle':([w.HANDLE],w.BOOL)}
+  for name, (args, result) in signatures.items():
+      function = getattr(self.kernel, name)
+      function.argtypes, function.restype = args, result
+  def check(value):
+   if not value:raise OSError(ctypes.get_last_error(),'owned reference ownership')
+  handles=[w.HANDLE() for _ in range(6)]
+  input_read,input_write,output_read,output_write,error_read,error_write=handles
+  attributes=None;initialized=False;child=Process()
+  try:
+   self.job=self.kernel.CreateJobObjectW(None,None);check(self.job)
+   limits=Extended();limits.basic.flags=0x4|0x8|0x200|0x2000
+   limits.basic.job_time,limits.basic.active,limits.job_memory=100000000,2,1073741824
+   check(self.kernel.SetInformationJobObject(self.job,9,ctypes.byref(limits),ctypes.sizeof(limits)))
+   observed=Extended();check(self.kernel.QueryInformationJobObject(self.job,9,ctypes.byref(observed),ctypes.sizeof(observed),None))
+   if (observed.basic.flags,observed.basic.job_time,observed.basic.active,observed.job_memory)!=(limits.basic.flags,100000000,2,1073741824):raise ValueError('owned reference limits readback')
+   security=Security(ctypes.sizeof(Security),None,True)
+   for read,write,parent_end in ((input_read,input_write,input_write),(output_read,output_write,output_read),(error_read,error_write,error_read)):
+    check(self.kernel.CreatePipe(ctypes.byref(read),ctypes.byref(write),ctypes.byref(security),4096));check(self.kernel.SetHandleInformation(parent_end,1,0))
+   size=ctypes.c_size_t();self.kernel.InitializeProcThreadAttributeList(None,2,0,ctypes.byref(size))
+   if not size.value or size.value>65536:raise ValueError('owned reference attributes bound')
+   attributes=ctypes.create_string_buffer(size.value);check(self.kernel.InitializeProcThreadAttributeList(attributes,2,0,ctypes.byref(size)));initialized=True
+   jobs=(w.HANDLE*1)(self.job);inherited=(w.HANDLE*3)(input_read.value,output_write.value,error_write.value)
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x2000d,jobs,ctypes.sizeof(jobs),None,None))
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x20002,inherited,ctypes.sizeof(inherited),None,None))
+   startup=StartupExtended();startup.startup.cb=ctypes.sizeof(startup);startup.startup.flags=0x100
+   startup.startup.stdin,startup.startup.stdout,startup.startup.stderr=input_read.value,output_write.value,error_write.value
+   startup.attributes=ctypes.cast(attributes,ctypes.c_void_p)
+   command_text=subprocess.list2cmdline(argv)
+   if len(command_text.encode('utf-16-le'))//2+1>32760:raise ValueError('owned reference command bound')
+   environment={key:os.environ[key] for key in ('SystemRoot','WINDIR','TEMP','TMP') if key in os.environ}
+   block=ctypes.create_unicode_buffer(''.join(k+'='+v+'\0' for k,v in sorted(environment.items()))+'\0')
+   command=ctypes.create_unicode_buffer(command_text)
+   check(self.kernel.CreateProcessW(argv[0],command,None,None,True,4|0x80000|0x400|0x8000000,block,None,ctypes.byref(startup.startup),ctypes.byref(child)))
+   self.process,self.thread,self.pid=child.process,child.thread,int(child.pid)
+   contained=w.BOOL();check(self.kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
+   if not contained.value:raise ValueError('owned reference launcher membership')
+   for handle in (input_read,output_write,error_write):check(self.kernel.CloseHandle(handle));handle.value=None
+   import msvcrt
+   def adopt(handle,flags,mode):
+    fd=msvcrt.open_osfhandle(handle.value,flags|os.O_BINARY);handle.value=None
+    try:return os.fdopen(fd,mode,buffering=0)
+    except BaseException:os.close(fd);raise
+   self.stdin=adopt(input_write,os.O_WRONLY,'wb');self.stdout=adopt(output_read,os.O_RDONLY,'rb');self.stderr=adopt(error_read,os.O_RDONLY,'rb')
+   if self.kernel.ResumeThread(self.thread)==0xffffffff:raise OSError(ctypes.get_last_error(),'owned reference resume')
+  except BaseException:
+   try:self.close()
+   except BaseException:pass
+   raise
+  finally:
+   active_exception=sys.exc_info()[0] is not None;errors=[]
+   for handle in handles:
+    if handle.value:
+     try:
+      if not self.kernel.CloseHandle(handle):errors.append('handle')
+     except BaseException:errors.append('handle')
+     handle.value=None
+   if initialized:
+    try:self.kernel.DeleteProcThreadAttributeList(attributes)
+    except BaseException:errors.append('attributes')
+   if errors and not active_exception:
+    try:self.close()
+    except BaseException:pass
+    raise ValueError('owned reference setup handles')
+
+ def poll(self):
+  from ctypes import wintypes as w
+  if self.process is None:return self.returncode
+  status=self.kernel.WaitForSingleObject(self.process,0)
+  if status==258:return None
+  if status!=0:raise OSError(ctypes.get_last_error(),'owned reference poll')
+  code=w.DWORD()
+  if not self.kernel.GetExitCodeProcess(self.process,ctypes.byref(code)):raise OSError(ctypes.get_last_error(),'owned reference exit code')
+  self.returncode=int(code.value);return self.returncode
+
+ def wait(self,timeout):
+  if type(timeout) not in (int,float) or not 0<timeout<=4:raise ValueError('owned reference wait bound')
+  until=time.monotonic()+timeout
+  while True:
+   value=self.poll()
+   if value is not None:return value
+   if time.monotonic()>=until:raise subprocess.TimeoutExpired('owned reference',timeout)
+   time.sleep(.01)
+
+ def verify_entry(self,pid):
+  from ctypes import wintypes as w
+  if self.entry is not None or type(pid) is not int or not 0<pid<=4294967295 or pid==self.pid:raise ValueError('owned reference entry PID')
+  handle=self.kernel.OpenProcess(0x1000|0x100000,False,pid)
+  if not handle:raise OSError(ctypes.get_last_error(),'owned reference entry open')
+  try:
+   contained=w.BOOL()
+   if not self.kernel.IsProcessInJob(handle,self.job,ctypes.byref(contained)):raise OSError(ctypes.get_last_error(),'owned reference entry query')
+   if not contained.value or self.kernel.GetProcessId(handle)!=pid:raise ValueError('owned reference entry membership')
+   self.entry,self.entry_pid=handle,pid;handle=None
+  finally:
+   active_exception=sys.exc_info()[0] is not None
+   if handle:
+    try:
+     if not self.kernel.CloseHandle(handle):raise OSError(ctypes.get_last_error(),'owned reference entry handle')
+    except BaseException:
+     if not active_exception:raise
+
+ def entry_exited(self):
+  if self.entry is None:raise ValueError('owned reference entry unbound')
+  status=self.kernel.WaitForSingleObject(self.entry,0)
+  if status not in (0,258):raise OSError(ctypes.get_last_error(),'owned reference entry wait')
+  return status==0
+
+ def active(self):
+  from ctypes import wintypes as w
+  class Accounting(ctypes.Structure):
+   _fields_=[('user',ctypes.c_longlong),('kernel',ctypes.c_longlong),('period_user',ctypes.c_longlong),('period_kernel',ctypes.c_longlong),('page_faults',w.DWORD),('total',w.DWORD),('active',w.DWORD),('terminated',w.DWORD)]
+  value=Accounting()
+  if not self.kernel.QueryInformationJobObject(self.job,1,ctypes.byref(value),ctypes.sizeof(value),None):raise OSError(ctypes.get_last_error(),'owned reference job accounting')
+  if not 0<=value.active<=2:raise ValueError('owned reference job process bound')
+  return int(value.active)
+
+ def kill(self):
+  if self.job and not self.kernel.TerminateJobObject(self.job,99):raise OSError(ctypes.get_last_error(),'owned reference terminate job')
+
+ def close(self):
+  errors=[];settled=False
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(type(error).__name__);return None
+  try:
+   if self.job:
+    clean(self.kill)
+    if self.process is not None:clean(lambda:self.wait(3))
+    until=time.monotonic()+3
+    while True:
+     count=clean(self.active)
+     if count==0:settled=True;break
+     if count is None or time.monotonic()>=until:errors.append('job active unconfirmed');break
+     time.sleep(.01)
+    if self.entry is not None and clean(self.entry_exited) is not True:errors.append('entry exit unconfirmed')
+  finally:
+   for pipe in (self.stdin,self.stdout,self.stderr):
+    if pipe is not None and not pipe.closed:clean(pipe.close)
+   for name in ('entry','thread','process','job'):
+    handle=getattr(self,name)
+    if handle:
+     result=clean(lambda handle=handle:self.kernel.CloseHandle(handle))
+     if not result:errors.append('handle close unconfirmed')
+     setattr(self,name,None)
+  if errors:raise ValueError('owned reference cleanup failed')
+  self.ownership_closed=settled
+
+from contextlib import asynccontextmanager
+import hashlib,json,queue,threading,math
+from pathlib import Path
+import anyio
+from mcp.types import JSONRPCMessage
+from mcp.shared.message import SessionMessage
+
+def tls_frame(raw):
+ if type(raw) is not bytes or not 1<len(raw)<=65536 or raw[-1:]!=b'\n' or b'\n' in raw[:-1]:raise ValueError('owned SDK physical frame')
+ def pairs(items):
+  result={}
+  for key,value in items:
+   if key in result:raise ValueError('owned SDK duplicate key')
+   result[key]=value
+  return result
+ def number(value):
+  result=float(value)
+  if not math.isfinite(result):raise ValueError('owned SDK nonfinite number')
+  return result
+ value=json.loads(raw.decode('utf-8','strict'),object_pairs_hook=pairs,parse_float=number,parse_constant=lambda value:(_ for _ in ()).throw(ValueError('owned SDK nonfinite')))
+ if type(value) is not dict or value.get('jsonrpc')!='2.0':raise ValueError('owned SDK JSONRPC frame')
+ return JSONRPCMessage.model_validate(value)
+
+@asynccontextmanager
+async def owned_tls_session_streams(root,origin,pid,mode,arm,role,observations):
+ """Qualification byte transport only; the official ClientSession owns protocol calls."""
+ root=Path(root).resolve();pid=Path(pid);arm=Path(arm)
+ modes=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+ import re
+ if mode not in modes or role not in ('baseline','fault','followup') or not re.fullmatch(r'https://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535:raise ValueError('owned SDK fixed selection')
+ if sys.flags.isolated!=1 or (root/'packages').exists():raise ValueError('owned SDK installed harness')
+ reference=root/'docs/EQ083_TLS_REFERENCE_ENTRY.txt'
+ with reference.open('rb') as stream:source=stream.read(5917)
+ if len(source)!=5916 or hashlib.sha256(source).hexdigest()!='298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231':raise ValueError('owned SDK reference identity')
+ certroot=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-tls-certificates-6197efe')
+ argv=[sys.executable,'-I',str(reference),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid),'trades',mode,str(arm),str(certroot),role]
+ process=None
+ started=[];errors=[];stderr=bytearray();frames=queue.Queue(maxsize=9);writes=queue.Queue(maxsize=9)
+ write_stop=threading.Event();read_count=write_count=0;entry=None;normal=False
+ read_sender,read_stream=anyio.create_memory_object_stream(0)
+ write_stream,write_receiver=anyio.create_memory_object_stream(0)
+ def stdout_reader():
+  nonlocal read_count
+  pending=bytearray();total=0
+  try:
+   while True:
+    chunk=process.stdout.read(1)
+    if not chunk:break
+    total+=1;pending.extend(chunk)
+    if total>524288 or len(pending)>65536:raise ValueError('owned SDK stdout bound')
+    if chunk==b'\n':
+     read_count+=1
+     if read_count>8:raise ValueError('owned SDK frame count')
+     frames.put_nowait(bytes(pending));pending.clear()
+   if pending:raise ValueError('owned SDK partial frame at EOF')
+  except BaseException as error:errors.append(type(error).__name__)
+  finally:
+   try:frames.put_nowait(None)
+   except BaseException as error:errors.append(type(error).__name__)
+ def stderr_reader():
+  try:
+   while True:
+    chunk=process.stderr.read(1024)
+    if not chunk:break
+    stderr.extend(chunk)
+    if len(stderr)>4096:raise ValueError('owned SDK stderr bound')
+  except BaseException as error:errors.append(type(error).__name__)
+ def stdin_writer():
+  nonlocal write_count
+  try:
+   while not write_stop.is_set():
+    try:raw=writes.get(timeout=.05)
+    except queue.Empty:continue
+    if raw is None:break
+    write_count+=1
+    if write_count>8 or not 1<len(raw)<=16384 or raw[-1:]!=b'\n':raise ValueError('owned SDK outgoing bound')
+    if process.stdin.write(raw)!=len(raw):raise ValueError('owned SDK short write')
+    process.stdin.flush()
+  except BaseException as error:errors.append(type(error).__name__)
+  finally:
+   try:process.stdin.close()
+   except BaseException as error:errors.append(type(error).__name__)
+ async def receive():
+  async with read_sender:
+   while True:
+    if errors:raise ValueError('owned SDK transport reader failure')
+    try:raw=frames.get_nowait()
+    except queue.Empty:
+     await anyio.sleep(.01);continue
+    if raw is None:return
+    await read_sender.send(SessionMessage(tls_frame(raw)))
+ async def send():
+  async with write_receiver:
+   async for message in write_receiver:
+    raw=(message.message.model_dump_json(by_alias=True,exclude_none=True)+'\n').encode('utf-8','strict')
+    if len(raw)>16384:raise ValueError('owned SDK outgoing length')
+    writes.put_nowait(raw)
+ try:
+  process=WindowsReferenceChild(argv)
+  for target in (stdout_reader,stderr_reader,stdin_writer):
+   thread=threading.Thread(target=target);thread.start();started.append(thread)
+  deadline=time.monotonic()+4
+  while not pid.with_name(pid.name+'.complete').is_dir():
+   if errors or process.poll() is not None or time.monotonic()>=deadline:raise ValueError('owned SDK marker unavailable')
+   await anyio.sleep(.01)
+  with pid.open('rb') as stream:data=stream.read(129)
+  if len(data)>128:raise ValueError('owned SDK marker bound')
+  marker=json.loads(data)
+  if type(marker) is not dict or set(marker)!={'pid'} or type(marker['pid']) is not int or not 0<marker['pid']<=4294967295:raise ValueError('owned SDK marker')
+  process.verify_entry(marker['pid']);entry=marker['pid']
+  if process.entry_exited() or process.poll() is not None:raise ValueError('owned SDK entry not live')
+  async with anyio.create_task_group() as tasks:
+   tasks.start_soon(receive);tasks.start_soon(send)
+   try:yield read_stream,write_stream
+   finally:
+    original=sys.exc_info()[0] is not None;inner_errors=[]
+    with anyio.CancelScope(shield=True):
+     try:await write_stream.aclose()
+     except BaseException as error:inner_errors.append(type(error).__name__)
+     for callback in (write_stop.set,tasks.cancel_scope.cancel):
+      try:callback()
+      except BaseException as error:inner_errors.append(type(error).__name__)
+    if inner_errors:
+     errors.extend(inner_errors)
+     if not original:raise ValueError('owned SDK inner cleanup failed')
+  normal=True
+ finally:
+  active_exception=sys.exc_info()[0] is not None;cleanup=[]
+  def clean(callback):
+   try:callback()
+   except BaseException as error:cleanup.append(type(error).__name__)
+  clean(write_stop.set)
+  if process is not None:
+   clean(lambda:process.wait(timeout=3))
+   if normal:
+    def inspect_exit():
+     if process.returncode!=0 or process.entry_exited() is not True:raise ValueError('owned SDK actual exit')
+    clean(inspect_exit)
+   clean(process.close)
+  for thread in started:clean(lambda thread=thread:thread.join(2))
+  for pipe in (() if process is None else (process.stdin,process.stdout,process.stderr)):
+   def close_pipe(pipe=pipe):
+    if not pipe.closed:pipe.close()
+   clean(close_pipe)
+  with anyio.CancelScope(shield=True):
+   for stream in (read_stream,read_sender,write_stream,write_receiver):
+    try:await stream.aclose()
+    except BaseException as error:cleanup.append(type(error).__name__)
+  def inspect_cleanup():
+   if process is not None and (process.ownership_closed is not True or process.returncode is None or any(thread.is_alive() for thread in started)):raise ValueError('owned SDK incomplete cleanup')
+  clean(inspect_cleanup)
+  if errors or stderr:cleanup.append('owned SDK wire reader failed')
+  if cleanup and not active_exception:raise ValueError('owned SDK cleanup failed')
+ if not normal:raise ValueError('owned SDK incomplete context')
+ closed=pid.with_name(pid.name+'.closed')
+ if not closed.with_name(closed.name+'.complete').is_dir():raise ValueError('owned SDK close witness absent')
+ with closed.open('rb') as stream:data=stream.read(257)
+ if len(data)>256:raise ValueError('owned SDK close witness bound')
+ witness=json.loads(data)
+ providers=5 if role=='baseline' else 2 if role=='followup' or mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial') else 1
+ if type(witness) is not dict or type(witness.get('pid')) is not int or type(witness.get('provider_calls')) is not int or witness!=dict(pid=entry,provider_calls=providers,marker='eq083-mcp-closed',role=role,mode=mode):raise ValueError('owned SDK close witness')
+ if read_count!=(7 if role=='baseline' else 4 if providers==2 else 3) or write_count!=read_count+1:raise ValueError('owned SDK complete frame ledger')
+ observations.append(dict(role=role,mode=mode,entry_exit=True,launcher_exit=True,job_empty=True,ownership_closed=True,provider_calls=providers,full_frames=read_count,closed=witness))
+
+assert len(sys.argv)==2
+root=Path(sys.argv[1]).resolve()
+assert sys.flags.isolated==1 and sys.platform=='win32' and not (root/'packages').exists()
+assert all('site-packages' in Path(v.__file__).resolve().parts for v in (mcp,equity_feature_io_sdk,equity_feature_client,equity_feature_mcp,equity_feature_service))
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+def pinned(path,size,digest):
+ with (root/path).open('rb') as stream:value=stream.read(size+1)
+ assert len(value)==size and hashlib.sha256(value).hexdigest()==digest
+ return value
+with (root/'docs/EQ083_TLS_PARENT_INPUTS.json').open('rb') as stream:manifest_bytes=stream.read(65537)
+assert len(manifest_bytes)<=65536
+manifest=json.loads(manifest_bytes)
+assert set(manifest)=={'scope','inputs','reference_entry','owner_entry','session_transport','request_ledger','process_source','certificate_inputs'}
+assert 1<=len(manifest['inputs'])<=32 and len({v['harness_path'] for v in manifest['inputs']})==len(manifest['inputs'])
+assets={item['harness_path']:pinned(item['harness_path'],item['bytes'],item['sha256']) for item in manifest['inputs']}
+assert hashlib.sha256(assets['docs/EQ083_REFERENCE_PROCESS.txt']).hexdigest()=='49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e'
+fixture=json.loads(assets['docs/EQ081_CLIENT_FIXTURES.json'])
+remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']))
+remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
+tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
+assert len(tools)==7
+owner_source=pinned('docs/EQ083_TLS_OWNER_ENTRY.txt',7687,'c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746')
+assert 1<=len(owner_source)<=8192
+pinned('docs/EQ083_TLS_REFERENCE_ENTRY.txt',5916,'298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231')
+pinned('docs/EQ083_TLS_SESSION_TRANSPORT.txt',20709,'f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50')
+
+def completed(path,limit):
+ marker=path.with_name(path.name+'.complete')
+ if not marker.exists():return None
+ assert marker.is_dir()
+ with path.open('rb') as stream:data=stream.read(limit+1)
+ assert len(data)<=limit
+ return json.loads(data)
+def wait_completed(path,limit,seconds):
+ deadline=time.monotonic()+seconds
+ while True:
+  value=completed(path,limit)
+  if value is not None:return value
+  assert time.monotonic()<deadline
+  time.sleep(.01)
+def exited(pid):
+ assert type(pid) is int and pid>0
+ if sys.platform=='linux':
+  try:value=(Path('/proc')/str(pid)/'stat').read_text(encoding='ascii')
+  except OSError as error:
+   if error.errno in (errno.ENOENT,errno.ESRCH):return True
+   raise
+  return value.rsplit(')',1)[1].strip().split()[0]=='Z'
+ kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+ kernel.OpenProcess.argtypes=[ctypes.c_uint32,ctypes.c_int,ctypes.c_uint32];kernel.OpenProcess.restype=ctypes.c_void_p
+ kernel.WaitForSingleObject.argtypes=[ctypes.c_void_p,ctypes.c_uint32];kernel.WaitForSingleObject.restype=ctypes.c_uint32
+ kernel.CloseHandle.argtypes=[ctypes.c_void_p];kernel.CloseHandle.restype=ctypes.c_int
+ handle=kernel.OpenProcess(0x100000,False,pid)
+ if not handle:
+  code=ctypes.get_last_error()
+  if code==87:return True
+  raise OSError(code,'owned process inspection')
+ try:
+  status=kernel.WaitForSingleObject(handle,0)
+  assert status in (0,258)
+  return status==0
+ finally:assert kernel.CloseHandle(handle)
+def pairs(items):
+ value={}
+ for key,item in items:
+  assert key not in value;value[key]=item
+ return value
+def number(value):
+ result=float(value);assert math.isfinite(result);return result
+def parse(raw):return json.loads(raw.decode('utf-8','strict'),object_pairs_hook=pairs,parse_float=number,parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite')))
+case=fixture['native_cases'][0];producer=case['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+def verify(value):
+ assert value==producer and hashlib.sha256(canonical(value)).hexdigest()==case['producer_payload_sha256']
+ native=convert_result(ResultView(canonical(dict(schema='equity.remote',version='1.1',request_id='native-proof',kind='result',payload=value))),expected)
+ assert native.ok and hashlib.sha256(encode_result(native.view)).hexdigest()==case['native_sha256']
+def value(outcome):assert outcome.ok;return outcome.view.payload_json()
+def denied(outcome):
+ assert not outcome.ok and outcome.view is None
+ f=outcome.failure;assert (f.category,f.code,f.phase,f.status)==('authorization','remote_denial','decode',403)
+modes=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+
+def publish(path,value,limit):
+ data=canonical(value);assert len(data)<=limit and not path.exists() and not path.with_name(path.name+'.complete').exists()
+ pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
+
+def structured(name,response):
+ assert set(response)=={'content','structuredContent','isError'}
+ value=response['structuredContent'];assert type(value) is dict and len(canonical(value))<=16384
+ assert response['content']==[dict(type='text',text=canonical(value).decode('ascii'))] and response['isError']==(not value['ok'])
+ Draft202012Validator(next(v['outputSchema'] for v in tools if v['name']==name)).validate(value)
+ assert b'eq083-synthetic-private-token-path' not in canonical(response) and b'Bearer' not in canonical(response) and b'A'*43 not in canonical(response) and b'B'*43 not in canonical(response)
+ return value
+
+
+certroot=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-tls-certificates-6197efe')
+for name,size,digest in [('valid',1174,'1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc'),('wrong',1174,'6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0')]:
+ path=certroot/(name+'-cert.pem');assert not path.is_symlink()
+ with path.open('rb') as stream:data=stream.read(8193)
+ assert len(data)==size and hashlib.sha256(data).hexdigest()==digest
+def context(fault=False):
+ if fault and mode=='untrusted-certificate':result=ssl.create_default_context()
+ else:
+  result=ssl.create_default_context(cafile=str(certroot/'valid-cert.pem'))
+  if fault and mode=='hostname-mismatch':result.load_verify_locations(cafile=str(certroot/'wrong-cert.pem'))
+ assert result.verify_mode==ssl.CERT_REQUIRED and result.check_hostname is True
+ return result
+
+for mode in modes:
+ with tempfile.TemporaryDirectory(prefix='eq083-three-lane-tls-') as directory:
+  ready,stop,control,ack=(Path(directory)/name for name in ('ready','stop','control','ack'))
+  profile=OwnedEntryProfile('eq083-tls',owner_source,hashlib.sha256(owner_source).hexdigest(),(str(root/'tests/service'),str(certroot),str(ready),str(stop),str(control),str(ack),mode),True)
+  supervisor=OwnedEpochSupervisor(OwnedEntryInventory((profile,)));results=[];errors=[];thread=None;owner=None;fault_client=None
+  direct_sends=direct_attempts=client_main=client_fault=sdk_http=sdk_attempts=sequence=0
+  acks=[];saved=None;complete=None;observations=[];references=[];wire_faults=[]
+  read_fault=mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+  trust_fault=mode in ('untrusted-certificate','hostname-mismatch')
+  def launch():
+   try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=25,output_limit=768))
+   except BaseException as error:errors.append(type(error).__name__)
+  try:
+   thread=threading.Thread(target=launch);thread.start()
+   address=wait_completed(ready,128,4);assert set(address)=={'port'} and type(address['port']) is int and 1<=address['port']<=65535 and thread.is_alive()
+   port=address['port'];origin='https://127.0.0.1:'+str(port)
+   def direct(payload,kind,status=200,principal='A',fault=False):
+    global direct_sends,direct_attempts
+    direct_attempts+=1;assert direct_attempts<=6
+    request_id='eq083-tls-http-'+str(direct_attempts);encoded=Request('1.1',request_id,payload).encoded;assert len(encoded)<=16384
+    wire=b'POST /v1/request HTTP/1.0\r\nHost: 127.0.0.1:'+str(port).encode()+b'\r\nAuthorization: Bearer '+principal.encode('ascii')*43+b'\r\nContent-Type: application/json\r\nContent-Length: '+str(len(encoded)).encode()+b'\r\nConnection: close\r\n\r\n'+encoded
+    received=bytearray();boundary=None
+    try:
+     with socket.create_connection(('127.0.0.1',port),timeout=5) as raw:
+      with context(fault).wrap_socket(raw,server_hostname='127.0.0.1') as connection:
+       assert not (fault and trust_fault)
+       direct_sends+=1;connection.settimeout(5);connection.sendall(wire)
+       while True:
+        chunk=connection.recv(1024)
+        if not chunk:break
+        received.extend(chunk)
+        if boundary is None:
+         location=received.find(b'\r\n\r\n')
+         if location>=0:boundary=location+4;assert boundary<=8192
+         else:assert len(received)<=8192
+        if boundary is not None:assert len(received)-boundary<=262144
+    except ssl.SSLCertVerificationError:
+     assert fault and trust_fault and not received
+     wire_faults.append(dict(mode=mode,stage='TLS handshake',http_sent=False));return None
+    assert boundary is not None
+    header=bytes(received[:boundary-4]);body=bytes(received[boundary:]);lines=header.split(b'\r\n')
+    assert re.fullmatch(rb'HTTP/1\.[01] '+str(status).encode()+rb' [\x20-\x7e]*',lines[0])
+    headers={};lengths=[]
+    for line in lines[1:]:
+     name,separator,item=line.partition(b':');assert separator
+     name=name.decode('ascii').lower();item=item.strip().decode('ascii')
+     if name=='content-length':lengths.append(item)
+     if name in headers:assert fault and mode=='duplicate-content-length' and name=='content-length'
+     else:headers[name]=item
+    assert headers['content-type']=='application/json' and headers['cache-control']=='no-store' and headers['x-content-type-options']=='nosniff'
+    assert 'transfer-encoding' not in headers and 'content-encoding' not in headers
+    assert all(re.fullmatch(r'0|[1-9][0-9]*',v) for v in lengths)
+    if fault and mode=='extra-response-byte':
+     assert len(lengths)==1 and int(lengths[0])+1==len(body) and body[-1:]==b'x'
+     parsed=parse(body[:-1]);remote.validate(parsed);assert (parsed['version'],parsed['request_id'],parsed['kind'])==('1.1',request_id,kind);verify(parsed['payload'])
+    elif fault and mode=='truncated-response-byte':assert len(lengths)==1 and int(lengths[0])==len(body)+1
+    elif fault and mode=='duplicate-content-length':
+     assert len(lengths)==2 and lengths[0]==lengths[1]==str(len(body))
+     parsed=parse(body);remote.validate(parsed);assert (parsed['version'],parsed['request_id'],parsed['kind'])==('1.1',request_id,kind);verify(parsed['payload'])
+    else:
+     assert len(lengths)==1 and int(lengths[0])==len(body)
+     parsed=parse(body);remote.validate(parsed);assert (parsed['version'],parsed['request_id'],parsed['kind'])==('1.1',request_id,kind)
+     if status!=200:assert 'content-disposition' not in headers
+     if status==200 and payload['operation']=='artifact_read':assert headers['content-disposition']=='attachment; filename="result-'+hashlib.sha256(payload['result_id'].encode()).hexdigest()+'.json"'
+     return parsed['payload']
+    assert kind=='result' and status==200
+    wire_faults.append(dict(mode=mode,physical_eof=True,received_bytes=len(body),declared_bytes=int(lengths[0]),content_lengths=len(lengths)));return None
+   def provider():
+    global client_main
+    client_main+=1;assert client_main<=6;return 'A'*43
+   def fault_provider():
+    global client_fault
+    client_fault+=1;assert client_fault==1;return ('B' if mode=='actual-owner-denial' else 'A')*43
+   owner=RemoteClient(origin,provider,attempts=1,budget=5,ssl_context=context())
+   def calc():return dict(operation='calculate',context=expected.context_json(),scope=expected.scope.payload_json(),idempotency_key='eq083-tls-original',command_digest=expected.command_digest)
+   def action(name):
+    global sequence,saved
+    assert name==('settled','baseline','arm','restored','final')[sequence];sequence+=1
+    publish(control.with_name(control.name+'.'+str(sequence)),dict(sequence=sequence,action=name),128)
+    v=wait_completed(ack.with_name(ack.name+'.'+str(sequence)),1024,4)
+    assert set(v)=={'sequence','action','mode','requests','tls','faults','snapshot'} and type(v['sequence']) is int and v['sequence']==sequence and v['action']==name and v['mode']==mode
+    totals=(1,12,13 if read_fault else 12,16 if read_fault else 12,22 if read_fault else 18)
+    sent=direct_sends+client_main+(client_fault if read_fault else 0)+sdk_http
+    assert type(v['requests']) is int and v['requests']==totals[sequence-1]==sent
+    failed=3 if trust_fault and sequence>=4 else 0
+    assert type(v['tls']) is dict and all(type(n) is int for n in v['tls'].values()) and v['tls']==dict(accepts=sent+failed,success=sent,failure=failed)
+    s=v['snapshot'];assert set(s)=={'job','result','state','expiry','held','sizes','reads','running','queue','sink_entries'}
+    assert all(type(s[k]) is str and re.fullmatch('[0-9a-f]{32}-[0-9a-f]{32}',s[k]) for k in ('job','result')) and s['state']=='succeeded'
+    assert type(s['expiry']) is int and s['expiry']==300000000100 and type(s['held']) is int and s['held']==17675
+    assert type(s['sizes']) is list and s['sizes']==[4696,6261,3318,3400] and all(type(n) is int and n>0 for n in s['sizes']) and 0<s['held']==sum(s['sizes'])<=262144
+    assert s['running'] is None and all(type(s[k]) is int and s[k]==n for k,n in [('reads',1),('queue',0),('sink_entries',1)])
+    if saved is None:saved=s
+    else:assert s==saved
+    fault_count=3 if mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length') and sequence>=4 else 0
+    assert type(v['faults']) is list and len(v['faults'])==fault_count
+    for witness in v['faults']:
+     assert set(witness)=={'original_bytes','original_sha256','forwarded_bytes'} and type(witness['original_bytes']) is int and 0<witness['original_bytes']<=262144 and type(witness['forwarded_bytes']) is int and re.fullmatch('[0-9a-f]{64}',witness['original_sha256'])
+     assert witness['forwarded_bytes']==witness['original_bytes']+(1 if mode=='extra-response-byte' else -1 if mode=='truncated-response-byte' else 0)
+    acks.append(v)
+   first=direct(calc(),'job');action('settled');assert first['job_id']==saved['job']
+   job=JobExpectation(saved['job'],expected.command_digest)
+   result_payload=dict(operation='result_read',result_id=saved['result'],cursor=None);export_payload=dict(operation='artifact_read',result_id=saved['result'],cursor=None)
+   verify(direct(result_payload,'result'));verify(direct(export_payload,'result'))
+   complete=value(owner.calculate(expected,'eq083-tls-original',request_id='tls-typed-baseline-calculate'))
+   assert (complete['job_id'],complete['result_id'],complete['state'],complete['command_digest'])==(saved['job'],saved['result'],'succeeded',expected.command_digest)
+   assert value(owner.job_status(job,request_id='tls-typed-baseline-status'))==complete
+   verify(value(owner.result_read(saved['result'],expected,request_id='tls-typed-baseline-result')))
+   verify(value(owner.artifact_read(saved['result'],expected,request_id='tls-typed-baseline-export')))
+   def failure(outcome):
+    assert not outcome.ok and outcome.view is None
+    expected_failure=('transport','tls_verification_failed','connect',None) if trust_fault else ('authorization','remote_denial','decode',403) if mode=='actual-owner-denial' else ('protocol','invalid_response','decode',None)
+    f=outcome.failure;assert (f.category,f.code,f.phase,f.status)==expected_failure
+   def physical_faults():
+    global fault_client
+    if trust_fault:
+     assert direct(calc(),'job',fault=True) is None
+    else:
+     denial=mode=='actual-owner-denial'
+     answer=direct(result_payload,'error' if denial else 'result',status=403 if denial else 200,principal='B' if denial else 'A',fault=True)
+     if denial:assert type(answer) is dict and answer['category']=='authorization'
+     else:assert answer is None
+    fault_client=RemoteClient(origin,fault_provider,attempts=1,budget=5,ssl_context=context(True))
+    outcome=fault_client.calculate(expected,'eq083-tls-original',request_id='tls-typed-fault') if trust_fault else fault_client.result_read(saved['result'],expected,request_id='tls-typed-fault')
+    failure(outcome);fault_client.close();fault_client=None
+   async def sdk(role):
+    global sdk_http,sdk_attempts
+    pid=Path(directory)/(role+'-pid');arm=Path(directory)/(role+'-arm');count=0
+    async def call(session,name,args,ok=True):
+     nonlocal count
+     global sdk_http,sdk_attempts
+     count+=1;sdk_attempts+=1;assert count<=(5 if role=='baseline' else 2 if role=='followup' or read_fault else 1)
+     response=await session.call_tool(name,args);v=structured(name,response.model_dump(exclude_none=True))
+     if not (role=='fault' and trust_fault):sdk_http+=1
+     assert v['ok'] is ok
+     if ok:return v['payload']
+     expected_failure=dict(source='client',category='transport',code='tls_verification_failed',phase='connect',status=None) if trust_fault else dict(source='client',category='authorization',code='remote_denial',phase='decode',status=403) if mode=='actual-owner-denial' else dict(source='client',category='protocol',code='invalid_response',phase='decode',status=None)
+     assert v==dict(ok=False,failure=expected_failure)
+    async with owned_tls_session_streams(root,origin,pid,mode,arm,role,observations) as (read,write):
+     async with ClientSession(read,write,read_timeout_seconds=timedelta(seconds=10)) as session:
+      init=await session.initialize();assert init.protocolVersion=='2025-11-25' and init.capabilities.model_dump(exclude_none=True)==dict(tools=dict(listChanged=False))
+      listed=await session.list_tools();assert [v.name for v in listed.tools]==[v['name'] for v in tools]
+      for actual,frozen in zip(listed.tools,tools):assert actual.inputSchema==frozen['inputSchema'] and actual.outputSchema==frozen['outputSchema']
+      if role=='fault' and trust_fault:
+       action('arm');publish(arm,dict(armed=True,mode=mode),64);physical_faults()
+       await call(session,'equity_calculate',dict(profile='command',idempotency_key='eq083-tls-original'),False)
+      else:
+       admitted=await call(session,'equity_calculate',dict(profile='command',idempotency_key='eq083-tls-original'));assert admitted['data']==complete
+       ref=admitted['reference'];references.append(ref)
+       if role=='fault':
+        action('arm');publish(arm,dict(armed=True,mode=mode),64);physical_faults()
+        await call(session,'equity_result_summary',dict(reference=ref),False)
+       else:
+        if role=='baseline':assert (await call(session,'equity_job_status',dict(reference=ref)))['data']==complete
+        verify((await call(session,'equity_result_summary',dict(reference=ref)))['data'])
+        if role=='baseline':
+         exported=await call(session,'equity_artifact_reference',dict(reference=ref));assert exported['operation']=='artifact_read'
+         verify((await call(session,'equity_result_summary',dict(reference=exported['reference'])))['data'])
+   anyio.run(sdk,'baseline');assert (direct_sends,client_main,sdk_http)==(3,4,5) and len(observations)==1;action('baseline')
+   if mode=='verified-full-result':action('arm')
+   else:anyio.run(sdk,'fault');assert len(observations)==2
+   action('restored')
+   assert direct(calc(),'job')==complete;verify(direct(result_payload,'result'))
+   assert value(owner.calculate(expected,'eq083-tls-original',request_id='tls-typed-followup-calculate'))==complete
+   verify(value(owner.result_read(saved['result'],expected,request_id='tls-typed-followup-result')))
+   anyio.run(sdk,'followup');action('final')
+   assert (direct_sends,client_main,client_fault,sdk_http)==((6,6,1,9) if read_fault else (5,6,1 if trust_fault else 0,7))
+   assert direct_attempts==(5 if mode=='verified-full-result' else 6) and sdk_attempts==(9 if read_fault else 8 if trust_fault else 7)
+   assert len(observations)==(2 if mode=='verified-full-result' else 3) and len(set(references))==len(references)
+   assert all(v['entry_exit'] is True and v['launcher_exit'] is True and v['job_empty'] is True and v['ownership_closed'] is True for v in observations)
+  finally:
+   active_exception=sys.exc_info()[0] is not None;cleanup=[]
+   def clean(callback):
+    try:callback()
+    except BaseException as error:cleanup.append(type(error).__name__)
+   for client in (fault_client,owner):
+    if client is not None:clean(client.close)
+   clean(lambda:stop.write_bytes(b'1'))
+   if thread is not None:
+    clean(lambda:thread.join(6))
+    def inspect_thread():
+     if thread.is_alive():raise ValueError('owned TLS owner still live')
+    clean(inspect_thread)
+   if cleanup and not active_exception:raise ValueError('owned TLS parent cleanup failed')
+  assert thread is not None and not thread.is_alive() and not errors and len(results)==1
+  assert (results[0].reason,results[0].exit_code)==('exited',0),(results[0].reason,results[0].exit_code,results[0].output)
+  assert parse(results[0].output)==dict(marker='eq083-tls-http-exited',mode=mode,requests=22 if read_fault else 18,sequence=5,snapshot_sha256=hashlib.sha256(canonical(saved)).hexdigest())
+  print(json.dumps(dict(marker='eq083-three-lane-tls',mode=mode,direct_attempts=direct_attempts,direct_sends=direct_sends,client_main=client_main,client_fault=client_fault,sdk_attempts=sdk_attempts,sdk_http=sdk_http,total=22 if read_fault else 18,source_reads=1,acks=acks,wire_faults=wire_faults,observations=observations,native_exit=True),sort_keys=True,separators=(',',':')))

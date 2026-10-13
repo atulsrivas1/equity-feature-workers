@@ -1,0 +1,65 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "disposition": "PRIMARY_DOCUMENTATION_RESEARCH_CONFINEMENT_CONTRACT_INCOMPLETE",
+    "scope": "MICROSOFT_PRIMARY_DOCUMENTATION_ONLY",
+    "newtests": 0,
+    "new_tests": 0,
+    "findings": [],
+    "facts": [
+      {
+        "source": "https://learn.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights",
+        "fact": "OpenProcess checks requested access against the process object's DACL. PROCESS_DUP_HANDLE permits handle duplication, and Microsoft warns that this right can be used to obtain a maximum-access process handle through pseudo-handle duplication. WRITE_DAC changes a DACL; WRITE_OWNER changes ownership. CreateProcess returns a full-access process handle. A process DACL is therefore an object-access control, not a complete filesystem confinement or quota mechanism."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-duplicatehandle",
+        "fact": "DuplicateHandle requires PROCESS_DUP_HANDLE on both source and target process handles. The duplicate refers to the same underlying object. Restricting acquisition of those rights matters in both directions, but this API contract alone does not establish that all existing, inherited or transferred writable handles are excluded from a proposed topology."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows/win32/secauthz/owner-of-a-new-object",
+        "fact": "The documented default is implicit owner WRITE_DAC. A new object's owner comes from the creating primary or impersonation token's default owner. Ownership-setting privileges and valid SID restrictions are distinct parts of this contract. An ordinary DACL omission is not sufficient reasoning for denying owner DACL modification."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-identifiers",
+        "fact": "OWNER RIGHTS SID S-1-3-4 represents the current object owner. Microsoft states that an applicable ACE carrying it suppresses implicit owner READ_CONTROL and WRITE_DAC. Thus restricting implicit owner rights is supported in principle; this is not proof that a specific uncreated process ACL denies all such rights. Other explicit grants, inherited ACEs, ownership changes and privilege paths still require separate evaluation."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows/win32/secauthz/implementing-an-appcontainer",
+        "fact": "AppContainer access is the intersection of user/group and package/capability permissions. LPAC opts out of All Application Packages through its additional process attribute and requires more explicit capabilities. The documented profile provides create/read/write storage; LOCALAPPDATA points at it and TEMP/TMP are rerouted beneath it. This is an additional writable-domain obligation, not proof of exclusive custom-quota-root access. LPAC does not, from this documentation, eliminate every profile or capability-granted storage path."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows/win32/secauthz/appcontainer-isolation",
+        "fact": "AppContainer isolation permits selectively granted read-write files/registry resources and access to resources created for that container. Isolation is not described as a global allocated-byte/file-node quota. It does not establish confinement of an unrelated provider or all external writers to a custom filesystem."
+      },
+      {
+        "source": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessasuserw",
+        "fact": "Inherited handles retain the original access rights. The returned process handle may continue to have full access even when the process descriptor prevents opening it again. Microsoft recommends an explicit handle list for selective inheritance. Therefore new-object DACL reasoning cannot substitute for auditing retained and inherited handle authority."
+      }
+    ],
+    "answer_to_candidate_question": "AppContainer plus a closed process DACL alone does not establish that every writer is confined to the custom quota root. Process-object access controls and file/token checks are different domains; profile storage, grants, existing handles, provider/broker authority and mapped/deferred lifetimes remain unclosed. This is a source-contract insufficiency, not an observed escape or a claim that a complete supported design is impossible.",
+    "candidate_obligations": [
+      "Freeze exact token user/group/package/capability/privilege and integrity policies, LPAC choice if any, supported OS contract and process/thread descriptors before the untrusted child resumes. Evaluate OWNER RIGHTS applicability and explicit grants instead of asserting blanket owner-rights denial.",
+      "Retain exact physical process identities and enumerate required handle rights/ownership, initial inheritance, duplication directions and broker/provider transfers. A generic PID comparison does not establish this authority.",
+      "Account for all writable domains: custom filesystem, profile/LOCALAPPDATA/TEMP, registry/capability resources and privileged provider/broker actions. Environment-variable redirection is not by itself an access-control boundary.",
+      "Independently freeze filesystem opening rights, outside-writer exclusion, alias/reparse/mapping handling and continuous allocation/node/request/metadata quotas, including deleted-open and deferred final-release accounting.",
+      "Compose these controls in the single reviewed outer transaction with preimport source/host binding, failure ordering, drain and all-owned cleanup. No current host setup, profile or ACL configuration is selected here."
+    ],
+    "limitations": [
+      "Documentation research only, tests zero; no implementation, token/ACL/profile changes, host observation, process or native/API calls, mounting, installation, binary/library/driver acquisition, downloads of executable artifacts, probe or rejected binary-task reattempt.",
+      "No actual security descriptor, effective access, selected host, complete process/handle/file topology, numerical quota enforcement or outside-writer exclusion was verified.",
+      "OWNER RIGHTS removes documented implicit rights when applicable; this report neither claims an unsupported unconditional denial nor establishes behavior of a specific untested combination of AppContainer token, privileges and ACLs.",
+      "No dependency/license/environment selection, physical issuer, Ready, fresh form or operational authority. Prior reports remain unchanged. Research and design remain agent work; no new owner-input requirement follows merely from incomplete implementation."
+    ],
+    "tool_only_history": [
+      "Web find reported no match for LPAC opt-out spelling; actual official article lines 253-322 were inspected and contain the explicit additional attribute. No absence inferred from search results."
+    ],
+    "operational_authorization": false,
+    "mechanism_admitted": false,
+    "new_owner_input_required": false
+  },
+  "new_tests": 0,
+  "tool_history": [
+    "Unavailable guessed lowbox-token URL and 503 on Microsoft/mxc source page supplied no authority; no topology selected or absence inferred."
+  ],
+  "scope": "Documentation contract research only, no native access check or ACL/profile/host operation"
+}

@@ -1,0 +1,156 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "disposition": "IMMUTABLE_SOURCE_RESEARCH_QUEUE_CONTROLS_PARTIAL_WHOLE_RESOURCE_CONTRACT_PENDING",
+    "scope": "SAVED_OFFICIAL_C_SOURCE_TEXT_AS_DATA_ONLY",
+    "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+    "source_receipt": "eq083-winfsp-request-source-text-receipt.json",
+    "newtests": 0,
+    "new_tests": 0,
+    "findings": [],
+    "sources": {
+      "src/dll/fs.c": {
+        "bytes": 19225,
+        "sha256": "6d57f68ff5cfabe90eade3ee230cd6a2a1ed155816c63125018195b8c61f79b8",
+        "git_blob_sha1": "a3549df4ddcca342b490d8304a3406a664a904ff"
+      },
+      "src/dll/fsctl.c": {
+        "bytes": 30977,
+        "sha256": "8a6356761209d9d16110be211d5deb5e8fec1e05a54ce0813bb4ce3b0f30519a",
+        "git_blob_sha1": "b8df14738152fe05197fa12421337ae2457c4aae"
+      },
+      "src/sys/fsctl.c": {
+        "bytes": 32318,
+        "sha256": "a249e32a77f760f1ff80a6f4bb1b336ac572cfdfba14ef43842e6f2ec124b72f",
+        "git_blob_sha1": "37cdf89961b83edf94d0896d3a6d3f2206e9cacd"
+      },
+      "src/sys/ioq.c": {
+        "bytes": 26897,
+        "sha256": "3d26fb9304f8e954a09ac65e51b1bc681e6f1150d790dd64acde80adc8d029c8",
+        "git_blob_sha1": "a7820bbf747705d689013c580dfd8e04a8a26ad0"
+      },
+      "src/sys/volume.c": {
+        "bytes": 62359,
+        "sha256": "d13842a6633c49383f5242f522984c72a8d66e35d4d6f5acf85ef1ae2b04e52c",
+        "git_blob_sha1": "02f15fe6d999472d078aaeb883f12b12235813ee"
+      }
+    },
+    "identity_checks": "Five saved text values UTF8-encoded as data; lengths, SHA256 and Git blob SHA1 independently recomputed and matched. Total 171776 bytes. Prior saved headers read as context only; no previous audit or tests rerun.",
+    "facts": [
+      {
+        "path": "src/sys/ioq.c",
+        "functions": [
+          "FspIoqPendingInsertIrpEx",
+          "FspIoqPostIrpEx",
+          "FspIoqProcessInsertIrpEx",
+          "FspIoqRetriedInsertIrpEx"
+        ],
+        "fact": "Ordinary pending insertion rejects when current pending count is at least capacity. A nonzero BestEffort insertion context bypasses that check and receives an infinity timestamp. Processing and retried insertion count their states but do not perform a capacity comparison. This is not a global sum-of-states count or byte admission gate."
+      },
+      {
+        "path": "src/sys/ioq.c",
+        "functions": [
+          "FspIoqStartProcessingIrp",
+          "FspIoqRetryCompleteIrp",
+          "FspIoqRemoveExpired",
+          "FspCsqInsertIrpEx"
+        ],
+        "context_path": "src/sys/driver.h",
+        "fact": "The saved fixed header defines FSP_IOQ_PROCESS_NO_CANCEL. In that source configuration, processing and completion-retry timestamps become infinity, the private queue insertion does not install cancellation, and expiration scanning excludes processing/retried states. Ordinary pending timeout is not a hard deadline or cancellation mechanism for executing user callbacks. Alternative compile branches are not proof of the selected binary configuration."
+      },
+      {
+        "path": "src/sys/ioq.c",
+        "functions": [
+          "FspIoqCreate",
+          "FspIoqStop",
+          "FspIoqDelete"
+        ],
+        "fact": "Queue setup allocates one nonpaged PAGE_SIZE block with process buckets. Stop marks the queue stopped and wakes waiters; only CancelIrps=true removes and completes requests from all three queues. Fixed queue bookkeeping size does not include request payloads, caller IRPs, MDLs, callback state, native objects or external work."
+      },
+      {
+        "path": "src/sys/volume.c",
+        "functions": [
+          "FspVolumeCreate",
+          "FspVolumeTransact",
+          "FspVolumeWork"
+        ],
+        "context_path": "inc/winfsp/fsctl.h",
+        "fact": "Volume parameter validation normalizes out-of-range pending capacity to default 1000; supported header range is 100..1000. Pending timeout range is 60000..600000ms/default300000ms, with special debug142ms. Zero transaction timeout becomes one day; transaction waiting and pending expiration are distinct. Callers must freeze exact accepted literals, not assume requested invalid values enforce smaller bounds."
+      },
+      {
+        "path": "src/sys/volume.c",
+        "functions": [
+          "FspVolumeTransact",
+          "FspVolumeWork"
+        ],
+        "fact": "Transaction loops bound one traversal using initial counts and the first reposted IRP, preventing immediate repeat traversal of that request. They do not impose a global retry-count limit across transactions. Work posting receives an already-associated request and releases that association on failed queue insertion; pending-capacity rejection therefore is not necessarily before every request-side allocation. Internal transaction mode can allocate another request copy."
+      },
+      {
+        "path": "src/sys/fsctl.c",
+        "functions": [
+          "FspFsvolFileSystemControlReparsePoint",
+          "FspFsvolFileSystemControlOplock"
+        ],
+        "fact": "Inspected filesystem-control paths create request data and nonpaged completion context before later dispatch/queue lifecycle. The five-file inventory does not cover every native allocation site or establish aggregate IRP/MDL/pool/kernel bounds."
+      },
+      {
+        "path": "src/dll/fs.c",
+        "functions": [
+          "FspFileSystemStartDispatcher",
+          "FspFileSystemDispatcherThread"
+        ],
+        "fact": "ThreadCount=0 derives affinity count and clamps it to default4..16. Explicit nonzero counts are only raised to minimum2; the inspected code does not impose the default16 maximum on them. Each chained dispatcher allocates a request buffer16320bytes and response buffer16384bytes before creating the next thread. Their 32704-byte sum excludes stack, allocator, callback, pending work and kernel costs. STATUS_PENDING suppresses immediate response and may outlive the callback."
+      },
+      {
+        "path": "src/dll/fs.c",
+        "functions": [
+          "FspFileSystemStopDispatcher",
+          "FspFileSystemDispatcherThread",
+          "FspFileSystemSendResponse"
+        ],
+        "fact": "Stop sends STOP0, waits indefinitely for the dispatcher chain, then sends STOP. Individual exiting dispatchers also stop admission and indefinitely join their child dispatcher. This stock path contains no hard stop deadline for a blocked callback or proof that independent asynchronous provider work has drained. The void stop API does not expose all underlying stop/wait/close outcomes as a complete cleanup receipt."
+      },
+      {
+        "path": "src/sys/fsctl.c and src/sys/volume.c",
+        "functions": [
+          "FspVolumeStop"
+        ],
+        "fact": "STOP0 intentionally stops queue admission without cancelling active IRPs, avoiding release of buffers still used by user-mode threads. STOP cancels requests only after dispatchers finish. Bypassing this sequencing to force a bounded join would require a supported ownership design, not an arbitrary early cancellation shortcut."
+      },
+      {
+        "path": "src/dll/fsctl.c",
+        "functions": [
+          "FspFsctlTransact",
+          "FspFsctlStop0",
+          "FspFsctlStop"
+        ],
+        "fact": "The user-mode transport issues synchronous DeviceIoControl requests and returns status. A transaction timeout or stop request is not independent evidence of user callback termination, native final release, safe asynchronous cancellation or whole provider quiescence."
+      }
+    ],
+    "source_urls": [
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/dll/fs.c",
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/dll/fsctl.c",
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/fsctl.c",
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/ioq.c",
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/volume.c"
+    ],
+    "remaining_full_physical_domains": [
+      "Freeze explicit dispatcher count, exact supported volume literals and all compile/runtime configuration; distinguish ordinary pending, best-effort, processing and retried resources.",
+      "Establish bounded aggregate bytes and counts across every queue state, pre-admission native allocation, callback/async task, IRP/MDL, kernel pools, mappings, cache and provider process, not merely queue length.",
+      "Define full request ownership, finite completion/retry policy and bounded cooperative callback design, with a separately supported containment/termination strategy for deadline failure that preserves shared buffer lifetimes.",
+      "Retain provider/root and original reservations until actual dispatcher and independent async drain, safe STOP ordering and final native reclamation; no void-return or endpoint PASS token substitutes for this.",
+      "Integrate these budgets and failures in the one whole provider/controller/outer-owner transaction together with writer confinement, quotas, source/native host provenance and remaining per-form qualification."
+    ],
+    "limitations": [
+      "Source text and receipt identity research only; tests0, no C compilation/import, native API, process, driver, mount, host, probe, binary/archive operation or rejected-task reattempt.",
+      "Five new files are partial inventory. Source declarations and configuration are not source-to-binary, installed-host, runtime, complete filesystem resource or ABI qualification.",
+      "No selected dependency/release/environment, implemented issuer, all-resource hard cap, Ready or operational approval. Prior reports unchanged; no new mandatory human-input requirement."
+    ],
+    "mechanism_admitted": false,
+    "release_selected": false,
+    "operational_authorization": false,
+    "new_owner_input_required": false
+  },
+  "new_tests": 0,
+  "scope": "Five new immutable source-text byte checks and request/dispatcher source contract only; no executed resource or cleanup failure"
+}

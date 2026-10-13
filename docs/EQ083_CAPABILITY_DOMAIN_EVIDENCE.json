@@ -1,0 +1,73 @@
+{
+  "full_independent_primary_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "PRIMARY_SEL4_DOCUMENTATION_ONLY_NO_OPERATIONS",
+    "disposition": "PHYSICAL_CAPABILITY_ALLOCATION_BOUNDARY_SUPPORTED_WHOLE_TOPOLOGY_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "facts": [
+      {
+        "source": "https://docs.sel4.systems/Tutorials/untyped.html",
+        "sections": [
+          "Untyped memory",
+          "Retype",
+          "Revoking"
+        ],
+        "fact": "Apart from a small static kernel allocation, physical memory is managed at user level. BootInfo describes available contiguous untyped ranges, excluding objects used to create the root task. Device untypeds have restricted uses. Retype creates descendant objects or smaller untypeds. A greedy watermark and alignment consume space; gaps remain unavailable until child revocation. A fixed non-device untyped capability budget therefore provides a physical allocation boundary for objects derived from it, subject to excluding additional allocation authority."
+      },
+      {
+        "source": "https://docs.sel4.systems/projects/sel4/api-doc.html",
+        "sections": [
+          "seL4_Untyped_Retype",
+          "seL4_CNode_Revoke"
+        ],
+        "fact": "Retype reports NotEnoughMemory when requested objects exceed available space and also validates object size, destination slots and fanout. CNode Revoke deletes child capabilities. These interfaces describe allocation and capability-tree effects; they do not by themselves establish a deadline for the complete application's device, driver, storage, VMM or external-resource cleanup."
+      },
+      {
+        "source": "https://sel4.systems/Verification/assumptions.html",
+        "fact": "Verification assumes correct hardware, assembly and cache/TLB behavior. It begins after correct boot into the required initial state and excludes startup. DMA must not misbehave; drivers need separate assurance, including valid MMIO behavior. Confidentiality claims exclude timing channels. Kernel verification is not a proof of this project's complete application or bootstrap topology."
+      },
+      {
+        "source": "https://sel4.systems/About/FAQ.html",
+        "sections": [
+          "Device drivers",
+          "DMA",
+          "Virtualisation"
+        ],
+        "fact": "Most drivers execute in user mode, but DMA can overwrite memory independently of CPU/MMU access. The formal proof assumes DMA disabled or suitably behaving; safe DMA needs trusted hardware and driver policy. System-MMU/VT-d configurations can restrict DMA but are unverified. An unprivileged VMM is a separate component; guest isolation does not automatically validate that component or its device/resource policy."
+      },
+      {
+        "source": "https://docs.sel4.systems/projects/sel4/verified-configurations.html",
+        "fact": "The listed verified configurations exclude device address translation/IOMMU and startup. The X64 Intel entry lists hypervisor/VT-x mode as not verified and describes C-level functional correctness without fastpath. This limits the cited verification coverage; it is not evidence that hardware virtualization is universally unavailable or impossible."
+      },
+      {
+        "source": "https://docs.sel4.systems/projects/camkes-vm/",
+        "fact": "The documentation supplies Linux guest examples, with a separate VMM component per guest and explicit device/storage connectors. Its x86 examples require VT-x, describe AMD-V as untested, and include an older 32-bit Linux guest configuration. These examples do not establish execution equivalence for the project's selected current Windows and Linux CPython 3.12 x64 wheels, sdists or native dependencies. Absence of a documented Windows example is not proof that such a guest is impossible."
+      }
+    ],
+    "qualified_answer": "Yes: allocation from a closed, fixed set of physical untyped ranges is a stronger scoped physical-object budget than interpreting an accounting limit as an exact instantaneous whole-machine bound. No: the cited contract does not supply the complete integrated execution domain required here. This is a mechanism research conclusion, not selection or admission.",
+    "missing_whole_domain_obligations": [
+      "Freeze the actual architecture, kernel configuration, boot chain and all root/controller capabilities. Account static kernel, root-task and bootstrap allocations separately; prevent replenishment or capability escape from the selected domain.",
+      "Specify object layouts, alignment/watermark debt, concurrent reservations and temporary overlap; establish that every relevant user-level allocation and VMM/control structure belongs to the complete physical budget.",
+      "Freeze DMA/IOMMU, driver, MMIO, interrupt and shared-memory topology with the appropriate assurance scope. Include all device buffers and external resource owners rather than substituting CPU capability isolation for DMA assurance.",
+      "Provide supported guest and native-artifact compatibility, runtime/library provenance and full resolver evidence for each selected Windows/Linux form; current examples are not that proof.",
+      "Provide finite storage allocation and live-node enforcement, mappings and handle-transfer policy, controller/output/IPC budgets, and continuous writer confinement across the entire integrated topology.",
+      "Define bounded termination, quiescence, capability revocation, driver/device cancellation, storage reclamation and residual-resource observations for normal and failed startup paths. Revoke alone is not the complete cleanup contract."
+    ],
+    "limitations": [
+      "Only the six official documentation pages were read as text. No source or binary acquisition, build, setup, API invocation, native process, VM, host inspection, probes or tests occurred.",
+      "No proof replay, selected release/configuration, physical host evidence, native ABI verification or resource measurement was performed.",
+      "The previously rejected binary verification task was not reattempted; independently unverified binary declarations remain unverified.",
+      "No dependency, license, environment, issuer or guest topology is selected. No Ready, runtime qualification or operational authorization is granted.",
+      "Mechanism research and integration remain agent work. This report creates no new mandatory owner-input request. Existing story 93/94 ordering and all release gates remain applicable."
+    ],
+    "selected_mechanism": false,
+    "operational_authorization": false,
+    "ready_approval": false,
+    "new_owner_input_required": false
+  },
+  "new_tests": 0,
+  "scope": "Primary capability allocation and proof-boundary research only; whole topology unestablished",
+  "tool_history": "Read-only guessed virtualization URL unavailable and API heading lookup no-match were corrected using actual official navigation and Retype/Revoke headings before any claims; no absence or implementation failure inferred. Earlier batched docs output and rg file listing truncated; narrowed linked design reads supplied relevant contract."
+}

@@ -1,0 +1,131 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "disposition": "IMMUTABLE_SOURCE_RESEARCH_MANDATORY_CLEANUP_DEBT_CONFIRMED_PEAK_BOUND_PENDING",
+    "scope": "SAVED_OFFICIAL_C_SOURCE_TEXT_AS_INERT_DATA_ONLY",
+    "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+    "receipt": "eq083-winfsp-cleanup-source-text-receipt.json",
+    "newtests": 0,
+    "new_tests": 0,
+    "findings": [],
+    "sources": {
+      "src/sys/iop.c": {
+        "bytes": 14580,
+        "sha256": "ee03d709aeb017e4349733c7e1578bff430c592009f64d350c4086c20d5b7973",
+        "git_blob_sha1": "c00ac277dfc51d4173eba1ed9974de77423b874e"
+      },
+      "src/sys/cleanup.c": {
+        "bytes": 9482,
+        "sha256": "5c7c3e6eda7af609afdc873059e232093441cf119907c3a7acd22339f1e49a28",
+        "git_blob_sha1": "5ac3ffa06490206570bea5ede15eb4a28f9f8f66"
+      },
+      "src/sys/close.c": {
+        "bytes": 4809,
+        "sha256": "6c0fbdc343c2618a3e08fd7d997807e1b94fc8b5be739cd7fdd08f1abad47712",
+        "git_blob_sha1": "b6999f0dcd5a4fa88c562c73a454cd945e9bada9"
+      }
+    },
+    "identity_checks": "Independently recomputed three UTF8 text lengths, raw SHA256 and Git blob SHA1 as data; all matched, total28871bytes. Previous fifteen source texts read only for context, not replayed as audits or tests.",
+    "facts": [
+      {
+        "path": "src/sys/iop.c",
+        "functions": [
+          "FspIopCreateRequestFunnel",
+          "FspIopCreateRequestWorkItem"
+        ],
+        "fact": "Creation includes aligned filename storage and rejects transaction body above FSP_FSCTL_TRANSACT_REQ_SIZEMAX. Allocation also includes an internal header and alignment overhead, and may separately allocate a nonpaged work item. MustSucceed uses the designated pool allocator; ordinary allocation can fail and frees the first allocation if the work-item allocation fails. This body-size check is not an aggregate native allocation cap or the full allocated size."
+      },
+      {
+        "path": "src/sys/iop.c",
+        "functions": [
+          "FspIopCreateRequestFunnel",
+          "FspIopDeleteRequest",
+          "FspIopResetRequest"
+        ],
+        "fact": "Non-null originating IRP attaches the request; a null IRP leaves an unattached request with zero hint for later work posting. Delete invokes the request finalizer before freeing response, work item and original header allocation. Reset invokes the previous finalizer and changes its context/owner. Correct accounting must follow request ownership and finalization, not only file-open count."
+      },
+      {
+        "path": "src/sys/cleanup.c",
+        "functions": [
+          "FspFsvolCleanup",
+          "FspFsvolCleanupRequestFini",
+          "FspFsvolCleanupComplete"
+        ],
+        "fact": "Cleanup first performs kernel file-node cleanup, notification/lock changes and a MustSucceed request allocation because this IRP cannot fail. It captures both user contexts and cleanup flags, acquires paging ownership and transfers Full lock ownership to the request before flush/post. The selected modified/delete policy returns BestEffort posting, or ordinary success when no user-mode delivery is needed. This is pre-post kernel state work, not evidence that the user-mode cleanup callback already completed."
+      },
+      {
+        "path": "src/sys/cleanup.c",
+        "functions": [
+          "FspFsvolCleanupRequestFini"
+        ],
+        "fact": "The finalizer deliberately performs CleanupComplete even if the request is cancelled when user-mode disappears. It releases paging ownership, sets FO_CLEANUP_COMPLETE, clears the saved main-file handle, releases Main ownership and closes that handle. User-mode delivery may be absent when the queue is stopped; teardown must therefore independently reconcile outstanding provider state rather than require every cleanup callback to arrive."
+      },
+      {
+        "path": "src/sys/close.c",
+        "functions": [
+          "FspFsvolClose"
+        ],
+        "fact": "Close allocates a MustSucceed request with null originating IRP, records user contexts, then closes the kernel node and deletes the descriptor/dereferences the node before delivering user-mode Close. Rename-exclusive context or pending occupancy above the 50-percent watermark selects original-IRP BestEffort posting. Otherwise a new internal BestEffort work IRP is posted and the original Close returns success. Watermark routing is not capacity denial or final provider cleanup proof."
+      },
+      {
+        "path": "src/sys/iop.c",
+        "functions": [
+          "FspIopPostWorkRequestFunnel",
+          "FspIopPostWorkRequestCompletion"
+        ],
+        "fact": "BestEffort allocates an internal IRP using the MustSucceed allocator before calling the driver. STATUS_PENDING transfers request ownership and is returned to this caller as success; other results cause the posting function to delete the request. The completion routine frees the internal IRP and retains completion control. Posting success therefore does not mean that the user-mode callback, finalizer or provider reclamation has already finished."
+      },
+      {
+        "path": "src/sys/iop.c",
+        "functions": [
+          "FspIopCompleteIrpEx",
+          "FspIopCompleteCanceledIrp",
+          "FspIopRetryPrepareIrp",
+          "FspIopRetryCompleteIrp",
+          "FspIopSetIrpResponse"
+        ],
+        "fact": "Completion deletes attached requests before completing the IRP and dropping device reference. Cancel completion uses the same request/finalizer path under filesystem and top-level-IRP protection. Prepare retry reposts BestEffort; completion retry can retain a MustSucceed response copy before entering the retried queue. These add lifetime and allocation classes beyond an open-node reservation."
+      },
+      {
+        "context_paths": [
+          "src/sys/driver.h",
+          "src/sys/ioq.c",
+          "src/sys/volume.c"
+        ],
+        "functions": [
+          "FSP_LEAVE_MJ",
+          "FspIoqPostIrpEx",
+          "FspVolumeWork"
+        ],
+        "fact": "Saved context macros route the BestEffort private status to the pending queue. Existing BestEffort bypass/infinity semantics apply to these mandatory Cleanup/Close and prepare-retry paths. Work posting associates the request before queue insertion and releases association when insertion fails. Stopped-queue request cancellation/finalization is separate from callback delivery and synchronous close-return success."
+      }
+    ],
+    "source_urls": [
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/iop.c",
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/cleanup.c",
+      "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/close.c"
+    ],
+    "answer": "Open-count reservation alone does not establish peak or all-allocation bounds. Close can lower kernel node/descriptor ownership before its mandatory request is processed; work IRPs, headers, responses, work items, prior operations and mapped/deferred references remain separate charges. This is a source-contract gap, not an observed leak or unbounded-growth measurement.",
+    "lifecycle_obligations": [
+      "Reserve mandatory teardown capacity before admitting the resource that may require it; transfer that reservation to request/internal-IRP/response/finalizer debt and release only on actual final ownership discharge. Preserve deleted-open and replaced-object debt separately from namespace/open counts.",
+      "Account for both synchronous original-IRP and asynchronous internal-work branches, no-delivery cancellation and response-copy/retry overlap, including per-object retained controls/locks and provider cleanup independent of missing callbacks.",
+      "Establish exact native structure/allocator overhead, MustSucceed allocator behavior, device-stack IRP sizes and all other allocation sites/maximum overlap before numerical peak claims. Allocator bodies are outside these three new files and were not inferred from the name.",
+      "Provide supported finite producer admission and all-failure drain/stop semantics without cancelling buffers still used by callbacks; retain physical provider/root authority until requests, async work, sections and orphan storage are actually reconciled.",
+      "Integrate this debt ledger with whole writer confinement, queue/kernel/cache/native budgets and the one complete controller/outer-owner transaction; no isolated wrapper or source-only physical issuer proof."
+    ],
+    "limitations": [
+      "Source-text identity and call-path inspection only; no tests, C compilation/import/execution, native/API/process/driver/mount/host/probe/archive/binary or rejected-task operation.",
+      "Three additional source files close the inspected mandatory cleanup request path, not all allocator/native/compiled flag/ABI/source-to-binary or installed-host coverage.",
+      "No numerical complete peak bound, actual leak, release/license/dependency selection, implemented issuer, Ready, operational grant or new human-input requirement. Prior reports unchanged."
+    ],
+    "mechanism_admitted": false,
+    "operational_authorization": false,
+    "new_owner_input_required": false
+  },
+  "new_tests": 0,
+  "scope": "Mandatory Cleanup/Close ownership and allocation source trace only; no actual resource or cleanup execution",
+  "tool_history": [
+    "Prior prepared metadata dict-key assumption corrected to three pins plus official URL; full prior prepared/final reports retained. No product failure.",
+    "Prior outside sync generator multiline summary flattened in owned issue/primary prefix BEFORE external writes; unrelated primary bytes preserved."
+  ]
+}

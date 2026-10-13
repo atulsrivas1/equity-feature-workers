@@ -1,0 +1,22 @@
+{
+  "scope": "PRE-EXECUTION proposed qualification patch; not applied to test source",
+  "source": {
+    "repo": "equity-feature-workers",
+    "commit": "e04839971526cc645c833e5353385ac4bc34f288",
+    "path": "tests/service/test_containment.py",
+    "bytes": 14622,
+    "sha256": "482da13290648ad273dffd398727261d74600ec160e52fc5c0dc3333f9d21dbf"
+  },
+  "proposed_source": {
+    "bytes": 14883,
+    "sha256": "561ba8b5434db0bd5184ba65e7e98d1aa427cb1c2624d2b9691fde2b187207d7"
+  },
+  "patch": {
+    "bytes": 907,
+    "sha256": "496400d3f254cc05e55fe735d8b09fcac09179defb37321d1b1bb5ff649f3a5d"
+  },
+  "failed_run": 38111132365,
+  "failed_job": 114386755180,
+  "failed_log_sha256": "3e33ae120955f2484a9d3e47007eea161c64bb8bae2d38bec8a13e6daef5f050",
+  "state_entry_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6105386399"
+}

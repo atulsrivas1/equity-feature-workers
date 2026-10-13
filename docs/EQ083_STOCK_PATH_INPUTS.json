@@ -1,0 +1,35 @@
+{
+  "schema": "eq083.stock-winfsp-parameter-path-decision.v1",
+  "bases": {
+    "equity-features": "35cee48ac65623510e620ae40d673bb523cd81f7",
+    "equity-feature-workers": "d94757bae28187d6cf0eaed67fae95620a41e2a1"
+  },
+  "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+  "sources": {
+    "src/sys/util.c": {
+      "bytes": 46472,
+      "git_blob_sha1": "82dc2880f8445887d560431e7fe75d817396cbe8",
+      "sha256": "b64d3e2cd497dbd50f997c89d29aa45ce205f291be1e7cd7bce591e9d6801d71",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/util.c"
+    },
+    "src/sys/wq.c": {
+      "bytes": 5583,
+      "git_blob_sha1": "e0adeea24915d6caf01d67c191bd4ffe314ebb23",
+      "sha256": "3fbbf0b60edd39553b22fbb39f671459597f23a842d1c1b8c7eb0011e53fed55",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/wq.c"
+    },
+    "src/sys/psbuffer.c": {
+      "bytes": 8940,
+      "git_blob_sha1": "49a5b60031df4a62fb0d24f300644fa34c1b3382",
+      "sha256": "d1c75cec88ba8c66569cda601c39debef7634eb01f542275f284ac14581324fd",
+      "url": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/psbuffer.c"
+    }
+  },
+  "combined_partial_source_files": 21,
+  "combined_partial_source_bytes": 820829,
+  "decision": "EXCLUDE_STOCK_SHARED_HOST_PARAMETERS_ALONE_AS_COMPLETE_CONTRACT",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false,
+  "dependency_selected": false
+}

@@ -1,0 +1,133 @@
+{
+  "schema": "eq083.settlement-capability-decision.v1",
+  "bases": {
+    "equity-features": "cea741cdcfcd970cd42c29b3e398ce8cc97d3141",
+    "equity-feature-workers": "5840b71518faec6bd16d2fcd56a694d0da423470"
+  },
+  "disposition": "REJECT_REVOKE_CLOSE_RCU_COMPOSITION_AS_FINITE_EPOCH_SETTLEMENT",
+  "implementation": "Reviewed NOVA b5177517cae440940348af0406903f607ea73a46 revoke/PD/EC/SC/RCU plus Genode26.08d18ee9e917200b059549e21f2dd9a55bfe61a0eb child/session closure and VirtualBox provider completion",
+  "stock_backed_epoch_selected": false,
+  "composition_inquiry_closed": true,
+  "qualified_replacement": false,
+  "criteria_changed": false,
+  "new_tests": 0,
+  "new_source_reads": 0,
+  "new_hash_checks": 0,
+  "full_independent_review": {
+    "decision": "This specific composition does not implement the requested nonblocking, allocation-independent, independently progressing, finite whole-epoch stop/revoke/drain/mapping/donation/retired-CPU-RCU/provider settlement contract on reviewed evidence. Reject it as the implementation of that capability and reject selection of the proposed epoch when supported only by it. The proposed new interface is unimplemented and cannot be treated as an actual qualified replacement.",
+    "scope": "NAMED_SETTLEMENT_CAPABILITY_ASSESSMENT_FROM_EXISTING_REVIEWED_REPORTS_ONLY",
+    "findings": [],
+    "new_source_reads": 0,
+    "next_engineering_decision": {
+      "required": "Either identify a named actual effective implementation of the complete missing nonblocking epoch-settlement capability with its supported CPU/provider completion and preallocation contract, or explicitly choose engineering a new mechanism/another whole architecture. Desired interface prose is not capability evidence.",
+      "owner_input": "No new owner input merely because this capability is incomplete. Technical search/engineering choice is agent-owned; any actual external operation or scope requirement must be concrete rather than a repeated broad approval question.",
+      "stop_conditions": [
+        "Before new research, name the actual implementation and the exact capability evidence that can accept or reject it; otherwise do not start another source batch.",
+        "Reject the candidate if any of independent dispatch, allocation-free failure path, all writer/execution withdrawal, bounded provider/cross-CPU/RCU completion or truthful full settlement witness is absent or only assumed.",
+        "If invasive new kernel/provider engineering is required, retain it as unimplemented and decide its complete scope/feasibility; do not announce an isolated primitive or token wrapper as progress on satisfaction.",
+        "Even a supported settlement primitive leaves closed escrow/storage bytes-and-nodes/all-writer/source-build/bothOSABI/resolver/license/literal budgets/host gates conjunctive."
+      ]
+    },
+    "termination": "Terminate this stock-composition inquiry. Further adjacent NOVA/Genode/provider enumeration, counter/report wrappers, timers and retelling the same known paths cannot change this verdict without a materially different actual capability.",
+    "contract_counterexamples": [
+      {
+        "fact_positions": [
+          5,
+          6
+        ],
+        "functions": [
+          "Ec::sys_revoke",
+          "Pd::revoke",
+          "Pd::pre_free",
+          "Pd::free",
+          "Rcu::call",
+          "Rcu::invoke_batch"
+        ],
+        "contract_failure": "Return/notification cannot certify whole epoch settlement; the composition lacks an admitted complete completion witness and finite dependency bound.",
+        "dependency": "A successful revocation/demotion or queued pre-free operation can still precede pending reference and RCU finalizers. The report separates revoke success from later eligible deletion and physical page/IOMMU/cache release.",
+        "id": "C1",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-quota-reclamation-source-reviewer-report.json"
+      },
+      {
+        "fact_positions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "functions": [
+          "Ec::handle_hazard",
+          "Lapic::handle_timer",
+          "Ec::idl_handler",
+          "Sc::pre_free",
+          "Sc::rrq_handler",
+          "Ec::free"
+        ],
+        "contract_failure": "A clock/quantum/IPI issuance/disable is not an independent finite all-finalizer progress contract. These are static permissible dependency states, not an observed hang.",
+        "dependency": "RCU needs relevant CPUs to reach quiet/update paths, actual timer/IPI handling, scheduled callback work and released partner/cross-CPU references. The described interface admits logical disable/recall while deferred work remains; no reviewed bound requires those dependencies to finish before a chosen deadline.",
+        "id": "C2",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-progress-source-reviewer-report.json"
+      },
+      {
+        "fact_positions": [
+          5,
+          6
+        ],
+        "functions": [
+          "Child::_close",
+          "Child::session_response",
+          "Child::close_all_sessions",
+          "Child::env_sessions_closed"
+        ],
+        "contract_failure": "A local CLOSED/ID absence/env eligibility flag cannot attest all provider queues/writers, account restitution, CPU/PD/RCU debt or physical backing settlement.",
+        "dependency": "Provider close may remain PENDING; client IDs can be discarded while provider work remains; quota reversal can fail separately. Retirement eligibility checks linker/log/binary state and explicitly omits CPU state.",
+        "id": "C3",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-owner-authority-source-reviewer-report.json"
+      },
+      {
+        "fact_positions": "Full saved ten-fact report",
+        "functions": [
+          "VD request wait/cancel paths",
+          "PDMTaskCancel",
+          "File manager blocking event/add/close/shutdown paths",
+          "POSIX AIO cancel/context wakeup",
+          "PDMThreadDestroy"
+        ],
+        "contract_failure": "Adding revocation, session close and RCU does not provide bounded nonblocking provider drain or an allocation-independent failure-control chain.",
+        "dependency": "Reviewed worker paths include unsupported cancellation, indefinite completion waits and conditional timed join/free eligibility. Kernel capability revocation does not by itself replace these provider completion interfaces or prove storage/worker backing released.",
+        "id": "C4",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vendor-worker-source-reviewer-report.json"
+      }
+    ],
+    "whole_candidate_verdict": "REJECT_PROPOSED_MEMORY_BACKED_EPOCH_FOR_SELECTION_WHEN_BACKED_ONLY_BY_THIS_STOCK_COMPOSITION",
+    "inference_limits": [
+      "Counterexamples are contract-stage/dependency mismatches supported by reviewed source reports, not executed traces or claims of vendor defects, hangs, leaks, attacks or universal platform impossibility.",
+      "No inference that an unreviewed API anywhere cannot implement a stronger contract. The verdict applies only to the named reviewed stock composition.",
+      "No actual bound for call allocation, nonblocking execution or scheduling/provider progress has been established; no guessed constant, tolerance or dropped resource class repairs it.",
+      "Keeping failed debt is necessary accounting but does not certify quiescence, release or successful cleanup."
+    ],
+    "disposition": "REJECT_REVOKE_CLOSE_RCU_COMPOSITION_AS_FINITE_EPOCH_SETTLEMENT",
+    "newtests": 0,
+    "heads": {
+      "equity-features": "cea741cdcfcd970cd42c29b3e398ce8cc97d3141",
+      "equity-feature-workers": "5840b71518faec6bd16d2fcd56a694d0da423470"
+    },
+    "composition": [
+      "NOVA Ec::sys_revoke / Pd::revoke / Pd::pre_free / Pd::free",
+      "Rcu::call / Rcu::quiet / Rcu::update / Rcu::invoke_batch",
+      "EC/SC remote finalization and CPU/interrupt/scheduling progress",
+      "Genode Child::close_all_sessions / Child::env_sessions_closed / session close callbacks",
+      "Vendor VD/PDM/AIO cancel/drain/flush/destroy completion"
+    ],
+    "limitations": [
+      "Only already reviewed saved reports and current head JSON read; no new upstream/source/hash/native/API/host/process/VM/probe/CI/test operation, old suite rerun or rejected binary task reattempt.",
+      "Prior source and reports unchanged; no product source or selected mechanism/ABI/license/build/host qualification.",
+      "No lower acceptance criteria, qualified substitute, complete epoch, Ready/runtime/operational grant or new mandatory owner input."
+    ],
+    "reviewer": "r7_policy_review independent reviewer",
+    "new_tests": 0
+  }
+}

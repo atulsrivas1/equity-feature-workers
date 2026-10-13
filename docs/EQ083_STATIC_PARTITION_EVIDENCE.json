@@ -1,0 +1,356 @@
+{
+  "full_independent_review": {
+    "reviewer": "r7_policy_review independent reviewer",
+    "unresolved_conjunction": [
+      "Exact partition-stop/shutdown/reset semantics for in-flight device, DMA, VirtIO/provider and shared-service work; whole completion and failure witnesses",
+      "Independent controller CPU/interrupt/clock/mailbox reservation and allocation-free failure path, all progress dependencies and literal supported finite bounds",
+      "Boot/kernel/PSSW/ASP/PSP/driver/provider and guest physical allocation geometry, metadata/caches/old-new overlap/retired debt with closed donors and all writers",
+      "Allocated storage byte and live/retired node enforcement including open-deleted/replacement/journal/temporary backing",
+      "Frozen supported release/hardware/configuration, source-to-build/native mappings and transitive license/build/provider authority",
+      "Exact Windows/Linux CPython3.12.10 x64 native four-form ABI/resolver/interpreter and actual qualification evidence"
+    ],
+    "limitations": [
+      "Primary vendor public documentation, not source implementation, certification-kit audit, supported-platform selection, real hardware or measured guarantee. No unreviewed internals absence inference.",
+      "No universal impossibility, vendor/product failure, incompatibility or security defect asserted. Independent restart does not imply all resources freed or every writer stopped.",
+      "No selected dependency/profile/license/host, relaxed criteria, Ready/fullR7/runtime/operational grant, new owner input requirement or fresh installation.",
+      "Initial combined context output truncated; relevant official architecture/virtualization sections reopened and local lifecycle sections read separately. No source execution or runtime failure."
+    ],
+    "actual_checks": [
+      "Read official SYSGO RTOS/hypervisor, Windows guest and virtualization pages as public documentation; assessed the requested finite whole-epoch capability conjunction.",
+      "Read current local AGENTS, public development/delivery lifecycle requirements and latest continuity/settlement decision; no lifecycle or scope transition made.",
+      "No vendor contact, archive/source/binary acquisition, installation/build, native/API/process/VM/host observation, probes or tests. No adjacent source inventory."
+    ],
+    "new_tests": 0,
+    "heads": {
+      "equity-features": "012a35cf38b93b2851dfb357269d91fc2ef92ce5",
+      "equity-feature-workers": "ba9ccb09aea03da8a312c0f2230752918763a1af"
+    },
+    "candidate": "PikeOS static-partition whole-domain physical owner",
+    "findings": [],
+    "decision_boundary": "Do not select PikeOS as a qualified substitute or implement a PASS-token wrapper from these claims. Any continuation must obtain a named precise supported completion/resource contract that can decide this whole candidate, not generic adjacent inventory. Existing NOVA stock-composition inquiry remains closed.",
+    "newtests": 0,
+    "scope": "BOUNDED_PRIMARY_PUBLIC_CONTRACT_CAPABILITY_INQUIRY_ONLY",
+    "facts": [
+      {
+        "url": "https://www.sysgo.com/rtos-hypervisor",
+        "boundary": "These architecture statements affirm partition/control capabilities; they do not specify the requested allocation-free aggregate completion interface or numerical settlement deadline.",
+        "fact": "SYSGO documents temporal CPU partitioning, spatial memory/I/O isolation and controlled inter-partition communication. PSSW reads the VMIT configuration and manages partition startup, shutdown, faults and communication.",
+        "id": "F1",
+        "lines": "103-132"
+      },
+      {
+        "url": "https://www.sysgo.com/rtos-hypervisor",
+        "boundary": "Selected device/provider topology, scheduling assumptions and recovery completion semantics are not fixed for EQ083 by these public descriptions. Restart/isolate is not an all-resource-free witness.",
+        "fact": "The page describes hardware-assisted or para-virtualized guests, native or PikeOS driver paths, time/priority scheduling, SMP/AMP choices, and Health Monitor restart, isolation or fail-safe actions.",
+        "id": "F2",
+        "lines": "166-205, 230-236"
+      },
+      {
+        "url": "https://www.sysgo.com/windows",
+        "boundary": "Windows/Linux support is affirmative, not inferred absent. This example does not attest exact CPython3.12.10, selected native artifacts/four forms or a closed EQ083 writer/provider graph.",
+        "fact": "The official demonstrator explicitly runs Windows10 and Ubuntu on an x86 industrial PC using Intel virtualization, VirtIO communication and PikeOS queuing ports. Ubuntu can reboot without affecting Windows. The demonstrator includes native/additional partitions and USB-to-network processing.",
+        "id": "F3",
+        "lines": "149-165"
+      },
+      {
+        "url": "https://www.sysgo.com/virtualization",
+        "boundary": "That description does not freeze all backing allocations, byte/node limits, actual source/build/provider rights or full transitive license approval.",
+        "fact": "SYSGO describes per-partition CPU time, memory and I/O access, scheduler/IOMMU isolation and multiple guest OS personalities. Its licensing discussion concerns separation of domains.",
+        "id": "F4",
+        "lines": "103-123, 154-186"
+      }
+    ],
+    "disposition": "NOT_SELECTABLE_ON_REVIEWED_PUBLIC_CONTRACT",
+    "assessment": "Public contracts support partition isolation, central control and predefined recovery, plus an affirmative Windows/Linux demonstration. They do not establish one independently reserved, nonblocking, allocation-free operation with a supported finite completion bound covering every execution/device/provider writer, pending queue, reference, finalizer, mapping and all physical backing. This missing positive contract prevents EQ083 selection on these pages; it is not a claim such a capability cannot exist in the product or another configuration."
+  },
+  "prior_settlement_reviews": {
+    "eq083-settlement-capability-reviewer-report.json": {
+      "decision": "This specific composition does not implement the requested nonblocking, allocation-independent, independently progressing, finite whole-epoch stop/revoke/drain/mapping/donation/retired-CPU-RCU/provider settlement contract on reviewed evidence. Reject it as the implementation of that capability and reject selection of the proposed epoch when supported only by it. The proposed new interface is unimplemented and cannot be treated as an actual qualified replacement.",
+      "scope": "NAMED_SETTLEMENT_CAPABILITY_ASSESSMENT_FROM_EXISTING_REVIEWED_REPORTS_ONLY",
+      "findings": [],
+      "new_source_reads": 0,
+      "next_engineering_decision": {
+        "required": "Either identify a named actual effective implementation of the complete missing nonblocking epoch-settlement capability with its supported CPU/provider completion and preallocation contract, or explicitly choose engineering a new mechanism/another whole architecture. Desired interface prose is not capability evidence.",
+        "owner_input": "No new owner input merely because this capability is incomplete. Technical search/engineering choice is agent-owned; any actual external operation or scope requirement must be concrete rather than a repeated broad approval question.",
+        "stop_conditions": [
+          "Before new research, name the actual implementation and the exact capability evidence that can accept or reject it; otherwise do not start another source batch.",
+          "Reject the candidate if any of independent dispatch, allocation-free failure path, all writer/execution withdrawal, bounded provider/cross-CPU/RCU completion or truthful full settlement witness is absent or only assumed.",
+          "If invasive new kernel/provider engineering is required, retain it as unimplemented and decide its complete scope/feasibility; do not announce an isolated primitive or token wrapper as progress on satisfaction.",
+          "Even a supported settlement primitive leaves closed escrow/storage bytes-and-nodes/all-writer/source-build/bothOSABI/resolver/license/literal budgets/host gates conjunctive."
+        ]
+      },
+      "termination": "Terminate this stock-composition inquiry. Further adjacent NOVA/Genode/provider enumeration, counter/report wrappers, timers and retelling the same known paths cannot change this verdict without a materially different actual capability.",
+      "contract_counterexamples": [
+        {
+          "fact_positions": [
+            5,
+            6
+          ],
+          "functions": [
+            "Ec::sys_revoke",
+            "Pd::revoke",
+            "Pd::pre_free",
+            "Pd::free",
+            "Rcu::call",
+            "Rcu::invoke_batch"
+          ],
+          "contract_failure": "Return/notification cannot certify whole epoch settlement; the composition lacks an admitted complete completion witness and finite dependency bound.",
+          "dependency": "A successful revocation/demotion or queued pre-free operation can still precede pending reference and RCU finalizers. The report separates revoke success from later eligible deletion and physical page/IOMMU/cache release.",
+          "id": "C1",
+          "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-quota-reclamation-source-reviewer-report.json"
+        },
+        {
+          "fact_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "functions": [
+            "Ec::handle_hazard",
+            "Lapic::handle_timer",
+            "Ec::idl_handler",
+            "Sc::pre_free",
+            "Sc::rrq_handler",
+            "Ec::free"
+          ],
+          "contract_failure": "A clock/quantum/IPI issuance/disable is not an independent finite all-finalizer progress contract. These are static permissible dependency states, not an observed hang.",
+          "dependency": "RCU needs relevant CPUs to reach quiet/update paths, actual timer/IPI handling, scheduled callback work and released partner/cross-CPU references. The described interface admits logical disable/recall while deferred work remains; no reviewed bound requires those dependencies to finish before a chosen deadline.",
+          "id": "C2",
+          "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-progress-source-reviewer-report.json"
+        },
+        {
+          "fact_positions": [
+            5,
+            6
+          ],
+          "functions": [
+            "Child::_close",
+            "Child::session_response",
+            "Child::close_all_sessions",
+            "Child::env_sessions_closed"
+          ],
+          "contract_failure": "A local CLOSED/ID absence/env eligibility flag cannot attest all provider queues/writers, account restitution, CPU/PD/RCU debt or physical backing settlement.",
+          "dependency": "Provider close may remain PENDING; client IDs can be discarded while provider work remains; quota reversal can fail separately. Retirement eligibility checks linker/log/binary state and explicitly omits CPU state.",
+          "id": "C3",
+          "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-owner-authority-source-reviewer-report.json"
+        },
+        {
+          "fact_positions": "Full saved ten-fact report",
+          "functions": [
+            "VD request wait/cancel paths",
+            "PDMTaskCancel",
+            "File manager blocking event/add/close/shutdown paths",
+            "POSIX AIO cancel/context wakeup",
+            "PDMThreadDestroy"
+          ],
+          "contract_failure": "Adding revocation, session close and RCU does not provide bounded nonblocking provider drain or an allocation-independent failure-control chain.",
+          "dependency": "Reviewed worker paths include unsupported cancellation, indefinite completion waits and conditional timed join/free eligibility. Kernel capability revocation does not by itself replace these provider completion interfaces or prove storage/worker backing released.",
+          "id": "C4",
+          "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vendor-worker-source-reviewer-report.json"
+        }
+      ],
+      "whole_candidate_verdict": "REJECT_PROPOSED_MEMORY_BACKED_EPOCH_FOR_SELECTION_WHEN_BACKED_ONLY_BY_THIS_STOCK_COMPOSITION",
+      "inference_limits": [
+        "Counterexamples are contract-stage/dependency mismatches supported by reviewed source reports, not executed traces or claims of vendor defects, hangs, leaks, attacks or universal platform impossibility.",
+        "No inference that an unreviewed API anywhere cannot implement a stronger contract. The verdict applies only to the named reviewed stock composition.",
+        "No actual bound for call allocation, nonblocking execution or scheduling/provider progress has been established; no guessed constant, tolerance or dropped resource class repairs it.",
+        "Keeping failed debt is necessary accounting but does not certify quiescence, release or successful cleanup."
+      ],
+      "disposition": "REJECT_REVOKE_CLOSE_RCU_COMPOSITION_AS_FINITE_EPOCH_SETTLEMENT",
+      "newtests": 0,
+      "heads": {
+        "equity-features": "cea741cdcfcd970cd42c29b3e398ce8cc97d3141",
+        "equity-feature-workers": "5840b71518faec6bd16d2fcd56a694d0da423470"
+      },
+      "composition": [
+        "NOVA Ec::sys_revoke / Pd::revoke / Pd::pre_free / Pd::free",
+        "Rcu::call / Rcu::quiet / Rcu::update / Rcu::invoke_batch",
+        "EC/SC remote finalization and CPU/interrupt/scheduling progress",
+        "Genode Child::close_all_sessions / Child::env_sessions_closed / session close callbacks",
+        "Vendor VD/PDM/AIO cancel/drain/flush/destroy completion"
+      ],
+      "limitations": [
+        "Only already reviewed saved reports and current head JSON read; no new upstream/source/hash/native/API/host/process/VM/probe/CI/test operation, old suite rerun or rejected binary task reattempt.",
+        "Prior source and reports unchanged; no product source or selected mechanism/ABI/license/build/host qualification.",
+        "No lower acceptance criteria, qualified substitute, complete epoch, Ready/runtime/operational grant or new mandatory owner input."
+      ],
+      "reviewer": "r7_policy_review independent reviewer",
+      "new_tests": 0
+    },
+    "eq083-settlement-docs-reviewer-report.json": {
+      "bases": {
+        "equity-features": "cea741cdcfcd970cd42c29b3e398ce8cc97d3141",
+        "equity-feature-workers": "5840b71518faec6bd16d2fcd56a694d0da423470"
+      },
+      "prepared_files": {
+        "equity-feature-workers": {
+          "docs/EQ083_SETTLEMENT_CAPABILITY_EVIDENCE.json": {
+            "bytes": 17514,
+            "sha256": "8bd24b673161c8a74fcad1e535b2dc65447f1902e3b5de9db47980c3c1f4818e"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 506866,
+            "sha256": "120b76f8eef40b74c3fb9e4a7ea150e625b4526400221d58a146fae2f05aa284"
+          },
+          "docs/EQ083_SETTLEMENT_CAPABILITY_DECISION.json": {
+            "bytes": 8935,
+            "sha256": "19b7bb20a910c3c3dce3e665c507d306ea7e2c3a063f00c4ad014d7235b9f4e5"
+          },
+          "docs/EQ083_SETTLEMENT_CAPABILITY_DECISION.md": {
+            "bytes": 6996,
+            "sha256": "730ba842f7027d6c84552fd289d8be28f93a9a2956f913a485191fe742635331"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 395728,
+            "sha256": "9ced516d6dcf0cf494e9c20bef6bd78500a7563981b7d6e024babe51f9b7af92"
+          }
+        },
+        "equity-features": {
+          "docs/stories/EQ-083_SETTLEMENT_CAPABILITY_DECISION.json": {
+            "bytes": 8935,
+            "sha256": "19b7bb20a910c3c3dce3e665c507d306ea7e2c3a063f00c4ad014d7235b9f4e5"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 792310,
+            "sha256": "6c01b6889412ef1ff8890740146006a04ed0c21392cfd124f1c8d644e2d819ad"
+          },
+          "docs/stories/EQ-083_SETTLEMENT_CAPABILITY_DECISION.md": {
+            "bytes": 6996,
+            "sha256": "730ba842f7027d6c84552fd289d8be28f93a9a2956f913a485191fe742635331"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 533059,
+            "sha256": "e306ef048768e2d97dbeccb7956771a7f6b780239e233845985555547cbaa6d4"
+          },
+          "docs/stories/EQ-083_SETTLEMENT_CAPABILITY_EVIDENCE.json": {
+            "bytes": 17514,
+            "sha256": "8bd24b673161c8a74fcad1e535b2dc65447f1902e3b5de9db47980c3c1f4818e"
+          }
+        }
+      },
+      "disposition": "APPROVED",
+      "capability_review_sha256": "8a7d8790430f9769e7b15e82c71103afe8af92328842c33c8bb7d53b9190a4e3",
+      "findings": [],
+      "scope": "PREPARED_NAMED_CAPABILITY_DECISION_DOCUMENTATION_ONLY",
+      "new_source_reads": 0,
+      "new_tests": 0,
+      "checks": [
+        {
+          "composition_closed_and_no_qualified_replacement": true,
+          "full_capability_report_and_prior_epoch_reviews_preserved": true,
+          "repo": "equity-features",
+          "five_doc_scope": true,
+          "old_continuity_suffix": true,
+          "exact_base": true
+        },
+        {
+          "composition_closed_and_no_qualified_replacement": true,
+          "full_capability_report_and_prior_epoch_reviews_preserved": true,
+          "repo": "equity-feature-workers",
+          "five_doc_scope": true,
+          "old_continuity_suffix": true,
+          "exact_base": true
+        }
+      ],
+      "newtests": 0,
+      "semantic_review": "The documents accurately close and reject the named stock revoke/close/RCU/provider composition as the finite nonblocking epoch interface and reject stock-backed epoch selection. Four preserved fact mismatches distinguish revoke success from deferred finalizers, conditional CPU/RCU progress, asynchronous close/CPU-excluding eligibility and separate vendor indefinite/unsupported completion. They do not claim no API anywhere, modified-platform impossibility, actual runtime failure or a qualified replacement. FAILED_RETAINED is not quiescence/free/success. Reopening requires materially different complete actual capability/engineering with decisive evidence; all node/storage/writer/build/ABI/license/budget/host gates remain conjunctive.",
+      "reviewer": "r7_policy_review independent reviewer",
+      "limitations": [
+        "Prepared docs review only; no new upstream/source/hash/native/host/probe/CI/tests or old/rejected binary task rerun.",
+        "Five changed documentation paths per repository only; full reviewed reports and continuity preserved, product source unchanged. Final publication/attribution remains separate readback.",
+        "No lower criteria, selected replacement, whole-epoch physical cleanup, Ready/runtime/operational grant or new required owner input merely for incompleteness."
+      ]
+    },
+    "eq083-settlement-final-readback-reviewer-report.json": {
+      "new_source_reads": 0,
+      "reviewer": "r7_policy_review independent reviewer",
+      "heads": {
+        "equity-features": "012a35cf38b93b2851dfb357269d91fc2ef92ce5",
+        "equity-feature-workers": "ba9ccb09aea03da8a312c0f2230752918763a1af"
+      },
+      "checks": [
+        "All ten Git LF lengths/SHA256 match reviewed_git_files and normalized approved prepared bytes.",
+        "Exact five-doc-only changes each/no tracked source changes, approved base parents and clean paired codex/eq083-resilience branches.",
+        "Decision/JSON/evidence mirrors and old PROJECT_KNOWLEDGE/SESSION_HANDOFF suffixes preserved.",
+        "Expected full Atul author/committer identities and noreply email; no Co-authored-by trailer."
+      ],
+      "published_files": {
+        "equity-features": {
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 533059,
+            "sha256": "e306ef048768e2d97dbeccb7956771a7f6b780239e233845985555547cbaa6d4"
+          },
+          "docs/stories/EQ-083_SETTLEMENT_CAPABILITY_EVIDENCE.json": {
+            "bytes": 17514,
+            "sha256": "8bd24b673161c8a74fcad1e535b2dc65447f1902e3b5de9db47980c3c1f4818e"
+          },
+          "docs/stories/EQ-083_SETTLEMENT_CAPABILITY_DECISION.json": {
+            "bytes": 8935,
+            "sha256": "19b7bb20a910c3c3dce3e665c507d306ea7e2c3a063f00c4ad014d7235b9f4e5"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 792310,
+            "sha256": "6c01b6889412ef1ff8890740146006a04ed0c21392cfd124f1c8d644e2d819ad"
+          },
+          "docs/stories/EQ-083_SETTLEMENT_CAPABILITY_DECISION.md": {
+            "bytes": 6996,
+            "sha256": "730ba842f7027d6c84552fd289d8be28f93a9a2956f913a485191fe742635331"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_SETTLEMENT_CAPABILITY_EVIDENCE.json": {
+            "bytes": 17514,
+            "sha256": "8bd24b673161c8a74fcad1e535b2dc65447f1902e3b5de9db47980c3c1f4818e"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 395728,
+            "sha256": "9ced516d6dcf0cf494e9c20bef6bd78500a7563981b7d6e024babe51f9b7af92"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 506866,
+            "sha256": "120b76f8eef40b74c3fb9e4a7ea150e625b4526400221d58a146fae2f05aa284"
+          },
+          "docs/EQ083_SETTLEMENT_CAPABILITY_DECISION.json": {
+            "bytes": 8935,
+            "sha256": "19b7bb20a910c3c3dce3e665c507d306ea7e2c3a063f00c4ad014d7235b9f4e5"
+          },
+          "docs/EQ083_SETTLEMENT_CAPABILITY_DECISION.md": {
+            "bytes": 6996,
+            "sha256": "730ba842f7027d6c84552fd289d8be28f93a9a2956f913a485191fe742635331"
+          }
+        }
+      },
+      "new_tests": 0,
+      "prepared_review_sha256": "ba31c6ab3a30ad9e2d077bed1527a36730876d84044a4d090ee2df1d9b172b62",
+      "disposition": "APPROVED",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "findings": [],
+      "attribution": {
+        "equity-features": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): reject named stock settlement composition and close inquiry\n",
+        "equity-feature-workers": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): reject named stock settlement composition and close inquiry\n"
+      },
+      "bases": {
+        "equity-features": "cea741cdcfcd970cd42c29b3e398ce8cc97d3141",
+        "equity-feature-workers": "5840b71518faec6bd16d2fcd56a694d0da423470"
+      },
+      "limitations": [
+        "Final published docs byte/attribution readback only; no semantic/sourcehash/research/native/host/probe/CI/tests or rejected binary task rerun.",
+        "Preserves rejection and closure of the specified stock composition, not universal impossibility or executed failure; no qualified replacement.",
+        "No whole physical epoch/Ready/runtime/operational approval or new owner input request."
+      ],
+      "newtests": 0
+    }
+  },
+  "tool_only_history": "Prior settlement sync first failed with GraphQL BodytooLong after one comment and before issue/PR/primary mutation. Corrective sync reused saved publication URL/review/heads and replaced current owned prefix before PREVIOUS CHECKPOINT HISTORY, preserving history; session79906 completed0. No duplicate comment or runtime failure. Future sync replaces owned prefix, never prepends full body.",
+  "immutable_source_inventory": {
+    "texts": 186,
+    "bytes": 1868044,
+    "rehashed": false
+  },
+  "new_tests": 0,
+  "native_operations": 0
+}

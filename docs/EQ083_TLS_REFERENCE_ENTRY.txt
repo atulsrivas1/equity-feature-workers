@@ -1,0 +1,71 @@
+"""Frozen trusted EQ083 reference-client entry; not a public loader."""
+import sys,json,re,hashlib,os,ssl
+if sys.flags.isolated!=1:raise ValueError('owned isolated reference')
+from pathlib import Path
+if len(sys.argv)!=10:raise ValueError('owned TLS reference arguments')
+origin,fixture,principal,pid_marker,case,mode,arm,certificate_root,role=sys.argv[1:]
+if not re.fullmatch(r'https://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535 or principal!='A':raise ValueError('owned TLS origin/principal')
+if case!='trades' or role not in ('baseline','fault','followup'):raise ValueError('owned TLS reference case/role')
+modes=('verified-full-result','untrusted-certificate','hostname-mismatch','extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial')
+if mode not in modes:raise ValueError('owned TLS mode')
+if any(len(path)>1024 for path in (fixture,pid_marker,arm,certificate_root)):raise ValueError('owned TLS path bounds')
+certroot=Path(certificate_root)
+if certroot!=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-tls-certificates-6197efe') or certroot.is_symlink() or certroot.resolve()!=certroot:raise ValueError('owned TLS certificate root')
+certificate_pins={'valid': {'bytes': 1174, 'sha256': '1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc'}, 'wrong': {'bytes': 1174, 'sha256': '6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0'}}
+for name,pin in certificate_pins.items():
+ file=certroot/(name+'-cert.pem')
+ if file.is_symlink():raise ValueError('owned TLS certificate file')
+ with file.open('rb') as stream:data=stream.read(8193)
+ if len(data)!=pin['bytes'] or hashlib.sha256(data).hexdigest()!=pin['sha256']:raise ValueError('owned TLS certificate identity')
+if role=='fault' and mode=='untrusted-certificate':context=ssl.create_default_context()
+else:
+ context=ssl.create_default_context(cafile=str(certroot/'valid-cert.pem'))
+ if role=='fault' and mode=='hostname-mismatch':context.load_verify_locations(cafile=str(certroot/'wrong-cert.pem'))
+if context.verify_mode!=ssl.CERT_REQUIRED or context.check_hostname is not True:raise ValueError('owned TLS verification required')
+import equity_feature_client,equity_feature_mcp
+if not all('site-packages' in Path(v.__file__).resolve().parts for v in (equity_feature_client,equity_feature_mcp)):raise ValueError('owned installed modules')
+from equity_feature_client import RemoteClient,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation
+from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration,RawSliceRegistration
+with Path(fixture).open('rb') as stream:raw=stream.read(76772)
+if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29':raise ValueError('owned fixture')
+fixtures=json.loads(raw)
+index=next(n for n,v in enumerate(fixtures['native_cases']) if v['case']==case)
+producer=fixtures['native_cases'][index]['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+rawcase=fixtures['raw_cases'][-1 if index==3 else index];data=rawcase['expected_raw_payload'];scope=data['scope']
+rawexpected=RawExpectation(DatasetKey(**data['dataset']),ScopeKey(scope['instrument_id'],scope['session_id'],int(scope['start_ns']),int(scope['end_ns'])),rawcase['data_kind'],tuple(v['name'] for v in data['columns']))
+profile=MCPProfile('eq083-tls-'+case,(),(CommandRegistration('command',expected),),60)
+provider_calls=0
+provider_cap=5 if role=='baseline' else 2 if role=='followup' or mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial') else 1
+def armed():
+ marker=Path(arm)
+ if not marker.with_name(marker.name+'.complete').is_dir():return False
+ with marker.open('rb') as stream:data=stream.read(65)
+ if len(data)>64:raise ValueError('owned TLS arm bounds')
+ value=json.loads(data)
+ if type(value) is not dict or set(value)!={'armed','mode'} or value['armed'] is not True or value['mode']!=mode:raise ValueError('owned TLS arm')
+ return True
+def provider():
+ global provider_calls
+ if provider_calls>=provider_cap:raise ValueError('owned TLS provider cap')
+ provider_calls+=1
+ token=principal
+ if role=='fault':
+  active=armed()
+  expected_active=provider_calls==2 if mode in ('extra-response-byte','truncated-response-byte','duplicate-content-length','actual-owner-denial') else True
+  if active is not expected_active:raise ValueError('owned TLS provider/control order')
+  if mode=='actual-owner-denial' and active:token='B'
+ return token*43
+client=RemoteClient(origin,provider,attempts=1,budget=5,ssl_context=context)
+server=StdioServer(client,profile)
+marker=Path(pid_marker)
+if marker.exists() or marker.with_name(marker.name+'.complete').exists():raise ValueError('owned marker')
+data=json.dumps({'pid':os.getpid()},separators=(',',':')).encode('ascii')
+if len(data)>128:raise ValueError('owned PID bounds')
+temporary=marker.with_name(marker.name+'.pending');temporary.write_bytes(data);temporary.replace(marker);marker.with_name(marker.name+'.complete').mkdir()
+server.run_stdio(sys.stdin.buffer,sys.stdout.buffer)
+closed=marker.with_name(marker.name+'.closed')
+data=json.dumps({'pid':os.getpid(),'provider_calls':provider_calls,'marker':'eq083-mcp-closed','role':role,'mode':mode},sort_keys=True,separators=(',',':')).encode('ascii')
+if len(data)>256:raise ValueError('owned close bounds')
+temporary=closed.with_name(closed.name+'.pending');temporary.write_bytes(data);temporary.replace(closed);closed.with_name(closed.name+'.complete').mkdir()

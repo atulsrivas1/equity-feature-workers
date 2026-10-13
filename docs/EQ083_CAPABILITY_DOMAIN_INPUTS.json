@@ -1,0 +1,12 @@
+{
+  "schema": "eq083.capability-domain-research.v1",
+  "bases": {
+    "equity-features": "d7da15b63dc99f3daf49a515494aa1a58a9c0527",
+    "equity-feature-workers": "28f2a22bf6f84994471d9aa26dfcbb103345041f"
+  },
+  "scope": "Primary seL4 physical allocation, API, proof assumptions/configuration and VMM documentation only; not immutable source, binary, host or selected implementation",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false,
+  "host_selected": false
+}

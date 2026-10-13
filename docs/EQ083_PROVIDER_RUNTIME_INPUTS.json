@@ -1,0 +1,111 @@
+{
+  "schema": "eq083.provider-libc-vfs-research.v1",
+  "bases": {
+    "equity-features": "2fea1c06514c7f2361705109f3a7a54747398cb4",
+    "equity-feature-workers": "8f11027e50ebc560d689bc4ef6678b99b7ad9c27"
+  },
+  "source_metadata": {
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "scope": "13 selected libc file/monitor/kernel/thread/allocator and VFS RAM/fs/block/tar/log source texts as DATA only; no complete platform/libc/provider/kernel/vendor sourcebinary/guest/host or timing proof",
+    "total_bytes": 204684,
+    "new_tests": 0,
+    "files": [
+      {
+        "path": "repos/libports/src/lib/libc/file_operations.cc",
+        "git_sha1": "7833d3338e108cd859a3f8209ef1f2954c1257fa",
+        "bytes": 29726,
+        "sha256": "d243b238789d14213b6edeb3236fe0fdd22fccfb4970f94860aae3bb15513477",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/file_operations.cc"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/internal/file.h",
+        "git_sha1": "7eb7427acb5e486a9f9e23feafd7a2b59a1c7636",
+        "bytes": 2416,
+        "sha256": "866b2989301f8365a8c89f8e7908cb4085a085f3127ceb3a49a28f266a16497f",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/file.h"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/kernel.cc",
+        "git_sha1": "baa84a9d0e008acbb7d6757d9e489f44333c4813",
+        "bytes": 15400,
+        "sha256": "7fd84c4a12d240fee86464b4f38e8caa3b169b6631320896f71cbd88b3f9d390",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/kernel.cc"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/internal/kernel.h",
+        "git_sha1": "2b983a7e245e2507108c4d94fb511fc35e9bc8b9",
+        "bytes": 17577,
+        "sha256": "de33dd81c55e9b5e5ac54244e656ef22f8b06488f318c3aeb9084d817c12ec65",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/kernel.h"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/internal/monitor.h",
+        "git_sha1": "ac6cef1207c98cac3b9d92b1126e60b3f3adc1c1",
+        "bytes": 4009,
+        "sha256": "3205f69373a0612b60421fdb2470736fa3c3e0d2e28dc11c072f4b783ad69dda",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/monitor.h"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/pthread.cc",
+        "git_sha1": "3ffc253c5c81b314cafae19f358931cbba90f20c",
+        "bytes": 32774,
+        "sha256": "ab5929c3bc0312521e838299bfbf169fa90c0088fef92e25915d22da7498d341",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/pthread.cc"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/malloc.cc",
+        "git_sha1": "d3ed4c726a9493bafd68c2bd6074cc242de82b63",
+        "bytes": 6733,
+        "sha256": "c1bcea5e5380cad45eadc319749494def7a5819d003ea4bc757cb857b64cde8b",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/malloc.cc"
+      },
+      {
+        "path": "repos/libports/src/lib/libc/internal/mem_alloc.h",
+        "git_sha1": "91a330ff2bf22b13613fec205cbed19a853f4167",
+        "bytes": 3506,
+        "sha256": "c3ffc4887bb32694740b77f294cbb2999bd6790082a2f0a65f9902a39615d7a2",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/libports/src/lib/libc/internal/mem_alloc.h"
+      },
+      {
+        "path": "repos/os/src/lib/vfs/ram_file_system.h",
+        "git_sha1": "a873bc27aebafe64cdbe6b7326a28fa3b97d5a12",
+        "bytes": 21954,
+        "sha256": "5b1244eccc3f60ad2a746447e1a68216ef7f01747f16ebc9b009fbbaf5cad48f",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/ram_file_system.h"
+      },
+      {
+        "path": "repos/os/src/lib/vfs/fs_file_system.h",
+        "git_sha1": "661b5d495f13c8edf79eb33152fca711c243c9f0",
+        "bytes": 26320,
+        "sha256": "51377c708c4235a2642e379abcbf1c5dbbeea562f28491e26c81d09cf603b490",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/fs_file_system.h"
+      },
+      {
+        "path": "repos/os/src/lib/vfs/block_file_system.h",
+        "git_sha1": "229a43604d44f01971bf42462c5473ffaaa6232e",
+        "bytes": 20624,
+        "sha256": "b943dbce76e9e240d1a711aaba26b422a1c3659792fe03e16d5f13f5f0f05bda",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/block_file_system.h"
+      },
+      {
+        "path": "repos/os/src/lib/vfs/tar_file_system.h",
+        "git_sha1": "cd1457a05a1069b52763454d059f5af609fbeea6",
+        "bytes": 19144,
+        "sha256": "bf5bd41cf415e985cbe35b25461cde7ea46ec2ea48458f765887a282fd163dcf",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/tar_file_system.h"
+      },
+      {
+        "path": "repos/os/src/lib/vfs/log_file_system.h",
+        "git_sha1": "5f6a7c2ba91884fa54b04bfa4cb57bbf69f6151a",
+        "bytes": 4501,
+        "sha256": "47dfb4a31574438a7072297312cab6f4761f05f609ca07aca9ec8256041de456",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/vfs/log_file_system.h"
+      }
+    ]
+  },
+  "new_tests": 0,
+  "scope": "13 selected immutable libc file/monitor/thread/allocator and VFS provider source texts as DATA; not entire platform/libc/provider/kernel/vendor sourcebinary/guest/host or physical timing closure",
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}

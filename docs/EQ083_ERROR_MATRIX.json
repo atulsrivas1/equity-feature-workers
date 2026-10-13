@@ -1,0 +1,297 @@
+{
+  "scope": "PRE-CODE source-derived expectations; no executed new tests, Ready or release approval",
+  "review_advice": "/root/r7_policy_review read-only source mapping at fba2/3a60; no execution",
+  "authority_entry": {
+    "bytes": 4645,
+    "sha256": "3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270",
+    "origin": "accepted EQ081 authority entry plus causal finalization barrier/explicit counters; new frozen source must be reviewed BEFORE execution"
+  },
+  "source_tuples": [
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+      "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+      "bytes": 104088,
+      "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+      "path": "packages/mcp/src/equity_feature_mcp/schemas/protocol.json",
+      "bytes": 10162,
+      "sha256": "967b2c78642caf757fbde5deb9f38742468b70606bc1348cd782b02e8f0ec70d"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+      "path": "packages/service/src/equity_feature_service/jobs.py",
+      "bytes": 43441,
+      "sha256": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9295ea59d52d67316d237ef16c9ba92a694ed52b",
+      "path": "packages/client/src/equity_feature_client/_response.py",
+      "bytes": 11985,
+      "sha256": "8cd9f5c34658a81600e8b69f6cce6c6d52b0e0818aab21df4ce7ca1a13023a8c"
+    }
+  ],
+  "cases": [
+    {
+      "id": "authentication",
+      "trigger": "valid-shaped unknown or retired credential",
+      "http": {
+        "status": 401,
+        "category": "authentication",
+        "code": "unauthenticated"
+      },
+      "client": {
+        "category": "credentials",
+        "code": "remote_denial",
+        "phase": "decode",
+        "status": 401
+      },
+      "mcp": "forward client; invalidate existing linked record; subsequent local reference_expired",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "foreign_owner",
+      "trigger": "authenticated B discovery succeeds then B sends original A native IDs",
+      "http": {
+        "status": 403,
+        "category": "authorization",
+        "code": "not_permitted"
+      },
+      "client": {
+        "category": "authorization",
+        "code": "remote_denial",
+        "phase": "decode",
+        "status": 403
+      },
+      "mcp": "foreign-process opaque reference is local unknown_reference/provider0; NOT backend-owner proof",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "original_ttl",
+      "trigger": "original initialized expiry-1/exact while grant live",
+      "http": {
+        "before": 200,
+        "at": 403,
+        "category": "authorization",
+        "code": "not_permitted",
+        "status_after": "expired",
+        "same_key": "same expired original job"
+      },
+      "client": {
+        "category": "authorization",
+        "code": "remote_denial",
+        "phase": "decode",
+        "status": 403
+      },
+      "mcp": "first backend denial forwarded; later linked refs local reference_expired/provider0",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "original_grant",
+      "trigger": "initialized expiry verified1000; clock999 then1000 with credential3600e9",
+      "http": {
+        "before": 200,
+        "at": 403,
+        "category": "authorization",
+        "code": "not_permitted",
+        "same_key": "denied; sweep removes original job/key"
+      },
+      "client": {
+        "category": "authorization",
+        "code": "remote_denial",
+        "phase": "decode",
+        "status": 403
+      },
+      "mcp": "first backend denial forwarded; later linked refs local reference_expired/provider0",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "retirement",
+      "trigger": "remove A credential; maintenance clears held capacity before ACK; restore same credential",
+      "http": {
+        "retired": 401,
+        "restored_result": 403,
+        "restored_status": "expired",
+        "same_key": "same expired original job"
+      },
+      "client": {
+        "category": "credentials",
+        "code": "remote_denial",
+        "phase": "decode",
+        "status": 401
+      },
+      "mcp": "retired first denial invalidates record; restoration cannot readmit old reference",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "epoch",
+      "trigger": "scheduler.close(2) exactTrue before new service on same listener",
+      "http": {
+        "old_ids": 403,
+        "new_manual_key": "new job/new epoch; explicit only"
+      },
+      "client": {
+        "category": "authorization",
+        "code": "remote_denial",
+        "phase": "decode",
+        "status": 403
+      },
+      "mcp": "old referenced backend denial then local tombstone; owner creates new process/nonce explicitly",
+      "native_reads_delta": "new epoch counter1; preserve old counter1 separately"
+    },
+    {
+      "id": "identity422",
+      "trigger": "legal registered dataset/scope but stale command digest/config identity",
+      "http": {
+        "status": 422,
+        "category": "contract",
+        "code": "inconsistent_identity"
+      },
+      "client": {
+        "mutation": {
+          "category": "unknown",
+          "code": "outcome_unknown",
+          "phase": "decode",
+          "status": 422
+        },
+        "read": {
+          "category": "protocol",
+          "code": "invalid_response",
+          "phase": "decode",
+          "status": 422
+        }
+      },
+      "mcp": "exact forwarded client fields; no remote_denial422 or mapping relaxation",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "wrong_expectation",
+      "trigger": "correct HTTP200 producer but independently wrong public expectation",
+      "http": {
+        "status": 200
+      },
+      "client": {
+        "read": {
+          "category": "protocol",
+          "code": "invalid_response",
+          "phase": "decode",
+          "status": 200
+        },
+        "mutation": {
+          "category": "unknown",
+          "code": "outcome_unknown",
+          "phase": "decode",
+          "status": 200
+        }
+      },
+      "mcp": "forward client failure; not service request rejection"
+    },
+    {
+      "id": "wrong_source_scope",
+      "trigger": "different source/snapshot/revision/scope request",
+      "http": {
+        "status": 403,
+        "category": "authorization",
+        "code": "not_permitted"
+      },
+      "client": {
+        "category": "authorization",
+        "code": "remote_denial",
+        "phase": "decode",
+        "status": 403
+      },
+      "mcp": "requires separately frozen wrong registration; caller cannot choose trusted bindings",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "unsupported_version",
+      "trigger": "raw HTTP unsupported revision versus public helper unsupported revision",
+      "http": {
+        "status": 400,
+        "category": "transport",
+        "code": "incompatible_version",
+        "version": "default1.0",
+        "request_id": null
+      },
+      "client": {
+        "category": "configuration",
+        "code": "invalid_request",
+        "phase": "prepare",
+        "status": null
+      },
+      "mcp": "transport version not a tool argument; unexpected argument JSONRPC -32602/provider0",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "native_failed",
+      "trigger": "explicit owned source callback failure",
+      "http": {
+        "status": 200,
+        "state": "failed",
+        "result_id": null,
+        "error": {
+          "category": "internal",
+          "code": "internal_error",
+          "retryable": false
+        }
+      },
+      "client": "successful JobView; not transport/internal500",
+      "mcp": {
+        "status": "ok:true native failed state",
+        "result": {
+          "source": "mcp",
+          "code": "unknown_reference"
+        },
+        "result_provider_calls": 0
+      },
+      "native_reads_delta": 1
+    },
+    {
+      "id": "queued_cancel",
+      "trigger": "blocked running job plus second queued job; explicit queued cancel",
+      "http": {
+        "status": 200,
+        "state": "cancelled",
+        "result_id": null,
+        "error": null
+      },
+      "client": "successful JobView",
+      "mcp": "ok:true native cancelled state; no automatic backend cancellation",
+      "native_reads_delta": 0
+    },
+    {
+      "id": "running_cancel",
+      "trigger": "explicit running cancel while native gate held; then owner releases gate",
+      "http": {
+        "status": 200,
+        "before_release": "cancel_requested",
+        "after_observed_exit": "cancelled",
+        "result_id": null,
+        "error": null
+      },
+      "client": "successful JobView",
+      "mcp": "ok:true native state; protocol cancellation/EOF do not imply backend cancel",
+      "native_reads_delta": 1
+    }
+  ],
+  "counter_rules": [
+    "attempts1 valid dispatched operation provider1/send1",
+    "invalid public preparation or MCP local failure provider0/send0",
+    "reads/rawslice/same-key reuse/denials add no native Source.iter_batches",
+    "source entry does not establish success/commit",
+    "quota/audit/clock/framing/late authority failures supersede nominal outcomes and fail this planned vector"
+  ],
+  "remaining": "Exact parent scripts, all lane negative request bodies and physical fault choreography/state source/builder design still pending"
+}

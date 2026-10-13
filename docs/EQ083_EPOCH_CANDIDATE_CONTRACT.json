@@ -1,0 +1,25 @@
+{
+  "schema": "eq083.epoch-enforcement-candidate.v1",
+  "bases": {
+    "equity-features": "705a51560d6a0d9f7f2f4e9d47f1f9338cfef232",
+    "equity-feature-workers": "ab5985c48268bd44998578384b1f013bfb6589d1"
+  },
+  "name": "Preallocated memory-backed guest epoch with separate failure control",
+  "family": "Modified Genode/NOVA/VirtualBox7",
+  "status": "PROPOSED_UNIMPLEMENTED_UNQUALIFIED_NOT_SELECTED",
+  "new_tests": 0,
+  "new_source_reads": 0,
+  "new_upstream_hash_checks": 0,
+  "criteria_changed": false,
+  "qualified_replacement": false,
+  "decisive_question": "Can the effective kernel/provider implementation settle the entire owned epoch, including execution, mappings, queues, donations and retired CPU/RCU debt, through a nonblocking independently progressing finite interface without new allocation or outside replenishment?",
+  "critical_mechanism": "Required new epoch revoke-and-settle control interface, not an existing qualified API",
+  "critical_mechanism_implemented": false,
+  "physical_budgets": null,
+  "cleanup_deadline": null,
+  "exact_effective_build": null,
+  "supported_guest_artifacts": null,
+  "source_binary_license_closure": false,
+  "physical_host_issuer": null,
+  "admission": false
+}

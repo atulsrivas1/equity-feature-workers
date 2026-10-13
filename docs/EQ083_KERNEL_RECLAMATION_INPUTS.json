@@ -1,0 +1,166 @@
+{
+  "schema": "eq083.nova-kernel-reclamation-research.v1",
+  "bases": {
+    "equity-features": "a966f9cdea4d9e9adefec621608b6767114bd4ed",
+    "equity-feature-workers": "94675775953754c094af344f305606a89c83c090"
+  },
+  "source_metadata": [
+    {
+      "scope": "Nine declared-kernel source text files plus complete immediate local patch-directory text set as DATA; not whole kernel/vendor/compiled flags/ABI/binary/host/resource proof; patches not applied or executed",
+      "kernel_commit": "b5177517cae440940348af0406903f607ea73a46",
+      "genode_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "total_bytes": 86949,
+      "new_tests": 0,
+      "files": [
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/kobject.hpp",
+          "bytes": 1421,
+          "git_sha1": "16d39879fb586573e31015335b79cbfdc63aec14",
+          "sha256": "bf2f1e3f87a0385a10e0dab6cda323120f894843999edbafb9f468bf38bb0c9a"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/pd.hpp",
+          "bytes": 5811,
+          "git_sha1": "b8ed2621bbbc17df262c41764de4c6169710bac5",
+          "sha256": "57e738aaaee6e46a7a8ecb1ae86189d2628b5d37424f6404d1e8a1f61eed6da8"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/qpd.hpp",
+          "bytes": 1099,
+          "git_sha1": "8e3020ce14f6d95d9c9ca29b38754782f104f7b1",
+          "sha256": "753bfc1b41268d54249393fed0ed90564ee5658e7995de6f9bd17c38259928b6"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/quota.hpp",
+          "bytes": 3950,
+          "git_sha1": "c00b0e38b416ec625ab0c53e62160c773c0ca8d6",
+          "sha256": "7efaac8bcedc0e016f2d68184d2a746fc84a94debc09efb839d5711a7534671a"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/rcu.hpp",
+          "bytes": 3545,
+          "git_sha1": "a8849455db8278c734e5fb40907ea00b67f6e484",
+          "sha256": "b893e9724f4ca63b3b7f082ffdc2a701699766828e2c78676fc2fb89ab01dd34"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/syscall.hpp",
+          "bytes": 8739,
+          "git_sha1": "c45670b8e14afeffc11b4e8a9d48e0a63bbf5c33",
+          "sha256": "4363bb57ae074485bb4ba6a6064385d404d1696de9c79bb0d5fd039719f213df"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "src/pd.cpp",
+          "bytes": 14670,
+          "git_sha1": "c1a5f366110dcb3136112f8bd66e7a3256fbb8cd",
+          "sha256": "80513e06fd6c665b7347371649219aacff8c29687bdd69ef3811e3f4b427cdf3"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "src/rcu.cpp",
+          "bytes": 2568,
+          "git_sha1": "a56f102c94bbd8a49b279b90499ec3e46de0e9f6",
+          "sha256": "aabbc297b1f8e7d054a7cfdbc7125265ae8aaf20f6ab6afb35e20d3f7550d60e"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "src/syscall.cpp",
+          "bytes": 42192,
+          "git_sha1": "3957b2b99b1b931af11efec0f895727caa30f749",
+          "sha256": "3b34a18059c9b5d3d9ee89720f2ef90f8a6538ab1a9743519d97e778055c875c"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "path": "repos/base-nova/patches/README",
+          "bytes": 145,
+          "git_sha1": "468bfa5eff79a54d56a097810865871849be0f01",
+          "sha256": "7aa00b313b2ecdc664eeea592976d08b9af2e3f23bbef2dcd4846d27eed70caa"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "path": "repos/base-nova/patches/allow_ioapic_access.patch",
+          "bytes": 792,
+          "git_sha1": "888fe1705a566c2b75ddc65e98e250d1f3c63375",
+          "sha256": "f8ff83856176c9bf2017abbefecaae33eae62d15c88888d3e10fb9f9af3c0f86"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "path": "repos/base-nova/patches/allow_iommu_access.patch",
+          "bytes": 1268,
+          "git_sha1": "e303485915ebba8428f4edac00032d8990958707",
+          "sha256": "687ac709e7c8c72c6769d97c5162c659c5d52f6359a48539026b4b81b7aa1ba1"
+        },
+        {
+          "repository": "https://codeberg.org/genodelabs/genode",
+          "commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+          "path": "repos/base-nova/patches/syscall_msi.patch",
+          "bytes": 749,
+          "git_sha1": "b112ab71ed905019a577c9488d41224d39255a28",
+          "sha256": "0a94bc0fb7d9d2b72178b3a5c56b75774eb7c85c95737ce61d9c278bcce8a18f"
+        }
+      ]
+    },
+    {
+      "scope": "Four additional pinned upstream buddy/slab allocator source files as UTF8 DATA only; no compile/import/execution; not complete allocation coverage or binary/host proof",
+      "kernel_commit": "b5177517cae440940348af0406903f607ea73a46",
+      "total_bytes": 17552,
+      "new_tests": 0,
+      "files": [
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/buddy.hpp",
+          "bytes": 3357,
+          "git_sha1": "dc4c9e0d4d4a6089a3dd75b397180a2caa977f3f",
+          "sha256": "64f57bd2369667af438e89ae801ed023bdbe4b3b3b8b2b03dafdc8af1d5f0f7d"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "include/slab.hpp",
+          "bytes": 2677,
+          "git_sha1": "955fe87f8afa77c76b6ab3804b6682602a420f8d",
+          "sha256": "57d98777cf8cdf2f569f3704f1bfcae59c8a443b68d81c257fac7d0c4420196e"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "src/buddy.cpp",
+          "bytes": 6744,
+          "git_sha1": "b81ac552221d1d1e9e473c12461457953bd3f96b",
+          "sha256": "c453c5c0cc58cba51989033d3f06744c8d14a3bfaa1315d6af0b9e9ee52b29d0"
+        },
+        {
+          "repository": "https://github.com/alex-ab/NOVA",
+          "commit": "b5177517cae440940348af0406903f607ea73a46",
+          "path": "src/slab.cpp",
+          "bytes": 4774,
+          "git_sha1": "0440c5852d6bf3e33d0e4c19404ee7b0ee942130",
+          "sha256": "094b6678b082a15b4d5eebb9865b14912ade3b4c52432b9aa67c4fe50a40527b"
+        }
+      ]
+    }
+  ],
+  "new_tests": 0,
+  "scope": "17 selected declared-kernel and immediate Genode patch-directory UTF8 source texts as DATA; not whole patched kernel/build/config/ABI/binary/host or implemented topology",
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}

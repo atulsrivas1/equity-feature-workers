@@ -1,0 +1,469 @@
+import ctypes,os,subprocess,sys,time
+
+class WindowsReferenceChild:
+ def __init__(self,argv):
+  from ctypes import wintypes as w
+  if sys.platform!='win32' or ctypes.sizeof(ctypes.c_void_p)!=8:raise ValueError('owned Windows reference only')
+  if type(argv) is not list or len(argv)!=6 or argv[:2]!=[sys.executable,'-I'] or any(type(v) is not str or not v or '\x00' in v for v in argv):raise ValueError('owned reference argv')
+  self.kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+  self.job=self.process=self.thread=self.entry=None
+  self.stdin=self.stdout=self.stderr=None
+  self.pid=self.entry_pid=None;self.returncode=None;self.ownership_closed=False
+  class Basic(ctypes.Structure):
+      _fields_ = [('process_time',ctypes.c_longlong),('job_time',ctypes.c_longlong),('flags',w.DWORD),
+          ('min_ws',ctypes.c_size_t),('max_ws',ctypes.c_size_t),('active',w.DWORD),
+          ('affinity',ctypes.c_size_t),('priority',w.DWORD),('scheduling',w.DWORD)]
+  class IO(ctypes.Structure):
+      _fields_ = [(name,ctypes.c_ulonglong) for name in ('read_op','write_op','other_op','read_bytes','write_bytes','other_bytes')]
+  class Extended(ctypes.Structure):
+      _fields_ = [('basic',Basic),('io',IO),('process_memory',ctypes.c_size_t),
+          ('job_memory',ctypes.c_size_t),('peak_process_memory',ctypes.c_size_t),('peak_job_memory',ctypes.c_size_t)]
+  class Startup(ctypes.Structure):
+      _fields_ = [('cb',w.DWORD),('reserved',w.LPWSTR),('desktop',w.LPWSTR),('title',w.LPWSTR),
+          ('x',w.DWORD),('y',w.DWORD),('xs',w.DWORD),('ys',w.DWORD),('xc',w.DWORD),('yc',w.DWORD),
+          ('fill',w.DWORD),('flags',w.DWORD),('show',w.WORD),('cb_reserved',w.WORD),
+          ('reserved2',ctypes.POINTER(ctypes.c_byte)),('stdin',w.HANDLE),('stdout',w.HANDLE),('stderr',w.HANDLE)]
+  class StartupExtended(ctypes.Structure):
+      _fields_ = [('startup',Startup),('attributes',ctypes.c_void_p)]
+  class Process(ctypes.Structure):
+      _fields_ = [('process',w.HANDLE),('thread',w.HANDLE),('pid',w.DWORD),('tid',w.DWORD)]
+  class Security(ctypes.Structure):
+      _fields_ = [('length',w.DWORD),('descriptor',ctypes.c_void_p),('inherit',w.BOOL)]
+  signatures = {
+      'CreateJobObjectW':([ctypes.c_void_p,w.LPCWSTR],w.HANDLE),
+      'SetInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD],w.BOOL),
+      'QueryInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD,ctypes.c_void_p],w.BOOL),
+      'CreatePipe':([ctypes.POINTER(w.HANDLE),ctypes.POINTER(w.HANDLE),ctypes.c_void_p,w.DWORD],w.BOOL),
+      'SetHandleInformation':([w.HANDLE,w.DWORD,w.DWORD],w.BOOL),
+      'OpenProcess':([w.DWORD,w.BOOL,w.DWORD],w.HANDLE),
+      'GetProcessId':([w.HANDLE],w.DWORD),
+      'InitializeProcThreadAttributeList':([ctypes.c_void_p,w.DWORD,w.DWORD,ctypes.POINTER(ctypes.c_size_t)],w.BOOL),
+      'UpdateProcThreadAttribute':([ctypes.c_void_p,w.DWORD,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p],w.BOOL),
+      'DeleteProcThreadAttributeList':([ctypes.c_void_p],None),
+      'CreateProcessW':([w.LPCWSTR,w.LPWSTR,ctypes.c_void_p,ctypes.c_void_p,w.BOOL,w.DWORD,
+          ctypes.c_void_p,w.LPCWSTR,ctypes.POINTER(Startup),ctypes.POINTER(Process)],w.BOOL),
+      'IsProcessInJob':([w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)],w.BOOL),
+      'ResumeThread':([w.HANDLE],w.DWORD), 'WaitForSingleObject':([w.HANDLE,w.DWORD],w.DWORD),
+      'GetExitCodeProcess':([w.HANDLE,ctypes.POINTER(w.DWORD)],w.BOOL),
+      'TerminateJobObject':([w.HANDLE,w.UINT],w.BOOL), 'CloseHandle':([w.HANDLE],w.BOOL)}
+  for name, (args, result) in signatures.items():
+      function = getattr(self.kernel, name)
+      function.argtypes, function.restype = args, result
+  def check(value):
+   if not value:raise OSError(ctypes.get_last_error(),'owned reference ownership')
+  handles=[w.HANDLE() for _ in range(6)]
+  input_read,input_write,output_read,output_write,error_read,error_write=handles
+  attributes=None;initialized=False;child=Process()
+  try:
+   self.job=self.kernel.CreateJobObjectW(None,None);check(self.job)
+   limits=Extended();limits.basic.flags=0x4|0x8|0x200|0x2000
+   limits.basic.job_time,limits.basic.active,limits.job_memory=100000000,2,1073741824
+   check(self.kernel.SetInformationJobObject(self.job,9,ctypes.byref(limits),ctypes.sizeof(limits)))
+   observed=Extended();check(self.kernel.QueryInformationJobObject(self.job,9,ctypes.byref(observed),ctypes.sizeof(observed),None))
+   if (observed.basic.flags,observed.basic.job_time,observed.basic.active,observed.job_memory)!=(limits.basic.flags,100000000,2,1073741824):raise ValueError('owned reference limits readback')
+   security=Security(ctypes.sizeof(Security),None,True)
+   for read,write,parent_end in ((input_read,input_write,input_write),(output_read,output_write,output_read),(error_read,error_write,error_read)):
+    check(self.kernel.CreatePipe(ctypes.byref(read),ctypes.byref(write),ctypes.byref(security),4096));check(self.kernel.SetHandleInformation(parent_end,1,0))
+   size=ctypes.c_size_t();self.kernel.InitializeProcThreadAttributeList(None,2,0,ctypes.byref(size))
+   if not size.value or size.value>65536:raise ValueError('owned reference attributes bound')
+   attributes=ctypes.create_string_buffer(size.value);check(self.kernel.InitializeProcThreadAttributeList(attributes,2,0,ctypes.byref(size)));initialized=True
+   jobs=(w.HANDLE*1)(self.job);inherited=(w.HANDLE*3)(input_read.value,output_write.value,error_write.value)
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x2000d,jobs,ctypes.sizeof(jobs),None,None))
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x20002,inherited,ctypes.sizeof(inherited),None,None))
+   startup=StartupExtended();startup.startup.cb=ctypes.sizeof(startup);startup.startup.flags=0x100
+   startup.startup.stdin,startup.startup.stdout,startup.startup.stderr=input_read.value,output_write.value,error_write.value
+   startup.attributes=ctypes.cast(attributes,ctypes.c_void_p)
+   command_text=subprocess.list2cmdline(argv)
+   if len(command_text.encode('utf-16-le'))//2+1>32760:raise ValueError('owned reference command bound')
+   environment={key:os.environ[key] for key in ('SystemRoot','WINDIR','TEMP','TMP') if key in os.environ}
+   block=ctypes.create_unicode_buffer(''.join(k+'='+v+'\0' for k,v in sorted(environment.items()))+'\0')
+   command=ctypes.create_unicode_buffer(command_text)
+   check(self.kernel.CreateProcessW(argv[0],command,None,None,True,4|0x80000|0x400|0x8000000,block,None,ctypes.byref(startup.startup),ctypes.byref(child)))
+   self.process,self.thread,self.pid=child.process,child.thread,int(child.pid)
+   contained=w.BOOL();check(self.kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
+   if not contained.value:raise ValueError('owned reference launcher membership')
+   for handle in (input_read,output_write,error_write):check(self.kernel.CloseHandle(handle));handle.value=None
+   import msvcrt
+   def adopt(handle,flags,mode):
+    fd=msvcrt.open_osfhandle(handle.value,flags|os.O_BINARY);handle.value=None
+    try:return os.fdopen(fd,mode,buffering=0)
+    except BaseException:os.close(fd);raise
+   self.stdin=adopt(input_write,os.O_WRONLY,'wb');self.stdout=adopt(output_read,os.O_RDONLY,'rb');self.stderr=adopt(error_read,os.O_RDONLY,'rb')
+   if self.kernel.ResumeThread(self.thread)==0xffffffff:raise OSError(ctypes.get_last_error(),'owned reference resume')
+  except BaseException:
+   try:self.close()
+   except BaseException:pass
+   raise
+  finally:
+   active_exception=sys.exc_info()[0] is not None;errors=[]
+   for handle in handles:
+    if handle.value:
+     try:
+      if not self.kernel.CloseHandle(handle):errors.append('handle')
+     except BaseException:errors.append('handle')
+     handle.value=None
+   if initialized:
+    try:self.kernel.DeleteProcThreadAttributeList(attributes)
+    except BaseException:errors.append('attributes')
+   if errors and not active_exception:
+    try:self.close()
+    except BaseException:pass
+    raise ValueError('owned reference setup handles')
+
+ def poll(self):
+  from ctypes import wintypes as w
+  if self.process is None:return self.returncode
+  status=self.kernel.WaitForSingleObject(self.process,0)
+  if status==258:return None
+  if status!=0:raise OSError(ctypes.get_last_error(),'owned reference poll')
+  code=w.DWORD()
+  if not self.kernel.GetExitCodeProcess(self.process,ctypes.byref(code)):raise OSError(ctypes.get_last_error(),'owned reference exit code')
+  self.returncode=int(code.value);return self.returncode
+
+ def wait(self,timeout):
+  if type(timeout) not in (int,float) or not 0<timeout<=4:raise ValueError('owned reference wait bound')
+  until=time.monotonic()+timeout
+  while True:
+   value=self.poll()
+   if value is not None:return value
+   if time.monotonic()>=until:raise subprocess.TimeoutExpired('owned reference',timeout)
+   time.sleep(.01)
+
+ def verify_entry(self,pid):
+  from ctypes import wintypes as w
+  if self.entry is not None or type(pid) is not int or not 0<pid<=4294967295 or pid==self.pid:raise ValueError('owned reference entry PID')
+  handle=self.kernel.OpenProcess(0x1000|0x100000,False,pid)
+  if not handle:raise OSError(ctypes.get_last_error(),'owned reference entry open')
+  try:
+   contained=w.BOOL()
+   if not self.kernel.IsProcessInJob(handle,self.job,ctypes.byref(contained)):raise OSError(ctypes.get_last_error(),'owned reference entry query')
+   if not contained.value or self.kernel.GetProcessId(handle)!=pid:raise ValueError('owned reference entry membership')
+   self.entry,self.entry_pid=handle,pid;handle=None
+  finally:
+   active_exception=sys.exc_info()[0] is not None
+   if handle:
+    try:
+     if not self.kernel.CloseHandle(handle):raise OSError(ctypes.get_last_error(),'owned reference entry handle')
+    except BaseException:
+     if not active_exception:raise
+
+ def entry_exited(self):
+  if self.entry is None:raise ValueError('owned reference entry unbound')
+  status=self.kernel.WaitForSingleObject(self.entry,0)
+  if status not in (0,258):raise OSError(ctypes.get_last_error(),'owned reference entry wait')
+  return status==0
+
+ def active(self):
+  from ctypes import wintypes as w
+  class Accounting(ctypes.Structure):
+   _fields_=[('user',ctypes.c_longlong),('kernel',ctypes.c_longlong),('period_user',ctypes.c_longlong),('period_kernel',ctypes.c_longlong),('page_faults',w.DWORD),('total',w.DWORD),('active',w.DWORD),('terminated',w.DWORD)]
+  value=Accounting()
+  if not self.kernel.QueryInformationJobObject(self.job,1,ctypes.byref(value),ctypes.sizeof(value),None):raise OSError(ctypes.get_last_error(),'owned reference job accounting')
+  if not 0<=value.active<=2:raise ValueError('owned reference job process bound')
+  return int(value.active)
+
+ def kill(self):
+  if self.job and not self.kernel.TerminateJobObject(self.job,99):raise OSError(ctypes.get_last_error(),'owned reference terminate job')
+
+ def close(self):
+  errors=[];settled=False
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(type(error).__name__);return None
+  try:
+   if self.job:
+    clean(self.kill)
+    if self.process is not None:clean(lambda:self.wait(3))
+    until=time.monotonic()+3
+    while True:
+     count=clean(self.active)
+     if count==0:settled=True;break
+     if count is None or time.monotonic()>=until:errors.append('job active unconfirmed');break
+     time.sleep(.01)
+    if self.entry is not None and clean(self.entry_exited) is not True:errors.append('entry exit unconfirmed')
+  finally:
+   for pipe in (self.stdin,self.stdout,self.stderr):
+    if pipe is not None and not pipe.closed:clean(pipe.close)
+   for name in ('entry','thread','process','job'):
+    handle=getattr(self,name)
+    if handle:
+     result=clean(lambda handle=handle:self.kernel.CloseHandle(handle))
+     if not result:errors.append('handle close unconfirmed')
+     setattr(self,name,None)
+  if errors:raise ValueError('owned reference cleanup failed')
+  self.ownership_closed=settled
+import json,hashlib,threading,stat,signal,re
+from pathlib import Path
+
+def strict_json(data):
+ def pairs(items):
+  result={}
+  for key,value in items:
+   if key in result:raise ValueError('certificate duplicate key')
+   result[key]=value
+  return result
+ return json.loads(data.decode('utf-8','strict'),object_pairs_hook=pairs,parse_constant=lambda value:(_ for _ in ()).throw(ValueError('certificate nonfinite')))
+
+def bounded(path,cap,allow_empty=False):
+ with path.open('rb') as stream:data=stream.read(cap+1)
+ if not (0 if allow_empty else 1)<=len(data)<=cap:raise ValueError('certificate file bound')
+ return data
+
+def proc_identity(pid):
+ data=bounded(Path('/proc')/str(pid)/'stat',4096)
+ first,separator,tail=data.rpartition(b') ');fields=tail.split()
+ if not separator or len(fields)<20 or first.split(b' ',1)[0]!=str(pid).encode() or not fields[19].isdigit() or int(fields[19])<=0:raise ValueError('certificate process identity')
+ return dict(parent=int(fields[1]),group=int(fields[2]),session=int(fields[3]),start_ticks=fields[19].decode('ascii'))
+
+class LinuxCertificateChild:
+ def __init__(self,argv):
+  if sys.platform!='linux' or type(argv)is not list or len(argv)!=7 or argv[:2]!=[sys.executable,'-I']:raise ValueError('certificate Linux argv')
+  environment={key:os.environ[key] for key in ('HOME','TMPDIR','LANG','LC_ALL') if key in os.environ}
+  self.pid=self.stdin=self.stdout=self.stderr=None;self.identity=None;self.ownership_closed=False
+  self.process=subprocess.Popen(argv,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=environment,start_new_session=True,bufsize=0)
+  try:
+   self.pid=self.process.pid;self.stdin,self.stdout,self.stderr=self.process.stdin,self.process.stdout,self.process.stderr
+  except BaseException:
+   def attempt(callback):
+    try:callback()
+    except BaseException:pass
+   def kill_group():
+    if self.process.returncode is None:os.killpg(self.process.pid,signal.SIGKILL)
+   attempt(kill_group);attempt(lambda:self.process.kill());attempt(lambda:self.process.wait(timeout=3))
+   for name in ('stdin','stdout','stderr'):attempt(lambda name=name:getattr(self.process,name).close())
+   raise
+ def poll(self):return self.process.poll()
+ def wait(self,timeout):
+  if type(timeout)not in(int,float) or not 0<timeout<=4:raise ValueError('certificate Linux wait bound')
+  return self.process.wait(timeout=timeout)
+ def verify_entry(self,marker):
+  observed=proc_identity(self.pid)
+  if observed!=dict(parent=os.getpid(),group=self.pid,session=self.pid,start_ticks=marker['start_ticks']):raise ValueError('certificate Linux retained identity')
+  self.identity=observed
+ def group_empty(self):
+  try:os.killpg(self.pid,0)
+  except ProcessLookupError:return True
+  return False
+ def kill(self):
+  if self.process.returncode is not None:return
+  current=proc_identity(self.pid)
+  if current['parent']!=os.getpid() or current['group']!=self.pid or current['session']!=self.pid or self.identity is not None and current!=self.identity:raise ValueError('certificate Linux termination identity')
+  try:os.killpg(self.pid,signal.SIGKILL)
+  except ProcessLookupError:pass
+ def close(self):
+  errors=[]
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(type(error).__name__);return None
+  clean(self.kill);clean(lambda:self.wait(3))
+  for pipe in (self.stdin,self.stdout,self.stderr):clean(pipe.close)
+  if clean(self.group_empty)is not True:errors.append('certificate process group not empty')
+  if clean(self.poll)is None:errors.append('certificate child not reaped')
+  if errors:raise ValueError('certificate Linux cleanup failed')
+  self.ownership_closed=True
+
+def validate_records(inputs):
+ if sys.flags.isolated!=1 or sys.platform not in ('win32','linux') or 'site-packages' not in str(Path(sys.prefix)/('Lib/site-packages' if sys.platform=='win32' else 'lib/python3.12/site-packages')):raise ValueError('certificate installed parent')
+ environment=inputs['environments'][sys.platform]
+ if environment['admitted']is not True:raise ValueError('certificate platform record admission pending')
+ prefix=Path(sys.prefix).resolve()
+ if str(prefix)==str(Path(sys.base_prefix).resolve()):raise ValueError('certificate parent requires venv')
+ for distribution,record in environment['records'].items():
+  for file in record['files']:
+   relative=Path(file['path'])
+   if relative.is_absolute() or '..' in relative.parts:raise ValueError('certificate installed record path')
+   path=prefix/relative
+   if not path.is_file() or path.is_symlink() or path.resolve().is_relative_to(prefix)is not True:raise ValueError('certificate installed record origin')
+   data=bounded(path,67108864,True)
+   if dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest())!=file['observed']:raise ValueError('certificate installed record bytes')
+ return environment
+
+def private_outputs(root):
+ token=None
+ if sys.platform=='win32':
+  import win32api,win32security
+  token=win32security.OpenProcessToken(win32api.GetCurrentProcess(),8)
+  try:sid=win32security.GetTokenInformation(token,1)[0]
+  finally:
+   original=sys.exc_info()[0]is not None
+   try:token.Close()
+   except BaseException:
+    if not original:raise
+ for path in (root,*sorted(root.iterdir())):
+  info=path.lstat()
+  if stat.S_ISLNK(info.st_mode) or getattr(info,'st_file_attributes',0)&0x400:raise ValueError('certificate private links')
+  directory=path==root or path.name=='certificate-record.json.complete'
+  if (stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode))is not True:raise ValueError('certificate private type')
+  if sys.platform=='linux':
+   mode=stat.S_IMODE(info.st_mode)
+   if info.st_uid!=os.geteuid() or (mode!=0o700 if path==root else (mode&0o700!=0o700 or mode&0o7022!=0) if directory else mode!=0o600):raise ValueError('certificate private Linux permissions')
+  else:
+   descriptor=win32security.GetNamedSecurityInfo(str(path),1,5)
+   acl=descriptor.GetSecurityDescriptorDacl();control=descriptor.GetSecurityDescriptorControl()[0]
+   if descriptor.GetSecurityDescriptorOwner()!=sid or acl is None or acl.GetAceCount()!=1:raise ValueError('certificate private Windows ownership')
+   ace=acl.GetAce(0)
+   if ace[0][0]!=0 or ace[1]!=0x1f01ff or ace[2]!=sid:raise ValueError('certificate private Windows ACE')
+   if path==root:
+    if not control&0x1000 or ace[0][1]!=3:raise ValueError('certificate private root protection')
+   elif not ace[0][1]&16:raise ValueError('certificate private inheritance')
+
+def verify_output(root,stdout):
+ names={'valid-cert.pem','valid-key.pem','wrong-cert.pem','wrong-key.pem','certificate-record.json','certificate-record.json.complete'}
+ if set(path.name for path in root.iterdir())!=names:raise ValueError('certificate output names')
+ private_outputs(root)
+ if list((root/'certificate-record.json.complete').iterdir()):raise ValueError('certificate completion directory')
+ raw=bounded(root/'certificate-record.json',16384)
+ marker=strict_json(stdout)
+ if marker!=dict(marker='eq083-certificates-complete',record=dict(name='certificate-record.json',bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())):raise ValueError('certificate stdout receipt')
+ record=strict_json(raw)
+ if type(record)is not dict or set(record)!={'schema','cryptography_version','backend_version','generated_utc','valid_from_utc','valid_until_utc','entries','scope'} or record['schema']!='eq083.synthetic-certificate.v1' or record['cryptography_version']!='50.0.2' or type(record['entries'])is not list or len(record['entries'])!=2:raise ValueError('certificate record identity')
+ import datetime,ipaddress,cryptography,importlib
+ backend_module=importlib.import_module('cryptography.hazmat.backends.openssl.backend')
+ if cryptography.__version__!='50.0.2' or record['backend_version']!=backend_module.backend.openssl_version_text():raise ValueError('certificate installed backend identity')
+ if record['scope']!='synthetic qualification inputs; keys remain private, no truststore mutation, not native OpenSSL process proof':raise ValueError('certificate record scope')
+ from cryptography import x509
+ from cryptography.hazmat.primitives import serialization
+ from cryptography.hazmat.primitives.asymmetric import rsa,padding
+ from cryptography.x509.oid import ExtendedKeyUsageOID
+ for module in (cryptography,x509,serialization,rsa,padding,backend_module):
+  if not Path(module.__file__).resolve().is_relative_to(Path(sys.prefix).resolve()) or 'site-packages' not in str(Path(module.__file__).resolve()):raise ValueError('certificate parser installed origin')
+ start=datetime.datetime.fromisoformat(record['valid_from_utc']);end=datetime.datetime.fromisoformat(record['valid_until_utc']);generated=datetime.datetime.fromisoformat(record['generated_utc'])
+ if any(value.tzinfo!=datetime.timezone.utc or value.microsecond!=0 for value in (start,end,generated)) or start!=generated-datetime.timedelta(minutes=1) or end!=generated+datetime.timedelta(days=30):raise ValueError('certificate time agreement')
+ for entry,role,address,serial in zip(record['entries'],('valid','wrong'),('127.0.0.1','127.0.0.2'),(8301,8302),strict=True):
+  if type(entry)is not dict or set(entry)!={'role','address','serial','certificate','private_key','certificate_der_sha256','public_key_der_sha256'} or type(entry['serial'])is not int or (entry['role'],entry['address'],entry['serial'])!=(role,address,serial):raise ValueError('certificate entry identity')
+  contents=[]
+  for field,name in (('certificate',role+'-cert.pem'),('private_key',role+'-key.pem')):
+   data=bounded(root/name,8192)
+   if entry[field]!=dict(name=name,bytes=len(data),sha256=hashlib.sha256(data).hexdigest()):raise ValueError('certificate file receipt')
+   contents.append(data)
+  cert=x509.load_pem_x509_certificate(contents[0]);key=serialization.load_pem_private_key(contents[1],password=None)
+  public=lambda value:value.public_bytes(serialization.Encoding.DER,serialization.PublicFormat.SubjectPublicKeyInfo)
+  if not isinstance(key,rsa.RSAPrivateKey) or key.key_size!=2048 or key.public_key().public_numbers().e!=65537 or public(cert.public_key())!=public(key.public_key()):raise ValueError('certificate independent keypair')
+  if cert.serial_number!=serial or cert.not_valid_before_utc!=start or cert.not_valid_after_utc!=end or cert.subject!=cert.issuer or cert.signature_hash_algorithm.name!='sha256':raise ValueError('certificate independent identity')
+  if cert.extensions.get_extension_for_class(x509.BasicConstraints).value.ca or list(cert.extensions.get_extension_for_class(x509.ExtendedKeyUsage).value)!=[ExtendedKeyUsageOID.SERVER_AUTH] or cert.extensions.get_extension_for_class(x509.SubjectAlternativeName).value.get_values_for_type(x509.IPAddress)!=[ipaddress.ip_address(address)]:raise ValueError('certificate independent constraints')
+  cert.public_key().verify(cert.signature,cert.tbs_certificate_bytes,padding.PKCS1v15(),cert.signature_hash_algorithm)
+  if hashlib.sha256(cert.public_bytes(serialization.Encoding.DER)).hexdigest()!=entry['certificate_der_sha256'] or hashlib.sha256(public(cert.public_key())).hexdigest()!=entry['public_key_der_sha256']:raise ValueError('certificate DER receipt')
+ return dict(record_bytes=len(raw),record_sha256=hashlib.sha256(raw).hexdigest(),backend_version=record['backend_version'],generated_utc=record['generated_utc'])
+
+from dataclasses import dataclass
+_binding_seal=object()
+
+def _certificate_snapshot(root):
+ if not root.is_absolute() or root.resolve()!=root or '..' in root.parts:raise ValueError('certificate binding root identity')
+ names={'valid-cert.pem','valid-key.pem','wrong-cert.pem','wrong-key.pem','certificate-record.json','certificate-record.json.complete'}
+ if set(path.name for path in root.iterdir())!=names or list((root/'certificate-record.json.complete').iterdir()):raise ValueError('certificate binding complete files')
+ private_outputs(root)
+ receipt_raw=bounded(root/'certificate-record.json',16384)
+ receipt=strict_json(receipt_raw)
+ declared={item[field]['name']:(item[field]['bytes'],item[field]['sha256']) for item in receipt['entries'] for field in ('certificate','private_key')}
+ if set(declared)!={'valid-cert.pem','valid-key.pem','wrong-cert.pem','wrong-key.pem'}:raise ValueError('certificate binding receipt file set')
+ declared['certificate-record.json']=(len(receipt_raw),hashlib.sha256(receipt_raw).hexdigest())
+ rows=[]
+ for path in (root,*sorted(root.iterdir())):
+  before=path.lstat()
+  identity=lambda info:(info.st_mode,info.st_uid,info.st_gid,info.st_dev,info.st_ino,info.st_size,info.st_mtime_ns)
+  if stat.S_ISREG(before.st_mode):
+   data=bounded(path,16384 if path.name=='certificate-record.json' else 8192)
+   content=(len(data),hashlib.sha256(data).hexdigest())
+   if declared.get(path.name)!=content:raise ValueError('certificate binding receipt bytes changed')
+  else:content=None
+  if identity(before)!=identity(path.lstat()):raise ValueError('certificate binding changed during read')
+  rows.append((path.name if path!=root else '.',identity(before),content))
+ private_outputs(root)
+ return tuple(rows)
+
+@dataclass(frozen=True,slots=True,init=False)
+class CertificateBinding:
+ root:Path
+ receipt_sha256:str
+ snapshot:tuple
+ evidence:tuple
+ parent_pid:int
+ def __init__(self,seal,root,receipt_sha,snapshot,evidence,parent_pid):
+  if seal is not _binding_seal:raise ValueError('certificate authority origin')
+  for name,value in (('root',root),('receipt_sha256',receipt_sha),('snapshot',snapshot),('evidence',evidence),('parent_pid',parent_pid)):object.__setattr__(self,name,value)
+  self.verify()
+ def verify(self):
+  if self.parent_pid!=os.getpid() or sys.flags.isolated!=1 or sys.flags.optimize!=0:raise ValueError('certificate binding trusted parent lifetime')
+  if _certificate_snapshot(self.root)!=self.snapshot:raise ValueError('certificate binding original snapshot changed')
+  raw=bounded(self.root/'certificate-record.json',16384)
+  if hashlib.sha256(raw).hexdigest()!=self.receipt_sha256:raise ValueError('certificate binding original receipt changed')
+  return True
+ def reference_inputs(self):
+  self.verify()
+  return str(self.root),self.receipt_sha256
+
+def generate_certificate_binding(harness,work):
+ if sys.flags.optimize!=0:raise ValueError('certificate authority optimize guard')
+ harness=Path(harness);work=Path(work)
+ if any(not p.is_absolute() or p.resolve()!=p or '..' in p.parts or len(str(p))>1024 for p in (harness,work)) or os.path.lexists(work) or not work.parent.is_dir():raise ValueError('certificate parent owned roots')
+ input_bytes=bounded(harness/'certificate-inputs.json',2097152)
+ if hashlib.sha256(input_bytes).hexdigest()!='6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532':raise ValueError('certificate literal input pin')
+ inputs=strict_json(input_bytes)
+ validate_records(inputs)
+ for name,pin in inputs['source_files'].items():
+  if name not in {'certificate-entry.py','windows-bootstrap.py','linux-bootstrap.py'}:raise ValueError('certificate source names')
+  data=bounded(harness/name,8192)
+  if dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest())!=pin:raise ValueError('certificate source byte pin')
+ if inputs['source_files']['certificate-entry.py']!=dict(bytes=7790,sha256='7f7aa8ac55d81fe5b8271cbb773ccb2c01dd4838fde18e865ed4535100b91d42'):raise ValueError('certificate literal generator pin')
+ work.mkdir(mode=0o700);root=work/'private-certificates';pidfile=work/'entry.json'
+ process=None;started=[];errors=[];stdout=bytearray();stderr=bytearray();normal=False;entry_pid=None
+ def reader(field,cap,pipe):
+  try:
+   while True:
+    chunk=pipe.read(128)
+    if not chunk:return
+    if len(field)+len(chunk)>cap:raise ValueError('certificate output cap')
+    field.extend(chunk)
+  except BaseException as error:errors.append(type(error).__name__)
+ try:
+  if sys.platform=='win32':
+   process=WindowsReferenceChild([sys.executable,'-I',str(harness/'windows-bootstrap.py'),str(harness/'certificate-entry.py'),str(root),str(pidfile)])
+  else:
+   process=LinuxCertificateChild([sys.executable,'-I',str(harness/'linux-bootstrap.py'),str(os.getpid()),str(pidfile),str(harness/'certificate-entry.py'),str(root)])
+  for field,cap,pipe in ((stdout,512,process.stdout),(stderr,4096,process.stderr)):
+   thread=threading.Thread(target=reader,args=(field,cap,pipe));thread.start();started.append(thread)
+  until=time.monotonic()+4
+  while not pidfile.with_name(pidfile.name+'.complete').is_dir():
+   if errors or process.poll()is not None or time.monotonic()>=until:raise ValueError('certificate entry marker unavailable')
+   time.sleep(.01)
+  marker=strict_json(bounded(pidfile,128 if sys.platform=='win32' else 512))
+  if sys.platform=='win32':
+   if type(marker)is not dict or set(marker)!={'pid'} or type(marker['pid'])is not int:raise ValueError('certificate Windows PID marker')
+   process.verify_entry(marker['pid']);entry_pid=marker['pid']
+   if process.entry_exited() or process.poll()is not None:raise ValueError('certificate entry not live before gate')
+  else:
+   if type(marker)is not dict or set(marker)!={'pid','parent','group','session','start_ticks','core','memory','cpu','seccomp','no_new_privileges'} or any(type(marker[key])is not int for key in ('pid','parent','group','session','core','memory','cpu','seccomp','no_new_privileges')):raise ValueError('certificate Linux marker shape')
+   if marker!=dict(pid=process.pid,parent=os.getpid(),group=process.pid,session=process.pid,start_ticks=marker['start_ticks'],core=0,memory=4294967296,cpu=10,seccomp=2,no_new_privileges=1):raise ValueError('certificate Linux marker values')
+   process.verify_entry(marker);entry_pid=process.pid
+  if process.stdin.write(b'GO\n')!=3:raise ValueError('certificate gate short write')
+  process.stdin.flush();process.stdin.close()
+  deadline=time.monotonic()+20
+  while process.poll()is None:
+   if errors or time.monotonic()>=deadline:raise ValueError('certificate generation bound')
+   time.sleep(.01)
+  if process.wait(3)!=0:raise ValueError('certificate child failed')
+  if sys.platform=='win32' and (process.entry_exited()is not True or process.active()!=0):raise ValueError('certificate Windows actual exit')
+  if sys.platform=='linux' and process.group_empty()is not True:raise ValueError('certificate Linux group exit')
+  normal=True
+ finally:
+  original=sys.exc_info()[0]is not None;cleanup=[]
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:cleanup.append(type(error).__name__);return None
+  if process is not None:clean(process.close)
+  for thread in started:clean(lambda thread=thread:thread.join(2))
+  for pipe in (() if process is None else (process.stdin,process.stdout,process.stderr)):clean(pipe.close)
+  def inspect():
+   if process is not None and process.ownership_closed is not True:raise ValueError('certificate ownership cleanup')
+   if any(thread.is_alive() for thread in started) or any(not pipe.closed for pipe in (() if process is None else (process.stdin,process.stdout,process.stderr))):raise ValueError('certificate stream cleanup')
+  clean(inspect)
+  if errors or stderr:cleanup.append('certificate reader error or stderr')
+  if cleanup and not original:raise ValueError('certificate parent cleanup failed')
+ if not normal:raise ValueError('certificate parent incomplete')
+ witness=verify_output(root,bytes(stdout))
+ evidence=dict(platform=sys.platform,entry_exit=True,owned_empty=True,ownership_closed=True,stdout_bytes=len(stdout),stderr_bytes=len(stderr),**witness)
+ evidence.update(dict(launcher_exit=True,job_empty=True) if sys.platform=='win32' else dict(direct_child_exit=True,group_empty=True))
+ return CertificateBinding(_binding_seal,root,witness['record_sha256'],_certificate_snapshot(root),tuple(sorted(evidence.items())),os.getpid())
+
+if __name__=='__main__':raise ValueError('certificate authority requires reviewed trusted parent integration')

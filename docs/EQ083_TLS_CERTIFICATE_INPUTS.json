@@ -1,0 +1,140 @@
+{
+  "schema": "eq083.tls-certificate.pre-execution.v1",
+  "bases": {
+    "equity-features": "c71e7bc292cef7851b9bae97c104fd7bcd47b257",
+    "equity-feature-workers": "47650925744cc494ba56a8e47012aff52bce20e6"
+  },
+  "qualification_source": {
+    "bytes": 17117,
+    "sha256": "5fc06444865d62b862cfc9525a36eeaf537fe2002a7269dd0cb35735cdfbd995"
+  },
+  "derived_helper_pin": {
+    "commit": "47650925744cc494ba56a8e47012aff52bce20e6",
+    "path": "docs/EQ083_REFERENCE_PROCESS.txt",
+    "bytes": 11944,
+    "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+  },
+  "binary_inventory": {
+    "schema": "eq083.tls-native-openssl.static-imports.v1",
+    "fixed_root": "C:\\Program Files\\Git\\mingw64\\bin",
+    "files": [
+      {
+        "name": "openssl.exe",
+        "bytes": 1050780,
+        "sha256": "822034da8a01558c17cbe53f42f33985a6eaf7c89e21273779f9c6560d8c4d78",
+        "imports": [
+          "kernel32.dll",
+          "libcrypto-3-x64.dll",
+          "libssl-3-x64.dll",
+          "msvcrt.dll",
+          "ws2_32.dll"
+        ]
+      },
+      {
+        "name": "libcrypto-3-x64.dll",
+        "bytes": 5805212,
+        "sha256": "0330b5f558996f297d687e1a2b2fcc2cacf883b16baef74aaef35285d7c1231c",
+        "imports": [
+          "advapi32.dll",
+          "crypt32.dll",
+          "kernel32.dll",
+          "msvcrt.dll",
+          "user32.dll",
+          "ws2_32.dll"
+        ]
+      },
+      {
+        "name": "libssl-3-x64.dll",
+        "bytes": 1026716,
+        "sha256": "feb5b300e0b3a021fed481178f3d66896426576d4d13b85a304d2a3809b25bfd",
+        "imports": [
+          "kernel32.dll",
+          "libcrypto-3-x64.dll",
+          "msvcrt.dll",
+          "ws2_32.dll"
+        ]
+      }
+    ],
+    "system_import_boundary": [
+      "advapi32.dll",
+      "crypt32.dll",
+      "kernel32.dll",
+      "msvcrt.dll",
+      "user32.dll",
+      "ws2_32.dll"
+    ],
+    "license_files": [
+      {
+        "name": "LICENSE",
+        "bytes": 10175,
+        "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+      }
+    ],
+    "scope": "Read-only static PE imports and file hashes, not dynamic-load or execution evidence",
+    "specification": "https://learn.microsoft.com/en-us/windows/win32/debug/pe-format",
+    "executed": false
+  },
+  "scope": "Windows-only local synthetic certificate generation SOURCE freeze; not executed, not TLS or native composition proof, not Ready admission",
+  "binary_choice": "Native Git mingw64/bin/openssl.exe replaces unexecuted MSYS usr/bin candidate; actual PE import inventory contains native libcrypto and libssl plus Windows system boundary, no MSYS runtime",
+  "owner_argument": "one absolute NEW destination under fixed P, name eq083-tls-certificates-<published worker head seven hex>",
+  "commands": [
+    "openssl version",
+    "openssl req -x509 -newkey rsa:2048 -sha256 -noenc -days 30 -batch -provider default -provider-path providers -config valid.cnf -extensions server -keyout valid-key.pem -out valid-cert.pem -set_serial 8301",
+    "same fixed req command with wrong.cnf/wrong-key.pem/wrong-cert.pem/serial8302"
+  ],
+  "contexts": [
+    "Self-signed serverAuth/CA:FALSE synthetic cert SAN IP127.0.0.1",
+    "Separately owned synthetic cert SAN IP127.0.0.2",
+    "Future clients trust selected owned cert but always CERT_REQUIRED/check_hostnameTrue/origin127.0.0.1"
+  ],
+  "job": {
+    "active_process_limit": 1,
+    "job_cpu_100ns": 100000000,
+    "job_memory_bytes": 1073741824,
+    "limit_flags": 8716,
+    "attribute_job_list": 131085,
+    "attribute_handle_list": 131074,
+    "creation_flags": 134743044
+  },
+  "bounds": {
+    "command_seconds": 4,
+    "each_reader_bytes": 16384,
+    "reader_chunk_bytes": 1024,
+    "reader_join_seconds": 1,
+    "cleanup_process_seconds": 3,
+    "cleanup_job_seconds": 3,
+    "pem_bytes": 8192,
+    "version_ascii_bytes": 256,
+    "attributes_bytes": 65536,
+    "command_utf16_units_including_nul": 32760
+  },
+  "environment": [
+    "SystemRoot",
+    "WINDIR",
+    "TEMP",
+    "TMP",
+    "OPENSSL_CONF fixed owned config",
+    "OPENSSL_MODULES fixed owned empty providers directory"
+  ],
+  "privacy": "Private key bytes and raw command stderr are never printed or published. Local record contains only lengths/digests, SAN/validity and version. No system trust store installation or public hosting.",
+  "validation": "Binary hashes verified BEFORE mkdir and again BEFORE each command; all command process exit0/actual owned job active0/closed pipes and joined readers mandatory. PEM bounds, stdlib trusted certificate SAN decoding and SSLContext.load_cert_chain validate key/cert locally without socket.",
+  "dynamic_boundary": "Static PE imports are not a dynamic module trace or source-build equivalence proof. Explicit config activates default provider only; empty owned provider directory, no caller PATH/config/engine/module input. OS system imports remain Windows runtime boundary. Exact runtime version and successful local generation not yet observed.",
+  "references": [
+    "https://learn.microsoft.com/en-us/windows/win32/debug/pe-format",
+    "https://docs.openssl.org/3.5/man5/config/",
+    "https://docs.openssl.org/3.4/man1/openssl-req/"
+  ],
+  "executed": false,
+  "reviewed": false,
+  "runtime_unchanged": true,
+  "linux_design_pending": true,
+  "prior_source_review": {
+    "heads": {
+      "equity-features": "38c6a86f1fc361d959b171fda97e712e1efc5887",
+      "equity-feature-workers": "9880275262aa1361aa9306dd2892d86679392e27"
+    },
+    "disposition": "REWORK P2 constructor command name shadowing",
+    "report": "eq083-tls-certificate-reviewer-report.json",
+    "corrected_before_execution": true
+  }
+}

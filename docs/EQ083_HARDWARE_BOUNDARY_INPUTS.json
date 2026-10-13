@@ -1,0 +1,12 @@
+{
+  "schema": "eq083.hardware-resource-domain-research.v1",
+  "bases": {
+    "equity-features": "e37abda258dab248370c56f81384d067f0ad6025",
+    "equity-feature-workers": "12c78a260d7a9a91e8a4b24b983a38689c1e5c07"
+  },
+  "scope": "Primary documentation whole-domain comparison; not immutable platform/SDK/native proof",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false,
+  "topology_selected": false
+}

@@ -1,0 +1,204 @@
+{
+  "scope": "PRE-EXECUTION version snapshot actual contract failure sources only",
+  "owner": {
+    "bytes": 5947,
+    "sha256": "3e1098a213cdd5d70db0d5fdee42c1b017efc3e02cee556bd448c669eba5a77a"
+  },
+  "reference": {
+    "bytes": 3707,
+    "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+  },
+  "source_inputs": [
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "packages/service/src/equity_feature_service/jobs.py",
+      "bytes": 43441,
+      "sha256": "c4eaf52791c996534dd358b58592a71fc8312978f84bb08252f9da17c87fca68"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "packages/service/src/equity_feature_service/datasets.py",
+      "bytes": 14401,
+      "sha256": "41db66b5f84bdc79fe88f4f5eae9f8d380e3affa12086bcf1021e2ec3ae3914f"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "packages/service/src/equity_feature_service/service.py",
+      "bytes": 34923,
+      "sha256": "5b7f55009f92b5a2647b278b3192c543cd463038e5755e563152674878cc0960"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "packages/client/src/equity_feature_client/_response.py",
+      "bytes": 11985,
+      "sha256": "8cd9f5c34658a81600e8b69f6cce6c6d52b0e0818aab21df4ce7ca1a13023a8c"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "packages/client/src/equity_feature_client/models.py",
+      "bytes": 8011,
+      "sha256": "b895015595a0f38efeb0a48185b677b3116ce92306f0a7b36684b9d315156f05"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "packages/client/src/equity_feature_client/client.py",
+      "bytes": 12050,
+      "sha256": "30b37a79cf56ec19de518f85e2c1a345cd469a9c901e7bd5cec3ff2b42e4b233"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "packages/mcp/src/equity_feature_mcp/server.py",
+      "bytes": 13023,
+      "sha256": "8d314f299ec8b9fa4903e8e94fc1ec685dafdcc331fc2c9f57425afbb78ba84b"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "commit": "e0f5382e19227734a45b2e66994a153bd9cd35f6",
+      "path": "docs/EQ083_REFERENCE_ENTRY.txt",
+      "bytes": 3332,
+      "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+    }
+  ],
+  "changed_registry_context": {
+    "availability": {
+      "evaluation_ns": "210",
+      "knowledge_cutoff_ns": "210",
+      "market_cutoff_ns": "200",
+      "mode": "known_at",
+      "reconstruction_reason": null
+    },
+    "config": {
+      "algorithm_version": "v1",
+      "config_id": "synthetic-bars",
+      "digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
+      "revision": "owned-config-v1",
+      "schema_version": "1"
+    },
+    "dataset": {
+      "dataset_id": "owned.trades",
+      "input_id": "trades",
+      "mapping_version": "map1",
+      "revision": "owned-v1",
+      "snapshot_id": "snapshot1",
+      "source_id": "synthetic"
+    },
+    "features": [
+      {
+        "algorithm_version": "v1",
+        "feature_id": "session.trade.volume"
+      }
+    ],
+    "math_policy_version": "v1",
+    "namespace": "demo",
+    "registry_snapshot": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "operation_ledger": {
+    "total": 42,
+    "raw": 16,
+    "client": 16,
+    "mcp": 10,
+    "controls": 4,
+    "polls": 0,
+    "native_source_entries": 1,
+    "raw_source_reads": 7,
+    "ack_requests": [
+      1,
+      33,
+      36,
+      42
+    ],
+    "ack_raw_reads": [
+      0,
+      1,
+      4,
+      7
+    ],
+    "supported_versions": {
+      "raw": 10,
+      "client": 8,
+      "mcp": 6
+    },
+    "wrong_registry": {
+      "raw": 1,
+      "client": 1,
+      "mcp": 1
+    },
+    "wrong_expectation200": {
+      "client": 4
+    },
+    "unsupported_version": {
+      "raw": 1,
+      "client": 0,
+      "mcp": 0
+    },
+    "raw_baseline": {
+      "raw": 1
+    },
+    "raw_bad": {
+      "raw": 1,
+      "client": 1,
+      "mcp": 1
+    },
+    "raw_restored": {
+      "raw": 1,
+      "client": 1,
+      "mcp": 1
+    },
+    "final_samekey_repeat": {
+      "raw": 1,
+      "client": 1,
+      "mcp": 1
+    }
+  },
+  "bounds": {
+    "ack": 1024,
+    "ack_worst": 398,
+    "final": 256,
+    "final_worst_including_lf": 165,
+    "requests": 48,
+    "raw_reads": 7
+  },
+  "local_typed_version_1_0_reads": {
+    "operations": [
+      "result_read",
+      "artifact_read"
+    ],
+    "category": "configuration",
+    "code": "invalid_request",
+    "phase": "prepare",
+    "status": null,
+    "provider_calls": 0
+  },
+  "superseded_source_review": {
+    "heads": {
+      "equity-features": "6f9c5ae135a1aa2917947543ff450c03de91b06d",
+      "equity-feature-workers": "480bdacafaa3277e0d44361e339a711b38d68dce"
+    },
+    "report": "eq083-version-entry-reviewer-report.json",
+    "disposition": "REWORK",
+    "finding": "P2 typed1.0 result/export are local prepare denials; original44-send barriers overcounted two physical sends; corrected before execution."
+  }
+}

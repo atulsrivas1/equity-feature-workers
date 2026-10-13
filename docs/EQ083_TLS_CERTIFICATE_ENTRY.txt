@@ -1,0 +1,268 @@
+from pathlib import Path
+import hashlib,json,re,ssl,threading
+BASE=Path('C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008')
+BIN=Path('C:/Program Files/Git/mingw64/bin')
+PINS=[{'name': 'openssl.exe', 'bytes': 1050780, 'sha256': '822034da8a01558c17cbe53f42f33985a6eaf7c89e21273779f9c6560d8c4d78'}, {'name': 'libcrypto-3-x64.dll', 'bytes': 5805212, 'sha256': '0330b5f558996f297d687e1a2b2fcc2cacf883b16baef74aaef35285d7c1231c'}, {'name': 'libssl-3-x64.dll', 'bytes': 1026716, 'sha256': 'feb5b300e0b3a021fed481178f3d66896426576d4d13b85a304d2a3809b25bfd'}]
+def validate_root(root):
+ if type(root) is not type(BASE) or root.parent!=BASE or not re.fullmatch(r'eq083-tls-certificates-[0-9a-f]{7}',root.name):raise ValueError('owned certificate destination')
+ if root.is_symlink() or root.resolve()!=root:raise ValueError('owned certificate destination resolution')
+def command(case):
+ executable=str(BIN/'openssl.exe')
+ if case=='version':return [executable,'version']
+ if case not in ('valid','wrong'):raise ValueError('owned certificate case')
+ return [executable,'req','-x509','-newkey','rsa:2048','-sha256','-noenc','-days','30','-batch','-provider','default','-provider-path','providers','-config',case+'.cnf','-extensions','server','-keyout',case+'-key.pem','-out',case+'-cert.pem','-set_serial','8301' if case=='valid' else '8302']
+CONFIG='openssl_conf = init\nconfig_diagnostics = 1\n[init]\nproviders = providers\n[providers]\ndefault = default_provider\n[default_provider]\nactivate = 1\n[req]\nprompt = no\ndistinguished_name = dn\n[dn]\nCN = EQ083 synthetic loopback\n[server]\nbasicConstraints = critical,CA:FALSE\nkeyUsage = critical,digitalSignature,keyEncipherment\nextendedKeyUsage = serverAuth\nsubjectAltName = IP:ADDRESS\n'
+def binary_guard():
+ for p in PINS:
+  file=BIN/p['name']
+  if file.is_symlink() or not file.is_file() or file.stat().st_size!=p['bytes']:raise ValueError('owned OpenSSL binary size')
+  with file.open('rb') as f:raw=f.read(p['bytes']+1)
+  if len(raw)!=p['bytes'] or hashlib.sha256(raw).hexdigest()!=p['sha256']:raise ValueError('owned OpenSSL binary digest')
+import ctypes,os,subprocess,sys,time
+
+class WindowsCertificateChild:
+ def __init__(self,case,root):
+  from ctypes import wintypes as w
+  if sys.platform!='win32' or ctypes.sizeof(ctypes.c_void_p)!=8:raise ValueError('owned Windows reference only')
+  validate_root(root)
+  if case not in ('version','valid','wrong'):raise ValueError('owned certificate case')
+  argv=command(case)
+  if any(type(v) is not str or not v or '\x00' in v for v in argv):raise ValueError('owned certificate argv')
+  self.kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+  self.job=self.process=self.thread=self.entry=None
+  self.stdin=self.stdout=self.stderr=None
+  self.pid=self.entry_pid=None;self.returncode=None;self.ownership_closed=False
+  class Basic(ctypes.Structure):
+      _fields_ = [('process_time',ctypes.c_longlong),('job_time',ctypes.c_longlong),('flags',w.DWORD),
+          ('min_ws',ctypes.c_size_t),('max_ws',ctypes.c_size_t),('active',w.DWORD),
+          ('affinity',ctypes.c_size_t),('priority',w.DWORD),('scheduling',w.DWORD)]
+  class IO(ctypes.Structure):
+      _fields_ = [(name,ctypes.c_ulonglong) for name in ('read_op','write_op','other_op','read_bytes','write_bytes','other_bytes')]
+  class Extended(ctypes.Structure):
+      _fields_ = [('basic',Basic),('io',IO),('process_memory',ctypes.c_size_t),
+          ('job_memory',ctypes.c_size_t),('peak_process_memory',ctypes.c_size_t),('peak_job_memory',ctypes.c_size_t)]
+  class Startup(ctypes.Structure):
+      _fields_ = [('cb',w.DWORD),('reserved',w.LPWSTR),('desktop',w.LPWSTR),('title',w.LPWSTR),
+          ('x',w.DWORD),('y',w.DWORD),('xs',w.DWORD),('ys',w.DWORD),('xc',w.DWORD),('yc',w.DWORD),
+          ('fill',w.DWORD),('flags',w.DWORD),('show',w.WORD),('cb_reserved',w.WORD),
+          ('reserved2',ctypes.POINTER(ctypes.c_byte)),('stdin',w.HANDLE),('stdout',w.HANDLE),('stderr',w.HANDLE)]
+  class StartupExtended(ctypes.Structure):
+      _fields_ = [('startup',Startup),('attributes',ctypes.c_void_p)]
+  class Process(ctypes.Structure):
+      _fields_ = [('process',w.HANDLE),('thread',w.HANDLE),('pid',w.DWORD),('tid',w.DWORD)]
+  class Security(ctypes.Structure):
+      _fields_ = [('length',w.DWORD),('descriptor',ctypes.c_void_p),('inherit',w.BOOL)]
+  signatures = {
+      'CreateJobObjectW':([ctypes.c_void_p,w.LPCWSTR],w.HANDLE),
+      'SetInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD],w.BOOL),
+      'QueryInformationJobObject':([w.HANDLE,ctypes.c_int,ctypes.c_void_p,w.DWORD,ctypes.c_void_p],w.BOOL),
+      'CreatePipe':([ctypes.POINTER(w.HANDLE),ctypes.POINTER(w.HANDLE),ctypes.c_void_p,w.DWORD],w.BOOL),
+      'SetHandleInformation':([w.HANDLE,w.DWORD,w.DWORD],w.BOOL),
+      'OpenProcess':([w.DWORD,w.BOOL,w.DWORD],w.HANDLE),
+      'GetProcessId':([w.HANDLE],w.DWORD),
+      'InitializeProcThreadAttributeList':([ctypes.c_void_p,w.DWORD,w.DWORD,ctypes.POINTER(ctypes.c_size_t)],w.BOOL),
+      'UpdateProcThreadAttribute':([ctypes.c_void_p,w.DWORD,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p],w.BOOL),
+      'DeleteProcThreadAttributeList':([ctypes.c_void_p],None),
+      'CreateProcessW':([w.LPCWSTR,w.LPWSTR,ctypes.c_void_p,ctypes.c_void_p,w.BOOL,w.DWORD,
+          ctypes.c_void_p,w.LPCWSTR,ctypes.POINTER(Startup),ctypes.POINTER(Process)],w.BOOL),
+      'IsProcessInJob':([w.HANDLE,w.HANDLE,ctypes.POINTER(w.BOOL)],w.BOOL),
+      'ResumeThread':([w.HANDLE],w.DWORD), 'WaitForSingleObject':([w.HANDLE,w.DWORD],w.DWORD),
+      'GetExitCodeProcess':([w.HANDLE,ctypes.POINTER(w.DWORD)],w.BOOL),
+      'TerminateJobObject':([w.HANDLE,w.UINT],w.BOOL), 'CloseHandle':([w.HANDLE],w.BOOL)}
+  for name, (args, result) in signatures.items():
+      function = getattr(self.kernel, name)
+      function.argtypes, function.restype = args, result
+  def check(value):
+   if not value:raise OSError(ctypes.get_last_error(),'owned certificate ownership')
+  handles=[w.HANDLE() for _ in range(6)]
+  input_read,input_write,output_read,output_write,error_read,error_write=handles
+  attributes=None;initialized=False;child=Process()
+  try:
+   self.job=self.kernel.CreateJobObjectW(None,None);check(self.job)
+   limits=Extended();limits.basic.flags=0x4|0x8|0x200|0x2000
+   limits.basic.job_time,limits.basic.active,limits.job_memory=100000000,1,1073741824
+   check(self.kernel.SetInformationJobObject(self.job,9,ctypes.byref(limits),ctypes.sizeof(limits)))
+   observed=Extended();check(self.kernel.QueryInformationJobObject(self.job,9,ctypes.byref(observed),ctypes.sizeof(observed),None))
+   if (observed.basic.flags,observed.basic.job_time,observed.basic.active,observed.job_memory)!=(limits.basic.flags,100000000,1,1073741824):raise ValueError('owned certificate limits readback')
+   security=Security(ctypes.sizeof(Security),None,True)
+   for read,write,parent_end in ((input_read,input_write,input_write),(output_read,output_write,output_read),(error_read,error_write,error_read)):
+    check(self.kernel.CreatePipe(ctypes.byref(read),ctypes.byref(write),ctypes.byref(security),4096));check(self.kernel.SetHandleInformation(parent_end,1,0))
+   size=ctypes.c_size_t();self.kernel.InitializeProcThreadAttributeList(None,2,0,ctypes.byref(size))
+   if not size.value or size.value>65536:raise ValueError('owned certificate attributes bound')
+   attributes=ctypes.create_string_buffer(size.value);check(self.kernel.InitializeProcThreadAttributeList(attributes,2,0,ctypes.byref(size)));initialized=True
+   jobs=(w.HANDLE*1)(self.job);inherited=(w.HANDLE*3)(input_read.value,output_write.value,error_write.value)
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x2000d,jobs,ctypes.sizeof(jobs),None,None))
+   check(self.kernel.UpdateProcThreadAttribute(attributes,0,0x20002,inherited,ctypes.sizeof(inherited),None,None))
+   startup=StartupExtended();startup.startup.cb=ctypes.sizeof(startup);startup.startup.flags=0x100
+   startup.startup.stdin,startup.startup.stdout,startup.startup.stderr=input_read.value,output_write.value,error_write.value
+   startup.attributes=ctypes.cast(attributes,ctypes.c_void_p)
+   command_text=subprocess.list2cmdline(argv)
+   if len(command_text.encode('utf-16-le'))//2+1>32760:raise ValueError('owned certificate command bound')
+   environment={key:os.environ[key] for key in ('SystemRoot','WINDIR','TEMP','TMP') if key in os.environ}
+   environment.update(OPENSSL_CONF=str(root/'empty.cnf'),OPENSSL_MODULES=str(root/'providers'))
+   block=ctypes.create_unicode_buffer(''.join(k+'='+v+'\0' for k,v in sorted(environment.items()))+'\0')
+   command_buffer=ctypes.create_unicode_buffer(command_text)
+   check(self.kernel.CreateProcessW(argv[0],command_buffer,None,None,True,4|0x80000|0x400|0x8000000,block,str(root),ctypes.byref(startup.startup),ctypes.byref(child)))
+   self.process,self.thread,self.pid=child.process,child.thread,int(child.pid)
+   contained=w.BOOL();check(self.kernel.IsProcessInJob(self.process,self.job,ctypes.byref(contained)))
+   if not contained.value:raise ValueError('owned certificate launcher membership')
+   for handle in (input_read,output_write,error_write):check(self.kernel.CloseHandle(handle));handle.value=None
+   import msvcrt
+   def adopt(handle,flags,mode):
+    fd=msvcrt.open_osfhandle(handle.value,flags|os.O_BINARY);handle.value=None
+    try:return os.fdopen(fd,mode,buffering=0)
+    except BaseException:os.close(fd);raise
+   self.stdin=adopt(input_write,os.O_WRONLY,'wb');self.stdout=adopt(output_read,os.O_RDONLY,'rb');self.stderr=adopt(error_read,os.O_RDONLY,'rb')
+   if self.kernel.ResumeThread(self.thread)==0xffffffff:raise OSError(ctypes.get_last_error(),'owned certificate resume')
+  except BaseException:
+   try:self.close()
+   except BaseException:pass
+   raise
+  finally:
+   active_exception=sys.exc_info()[0] is not None;errors=[]
+   for handle in handles:
+    if handle.value:
+     try:
+      if not self.kernel.CloseHandle(handle):errors.append('handle')
+     except BaseException:errors.append('handle')
+     handle.value=None
+   if initialized:
+    try:self.kernel.DeleteProcThreadAttributeList(attributes)
+    except BaseException:errors.append('attributes')
+   if errors and not active_exception:
+    try:self.close()
+    except BaseException:pass
+    raise ValueError('owned certificate setup handles')
+
+ def poll(self):
+  from ctypes import wintypes as w
+  if self.process is None:return self.returncode
+  status=self.kernel.WaitForSingleObject(self.process,0)
+  if status==258:return None
+  if status!=0:raise OSError(ctypes.get_last_error(),'owned certificate poll')
+  code=w.DWORD()
+  if not self.kernel.GetExitCodeProcess(self.process,ctypes.byref(code)):raise OSError(ctypes.get_last_error(),'owned certificate exit code')
+  self.returncode=int(code.value);return self.returncode
+
+ def wait(self,timeout):
+  if type(timeout) not in (int,float) or not 0<timeout<=4:raise ValueError('owned certificate wait bound')
+  until=time.monotonic()+timeout
+  while True:
+   value=self.poll()
+   if value is not None:return value
+   if time.monotonic()>=until:raise subprocess.TimeoutExpired('owned certificate',timeout)
+   time.sleep(.01)
+
+ def active(self):
+  from ctypes import wintypes as w
+  class Accounting(ctypes.Structure):
+   _fields_=[('user',ctypes.c_longlong),('kernel',ctypes.c_longlong),('period_user',ctypes.c_longlong),('period_kernel',ctypes.c_longlong),('page_faults',w.DWORD),('total',w.DWORD),('active',w.DWORD),('terminated',w.DWORD)]
+  value=Accounting()
+  if not self.kernel.QueryInformationJobObject(self.job,1,ctypes.byref(value),ctypes.sizeof(value),None):raise OSError(ctypes.get_last_error(),'owned certificate job accounting')
+  if not 0<=value.active<=1:raise ValueError('owned certificate job process bound')
+  return int(value.active)
+
+ def kill(self):
+  if self.job and not self.kernel.TerminateJobObject(self.job,99):raise OSError(ctypes.get_last_error(),'owned certificate terminate job')
+
+ def close(self):
+  errors=[];settled=False
+  def clean(callback):
+   try:return callback()
+   except BaseException as error:errors.append(type(error).__name__);return None
+  try:
+   if self.job:
+    clean(self.kill)
+    if self.process is not None:clean(lambda:self.wait(3))
+    until=time.monotonic()+3
+    while True:
+     count=clean(self.active)
+     if count==0:settled=True;break
+     if count is None or time.monotonic()>=until:errors.append('job active unconfirmed');break
+     time.sleep(.01)
+  finally:
+   for pipe in (self.stdin,self.stdout,self.stderr):
+    if pipe is not None and not pipe.closed:clean(pipe.close)
+   for name in ('entry','thread','process','job'):
+    handle=getattr(self,name)
+    if handle:
+     result=clean(lambda handle=handle:self.kernel.CloseHandle(handle))
+     if not result:errors.append('handle close unconfirmed')
+     setattr(self,name,None)
+  if errors:raise ValueError('owned certificate cleanup failed')
+  self.ownership_closed=settled
+
+def run_case(case,root):
+ child=None;threads=[];started=[];values={};errors=[]
+ def read(label,pipe):
+  try:
+   data=bytearray()
+   while True:
+    chunk=pipe.read(1024)
+    if not chunk:break
+    data.extend(chunk)
+    if len(data)>16384:raise ValueError('owned certificate output bound')
+   values[label]=bytes(data)
+  except BaseException as error:
+   errors.append(type(error).__name__)
+   try:child.kill()
+   except BaseException:errors.append('kill')
+ try:
+  binary_guard();child=WindowsCertificateChild(case,root)
+  child.stdin.close()
+  for label,pipe in (('stdout',child.stdout),('stderr',child.stderr)):
+   thread=threading.Thread(target=read,args=(label,pipe),daemon=True);threads.append(thread)
+   thread.start();started.append(thread)
+  code=child.wait(4)
+  for thread in started:thread.join(1)
+  if any(thread.is_alive() for thread in started) or errors or code!=0 or child.active()!=0:raise ValueError('owned certificate command failed')
+  if set(values)!=set(('stdout','stderr')):raise ValueError('owned certificate missing output')
+  if case=='version':
+   version=values['stdout'].decode('ascii').strip()
+   if not version.startswith('OpenSSL 3.') or len(version)>256 or '\n' in version:raise ValueError('owned OpenSSL version')
+  else:
+   version=None
+   if values['stdout']:raise ValueError('owned certificate unexpected stdout')
+  result=dict(case=case,exit_code=code,job_active=0,version=version,outputs={k:dict(bytes=len(v),sha256=hashlib.sha256(v).hexdigest()) for k,v in values.items()})
+ finally:
+  active_exception=sys.exc_info()[0] is not None;cleanup=[]
+  if child is not None:
+   try:child.close()
+   except BaseException:cleanup.append('owned child close')
+  for thread in started:
+   try:
+    thread.join(1)
+    if thread.is_alive():cleanup.append('reader active')
+   except BaseException:cleanup.append('reader join')
+  if child is not None and not child.ownership_closed:cleanup.append('ownership unconfirmed')
+  if cleanup and not active_exception:raise ValueError('owned certificate cleanup failed')
+ result['ownership_closed']=True
+ return result
+def main():
+ if len(sys.argv)!=2:raise ValueError('one fixed owner destination argument')
+ root=Path(sys.argv[1]);validate_root(root);binary_guard()
+ if root.exists():raise ValueError('owned certificate destination already exists')
+ root.mkdir();(root/'providers').mkdir()
+ (root/'empty.cnf').write_bytes(b'openssl_conf = init\nconfig_diagnostics = 1\n[init]\nproviders = providers\n[providers]\ndefault = default_provider\n[default_provider]\nactivate = 1\n')
+ for case,address in (('valid','127.0.0.1'),('wrong','127.0.0.2')):
+  (root/(case+'.cnf')).write_bytes(CONFIG.replace('ADDRESS',address).encode('ascii'))
+ results=[run_case(case,root) for case in ('version','valid','wrong')]
+ certificates={}
+ for case,address in (('valid','127.0.0.1'),('wrong','127.0.0.2')):
+  files={}
+  for kind in ('cert','key'):
+   path=root/(case+'-'+kind+'.pem')
+   with path.open('rb') as file:data=file.read(8193)
+   if not 0<len(data)<=8192:raise ValueError('owned certificate PEM bound')
+   files[kind]=dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+  cert=root/(case+'-cert.pem');key=root/(case+'-key.pem')
+  # Trusted qualification-only stdlib parser; no socket or handshake.
+  decoded=ssl._ssl._test_decode_cert(str(cert))
+  if decoded.get('subjectAltName')!=(('IP Address',address),):raise ValueError('owned certificate SAN')
+  context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);context.load_cert_chain(str(cert),str(key))
+  der=ssl.PEM_cert_to_DER_cert(cert.read_text(encoding='ascii'))
+  certificates[case]=dict(files=files,san=address,der_sha256=hashlib.sha256(der).hexdigest(),not_before=decoded['notBefore'],not_after=decoded['notAfter'])
+ record=dict(schema='eq083.tls-local-certificates.v1',binary_pins=PINS,commands=results,certificates=certificates,scope='Local synthetic certificate generation only; no TLS socket, service, native or reference execution')
+ (root/'certificate-record.json').write_bytes((json.dumps(record,indent=2)+'\n').encode())
+ print(json.dumps(dict(schema=record['schema'],commands=results,certificates=certificates),sort_keys=True))
+if __name__=='__main__':main()

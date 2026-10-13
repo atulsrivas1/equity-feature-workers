@@ -1,0 +1,13 @@
+{
+  "schema": "eq083.resource-trading-whole-subsystem-design.v1",
+  "bases": {
+    "equity-features": "b39c0d2abd3450340ed363138fcd71f583dbf191",
+    "equity-feature-workers": "27a0b4d01b9cdcb32466d933a84480d1e9cf5c8e"
+  },
+  "scope": "Primary Genode documentation and proposed complete ownership-subtree design; no selected supported operational topology or immutable vendor implementation",
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false,
+  "host_selected": false,
+  "numeric_budgets_frozen": false
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "eq083.certificate-authority-source.v1",
+  "scope": "PRE-EXECUTION SOURCE ONLY; new trusted parent binding not executed/admitted; no generation or integrated TLS proof",
+  "bases": {
+    "equity-features": "b5526555f4d731706d8a5488fb484e5328239c21",
+    "equity-feature-workers": "61e1568656290c6a1dc892d3ec75bdf5bdffbfa4"
+  },
+  "source": {
+    "bytes": 31786,
+    "sha256": "ededa5a073359b8445047ee12ddefc65acc6b9e3b60bed437a0caa36fb9680da"
+  },
+  "source_pins": {
+    "docs/EQ083_CERTIFICATE_PARENT.txt": {
+      "bytes": 27748,
+      "sha256": "dd140e306c56349fa09e00309d050fc6c5eb949746fc5a567a61fa0951600488"
+    },
+    "docs/EQ083_CERTIFICATE_ENV_INPUTS.json": {
+      "bytes": 587716,
+      "sha256": "6151cad5aa2451b100e309ce4a76c8be70301977038adafd088f1f8a78881532"
+    },
+    "docs/EQ083_CERTIFICATE_COPIER.txt": {
+      "bytes": 6157,
+      "sha256": "ed0e61354b7f2e18dd9135378eeb77a769a6f4c388f71cfbc12f0bf1d0bab08f"
+    },
+    "docs/EQ083_PORTABLE_CERTIFICATE_ENTRY.txt": {
+      "bytes": 7790,
+      "sha256": "7f7aa8ac55d81fe5b8271cbb773ccb2c01dd4838fde18e865ed4535100b91d42"
+    },
+    "docs/EQ083_LINUX_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 7870,
+      "sha256": "c4dbc1009641e4acae4b628a37256fb2ebde364dda5b53bf09a20ed7c94a81c8"
+    },
+    "docs/EQ083_LINUX_TLS_SESSION_TRANSPORT.txt": {
+      "bytes": 14570,
+      "sha256": "045c47ffb59016d4bc78f2bae5d939bea2ca12e2a4ee06aaf01dac24998550cb"
+    },
+    "docs/EQ083_CERTIFICATE_BACKEND_INPUTS.json": {
+      "bytes": 412760,
+      "sha256": "b5a389b031a00f5835df0f4b42997858e98731fd140f05127b90c64efee26151"
+    }
+  },
+  "derivation": "Exact reviewed27748 certificate parent retained, main refactored to trusted generate_certificate_binding(harness,work) returning immutable root/receipt/file-identity/evidence binding only AFTER owned cleanup and full independent parser; backend actual version/closed receipt-entry shapes/UTC and nonboolserial guards strengthened; no existing parent/copier/ENV edits.",
+  "source_reviews": [
+    {
+      "url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6109305385",
+      "scope": "Distinct Linux reference/bootstrap/bridge SOURCE ONLY"
+    },
+    {
+      "url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6108870012",
+      "scope": "Original integrated certificate parent SOURCE ONLY; original3P2 REWORK preserved"
+    }
+  ],
+  "limits": {
+    "source_bytes": 65536,
+    "manifest_bytes": 2097152,
+    "receipt_bytes": 16384,
+    "cert_key_bytes": 8192,
+    "stdout_bytes": 512,
+    "stderr_bytes": 4096,
+    "startup_seconds": 4,
+    "cooperative_generation_seconds": 20,
+    "wait_seconds": 3,
+    "reader_join_seconds": 2
+  },
+  "linux_admitted": false,
+  "remaining": "Exact integrated portableTLS owner/parent/copier; perOS host/backend/RECORD/freshmaps and validators; R04R05/all24/fullsevenReady BEFOREexecution",
+  "tool_history": "Initial unpublished AST-only candidate snapshot did not compare each retained certificate/key digest back to parsed receipt; author source inspection added exact four-file plus receipt digest reconciliation before publication/review/execution. No runtime defect or failed run inferred."
+}

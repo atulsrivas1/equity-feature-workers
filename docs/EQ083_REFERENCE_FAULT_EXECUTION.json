@@ -1,0 +1,3403 @@
+{
+  "schema": "eq083.reference-fault.executed-windows.v1",
+  "scope": "Actual Windows native-wheel reference fault feasibility only",
+  "executed_heads": {
+    "equity-features": "b60fc85223ea3f2ea5c9af77406bbe2cdafb6486",
+    "equity-feature-workers": "95b14d46042a685ac1750589044eb591728b4d26"
+  },
+  "parent": {
+    "bytes": 36601,
+    "sha256": "35c5c218461e536ff9b257ab9a48e90d6d88999b8f4984249371eff0f39a92f8"
+  },
+  "copy": {
+    "bytes": 5834,
+    "sha256": "c06920670247e0ff0dbe22fce490dce2fafe2637a6d3d28ee0eb6823ac095853",
+    "raw_log_sha256": "bd1180ed7d78a1268c9ed1032ea6547a330069012b8544f9ffeb69962dba6b8f",
+    "report": {
+      "inputs": 12,
+      "marker": "eq083-reference-fault-harness-copy",
+      "scope": "Reuses verified author Windows nativewheel environment; fresh copied harness only, no probe execution or independent reinstall",
+      "source_head": "95b14d46042a685ac1750589044eb591728b4d26",
+      "verified_archives": 44
+    }
+  },
+  "process": {
+    "bytes": 11944,
+    "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+  },
+  "inputs": {
+    "scope": "PRE-EXECUTION Windows-only corrected atomic ownership parent; original failed run preserved; independent review pending",
+    "inputs": [
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "docs/EQ081_CLIENT_FIXTURES.json",
+        "harness_path": "docs/EQ081_CLIENT_FIXTURES.json",
+        "bytes": 76771,
+        "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+        "harness_path": "schemas/remote-v1.1.schema.json",
+        "bytes": 30039,
+        "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+        "harness_path": "schemas/mcp-tools.json",
+        "bytes": 104088,
+        "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/test_jobs.py",
+        "harness_path": "tests/service/test_jobs.py",
+        "bytes": 60646,
+        "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/test_service.py",
+        "harness_path": "tests/service/test_service.py",
+        "bytes": 30744,
+        "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+        "path": "tests/service/fixtures/jobs_native.json",
+        "harness_path": "tests/service/fixtures/jobs_native.json",
+        "bytes": 22366,
+        "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "82e88703135d517825d09ae75d63fe15d4760a78",
+        "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+        "harness_path": "schemas/remote-v1.schema.json",
+        "bytes": 28666,
+        "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "48074dbfc26b0c27e1fcedc70075bfe6761e3c8a",
+        "path": "docs/EQ083_VERSION_REFERENCE_ENTRY.txt",
+        "harness_path": "docs/EQ083_VERSION_REFERENCE_ENTRY.txt",
+        "bytes": 3707,
+        "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "66b53c878927cc6104c9ed760cd78c268b34f890",
+        "path": "docs/EQ083_REFERENCE_FAULT_OWNER.txt",
+        "harness_path": "docs/EQ083_REFERENCE_FAULT_OWNER.txt",
+        "bytes": 5139,
+        "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "66b53c878927cc6104c9ed760cd78c268b34f890",
+        "path": "docs/EQ083_REFERENCE_FAULT_ENTRY.txt",
+        "harness_path": "docs/EQ083_REFERENCE_FAULT_ENTRY.txt",
+        "bytes": 7919,
+        "sha256": "b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": null,
+        "path": "docs/EQ083_REFERENCE_FAULT_PROBE.txt",
+        "harness_path": "docs/EQ083_REFERENCE_FAULT_PROBE.txt",
+        "bytes": 36601,
+        "sha256": "35c5c218461e536ff9b257ab9a48e90d6d88999b8f4984249371eff0f39a92f8"
+      },
+      {
+        "repo": "equity-feature-workers",
+        "commit": "c67cab68c73e0d99809f46c53961dae9f5bdaff3",
+        "path": "docs/EQ083_REFERENCE_PROCESS.txt",
+        "harness_path": "docs/EQ083_REFERENCE_PROCESS.txt",
+        "bytes": 11944,
+        "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+      }
+    ],
+    "reference_entry": {
+      "bytes": 3707,
+      "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+    },
+    "owner_entry": {
+      "bytes": 5139,
+      "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+    },
+    "fault_entry": {
+      "bytes": 7919,
+      "sha256": "b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57"
+    },
+    "request_ledger": {
+      "provider-runtime": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 1,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "provider-interrupt": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 1,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "clock-before-bool": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 0,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "clock-before-negative": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 0,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "clock-before-float": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 0,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "clock-before-none": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 0,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "clock-after": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 2,
+        "fault_http": 2,
+        "total_http": 20,
+        "ack_requests": [
+          1,
+          12,
+          14,
+          20
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "active-eof-runtime": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 1,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "active-eof-interrupt": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 1,
+        "fault_http": 0,
+        "total_http": 18,
+        "ack_requests": [
+          1,
+          12,
+          12,
+          18
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      },
+      "partial-output": {
+        "raw": 5,
+        "typed": 6,
+        "baseline_mcp": 5,
+        "followup_mcp": 2,
+        "fault_provider": 1,
+        "fault_http": 1,
+        "total_http": 19,
+        "ack_requests": [
+          1,
+          12,
+          13,
+          19
+        ],
+        "native_source": 1,
+        "sink_factory": 1
+      }
+    },
+    "process_source": {
+      "scope": "Windows64 atomic owned reference job, reviewed source approval required before execution",
+      "bytes": 11944,
+      "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e",
+      "review": {
+        "disposition": "APPROVED corrected Windows reference process helper source only",
+        "heads": {
+          "equity-features": "6069348f7a6c575ef62f591387700eb7c159c68d",
+          "equity-feature-workers": "c67cab68c73e0d99809f46c53961dae9f5bdaff3"
+        },
+        "source_bytes": 11944,
+        "source_sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e",
+        "constructor_cases": [
+          {
+            "fault": null,
+            "outcome": "owned and closed",
+            "resumed": true,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "CreateJobObjectW",
+              1
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "SetInformationJobObject",
+              1
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "QueryInformationJobObject",
+              1
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "CreatePipe",
+              2
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "SetHandleInformation",
+              2
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "InitializeProcThreadAttributeList",
+              2
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "UpdateProcThreadAttribute",
+              2
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "CreateProcessW",
+              1
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "IsProcessInJob",
+              1
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "ResumeThread",
+              1
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          },
+          {
+            "fault": [
+              "CloseHandle",
+              1
+            ],
+            "outcome": "original exception",
+            "resumed": false,
+            "live_handles": 0,
+            "live_fds": 0
+          }
+        ],
+        "fdopen_fault": true,
+        "entry_cases": [
+          {
+            "pid": true,
+            "rejected_before_open": true
+          },
+          {
+            "pid": 0,
+            "rejected_before_open": true
+          },
+          {
+            "pid": -1,
+            "rejected_before_open": true
+          },
+          {
+            "pid": 4294967296,
+            "rejected_before_open": true
+          },
+          {
+            "pid": "2002",
+            "rejected_before_open": true
+          },
+          {
+            "fault": "OpenProcess",
+            "original_exception": true,
+            "resources_closed": true
+          },
+          {
+            "fault": "IsProcessInJob",
+            "original_exception": true,
+            "resources_closed": true
+          },
+          {
+            "fault": "GetProcessId",
+            "original_exception": true,
+            "resources_closed": true
+          }
+        ],
+        "launcher_pid_admitted_as_entry": false,
+        "cleanup_cases": [
+          {
+            "fault": "TerminateJobObject",
+            "fixed_failure": true,
+            "ownership_not_claimed": true,
+            "remaining_mock_handles": 0
+          },
+          {
+            "fault": "WaitForSingleObject",
+            "fixed_failure": true,
+            "ownership_not_claimed": true,
+            "remaining_mock_handles": 0
+          },
+          {
+            "fault": "QueryInformationJobObject",
+            "fixed_failure": true,
+            "ownership_not_claimed": true,
+            "remaining_mock_handles": 0
+          },
+          {
+            "fault": "CloseHandle",
+            "fixed_failure": true,
+            "ownership_not_claimed": true,
+            "remaining_mock_handles": 1
+          }
+        ],
+        "findings": [],
+        "checks": [
+          "Three exact UTF8 mirrored assets; source AST/compile and accepted containment pin checked.",
+          "Exact five allowed docs paths per repo, protected runtime/test/build/workflow/schema inputs unchanged; Atul attribution and no coauthors.",
+          "Mock suspended creation asserts JOB_LIST+HANDLE_LIST before create, only three inheritable child ends and distinct launcher/entry positive PID normal case.",
+          "Valid constructor plus eleven API fault locations and fdopen ownership transfer failure clean mock resources and preserve original injected error.",
+          "Malformed PID types/ranges and substituted launcher PID rejected before OpenProcess; distinct valid entry admitted; entry open/membership/id-query failures preserve original and close temporary handle.",
+          "Termination/wait/job accounting/handle-close faults fail fixed cleanup outcome without ownership_closed claim."
+        ],
+        "limits": [
+          "Only exact source execution with fake WinDLL functions, fake CRT adoption and fake streams; no real Win32 API, subprocess, installed product/reference/native/setup/socket/copy/install/probe invocation.",
+          "Mock cleanup faults cannot establish actual OS cleanup; a failed CloseHandle may retain a native resource and the helper correctly fails rather than claiming confirmed close.",
+          "Windows-only source; integrated parent/copier and Linux ownership design still require separate review. No actual fault PASS, Ready/full24/forms/artifact/release qualification.",
+          "One read-only git show attempt was initially issued from parent directory and failed before reads; exact repo-qualified Git inspection used afterward."
+        ]
+      }
+    }
+  },
+  "verified_windows_archive_map": {
+    "equity_feature_mcp-0.1.0a0-py3-none-any.whl": "49358ab38934053bc55db5fbd1e06d62b692fd6a7dd62b8324300c7293a10f93",
+    "equity_feature_mcp-0.1.0a0.tar.gz": "b10f2d8abd3bbaef4c4a1e3a45029e2c1b1c1d562e7a9a7ee1d5691d19e26c8a",
+    "equity_feature_client-0.1.0a0-py3-none-any.whl": "881b6059a37b3b076f26ac2ddcf14c2fa343fb0292a6aba3fc7652df500540b1",
+    "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2",
+    "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc",
+    "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8",
+    "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549",
+    "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb",
+    "equity_feature_service-0.1.0a3-py3-none-any.whl": "f6be07ba2dc03ae0d5fee65e21a6ac615f544344df3d5517e0eb20b64db62f56",
+    "equity_feature_workers-0.1.0a13-py3-none-any.whl": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324",
+    "equity_features-0.0.4a4-py3-none-any.whl": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0",
+    "annotated_types-0.8.0-py3-none-any.whl": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+    "anyio-4.15.1-py3-none-any.whl": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+    "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+    "certifi-2026.7.22-py3-none-any.whl": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+    "cffi-2.1.1-cp312-cp312-win_amd64.whl": "f53e442b08449d42821fa4a4fba000095af9f62742a500f978a9f557ec44339a",
+    "click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+    "colorama-0.4.6-py2.py3-none-any.whl": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+    "cryptography-50.0.2-cp311-abi3-win_amd64.whl": "7afa5a6602a9f29af1f3a2965f831bae7c9d5d597b7cbb716d41ab3b7d89879c",
+    "duckdb-1.5.6-cp312-cp312-win_amd64.whl": "09ff51b230219f0d8b47fc8a1e17fb595ba9fab0c3d96a6de4d00b8ff86b3cf1",
+    "h11-0.16.0-py3-none-any.whl": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+    "httpcore-1.0.9-py3-none-any.whl": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+    "httpx-0.28.1-py3-none-any.whl": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+    "httpx_sse-0.4.3-py3-none-any.whl": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+    "idna-3.20-py3-none-any.whl": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+    "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+    "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+    "mcp-1.30.0-py3-none-any.whl": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+    "numpy-2.2.6-cp312-cp312-win_amd64.whl": "c1f9540be57940698ed329904db803cf7a402f3fc200bfe599334c9bd84a40b2",
+    "pycparser-3.11-py3-none-any.whl": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+    "pydantic-2.14.0-py3-none-any.whl": "15fab1bea6f1dc5003b54fc2ecab230c1fd1dbade2acd4addc52d81e32416d4b",
+    "pydantic_core-2.50.0-cp312-cp312-win_amd64.whl": "1541c334af5d42cb9eb03862a9b4d2cfbfc670fd05172ec51f3ce02d704550f1",
+    "pydantic_settings-2.15.0-py3-none-any.whl": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+    "pyjwt-2.15.1-py3-none-any.whl": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+    "python_dotenv-1.2.4-py3-none-any.whl": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+    "python_multipart-0.0.32-py3-none-any.whl": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+    "pywin32-312-cp312-cp312-win_amd64.whl": "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc",
+    "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+    "rpds_py-2026.9.1-cp312-cp312-win_amd64.whl": "5ce8943f79c2210f7abcc28e86367b03b28d95027fd01c46d2472373ae70c86f",
+    "sse_starlette-3.5.0-py3-none-any.whl": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+    "starlette-1.7.0-py3-none-any.whl": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+    "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+    "typing_inspection-0.4.4-py3-none-any.whl": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+    "uvicorn-0.54.0-py3-none-any.whl": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+  },
+  "installed_versions": [
+    {
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1"
+    },
+    {
+      "name": "click",
+      "version": "8.5.0"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.2"
+    },
+    {
+      "name": "duckdb",
+      "version": "1.5.6"
+    },
+    {
+      "name": "equity-feature-client",
+      "version": "0.1.0a0"
+    },
+    {
+      "name": "equity-feature-contracts",
+      "version": "0.0.4a4"
+    },
+    {
+      "name": "equity-feature-duckdb",
+      "version": "0.1.0a8"
+    },
+    {
+      "name": "equity-feature-example-extensions",
+      "version": "0.1.0a0"
+    },
+    {
+      "name": "equity-feature-io-contracts",
+      "version": "0.1.0a2"
+    },
+    {
+      "name": "equity-feature-io-sdk",
+      "version": "0.1.0a2"
+    },
+    {
+      "name": "equity-feature-mcp",
+      "version": "0.1.0a0"
+    },
+    {
+      "name": "equity-feature-service",
+      "version": "0.1.0a3"
+    },
+    {
+      "name": "equity-feature-workers",
+      "version": "0.1.0a13"
+    },
+    {
+      "name": "equity-features",
+      "version": "0.0.4a4"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1"
+    },
+    {
+      "name": "httpx-sse",
+      "version": "0.4.3"
+    },
+    {
+      "name": "idna",
+      "version": "3.20"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1"
+    },
+    {
+      "name": "mcp",
+      "version": "1.30.0"
+    },
+    {
+      "name": "numpy",
+      "version": "2.2.6"
+    },
+    {
+      "name": "pip",
+      "version": "25.0.1"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.11"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.14.0"
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.50.0"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.15.0"
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.15.1"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.4"
+    },
+    {
+      "name": "python-multipart",
+      "version": "0.0.32"
+    },
+    {
+      "name": "pywin32",
+      "version": "312"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.9.1"
+    },
+    {
+      "name": "sse-starlette",
+      "version": "3.5.0"
+    },
+    {
+      "name": "starlette",
+      "version": "1.7.0"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.54.0"
+    }
+  ],
+  "author": {
+    "exit_code": 0,
+    "raw_log_sha256": "c90d5d5dec6b26cc0dfecf8eeb80d7af7a5229a0af6f37426c929387804a326f",
+    "reports": [
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "provider-runtime",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "7733ce474eef9d24e91dc5a13e698756-960fddab02f05d5c0d6a7ca806b10b63",
+              "queue": 0,
+              "reads": 1,
+              "result": "7733ce474eef9d24e91dc5a13e698756-7fc8db2e2f46ca3df53f8804395fd8c3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "provider-runtime",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "7733ce474eef9d24e91dc5a13e698756-960fddab02f05d5c0d6a7ca806b10b63",
+              "queue": 0,
+              "reads": 1,
+              "result": "7733ce474eef9d24e91dc5a13e698756-7fc8db2e2f46ca3df53f8804395fd8c3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "provider-runtime",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "7733ce474eef9d24e91dc5a13e698756-960fddab02f05d5c0d6a7ca806b10b63",
+              "queue": 0,
+              "reads": 1,
+              "result": "7733ce474eef9d24e91dc5a13e698756-7fc8db2e2f46ca3df53f8804395fd8c3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "provider-runtime",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "7733ce474eef9d24e91dc5a13e698756-960fddab02f05d5c0d6a7ca806b10b63",
+              "queue": 0,
+              "reads": 1,
+              "result": "7733ce474eef9d24e91dc5a13e698756-7fc8db2e2f46ca3df53f8804395fd8c3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "provider-runtime",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 57644,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "provider-runtime",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "provider-interrupt",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c39f82d3672683ee6c19384f4f63d84a-c0b957905fe7e4aa39913a9d244a9720",
+              "queue": 0,
+              "reads": 1,
+              "result": "c39f82d3672683ee6c19384f4f63d84a-bb49ea5d8624674887fbb315e6fb70ac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "provider-interrupt",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c39f82d3672683ee6c19384f4f63d84a-c0b957905fe7e4aa39913a9d244a9720",
+              "queue": 0,
+              "reads": 1,
+              "result": "c39f82d3672683ee6c19384f4f63d84a-bb49ea5d8624674887fbb315e6fb70ac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "provider-interrupt",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c39f82d3672683ee6c19384f4f63d84a-c0b957905fe7e4aa39913a9d244a9720",
+              "queue": 0,
+              "reads": 1,
+              "result": "c39f82d3672683ee6c19384f4f63d84a-bb49ea5d8624674887fbb315e6fb70ac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "provider-interrupt",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c39f82d3672683ee6c19384f4f63d84a-c0b957905fe7e4aa39913a9d244a9720",
+              "queue": 0,
+              "reads": 1,
+              "result": "c39f82d3672683ee6c19384f4f63d84a-bb49ea5d8624674887fbb315e6fb70ac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "provider-interrupt",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 23492,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "provider-interrupt",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-bool",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "d37999351d57570fb7fdcf92b5561fb0-597584f90a1971644f236f3fc0af3160",
+              "queue": 0,
+              "reads": 1,
+              "result": "d37999351d57570fb7fdcf92b5561fb0-b5f625dd92ea4a268728757752b5bbd6",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-bool",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "d37999351d57570fb7fdcf92b5561fb0-597584f90a1971644f236f3fc0af3160",
+              "queue": 0,
+              "reads": 1,
+              "result": "d37999351d57570fb7fdcf92b5561fb0-b5f625dd92ea4a268728757752b5bbd6",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-bool",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "d37999351d57570fb7fdcf92b5561fb0-597584f90a1971644f236f3fc0af3160",
+              "queue": 0,
+              "reads": 1,
+              "result": "d37999351d57570fb7fdcf92b5561fb0-b5f625dd92ea4a268728757752b5bbd6",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-bool",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "d37999351d57570fb7fdcf92b5561fb0-597584f90a1971644f236f3fc0af3160",
+              "queue": 0,
+              "reads": 1,
+              "result": "d37999351d57570fb7fdcf92b5561fb0-b5f625dd92ea4a268728757752b5bbd6",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-bool",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 48212,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-bool",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-negative",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a7af9983621c474c19509e9e06cfb54f-40a14c0c3c0e0d22fde920d1d67a19b8",
+              "queue": 0,
+              "reads": 1,
+              "result": "a7af9983621c474c19509e9e06cfb54f-7b2f54c03915676c8c1af4477b26ceac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-negative",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a7af9983621c474c19509e9e06cfb54f-40a14c0c3c0e0d22fde920d1d67a19b8",
+              "queue": 0,
+              "reads": 1,
+              "result": "a7af9983621c474c19509e9e06cfb54f-7b2f54c03915676c8c1af4477b26ceac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-negative",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a7af9983621c474c19509e9e06cfb54f-40a14c0c3c0e0d22fde920d1d67a19b8",
+              "queue": 0,
+              "reads": 1,
+              "result": "a7af9983621c474c19509e9e06cfb54f-7b2f54c03915676c8c1af4477b26ceac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-negative",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a7af9983621c474c19509e9e06cfb54f-40a14c0c3c0e0d22fde920d1d67a19b8",
+              "queue": 0,
+              "reads": 1,
+              "result": "a7af9983621c474c19509e9e06cfb54f-7b2f54c03915676c8c1af4477b26ceac",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-negative",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 29648,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-negative",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-float",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "8b39ce0b358b93ed1d51d8b823093a92-272bcba2ccc821dae5b6180be5a167aa",
+              "queue": 0,
+              "reads": 1,
+              "result": "8b39ce0b358b93ed1d51d8b823093a92-07663d23ff3a98a2374741caccd21294",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-float",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "8b39ce0b358b93ed1d51d8b823093a92-272bcba2ccc821dae5b6180be5a167aa",
+              "queue": 0,
+              "reads": 1,
+              "result": "8b39ce0b358b93ed1d51d8b823093a92-07663d23ff3a98a2374741caccd21294",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-float",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "8b39ce0b358b93ed1d51d8b823093a92-272bcba2ccc821dae5b6180be5a167aa",
+              "queue": 0,
+              "reads": 1,
+              "result": "8b39ce0b358b93ed1d51d8b823093a92-07663d23ff3a98a2374741caccd21294",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-float",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "8b39ce0b358b93ed1d51d8b823093a92-272bcba2ccc821dae5b6180be5a167aa",
+              "queue": 0,
+              "reads": 1,
+              "result": "8b39ce0b358b93ed1d51d8b823093a92-07663d23ff3a98a2374741caccd21294",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-float",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 21360,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-float",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-none",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "ce7f1694a70bcac490f9e936c7820081-c21c30134863de1fa1df3c5b23c16056",
+              "queue": 0,
+              "reads": 1,
+              "result": "ce7f1694a70bcac490f9e936c7820081-48ff9c2547d9ec9885cc5ccfe79ae6f9",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-none",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "ce7f1694a70bcac490f9e936c7820081-c21c30134863de1fa1df3c5b23c16056",
+              "queue": 0,
+              "reads": 1,
+              "result": "ce7f1694a70bcac490f9e936c7820081-48ff9c2547d9ec9885cc5ccfe79ae6f9",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-none",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "ce7f1694a70bcac490f9e936c7820081-c21c30134863de1fa1df3c5b23c16056",
+              "queue": 0,
+              "reads": 1,
+              "result": "ce7f1694a70bcac490f9e936c7820081-48ff9c2547d9ec9885cc5ccfe79ae6f9",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-none",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "ce7f1694a70bcac490f9e936c7820081-c21c30134863de1fa1df3c5b23c16056",
+              "queue": 0,
+              "reads": 1,
+              "result": "ce7f1694a70bcac490f9e936c7820081-48ff9c2547d9ec9885cc5ccfe79ae6f9",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-none",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 45876,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-none",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-after",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "491f1cb2b975b8cdf720dc163073bd9c-57a5e849df541897ac8b8d0362315d7a",
+              "queue": 0,
+              "reads": 1,
+              "result": "491f1cb2b975b8cdf720dc163073bd9c-212e640e01019c4c598bb81d405b84b8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-after",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "491f1cb2b975b8cdf720dc163073bd9c-57a5e849df541897ac8b8d0362315d7a",
+              "queue": 0,
+              "reads": 1,
+              "result": "491f1cb2b975b8cdf720dc163073bd9c-212e640e01019c4c598bb81d405b84b8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-after",
+            "requests": 14,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "491f1cb2b975b8cdf720dc163073bd9c-57a5e849df541897ac8b8d0362315d7a",
+              "queue": 0,
+              "reads": 1,
+              "result": "491f1cb2b975b8cdf720dc163073bd9c-212e640e01019c4c598bb81d405b84b8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-after",
+            "requests": 20,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "491f1cb2b975b8cdf720dc163073bd9c-57a5e849df541897ac8b8d0362315d7a",
+              "queue": 0,
+              "reads": 1,
+              "result": "491f1cb2b975b8cdf720dc163073bd9c-212e640e01019c4c598bb81d405b84b8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 11,
+          "full_frames": 3,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-after",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 36256,
+          "provider_calls": 2,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 2,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-after",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 20
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "active-eof-runtime",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f95ce1fb0d23ac8dc08d6a85c1d3a592-f4bfa60162b411605474b4d289a583c0",
+              "queue": 0,
+              "reads": 1,
+              "result": "f95ce1fb0d23ac8dc08d6a85c1d3a592-ee90a6122dfb2268d185ad79efb98732",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "active-eof-runtime",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f95ce1fb0d23ac8dc08d6a85c1d3a592-f4bfa60162b411605474b4d289a583c0",
+              "queue": 0,
+              "reads": 1,
+              "result": "f95ce1fb0d23ac8dc08d6a85c1d3a592-ee90a6122dfb2268d185ad79efb98732",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "active-eof-runtime",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f95ce1fb0d23ac8dc08d6a85c1d3a592-f4bfa60162b411605474b4d289a583c0",
+              "queue": 0,
+              "reads": 1,
+              "result": "f95ce1fb0d23ac8dc08d6a85c1d3a592-ee90a6122dfb2268d185ad79efb98732",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "active-eof-runtime",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f95ce1fb0d23ac8dc08d6a85c1d3a592-f4bfa60162b411605474b4d289a583c0",
+              "queue": 0,
+              "reads": 1,
+              "result": "f95ce1fb0d23ac8dc08d6a85c1d3a592-ee90a6122dfb2268d185ad79efb98732",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": true,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "active-eof-runtime",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 56292,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "active-eof-runtime",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "active-eof-interrupt",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "febeb96d8f851c1496022a75f1e9dfbd-e1d2ffb6b0d5b77921b49947a741834b",
+              "queue": 0,
+              "reads": 1,
+              "result": "febeb96d8f851c1496022a75f1e9dfbd-fc1aaeaac02daa591be6ec5839779a94",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "active-eof-interrupt",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "febeb96d8f851c1496022a75f1e9dfbd-e1d2ffb6b0d5b77921b49947a741834b",
+              "queue": 0,
+              "reads": 1,
+              "result": "febeb96d8f851c1496022a75f1e9dfbd-fc1aaeaac02daa591be6ec5839779a94",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "active-eof-interrupt",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "febeb96d8f851c1496022a75f1e9dfbd-e1d2ffb6b0d5b77921b49947a741834b",
+              "queue": 0,
+              "reads": 1,
+              "result": "febeb96d8f851c1496022a75f1e9dfbd-fc1aaeaac02daa591be6ec5839779a94",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "active-eof-interrupt",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "febeb96d8f851c1496022a75f1e9dfbd-e1d2ffb6b0d5b77921b49947a741834b",
+              "queue": 0,
+              "reads": 1,
+              "result": "febeb96d8f851c1496022a75f1e9dfbd-fc1aaeaac02daa591be6ec5839779a94",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": true,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "active-eof-interrupt",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 44392,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "active-eof-interrupt",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "partial-output",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "28e020229bf320263dcfb82897fb3b1f-eb2782861c6501aae5c778a2cb2c8db9",
+              "queue": 0,
+              "reads": 1,
+              "result": "28e020229bf320263dcfb82897fb3b1f-54ff03874540b1c6bbcf643ef5810923",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "partial-output",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "28e020229bf320263dcfb82897fb3b1f-eb2782861c6501aae5c778a2cb2c8db9",
+              "queue": 0,
+              "reads": 1,
+              "result": "28e020229bf320263dcfb82897fb3b1f-54ff03874540b1c6bbcf643ef5810923",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "partial-output",
+            "requests": 13,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "28e020229bf320263dcfb82897fb3b1f-eb2782861c6501aae5c778a2cb2c8db9",
+              "queue": 0,
+              "reads": 1,
+              "result": "28e020229bf320263dcfb82897fb3b1f-54ff03874540b1c6bbcf643ef5810923",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "partial-output",
+            "requests": 19,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "28e020229bf320263dcfb82897fb3b1f-eb2782861c6501aae5c778a2cb2c8db9",
+              "queue": 0,
+              "reads": 1,
+              "result": "28e020229bf320263dcfb82897fb3b1f-54ff03874540b1c6bbcf643ef5810923",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "partial-output",
+          "partial_bytes": 64,
+          "partial_length": 989,
+          "partial_sha256": "03be769524535a6ce42c7dbb0c1bd8fe288ca1fe653124bca506d754897b9d58",
+          "pid": 50716,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 1,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "partial-output",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 19
+      }
+    ]
+  },
+  "reviewer": {
+    "disposition": "APPROVED independently executed Windows owned reference-fault feasibility",
+    "heads": {
+      "equity-features": "b60fc85223ea3f2ea5c9af77406bbe2cdafb6486",
+      "equity-feature-workers": "95b14d46042a685ac1750589044eb591728b4d26"
+    },
+    "parent_bytes": 36601,
+    "parent_sha256": "35c5c218461e536ff9b257ab9a48e90d6d88999b8f4984249371eff0f39a92f8",
+    "process_sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e",
+    "exit_code": 0,
+    "elapsed_seconds": 67.81300000008196,
+    "rawlog": "eq083-three-lane-reference-fault-owned-reviewer.log",
+    "rawlog_sha256": "cbb5de42a45c3bea812554d2fe85b49373258eb9e3d03333d620d52236090d80",
+    "verified_copied_inputs": 12,
+    "accepted_archive_map_files": 44,
+    "installed_wheels": 43,
+    "module_origins": {
+      "client": "Lib/site-packages/equity_feature_client/__init__.py",
+      "mcp": "Lib/site-packages/equity_feature_mcp/__init__.py",
+      "service": "Lib/site-packages/equity_feature_service/__init__.py"
+    },
+    "cases": [
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "provider-runtime",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "4a1ad412a59f7ba41ac33ec91983d750-22c08af3eeada390e0864318e688e8b5",
+              "queue": 0,
+              "reads": 1,
+              "result": "4a1ad412a59f7ba41ac33ec91983d750-17f8c99f0a07ede69e33860705282221",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "provider-runtime",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "4a1ad412a59f7ba41ac33ec91983d750-22c08af3eeada390e0864318e688e8b5",
+              "queue": 0,
+              "reads": 1,
+              "result": "4a1ad412a59f7ba41ac33ec91983d750-17f8c99f0a07ede69e33860705282221",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "provider-runtime",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "4a1ad412a59f7ba41ac33ec91983d750-22c08af3eeada390e0864318e688e8b5",
+              "queue": 0,
+              "reads": 1,
+              "result": "4a1ad412a59f7ba41ac33ec91983d750-17f8c99f0a07ede69e33860705282221",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "provider-runtime",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "4a1ad412a59f7ba41ac33ec91983d750-22c08af3eeada390e0864318e688e8b5",
+              "queue": 0,
+              "reads": 1,
+              "result": "4a1ad412a59f7ba41ac33ec91983d750-17f8c99f0a07ede69e33860705282221",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "provider-runtime",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 46944,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "provider-runtime",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "provider-interrupt",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0782b2a024195a87ef2c04e84e676cff-5b85e401a1a25fd54fb898de4bb7c107",
+              "queue": 0,
+              "reads": 1,
+              "result": "0782b2a024195a87ef2c04e84e676cff-dc18b4618d475b91267bdcc5c32c2721",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "provider-interrupt",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0782b2a024195a87ef2c04e84e676cff-5b85e401a1a25fd54fb898de4bb7c107",
+              "queue": 0,
+              "reads": 1,
+              "result": "0782b2a024195a87ef2c04e84e676cff-dc18b4618d475b91267bdcc5c32c2721",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "provider-interrupt",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0782b2a024195a87ef2c04e84e676cff-5b85e401a1a25fd54fb898de4bb7c107",
+              "queue": 0,
+              "reads": 1,
+              "result": "0782b2a024195a87ef2c04e84e676cff-dc18b4618d475b91267bdcc5c32c2721",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "provider-interrupt",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0782b2a024195a87ef2c04e84e676cff-5b85e401a1a25fd54fb898de4bb7c107",
+              "queue": 0,
+              "reads": 1,
+              "result": "0782b2a024195a87ef2c04e84e676cff-dc18b4618d475b91267bdcc5c32c2721",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "provider-interrupt",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 5808,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "provider-interrupt",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-bool",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "6a9f400638df3589606ccf03fb55ea6e-8d4cb4c8759801882904fea15c77da1e",
+              "queue": 0,
+              "reads": 1,
+              "result": "6a9f400638df3589606ccf03fb55ea6e-9b1ace8c8547d066d4407f44ef046bc7",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-bool",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "6a9f400638df3589606ccf03fb55ea6e-8d4cb4c8759801882904fea15c77da1e",
+              "queue": 0,
+              "reads": 1,
+              "result": "6a9f400638df3589606ccf03fb55ea6e-9b1ace8c8547d066d4407f44ef046bc7",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-bool",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "6a9f400638df3589606ccf03fb55ea6e-8d4cb4c8759801882904fea15c77da1e",
+              "queue": 0,
+              "reads": 1,
+              "result": "6a9f400638df3589606ccf03fb55ea6e-9b1ace8c8547d066d4407f44ef046bc7",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-bool",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "6a9f400638df3589606ccf03fb55ea6e-8d4cb4c8759801882904fea15c77da1e",
+              "queue": 0,
+              "reads": 1,
+              "result": "6a9f400638df3589606ccf03fb55ea6e-9b1ace8c8547d066d4407f44ef046bc7",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-bool",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 60696,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-bool",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-negative",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "50bde0cd9f2e5c85caf34a766abd219e-b64368e5e2448a04d61d50ac0e546c9c",
+              "queue": 0,
+              "reads": 1,
+              "result": "50bde0cd9f2e5c85caf34a766abd219e-a8fe9fe409e91da84e8cb6d481ef2fa5",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-negative",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "50bde0cd9f2e5c85caf34a766abd219e-b64368e5e2448a04d61d50ac0e546c9c",
+              "queue": 0,
+              "reads": 1,
+              "result": "50bde0cd9f2e5c85caf34a766abd219e-a8fe9fe409e91da84e8cb6d481ef2fa5",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-negative",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "50bde0cd9f2e5c85caf34a766abd219e-b64368e5e2448a04d61d50ac0e546c9c",
+              "queue": 0,
+              "reads": 1,
+              "result": "50bde0cd9f2e5c85caf34a766abd219e-a8fe9fe409e91da84e8cb6d481ef2fa5",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-negative",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "50bde0cd9f2e5c85caf34a766abd219e-b64368e5e2448a04d61d50ac0e546c9c",
+              "queue": 0,
+              "reads": 1,
+              "result": "50bde0cd9f2e5c85caf34a766abd219e-a8fe9fe409e91da84e8cb6d481ef2fa5",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-negative",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 31548,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-negative",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-float",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f1b742ed1605625ad02386b788e839e6-21d1eac67f5f6e0b6bbbb837136901ef",
+              "queue": 0,
+              "reads": 1,
+              "result": "f1b742ed1605625ad02386b788e839e6-593f9c1605c2cddacc4b870edca70367",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-float",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f1b742ed1605625ad02386b788e839e6-21d1eac67f5f6e0b6bbbb837136901ef",
+              "queue": 0,
+              "reads": 1,
+              "result": "f1b742ed1605625ad02386b788e839e6-593f9c1605c2cddacc4b870edca70367",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-float",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f1b742ed1605625ad02386b788e839e6-21d1eac67f5f6e0b6bbbb837136901ef",
+              "queue": 0,
+              "reads": 1,
+              "result": "f1b742ed1605625ad02386b788e839e6-593f9c1605c2cddacc4b870edca70367",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-float",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "f1b742ed1605625ad02386b788e839e6-21d1eac67f5f6e0b6bbbb837136901ef",
+              "queue": 0,
+              "reads": 1,
+              "result": "f1b742ed1605625ad02386b788e839e6-593f9c1605c2cddacc4b870edca70367",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-float",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 60320,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-float",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-before-none",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0fcee4a30b369d78a9ee61512d18acff-9cdd8e98e69ea5959e86ebe44bd648b7",
+              "queue": 0,
+              "reads": 1,
+              "result": "0fcee4a30b369d78a9ee61512d18acff-4cb268fb871ae38dec2fb6b13ab13094",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-before-none",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0fcee4a30b369d78a9ee61512d18acff-9cdd8e98e69ea5959e86ebe44bd648b7",
+              "queue": 0,
+              "reads": 1,
+              "result": "0fcee4a30b369d78a9ee61512d18acff-4cb268fb871ae38dec2fb6b13ab13094",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-before-none",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0fcee4a30b369d78a9ee61512d18acff-9cdd8e98e69ea5959e86ebe44bd648b7",
+              "queue": 0,
+              "reads": 1,
+              "result": "0fcee4a30b369d78a9ee61512d18acff-4cb268fb871ae38dec2fb6b13ab13094",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-before-none",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "0fcee4a30b369d78a9ee61512d18acff-9cdd8e98e69ea5959e86ebe44bd648b7",
+              "queue": 0,
+              "reads": 1,
+              "result": "0fcee4a30b369d78a9ee61512d18acff-4cb268fb871ae38dec2fb6b13ab13094",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 3,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-before-none",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 8624,
+          "provider_calls": 0,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-before-none",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "clock-after",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c4410b1cd9d16b22592510e65183d131-33ef8d0155efc77a297affb53257e82a",
+              "queue": 0,
+              "reads": 1,
+              "result": "c4410b1cd9d16b22592510e65183d131-3caa9c04d0748c46f5d3d5b58617abf8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "clock-after",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c4410b1cd9d16b22592510e65183d131-33ef8d0155efc77a297affb53257e82a",
+              "queue": 0,
+              "reads": 1,
+              "result": "c4410b1cd9d16b22592510e65183d131-3caa9c04d0748c46f5d3d5b58617abf8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "clock-after",
+            "requests": 14,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c4410b1cd9d16b22592510e65183d131-33ef8d0155efc77a297affb53257e82a",
+              "queue": 0,
+              "reads": 1,
+              "result": "c4410b1cd9d16b22592510e65183d131-3caa9c04d0748c46f5d3d5b58617abf8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "clock-after",
+            "requests": 20,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "c4410b1cd9d16b22592510e65183d131-33ef8d0155efc77a297affb53257e82a",
+              "queue": 0,
+              "reads": 1,
+              "result": "c4410b1cd9d16b22592510e65183d131-3caa9c04d0748c46f5d3d5b58617abf8",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": true,
+          "clock_samples": 11,
+          "full_frames": 3,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "clock-after",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 9008,
+          "provider_calls": 2,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 2,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "clock-after",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 20
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "active-eof-runtime",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "19c291b23cd891441d964753a4416301-bf265bc6e8140b3c6c37489bbd0ec0d1",
+              "queue": 0,
+              "reads": 1,
+              "result": "19c291b23cd891441d964753a4416301-2eaa1e327458da75d7852c3afbf8a74a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "active-eof-runtime",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "19c291b23cd891441d964753a4416301-bf265bc6e8140b3c6c37489bbd0ec0d1",
+              "queue": 0,
+              "reads": 1,
+              "result": "19c291b23cd891441d964753a4416301-2eaa1e327458da75d7852c3afbf8a74a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "active-eof-runtime",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "19c291b23cd891441d964753a4416301-bf265bc6e8140b3c6c37489bbd0ec0d1",
+              "queue": 0,
+              "reads": 1,
+              "result": "19c291b23cd891441d964753a4416301-2eaa1e327458da75d7852c3afbf8a74a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "active-eof-runtime",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "19c291b23cd891441d964753a4416301-bf265bc6e8140b3c6c37489bbd0ec0d1",
+              "queue": 0,
+              "reads": 1,
+              "result": "19c291b23cd891441d964753a4416301-2eaa1e327458da75d7852c3afbf8a74a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": true,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "active-eof-runtime",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 64344,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "active-eof-runtime",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "active-eof-interrupt",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "e7025b6301a191377807697ff010690d-390574d36a6849db90d42bd4c897ff92",
+              "queue": 0,
+              "reads": 1,
+              "result": "e7025b6301a191377807697ff010690d-2ce5bedda49d0a8c828995da12e20b9d",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "active-eof-interrupt",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "e7025b6301a191377807697ff010690d-390574d36a6849db90d42bd4c897ff92",
+              "queue": 0,
+              "reads": 1,
+              "result": "e7025b6301a191377807697ff010690d-2ce5bedda49d0a8c828995da12e20b9d",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "active-eof-interrupt",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "e7025b6301a191377807697ff010690d-390574d36a6849db90d42bd4c897ff92",
+              "queue": 0,
+              "reads": 1,
+              "result": "e7025b6301a191377807697ff010690d-2ce5bedda49d0a8c828995da12e20b9d",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "active-eof-interrupt",
+            "requests": 18,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "e7025b6301a191377807697ff010690d-390574d36a6849db90d42bd4c897ff92",
+              "queue": 0,
+              "reads": 1,
+              "result": "e7025b6301a191377807697ff010690d-2ce5bedda49d0a8c828995da12e20b9d",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 3,
+          "gate_released": true,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "active-eof-interrupt",
+          "partial_bytes": 0,
+          "partial_length": 0,
+          "partial_sha256": null,
+          "pid": 40612,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 0,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "active-eof-interrupt",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 18
+      },
+      {
+        "acknowledgements": [
+          {
+            "action": "settled",
+            "mode": "partial-output",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "88405cbd67a0324e3308a8164277bf24-19283d0447c4a59a5a4ef6cb1161b75f",
+              "queue": 0,
+              "reads": 1,
+              "result": "88405cbd67a0324e3308a8164277bf24-a681630a9a7ce020f0342b9eff04cdd3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "baseline",
+            "mode": "partial-output",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "88405cbd67a0324e3308a8164277bf24-19283d0447c4a59a5a4ef6cb1161b75f",
+              "queue": 0,
+              "reads": 1,
+              "result": "88405cbd67a0324e3308a8164277bf24-a681630a9a7ce020f0342b9eff04cdd3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "after_fault",
+            "mode": "partial-output",
+            "requests": 13,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "88405cbd67a0324e3308a8164277bf24-19283d0447c4a59a5a4ef6cb1161b75f",
+              "queue": 0,
+              "reads": 1,
+              "result": "88405cbd67a0324e3308a8164277bf24-a681630a9a7ce020f0342b9eff04cdd3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          },
+          {
+            "action": "final",
+            "mode": "partial-output",
+            "requests": 19,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "88405cbd67a0324e3308a8164277bf24-19283d0447c4a59a5a4ef6cb1161b75f",
+              "queue": 0,
+              "reads": 1,
+              "result": "88405cbd67a0324e3308a8164277bf24-a681630a9a7ce020f0342b9eff04cdd3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            }
+          }
+        ],
+        "client": 6,
+        "direct": 5,
+        "fault_closed": {
+          "client_closed": true,
+          "clock_fault": false,
+          "clock_samples": 0,
+          "full_frames": 2,
+          "gate_released": false,
+          "marker": "eq083-reference-fault-closed",
+          "mode": "partial-output",
+          "partial_bytes": 64,
+          "partial_length": 989,
+          "partial_sha256": "4c134cf56bb74da78e0e2178022bef00ddfe488325ed71a031fae0720d07a2d1",
+          "pid": 34984,
+          "provider_calls": 1,
+          "records": 0,
+          "reservations": 0,
+          "server_closed": true
+        },
+        "fault_entry_exit": true,
+        "fault_http": 1,
+        "fault_job_empty": true,
+        "fault_launcher_exit": true,
+        "marker": "eq083-three-lane-reference-fault",
+        "mode": "partial-output",
+        "native_exit": true,
+        "reference_exits": 3,
+        "sdk": 7,
+        "source_reads": 1,
+        "total": 19
+      }
+    ],
+    "checks": [
+      "Exact copied twelve Git pins/full accepted44 maps/raw receipt/archive hashes verified; installed module origins match verified setup report.",
+      "Ten mode direct5/client6/SDK7 plus faultHTTP0/2/1 totals18/20/19; provider0/1/2 and four exact owner barriers.",
+      "Complete producer/raw/canonical SDK native golden and output schema/canonical text assertions passed inside immutable parent.",
+      "Full original retained snapshot after repetitions and native scheduler close passed; originalexpiry and allfour held forms stable.",
+      "Actual owned entry handle exit, separate launcher wait0, jobactive0/ownership close, three reference physical exits and native realexit assertions passed.",
+      "Provider/interrupt privacy, invalidclock nooutput, activeEOF remains alive until trusted release, actual64byte partialprefix+EOF/no replacement passed."
+    ],
+    "limits": [
+      "Separate process reuses author verified Windows wheel environment and copied harness; not independent reinstall.",
+      "No repository/runtime/test edit, duplicate copy/install/download or environment mutation.",
+      "Actual Windows wheel feasibility only; no Linux/TLS/full24/Ready/current artifacts/release approval.",
+      "Original 32fa6 PID-assertion failure remains FAILED and its diagnostic/review miss preserved."
+    ]
+  },
+  "review_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107167891",
+  "pre_execution_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107139106",
+  "failure_history": {
+    "heads": {
+      "equity-features": "43c07a09497af1486cc8324f8ec7dbc20a955fcf",
+      "equity-feature-workers": "32fa6bdf6dbb214d6e96b43954b34359c48bb43d"
+    },
+    "copy_exit": 0,
+    "parent_exit": 1,
+    "log_sha256": "0f101449635ededa8a415700e63f7e8a8341962ad81b4fba8a1599c4797ce440",
+    "source_approval": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6106891452",
+    "failure_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6106903171",
+    "scope": "FAILED Windows reference fault feasibility; PID diagnosis pending; no PASS or completed cleanup proof",
+    "schema": "eq083.reference-fault.failed-execution.v1",
+    "parent_bytes": 24254,
+    "parent_sha256": "8ed0ac8e59bef232df1bb81aac13f625b778b3c00fa9120cef00db80f87b7771",
+    "copy_bytes": 5762,
+    "copy_sha256": "bd97a249fed1d32c8c2a9b7cd312370ebf3d1642035609fcc4806ec8ee294a80",
+    "diagnostic": {
+      "disposition": "REWORK qualification PID topology; no demonstrated accepted runtime defect",
+      "heads": {
+        "equity-features": "43c07a09497af1486cc8324f8ec7dbc20a955fcf",
+        "equity-feature-workers": "32fa6bdf6dbb214d6e96b43954b34359c48bb43d"
+      },
+      "parent_sha256": "8ed0ac8e59bef232df1bb81aac13f625b778b3c00fa9120cef00db80f87b7771",
+      "failed_log_sha256": "0f101449635ededa8a415700e63f7e8a8341962ad81b4fba8a1599c4797ce440",
+      "observed_failure": "Actual author exit1 at parent line268 marker==dict(pid=process.pid), before init/faultcall; numeric PIDs not included in log.",
+      "evidence": {
+        "venv_executable_bytes": 274424,
+        "venv_executable_sha256": "0b471133e110cfb53a061cad528ce8e517d7b9ac41a0a396c39ad795a487fc14",
+        "identical_to_installed_venv_redirector": true,
+        "base_executable_bytes": 104952,
+        "cpython_source": "https://github.com/python/cpython/blob/v3.12.10/PC/launcher.c",
+        "cpython_source_sha256": "5f22f9a9be91601e323d8ffc5e74279af4676acbc01daeeba0b92457f67590a1",
+        "source_semantics": "CreateProcessW line810 creates interpreter child; AssignProcessToJobObject line814 unchecked; waits child line816; KILL_ON_JOB_CLOSE configured line787. Assignment is after process creation, so not atomic."
+      },
+      "findings": [
+        {
+          "priority": 2,
+          "title": "Popen launcher PID conflated with entry marker PID",
+          "locations": [
+            268,
+            283,
+            284,
+            294,
+            298,
+            307
+          ],
+          "correction": "Validate closed marker with exact positive non-bool platform-bounded integer; keep launcher and entry PID separately. Use entry PID for entered/closed witness and actual entry liveness/exit; independently wait/reap Popen and observe launcher exit. Retain exact stream/ledger/provider/no-replay assertions."
+        },
+        {
+          "priority": 2,
+          "title": "Cleanup ownership must cover actual entry and pre-marker topology",
+          "correction": "Before renewed execution freeze owned cleanup for both processes, including missing/malformed marker and reader-start failure. Marker-present cleanup must terminate/wait actual entry as needed plus launcher wait; do not rely solely on launcher kill or claim CPython post-create unchecked Job assignment is atomic. An owned atomic JobObject strategy or another reviewed topology must cover startup before marker, with failure preserving original exception."
+        }
+      ],
+      "inert_checks": {
+        "distinct_positive_launcher_entry_pids_admissible": true,
+        "closed_marker_invalid_cases_rejected": 7
+      },
+      "review_miss": "Prior source approval missed Windows venv redirector PID distinction; retained as reviewer miss, failed run remains failed.",
+      "limits": [
+        "No unchanged probe rerun, native/reference/socket/copy/setup/install execution or environment modification.",
+        "Diagnosis is source and verified binary-layout evidence; the failed log contains no actual marker/launcher PID values and no cleanup report, so no physical exit or completed native cleanup claimed.",
+        "Proposed marker guard tested with inert values only; candidate correction needs exact published pre-execution source review.",
+        "No Ready/full24/Linux/artifact/release qualification."
+      ]
+    },
+    "actual_env_reinstalled": false,
+    "source_runtime_unchanged": true,
+    "owner_notified_once": true,
+    "no_matching_live_python_observed": true,
+    "process_inventory_scope": "Read-only matching-command process inventory found none after failure; not completed cleanup proof",
+    "remaining": "Freeze exact distinct launcher/entry PID guards and reviewed pre-marker cleanup ownership, publish/review before NEW corrected harness/run; original failed run unchanged/no PASS",
+    "candidate_ownership_source_pin": {
+      "commit": "32fa6bdf6dbb214d6e96b43954b34359c48bb43d",
+      "path": "packages/service/src/equity_feature_service/_containment.py",
+      "bytes": 28231,
+      "sha256": "e36db74f7cf271b86ac7af3b1a9ec7c220150864a50a52d5189c1e8325c797dd",
+      "scope": "AST/source only: accepted _WindowsChild uses PROC_THREAD_ATTRIBUTE_JOB_LIST atomically before suspended CreateProcess/IsProcessInJob/ResumeThread; active1/stdinNUL oradmissionACK cannot be reused unchanged for venv redirector+interactiveMCP. New qualification-only fixed wrapper must freeze exactactive2/stdin-out-err pipes/limits/readback/entrymembership/active0cleanup, no productruntime edits."
+    }
+  },
+  "limits": [
+    "Reviewer separate process in verified author Windows environment, not independent reinstall",
+    "Windows atomic fault reference ownership only, Linux ownership pending",
+    "Official SDK reference lifetimes not atomic-launch proof",
+    "Factory construction not publication; partial frame witness not remote receipt or unseen frame reconstruction",
+    "No TLS/Linux/forms/current-artifact/full24/Ready/release proof"
+  ]
+}

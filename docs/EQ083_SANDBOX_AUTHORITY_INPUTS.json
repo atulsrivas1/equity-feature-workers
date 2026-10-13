@@ -1,0 +1,180 @@
+{
+  "schema": "eq083.sandbox-authority-research.v1",
+  "bases": {
+    "equity-features": "e524648851290f764873733fcd6d564413a9d475",
+    "equity-feature-workers": "f9368d821a4fd65adcc62b849753c81c46716c56"
+  },
+  "source_metadata": {
+    "repository": "https://codeberg.org/genodelabs/genode",
+    "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+    "scope": "Whole immediate eighteen-file Sandbox implementation plus interface/quota-transfer/session-state/abstract Env texts as immutable DATA; not complete lower Env/provider/kernel/vendor/build/guest ABI or finite physical teardown proof",
+    "total_bytes": 164479,
+    "new_tests": 0,
+    "files": [
+      {
+        "path": "repos/os/src/lib/sandbox/alias.h",
+        "git_sha1": "62fd9beb5fb97cd0373cf9f3c0280f67b48697e0",
+        "bytes": 1005,
+        "sha256": "7b081f6ae5643a0f8149e4bdd178428fd75bcaa5a25ff680fd98d9a1817e7120",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/alias.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/child.cc",
+        "git_sha1": "d9e0a75956f3e950d1b98b23fc86dab264c631dd",
+        "bytes": 26339,
+        "sha256": "5ab96dfc6e5a19d3f6726eedce89e929aeac9338f2891c78617105bebfa5aeef",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/child.cc"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/child.h",
+        "git_sha1": "6f28e47a12fa59b82414fcd3cf1b5d3a82c01042",
+        "bytes": 21964,
+        "sha256": "8a72d59bd02cf8c112f8fb33eb767853aa4f7428e470f0ac88266ab23c0b3950",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/child.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/child_registry.h",
+        "git_sha1": "315e6bfdc2b456ae14230a529487cb33043c8ace",
+        "bytes": 2319,
+        "sha256": "952137af4b54c1fc279a5fd121eba2d32c89385a0c5fd8cb000e02273a038bd3",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/child_registry.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/config_model.cc",
+        "git_sha1": "94158dcf6d6efbf156987a449a74d85dd5383416",
+        "bytes": 10910,
+        "sha256": "358b324d8a94d1e3d0933e8bf5d32cbb36b7135a8a93f6d65f10f85b161c063a",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/config_model.cc"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/config_model.h",
+        "git_sha1": "2c9021858000e1c1719cc4dee62b09f882ee96eb",
+        "bytes": 6572,
+        "sha256": "c8eb3e29e0aab07339e0473fe56b79db1adcfd4f25583eed346043a8aa3da42c",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/config_model.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/heartbeat.h",
+        "git_sha1": "d9f5e4c06bae62172dd6bf4a9819171f3505884f",
+        "bytes": 1788,
+        "sha256": "fe00d949f66a79dd34f2f91a18fde4031516b5ada75477f7ade3f2205ce38d6b",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/heartbeat.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/library.cc",
+        "git_sha1": "25637c1cb1ec336e19847bc7104ca828190dee00",
+        "bytes": 18434,
+        "sha256": "433488bd23c23dd5e9307a5375f1b890e932203a75dbf5dace5eb122224c5fc8",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/library.cc"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/name_registry.h",
+        "git_sha1": "26eafb4b1354c6ed3b932f405e7622a6fcc580f2",
+        "bytes": 825,
+        "sha256": "9e3c4970bb5688cdcb6912ad5bc6456ab441e582e39326e68234cd8d670eebdb",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/name_registry.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/report.h",
+        "git_sha1": "2d088c800e9448437de390fe0b3659305b713310",
+        "bytes": 2470,
+        "sha256": "19e2980721848a300cb08de0b0f77c3340e112ab27b8ee7f81e4731ae655bcca",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/report.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/route_model.h",
+        "git_sha1": "4e317e9ca0e7f4a0b16f170f317ef0d0c28db4d8",
+        "bytes": 6227,
+        "sha256": "493b42ea9881c365243bd6ab9b118a31a833b41c6246ce825bcef49483d3d979",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/route_model.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/server.cc",
+        "git_sha1": "599bb541a31dd877bf01522e1821c344d4165bd9",
+        "bytes": 14165,
+        "sha256": "46ffa2361d756ddb402fe38ab2986e67016d0ef506154e3cb2d4570116d2b0a5",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/server.cc"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/server.h",
+        "git_sha1": "339cb3cbb46a6be5071acb6ab512dfbff1b88d07",
+        "bytes": 3029,
+        "sha256": "74d82f41c0e169ec6b6aacaa495e43ba4beb6219c1894e485070530ab8fc4e52",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/server.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/service.h",
+        "git_sha1": "0b23fb84b87c009a9a4df7fba522a1e71d81c5b2",
+        "bytes": 4058,
+        "sha256": "4da363753af8ffb323886e5f96e497ecafb8efa1966cf36b9f1371bb686042ae",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/service.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/state_reporter.h",
+        "git_sha1": "48806b0ec9f57d31580b407e84c3a32cddf19a3f",
+        "bytes": 4886,
+        "sha256": "962974784c5b1051c57c9da92ea1befb03751efa25022fbbb2787a265143e779",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/state_reporter.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/types.h",
+        "git_sha1": "61ae5a18d02bee0bf86e323d093fc2e522a3c183",
+        "bytes": 2452,
+        "sha256": "1e0841dca3ea9ef2b1993e954d87795b770a4666933a2258aa8ab65e956e6fff",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/types.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/utils.h",
+        "git_sha1": "2179dac459da0e8d39556f03cb25cee19a89a45f",
+        "bytes": 6330,
+        "sha256": "0e00d79d326dd008ea3a487e4fbde93fa4f6184ec0841f3572564e400ad69d8f",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/utils.h"
+      },
+      {
+        "path": "repos/os/src/lib/sandbox/verbose.h",
+        "git_sha1": "debcea2d79cbba8c739547fe9c7efc86a46082c9",
+        "bytes": 712,
+        "sha256": "e5a998d597f4b339b2f12a21f2af3e7969415e6353914deda7cb367f04888bd1",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/src/lib/sandbox/verbose.h"
+      },
+      {
+        "path": "repos/os/include/sandbox/sandbox.h",
+        "git_sha1": "edd210d74750e0d2312f60af56d3634c73fc7927",
+        "bytes": 6982,
+        "sha256": "efc44ffc8913438f5f7ada6789a32f80834d671e827655b82c0068d88943e06d",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/sandbox/sandbox.h"
+      },
+      {
+        "path": "repos/base/include/base/quota_transfer.h",
+        "git_sha1": "67c3c8f4ebf7393de0a56eb0c95dd5d4b6d2d7e5",
+        "bytes": 3988,
+        "sha256": "2a489ba8fb3c81847bdc19192f42f9717ae197695b9848e4ef963780ff62d0b2",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/quota_transfer.h"
+      },
+      {
+        "path": "repos/base/include/base/session_state.h",
+        "git_sha1": "3552adb23f766a19a4d6a5b45c2d92bdfc230ac6",
+        "bytes": 8729,
+        "sha256": "e7eccd82145104a602d94eff78ccf25ae2fcc01b830065fbea20531e078126e3",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/session_state.h"
+      },
+      {
+        "path": "repos/base/src/lib/base/session_state.cc",
+        "git_sha1": "fd2e23e3b706ae01262ffb24b373960070418572",
+        "bytes": 5555,
+        "sha256": "609d822f997891b2a4a821007e3732f4500297930a15cda8559549af9c976f00",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/session_state.cc"
+      },
+      {
+        "path": "repos/base/include/base/env.h",
+        "git_sha1": "0f12d9f1cff602b4cdf9347c8528fe747fae570f",
+        "bytes": 4740,
+        "sha256": "4e117d2a12c864094707aebc08eae61d6c60f5018c952d9275418abc72fc96ef",
+        "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/env.h"
+      }
+    ]
+  },
+  "new_tests": 0,
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}

@@ -1,0 +1,5914 @@
+{
+  "schema": "eq083.tls-execution.v1",
+  "scope": "ACTUAL installed Windows seven-case TLS rawHTTPS/RemoteClient/officialClientSession; reviewer separateprocess SAMEverifiedauthorenvironment NOTindependentreinstall",
+  "executed_heads": {
+    "equity-features": "fb29e340da1e8af94b46b6d67d01c9fcbf994bf7",
+    "equity-feature-workers": "72c812c81c955abd1ab2eb563c05ecd2b6703542"
+  },
+  "owner": {
+    "bytes": 7687,
+    "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746"
+  },
+  "parent": {
+    "bytes": 43762,
+    "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a"
+  },
+  "copy": {
+    "bytes": 5806,
+    "sha256": "8248b34e3da50581c753f0f2f491aeefed9f4f27e5b6d895854ec1e5062d8515",
+    "raw_log": "eq083-tls-compact-harness-author.log",
+    "sha256_log": "03d7b029a8fb37c5a57a356588efceb3dfcc615e52939bdbb4cbfbc4f3be2bbe",
+    "exit_code": 0
+  },
+  "inputs": [
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "harness_path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+      "harness_path": "schemas/remote-v1.1.schema.json",
+      "bytes": 30039,
+      "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+      "harness_path": "schemas/mcp-tools.json",
+      "bytes": 104088,
+      "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_jobs.py",
+      "harness_path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/test_service.py",
+      "harness_path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "9055ecafe18254061015c33f4973d1f534077b4f",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "harness_path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "82e88703135d517825d09ae75d63fe15d4760a78",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+      "harness_path": "schemas/remote-v1.schema.json",
+      "bytes": 28666,
+      "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "2ceb179f9330ef7d75ee0ac378a6c3a7795d84fe",
+      "path": "docs/EQ083_TLS_REFERENCE_ENTRY.txt",
+      "harness_path": "docs/EQ083_TLS_REFERENCE_ENTRY.txt",
+      "bytes": 5916,
+      "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_TLS_OWNER_ENTRY.txt",
+      "harness_path": "docs/EQ083_TLS_OWNER_ENTRY.txt",
+      "bytes": 7687,
+      "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "2ceb179f9330ef7d75ee0ac378a6c3a7795d84fe",
+      "path": "docs/EQ083_TLS_SESSION_TRANSPORT.txt",
+      "harness_path": "docs/EQ083_TLS_SESSION_TRANSPORT.txt",
+      "bytes": 20709,
+      "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": null,
+      "path": "docs/EQ083_TLS_PROBE.txt",
+      "harness_path": "docs/EQ083_TLS_PROBE.txt",
+      "bytes": 43762,
+      "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a"
+    },
+    {
+      "repo": "equity-feature-workers",
+      "commit": "c67cab68c73e0d99809f46c53961dae9f5bdaff3",
+      "path": "docs/EQ083_REFERENCE_PROCESS.txt",
+      "harness_path": "docs/EQ083_REFERENCE_PROCESS.txt",
+      "bytes": 11944,
+      "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+    }
+  ],
+  "verified_windows_archive_map": {
+    "equity_feature_mcp-0.1.0a0-py3-none-any.whl": "49358ab38934053bc55db5fbd1e06d62b692fd6a7dd62b8324300c7293a10f93",
+    "equity_feature_mcp-0.1.0a0.tar.gz": "b10f2d8abd3bbaef4c4a1e3a45029e2c1b1c1d562e7a9a7ee1d5691d19e26c8a",
+    "equity_feature_client-0.1.0a0-py3-none-any.whl": "881b6059a37b3b076f26ac2ddcf14c2fa343fb0292a6aba3fc7652df500540b1",
+    "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2",
+    "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc",
+    "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8",
+    "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549",
+    "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb",
+    "equity_feature_service-0.1.0a3-py3-none-any.whl": "f6be07ba2dc03ae0d5fee65e21a6ac615f544344df3d5517e0eb20b64db62f56",
+    "equity_feature_workers-0.1.0a13-py3-none-any.whl": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324",
+    "equity_features-0.0.4a4-py3-none-any.whl": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0",
+    "annotated_types-0.8.0-py3-none-any.whl": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+    "anyio-4.15.1-py3-none-any.whl": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+    "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+    "certifi-2026.7.22-py3-none-any.whl": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+    "cffi-2.1.1-cp312-cp312-win_amd64.whl": "f53e442b08449d42821fa4a4fba000095af9f62742a500f978a9f557ec44339a",
+    "click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+    "colorama-0.4.6-py2.py3-none-any.whl": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+    "cryptography-50.0.2-cp311-abi3-win_amd64.whl": "7afa5a6602a9f29af1f3a2965f831bae7c9d5d597b7cbb716d41ab3b7d89879c",
+    "duckdb-1.5.6-cp312-cp312-win_amd64.whl": "09ff51b230219f0d8b47fc8a1e17fb595ba9fab0c3d96a6de4d00b8ff86b3cf1",
+    "h11-0.16.0-py3-none-any.whl": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+    "httpcore-1.0.9-py3-none-any.whl": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+    "httpx-0.28.1-py3-none-any.whl": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+    "httpx_sse-0.4.3-py3-none-any.whl": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+    "idna-3.20-py3-none-any.whl": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+    "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+    "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+    "mcp-1.30.0-py3-none-any.whl": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+    "numpy-2.2.6-cp312-cp312-win_amd64.whl": "c1f9540be57940698ed329904db803cf7a402f3fc200bfe599334c9bd84a40b2",
+    "pycparser-3.11-py3-none-any.whl": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+    "pydantic-2.14.0-py3-none-any.whl": "15fab1bea6f1dc5003b54fc2ecab230c1fd1dbade2acd4addc52d81e32416d4b",
+    "pydantic_core-2.50.0-cp312-cp312-win_amd64.whl": "1541c334af5d42cb9eb03862a9b4d2cfbfc670fd05172ec51f3ce02d704550f1",
+    "pydantic_settings-2.15.0-py3-none-any.whl": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+    "pyjwt-2.15.1-py3-none-any.whl": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+    "python_dotenv-1.2.4-py3-none-any.whl": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+    "python_multipart-0.0.32-py3-none-any.whl": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+    "pywin32-312-cp312-cp312-win_amd64.whl": "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc",
+    "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+    "rpds_py-2026.9.1-cp312-cp312-win_amd64.whl": "5ce8943f79c2210f7abcc28e86367b03b28d95027fd01c46d2472373ae70c86f",
+    "sse_starlette-3.5.0-py3-none-any.whl": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+    "starlette-1.7.0-py3-none-any.whl": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+    "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+    "typing_inspection-0.4.4-py3-none-any.whl": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+    "uvicorn-0.54.0-py3-none-any.whl": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+  },
+  "installed_versions": [
+    {
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1"
+    },
+    {
+      "name": "click",
+      "version": "8.5.0"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.2"
+    },
+    {
+      "name": "duckdb",
+      "version": "1.5.6"
+    },
+    {
+      "name": "equity-feature-client",
+      "version": "0.1.0a0"
+    },
+    {
+      "name": "equity-feature-contracts",
+      "version": "0.0.4a4"
+    },
+    {
+      "name": "equity-feature-duckdb",
+      "version": "0.1.0a8"
+    },
+    {
+      "name": "equity-feature-example-extensions",
+      "version": "0.1.0a0"
+    },
+    {
+      "name": "equity-feature-io-contracts",
+      "version": "0.1.0a2"
+    },
+    {
+      "name": "equity-feature-io-sdk",
+      "version": "0.1.0a2"
+    },
+    {
+      "name": "equity-feature-mcp",
+      "version": "0.1.0a0"
+    },
+    {
+      "name": "equity-feature-service",
+      "version": "0.1.0a3"
+    },
+    {
+      "name": "equity-feature-workers",
+      "version": "0.1.0a13"
+    },
+    {
+      "name": "equity-features",
+      "version": "0.0.4a4"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1"
+    },
+    {
+      "name": "httpx-sse",
+      "version": "0.4.3"
+    },
+    {
+      "name": "idna",
+      "version": "3.20"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1"
+    },
+    {
+      "name": "mcp",
+      "version": "1.30.0"
+    },
+    {
+      "name": "numpy",
+      "version": "2.2.6"
+    },
+    {
+      "name": "pip",
+      "version": "25.0.1"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.11"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.14.0"
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.50.0"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.15.0"
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.15.1"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.4"
+    },
+    {
+      "name": "python-multipart",
+      "version": "0.0.32"
+    },
+    {
+      "name": "pywin32",
+      "version": "312"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.9.1"
+    },
+    {
+      "name": "sse-starlette",
+      "version": "3.5.0"
+    },
+    {
+      "name": "starlette",
+      "version": "1.7.0"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.54.0"
+    }
+  ],
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6108085105",
+  "review_url": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6108115955",
+  "author": {
+    "raw_log": "eq083-three-lane-tls-corrective-author.log",
+    "bytes": 25556,
+    "sha256": "e7d25b0de597169b4dec5e66406a969dd75d2d375a91108eee57f9cffc7c0183",
+    "exit_code": 0,
+    "scenarios": [
+      {
+        "acks": [
+          {
+            "action": "settled",
+            "faults": [],
+            "mode": "verified-full-result",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "b31f93efbfd4f52a1407a9486504b429-243191c70b2c4c60b7a2f476c1951c47",
+              "queue": 0,
+              "reads": 1,
+              "result": "b31f93efbfd4f52a1407a9486504b429-6bc7959927a35fe0ca01c5a8ecebf686",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 1,
+              "failure": 0,
+              "success": 1
+            }
+          },
+          {
+            "action": "baseline",
+            "faults": [],
+            "mode": "verified-full-result",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "b31f93efbfd4f52a1407a9486504b429-243191c70b2c4c60b7a2f476c1951c47",
+              "queue": 0,
+              "reads": 1,
+              "result": "b31f93efbfd4f52a1407a9486504b429-6bc7959927a35fe0ca01c5a8ecebf686",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "arm",
+            "faults": [],
+            "mode": "verified-full-result",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "b31f93efbfd4f52a1407a9486504b429-243191c70b2c4c60b7a2f476c1951c47",
+              "queue": 0,
+              "reads": 1,
+              "result": "b31f93efbfd4f52a1407a9486504b429-6bc7959927a35fe0ca01c5a8ecebf686",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "restored",
+            "faults": [],
+            "mode": "verified-full-result",
+            "requests": 12,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "b31f93efbfd4f52a1407a9486504b429-243191c70b2c4c60b7a2f476c1951c47",
+              "queue": 0,
+              "reads": 1,
+              "result": "b31f93efbfd4f52a1407a9486504b429-6bc7959927a35fe0ca01c5a8ecebf686",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "final",
+            "faults": [],
+            "mode": "verified-full-result",
+            "requests": 18,
+            "sequence": 5,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "b31f93efbfd4f52a1407a9486504b429-243191c70b2c4c60b7a2f476c1951c47",
+              "queue": 0,
+              "reads": 1,
+              "result": "b31f93efbfd4f52a1407a9486504b429-6bc7959927a35fe0ca01c5a8ecebf686",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 18,
+              "failure": 0,
+              "success": 18
+            }
+          }
+        ],
+        "client_fault": 0,
+        "client_main": 6,
+        "direct_attempts": 5,
+        "direct_sends": 5,
+        "marker": "eq083-three-lane-tls",
+        "mode": "verified-full-result",
+        "native_exit": true,
+        "observations": [
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "verified-full-result",
+              "pid": 39508,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            "entry_exit": true,
+            "full_frames": 7,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "verified-full-result",
+            "ownership_closed": true,
+            "provider_calls": 5,
+            "role": "baseline"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "verified-full-result",
+              "pid": 53632,
+              "provider_calls": 2,
+              "role": "followup"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "verified-full-result",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "followup"
+          }
+        ],
+        "sdk_attempts": 7,
+        "sdk_http": 7,
+        "source_reads": 1,
+        "total": 18,
+        "wire_faults": []
+      },
+      {
+        "acks": [
+          {
+            "action": "settled",
+            "faults": [],
+            "mode": "untrusted-certificate",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "cd9100836568ae69124bddcff41627e4-0588df4aaf6f61b60ec59bd6a9ffdc24",
+              "queue": 0,
+              "reads": 1,
+              "result": "cd9100836568ae69124bddcff41627e4-7a2f6ff747fe12bade622056e948d53a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 1,
+              "failure": 0,
+              "success": 1
+            }
+          },
+          {
+            "action": "baseline",
+            "faults": [],
+            "mode": "untrusted-certificate",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "cd9100836568ae69124bddcff41627e4-0588df4aaf6f61b60ec59bd6a9ffdc24",
+              "queue": 0,
+              "reads": 1,
+              "result": "cd9100836568ae69124bddcff41627e4-7a2f6ff747fe12bade622056e948d53a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "arm",
+            "faults": [],
+            "mode": "untrusted-certificate",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "cd9100836568ae69124bddcff41627e4-0588df4aaf6f61b60ec59bd6a9ffdc24",
+              "queue": 0,
+              "reads": 1,
+              "result": "cd9100836568ae69124bddcff41627e4-7a2f6ff747fe12bade622056e948d53a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "restored",
+            "faults": [],
+            "mode": "untrusted-certificate",
+            "requests": 12,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "cd9100836568ae69124bddcff41627e4-0588df4aaf6f61b60ec59bd6a9ffdc24",
+              "queue": 0,
+              "reads": 1,
+              "result": "cd9100836568ae69124bddcff41627e4-7a2f6ff747fe12bade622056e948d53a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 15,
+              "failure": 3,
+              "success": 12
+            }
+          },
+          {
+            "action": "final",
+            "faults": [],
+            "mode": "untrusted-certificate",
+            "requests": 18,
+            "sequence": 5,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "cd9100836568ae69124bddcff41627e4-0588df4aaf6f61b60ec59bd6a9ffdc24",
+              "queue": 0,
+              "reads": 1,
+              "result": "cd9100836568ae69124bddcff41627e4-7a2f6ff747fe12bade622056e948d53a",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 21,
+              "failure": 3,
+              "success": 18
+            }
+          }
+        ],
+        "client_fault": 1,
+        "client_main": 6,
+        "direct_attempts": 6,
+        "direct_sends": 5,
+        "marker": "eq083-three-lane-tls",
+        "mode": "untrusted-certificate",
+        "native_exit": true,
+        "observations": [
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "untrusted-certificate",
+              "pid": 16112,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            "entry_exit": true,
+            "full_frames": 7,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "untrusted-certificate",
+            "ownership_closed": true,
+            "provider_calls": 5,
+            "role": "baseline"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "untrusted-certificate",
+              "pid": 57032,
+              "provider_calls": 1,
+              "role": "fault"
+            },
+            "entry_exit": true,
+            "full_frames": 3,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "untrusted-certificate",
+            "ownership_closed": true,
+            "provider_calls": 1,
+            "role": "fault"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "untrusted-certificate",
+              "pid": 39980,
+              "provider_calls": 2,
+              "role": "followup"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "untrusted-certificate",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "followup"
+          }
+        ],
+        "sdk_attempts": 8,
+        "sdk_http": 7,
+        "source_reads": 1,
+        "total": 18,
+        "wire_faults": [
+          {
+            "http_sent": false,
+            "mode": "untrusted-certificate",
+            "stage": "TLS handshake"
+          }
+        ]
+      },
+      {
+        "acks": [
+          {
+            "action": "settled",
+            "faults": [],
+            "mode": "hostname-mismatch",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a91dde8fc8c00cfa341c3f97003ec510-8a9fa1db114aa8d8e5eef3bb4a4cc945",
+              "queue": 0,
+              "reads": 1,
+              "result": "a91dde8fc8c00cfa341c3f97003ec510-2cf17db3ab26d511680e6abd5bee6a18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 1,
+              "failure": 0,
+              "success": 1
+            }
+          },
+          {
+            "action": "baseline",
+            "faults": [],
+            "mode": "hostname-mismatch",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a91dde8fc8c00cfa341c3f97003ec510-8a9fa1db114aa8d8e5eef3bb4a4cc945",
+              "queue": 0,
+              "reads": 1,
+              "result": "a91dde8fc8c00cfa341c3f97003ec510-2cf17db3ab26d511680e6abd5bee6a18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "arm",
+            "faults": [],
+            "mode": "hostname-mismatch",
+            "requests": 12,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a91dde8fc8c00cfa341c3f97003ec510-8a9fa1db114aa8d8e5eef3bb4a4cc945",
+              "queue": 0,
+              "reads": 1,
+              "result": "a91dde8fc8c00cfa341c3f97003ec510-2cf17db3ab26d511680e6abd5bee6a18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "restored",
+            "faults": [],
+            "mode": "hostname-mismatch",
+            "requests": 12,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a91dde8fc8c00cfa341c3f97003ec510-8a9fa1db114aa8d8e5eef3bb4a4cc945",
+              "queue": 0,
+              "reads": 1,
+              "result": "a91dde8fc8c00cfa341c3f97003ec510-2cf17db3ab26d511680e6abd5bee6a18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 15,
+              "failure": 3,
+              "success": 12
+            }
+          },
+          {
+            "action": "final",
+            "faults": [],
+            "mode": "hostname-mismatch",
+            "requests": 18,
+            "sequence": 5,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "a91dde8fc8c00cfa341c3f97003ec510-8a9fa1db114aa8d8e5eef3bb4a4cc945",
+              "queue": 0,
+              "reads": 1,
+              "result": "a91dde8fc8c00cfa341c3f97003ec510-2cf17db3ab26d511680e6abd5bee6a18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 21,
+              "failure": 3,
+              "success": 18
+            }
+          }
+        ],
+        "client_fault": 1,
+        "client_main": 6,
+        "direct_attempts": 6,
+        "direct_sends": 5,
+        "marker": "eq083-three-lane-tls",
+        "mode": "hostname-mismatch",
+        "native_exit": true,
+        "observations": [
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "hostname-mismatch",
+              "pid": 57828,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            "entry_exit": true,
+            "full_frames": 7,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "hostname-mismatch",
+            "ownership_closed": true,
+            "provider_calls": 5,
+            "role": "baseline"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "hostname-mismatch",
+              "pid": 50356,
+              "provider_calls": 1,
+              "role": "fault"
+            },
+            "entry_exit": true,
+            "full_frames": 3,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "hostname-mismatch",
+            "ownership_closed": true,
+            "provider_calls": 1,
+            "role": "fault"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "hostname-mismatch",
+              "pid": 42152,
+              "provider_calls": 2,
+              "role": "followup"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "hostname-mismatch",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "followup"
+          }
+        ],
+        "sdk_attempts": 8,
+        "sdk_http": 7,
+        "source_reads": 1,
+        "total": 18,
+        "wire_faults": [
+          {
+            "http_sent": false,
+            "mode": "hostname-mismatch",
+            "stage": "TLS handshake"
+          }
+        ]
+      },
+      {
+        "acks": [
+          {
+            "action": "settled",
+            "faults": [],
+            "mode": "extra-response-byte",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "65ada38680ed0d031d6b98dd8b6aa3f6-2006468d322b120b447713f5ad732e45",
+              "queue": 0,
+              "reads": 1,
+              "result": "65ada38680ed0d031d6b98dd8b6aa3f6-2ed9a491c8f7d060088c25ea4475fbc3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 1,
+              "failure": 0,
+              "success": 1
+            }
+          },
+          {
+            "action": "baseline",
+            "faults": [],
+            "mode": "extra-response-byte",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "65ada38680ed0d031d6b98dd8b6aa3f6-2006468d322b120b447713f5ad732e45",
+              "queue": 0,
+              "reads": 1,
+              "result": "65ada38680ed0d031d6b98dd8b6aa3f6-2ed9a491c8f7d060088c25ea4475fbc3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "arm",
+            "faults": [],
+            "mode": "extra-response-byte",
+            "requests": 13,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "65ada38680ed0d031d6b98dd8b6aa3f6-2006468d322b120b447713f5ad732e45",
+              "queue": 0,
+              "reads": 1,
+              "result": "65ada38680ed0d031d6b98dd8b6aa3f6-2ed9a491c8f7d060088c25ea4475fbc3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 13,
+              "failure": 0,
+              "success": 13
+            }
+          },
+          {
+            "action": "restored",
+            "faults": [
+              {
+                "forwarded_bytes": 5769,
+                "original_bytes": 5768,
+                "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+              },
+              {
+                "forwarded_bytes": 5768,
+                "original_bytes": 5767,
+                "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+              },
+              {
+                "forwarded_bytes": 5785,
+                "original_bytes": 5784,
+                "original_sha256": "3f104e3f0725d6f93e80c7d15e3d8bd7ca15a95bb12056d2c0430e8e5af68198"
+              }
+            ],
+            "mode": "extra-response-byte",
+            "requests": 16,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "65ada38680ed0d031d6b98dd8b6aa3f6-2006468d322b120b447713f5ad732e45",
+              "queue": 0,
+              "reads": 1,
+              "result": "65ada38680ed0d031d6b98dd8b6aa3f6-2ed9a491c8f7d060088c25ea4475fbc3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 16,
+              "failure": 0,
+              "success": 16
+            }
+          },
+          {
+            "action": "final",
+            "faults": [
+              {
+                "forwarded_bytes": 5769,
+                "original_bytes": 5768,
+                "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+              },
+              {
+                "forwarded_bytes": 5768,
+                "original_bytes": 5767,
+                "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+              },
+              {
+                "forwarded_bytes": 5785,
+                "original_bytes": 5784,
+                "original_sha256": "3f104e3f0725d6f93e80c7d15e3d8bd7ca15a95bb12056d2c0430e8e5af68198"
+              }
+            ],
+            "mode": "extra-response-byte",
+            "requests": 22,
+            "sequence": 5,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "65ada38680ed0d031d6b98dd8b6aa3f6-2006468d322b120b447713f5ad732e45",
+              "queue": 0,
+              "reads": 1,
+              "result": "65ada38680ed0d031d6b98dd8b6aa3f6-2ed9a491c8f7d060088c25ea4475fbc3",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 22,
+              "failure": 0,
+              "success": 22
+            }
+          }
+        ],
+        "client_fault": 1,
+        "client_main": 6,
+        "direct_attempts": 6,
+        "direct_sends": 6,
+        "marker": "eq083-three-lane-tls",
+        "mode": "extra-response-byte",
+        "native_exit": true,
+        "observations": [
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "extra-response-byte",
+              "pid": 56864,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            "entry_exit": true,
+            "full_frames": 7,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "extra-response-byte",
+            "ownership_closed": true,
+            "provider_calls": 5,
+            "role": "baseline"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "extra-response-byte",
+              "pid": 23708,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "extra-response-byte",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "fault"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "extra-response-byte",
+              "pid": 60508,
+              "provider_calls": 2,
+              "role": "followup"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "extra-response-byte",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "followup"
+          }
+        ],
+        "sdk_attempts": 9,
+        "sdk_http": 9,
+        "source_reads": 1,
+        "total": 22,
+        "wire_faults": [
+          {
+            "content_lengths": 1,
+            "declared_bytes": 5768,
+            "mode": "extra-response-byte",
+            "physical_eof": true,
+            "received_bytes": 5769
+          }
+        ]
+      },
+      {
+        "acks": [
+          {
+            "action": "settled",
+            "faults": [],
+            "mode": "truncated-response-byte",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "090ea87561de80f054519b7f149bd02c-d4a703207396b9cfc8bea2f2d967261f",
+              "queue": 0,
+              "reads": 1,
+              "result": "090ea87561de80f054519b7f149bd02c-48c6e8ba5ff9ffa5bb5c501a3786620f",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 1,
+              "failure": 0,
+              "success": 1
+            }
+          },
+          {
+            "action": "baseline",
+            "faults": [],
+            "mode": "truncated-response-byte",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "090ea87561de80f054519b7f149bd02c-d4a703207396b9cfc8bea2f2d967261f",
+              "queue": 0,
+              "reads": 1,
+              "result": "090ea87561de80f054519b7f149bd02c-48c6e8ba5ff9ffa5bb5c501a3786620f",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "arm",
+            "faults": [],
+            "mode": "truncated-response-byte",
+            "requests": 13,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "090ea87561de80f054519b7f149bd02c-d4a703207396b9cfc8bea2f2d967261f",
+              "queue": 0,
+              "reads": 1,
+              "result": "090ea87561de80f054519b7f149bd02c-48c6e8ba5ff9ffa5bb5c501a3786620f",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 13,
+              "failure": 0,
+              "success": 13
+            }
+          },
+          {
+            "action": "restored",
+            "faults": [
+              {
+                "forwarded_bytes": 5767,
+                "original_bytes": 5768,
+                "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+              },
+              {
+                "forwarded_bytes": 5766,
+                "original_bytes": 5767,
+                "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+              },
+              {
+                "forwarded_bytes": 5783,
+                "original_bytes": 5784,
+                "original_sha256": "dc9b75cffcc2931fcd68addc71348b0bb01fe507ec4bdaa8faa1454a7713d8b3"
+              }
+            ],
+            "mode": "truncated-response-byte",
+            "requests": 16,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "090ea87561de80f054519b7f149bd02c-d4a703207396b9cfc8bea2f2d967261f",
+              "queue": 0,
+              "reads": 1,
+              "result": "090ea87561de80f054519b7f149bd02c-48c6e8ba5ff9ffa5bb5c501a3786620f",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 16,
+              "failure": 0,
+              "success": 16
+            }
+          },
+          {
+            "action": "final",
+            "faults": [
+              {
+                "forwarded_bytes": 5767,
+                "original_bytes": 5768,
+                "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+              },
+              {
+                "forwarded_bytes": 5766,
+                "original_bytes": 5767,
+                "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+              },
+              {
+                "forwarded_bytes": 5783,
+                "original_bytes": 5784,
+                "original_sha256": "dc9b75cffcc2931fcd68addc71348b0bb01fe507ec4bdaa8faa1454a7713d8b3"
+              }
+            ],
+            "mode": "truncated-response-byte",
+            "requests": 22,
+            "sequence": 5,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "090ea87561de80f054519b7f149bd02c-d4a703207396b9cfc8bea2f2d967261f",
+              "queue": 0,
+              "reads": 1,
+              "result": "090ea87561de80f054519b7f149bd02c-48c6e8ba5ff9ffa5bb5c501a3786620f",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 22,
+              "failure": 0,
+              "success": 22
+            }
+          }
+        ],
+        "client_fault": 1,
+        "client_main": 6,
+        "direct_attempts": 6,
+        "direct_sends": 6,
+        "marker": "eq083-three-lane-tls",
+        "mode": "truncated-response-byte",
+        "native_exit": true,
+        "observations": [
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "truncated-response-byte",
+              "pid": 33916,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            "entry_exit": true,
+            "full_frames": 7,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "truncated-response-byte",
+            "ownership_closed": true,
+            "provider_calls": 5,
+            "role": "baseline"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "truncated-response-byte",
+              "pid": 31952,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "truncated-response-byte",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "fault"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "truncated-response-byte",
+              "pid": 45776,
+              "provider_calls": 2,
+              "role": "followup"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "truncated-response-byte",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "followup"
+          }
+        ],
+        "sdk_attempts": 9,
+        "sdk_http": 9,
+        "source_reads": 1,
+        "total": 22,
+        "wire_faults": [
+          {
+            "content_lengths": 1,
+            "declared_bytes": 5768,
+            "mode": "truncated-response-byte",
+            "physical_eof": true,
+            "received_bytes": 5767
+          }
+        ]
+      },
+      {
+        "acks": [
+          {
+            "action": "settled",
+            "faults": [],
+            "mode": "duplicate-content-length",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "810955aa5a8bad5781f930955c0293eb-4bf3a5f7846ce27a56defab6d7594b31",
+              "queue": 0,
+              "reads": 1,
+              "result": "810955aa5a8bad5781f930955c0293eb-b3a6f9fa1c3c98df325522bd6af12035",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 1,
+              "failure": 0,
+              "success": 1
+            }
+          },
+          {
+            "action": "baseline",
+            "faults": [],
+            "mode": "duplicate-content-length",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "810955aa5a8bad5781f930955c0293eb-4bf3a5f7846ce27a56defab6d7594b31",
+              "queue": 0,
+              "reads": 1,
+              "result": "810955aa5a8bad5781f930955c0293eb-b3a6f9fa1c3c98df325522bd6af12035",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "arm",
+            "faults": [],
+            "mode": "duplicate-content-length",
+            "requests": 13,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "810955aa5a8bad5781f930955c0293eb-4bf3a5f7846ce27a56defab6d7594b31",
+              "queue": 0,
+              "reads": 1,
+              "result": "810955aa5a8bad5781f930955c0293eb-b3a6f9fa1c3c98df325522bd6af12035",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 13,
+              "failure": 0,
+              "success": 13
+            }
+          },
+          {
+            "action": "restored",
+            "faults": [
+              {
+                "forwarded_bytes": 5768,
+                "original_bytes": 5768,
+                "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+              },
+              {
+                "forwarded_bytes": 5767,
+                "original_bytes": 5767,
+                "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+              },
+              {
+                "forwarded_bytes": 5784,
+                "original_bytes": 5784,
+                "original_sha256": "408d095d21c3b6fb857bccb46d4b5b0874de86a2bfc77744112e11b51ef398da"
+              }
+            ],
+            "mode": "duplicate-content-length",
+            "requests": 16,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "810955aa5a8bad5781f930955c0293eb-4bf3a5f7846ce27a56defab6d7594b31",
+              "queue": 0,
+              "reads": 1,
+              "result": "810955aa5a8bad5781f930955c0293eb-b3a6f9fa1c3c98df325522bd6af12035",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 16,
+              "failure": 0,
+              "success": 16
+            }
+          },
+          {
+            "action": "final",
+            "faults": [
+              {
+                "forwarded_bytes": 5768,
+                "original_bytes": 5768,
+                "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+              },
+              {
+                "forwarded_bytes": 5767,
+                "original_bytes": 5767,
+                "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+              },
+              {
+                "forwarded_bytes": 5784,
+                "original_bytes": 5784,
+                "original_sha256": "408d095d21c3b6fb857bccb46d4b5b0874de86a2bfc77744112e11b51ef398da"
+              }
+            ],
+            "mode": "duplicate-content-length",
+            "requests": 22,
+            "sequence": 5,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "810955aa5a8bad5781f930955c0293eb-4bf3a5f7846ce27a56defab6d7594b31",
+              "queue": 0,
+              "reads": 1,
+              "result": "810955aa5a8bad5781f930955c0293eb-b3a6f9fa1c3c98df325522bd6af12035",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 22,
+              "failure": 0,
+              "success": 22
+            }
+          }
+        ],
+        "client_fault": 1,
+        "client_main": 6,
+        "direct_attempts": 6,
+        "direct_sends": 6,
+        "marker": "eq083-three-lane-tls",
+        "mode": "duplicate-content-length",
+        "native_exit": true,
+        "observations": [
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "duplicate-content-length",
+              "pid": 33556,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            "entry_exit": true,
+            "full_frames": 7,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "duplicate-content-length",
+            "ownership_closed": true,
+            "provider_calls": 5,
+            "role": "baseline"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "duplicate-content-length",
+              "pid": 20576,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "duplicate-content-length",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "fault"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "duplicate-content-length",
+              "pid": 63252,
+              "provider_calls": 2,
+              "role": "followup"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "duplicate-content-length",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "followup"
+          }
+        ],
+        "sdk_attempts": 9,
+        "sdk_http": 9,
+        "source_reads": 1,
+        "total": 22,
+        "wire_faults": [
+          {
+            "content_lengths": 2,
+            "declared_bytes": 5768,
+            "mode": "duplicate-content-length",
+            "physical_eof": true,
+            "received_bytes": 5768
+          }
+        ]
+      },
+      {
+        "acks": [
+          {
+            "action": "settled",
+            "faults": [],
+            "mode": "actual-owner-denial",
+            "requests": 1,
+            "sequence": 1,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "349cc8f2e18192919113cd57deaa9d04-468619cf043d7508bf54465073d9c6d0",
+              "queue": 0,
+              "reads": 1,
+              "result": "349cc8f2e18192919113cd57deaa9d04-e2688d4d282720bfc36a5cf5f1621b18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 1,
+              "failure": 0,
+              "success": 1
+            }
+          },
+          {
+            "action": "baseline",
+            "faults": [],
+            "mode": "actual-owner-denial",
+            "requests": 12,
+            "sequence": 2,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "349cc8f2e18192919113cd57deaa9d04-468619cf043d7508bf54465073d9c6d0",
+              "queue": 0,
+              "reads": 1,
+              "result": "349cc8f2e18192919113cd57deaa9d04-e2688d4d282720bfc36a5cf5f1621b18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 12,
+              "failure": 0,
+              "success": 12
+            }
+          },
+          {
+            "action": "arm",
+            "faults": [],
+            "mode": "actual-owner-denial",
+            "requests": 13,
+            "sequence": 3,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "349cc8f2e18192919113cd57deaa9d04-468619cf043d7508bf54465073d9c6d0",
+              "queue": 0,
+              "reads": 1,
+              "result": "349cc8f2e18192919113cd57deaa9d04-e2688d4d282720bfc36a5cf5f1621b18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 13,
+              "failure": 0,
+              "success": 13
+            }
+          },
+          {
+            "action": "restored",
+            "faults": [],
+            "mode": "actual-owner-denial",
+            "requests": 16,
+            "sequence": 4,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "349cc8f2e18192919113cd57deaa9d04-468619cf043d7508bf54465073d9c6d0",
+              "queue": 0,
+              "reads": 1,
+              "result": "349cc8f2e18192919113cd57deaa9d04-e2688d4d282720bfc36a5cf5f1621b18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 16,
+              "failure": 0,
+              "success": 16
+            }
+          },
+          {
+            "action": "final",
+            "faults": [],
+            "mode": "actual-owner-denial",
+            "requests": 22,
+            "sequence": 5,
+            "snapshot": {
+              "expiry": 300000000100,
+              "held": 17675,
+              "job": "349cc8f2e18192919113cd57deaa9d04-468619cf043d7508bf54465073d9c6d0",
+              "queue": 0,
+              "reads": 1,
+              "result": "349cc8f2e18192919113cd57deaa9d04-e2688d4d282720bfc36a5cf5f1621b18",
+              "running": null,
+              "sink_entries": 1,
+              "sizes": [
+                4696,
+                6261,
+                3318,
+                3400
+              ],
+              "state": "succeeded"
+            },
+            "tls": {
+              "accepts": 22,
+              "failure": 0,
+              "success": 22
+            }
+          }
+        ],
+        "client_fault": 1,
+        "client_main": 6,
+        "direct_attempts": 6,
+        "direct_sends": 6,
+        "marker": "eq083-three-lane-tls",
+        "mode": "actual-owner-denial",
+        "native_exit": true,
+        "observations": [
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "actual-owner-denial",
+              "pid": 40100,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            "entry_exit": true,
+            "full_frames": 7,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "actual-owner-denial",
+            "ownership_closed": true,
+            "provider_calls": 5,
+            "role": "baseline"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "actual-owner-denial",
+              "pid": 50188,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "actual-owner-denial",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "fault"
+          },
+          {
+            "closed": {
+              "marker": "eq083-mcp-closed",
+              "mode": "actual-owner-denial",
+              "pid": 37688,
+              "provider_calls": 2,
+              "role": "followup"
+            },
+            "entry_exit": true,
+            "full_frames": 4,
+            "job_empty": true,
+            "launcher_exit": true,
+            "mode": "actual-owner-denial",
+            "ownership_closed": true,
+            "provider_calls": 2,
+            "role": "followup"
+          }
+        ],
+        "sdk_attempts": 9,
+        "sdk_http": 9,
+        "source_reads": 1,
+        "total": 22,
+        "wire_faults": []
+      }
+    ]
+  },
+  "reviewer": {
+    "execution": {
+      "raw_log": "eq083-three-lane-tls-corrective-reviewer.log",
+      "bytes": 25556,
+      "sha256": "7deccf530b3945aa7a439234dbf1348ac967889eb44cd7d965d83c7365263645",
+      "exit_code": 0,
+      "scenarios": [
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 12,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 12,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 18,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 18,
+                "failure": 0,
+                "success": 18
+              }
+            }
+          ],
+          "client_fault": 0,
+          "client_main": 6,
+          "direct_attempts": 5,
+          "direct_sends": 5,
+          "marker": "eq083-three-lane-tls",
+          "mode": "verified-full-result",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "verified-full-result",
+                "pid": 63904,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "verified-full-result",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "verified-full-result",
+                "pid": 17048,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "verified-full-result",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 7,
+          "sdk_http": 7,
+          "source_reads": 1,
+          "total": 18,
+          "wire_faults": []
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 12,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 12,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 15,
+                "failure": 3,
+                "success": 12
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 18,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 21,
+                "failure": 3,
+                "success": 18
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 5,
+          "marker": "eq083-three-lane-tls",
+          "mode": "untrusted-certificate",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "untrusted-certificate",
+                "pid": 15808,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "untrusted-certificate",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "untrusted-certificate",
+                "pid": 53356,
+                "provider_calls": 1,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 3,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "untrusted-certificate",
+              "ownership_closed": true,
+              "provider_calls": 1,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "untrusted-certificate",
+                "pid": 52416,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "untrusted-certificate",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 8,
+          "sdk_http": 7,
+          "source_reads": 1,
+          "total": 18,
+          "wire_faults": [
+            {
+              "http_sent": false,
+              "mode": "untrusted-certificate",
+              "stage": "TLS handshake"
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 12,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 12,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 15,
+                "failure": 3,
+                "success": 12
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 18,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 21,
+                "failure": 3,
+                "success": 18
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 5,
+          "marker": "eq083-three-lane-tls",
+          "mode": "hostname-mismatch",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "hostname-mismatch",
+                "pid": 56492,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "hostname-mismatch",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "hostname-mismatch",
+                "pid": 30564,
+                "provider_calls": 1,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 3,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "hostname-mismatch",
+              "ownership_closed": true,
+              "provider_calls": 1,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "hostname-mismatch",
+                "pid": 21408,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "hostname-mismatch",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 8,
+          "sdk_http": 7,
+          "source_reads": 1,
+          "total": 18,
+          "wire_faults": [
+            {
+              "http_sent": false,
+              "mode": "hostname-mismatch",
+              "stage": "TLS handshake"
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "extra-response-byte",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "extra-response-byte",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "extra-response-byte",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [
+                {
+                  "forwarded_bytes": 5769,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5785,
+                  "original_bytes": 5784,
+                  "original_sha256": "168bf84dbe9622d9e828be8fd516a20508d645def503f1c616a0317a0fb6e7f4"
+                }
+              ],
+              "mode": "extra-response-byte",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [
+                {
+                  "forwarded_bytes": 5769,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5785,
+                  "original_bytes": 5784,
+                  "original_sha256": "168bf84dbe9622d9e828be8fd516a20508d645def503f1c616a0317a0fb6e7f4"
+                }
+              ],
+              "mode": "extra-response-byte",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "extra-response-byte",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "extra-response-byte",
+                "pid": 17872,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "extra-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "extra-response-byte",
+                "pid": 15932,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "extra-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "extra-response-byte",
+                "pid": 40812,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "extra-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": [
+            {
+              "content_lengths": 1,
+              "declared_bytes": 5768,
+              "mode": "extra-response-byte",
+              "physical_eof": true,
+              "received_bytes": 5769
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "truncated-response-byte",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "truncated-response-byte",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "truncated-response-byte",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5766,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5783,
+                  "original_bytes": 5784,
+                  "original_sha256": "8a9199aa3d6cb34c3550ab181eab08328cdf25cbf23b9d08173ad519dce40acd"
+                }
+              ],
+              "mode": "truncated-response-byte",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5766,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5783,
+                  "original_bytes": 5784,
+                  "original_sha256": "8a9199aa3d6cb34c3550ab181eab08328cdf25cbf23b9d08173ad519dce40acd"
+                }
+              ],
+              "mode": "truncated-response-byte",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "truncated-response-byte",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "truncated-response-byte",
+                "pid": 13228,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "truncated-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "truncated-response-byte",
+                "pid": 32532,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "truncated-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "truncated-response-byte",
+                "pid": 23712,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "truncated-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": [
+            {
+              "content_lengths": 1,
+              "declared_bytes": 5768,
+              "mode": "truncated-response-byte",
+              "physical_eof": true,
+              "received_bytes": 5767
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "duplicate-content-length",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "duplicate-content-length",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "duplicate-content-length",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5784,
+                  "original_bytes": 5784,
+                  "original_sha256": "66bdae239ac8248717e3411ae16c5fe21841b8d7d6e7fe45edbc4bae4599567b"
+                }
+              ],
+              "mode": "duplicate-content-length",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5784,
+                  "original_bytes": 5784,
+                  "original_sha256": "66bdae239ac8248717e3411ae16c5fe21841b8d7d6e7fe45edbc4bae4599567b"
+                }
+              ],
+              "mode": "duplicate-content-length",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "duplicate-content-length",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "duplicate-content-length",
+                "pid": 12256,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "duplicate-content-length",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "duplicate-content-length",
+                "pid": 38220,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "duplicate-content-length",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "duplicate-content-length",
+                "pid": 49060,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "duplicate-content-length",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": [
+            {
+              "content_lengths": 2,
+              "declared_bytes": 5768,
+              "mode": "duplicate-content-length",
+              "physical_eof": true,
+              "received_bytes": 5768
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "actual-owner-denial",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "actual-owner-denial",
+                "pid": 38392,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "actual-owner-denial",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "actual-owner-denial",
+                "pid": 56560,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "actual-owner-denial",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "actual-owner-denial",
+                "pid": 50216,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "actual-owner-denial",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": []
+        }
+      ]
+    },
+    "report": {
+      "disposition": "APPROVED actual Windows TLS feasibility",
+      "heads": {
+        "equity-features": "fb29e340da1e8af94b46b6d67d01c9fcbf994bf7",
+        "equity-feature-workers": "72c812c81c955abd1ab2eb563c05ecd2b6703542"
+      },
+      "scope": "Actual separate-process Windows installed-I seven-case TLS feasibility; reused verified author environment/harness, not independent reinstall.",
+      "parent_bytes": 43762,
+      "parent_sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a",
+      "owner_bytes": 7687,
+      "owner_sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746",
+      "copier_bytes": 5806,
+      "copier_sha256": "8248b34e3da50581c753f0f2f491aeefed9f4f27e5b6d895854ec1e5062d8515",
+      "harness_inputs": 12,
+      "accepted_archives": 44,
+      "verified_setup_wheels": 43,
+      "exit_code": 0,
+      "elapsed_seconds": 50.43799999996554,
+      "raw_log": "C:\\Users\\Monikasrivas1\\AppData\\Local\\Temp\\equity-r6-postreview-20261008\\eq083-three-lane-tls-corrective-reviewer.log",
+      "raw_log_sha256": "7deccf530b3945aa7a439234dbf1348ac967889eb44cd7d965d83c7365263645",
+      "actual_vectors": [
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 12,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 12,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "verified-full-result",
+              "requests": 18,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "600b4b32a8d6be40219cd3700348bbae-3d6592ad0ad651ced74561bc99efc3bd",
+                "queue": 0,
+                "reads": 1,
+                "result": "600b4b32a8d6be40219cd3700348bbae-d6523e00531c2e2ae1493707c1016ed0",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 18,
+                "failure": 0,
+                "success": 18
+              }
+            }
+          ],
+          "client_fault": 0,
+          "client_main": 6,
+          "direct_attempts": 5,
+          "direct_sends": 5,
+          "marker": "eq083-three-lane-tls",
+          "mode": "verified-full-result",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "verified-full-result",
+                "pid": 63904,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "verified-full-result",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "verified-full-result",
+                "pid": 17048,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "verified-full-result",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 7,
+          "sdk_http": 7,
+          "source_reads": 1,
+          "total": 18,
+          "wire_faults": []
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 12,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 12,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 15,
+                "failure": 3,
+                "success": 12
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "untrusted-certificate",
+              "requests": 18,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3a7f437e30029ca7632c4d777f1a5505-ef1915476b09f00f646f5e4c0efcbb6f",
+                "queue": 0,
+                "reads": 1,
+                "result": "3a7f437e30029ca7632c4d777f1a5505-5578fa5147f6ac3071f59a1488807f7b",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 21,
+                "failure": 3,
+                "success": 18
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 5,
+          "marker": "eq083-three-lane-tls",
+          "mode": "untrusted-certificate",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "untrusted-certificate",
+                "pid": 15808,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "untrusted-certificate",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "untrusted-certificate",
+                "pid": 53356,
+                "provider_calls": 1,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 3,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "untrusted-certificate",
+              "ownership_closed": true,
+              "provider_calls": 1,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "untrusted-certificate",
+                "pid": 52416,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "untrusted-certificate",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 8,
+          "sdk_http": 7,
+          "source_reads": 1,
+          "total": 18,
+          "wire_faults": [
+            {
+              "http_sent": false,
+              "mode": "untrusted-certificate",
+              "stage": "TLS handshake"
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 12,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 12,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 15,
+                "failure": 3,
+                "success": 12
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "hostname-mismatch",
+              "requests": 18,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "290072820b3a174b36917fb72087d433-c15550d66229911fcd25de74ef2ed0c4",
+                "queue": 0,
+                "reads": 1,
+                "result": "290072820b3a174b36917fb72087d433-41619087ca8f0dba35bd540e323557dc",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 21,
+                "failure": 3,
+                "success": 18
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 5,
+          "marker": "eq083-three-lane-tls",
+          "mode": "hostname-mismatch",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "hostname-mismatch",
+                "pid": 56492,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "hostname-mismatch",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "hostname-mismatch",
+                "pid": 30564,
+                "provider_calls": 1,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 3,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "hostname-mismatch",
+              "ownership_closed": true,
+              "provider_calls": 1,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "hostname-mismatch",
+                "pid": 21408,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "hostname-mismatch",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 8,
+          "sdk_http": 7,
+          "source_reads": 1,
+          "total": 18,
+          "wire_faults": [
+            {
+              "http_sent": false,
+              "mode": "hostname-mismatch",
+              "stage": "TLS handshake"
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "extra-response-byte",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "extra-response-byte",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "extra-response-byte",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [
+                {
+                  "forwarded_bytes": 5769,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5785,
+                  "original_bytes": 5784,
+                  "original_sha256": "168bf84dbe9622d9e828be8fd516a20508d645def503f1c616a0317a0fb6e7f4"
+                }
+              ],
+              "mode": "extra-response-byte",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [
+                {
+                  "forwarded_bytes": 5769,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5785,
+                  "original_bytes": 5784,
+                  "original_sha256": "168bf84dbe9622d9e828be8fd516a20508d645def503f1c616a0317a0fb6e7f4"
+                }
+              ],
+              "mode": "extra-response-byte",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "9b94329035dbe331e1e58be5f2b96c00-1940f9cc8303ea3efb74eedd6892bffe",
+                "queue": 0,
+                "reads": 1,
+                "result": "9b94329035dbe331e1e58be5f2b96c00-7c9827e78c352c2e7d4c5c83b39ddfaa",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "extra-response-byte",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "extra-response-byte",
+                "pid": 17872,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "extra-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "extra-response-byte",
+                "pid": 15932,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "extra-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "extra-response-byte",
+                "pid": 40812,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "extra-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": [
+            {
+              "content_lengths": 1,
+              "declared_bytes": 5768,
+              "mode": "extra-response-byte",
+              "physical_eof": true,
+              "received_bytes": 5769
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "truncated-response-byte",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "truncated-response-byte",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "truncated-response-byte",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5766,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5783,
+                  "original_bytes": 5784,
+                  "original_sha256": "8a9199aa3d6cb34c3550ab181eab08328cdf25cbf23b9d08173ad519dce40acd"
+                }
+              ],
+              "mode": "truncated-response-byte",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5766,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5783,
+                  "original_bytes": 5784,
+                  "original_sha256": "8a9199aa3d6cb34c3550ab181eab08328cdf25cbf23b9d08173ad519dce40acd"
+                }
+              ],
+              "mode": "truncated-response-byte",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "3041ad9e167476d45c18d89b2cfa7a7d-36b9a881919432de9145b4d4c4bb9f15",
+                "queue": 0,
+                "reads": 1,
+                "result": "3041ad9e167476d45c18d89b2cfa7a7d-32cbee2b80f44841d0467647eb56e816",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "truncated-response-byte",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "truncated-response-byte",
+                "pid": 13228,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "truncated-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "truncated-response-byte",
+                "pid": 32532,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "truncated-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "truncated-response-byte",
+                "pid": 23712,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "truncated-response-byte",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": [
+            {
+              "content_lengths": 1,
+              "declared_bytes": 5768,
+              "mode": "truncated-response-byte",
+              "physical_eof": true,
+              "received_bytes": 5767
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "duplicate-content-length",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "duplicate-content-length",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "duplicate-content-length",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5784,
+                  "original_bytes": 5784,
+                  "original_sha256": "66bdae239ac8248717e3411ae16c5fe21841b8d7d6e7fe45edbc4bae4599567b"
+                }
+              ],
+              "mode": "duplicate-content-length",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [
+                {
+                  "forwarded_bytes": 5768,
+                  "original_bytes": 5768,
+                  "original_sha256": "1a6cf3b788febd2884520929b92bb8b66b10412e0a812be321ac1fb9efaf7883"
+                },
+                {
+                  "forwarded_bytes": 5767,
+                  "original_bytes": 5767,
+                  "original_sha256": "e4764dd0504383ddcdca6f81d337f76bbd2484dc5769d04a5acf3b36c73a6d5a"
+                },
+                {
+                  "forwarded_bytes": 5784,
+                  "original_bytes": 5784,
+                  "original_sha256": "66bdae239ac8248717e3411ae16c5fe21841b8d7d6e7fe45edbc4bae4599567b"
+                }
+              ],
+              "mode": "duplicate-content-length",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "02dbd78871c5af923ea77c0e255eed17-cd535f893e2747a0ab876bac2656cac1",
+                "queue": 0,
+                "reads": 1,
+                "result": "02dbd78871c5af923ea77c0e255eed17-8a4a953116c69b08d541c02864c74bd5",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "duplicate-content-length",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "duplicate-content-length",
+                "pid": 12256,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "duplicate-content-length",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "duplicate-content-length",
+                "pid": 38220,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "duplicate-content-length",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "duplicate-content-length",
+                "pid": 49060,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "duplicate-content-length",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": [
+            {
+              "content_lengths": 2,
+              "declared_bytes": 5768,
+              "mode": "duplicate-content-length",
+              "physical_eof": true,
+              "received_bytes": 5768
+            }
+          ]
+        },
+        {
+          "acks": [
+            {
+              "action": "settled",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 1,
+              "sequence": 1,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 1,
+                "failure": 0,
+                "success": 1
+              }
+            },
+            {
+              "action": "baseline",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 12,
+              "sequence": 2,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 12,
+                "failure": 0,
+                "success": 12
+              }
+            },
+            {
+              "action": "arm",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 13,
+              "sequence": 3,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 13,
+                "failure": 0,
+                "success": 13
+              }
+            },
+            {
+              "action": "restored",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 16,
+              "sequence": 4,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 16,
+                "failure": 0,
+                "success": 16
+              }
+            },
+            {
+              "action": "final",
+              "faults": [],
+              "mode": "actual-owner-denial",
+              "requests": 22,
+              "sequence": 5,
+              "snapshot": {
+                "expiry": 300000000100,
+                "held": 17675,
+                "job": "7ca1eee003d3204807938f94350dc86a-57d450e310190f2b4930462d3ee6a9d6",
+                "queue": 0,
+                "reads": 1,
+                "result": "7ca1eee003d3204807938f94350dc86a-691ba9b6aac138e67335216219333833",
+                "running": null,
+                "sink_entries": 1,
+                "sizes": [
+                  4696,
+                  6261,
+                  3318,
+                  3400
+                ],
+                "state": "succeeded"
+              },
+              "tls": {
+                "accepts": 22,
+                "failure": 0,
+                "success": 22
+              }
+            }
+          ],
+          "client_fault": 1,
+          "client_main": 6,
+          "direct_attempts": 6,
+          "direct_sends": 6,
+          "marker": "eq083-three-lane-tls",
+          "mode": "actual-owner-denial",
+          "native_exit": true,
+          "observations": [
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "actual-owner-denial",
+                "pid": 38392,
+                "provider_calls": 5,
+                "role": "baseline"
+              },
+              "entry_exit": true,
+              "full_frames": 7,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "actual-owner-denial",
+              "ownership_closed": true,
+              "provider_calls": 5,
+              "role": "baseline"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "actual-owner-denial",
+                "pid": 56560,
+                "provider_calls": 2,
+                "role": "fault"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "actual-owner-denial",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "fault"
+            },
+            {
+              "closed": {
+                "marker": "eq083-mcp-closed",
+                "mode": "actual-owner-denial",
+                "pid": 50216,
+                "provider_calls": 2,
+                "role": "followup"
+              },
+              "entry_exit": true,
+              "full_frames": 4,
+              "job_empty": true,
+              "launcher_exit": true,
+              "mode": "actual-owner-denial",
+              "ownership_closed": true,
+              "provider_calls": 2,
+              "role": "followup"
+            }
+          ],
+          "sdk_attempts": 9,
+          "sdk_http": 9,
+          "source_reads": 1,
+          "total": 22,
+          "wire_faults": []
+        }
+      ],
+      "findings": [],
+      "checks": [
+        "Copied12Gitpins and exact approved parent/source hashes verified;44actualacceptedarchive hashes/rawreceipt/setup map and module origin report inspected before invocation.",
+        "One separate process ran exact approved -I parent; actual output/exit/time retained.",
+        "Parent executes actual raw/typed/officialClientSession TLS trust/framing/403 dialogues, fullproducer/nativeSDKgolden/schema/canonicaltext assertions and full original native snapshots after repeats and close.",
+        "Actual returned bridge witnesses require retained entry exit, launcher exit, jobempty, pipe/thread/stream cleanup and closed exact provider/frame records for each baseline/fault/followup instance."
+      ],
+      "limits": [
+        "Reuses author Windows environment and harness; no independent reinstall or certificate generation. No source/runtime/environment mutation, downloads or GitHub publishing.",
+        "Original failed oversized49ae489 admission remains FAILED and reviewer miss/three cleanup P2 histories retained; only corrected reviewed72c812c harness executed.",
+        "No Linux/full24/Ready/current artifact/release qualification; this is scoped Windows feasibility. Synchronous writes/cooperative cleanup do not establish arbitrary callback hard termination.",
+        "Truncated raw response proves declared-minus-one EOF only; full unseen envelope is not reconstructed. Full payload proof comes from other actual verified responses."
+      ]
+    }
+  },
+  "certificate_inputs": {
+    "schema": "eq083.tls-certificate-execution.v1",
+    "heads": {
+      "equity-features": "95d27a31f72a23e21f6599c9dcbf6ac8cb1beb5a",
+      "equity-feature-workers": "6197efe3d0ed6c3ac4aabc314916f3f8cfb794fc"
+    },
+    "source": {
+      "bytes": 17117,
+      "sha256": "5fc06444865d62b862cfc9525a36eeaf537fe2002a7269dd0cb35735cdfbd995"
+    },
+    "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107363421",
+    "actual_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107393637",
+    "author_log": {
+      "file": "eq083-tls-certificates-author.log",
+      "sha256": "e69586ee956fa8c62374a4ced85d671f5632b2af4b89e68a559e1c6bcb708aa0",
+      "exit_code": 0
+    },
+    "local_record": {
+      "relative_directory": "eq083-tls-certificates-6197efe",
+      "sha256": "f121d4abbbc7def06cc5c9b27107d7107a8ca8067c9bba2a85801e638a981eca"
+    },
+    "binary_pins": [
+      {
+        "name": "openssl.exe",
+        "bytes": 1050780,
+        "sha256": "822034da8a01558c17cbe53f42f33985a6eaf7c89e21273779f9c6560d8c4d78"
+      },
+      {
+        "name": "libcrypto-3-x64.dll",
+        "bytes": 5805212,
+        "sha256": "0330b5f558996f297d687e1a2b2fcc2cacf883b16baef74aaef35285d7c1231c"
+      },
+      {
+        "name": "libssl-3-x64.dll",
+        "bytes": 1026716,
+        "sha256": "feb5b300e0b3a021fed481178f3d66896426576d4d13b85a304d2a3809b25bfd"
+      }
+    ],
+    "commands": [
+      {
+        "case": "version",
+        "exit_code": 0,
+        "job_active": 0,
+        "version": "OpenSSL 3.5.7 9 Jun 2026 (Library: OpenSSL 3.5.7 9 Jun 2026)",
+        "outputs": {
+          "stdout": {
+            "bytes": 62,
+            "sha256": "abca2d2b3e9e564d3795aff39324e2f9a13ec5fa90c804015faf74206d5de9c0"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        "ownership_closed": true
+      },
+      {
+        "case": "valid",
+        "exit_code": 0,
+        "job_active": 0,
+        "version": null,
+        "outputs": {
+          "stderr": {
+            "bytes": 1651,
+            "sha256": "feb03447c22a1274f714c0a3b7d93b39bac11a9e732b9e70381c6d9affd1060b"
+          },
+          "stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        "ownership_closed": true
+      },
+      {
+        "case": "wrong",
+        "exit_code": 0,
+        "job_active": 0,
+        "version": null,
+        "outputs": {
+          "stderr": {
+            "bytes": 1724,
+            "sha256": "3a3ba36717684c00007baee9db340aec74ab0845aed38feca9006d7eb0433c0c"
+          },
+          "stdout": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        "ownership_closed": true
+      }
+    ],
+    "certificates": {
+      "valid": {
+        "files": {
+          "cert": {
+            "bytes": 1174,
+            "sha256": "1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc"
+          },
+          "key": {
+            "bytes": 1732,
+            "sha256": "e2414edfb163e9d3d534fdb02edfd88739d0db27b0396af024219ec2bdc48b47"
+          }
+        },
+        "san": "127.0.0.1",
+        "der_sha256": "c0a3c29fcd28b214f5b244f35a71d83443a50cdc39fe8e4037c47a09b91ef9e9",
+        "not_before": "Oct 11 08:59:19 2026 GMT",
+        "not_after": "Nov 10 08:59:19 2026 GMT"
+      },
+      "wrong": {
+        "files": {
+          "cert": {
+            "bytes": 1174,
+            "sha256": "6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0"
+          },
+          "key": {
+            "bytes": 1732,
+            "sha256": "f9ac19359e1adf915908bdce2a2e8d93e323348661529ca433c80eba6ba159e6"
+          }
+        },
+        "san": "127.0.0.2",
+        "der_sha256": "7dc2951ca43895e74d11570a5630face4d0971c956ddf4616dcaa7dbb84577ed",
+        "not_before": "Oct 11 08:59:19 2026 GMT",
+        "not_after": "Nov 10 08:59:19 2026 GMT"
+      }
+    },
+    "reviewer": {
+      "identity": "/root/r7_policy_review",
+      "scope": "Separate verified-environment read-only parser, file/hash/SAN/validity/keypair checks; NO regeneration or independent OpenSSL exit observation",
+      "report": "eq083-tls-certificates-reviewer-report.json"
+    },
+    "limits": [
+      "Local certificate setup only, no TLS socket/handshake/service/native/reference composition",
+      "Private key bytes never published; keys remain owned outside repos",
+      "Static imports not dynamic module/source-build proof",
+      "Windows only, not Linux/forms/full24/Ready/artifact/release"
+    ],
+    "history": [
+      "Original17103byte generator name-shadowing P2 corrected BEFOREexecution at95d27a/6197efe; initialREWORK preserved",
+      "Recorder expected findings field absent in actual reviewer report: KeyError BEFOREcomment/write, reviewer added genuine findings:[], then recorder succeeded",
+      "Author read reviewer report from wrong repo cwd failed read-only, corrected explicit parent; no product failure"
+    ]
+  },
+  "compaction": {
+    "original_bytes": 9985,
+    "original_sha256": "8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100",
+    "bytes": 7687,
+    "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746",
+    "owned_identifier_renames": {
+      "accepted_tls": "z0",
+      "ack": "z1",
+      "action": "z2",
+      "actions": "z3",
+      "active_exception": "z4",
+      "address": "z5",
+      "app": "z6",
+      "armed": "z7",
+      "body": "z8",
+      "canonical": "z9",
+      "capture": "za",
+      "case": "zb",
+      "certificate_pins": "zc",
+      "certroot": "zd",
+      "chunk": "ze",
+      "chunks": "zf",
+      "cleanup": "z10",
+      "clock": "z11",
+      "close": "z12",
+      "connection": "z13",
+      "connections": "z14",
+      "context": "z15",
+      "contexts": "z16",
+      "control": "z17",
+      "data": "z18",
+      "deadline": "z19",
+      "declared": "z1a",
+      "environ": "z1b",
+      "exc_info": "z1c",
+      "facts": "z1d",
+      "failed": "z1e",
+      "failures": "z1f",
+      "fault_requests": "z20",
+      "faults": "z21",
+      "fields": "z22",
+      "file": "z23",
+      "files": "z24",
+      "forbidden_write": "z25",
+      "framing": "z26",
+      "headers": "z27",
+      "iterable": "z28",
+      "job": "z29",
+      "kind": "z2a",
+      "length": "z2b",
+      "limit": "z2c",
+      "mode": "z2d",
+      "modes": "z2e",
+      "name": "z2f",
+      "observe": "z30",
+      "original_accept": "z31",
+      "original_snapshot": "z32",
+      "outgoing": "z33",
+      "path": "z34",
+      "pending": "z35",
+      "pin": "z36",
+      "publish": "z37",
+      "raw_connections": "z38",
+      "reads_fault": "z39",
+      "ready": "z3a",
+      "remaining": "z3b",
+      "requests": "z3c",
+      "result": "z3d",
+      "scheduler": "z3e",
+      "secured": "z3f",
+      "sequence": "z40",
+      "server": "z41",
+      "service": "z42",
+      "size": "z43",
+      "sizes": "z44",
+      "slot": "z45",
+      "snapshot": "z46",
+      "start_response": "z47",
+      "status": "z48",
+      "stop": "z49",
+      "stream": "z4a",
+      "successes": "z4b",
+      "targets": "z4c",
+      "tls": "z4d",
+      "tokens": "z4e",
+      "transport_cleanup": "z4f",
+      "until": "z50",
+      "value": "z51",
+      "wait": "z52",
+      "witness": "z53"
+    },
+    "private_ValueError_labels": {
+      "owned TLS arguments": "T1",
+      "owned TLS certificate root": "T2",
+      "owned TLS mode": "T3",
+      "owned TLS cleanup changed original result": "T4",
+      "owned TLS owner marker": "T5",
+      "owned TLS request cap": "T6",
+      "owned TLS framing count": "T7",
+      "owned TLS original framing": "T8",
+      "owned TLS response header bound": "T9",
+      "owned TLS physical ledger": "T10",
+      "owned TLS transport cleanup failed": "T11",
+      "owned TLS connection still open": "T12",
+      "owned TLS dialogue incomplete": "T13",
+      "owned TLS cleanup failed": "T14",
+      "owned TLS certificate file": "T15",
+      "owned TLS certificate identity": "T16",
+      "owned TLS single job": "T17",
+      "owned TLS completion facts": "T18",
+      "owned TLS full forms": "T19",
+      "owned TLS retained accounting": "T20",
+      "owned TLS original expiry": "T21",
+      "owned TLS actual successful response required": "T22",
+      "owned TLS iterable only": "T23",
+      "owned TLS original changed": "T24",
+      "owned TLS response fault witnesses": "T25",
+      "owned TLS accept cap": "T26",
+      "owned TLS physical completion unconfirmed": "T27",
+      "owned TLS response chunk type": "T28",
+      "owned TLS response body bound": "T29",
+      "owned TLS control bound": "T30",
+      "owned TLS control order": "T31"
+    },
+    "proof": "Reverse declared alpha-renaming and private diagnostic whitelist yields exact original AST including all constants, arguments, external keywords and attributes. AST/compile only; no owner execution"
+  },
+  "failure_history": {
+    "scope": "ACTUAL installed Windows TLS feasibility FAILED before native owner launch, not TLS PASS",
+    "executed_heads": {
+      "equity-features": "61629003122782c36f6e05ce37e388936642af49",
+      "equity-feature-workers": "49ae489de8cbcf3ccdc522bd2291fcbdfe3d0a2f"
+    },
+    "parent_bytes": 43728,
+    "parent_sha256": "7697359a26b0e756fcb7edec7ef087871acc9d0d6c8d5c8826960b74950536af",
+    "copier_bytes": 5730,
+    "copier_sha256": "dffa08532e2c9116143b17dbe7714697ad2df6e32cd3308d940979006a5fae2b",
+    "source_approval": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107929105",
+    "failure_evidence": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107942878",
+    "harness": "eq083-tls-harness-49ae489",
+    "copier_exit": 0,
+    "parent_exit": 1,
+    "logs": {
+      "eq083-tls-harness-author.log": {
+        "bytes": 266,
+        "sha256": "3ae6ae7adc8db6c8261baa07d10909622fd7be2ed253f20986868649ba09dec2"
+      },
+      "eq083-three-lane-tls-author.log": {
+        "bytes": 893,
+        "sha256": "7a017ebfd8e5c44a56400962db6df7df1149addc4a2b47c05d7d8d9ea92563c8"
+      }
+    },
+    "reviewer_diagnostic": {
+      "disposition": "REWORK actual TLS author admission failure diagnosed; no runtime defect demonstrated",
+      "reviewed_heads": {
+        "equity-features": "61629003122782c36f6e05ce37e388936642af49",
+        "equity-feature-workers": "49ae489de8cbcf3ccdc522bd2291fcbdfe3d0a2f"
+      },
+      "owner_bytes": 9985,
+      "owner_sha256": "8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100",
+      "accepted_entry_source_sha256": "66d6982313a84627916be6145f9b611b4237c6641a6b542e9a8f2e459abb6b7e",
+      "author_failed_log_sha256": "7a017ebfd8e5c44a56400962db6df7df1149addc4a2b47c05d7d8d9ea92563c8",
+      "source_limit": 8192,
+      "excess_bytes": 1793,
+      "failure_line": 487,
+      "findings": [
+        {
+          "priority": "P2",
+          "title": "Frozen qualification owner exceeds accepted8192-byte admission limit",
+          "detail": "The9985-byte owner fails the exact public OwnedEntryProfile admission predicate before run_admitted, owner thread launch or TLS/native execution. Reviewer pre-execution approval missed this existing limit.",
+          "correction": "Compact the qualification owner below8192 UTF8 bytes while preserving behavior, original source history and closed pins. Do not change accepted runtime limit or introduce a loader/bypass."
+        }
+      ],
+      "inert_admission_boundaries": [
+        {
+          "source_bytes": 8192,
+          "accepted": true
+        },
+        {
+          "source_bytes": 8193,
+          "accepted": false
+        }
+      ],
+      "identifier_compaction_inventory": [
+        {
+          "identifier": "ValueError",
+          "name_occurrences": 31,
+          "maximum_name_only_byte_saving": 279
+        },
+        {
+          "identifier": "sequence",
+          "name_occurrences": 14,
+          "maximum_name_only_byte_saving": 98
+        },
+        {
+          "identifier": "scheduler",
+          "name_occurrences": 12,
+          "maximum_name_only_byte_saving": 96
+        },
+        {
+          "identifier": "server",
+          "name_occurrences": 10,
+          "maximum_name_only_byte_saving": 50
+        },
+        {
+          "identifier": "connection",
+          "name_occurrences": 10,
+          "maximum_name_only_byte_saving": 90
+        },
+        {
+          "identifier": "certroot",
+          "name_occurrences": 8,
+          "maximum_name_only_byte_saving": 56
+        },
+        {
+          "identifier": "requests",
+          "name_occurrences": 7,
+          "maximum_name_only_byte_saving": 49
+        },
+        {
+          "identifier": "original_snapshot",
+          "name_occurrences": 7,
+          "maximum_name_only_byte_saving": 112
+        },
+        {
+          "identifier": "cleanup",
+          "name_occurrences": 7,
+          "maximum_name_only_byte_saving": 42
+        },
+        {
+          "identifier": "secured",
+          "name_occurrences": 7,
+          "maximum_name_only_byte_saving": 42
+        },
+        {
+          "identifier": "context",
+          "name_occurrences": 6,
+          "maximum_name_only_byte_saving": 36
+        },
+        {
+          "identifier": "service",
+          "name_occurrences": 6,
+          "maximum_name_only_byte_saving": 36
+        },
+        {
+          "identifier": "headers",
+          "name_occurrences": 6,
+          "maximum_name_only_byte_saving": 36
+        },
+        {
+          "identifier": "faults",
+          "name_occurrences": 5,
+          "maximum_name_only_byte_saving": 25
+        },
+        {
+          "identifier": "status",
+          "name_occurrences": 5,
+          "maximum_name_only_byte_saving": 25
+        },
+        {
+          "identifier": "outgoing",
+          "name_occurrences": 5,
+          "maximum_name_only_byte_saving": 35
+        },
+        {
+          "identifier": "BaseException",
+          "name_occurrences": 5,
+          "maximum_name_only_byte_saving": 60
+        },
+        {
+          "identifier": "framing",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 24
+        },
+        {
+          "identifier": "reads_fault",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 40
+        },
+        {
+          "identifier": "connections",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 40
+        },
+        {
+          "identifier": "raw_connections",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 56
+        },
+        {
+          "identifier": "transport_cleanup",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 64
+        },
+        {
+          "identifier": "chunks",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 20
+        },
+        {
+          "identifier": "declared",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 28
+        },
+        {
+          "identifier": "action",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 20
+        },
+        {
+          "identifier": "stream",
+          "name_occurrences": 4,
+          "maximum_name_only_byte_saving": 20
+        },
+        {
+          "identifier": "contexts",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 21
+        },
+        {
+          "identifier": "control",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 18
+        },
+        {
+          "identifier": "pending",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 18
+        },
+        {
+          "identifier": "iterable",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 21
+        },
+        {
+          "identifier": "length",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 15
+        },
+        {
+          "identifier": "witness",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 18
+        },
+        {
+          "identifier": "targets",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 18
+        },
+        {
+          "identifier": "successes",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 24
+        },
+        {
+          "identifier": "failures",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 21
+        },
+        {
+          "identifier": "canonical",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 24
+        },
+        {
+          "identifier": "snapshot",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 21
+        },
+        {
+          "identifier": "remaining",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 24
+        },
+        {
+          "identifier": "failed",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 15
+        },
+        {
+          "identifier": "hashlib",
+          "name_occurrences": 3,
+          "maximum_name_only_byte_saving": 18
+        },
+        {
+          "identifier": "certificate_pins",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 30
+        },
+        {
+          "identifier": "fault_requests",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 26
+        },
+        {
+          "identifier": "actions",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 12
+        },
+        {
+          "identifier": "deadline",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 14
+        },
+        {
+          "identifier": "original_accept",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 28
+        },
+        {
+          "identifier": "active_exception",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 30
+        },
+        {
+          "identifier": "environ",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 12
+        },
+        {
+          "identifier": "start_response",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 26
+        },
+        {
+          "identifier": "publish",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 12
+        },
+        {
+          "identifier": "fields",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 10
+        },
+        {
+          "identifier": "address",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 12
+        },
+        {
+          "identifier": "result",
+          "name_occurrences": 2,
+          "maximum_name_only_byte_saving": 10
+        },
+        {
+          "identifier": "tokens",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 5
+        },
+        {
+          "identifier": "accepted_tls",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 11
+        },
+        {
+          "identifier": "forbidden_write",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 14
+        },
+        {
+          "identifier": "capture",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 6
+        },
+        {
+          "identifier": "qualification_server",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 19
+        },
+        {
+          "identifier": "OwnedAudit",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 9
+        },
+        {
+          "identifier": "getattr",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 6
+        },
+        {
+          "identifier": "enumerate",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 8
+        },
+        {
+          "identifier": "exc_info",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 7
+        },
+        {
+          "identifier": "observe",
+          "name_occurrences": 1,
+          "maximum_name_only_byte_saving": 6
+        }
+      ],
+      "owned_error_literal_occurrences": 31,
+      "owned_error_literal_total_bytes": 835,
+      "checks": [
+        "Exact installed accepted _entry.py bytes match immutableGit; actual failed log hash and traceback independently read.",
+        "Only AST-extracted __post_init__ predicate/canonical helper executed on inert profile objects;9985 rejection and8192/8193 inclusive boundary reproduced.",
+        "Parent constructor executes before owner launch thread setup/run_admitted; raw log shows no completed mode or native/TLS witness.",
+        "Identifier and diagnostic-literal inventory is source-only sizing advice, not a semantics-equivalence or execution claim."
+      ],
+      "limits": [
+        "No product import, native/TLS/socket/process/copy/setup/install/probe rerun or downloads. Original failed run remains FAILED, not PASS.",
+        "The previous source approval missed admission size; this diagnostic explicitly preserves that review limitation.",
+        "Exact proposed compacted owner/updated hash-manifest-parent requires separate full source review and admission predicate test before new execution.",
+        "Compaction must preserve protocol keyword names/JSON fields/fixture identities/limits/control and exception semantics; ASCII identifier reduction alone is only an upper-bound estimate.",
+        "No Ready/full24/Linux/artifact/release qualification."
+      ]
+    },
+    "admission": {
+      "owner_bytes": 9985,
+      "accepted_source_cap": 8192,
+      "error": "unadmitted_owned_entry",
+      "line": 487
+    },
+    "tool_only_history": "Checkpoint preparer initially assumed heads rather than actual reviewed_heads report field; KeyError before writes. Dependent publisher missing-file read also failed before any mutation. Corrected explicit report field; no new native/product failure.",
+    "execution_limitations": [
+      "Failure before owner launch; no native/TLS/reference/socket cleanup PASS inferred",
+      "Same verified author environment, not independently reinstalled",
+      "Original failed harness/log preserved; no unchanged rerun"
+    ],
+    "next": "Freeze exact qualification source correction within accepted8192 cap, renew owner/parent/copier source review before any new copy/native/TLS execution; no product limit change or source-loader bypass"
+  },
+  "limits": [
+    "Windows nativewheel/reference installed-only scoped proof; not independently reinstalled",
+    "No Linux/freshwheel-sdist-light/currentserverZIP/full24/Ready/release proof",
+    "Earlier SDK lifetimes not retroactively atomic",
+    "Private keys outsideGit; no regenerated certs or system trust modification",
+    "Framing original length/SHA is source witness, not remote receipt; no truncated unseen-byte reconstruction",
+    "No autoretry/replay/poll/secondcompute or hosted deployment claim"
+  ]
+}

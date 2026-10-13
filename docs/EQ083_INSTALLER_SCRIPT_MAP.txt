@@ -1,0 +1,614 @@
+"""EQ083 inert wheel payload/installed RECORD byte-map verifier SOURCE ONLY.
+
+No filesystem, installation, imports of product code or admission authority.
+Generated-byte inventory is returned as pending; this function NEVER admits a
+fresh environment. Trusted source-pinned parent collection/integration pending.
+"""
+import base64
+import csv
+import hashlib
+import io
+import re
+
+MAX_FILE = 67108864
+MAX_TOTAL = 1073741824
+MAX_ROWS = 20000
+SCHEMES = frozenset(('purelib', 'platlib', 'data', 'headers', 'scripts'))
+
+def relative_path(value):
+    if type(value) is not str or not value or len(value) > 1024:
+        raise ValueError('path shape')
+    if value.startswith('/') or any(c in value for c in '\\:\x00\r\n'):
+        raise ValueError('path syntax')
+    parts = value.split('/')
+    if any(p in ('', '.', '..') for p in parts):
+        raise ValueError('path components')
+    return value
+
+def record_destination(base, value):
+    relative_path(base)
+    if type(value) is not str or not value or len(value) > 1024:
+        raise ValueError('record path shape')
+    if value.startswith('/') or any(c in value for c in '\\:\x00\r\n'):
+        raise ValueError('record path syntax')
+    parts = base.split('/')
+    for component in value.split('/'):
+        if component in ('', '.'):
+            raise ValueError('record empty/dot component')
+        if component == '..':
+            if not parts:
+                raise ValueError('record outside venv')
+            parts.pop()
+        else:
+            parts.append(component)
+    return relative_path('/'.join(parts))
+
+def digest(data):
+    return dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+
+def byte_map(files, windows):
+    if type(files) is not dict or not files or len(files) > MAX_ROWS:
+        raise ValueError('byte map shape')
+    total = 0
+    seen = set()
+    for path, data in files.items():
+        relative_path(path)
+        identity = path.casefold() if windows else path
+        if identity in seen or type(data) is not bytes or len(data) > MAX_FILE:
+            raise ValueError('byte map collision/type/bound')
+        seen.add(identity)
+        total += len(data)
+        if total > MAX_TOTAL:
+            raise ValueError('byte map expanded bound')
+
+def parse_record(raw, files, self_path, installed_base=None):
+    if type(raw) is not bytes or len(raw) > 4194304:
+        raise ValueError('record bytes bound')
+    rows = list(csv.reader(io.StringIO(raw.decode('utf-8', errors='strict'), newline=''), strict=True))
+    if not rows or len(rows) > MAX_ROWS:
+        raise ValueError('record row bound')
+    result = {}
+    for row in rows:
+        if len(row) != 3:
+            raise ValueError('record arity')
+        path, encoded, size = row
+        path = relative_path(path) if installed_base is None else record_destination(installed_base, path)
+        if path in result or path not in files:
+            raise ValueError('record duplicate/missing bytes')
+        if path == self_path:
+            if encoded != '' or size != '':
+                raise ValueError('record self row')
+        elif encoded == '' and size == '' and installed_base is not None:
+            pass  # Only finite pyc rows may use this form; caller checks below.
+        else:
+            data = files[path]
+            expected = 'sha256=' + base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b'=').decode('ascii')
+            if encoded != expected or size != str(len(data)):
+                raise ValueError('record hash/size')
+        result[path] = (encoded, size)
+    if set(result) != set(files) or self_path not in result:
+        raise ValueError('record full fileset')
+    return result
+
+def relocate_payload(wheel, scheme, purelib, info, data_dir, windows):
+    byte_map(wheel, windows)
+    if type(scheme) is not dict or set(scheme) != SCHEMES or type(purelib) is not bool:
+        raise ValueError('scheme identity')
+    for path in scheme.values():
+        relative_path(path)
+    relative_path(info)
+    relative_path(data_dir)
+    if '/' in info or '/' in data_dir or not info.endswith('.dist-info') or not data_dir.endswith('.data'):
+        raise ValueError('wheel distribution directories')
+    if data_dir != info[:-10] + '.data' or info + '/WHEEL' not in wheel:
+        raise ValueError('wheel metadata/data directory association')
+    root_fields = [line for line in wheel[info + '/WHEEL'].decode('utf-8', errors='strict').splitlines()
+                   if line.lower().startswith('root-is-purelib:')]
+    if root_fields != ['Root-Is-Purelib: ' + ('true' if purelib else 'false')]:
+        raise ValueError('wheel purelib metadata association')
+    root = scheme['purelib' if purelib else 'platlib']
+    mapping, seen = {}, set()
+    for source in wheel:
+        parts = source.split('/')
+        if parts[0].endswith('.data'):
+            if parts[0] != data_dir or len(parts) < 3 or parts[1] not in SCHEMES:
+                raise ValueError('data scheme member')
+            target = scheme[parts[1]] + '/' + '/'.join(parts[2:])
+        else:
+            if parts[0].endswith('.dist-info') and parts[0] != info:
+                raise ValueError('foreign distribution metadata')
+            target = root + '/' + source
+        relative_path(target)
+        identity = target.casefold() if windows else target
+        if identity in seen:
+            raise ValueError('payload relocation collision')
+        seen.add(identity)
+        mapping[source] = target
+    return root, mapping
+
+def verify_payload_record(wheel, installed, recipe):
+    if type(recipe) is not dict or set(recipe) != {'system', 'scheme', 'purelib', 'info', 'data_dir', 'executable_bytes', 'generated'}:
+        raise ValueError('recipe closed shape')
+    if recipe['system'] not in ('Windows', 'Linux'):
+        raise ValueError('recipe OS')
+    windows = recipe['system'] == 'Windows'
+    byte_map(installed, windows)
+    root, mapping = relocate_payload(wheel, recipe['scheme'], recipe['purelib'], recipe['info'], recipe['data_dir'], windows)
+    source_record = recipe['info'] + '/RECORD'
+    if source_record not in wheel:
+        raise ValueError('wheel record required')
+    parse_record(wheel[source_record], wheel, source_record)
+    target_record = mapping[source_record]
+    if target_record not in installed:
+        raise ValueError('installed record required')
+    rows = parse_record(installed[target_record], installed, target_record, root)
+    executable = recipe['executable_bytes']
+    if type(executable) is not bytes or not executable or len(executable) > 4096 or any(c in executable for c in (0, 10, 13)):
+        raise ValueError('installer executable encoding')
+    for source, target in mapping.items():
+        if target not in installed:
+            raise ValueError('missing relocated payload')
+        if source == source_record:
+            continue
+        expected = wheel[source]
+        if source.startswith(recipe['data_dir'] + '/scripts/') and expected.startswith(b'#!python'):
+            expected = b'#!' + executable + (b'\r\n' if windows else b'\n') + expected.partition(b'\n')[2]
+        if installed[target] != expected or rows[target] == ('', ''):
+            raise ValueError('relocated payload changed/unhashed')
+    generated = recipe['generated']
+    if type(generated) is not dict or len(generated) > MAX_ROWS:
+        raise ValueError('finite generated map')
+    if set(installed) != set(mapping.values()) | set(generated) or set(mapping.values()) & set(generated):
+        raise ValueError('generated ownership/fileset')
+    pending = {}
+    for path, item in generated.items():
+        if type(item) is not dict or set(item) != {'kind', 'source', 'observed'}:
+            raise ValueError('generated closed identity')
+        observed = item['observed']
+        if type(observed) is not dict or set(observed) != {'bytes', 'sha256'}:
+            raise ValueError('generated observation shape')
+        if type(observed['bytes']) is not int or not 0 <= observed['bytes'] <= MAX_FILE:
+            raise ValueError('generated observation size')
+        if type(observed['sha256']) is not str or re.fullmatch('[0-9a-f]{64}', observed['sha256']) is None:
+            raise ValueError('generated observation SHA')
+        if observed != digest(installed[path]):
+            raise ValueError('generated observed bytes mismatch')
+        kind = item['kind']
+        if kind in ('INSTALLER', 'REQUESTED', 'direct_url'):
+            name = {'INSTALLER': 'INSTALLER', 'REQUESTED': 'REQUESTED', 'direct_url': 'direct_url.json'}[kind]
+            if path != root + '/' + recipe['info'] + '/' + name or item['source'] is not None or rows[path] == ('', ''):
+                raise ValueError('generated metadata origin')
+            if kind == 'INSTALLER' and installed[path] != b'pip\n' or kind == 'REQUESTED' and installed[path] != b'':
+                raise ValueError('generated metadata bytes')
+        elif kind == 'pyc':
+            source = item['source']
+            if source not in mapping.values() or not source.endswith('.py'):
+                raise ValueError('pyc source association')
+            directory, _, filename = source.rpartition('/')
+            if path != directory + '/__pycache__/' + filename[:-3] + '.cpython-312.pyc' or len(installed[path]) < 16:
+                raise ValueError('pyc exact path/header bound')
+        elif kind == 'entry_script':
+            if not path.startswith(recipe['scheme']['scripts'] + '/') or item['source'] not in mapping.values() or not item['source'].endswith('/entry_points.txt') or rows[path] == ('', ''):
+                raise ValueError('entry script finite origin')
+        else:
+            raise ValueError('unknown generated category')
+        pending[path] = item
+    return dict(scope='PAYLOAD_RECORD_ONLY_GENERATED_SEMANTICS_AND_HOST_PENDING', admitted=False,
+                payload_mapping=mapping, installed_record=digest(installed[target_record]), generated_pending=pending)
+
+
+
+"""EQ083 generated byte semantics SOURCE ONLY; no fresh/host admission.
+
+No installed code is imported, executed or unmarshalled. verify_pyc would
+compile honest admitted source ONLY after separate interpreter/source/collector
+integration approval. Source review must not invoke that compiler branch.
+"""
+import configparser
+import hashlib
+import importlib.util
+import io
+import json
+import keyword
+import marshal
+from pathlib import PurePosixPath, PureWindowsPath
+import re
+import sys
+import zipfile
+
+MAX_BYTES = 2097152
+WINDOWS_LAUNCHERS = {
+    'console': (108032, '81a618f21cb87db9076134e70388b6e9cb7c2106739011b6a51772d22cae06b7'),
+    'gui': (101888, '7a319ffaba23a017d7b1e18ba726ba6c54c53d6446db55f92af53c279894f8ad'),
+}
+SCRIPT_TEMPLATE = """# -*- coding: utf-8 -*-
+import re
+import sys
+from %(module)s import %(import_name)s
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\\.pyw|\\.exe)?$', '', sys.argv[0])
+    sys.exit(%(func)s())
+"""
+
+def bounded_bytes(data, limit=MAX_BYTES):
+    if type(data) is not bytes or len(data) > limit:
+        raise ValueError('generated bytes type/bound')
+    return data
+
+def sha(value):
+    if type(value) is not str or re.fullmatch('[0-9a-f]{64}', value) is None:
+        raise ValueError('canonical SHA')
+    return value
+
+def observe(data):
+    return dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+
+def owned_absolute(path, system):
+    if system not in ('Windows', 'Linux') or type(path) is not str or not path or len(path) > 2048 or any(c in path for c in '\x00\r\n"'):
+        raise ValueError('fixed absolute path')
+    cls = PureWindowsPath if system == 'Windows' else PurePosixPath
+    p = cls(path)
+    if not p.is_absolute() or '..' in p.parts or str(p) != path:
+        raise ValueError('canonical absolute path')
+    if system == 'Windows' and (p.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:', p.drive) is None):
+        raise ValueError('local Windows drive')
+    return p
+
+def unique_json(raw):
+    bounded_bytes(raw, 16384)
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('duplicate JSON key')
+            result[key] = value
+        return result
+    def constant(value):
+        raise ValueError('nonfinite JSON')
+    return json.loads(raw.decode('utf-8', errors='strict'), object_pairs_hook=pairs, parse_constant=constant)
+
+def verify_direct_url(data, archive_path, archive_bytes, archive_sha, system):
+    path = owned_absolute(archive_path, system)
+    bounded_bytes(archive_bytes, 67108864)
+    if hashlib.sha256(archive_bytes).hexdigest() != sha(archive_sha):
+        raise ValueError('accepted archive bytes')
+    expected = dict(url=path.as_uri(), archive_info=dict(hash='sha256=' + archive_sha, hashes=dict(sha256=archive_sha)))
+    if unique_json(data) != expected or data != json.dumps(expected, sort_keys=True).encode('utf-8'):
+        raise ValueError('entire direct URL archive provenance')
+    return dict(scope='GENERATED_SEMANTIC_ONLY_HOST_PENDING', admitted=False, observed=observe(data))
+
+def dotted_identifier(value):
+    if type(value) is not str or not value or len(value) > 256:
+        raise ValueError('entry callable shape')
+    if any(re.fullmatch('[A-Za-z_][A-Za-z_0-9]*', p) is None or keyword.iskeyword(p) for p in value.split('.')):
+        raise ValueError('entry callable syntax')
+    return value
+
+def entry_filename(name, system):
+    if system == 'Linux':
+        return name
+    if system != 'Windows':
+        raise ValueError('entry filename OS')
+    suffix = PurePosixPath(name).suffix
+    if suffix.startswith('.py'):
+        name = name[:-len(suffix)]
+    return name + '.exe'
+
+def entry_inventory(metadata, system):
+    # Fixed pip25.0.1 / CPython3.12 / ENSUREPIP_OPTIONS ABSENT semantics.
+    # This pure derivation does not attest the actual installer environment.
+    bounded_bytes(metadata, 65536)
+    parser = configparser.ConfigParser(interpolation=None, delimiters=('=',), strict=True)
+    parser.optionxform = str
+    parser.read_string(metadata.decode('utf-8', errors='strict'))
+    if parser.defaults():
+        raise ValueError('entry default inheritance')
+    groups, names = {}, set()
+    for section, kind in (('console_scripts', 'console'), ('gui_scripts', 'gui')):
+        group = {}
+        if parser.has_section(section):
+            for name, target in parser.items(section, raw=True):
+                if re.fullmatch('[A-Za-z_][A-Za-z_0-9.-]{0,127}', name) is None or name.casefold() in names:
+                    raise ValueError('entry name/collision')
+                fields = target.split(':')
+                if len(fields) != 2:
+                    raise ValueError('entry target arity/extras unsupported')
+                module, function = map(dotted_identifier, fields)
+                group[name] = dict(kind=kind, module=module, function=function)
+                names.add(name.casefold())
+        groups[kind] = group
+    if sum(len(g) for g in groups.values()) > 128:
+        raise ValueError('raw entry inventory bound')
+    console = groups['console'].copy()
+    derived = {}
+    for base, pattern, variants in (
+        ('pip', r'pip(\d+(\.\d+)?)?$', ('pip', 'pip3', 'pip3.12')),
+        ('easy_install', r'easy_install(-\d+\.\d+)?$', ('easy_install', 'easy_install-3.12')),
+    ):
+        original = console.pop(base, None)
+        if original is not None:
+            for variant in variants:
+                derived[variant] = dict(original)
+            for name in tuple(console):
+                if re.match(pattern, name):
+                    del console[name]
+    derived.update(console)
+    result, destinations, final_names = {}, set(), set()
+    for group in (derived, groups['gui']):
+        for name, entry in group.items():
+            filename = entry_filename(name, system)
+            identity = filename.casefold() if system == 'Windows' else filename
+            if name.casefold() in final_names or identity in destinations:
+                raise ValueError('derived installer entry name/destination collision')
+            final_names.add(name.casefold())
+            destinations.add(identity)
+            result[name] = dict(entry, filename=filename)
+    if len(result) > 128:
+        raise ValueError('derived entry inventory bound')
+    return result
+
+
+def expected_entry_bytes(metadata, name, executable, system, launcher=None, launcher_sha=None):
+    inventory = entry_inventory(metadata, system)
+    if type(name) is not str or name not in inventory:
+        raise ValueError('entry metadata association')
+    entry = inventory[name]
+    p = owned_absolute(executable, system)
+    if system == 'Windows' and entry['kind'] == 'gui':
+        p = p.with_name(p.name.replace('python', 'pythonw'))
+    encoded = str(p)
+    if ' ' in encoded:
+        encoded = '"' + encoded + '"'
+    encoded = encoded.encode('utf-8')
+    if system == 'Windows' or b' ' not in encoded and len(encoded) + 3 <= 127:
+        shebang = b'#!' + encoded + b'\n'
+    else:
+        shebang = b'#!/bin/sh\n' + b"'''exec' " + encoded + b' "$0" "$@"\n' + b"' '''\n"
+    body = (SCRIPT_TEMPLATE % dict(module=entry['module'], import_name=entry['function'].split('.')[0], func=entry['function'])).encode('utf-8')
+    if system == 'Linux':
+        if launcher is not None or launcher_sha is not None:
+            raise ValueError('Linux launcher unexpected')
+        return entry['filename'], shebang + body
+    bounded_bytes(launcher)
+    size, fixed_sha = WINDOWS_LAUNCHERS[entry['kind']]
+    if len(launcher) != size or sha(launcher_sha) != fixed_sha or not launcher.startswith(b'MZ') or hashlib.sha256(launcher).hexdigest() != fixed_sha:
+        raise ValueError('accepted selected console/gui launcher')
+    stream = io.BytesIO()
+    # Exact distlib SOURCE_DATE_EPOCH=1700000000 contract; other times deny.
+    info = zipfile.ZipInfo('__main__.py', (2023, 11, 14, 22, 13, 20))
+    info.create_system = 0
+    with zipfile.ZipFile(stream, 'w') as archive:
+        archive.writestr(info, body)
+    return entry['filename'], launcher + shebang + stream.getvalue()
+
+def verify_entry_script(data, metadata, name, executable, system, launcher=None, launcher_sha=None):
+    bounded_bytes(data)
+    filename, expected = expected_entry_bytes(metadata, name, executable, system, launcher, launcher_sha)
+    if data != expected:
+        raise ValueError('entire generated entry script')
+    return dict(scope='GENERATED_SEMANTIC_ONLY_HOST_PENDING', admitted=False, filename=filename, observed=observe(data))
+
+def verify_pyc(data, source, source_path, source_mtime_ns, invalidation, system):
+    bounded_bytes(data)
+    bounded_bytes(source)
+    path = owned_absolute(source_path, system)
+    if not path.name.endswith('.py') or type(source_mtime_ns) is not int or not 0 <= source_mtime_ns <= 9223372036854775807:
+        raise ValueError('pyc source identity/time')
+    if sys.implementation.name != 'cpython' or sys.implementation.cache_tag != 'cpython-312' or tuple(sys.version_info[:3]) != (3, 12, 10) or sys.flags.isolated != 1 or sys.flags.optimize != 0:
+        raise ValueError('reviewed isolated interpreter identity pending host binding')
+    magic = (3531).to_bytes(2, 'little') + b'\r\n'
+    if importlib.util.MAGIC_NUMBER != magic:
+        raise ValueError('CPython source magic')
+    if invalidation == 'timestamp':
+        header = magic + (0).to_bytes(4, 'little') + ((source_mtime_ns // 1000000000) & 0xffffffff).to_bytes(4, 'little') + len(source).to_bytes(4, 'little')
+    elif invalidation == 'checked_hash':
+        header = magic + (3).to_bytes(4, 'little') + importlib.util.source_hash(source)
+    else:
+        raise ValueError('pyc invalidation mode')
+    # Future separately approved invocation compiles admitted source to bytes;
+    # NEVER exec/eval/import source or marshal.loads any installed bytes.
+    code = compile(source, str(path), 'exec', dont_inherit=True, optimize=0)
+    expected = header + marshal.dumps(code)
+    if data != expected:
+        raise ValueError('entire pyc header/source code association')
+    cache = path.parent / '__pycache__' / (path.stem + '.cpython-312.pyc')
+    return dict(scope='GENERATED_SEMANTIC_ONLY_HOST_PENDING', admitted=False, path=str(cache), observed=observe(data), source=observe(source))
+
+
+
+import stat
+
+COMPONENT_KEYS = {'name', 'wheel_bytes', 'wheel_sha', 'archive_path', 'archive_bytes', 'archive_sha',
+                  'selected_form', 'purelib', 'info', 'data_dir', 'requested'}
+RECIPE_KEYS = {'system', 'venv', 'executable', 'installer', 'interpreter', 'source_date_epoch', 'bytecode', 'components', 'launchers', 'ensurepip_options'}
+BYTECODE_POLICY = dict(pip_no_compile=True, parent_flags=('-I', '-B'), child_flags=('-I', '-B'),
+                       dont_write_bytecode=True, expected_pyc=())
+
+
+def wheel_byte_map(raw, expected_sha, windows):
+    bounded_bytes(raw, MAX_FILE)
+    if hashlib.sha256(raw).hexdigest() != sha(expected_sha):
+        raise ValueError('selected built wheel bytes')
+    result, total = {}, 0
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        infos = archive.infolist()
+        if not infos or len(infos) > MAX_ROWS:
+            raise ValueError('wheel member count')
+        seen = set()
+        for item in infos:
+            if type(item.orig_filename) is not str or item.orig_filename != item.filename:
+                raise ValueError('ZIP original spelling rewritten/truncated/Unicode override')
+            name = item.orig_filename
+            directory = name.endswith('/')
+            path = relative_path(name[:-1] if directory else name)
+            identity = path.casefold() if windows else path
+            if identity in seen or item.flag_bits & 1 or item.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
+                raise ValueError('wheel ZIP member identity/encryption/compression')
+            seen.add(identity)
+            mode = (item.external_attr >> 16) & 0xffff
+            if stat.S_IFMT(mode) not in (0, stat.S_IFDIR if directory else stat.S_IFREG):
+                raise ValueError('wheel ZIP link/nonregular member')
+            if item.file_size > MAX_FILE or item.file_size < 0:
+                raise ValueError('wheel ZIP member size')
+            total += item.file_size
+            if total > MAX_TOTAL:
+                raise ValueError('wheel ZIP expanded total')
+            data = archive.read(item)
+            if len(data) != item.file_size or directory and data:
+                raise ValueError('wheel ZIP full member bytes')
+            if not directory:
+                result[path] = data
+    byte_map(result, windows)
+    return result
+
+
+def map_scheme(system, name):
+    if system == 'Windows':
+        library, scripts, headers = 'venv/Lib/site-packages', 'venv/Scripts', 'venv/Include/site/python3.12/' + name
+    elif system == 'Linux':
+        library, scripts, headers = 'venv/lib/python3.12/site-packages', 'venv/bin', 'venv/include/site/python3.12/' + name
+    else:
+        raise ValueError('whole map OS')
+    return dict(purelib=library, platlib=library, data='venv', headers=headers, scripts=scripts)
+
+
+def fixed_map_recipe(recipe):
+    if type(recipe) is not dict or set(recipe) != RECIPE_KEYS or recipe['system'] not in ('Windows', 'Linux'):
+        raise ValueError('whole map recipe closed shape')
+    if recipe['ensurepip_options'] is not None:
+        raise ValueError('fixed ENSUREPIP_OPTIONS absence policy')
+    system = recipe['system']
+    root = owned_absolute(recipe['venv'], system)
+    expected = root / ('Scripts/python.exe' if system == 'Windows' else 'bin/python')
+    interpreter = recipe['interpreter']
+    if type(recipe['executable']) is not str or recipe['executable'] != str(expected) or type(recipe['installer']) is not tuple or recipe['installer'] != ('pip', '25.0.1') or any(type(v) is not str for v in recipe['installer']):
+        raise ValueError('fixed executable-installer recipe')
+    if type(interpreter) is not tuple or len(interpreter) != 4 or type(interpreter[0]) is not str or type(interpreter[2]) is not str or type(interpreter[3]) is not int or type(interpreter[1]) is not tuple or any(type(v) is not int for v in interpreter[1]) or interpreter != ('cpython', (3, 12, 10), 'cpython-312', 0):
+        raise ValueError('fixed interpreter-installer recipe')
+    if type(recipe['source_date_epoch']) is not int or recipe['source_date_epoch'] != 1700000000:
+        raise ValueError('fixed script ZIP epoch')
+    policy = recipe['bytecode']
+    if type(policy) is not dict or set(policy) != set(BYTECODE_POLICY) or policy != BYTECODE_POLICY or policy['pip_no_compile'] is not True or policy['dont_write_bytecode'] is not True:
+        raise ValueError('fixed no-write bytecode policy')
+    components = recipe['components']
+    if type(components) is not tuple or not 1 <= len(components) <= 128:
+        raise ValueError('finite selected component inventory')
+    launchers = recipe['launchers']
+    if type(launchers) is not dict or set(launchers) != ({'console', 'gui'} if system == 'Windows' else set()):
+        raise ValueError('selected installer launcher inventory')
+    for kind, data in launchers.items():
+        bounded_bytes(data)
+        size, expected_sha = WINDOWS_LAUNCHERS[kind]
+        if len(data) != size or hashlib.sha256(data).hexdigest() != expected_sha:
+            raise ValueError('selected installer launcher bytes')
+    return root, map_scheme(system, 'placeholder')
+
+
+def verify_whole_installed_map(installed, recipe):
+    # Pure byte orchestration. Supplied observations/recipes are not authority;
+    # actual collector/fixed builder/host/installer/form binding is still absent.
+    root, _ = fixed_map_recipe(recipe)
+    system, windows = recipe['system'], recipe['system'] == 'Windows'
+    byte_map(installed, windows)
+    if any(path.endswith('.pyc') for path in installed):
+        raise ValueError('unexpected bytecode under fixed no-compile/no-write policy')
+    components, names, owners, reports, compressed = recipe['components'], set(), {}, {}, 0
+    for item in components:
+        if type(item) is not dict or set(item) != COMPONENT_KEYS or type(item['name']) is not str or re.fullmatch('[a-z0-9]+(?:[-_][a-z0-9]+)*', item['name']) is None:
+            raise ValueError('selected component closed identity')
+        normalized = item['name'].replace('_', '-')
+        if normalized in names or type(item['requested']) is not bool or type(item['purelib']) is not bool or item['selected_form'] not in ('wheel', 'sdist'):
+            raise ValueError('component duplicate/form/requested identity')
+        names.add(normalized)
+        bounded_bytes(item['archive_bytes'], MAX_FILE)
+        if hashlib.sha256(item['archive_bytes']).hexdigest() != sha(item['archive_sha']):
+            raise ValueError('selected original archive bytes')
+        original = owned_absolute(item['archive_path'], system)
+        if item['selected_form'] == 'wheel' and (item['archive_bytes'] != item['wheel_bytes'] or not original.name.endswith('.whl')):
+            raise ValueError('wheel selected original archive equality')
+        if item['selected_form'] == 'sdist' and not original.name.endswith('.tar.gz'):
+            raise ValueError('selected sdist original provenance')
+        wheel = wheel_byte_map(item['wheel_bytes'], item['wheel_sha'], windows)
+        metadata_path = item['info'] + '/METADATA'
+        if metadata_path not in wheel:
+            raise ValueError('selected distribution metadata required')
+        declared, last_field = [], None
+        for line in wheel[metadata_path].decode('utf-8', errors='strict').split('\n'):
+            if line.endswith('\r'):
+                line = line[:-1]  # Exactly one CR is allowed only before LF.
+            if any(ord(c) < 32 and c != '\t' or ord(c) in (127, 133, 8232, 8233) for c in line):
+                raise ValueError('metadata header control separator')
+            if line == '':
+                break  # LF and CRLF terminate headers before description text.
+            if line[:1] in (' ', '\t'):
+                if last_field is None or last_field == 'name':
+                    raise ValueError('metadata Name/initial header continuation')
+                continue
+            key, separator, value = line.partition(':')
+            if not separator or re.fullmatch('[A-Za-z0-9-]+', key) is None:
+                raise ValueError('metadata header field syntax')
+            last_field = key.casefold()
+            if last_field == 'name':
+                declared.append(value.strip())
+        if len(declared) != 1 or re.sub('[-_.]+', '-', declared[0]).lower() != normalized:
+            raise ValueError('component metadata name identity')
+        compressed += len(item['wheel_bytes']) + len(item['archive_bytes'])
+        if compressed > 536870912:
+            raise ValueError('whole compressed archive bound')
+        scheme = map_scheme(system, item['name'])
+        library, mapping = relocate_payload(wheel, scheme, item['purelib'], item['info'], item['data_dir'], windows)
+        metadata_base = library + '/' + item['info']
+        generated = {
+            metadata_base + '/INSTALLER': dict(kind='INSTALLER', source=None),
+            metadata_base + '/direct_url.json': dict(kind='direct_url', source=None),
+        }
+        if item['requested']:
+            generated[metadata_base + '/REQUESTED'] = dict(kind='REQUESTED', source=None)
+        entry_source = item['info'] + '/entry_points.txt'
+        entries = entry_inventory(wheel[entry_source], system) if entry_source in wheel else {}
+        for name, entry in entries.items():
+            path = scheme['scripts'] + '/' + entry['filename']
+            if path in generated:
+                raise ValueError('derived script/generated path collision')
+            generated[path] = dict(kind='entry_script', source=mapping[entry_source])
+        paths = set(mapping.values()) | set(generated)
+        if set(mapping.values()) & set(generated):
+            raise ValueError('generated metadata collides with archive payload')
+        subset = {}
+        for path in sorted(paths):
+            key = path.casefold() if windows else path
+            if key in owners or path not in installed:
+                raise ValueError('cross-distribution ownership collision/missing installed path')
+            owners[key] = (item['name'], path)
+            subset[path] = installed[path]
+        for path, description in generated.items():
+            description['observed'] = digest(subset[path])
+        payload = verify_payload_record(wheel, subset, dict(system=system, scheme=scheme, purelib=item['purelib'],
+                      info=item['info'], data_dir=item['data_dir'], executable_bytes=recipe['executable'].encode('utf-8'), generated=generated))
+        verify_direct_url(subset[metadata_base + '/direct_url.json'], str(original), item['archive_bytes'], item['archive_sha'], system)
+        for name, entry in entries.items():
+            launcher = recipe['launchers'].get(entry['kind']) if windows else None
+            launcher_sha = WINDOWS_LAUNCHERS[entry['kind']][1] if windows else None
+            verify_entry_script(subset[scheme['scripts'] + '/' + entry['filename']], wheel[entry_source], name,
+                                recipe['executable'], system, launcher, launcher_sha)
+        reports[item['name']] = dict(selected_form=item['selected_form'], original_archive=digest(item['archive_bytes']),
+                                     built_wheel=digest(item['wheel_bytes']), payload=payload,
+                                     generated={p: digest(subset[p]) for p in generated})
+    if {v[1] for v in owners.values()} != set(installed):
+        raise ValueError('complete installed ownership union: extra/unowned path')
+    return dict(admitted=False, scope='WHOLE_SELECTED_MAP_SEMANTICS_ONLY_COLLECTOR_BOOTSTRAP_HOST_FORM_PENDING',
+                components=reports, owners=owners, installed={p: digest(v) for p, v in installed.items()},
+                bytecode=dict(BYTECODE_POLICY))
+
+
+def compare_whole_installed_maps(before, after):
+    keys = {'admitted', 'scope', 'components', 'owners', 'installed', 'bytecode'}
+    if type(before) is not dict or type(after) is not dict or set(before) != keys or set(after) != keys or before['admitted'] is not False or after['admitted'] is not False:
+        raise ValueError('unadmitted whole map comparison shape')
+    if before['scope'] != 'WHOLE_SELECTED_MAP_SEMANTICS_ONLY_COLLECTOR_BOOTSTRAP_HOST_FORM_PENDING' or before != after:
+        raise ValueError('entire selected installed map changed')
+    return dict(admitted=False, scope=before['scope'])
+
+
+if __name__ == '__main__':
+    raise SystemExit('SOURCE ONLY: actual collector, installer-host-form and full fixed resolver binding pending; no admission')

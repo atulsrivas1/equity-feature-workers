@@ -1,0 +1,855 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "THIRTEEN_OFFICIAL_TAGGED_VENDOR_WORKER_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+    "disposition": "VENDOR_ALLOCATION_CANCEL_DRAIN_DESTROY_PATHS_TRACED_WHOLE_PHYSICAL_RELEASE_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "repository": "https://github.com/VirtualBox/virtualbox",
+    "research_tag": {
+      "ref": "refs/tags/v7.2.14",
+      "node_id": "REF_kwDOOrL_T7FyZWZzL3RhZ3MvdjcuMi4xNA",
+      "url": "https://api.github.com/repos/VirtualBox/virtualbox/git/refs/tags/v7.2.14",
+      "object": {
+        "sha": "51d188f0a2a40015663041baa29f7aa0c10af5e5",
+        "type": "commit",
+        "url": "https://api.github.com/repos/VirtualBox/virtualbox/git/commits/51d188f0a2a40015663041baa29f7aa0c10af5e5"
+      }
+    },
+    "research_commit": "51d188f0a2a40015663041baa29f7aa0c10af5e5",
+    "source_receipt_sha256": "15c0d96be0182ebeb4aa0fda459ce0b579a8197ff3127197ab7984997fadc64b",
+    "source_pins": [
+      {
+        "path": "COPYING",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/COPYING",
+        "sha256": "8d684127eb278ec9a4e80a8c34320645d8579712ef6e893fe7393393fbbf59a4",
+        "git_sha1": "65dcfb4a4698d43a54c1c11bbf2def150a09a524",
+        "bytes": 36037
+      },
+      {
+        "path": "Version.kmk",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/Version.kmk",
+        "sha256": "79722c17a028e73c106bdf946b3c0ac05ba142d6afecabc3f89bebcb34d24e5f",
+        "git_sha1": "3ad6cdb5c17e2bdad466d32d1ead7db6233df6c3",
+        "bytes": 1870
+      },
+      {
+        "path": "src/VBox/Devices/Storage/DrvVD.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Devices/Storage/DrvVD.cpp",
+        "sha256": "ec6c598dfc79755c9f9bfdd72e636f24c0b8134e81ef4dcef62927f89c7407e7",
+        "git_sha1": "5a4d5c9a06fe1ec6c9cc72386d9d3d75493bd0c3",
+        "bytes": 212270
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp",
+        "sha256": "b06080d44a487a194432fcbbdebde78afa13fa4a92b895deb4d7833b1d72813f",
+        "git_sha1": "8c25f0bbcb0dd3c70f7b26256d4e95b94998889d",
+        "bytes": 68773
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp",
+        "sha256": "f8940782af1c3aa098c9605d9ac7d99a595d86659e16d936d305c53e85c9896e",
+        "git_sha1": "f382a233eef6439ea1a9a7c50cf5db118487d0c7",
+        "bytes": 49141
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp",
+        "sha256": "6f9f518b7aa32e091b3264e3065452d706e435ac8fbb9c85ae3126d25b595f9d",
+        "git_sha1": "89fa987634b535987b22939e6176e4986314fd45",
+        "bytes": 10674
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp",
+        "sha256": "e4abe9947fc94e965f76470c564ac57e2faa4b2492ed559e5396e66938c6fe33",
+        "git_sha1": "6c18d7d40f2aff1c3dc0a78b0f37e50a8fe0e1b5",
+        "bytes": 68046
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3Thread.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3Thread.cpp",
+        "sha256": "7f39f2c374778a0d425779379bed4c4155928d143f71ecd204ec7ec98d7e2572",
+        "git_sha1": "941a1a4e9a0d6dbddf83cafb0e507d0fc9b3021c",
+        "bytes": 36894
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/fileaio-posix.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/fileaio-posix.cpp",
+        "sha256": "3c0962c8e3baa067f21351d51be93126afa8d874351c3934338891ecf24f1b7d",
+        "git_sha1": "d4f69852765cfd39de0b87818ae49e0486462b54",
+        "bytes": 38019
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/fileio-posix.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/fileio-posix.cpp",
+        "sha256": "0d90076c421d510b9d0e7a9498ab45b9820fbc872fb9947a73979532eacc1adf",
+        "git_sha1": "d11c9fea4ec835693726807f82d204a52bd12ad2",
+        "bytes": 29246
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/semevent-posix.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/semevent-posix.cpp",
+        "sha256": "396244d0f649210b6b0dbef6b272c1698d4dac47b389db5919ef2f13915f5a32",
+        "git_sha1": "6f5b112c0a0cb41d49f3dc615dbd79285f63328e",
+        "bytes": 22945
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp",
+        "sha256": "c39a483a331cb7b7a93f73675cb1b4ea14c33a7a3f0f8d642f016526bf955afa",
+        "git_sha1": "fceb86b091a162a6fb82fa88bac6a8372e68ba62",
+        "bytes": 21637
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/thread-posix.cpp",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/thread-posix.cpp",
+        "sha256": "0712f691cfc75b08b8dcd39cc58635bf38bf6377fb5d5998e47fe52c09ac11d0",
+        "git_sha1": "5e24500266c879d51f508744b7e95bdb1ef285bb",
+        "bytes": 26115
+      }
+    ],
+    "total_bytes": 621667,
+    "facts": [
+      {
+        "fact": "Version.kmk declares7.2.14 with publisher/config override boundaries and COPYING supplies vendor license text. The saved official tag refers directly to commit51d188f0a2a40015663041baa29f7aa0c10af5e5. Matching version is not complete equality with Genode tarball SHA384f293184c52fd51bc941c17d753b4019446f53a6b07c828adfb3e61fe0a500, SDK/generated sources or ordered patch build. Complete license applicability remains separate.",
+        "paths": [
+          "COPYING",
+          "Version.kmk"
+        ]
+      },
+      {
+        "functions": [
+          "drvvdAsyncIOReadSync",
+          "drvvdAsyncIOWriteSync",
+          "drvvdAsyncIOFlushSync",
+          "drvvdMediaExIoReqCancel",
+          "drvvdIoReqCancelAll"
+        ],
+        "paths": [
+          "src/VBox/Devices/Storage/DrvVD.cpp"
+        ],
+        "fact": "Storage backend allocates request/event state; sync wrappers around asynchronous submission wait indefinitely for completion. Media cancellation changes eligible request state atomically and may decrement active count; it does not by itself cancel every physical backend operation. Driver destruction calls poweroff/unmount cleanup then destroys locks/caches/buffers/configuration records. VD/block-cache/provider bodies remain transitive obligations."
+      },
+      {
+        "functions": [
+          "PDMR3AsyncCompletionTaskCancel",
+          "PDMR3AsyncCompletionEpClose",
+          "pdmR3AsyncCompletionTerm"
+        ],
+        "paths": [
+          "src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp"
+        ],
+        "fact": "TaskCancel returns VERR_NOT_IMPLEMENTED in this tag. Endpoint close invokes its class callback then drops template reference, unlinks and frees endpoint metadata; class termination follows its endpoint lifecycle. This makes class-specific completion/drain semantics mandatory. A generic void close or canceled logical request is not a whole physical completion witness."
+      },
+      {
+        "functions": [
+          "pdmacFileEpAddTask",
+          "pdmacFileAioMgrWaitForBlockingEvent",
+          "pdmacFileAioMgrCloseEndpoint",
+          "pdmacFileAioMgrShutdown",
+          "pdmacFileAioMgrDestroy",
+          "pdmacFileEpClose"
+        ],
+        "paths": [
+          "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp"
+        ],
+        "fact": "New tasks are atomically prepended and managers awakened. Add/close/shutdown blocking events wait indefinitely for manager acknowledgement. Endpoint close waits for tasks then releases cached tasks/ranges/file; manager destroy performs shutdown before removing events/context/heap. Allocation, queued work, worker acknowledgement and final frees are one lifetime chain; there is no independent whole-operation deadline in this handshake."
+      },
+      {
+        "functions": [
+          "pdmacFileAioMgrNormal",
+          "pdmacFileAioMgrNormalDestroy"
+        ],
+        "paths": [
+          "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp"
+        ],
+        "fact": "Normal manager can grow its active-request context, attempts an unlimited request count, and allocates a replacement request-handle array before freeing the old one. It waits for active AIO completion indefinitely while processing blocking events and endpoints. Request cache, new tasks, alignment buffers, locked ranges and replacement overlap need complete backing reservations; context count/bandwidth state is not a global byte/node cap."
+      },
+      {
+        "functions": [
+          "pdmacFileAioMgrFailsafeProcessEndpointTaskList",
+          "pdmacFileAioMgrFailsafe"
+        ],
+        "paths": [
+          "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp"
+        ],
+        "fact": "Failsafe mode processes task lists using synchronous file flush/read/write and file growth, retaining pending tasks when rate policy prevents progress. Close/shutdown are worker states and signal a blocking-event waiter. Failsafe is not a hard-cancel or finite-storage guarantee: synchronous backend latency, write growth, rate delays, callbacks and provider final release remain part of the same domain."
+      },
+      {
+        "functions": [
+          "RTFileAioReqCancel",
+          "RTFileAioCtxWait",
+          "RTFileAioReqDestroy",
+          "RTFileAioCtxDestroy"
+        ],
+        "paths": [
+          "src/VBox/Runtime/r3/posix/fileaio-posix.cpp"
+        ],
+        "fact": "POSIX cancellation calls aio_cancel. AIO_CANCELED wakes a context and waits indefinitely for acknowledgement before marking completed; ALLDONE and NOTCANCELED return distinct completion/in-progress statuses. Context waiting uses aio_suspend with timed or indefinite modes and request reconciliation. Request/context destruction depends on eligible state. These branches do not guarantee immediate backend cancellation or bounded drain, especially without the selected OS/libc implementation."
+      },
+      {
+        "functions": [
+          "PDMR3ThreadDestroy",
+          "pdmR3ThreadDestroyAll"
+        ],
+        "paths": [
+          "src/VBox/VMM/VMMR3/PDMR3Thread.cpp"
+        ],
+        "fact": "Destroy moves thread toward terminating, wakes/signals it and waits60s or150ms based on earlier success; only successful thread wait proceeds to unlink and resource destruction. The state-transition loop and wake callbacks precede that wait. A finite one-thread wait is not a total cleanup deadline or successful termination; caller policy must retain failed/live debt and all other workers/resources."
+      },
+      {
+        "functions": [
+          "RTSemEventDestroy",
+          "RTSemEventMultiDestroy",
+          "rtThreadNativeMain",
+          "rtThreadNativeDestroy"
+        ],
+        "paths": [
+          "src/VBox/Runtime/r3/posix/semevent-posix.cpp",
+          "src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp",
+          "src/VBox/Runtime/r3/posix/thread-posix.cpp"
+        ],
+        "fact": "Event destruction marks invalid, broadcasts and retries busy condition/mutex destruction up to30 times with1ms sleeps per loop; errors return before free. This is attempt-count structure, not scheduler/callback elapsed-time proof. Native thread wrapper invokes common thread main then pthread_exit; native destroy here clears TLS. Common thread/refcount and Genode libc behavior remain separate from a full physical thread/stack release witness."
+      },
+      {
+        "functions": [
+          "RTFileClose",
+          "RTFileFlush"
+        ],
+        "paths": [
+          "src/VBox/Runtime/r3/posix/fileio-posix.cpp"
+        ],
+        "fact": "Close delegates to OS close and propagates errors. Flush delegates to fsync, with EINVAL returning a not-supported classification. Neither wrapper contains a timeout or proves provider/device durability or reclamation. Whole storage writer/node/backing ownership requires the selected VFS/filesystem/driver and failure policies, not merely these wrapper returns."
+      }
+    ],
+    "source_inventory_summary": {
+      "prior_partial_bytes": 498502,
+      "complete_vendor_closure": false,
+      "new_files": 13,
+      "prior_partial_files_context_only": 96,
+      "new_text_bytes": 621667,
+      "combined_partial_bytes": 1120169,
+      "combined_partial_files": 109
+    },
+    "conclusion": "The tagged vendor sources show concrete allocated/cached/queued state, logical cancellation, worker handshakes, waits and conditional final frees. Those paths must be analyzed together with the Genode port, provider and kernel/core/RCU graph. No stock cancellation or timeout parameter establishes a complete fixed peak or finite teardown, and this source selection is not the applied Genode implementation.",
+    "remaining_obligations": [
+      "Reconcile full original Genode archive and SDK/generated/ordered patched source with the official tag; do not infer whole archive equality from version.",
+      "Close all actual allocation callsites, caches, AIO replacement/retired overlap, request payloads and external provider backing under one conserved fixed total.",
+      "Trace transitive VD/block-cache/file format/AIO backend/libc pthread/common thread-refcounts and every callback through physical final release.",
+      "Establish supported finite cancellation/drain/failure control including unimplemented generic cancel, indefinite handshakes, busy-event failure and surviving/live worker debt.",
+      "Bind exact hardware/device/storage and Windows/Linux guest/interpreter/native fourforms/source-build-ABI-resolver/license configuration before Ready and operations."
+    ],
+    "limitations": [
+      "Only13saved UTF8 source texts were read and independently hashed as DATA; no compile/import/execute, archive/image/SDK/kernel/binary acquisition, build/patch/install/provision/API/native/process/VM/host/probe/test.",
+      "Prior96texts not rehashed or rereviewed;109PARTIAL1120169bytes do not close entire vendor/patched build/ABI/license/guest/provider/host proof.",
+      "Static waits/unimplemented paths/assertions/errors are not actual executed failure, leak, attack, incompatibility or universal impossibility.",
+      "Official tag and license/version text are research provenance, not selected dependency/configuration/license approval.",
+      "No Ready/operations/new mandatory owner input; rejected binary task not reattempted."
+    ],
+    "tool_only_history": [
+      "Some batched source snippets truncated; narrowed explicit function ranges supplied cancellation and close/destroy bodies. No actual operation occurred."
+    ],
+    "operational_authorization": false,
+    "ready_approval": false,
+    "selected_mechanism": false
+  },
+  "full_prior_vmm_release_reports": {
+    "eq083-vmm-release-source-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FORTY_ONE_IMMUTABLE_PORT_PATCH_AND_SUPPORT_SOURCE_TEXT_FILES_AS_DATA_ONLY",
+      "disposition": "PATCH_ORDER_AND_VCPU_EVENT_DRIVER_LIFETIMES_TRACED_WHOLE_RELEASE_PENDING",
+      "findings": [],
+      "newtests": 0,
+      "new_tests": 0,
+      "repository": "https://codeberg.org/genodelabs/genode",
+      "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "source_receipt_sha256": "0e8423ad06297ffa862c654bf644b6776693285fa5492fdc57798c4643ee63dd",
+      "source_pins": [
+        {
+          "path": "repos/ports/src/virtualbox7/patches/audio.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/audio.patch",
+          "sha256": "0c9b6a3e682d1a3ba586392f486113368b888753757757d6353feafe2467be93",
+          "bytes": 1160,
+          "git_sha1": "d547b5860f6d94af8b4f77992781f84bd7af3cd0"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/avx.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/avx.patch",
+          "sha256": "92d5d0f7d0bcebbd63bbef0f11815d1ba35a2a2f78ba058e8e0f61dbca407c7e",
+          "bytes": 4048,
+          "git_sha1": "b2ee8806e41cd9cd9f64a3a54078106b6d09e292"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/devsvga.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/devsvga.patch",
+          "sha256": "22bcf4b66db9e1a59064a962c335b62aac04c71c3f13586cdbbad92f73ab9259",
+          "bytes": 380,
+          "git_sha1": "623d07fdfca2101c3f88492f2f4bc578b8190d60"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/disk_geometry.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/disk_geometry.patch",
+          "sha256": "f1f3f021235226a3b04e426510ab596c4b2a67e91b770d8291357682caec18c2",
+          "bytes": 894,
+          "git_sha1": "810f1ac5aa5f9456fb4469213b68801b9f0f4071"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/display.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/display.patch",
+          "sha256": "0443153a6b0ca96e72bca3986104c1dc9984c422c6537e7577f4639279b38212",
+          "bytes": 1700,
+          "git_sha1": "99eb820874c0232947435a71e9da9c50bee2dc41"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/drvtap.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/drvtap.patch",
+          "sha256": "138fa4c9cd00b9ff29635f9df64f720ad845d08e6f82ea7e7354728048d0e0ea",
+          "bytes": 1497,
+          "git_sha1": "71a1a120f38f8cc082eb66d38d13839968f38fa8"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/exec_state.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/exec_state.patch",
+          "sha256": "34548770008260b79c05b38ab939862c72b1cd32baab036b1eefbd0213dc366b",
+          "bytes": 1275,
+          "git_sha1": "59872e543bb775566d900bd80572f0c30523bdee"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/full_encrypted.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/full_encrypted.patch",
+          "sha256": "272be9d0bfbc44eed6581eb2ffeb014ac4240d0e6614874f291792261d1dabbc",
+          "bytes": 916,
+          "git_sha1": "3745881a46d630ab440094193d9e7c4812784be0"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/gcc14.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/gcc14.patch",
+          "sha256": "f96580ab2aeaa5111bf0257f6e68388e6bf24bc61951c118ca6aad687f0c79ed",
+          "bytes": 322,
+          "git_sha1": "905abca5d878de327cb026a03bb1c17b523af554"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/htype.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/htype.patch",
+          "sha256": "e3f923361114b7d15f0947e840e8c462e66c2ff6f624590a0e8eb3cb262f4f20",
+          "bytes": 862,
+          "git_sha1": "944fdf21f3fdc77a4bd88f9550a0aef811b0749b"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/ich9.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/ich9.patch",
+          "sha256": "73e4f6cdbae1286e120e0e004c0f0a0a44e8406b10540bf5a2c01ed13b91a19e",
+          "bytes": 874,
+          "git_sha1": "eac88de28890b94dc964744ba3084020b90ad18f"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/log_level.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/log_level.patch",
+          "sha256": "b058703d3406ea763026cd5613b72e21cd46086f71dea75f53b9d6c0675d6f8c",
+          "bytes": 709,
+          "git_sha1": "610240090ea71ae0794f711cd96517ad63aee792"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/mousebuttons.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/mousebuttons.patch",
+          "sha256": "c280559311478e66676e831e2f6c414a50e3ff86eb3a21647a1328cda625d6ab",
+          "bytes": 7582,
+          "git_sha1": "ac64984ca5a334f76e311986e921f73b4abb4ca2"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/native_api.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/native_api.patch",
+          "sha256": "279d5619dbe2edaf167bfd284b7b2d536361bc77dc8ad53b750a058262bb7f52",
+          "bytes": 305,
+          "git_sha1": "531e2986e17792e0c9517406b0a7a9da599a5f7a"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/network.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/network.patch",
+          "sha256": "9c169cecf9872771914f001122e4ed574d18b9d385687f09b61a33d88c0488c0",
+          "bytes": 5735,
+          "git_sha1": "839ca64ed2d194a3b666277c659f4d4c19300946"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/ohci.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/ohci.patch",
+          "sha256": "798846c0247049fdfe11fc8987355f71a7c97c5372357799bb40f44d6860bb60",
+          "bytes": 2230,
+          "git_sha1": "65e58d72f5e4bce1b11c88a34616772d91fe0e58"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/pdmdriver.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/pdmdriver.patch",
+          "sha256": "0fb835308b3593e102312694c17f15f172cd7c6d1c3c67284724fe17d114b834",
+          "bytes": 452,
+          "git_sha1": "d930d029188ddacdfa79b44842668d209eb614db"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/qemu-xhci.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/qemu-xhci.patch",
+          "sha256": "de0c335ae5d09d731f106614e9a0cf2129b97c6846852fd294dfa99f9ac47aed",
+          "bytes": 1315,
+          "git_sha1": "a91c33d18869445b3387b86ad2b3f205a1478498"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/rdrand.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/rdrand.patch",
+          "sha256": "6a1a750fddd5a1515370c5f77716fe3a3ff6582c1743ce86278c497bd650b917",
+          "bytes": 1372,
+          "git_sha1": "3d0dcffc11b3e9e5fa201f773d6b077b7010d666"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/rttimer.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/rttimer.patch",
+          "sha256": "92590caa10ab0a5b9c0becc2463b735b34b37d666527290d7ea560f850fce3a6",
+          "bytes": 1511,
+          "git_sha1": "4f903d324bf996e55f99a589e0f9cc5d147f975f"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/series",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/series",
+          "sha256": "39c35d3b0d4ab5f90a28be7519964cffa46caff5cd29201e19ce46f01a54e479",
+          "bytes": 457,
+          "git_sha1": "0d19e2a868e8686c3c28a48e0ff9615df72bca0a"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/setjmp.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/setjmp.patch",
+          "sha256": "e7d09c7308374d13364a28f48c6ca51e78719e71bcfeabc22ca1bfac78cb8628",
+          "bytes": 698,
+          "git_sha1": "ab31fca8f812506fb213e56889f6d8c5c47e571e"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/shaderlib.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/shaderlib.patch",
+          "sha256": "de0910be1f4aeec27613ab98f36264e0db032e040bc9425ca8cebe31c30a89c2",
+          "bytes": 1996,
+          "git_sha1": "0783a75d2c224156e8a24b39c9fbf62447e738b2"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/sharedclipboard.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/sharedclipboard.patch",
+          "sha256": "96aa911fca45457c1aaca6ec6da0c15faf7eda54a23a062a3ff4cdf8aa307537",
+          "bytes": 1394,
+          "git_sha1": "69507361cc35de4151b371fe5c4fe260e76b71cf"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/smp_sipi.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/smp_sipi.patch",
+          "sha256": "f3f8ef176c10a19999e25c4daa2183047ccea15aed7cfba30291fe03670ae297",
+          "bytes": 1249,
+          "git_sha1": "b2bfa41ed141bdc396c574992c55d8dc02d2d882"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/stack_size.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/stack_size.patch",
+          "sha256": "e434615efb67b57ade7f142c27460c10672e8308498bdf0befdb2d7cd87a33ca",
+          "bytes": 926,
+          "git_sha1": "480a572ccc7925808dad334790d3b8861455f80c"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/sup_ioctl_query_func_size.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/sup_ioctl_query_func_size.patch",
+          "sha256": "4b3d02e7f3b8956127aea9e797e44cad466bec2c9b56bc6dda60cc2e2309c952",
+          "bytes": 947,
+          "git_sha1": "31779bb471e87385248b0953c18b59bebaf8de69"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/tm_poke.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/tm_poke.patch",
+          "sha256": "e1aa5ce2134960c0c79a7a8d417f78b01ddd83a312aab2523babf4dab0bcf3dd",
+          "bytes": 5336,
+          "git_sha1": "1ac7b6be3f3a9742685a33dec404a13a4b406a8e"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/tpm.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/tpm.patch",
+          "sha256": "610e1d1a8d4426b071a628447954e3377e79a27d9e5e2d2ce95e5eec4866594c",
+          "bytes": 1951,
+          "git_sha1": "12872b1275295a985e363efdd2dc1e71d2e7aa54"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/tsc_mode.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/tsc_mode.patch",
+          "sha256": "70dbdfdcb939f22e0a432c549c74685f2fc4eafc7f30d3e316bd521e40e3f38e",
+          "bytes": 559,
+          "git_sha1": "3ea6212ec651add378efa181d682f433d05a2771"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/patches/vmdk.patch",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/patches/vmdk.patch",
+          "sha256": "ea56c14c98ca77e56f9d564b471ea8af08d741171de862b678ea664997d77254",
+          "bytes": 718,
+          "git_sha1": "c26a41896b87c4116b8935a5f651ca06f91ae19c"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/drivers.cc",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/drivers.cc",
+          "sha256": "389393126e15cf4d1b0acdf65f17cef032aa0fa2e9210ba6faa759fb48ad0167",
+          "bytes": 1439,
+          "git_sha1": "bf4b101fe11262ce363c7ee3369cb6b145fb0379"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/pdm.cc",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/pdm.cc",
+          "sha256": "8e3d201486c920aa03033b22c6b578e7caa15522825da4547c1fcde6709f5b7e",
+          "bytes": 3646,
+          "git_sha1": "7101caab9c5bc4fc1d5a8aadc13727c9a35541c8"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/sup_drv.cc",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_drv.cc",
+          "sha256": "348728e59f49a9ffd1ca96832164c5925f355b8d0c4da4bec019de6b8a171d2a",
+          "bytes": 1608,
+          "git_sha1": "891c54c0958c070935d4d778323f644546b916f9"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/sup_sem.cc",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_sem.cc",
+          "sha256": "3b6e0b1143cf2360e80ba042ba885fd7f05483d593f457ffa81294ddf6e7843b",
+          "bytes": 3565,
+          "git_sha1": "ff47155d6112782d2aa9f1274884a79c15a627a0"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/sup_vcpu.cc",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vcpu.cc",
+          "sha256": "129077d85c5b9e71149873be032bb9f009212ffbc8b4d22cd27500e20be0090b",
+          "bytes": 23875,
+          "git_sha1": "d8f0f0ba0a5e1bdbe49b8fae8190e8a90881bd43"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/sup_vcpu.h",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/sup_vcpu.h",
+          "sha256": "f3d09828e0c4891b9450bbc9fb5a9ecc0d64494f0c6dbf7b4243c54f2734f66d",
+          "bytes": 1158,
+          "git_sha1": "e8a274c30a8c3d42f704f4e969c0aa23befdf73a"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/stub_macros.h",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/stub_macros.h",
+          "sha256": "53007ef2cff868bbc62b5a8d3bdee887465b91e3d482df99999989e1d6900670",
+          "bytes": 929,
+          "git_sha1": "3b5bceb13a23d52e1052fd391d30d060ac350573"
+        },
+        {
+          "path": "repos/ports/src/virtualbox7/attempt.h",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/src/virtualbox7/attempt.h",
+          "sha256": "a1a0bf08ad66430c36c9699bb36b4242324234871f230df030b2086ec735c4ed",
+          "bytes": 788,
+          "git_sha1": "9937ff3bef100a388d8f17e0aa0a7cbe22f368b2"
+        },
+        {
+          "path": "repos/ports/lib/mk/spec/x86_64/virtualbox7-storage.mk",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/lib/mk/spec/x86_64/virtualbox7-storage.mk",
+          "sha256": "4dc9e00121075684f6448467bb8057a753d9eda850206cdc48409913bcd4ee6b",
+          "bytes": 212,
+          "git_sha1": "a123be05b3fa1e052ed895e83edf17f3e6a537d9"
+        },
+        {
+          "path": "repos/ports/lib/mk/spec/x86_64/virtualbox7-runtime.mk",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/ports/lib/mk/spec/x86_64/virtualbox7-runtime.mk",
+          "sha256": "bd6dfe5c24005d48b8ba6bb60f8aee71bc4016e67e8635f29ab02600a0b15ff3",
+          "bytes": 8201,
+          "git_sha1": "18bed3662109071192acce27e1f55ee134e473cf"
+        }
+      ],
+      "total_bytes": 96791,
+      "patch_series_order": [
+        "drvtap.patch",
+        "qemu-xhci.patch",
+        "network.patch",
+        "smp_sipi.patch",
+        "tm_poke.patch",
+        "exec_state.patch",
+        "rttimer.patch",
+        "devsvga.patch",
+        "shaderlib.patch",
+        "audio.patch",
+        "sup_ioctl_query_func_size.patch",
+        "disk_geometry.patch",
+        "stack_size.patch",
+        "avx.patch",
+        "rdrand.patch",
+        "mousebuttons.patch",
+        "log_level.patch",
+        "vmdk.patch",
+        "setjmp.patch",
+        "display.patch",
+        "gcc14.patch",
+        "tsc_mode.patch",
+        "htype.patch",
+        "native_api.patch",
+        "full_encrypted.patch",
+        "pdmdriver.patch",
+        "tpm.patch",
+        "ich9.patch",
+        "ohci.patch",
+        "sharedclipboard.patch"
+      ],
+      "facts": [
+        {
+          "fact": "All30named patch files match the saved series ordering and immediate31-text patch-directory inventory. Exact text identities are verified; patches were not applied, compiled or reconciled with full original vendor files. Patch completeness in this directory is not full effective build/configuration/license or ABI closure.",
+          "paths": [
+            "repos/ports/src/virtualbox7/patches/series"
+          ]
+        },
+        {
+          "fact": "Selected patches change guest CPU feature handling, EMT stack from1MiB to1MiB-minus16KiB, Genode setjmp selection, minimum query-function structure size and native-API support declaration. These affect actual port ABI/runtime geometry and must be joined to exact compiler/vendor/configuration sources; neither a flag nor declared support proves our guest/native artifacts.",
+          "paths": [
+            "repos/ports/src/virtualbox7/patches/avx.patch",
+            "repos/ports/src/virtualbox7/patches/rdrand.patch",
+            "repos/ports/src/virtualbox7/patches/stack_size.patch",
+            "repos/ports/src/virtualbox7/patches/setjmp.patch",
+            "repos/ports/src/virtualbox7/patches/sup_ioctl_query_func_size.patch",
+            "repos/ports/src/virtualbox7/patches/native_api.patch"
+          ]
+        },
+        {
+          "fact": "Patches add forced-action CPU pokes, implement timer-interval change with callback-local update or stop/start, broaden NEM notification beyond selected remote-state tests, force WAIT_SIPI transitions and exclude native-API TSC mode on Genode. These are event/timing behavior, not numeric latency, callback cancellation or finite whole teardown guarantees.",
+          "paths": [
+            "repos/ports/src/virtualbox7/patches/tm_poke.patch",
+            "repos/ports/src/virtualbox7/patches/rttimer.patch",
+            "repos/ports/src/virtualbox7/patches/exec_state.patch",
+            "repos/ports/src/virtualbox7/patches/smp_sipi.patch",
+            "repos/ports/src/virtualbox7/patches/tsc_mode.patch"
+          ]
+        },
+        {
+          "fact": "Disk geometry is calculated instead of using the BIOS geometry query branch. VMDK patch removes FreeBSD-specific raw descriptor/image paths on Genode. Storage makefile includes vendor Storage cpp files except VDIfTcpNet. Full format/provider/cache/async I/O constructors and frees remain outside these selected text snippets; no continuous bytes/nodes/retired-object quota is established.",
+          "paths": [
+            "repos/ports/src/virtualbox7/patches/disk_geometry.patch",
+            "repos/ports/src/virtualbox7/patches/vmdk.patch",
+            "repos/ports/lib/mk/spec/x86_64/virtualbox7-storage.mk"
+          ]
+        },
+        {
+          "fact": "Audio patch disables a recording-start read section; network adds receive-readiness callbacks and early driver attachment; OHCI adds an operational bus-stop PowerOff callback and Genode request processing; shared clipboard conditionally skips a data-event signal, with reference/lifetime concerns documented in the patch. These are source comments/behavior changes, not executed failures or proof all queues, events and external writers drain.",
+          "paths": [
+            "repos/ports/src/virtualbox7/patches/audio.patch",
+            "repos/ports/src/virtualbox7/patches/network.patch",
+            "repos/ports/src/virtualbox7/patches/ohci.patch",
+            "repos/ports/src/virtualbox7/patches/sharedclipboard.patch"
+          ]
+        },
+        {
+          "fact": "vCPU owns a VM-connection wrapper and halt-event handle, creates the event and switches to hardware at construction. Pause posts an exit signal or marks forced flags; halt waits at least1ms and resets its event, wake signals it. Exit constructs a temporary state reference across an EMT switch then destructs that reference. No explicit derived destructor/release method here closes the halt event or proves VM-session detached/quiescent; member/base/vendor destroy paths remain to trace. This is missing closure, not a demonstrated leak.",
+          "functions": [
+            "Sup::Vcpu_impl::_handle_exit",
+            "halt",
+            "pause",
+            "wake_up",
+            "run",
+            "Vcpu_impl",
+            "create_vmx",
+            "create_svm"
+          ],
+          "paths": [
+            "repos/ports/src/virtualbox7/sup_vcpu.cc",
+            "repos/ports/src/virtualbox7/sup_vcpu.h"
+          ]
+        },
+        {
+          "fact": "Semaphore create/close/signal delegate to IPRT event functions. Multi wait translates milliseconds and indefinite sentinel to relative interruptible flags; relative nanoseconds are converted to milliseconds. Several nanosecond wait variants use STOP, which logs/backtraces then sleeps forever. A supported selected call graph must exclude or control those paths; timeout/resolution constants do not establish cancel/drain/destruction of all workers. No such path was run.",
+          "paths": [
+            "repos/ports/src/virtualbox7/sup_sem.cc",
+            "repos/ports/src/virtualbox7/stub_macros.h"
+          ]
+        },
+        {
+          "fact": "PDM maps known registration symbols to statically linked drivers, with dummy success registrations for some modules; unexpected RC symbol enters a loop and R0 dummy asserts. Driver registry includes disk/SCSI/DVD/network/audio/USB/pipes/TCP/UDP/rawfile/serial/TPM paths. Missing CPU frequency sleeps forever, virtualization selection uses platform ROM, and attempt throws Fatal on failed HRESULT. Registration/status checking does not prove every callback lifetime, actual supported feature path or cleanup.",
+          "paths": [
+            "repos/ports/src/virtualbox7/pdm.cc",
+            "repos/ports/src/virtualbox7/drivers.cc",
+            "repos/ports/src/virtualbox7/sup_drv.cc",
+            "repos/ports/src/virtualbox7/attempt.h"
+          ]
+        },
+        {
+          "fact": "Runtime composition selects upstream generic/common, POSIX file/async/thread/event/native-loader and FreeBSD memory sources, with explicit filters. This gives concrete next dependencies for event/thread/file teardown, but their complete bodies and provider backends are not present. Full vendor runtime cannot be inferred from makefile filenames.",
+          "paths": [
+            "repos/ports/lib/mk/spec/x86_64/virtualbox7-runtime.mk"
+          ]
+        }
+      ],
+      "source_inventory_summary": {
+        "combined_partial_bytes": 498502,
+        "new_text_bytes": 96791,
+        "prior_partial_files_context_only": 55,
+        "complete_vendor_closure": false,
+        "combined_partial_files": 96,
+        "prior_partial_bytes": 401711,
+        "new_files": 41
+      },
+      "conclusion": "The exact patch series and selected support code expose real port-specific ABI, notification, storage and vCPU/event lifetimes. Neither complete patch-directory reading nor pause/timeout/status supplies applied vendor semantics, whole resource conservation or bounded cleanup. Underlying VM connection, IPRT workers/events, device callbacks and storage providers must join the same kernel/core/RCU owner graph.",
+      "remaining_obligations": [
+        "Reconcile exact ordered patches with permitted original vendor source and generated/build configuration before interpreting effective ABI or library/lifetime behavior.",
+        "Trace actual VM_connection vCPU destructor/session detach, halt-event destruction, full vendor VM destroy and pthread/IPRT worker/event queues including failure and partial initialization.",
+        "Close all registered device, async storage, clipboard/network/USB and provider callback ownership with reserved resources and finite supported cancellation/drain/release.",
+        "Prove complete kernel/core/GMM/session/driver/provider budget conservation including retained/deferred backing and outside writers, then exact guest/interpreter/native fourforms/source-build-ABI-resolver-license closure."
+      ],
+      "limitations": [
+        "Only41newsaved UTF8 source texts were read and independently hashed as DATA; no code compile/apply/import/execute, vendor/archive/binary/image/kernel acquisition, build/boot/install/native API/process/VM/host/probe/test.",
+        "Prior55texts not rehashed or rereviewed;96PARTIAL498502bytes are not whole vendor/applied patch/configuration/ABI/binary/guest/license/host/provider closure.",
+        "Source STOP/assert/loop/error branches and comments are not actual runtime failures, attacks, leaks or universal incompatibility/impossibility.",
+        "No dependency/topology/configuration selected, no Ready/operations/new mandatory owner input. Rejected binary task not reattempted."
+      ],
+      "tool_only_history": [
+        "Batched source read output truncated; explicit narrow vCPU/semaphore/patch ranges supplied relevant bodies before conclusions."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false,
+      "selected_mechanism": false
+    },
+    "eq083-vmm-release-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "bases": {
+        "equity-features": "640fc1dd2995515f765201d8f9603839d97fdeb7",
+        "equity-feature-workers": "729a635523e789a55e625e751200a1bc077fcc32"
+      },
+      "disposition": "APPROVED",
+      "findings": [],
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_VMM_RELEASE_RESEARCH.md": {
+            "bytes": 8007,
+            "sha256": "b718008de94a1c07fea89bebd35d88e75d90707c8df31cc615cb108dad8b90d8"
+          },
+          "docs/stories/EQ-083_VMM_RELEASE_INPUTS.json": {
+            "bytes": 18655,
+            "sha256": "d8bcf0a187de2569d93df2c4d4c3e4829028bab77b7eb829025cbb0ff03da91b"
+          },
+          "docs/stories/EQ-083_VMM_RELEASE_EVIDENCE.json": {
+            "bytes": 50625,
+            "sha256": "f301214b00d7a2055f96b0522e68a4705c4499eb251deaf28a6b4b55a99b7e8e"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 529313,
+            "sha256": "58a95cef47b3dfdce8c031acf9066ed6b218f994e64af1da6977befd7e5fa022"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 788564,
+            "sha256": "1ab7c6effca975adf90945cb2dfd736aecce50d9a16401f72458a376002999c8"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_VMM_RELEASE_RESEARCH.md": {
+            "bytes": 8007,
+            "sha256": "b718008de94a1c07fea89bebd35d88e75d90707c8df31cc615cb108dad8b90d8"
+          },
+          "docs/EQ083_VMM_RELEASE_INPUTS.json": {
+            "bytes": 18655,
+            "sha256": "d8bcf0a187de2569d93df2c4d4c3e4829028bab77b7eb829025cbb0ff03da91b"
+          },
+          "docs/EQ083_VMM_RELEASE_EVIDENCE.json": {
+            "bytes": 50625,
+            "sha256": "f301214b00d7a2055f96b0522e68a4705c4499eb251deaf28a6b4b55a99b7e8e"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 391982,
+            "sha256": "6f2eb5e905169087dacc2ba6aab352ff75aded67a44d0f44e363ac8b33c6c8a7"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 503120,
+            "sha256": "cc50cbf191958cf497a332d8f469a7d4d53d21acded1f61c98bd6c8b3c496579"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases/five docs each; other tracked source/history unchanged and old continuity suffixes retained.",
+        "Three assets mirrored exactly; full nine-fact source report and prior three VMM-graph reports/tool history preserved.",
+        "41metadata96791bytes and exact30patch ordering match saved report;96PARTIAL scope does not claim full vendor/configuration/ABI/binary closure.",
+        "Patch/source/build/license declarations remain unapplied and unqualified; STOP/indefinitewait/RCdummy/missingfrequency branches are reachability obligations, not executed failures or impossibility.",
+        "vCPU pause/event/state transitions and timeouts remain separate from release/cancel/drain; full runtime workers, providers and vendor destruction pending.",
+        "Wholecore-VMMproviderwriterqueue-retiredbacking/formABI-license-finitecleanup proof remains combined; no Ready/operations/selected topology or mandatory owner input."
+      ],
+      "limitations": [
+        "Source reports reused; no source/research/rawtext rehash/native/host/probe/test rerun.",
+        "Documentation review does not qualify applied vendor behavior, physical resource conservation or timing.",
+        "Prepared commit attribution awaits final publication readback."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    },
+    "eq083-vmm-release-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "adbc6336f39b5a2ab270c00dd17ced59e125ac74",
+        "equity-feature-workers": "248d5cc0592b243f1923d9c483b9f5ea0956149f"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_VMM_RELEASE_RESEARCH.md": {
+            "bytes": 8007,
+            "sha256": "b718008de94a1c07fea89bebd35d88e75d90707c8df31cc615cb108dad8b90d8"
+          },
+          "docs/stories/EQ-083_VMM_RELEASE_INPUTS.json": {
+            "bytes": 18655,
+            "sha256": "d8bcf0a187de2569d93df2c4d4c3e4829028bab77b7eb829025cbb0ff03da91b"
+          },
+          "docs/stories/EQ-083_VMM_RELEASE_EVIDENCE.json": {
+            "bytes": 50625,
+            "sha256": "f301214b00d7a2055f96b0522e68a4705c4499eb251deaf28a6b4b55a99b7e8e"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 529313,
+            "sha256": "58a95cef47b3dfdce8c031acf9066ed6b218f994e64af1da6977befd7e5fa022"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 788564,
+            "sha256": "1ab7c6effca975adf90945cb2dfd736aecce50d9a16401f72458a376002999c8"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_VMM_RELEASE_RESEARCH.md": {
+            "bytes": 8007,
+            "sha256": "b718008de94a1c07fea89bebd35d88e75d90707c8df31cc615cb108dad8b90d8"
+          },
+          "docs/EQ083_VMM_RELEASE_INPUTS.json": {
+            "bytes": 18655,
+            "sha256": "d8bcf0a187de2569d93df2c4d4c3e4829028bab77b7eb829025cbb0ff03da91b"
+          },
+          "docs/EQ083_VMM_RELEASE_EVIDENCE.json": {
+            "bytes": 50625,
+            "sha256": "f301214b00d7a2055f96b0522e68a4705c4499eb251deaf28a6b4b55a99b7e8e"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 391982,
+            "sha256": "6f2eb5e905169087dacc2ba6aab352ff75aded67a44d0f44e363ac8b33c6c8a7"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 503120,
+            "sha256": "cc50cbf191958cf497a332d8f469a7d4d53d21acded1f61c98bd6c8b3c496579"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git LF sizeSHA pins match reviewed_git_files and reviewed prepared bytes after only line-ending normalization; no CR.",
+        "Exact five documentation changes perrepo, direct reviewed parent bases and clean paired codex/eq083-resilience branches.",
+        "Three assets mirrored, exact old knowledge/handoff suffixes and other tracked source/history outside allowed paths unchanged.",
+        "Full Atul author and committer identity and no Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "fa66bf0899b3125d42c17dfe372f58804703e95d5fe6b3c1284faa2a973215ab",
+      "limitations": [
+        "Published docs readback only; no semantic/source/research/native/host/probe/test rerun.",
+        "No whole qualification, resource/cleanup enforcement, runtime/operational or Ready authority."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Tagged selected vendor driver/runtime/worker lifetimes; whole archive-patched-build-provider physical/timing/compatibility proof pending",
+  "tool_history": "Web-only official Downloads fetch402 and main README timeout were unavailable; actual official GitHub tag/contents API established selected text identities before claims, no absence inference or operational failure. Prior VMM-release source renderer IndexError already preserved in prior full evidence; not rerun. All13 new texts were inspected as DATA only."
+}

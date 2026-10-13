@@ -1,0 +1,142 @@
+{
+  "schema": "eq083.tls-certificate-execution.v1",
+  "heads": {
+    "equity-features": "95d27a31f72a23e21f6599c9dcbf6ac8cb1beb5a",
+    "equity-feature-workers": "6197efe3d0ed6c3ac4aabc314916f3f8cfb794fc"
+  },
+  "source": {
+    "bytes": 17117,
+    "sha256": "5fc06444865d62b862cfc9525a36eeaf537fe2002a7269dd0cb35735cdfbd995"
+  },
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107363421",
+  "actual_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107393637",
+  "author_log": {
+    "file": "eq083-tls-certificates-author.log",
+    "sha256": "e69586ee956fa8c62374a4ced85d671f5632b2af4b89e68a559e1c6bcb708aa0",
+    "exit_code": 0
+  },
+  "local_record": {
+    "relative_directory": "eq083-tls-certificates-6197efe",
+    "sha256": "f121d4abbbc7def06cc5c9b27107d7107a8ca8067c9bba2a85801e638a981eca"
+  },
+  "binary_pins": [
+    {
+      "name": "openssl.exe",
+      "bytes": 1050780,
+      "sha256": "822034da8a01558c17cbe53f42f33985a6eaf7c89e21273779f9c6560d8c4d78"
+    },
+    {
+      "name": "libcrypto-3-x64.dll",
+      "bytes": 5805212,
+      "sha256": "0330b5f558996f297d687e1a2b2fcc2cacf883b16baef74aaef35285d7c1231c"
+    },
+    {
+      "name": "libssl-3-x64.dll",
+      "bytes": 1026716,
+      "sha256": "feb5b300e0b3a021fed481178f3d66896426576d4d13b85a304d2a3809b25bfd"
+    }
+  ],
+  "commands": [
+    {
+      "case": "version",
+      "exit_code": 0,
+      "job_active": 0,
+      "version": "OpenSSL 3.5.7 9 Jun 2026 (Library: OpenSSL 3.5.7 9 Jun 2026)",
+      "outputs": {
+        "stdout": {
+          "bytes": 62,
+          "sha256": "abca2d2b3e9e564d3795aff39324e2f9a13ec5fa90c804015faf74206d5de9c0"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "ownership_closed": true
+    },
+    {
+      "case": "valid",
+      "exit_code": 0,
+      "job_active": 0,
+      "version": null,
+      "outputs": {
+        "stderr": {
+          "bytes": 1651,
+          "sha256": "feb03447c22a1274f714c0a3b7d93b39bac11a9e732b9e70381c6d9affd1060b"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "ownership_closed": true
+    },
+    {
+      "case": "wrong",
+      "exit_code": 0,
+      "job_active": 0,
+      "version": null,
+      "outputs": {
+        "stderr": {
+          "bytes": 1724,
+          "sha256": "3a3ba36717684c00007baee9db340aec74ab0845aed38feca9006d7eb0433c0c"
+        },
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "ownership_closed": true
+    }
+  ],
+  "certificates": {
+    "valid": {
+      "files": {
+        "cert": {
+          "bytes": 1174,
+          "sha256": "1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc"
+        },
+        "key": {
+          "bytes": 1732,
+          "sha256": "e2414edfb163e9d3d534fdb02edfd88739d0db27b0396af024219ec2bdc48b47"
+        }
+      },
+      "san": "127.0.0.1",
+      "der_sha256": "c0a3c29fcd28b214f5b244f35a71d83443a50cdc39fe8e4037c47a09b91ef9e9",
+      "not_before": "Oct 11 08:59:19 2026 GMT",
+      "not_after": "Nov 10 08:59:19 2026 GMT"
+    },
+    "wrong": {
+      "files": {
+        "cert": {
+          "bytes": 1174,
+          "sha256": "6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0"
+        },
+        "key": {
+          "bytes": 1732,
+          "sha256": "f9ac19359e1adf915908bdce2a2e8d93e323348661529ca433c80eba6ba159e6"
+        }
+      },
+      "san": "127.0.0.2",
+      "der_sha256": "7dc2951ca43895e74d11570a5630face4d0971c956ddf4616dcaa7dbb84577ed",
+      "not_before": "Oct 11 08:59:19 2026 GMT",
+      "not_after": "Nov 10 08:59:19 2026 GMT"
+    }
+  },
+  "reviewer": {
+    "identity": "/root/r7_policy_review",
+    "scope": "Separate verified-environment read-only parser, file/hash/SAN/validity/keypair checks; NO regeneration or independent OpenSSL exit observation",
+    "report": "eq083-tls-certificates-reviewer-report.json"
+  },
+  "limits": [
+    "Local certificate setup only, no TLS socket/handshake/service/native/reference composition",
+    "Private key bytes never published; keys remain owned outside repos",
+    "Static imports not dynamic module/source-build proof",
+    "Windows only, not Linux/forms/full24/Ready/artifact/release"
+  ],
+  "history": [
+    "Original17103byte generator name-shadowing P2 corrected BEFOREexecution at95d27a/6197efe; initialREWORK preserved",
+    "Recorder expected findings field absent in actual reviewer report: KeyError BEFOREcomment/write, reviewer added genuine findings:[], then recorder succeeded",
+    "Author read reviewer report from wrong repo cwd failed read-only, corrected explicit parent; no product failure"
+  ]
+}

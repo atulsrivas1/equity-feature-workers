@@ -1,0 +1,270 @@
+{
+  "schema": "eq083.tls-reference.pre-execution.v1",
+  "bases": {
+    "equity-features": "53018c83d4b41f5bf578b7198b38bb2d1c9b9366",
+    "equity-feature-workers": "4c61b5eeda1f5445e57f5e146eefeda80d4c3a4a"
+  },
+  "reference": {
+    "bytes": 5916,
+    "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231"
+  },
+  "derived_source": {
+    "commit": "7adcad108d2785a90883f97a452deb7758fbe4f1",
+    "path": "docs/EQ083_VERSION_REFERENCE_ENTRY.txt",
+    "bytes": 3707,
+    "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+  },
+  "owner_source": {
+    "bytes": 9985,
+    "sha256": "8b49365ce9525831cedacf63a71edbd0a25712e84773798a556d800293880100",
+    "review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6107465135"
+  },
+  "certificate_pins": {
+    "valid": {
+      "bytes": 1174,
+      "sha256": "1566a59de9b7bb0b72f7bdad3370a96ad3701aa24e605af5195dd989b8f97adc"
+    },
+    "wrong": {
+      "bytes": 1174,
+      "sha256": "6c9e6b665117c9d9ab857194398161060168a336b5aec3eebd7cd33a7549f4b0"
+    }
+  },
+  "fixture": {
+    "path": "docs/EQ081_CLIENT_FIXTURES.json",
+    "bytes": 76771,
+    "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+  },
+  "owner_arguments": [
+    "origin fixed HTTPS127.0.0.1",
+    "frozen fixture",
+    "principalA",
+    "PIDmarker",
+    "case trades",
+    "fixed TLSmode",
+    "immutable arm marker",
+    "exact literal certroot",
+    "role baseline/fault/followup"
+  ],
+  "public_constructors": [
+    "RemoteClient(origin,provider,attempts=1,budget=5,ssl_context=context)",
+    "MCPProfile(eq083-tls-trades,(),(CommandRegistration(command,full_expected),),60)",
+    "StdioServer(client,profile)"
+  ],
+  "bounds": {
+    "provider_baseline": 5,
+    "provider_followup": 2,
+    "provider_fault_read_modes": 2,
+    "provider_fault_trust_modes": 1,
+    "arm": 64,
+    "arm_read": 65,
+    "pid": 128,
+    "closed": 256,
+    "path_chars": 1024,
+    "fixture_read": 76772,
+    "cert_read": 8193,
+    "budget_seconds": 5,
+    "attempts": 1,
+    "local_reference_ttl_seconds": 60
+  },
+  "ledger": {
+    "schema": "eq083.tls-dialogue.outside-design.v1",
+    "scope": "Source-derived outside design only, not frozen, reviewed, executed or Ready",
+    "common_baseline": {
+      "raw": 3,
+      "typed": 4,
+      "official_sdk_mcp": 5,
+      "http": 12,
+      "source": 1,
+      "native": "One actual audited original trades producer, entire producer and native SDK golden SHA; no stripped metadata",
+      "process": "Observe baseline MCP actual entry OS exit before fault process"
+    },
+    "common_followup": {
+      "raw": 2,
+      "typed": 2,
+      "new_official_sdk_mcp": 2,
+      "http": 6,
+      "source": 1,
+      "operation": "Explicit same-key calculate and full result/summary only, no replay or second compute"
+    },
+    "cases": [
+      {
+        "name": "verified-full-result",
+        "http_total": 18,
+        "accepts": 18,
+        "handshake_success": 18,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "fault": "None; full baseline and explicit followup"
+      },
+      {
+        "name": "untrusted-certificate",
+        "http_total": 18,
+        "accepts": 21,
+        "handshake_success": 18,
+        "handshake_failure": 3,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "raw_fault_attempts": 1,
+        "typed_fault_provider": 1,
+        "mcp_fault_provider": 1,
+        "fault": "Three explicit same-key calculate calls, each one TLS handshake and zero WSGI dispatch; default public trust rejects owned self-signed certificate before any HTTP send",
+        "controls_http": [
+          1,
+          12,
+          12,
+          12,
+          18
+        ]
+      },
+      {
+        "name": "hostname-mismatch",
+        "http_total": 18,
+        "accepts": 21,
+        "handshake_success": 18,
+        "handshake_failure": 3,
+        "raw_typed_sdk_http": [
+          5,
+          6,
+          7
+        ],
+        "raw_fault_attempts": 1,
+        "typed_fault_provider": 1,
+        "mcp_fault_provider": 1,
+        "fault": "Same fixed origin127.0.0.1 and trust store containing both owned certs; check_hostname stays true. Owner switches per-connection server context to SAN127.0.0.2, then restores valid context",
+        "controls_http": [
+          1,
+          12,
+          12,
+          12,
+          18
+        ]
+      },
+      {
+        "name": "extra-response-byte",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Fault MCP explicit same-key attach BEFORE arm adds1 actual HTTP; then raw/typed/MCP result reads each actually dispatch. Consume and close actual service response, append one byte with original Content-Length. No cached/fabricated producer",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "truncated-response-byte",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Same pre-arm MCP attach and three actual result dispatches; consume/close entire original response, forward all but last byte, preserve original declared length",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "duplicate-content-length",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "Same pre-arm MCP attach and three actual result dispatches; append duplicate actual original Content-Length header, preserve actual producer body",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      },
+      {
+        "name": "actual-owner-denial",
+        "http_total": 22,
+        "accepts": 22,
+        "handshake_success": 22,
+        "handshake_failure": 0,
+        "raw_typed_sdk_http": [
+          6,
+          7,
+          9
+        ],
+        "fault_mcp_provider": 2,
+        "fault_http": 4,
+        "fault": "MCP fault process attaches original nativeA job using A provider BEFORE arm, then fixed provider rotates to B after arm and reads same A reference; actual HTTP403 invalidates local reference. Raw/typedB read actual nativeA result IDs403. Immutable MCP profile stays identical; token callback is trusted owner state. Foreign process unknown_reference0 is distinct",
+        "controls_http": [
+          1,
+          12,
+          13,
+          16,
+          22
+        ]
+      }
+    ],
+    "physical_caps": {
+      "accepts": 24,
+      "service_dispatch": 24,
+      "handshake_seconds": 2,
+      "accepted_connection_timeout_before_handshake": true,
+      "http_body": 262144,
+      "http_header": 8192,
+      "native_output": 768,
+      "control": 128,
+      "control_read": 129,
+      "ack": 1024
+    },
+    "controls": [
+      "settled",
+      "baseline",
+      "arm",
+      "restored",
+      "final"
+    ],
+    "pending": [
+      "Exact five controls/counters/handshake and response close source",
+      "Certificate identities from separately reviewed and actually completed local generation",
+      "TLS owner/ref/parent/copier published and separately reviewed before any TLS/socket/native execution",
+      "Generic schema and canonical SDK content checks",
+      "Full original snapshot after all repetitions AND actual native/server/process close"
+    ],
+    "limitations": "Attempt/provider/handshake/WSGI dispatch/native source are separate counters. TLS cert failure connect/statusNone is not mutation outcome_unknown because no HTTP bytes were sent. Read framing failure decode/statusNone is protocol invalid_response and not autoretryable. Server audit emitted is not remote receipt. No scheduler/HTTP owner replacement, hostname bypass, system trust installation, public hosting or TLS proof from fake-wire tests. Timing is cooperative, not hard DNS or callback termination. Counts remain proposed until exact source review and actual run."
+  },
+  "scope": "PRE-EXECUTION installed reference SOURCE only. Exact parent/copier pending before any TLS/reference/native/socket execution",
+  "executed": false,
+  "reviewed": false,
+  "runtime_unchanged": true
+}

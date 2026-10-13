@@ -1,0 +1,230 @@
+{
+  "full_independent_primary_research": {
+    "reviewer": "/root/r7_policy_review",
+    "scope": "PRIMARY_GENODE_DOCUMENTATION_ONLY_NO_OPERATIONS",
+    "disposition": "RAM_KERNEL_QUOTA_AND_DOCUMENTED_GUEST_CANDIDATE_SUPPORTED_WHOLE_TOPOLOGY_PENDING",
+    "findings": [],
+    "newtests": 0,
+    "new_tests": 0,
+    "facts": [
+      {
+        "source": "https://genode.org/documentation/genode-foundations/25.05/architecture/Resource_trading.html",
+        "fact": "PD quotas account physical RAM. Init subdivides its budget; reference-account restrictions prevent arbitrary transfers across branches without parent mediation. Clients donate session quota before service creation and can request upgrades. Servers must undo session allocations before quota withdrawal; failures require parent policy, potentially destroying a sibling server or supplying more quota. Locally supplied or ancestor services retain authority over reclamation. Independent session backing stores are required: byte bookkeeping in a shared heap cannot ensure backing dataspaces can be freed. Resource requests may stall or trigger long operations; yield compliance is cooperative. Disk-space management belongs to servers, not the RAM quota contract."
+      },
+      {
+        "source": "https://genode.org/documentation/genode-foundations/25.05/architecture/Recursive_system_structure.html",
+        "sections": [
+          "Component ownership",
+          "Client-server relationship",
+          "Ownership and lifetime of a session"
+        ],
+        "fact": "Parents provide resources throughout child lifetime and control initial code, threads, capabilities and relationships. Children ultimately trust their parents. An established session directly connects client and server; intermediate policy components are outside its operation path. Session objects belong to the server and close follows the broker chain. A nonresponding server may block a client indefinitely. Parent destruction authority is not a numerical bound on complete teardown."
+      },
+      {
+        "source": "https://www.genode.org/documentation/genode-foundations/25.05/architecture/Core_-_the_root_of_the_component_tree.html",
+        "fact": "Core starts init and grants available resources, exposes physical resources through routed services, and provides bootstrap objects. PD sessions start with zero quota and have quota-bounded physical-memory and capability allocators. Closing a PD destroys its allocated dataspaces, removes their visibility across components and returns quota to the reference account. Dataspaces may be shared and mapped multiple times; contiguous RAM can serve as DMA buffers. Device, boot-ROM, CPU and mapping authority therefore belongs in the complete topology, not just guest RAM totals."
+      },
+      {
+        "source": "https://genode.org/documentation/release-notes/15.08",
+        "sections": [
+          "NOVA kernel-resource management"
+        ],
+        "historical": true,
+        "fact": "This historical release describes per-protection-domain kernel-memory accounting and quota exhaustion stopping a thread or invoking an OOM handler. The handler may transfer kernel quota, revoke delegations or stop the thread. Core's then-current IPC policy attempted an upgrade, then mapping revocation, then stopping; it was explicitly described as heuristic. This is evidence of the mechanism and policy distinction, not an immutable current NOVA configuration, fixed non-upgrading quota or complete current proof."
+      },
+      {
+        "source": "https://genode.org/documentation/release-notes/21.02",
+        "sections": [
+          "VirtualBox 6.1.14",
+          "VirtualBox 5"
+        ],
+        "historical": true,
+        "fact": "Genode's own VirtualBox 6 port was documented as an initial development snapshot running Linux and Windows guests, with limited multicore and preliminary integration. Kernel-agnostic virtualization interfaces replaced the NOVA-specific approach; readiness for other kernels was not universal tested feature parity. The same notes describe 64-bit AMD guests for VirtualBox 5. These are actual Genode-port claims, not merely upstream VirtualBox compatibility claims."
+      },
+      {
+        "source": "https://genode.org/documentation/release-notes/26.08",
+        "sections": [
+          "New port of VirtualBox 7"
+        ],
+        "fact": "The newer official release announces Genode support for VirtualBox 7.2.14 after staff and community use, with newer Linux guests, improved multicore, UEFI, TPM 2.0 and Secure Boot including Windows 11. It states that the older VirtualBox 6.1 port had reached end of life. This narrows the guest-support feasibility gap but does not validate our exact guest image, CPython 3.12 x64 native artifacts, four installed forms or their resource and cleanup behavior."
+      },
+      {
+        "source": "https://genode.org/documentation/articles/sculpt-25-10",
+        "fact": "Sculpt 25.10 documents an x86-64 system, VT-x for VirtualBox and recommended VT-d for driver sandboxing, plus Linux VM examples. Its service catalog includes virtualization, direct devices, storage, shared interfaces and powerful PD/tracing services. These require explicit routing and ownership decisions. This consulted Sculpt version is a documentation example, not a selected or asserted latest deployment; no boot, installation, guest or hardware setup was performed."
+      }
+    ],
+    "qualified_conclusion": "The documented combination of physical RAM budgets, client-funded server allocations, kernel-resource quotas and Genode's actual Windows/Linux guest ports is a substantive whole-topology candidate. A quota parameter or guest-support statement alone is not positive admission. Exact selected configuration, donation and reclamation policies and every external backing owner still need one integrated allocation-and-authority graph.",
+    "missing_whole_domain_obligations": [
+      "Freeze an exact supported kernel/core/init/VMM/driver build and source-to-binary provenance. Include static kernel, bootstrap, core, controller and allocator overhead, with fixed global and per-domain budgets and no unbudgeted automatic upgrades or transfers.",
+      "Prove per-session independent backing and all pending, retired, shared, mapped and cross-process ownership. Freeze failure policy for server close, blocked RPC, cooperative yield, insufficient quota and destruction; retain debt until actual release.",
+      "Provide continuous storage-byte and live-node enforcement separately, including disk images, metadata, deleted-open files, logs, brokers and backend caches. RAM donation is not a filesystem quota or cumulative-write bound.",
+      "Include DMA/IOMMU, device queues and passthrough, IPC and shared-folder/network crossings, external brokers and drivers in the authority and resource graph.",
+      "Establish exact Windows/Linux guest and interpreter/native dependency compatibility, complete resolver/host maps and source/wheel/sdist/repeat-build closure for the required four forms.",
+      "Provide supported bounded stop, cancel, drain, unmap, close, reap and physical reclamation across all owners, including failed startup. Neither cooperative policy nor logical session destruction supplies the complete numerical teardown bound."
+    ],
+    "limitations": [
+      "Only official documentation was read. No third-party authority, source or binary acquisition, code execution, build, setup, native API, VM/image, host inspection, probes or tests.",
+      "Historical 15.08 and 21.02 statements remain historical; newer guest support is separately sourced. No release, dependency, license, hardware or topology is selected.",
+      "No numerical resource measurement, selected configuration proof or physical cleanup qualification. The previously rejected binary verification task was not reattempted.",
+      "The seL4 report is context only and was not rereviewed. Existing reports and project source were not changed.",
+      "No Ready or operational approval and no new mandatory owner-input request. Complete mechanism design remains agent work."
+    ],
+    "tool_only_history": [
+      "Guessed standalone Component_ownership URL was unavailable; official Resource_trading navigation identified the actual Recursive_system_structure page. A batched browser response was truncated; explicit section reads supplied the relevant resource and kernel policy text. Neither tooling event is implementation evidence."
+    ],
+    "selected_mechanism": false,
+    "operational_authorization": false,
+    "ready_approval": false,
+    "new_owner_input_required": false
+  },
+  "full_prior_capability_docs_reports": {
+    "eq083-capability-domain-docs-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "PREPARED_DOCUMENTATION_SEMANTIC_REVIEW_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "bases": {
+        "equity-features": "d7da15b63dc99f3daf49a515494aa1a58a9c0527",
+        "equity-feature-workers": "28f2a22bf6f84994471d9aa26dfcbb103345041f"
+      },
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_CAPABILITY_DOMAIN_RESEARCH.md": {
+            "bytes": 7567,
+            "sha256": "f70735701e2ce0e1162c0dc5a07d3d0ec3c425d5cf6841e28aed34448df51b7e"
+          },
+          "docs/stories/EQ-083_CAPABILITY_DOMAIN_INPUTS.json": {
+            "bytes": 504,
+            "sha256": "87678c3f79d7cb0eeea1521b484ad5cc32279c774418ac52b886489ba2170970"
+          },
+          "docs/stories/EQ-083_CAPABILITY_DOMAIN_EVIDENCE.json": {
+            "bytes": 7146,
+            "sha256": "4c6e58b544a34f80b6323386d2363e98ca6535a79b4dc2ed16701824708c8997"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 526613,
+            "sha256": "b775bd68a45a22929058bd0fc76e89d383d27ef808f87cf380940234fe8d3ab4"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 785864,
+            "sha256": "8cb5a70af350057ba90205ff42dd12210522c89fdae8ff8b14edac397827816f"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_CAPABILITY_DOMAIN_RESEARCH.md": {
+            "bytes": 7567,
+            "sha256": "f70735701e2ce0e1162c0dc5a07d3d0ec3c425d5cf6841e28aed34448df51b7e"
+          },
+          "docs/EQ083_CAPABILITY_DOMAIN_INPUTS.json": {
+            "bytes": 504,
+            "sha256": "87678c3f79d7cb0eeea1521b484ad5cc32279c774418ac52b886489ba2170970"
+          },
+          "docs/EQ083_CAPABILITY_DOMAIN_EVIDENCE.json": {
+            "bytes": 7146,
+            "sha256": "4c6e58b544a34f80b6323386d2363e98ca6535a79b4dc2ed16701824708c8997"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 389282,
+            "sha256": "b6e164b456beb96f87ec552af9c1c4ac55ee05d096dba61d0df5a1d62a1ea3fb"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 500420,
+            "sha256": "25198f8c1547f6db0a7ef5f1703d844f4ebc5c872a58feb97a04e9f8a2c2f353"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "Exact paired bases and five-file documentation-only worktree scope; other tracked source/history unchanged.",
+        "Three research assets mirror byte-for-byte; full saved independent primary report preserved exactly.",
+        "Old project knowledge and handoff suffixes preserved after line-ending normalization.",
+        "Semantic readback distinguishes physical untyped allocation from whole allocation-and-authority topology; boot, alignment debt, DMA, VMM compatibility, brokers, storage and bounded teardown remain obligations.",
+        "No configuration/topology selected, no guest impossibility inferred, no operational or Ready grant, no mandatory new owner input."
+      ],
+      "limitations": [
+        "No research, source controls, native operations, host inspection, probes or tests rerun.",
+        "Attribution of prepared changes must be checked after publication; no new commit exists in this review.",
+        "Review does not qualify an issuer, resource mechanism, artifact compatibility or complete topology."
+      ],
+      "tool_only_history": [
+        "First read-only PowerShell guard command had unbraced variable before colon and failed parsing before any checks or writes; corrected data-only guard completed."
+      ]
+    },
+    "eq083-capability-domain-final-readback-reviewer-report.json": {
+      "reviewer": "/root/r7_policy_review",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "disposition": "APPROVED",
+      "findings": [],
+      "heads": {
+        "equity-features": "b39c0d2abd3450340ed363138fcd71f583dbf191",
+        "equity-feature-workers": "27a0b4d01b9cdcb32466d933a84480d1e9cf5c8e"
+      },
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_CAPABILITY_DOMAIN_RESEARCH.md": {
+            "bytes": 7567,
+            "sha256": "f70735701e2ce0e1162c0dc5a07d3d0ec3c425d5cf6841e28aed34448df51b7e"
+          },
+          "docs/stories/EQ-083_CAPABILITY_DOMAIN_INPUTS.json": {
+            "bytes": 504,
+            "sha256": "87678c3f79d7cb0eeea1521b484ad5cc32279c774418ac52b886489ba2170970"
+          },
+          "docs/stories/EQ-083_CAPABILITY_DOMAIN_EVIDENCE.json": {
+            "bytes": 7146,
+            "sha256": "4c6e58b544a34f80b6323386d2363e98ca6535a79b4dc2ed16701824708c8997"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 526613,
+            "sha256": "b775bd68a45a22929058bd0fc76e89d383d27ef808f87cf380940234fe8d3ab4"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 785864,
+            "sha256": "8cb5a70af350057ba90205ff42dd12210522c89fdae8ff8b14edac397827816f"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_CAPABILITY_DOMAIN_RESEARCH.md": {
+            "bytes": 7567,
+            "sha256": "f70735701e2ce0e1162c0dc5a07d3d0ec3c425d5cf6841e28aed34448df51b7e"
+          },
+          "docs/EQ083_CAPABILITY_DOMAIN_INPUTS.json": {
+            "bytes": 504,
+            "sha256": "87678c3f79d7cb0eeea1521b484ad5cc32279c774418ac52b886489ba2170970"
+          },
+          "docs/EQ083_CAPABILITY_DOMAIN_EVIDENCE.json": {
+            "bytes": 7146,
+            "sha256": "4c6e58b544a34f80b6323386d2363e98ca6535a79b4dc2ed16701824708c8997"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 389282,
+            "sha256": "b6e164b456beb96f87ec552af9c1c4ac55ee05d096dba61d0df5a1d62a1ea3fb"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 500420,
+            "sha256": "25198f8c1547f6db0a7ef5f1703d844f4ebc5c872a58feb97a04e9f8a2c2f353"
+          }
+        }
+      },
+      "newtests": 0,
+      "new_tests": 0,
+      "checks": [
+        "All ten immutable Git bytes match reviewed_git_files and reviewed prepared bytes after only CRLF-to-LF normalization; no CR.",
+        "Exact five-document commit per repository, direct parent bases, clean codex/eq083-resilience branches; all other tracked source/history unchanged.",
+        "Three research assets mirrored; old knowledge/handoff byte suffixes retained.",
+        "Atul attribution and no Co-authored-by trailers verified."
+      ],
+      "prepared_report_sha256": "95321a1a2d3ec45a1ac8d3dabfc7747efae9721c95440aca1d4db99c5ead87eb",
+      "limitations": [
+        "Published documentation byte/attribution/scope readback only; no semantic research, source tests, native or host operations/probes rerun.",
+        "Prepared report including tool-only colon parse correction retained untouched.",
+        "No runtime, issuer/resource enforcement, compatibility, full topology or Ready approval."
+      ],
+      "operational_authorization": false,
+      "ready_approval": false
+    }
+  },
+  "new_tests": 0,
+  "scope": "Primary resource trading and versioned guest-support research plus proposed one-subsystem graph, not implementation or runtime qualification",
+  "tool_history": "Prior capability reviewer PowerShell colon-interpolation parse failure occurred before checks/writes; corrected checks/full reports preserved here. Author read-only pending-report filename GetItem miss was not a product failure. Existing broad documentation output narrowed relevant sources; no source/runtime failure inferred."
+}

@@ -1,0 +1,90 @@
+{
+  "full_independent_source_research": {
+    "reviewer": "/root/r7_policy_review",
+    "disposition": "SOURCE_RESEARCH_STOCK_SHARED_HOST_PARAMETERS_EXCLUDED_AS_COMPLETE_FINITE_RESOURCE_SOLUTION",
+    "scope": "SAVED_IMMUTABLE_UPSTREAM_C_TEXT_AS_DATA_ONLY",
+    "commit": "ddca7bd5481857a65ba552f643b8776fd070836f",
+    "source_receipt": "eq083-winfsp-allocator-source-text-receipt.json",
+    "newtests": 0,
+    "new_tests": 0,
+    "findings": [],
+    "sources": {
+      "src/sys/util.c": {
+        "bytes": 46472,
+        "sha256": "b64d3e2cd497dbd50f997c89d29aa45ce205f291be1e7cd7bce591e9d6801d71",
+        "git_blob_sha1": "82dc2880f8445887d560431e7fe75d817396cbe8"
+      },
+      "src/sys/wq.c": {
+        "bytes": 5583,
+        "sha256": "3fbbf0b60edd39553b22fbb39f671459597f23a842d1c1b8c7eb0011e53fed55",
+        "git_blob_sha1": "e0adeea24915d6caf01d67c191bd4ffe314ebb23"
+      },
+      "src/sys/psbuffer.c": {
+        "bytes": 8940,
+        "sha256": "d1c75cec88ba8c66569cda601c39debef7634eb01f542275f284ac14581324fd",
+        "git_blob_sha1": "49a5b60031df4a62fb0d24f300644fa34c1b3382"
+      }
+    },
+    "identity_checks": "Three saved UTF8 text byte lengths, rawSHA256 and Git blob SHA1 independently recomputed and matched;60995bytes. With prior18/759834 this is partial21/820829 source bytes, not whole filesystem/native closure. Previous mandatory-cleanup report is context only, not an audit/test replay.",
+    "facts": [
+      {
+        "source": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/util.c",
+        "functions": [
+          "FspAllocatePoolMustSucceed",
+          "FspAllocateIrpMustSucceed"
+        ],
+        "fact": "Both repeatedly attempt the allocator until a non-null result. Delay sequence starts10/10/50/50/100/100ms and then uses300ms while the retry index remains beyond the array; there is no finite retry or elapsed-time stop. Delay uses KernelMode and nonalertable FALSE. The inspected bodies take no quota reservation, cancel token or deadline and do not inspect queue stop. No time guarantee follows from the MustSucceed name."
+      },
+      {
+        "source": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/psbuffer.c",
+        "functions": [
+          "FspProcessBufferAcquire",
+          "FspProcessBufferRelease",
+          "FspProcessBufferReuseEntry"
+        ],
+        "fact": "Processor-derived2..8 bounds registered reusable buffer slots per process. If no reusable entry remains and that count is exhausted, allocation uses alloc_no_reuse rather than rejecting. Oversized requests also allocate directly. This fallback obtains committed process virtual memory and returns no reuse cookie; its release frees that allocation. Thus the reuse count does not bound simultaneous active allocations or aggregate committed bytes."
+      },
+      {
+        "source": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/psbuffer.c",
+        "functions": [
+          "FspProcessBufferCollect",
+          "FspProcessBufferNotifyRoutine",
+          "FspProcessBufferFinalize"
+        ],
+        "fact": "Cached bookkeeping participates in process notifications and collection. This is a reuse/reclamation lifecycle, not a complete cross-process resource admission ledger. Its source does not establish finite completion of every active caller or cap every kernel/cached/request allocation."
+      },
+      {
+        "source": "https://github.com/winfsp/winfsp/blob/ddca7bd5481857a65ba552f643b8776fd070836f/src/sys/wq.c",
+        "functions": [
+          "FspWqPrepareIrpWorkItem",
+          "FspWqCreateAndPostIrpWorkItem",
+          "FspWqPostIrpWorkItem",
+          "FspWqWorkRoutine"
+        ],
+        "fact": "Work preparation can lock user buffers and allocate request/work-item state before posting to CriticalWorkQueue. Posting marks the IRP pending. The routine may complete it, repost through ordinary/BestEffort IOQ or retain pending/ignore status. The inspected path has no local global active-work byte/count reservation or finite work-duration deadline. Dispatcher joining alone therefore does not establish this independent native asynchronous work has drained."
+      }
+    ],
+    "mandatory_path_binding": "Earlier inspected Cleanup/Close requests use these MustSucceed pool and internal-IRP helpers; prepare/complete retries may retain additional request/response/work state. Mandatory teardown may allocate after original descriptor/reference retirement and before queue admission. This binding uses saved source/report context, not runtime execution.",
+    "qualified_candidate_verdict": {
+      "parameter_only_claim": "EXCLUDED",
+      "reason": "Stock shared-host WinFsp IrpCapacity/timeout/thread/cache parameters alone cannot satisfy the required mandatory finite cleanup and whole-resource enforcement proof: unconditional allocator retry paths and non-admission reuse fallbacks remain, alongside independent asynchronous kernel work.",
+      "qualification": "This does not prove universal impossibility of a supported complete solution, vendor defect, actual allocation failure, leak, hang or security escape. A substantially different complete supported reservation/allocation-failure-prevention and physical-domain design could be assessed on its own evidence; no such design is selected or verified here."
+    },
+    "next_boundary": [
+      "End the stock-parameter-only shortcut: further isolated count/clock/cache wrappers cannot certify these allocations or interrupt nonalertable kernel retry loops.",
+      "If retaining this candidate, establish supported physical admission and reservation coverage for every mandatory allocation and external memory-pressure domain, all asynchronous work, mapping/cache/request lifetimes and final drain. User-mode open-count debt accounting alone cannot establish kernel allocation success.",
+      "Otherwise research a complete alternative isolation/resource topology with every host/guest/provider/storage domain explicitly bounded; retain all source/native resolver, writer, cleanup and per-form obligations. Do not infer a guest cap automatically bounds host cost.",
+      "Freeze and review one complete provider/controller/outer-owner transaction only after supported contracts are concrete; no new human input solely because mechanism work is incomplete."
+    ],
+    "limitations": [
+      "No tests, C compilation/import/execution, binary/driver/library acquisition, native/API/process/mount/host/probe/archive verification or rejected binary-task reattempt.",
+      "Text declarations are partial source evidence, not compiled flags, ABI, installed host, actual peak measurement or runtime enforcement.",
+      "No selected dependency/release/license/environment, implemented physical issuer, Ready/form/release qualification or operational grant. Prior reports unchanged."
+    ],
+    "mechanism_admitted": false,
+    "operational_authorization": false,
+    "new_owner_input_required": false
+  },
+  "new_tests": 0,
+  "scope": "Exact allocator/cache/workqueue source and qualified settings-only candidate exclusion; no actual resource failure"
+}

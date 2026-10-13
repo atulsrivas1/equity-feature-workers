@@ -1,0 +1,1251 @@
+import sys
+
+if len(sys.argv) != 1 or any(type(getattr(sys.flags, key)) is not int for key in ('isolated', 'no_site', 'optimize')) or sys.flags.isolated != 1 or sys.flags.no_site != 1 or sys.flags.optimize != 0 or sys.dont_write_bytecode is not True:
+    raise ValueError('proposed preflight requires zero arguments and -I-B-S before stdlib imports')
+
+if any(type(value) is not int for value in sys.version_info[:3]) or tuple(sys.version_info[:3]) != (3, 12, 10) or sys.implementation.name != 'cpython' or sys.implementation.cache_tag != 'cpython-312':
+    raise ValueError('proposed preflight exact CPython3.12.10 required')
+
+"""EQ083 current-process loaded-host observation SOURCE ONLY, never admission.
+
+Fixed current process only. Future form-parent AND each owned child must emit
+separate reviewed observations. No import/load/install/native execution is
+performed by source publication/review. Full resolver/form/loader closure,
+Windows datafile mappings and trusted receipt reconciliation remain pending.
+"""
+
+import hashlib
+
+import os
+
+from pathlib import Path
+
+import re
+
+import stat
+
+import sys
+
+MAX_MAPS = 4096
+
+MAX_MODULES = 1024
+
+MAX_MAP_BYTES = 1048576
+
+MAX_FILE = 67108864
+
+MAX_TOTAL = 1073741824
+
+REPARSE = 0x400
+
+def stat_pin(info):
+    if not stat.S_ISREG(info.st_mode) or getattr(info, 'st_file_attributes', 0) & REPARSE:
+        raise ValueError('resolved regular nonreparse file required')
+    if type(info.st_size) is not int or not 0 <= info.st_size <= MAX_FILE:
+        raise ValueError('host file size')
+    return tuple(getattr(info, key) for key in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+
+def host_open_identity_note(expected, opened):
+    keys = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+    for pin in (expected, opened):
+        if type(pin) is not tuple or len(pin) != 7 or any(type(value) is not int for value in pin):
+            raise ValueError('identity diagnostic exact primitive tuple')
+        if not (0 <= pin[0] < 2**64 and 0 <= pin[1] < 2**128 and 0 <= pin[2] < 2**32
+                and 0 <= pin[3] < 2**64 and 0 <= pin[4] <= MAX_FILE
+                and all(-2**127 <= value < 2**127 for value in pin[5:])):
+            raise ValueError('identity diagnostic scalar bounds')
+    differences = tuple(key for key, left, right in zip(keys, expected, opened) if left != right)
+    if not differences:
+        raise ValueError('identity diagnostic requires mismatch')
+    note = json.dumps(dict(expected=dict(zip(keys, expected)), opened=dict(zip(keys, opened)),
+                           differing_fields=differences), sort_keys=True, separators=(',', ':'), allow_nan=False)
+    if len(note.encode('ascii')) > 2048:
+        raise ValueError('identity diagnostic output bound')
+    return note
+
+
+_WINDOWS_NATIVE_FILE_API = None
+
+
+def windows_native_file_api():
+    global _WINDOWS_NATIVE_FILE_API
+    if _WINDOWS_NATIVE_FILE_API is not None:
+        return _WINDOWS_NATIVE_FILE_API
+    if os.name != 'nt' or sys.flags.isolated != 1 or sys.flags.optimize != 0:
+        raise ValueError('isolated Windows native file context')
+    import ctypes as c
+    from ctypes import wintypes as w
+    import msvcrt
+    if c.sizeof(c.c_void_p) != 8:
+        raise ValueError('native file Windows64 only')
+    class Basic(c.Structure):
+        _fields_ = [('creation', c.c_longlong), ('access', c.c_longlong), ('write', c.c_longlong),
+                    ('change', c.c_longlong), ('attributes', w.DWORD)]
+    class Standard(c.Structure):
+        _fields_ = [('allocation', c.c_longlong), ('end', c.c_longlong), ('links', w.DWORD),
+                    ('delete_pending', c.c_ubyte), ('directory', c.c_ubyte)]
+    class FileId(c.Structure):
+        _fields_ = [('volume', c.c_ulonglong), ('file_id', c.c_ubyte * 16)]
+    if (c.sizeof(Basic), Basic.attributes.offset, c.sizeof(Standard), Standard.links.offset,
+            Standard.delete_pending.offset, Standard.directory.offset, c.sizeof(FileId), FileId.file_id.offset) != (40, 32, 24, 16, 20, 21, 24, 8):
+        raise ValueError('native file ABI')
+    kernel = c.WinDLL('kernel32', use_last_error=True)
+    create, query, close, kind = kernel.CreateFileW, kernel.GetFileInformationByHandleEx, kernel.CloseHandle, kernel.GetFileType
+    create.argtypes, create.restype = [w.LPCWSTR, w.DWORD, w.DWORD, c.c_void_p, w.DWORD, w.DWORD, w.HANDLE], w.HANDLE
+    query.argtypes, query.restype = [w.HANDLE, c.c_int, c.c_void_p, w.DWORD], w.BOOL
+    close.argtypes, close.restype = [w.HANDLE], w.BOOL
+    kind.argtypes, kind.restype = [w.HANDLE], w.DWORD
+    _WINDOWS_NATIVE_FILE_API = (c, Basic, Standard, FileId, create, query, close, kind, msvcrt.get_osfhandle)
+    return _WINDOWS_NATIVE_FILE_API
+
+
+def windows_file_handle(handle):
+    if type(handle) is not int or not 0 < handle < 2**63:
+        raise ValueError('ordinary positive native file HANDLE')
+    return handle
+
+
+def windows_file_error(c):
+    code = c.get_last_error()
+    if type(code) is not int or not 0 < code <= 0xffffffff:
+        raise ValueError('native file error DWORD')
+    return c.WinError(code)
+
+
+def windows_handle_file_info(handle):
+    windows_file_handle(handle)
+    c, Basic, Standard, FileId, create, query, close, kind, get_handle = windows_native_file_api()
+    c.set_last_error(0)
+    file_type = kind(handle)
+    if type(file_type) is not int or file_type != 1:
+        raise ValueError('native file disk handle required')
+    basic, standard, file_id = Basic(), Standard(), FileId()
+    for enum, value in ((0, basic), (1, standard), (18, file_id)):
+        c.set_last_error(0)
+        success = query(handle, enum, c.byref(value), c.sizeof(value))
+        if type(success) is not int or not -(2**31) <= success < 2**31:
+            raise ValueError('native file BOOL result')
+        if success == 0:
+            raise windows_file_error(c)
+    times = (int(basic.creation), int(basic.access), int(basic.write), int(basic.change))
+    attributes = int(basic.attributes)
+    if any(not 0 <= value < 2**63 for value in times) or attributes == 0 or attributes & (0x10 | REPARSE):
+        raise ValueError('native regular nonreparse file attributes/times')
+    if not 0 <= int(standard.allocation) < 2**63 or not 0 <= int(standard.end) <= MAX_FILE or not 0 < int(standard.links) <= 0xffffffff:
+        raise ValueError('native file allocation/end/nlink bounds')
+    if int(standard.delete_pending) != 0 or int(standard.directory) != 0:
+        raise ValueError('native file delete-pending/directory denied')
+    return dict(volume=int(file_id.volume), file_id=bytes(file_id.file_id).hex(),
+                creation=times[0], access=times[1], write=times[2], change=times[3], attributes=attributes,
+                allocation=int(standard.allocation), size=int(standard.end), nlink=int(standard.links),
+                delete_pending=0, directory=0)
+
+
+def windows_path_file_info(path, borrowed):
+    windows_file_handle(borrowed)
+    c, Basic, Standard, FileId, create, query, close, kind, get_handle = windows_native_file_api()
+    c.set_last_error(0)
+    handle = create(path, 0x80, 0x7, None, 3, 0x00200000, None)
+    if handle is None or handle == 2**64 - 1:
+        raise windows_file_error(c)
+    if type(handle) is not int or not 0 < handle < 2**64 - 1:
+        raise ValueError('created path HANDLE representation')
+    if handle == borrowed:
+        raise ValueError('path HANDLE aliases borrowed fd')
+    try:
+        windows_file_handle(handle)
+        return windows_handle_file_info(handle)
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            c.set_last_error(0)
+            result = close(handle)
+            if type(result) is not int or not -(2**31) <= result < 2**31:
+                raise ValueError('native close BOOL result')
+            if result == 0:
+                raise windows_file_error(c)
+        except BaseException:
+            if not active:
+                raise
+
+
+def windows_python_file_views(path, expected, opened, native):
+    for pin in (expected, opened):
+        if type(pin) is not tuple or len(pin) != 7 or any(type(value) is not int for value in pin):
+            raise ValueError('Windows Python pin shape')
+        if not (0 <= pin[0] < 2**64 and 0 <= pin[1] < 2**128 and 0 <= pin[2] < 2**32
+                and 0 < pin[3] <= 0xffffffff and 0 <= pin[4] <= MAX_FILE
+                and all(-2**127 <= value < 2**127 for value in pin[5:])):
+            raise ValueError('Windows Python pin bounds')
+    if any(expected[index] != opened[index] for index in (0, 1, 3, 4, 5)):
+        raise ValueError('Windows Python common identity differs')
+    regular_mode = 0o100444 if native['attributes'] & 1 else 0o100666
+    suffix = path[path.rfind('.'):].lower() if '.' in path else ''
+    path_mode = regular_mode | (0o111 if suffix in ('.exe', '.bat', '.cmd', '.com') else 0)
+    epoch = 11644473600000000000
+    if expected[2] != path_mode or opened[2] != regular_mode:
+        raise ValueError('Windows Python mode interface semantics')
+    if expected[3] != native['nlink'] or expected[4] != native['size'] or expected[5] != native['write'] * 100 - epoch:
+        raise ValueError('Windows Python size/link/write binding')
+    if expected[6] != native['creation'] * 100 - epoch or opened[6] != native['change'] * 100 - epoch:
+        raise ValueError('Windows Python creation/change binding')
+    return dict(pathname=expected, descriptor=opened)
+
+
+def windows_native_post_note(before, after, stage):
+    keys = ('volume', 'file_id', 'creation', 'access', 'write', 'change', 'attributes',
+            'allocation', 'size', 'nlink', 'delete_pending', 'directory')
+    if type(stage) is not str or stage not in ('fd', 'path'):
+        raise ValueError('native post diagnostic stage')
+    for record in (before, after):
+        if type(record) is not dict or any(type(key) is not str for key in record) or set(record) != set(keys):
+            raise ValueError('native post diagnostic closed keys')
+        if any(type(record[key]) is not int for key in keys if key != 'file_id'):
+            raise ValueError('native post diagnostic primitive integers')
+        if type(record['file_id']) is not str or re.fullmatch('[0-9a-f]{32}', record['file_id']) is None:
+            raise ValueError('native post diagnostic file ID')
+        if not (0 <= record['volume'] < 2**64
+                and all(0 <= record[key] < 2**63 for key in ('creation', 'access', 'write', 'change', 'allocation'))
+                and 0 < record['attributes'] <= 0xffffffff and not record['attributes'] & (0x10 | REPARSE)
+                and 0 <= record['size'] <= MAX_FILE and 0 < record['nlink'] <= 0xffffffff
+                and record['delete_pending'] == 0 and record['directory'] == 0):
+            raise ValueError('native post diagnostic scalar bounds')
+    differences = tuple(key for key in keys if before[key] != after[key])
+    if not differences:
+        raise ValueError('native post diagnostic requires mismatch')
+    note = json.dumps(dict(before=before, after=after, differing_fields=differences, stage=stage,
+                           path_post='not_sampled' if stage == 'fd' else 'sampled'),
+                      sort_keys=True, separators=(',', ':'), allow_nan=False)
+    if len(note.encode('ascii')) > 4096:
+        raise ValueError('native post diagnostic output bound')
+    return note
+
+
+def actual_windows_file(path):
+    if type(path) is not str or not path or len(path) > 32767 or any(char in path for char in '\x00\r\n'):
+        raise ValueError('host absolute path shape')
+    p = Path(path)
+    if not p.is_absolute() or '..' in p.parts or p.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:', p.drive) is None or any(':' in item for item in p.parts[1:]):
+        raise ValueError('host Windows local absolute path/no stream')
+    if p.is_symlink() or getattr(p.lstat(), 'st_file_attributes', 0) & REPARSE:
+        raise ValueError('mapped pathname link/reparse')
+    resolved = p.resolve(strict=True)
+    pins = []
+    for parent in tuple(reversed(resolved.parents)):
+        info = parent.lstat()
+        if not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & REPARSE:
+            raise ValueError('resolved ancestor directory/link')
+        pins.append((str(parent), info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns))
+    expected = stat_pin(resolved.lstat())
+    context = windows_native_file_api()
+    flags = os.O_RDONLY | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOINHERIT', 0)
+    fd = os.open(resolved, flags)
+    try:
+        borrowed = windows_file_handle(context[8](fd))
+        opened = stat_pin(os.fstat(fd))
+        native = windows_handle_file_info(borrowed)
+        if windows_path_file_info(str(resolved), borrowed) != native:
+            raise ValueError('Windows path/fd native identity differs')
+        views = windows_python_file_views(str(resolved), expected, opened, native)
+        digest, size = hashlib.sha256(), 0
+        while True:
+            block = os.read(fd, 65536)
+            if not block:
+                break
+            size += len(block)
+            if size > MAX_FILE or size > expected[4]:
+                raise ValueError('host read growth')
+            digest.update(block)
+        if size != expected[4] or windows_file_handle(context[8](fd)) != borrowed:
+            raise ValueError('Windows read size/borrowed handle drift')
+        if stat_pin(os.fstat(fd)) != opened or stat_pin(resolved.lstat()) != expected:
+            raise ValueError('Windows Python same-interface drift')
+        native_fd_post = windows_handle_file_info(borrowed)
+        if native_fd_post != native:
+            error = ValueError('Windows native metadata drift')
+            try:
+                error.add_note('EQ083_WINDOWS_NATIVE_POST_METADATA ' + windows_native_post_note(native, native_fd_post, 'fd'))
+            except BaseException as diagnostic_error:
+                raise error from diagnostic_error
+            raise error
+        native_path_post = windows_path_file_info(str(resolved), borrowed)
+        if native_path_post != native:
+            error = ValueError('Windows native metadata drift')
+            try:
+                error.add_note('EQ083_WINDOWS_NATIVE_POST_METADATA ' + windows_native_post_note(native, native_path_post, 'path'))
+            except BaseException as diagnostic_error:
+                raise error from diagnostic_error
+            raise error
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            os.close(fd)
+        except BaseException:
+            if not active:
+                raise
+    for parent, device, inode, mode, mtime, ctime in pins:
+        info = Path(parent).lstat()
+        if (info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns) != (device, inode, mode, mtime, ctime):
+            raise ValueError('host ancestor changed')
+    if str(p.resolve(strict=True)) != str(resolved) or stat_pin(p.lstat()) != expected:
+        raise ValueError('host original path changed/alias')
+    return dict(path=str(resolved), identity=expected, fd_identity=opened, python_views=views,
+                native_identity=native, ancestors=tuple(pins), bytes=size, sha256=digest.hexdigest())
+
+def actual_file(path, system):
+    if system == 'Windows':
+        return actual_windows_file(path)
+    if type(path) is not str or not path or len(path) > 32767 or any(c in path for c in '\x00\r\n'):
+        raise ValueError('host absolute path shape')
+    p = Path(path)
+    if not p.is_absolute() or '..' in p.parts:
+        raise ValueError('host absolute path')
+    if system == 'Windows' and (p.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:',p.drive) is None or any(':' in item for item in p.parts[1:])):
+        raise ValueError('host Windows local drive/no alternate stream')
+    # Linux mapped pathnames are already resolved by the kernel. Interpreter
+    # venv symlinks are retained separately by runtime observation below.
+    if p.is_symlink() or system == 'Windows' and getattr(p.lstat(), 'st_file_attributes', 0) & REPARSE:
+        raise ValueError('mapped pathname link/reparse')
+    resolved = p.resolve(strict=True)
+    ancestors = tuple(reversed(resolved.parents))
+    pins = []
+    for parent in ancestors:
+        info = parent.lstat()
+        if not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & REPARSE:
+            raise ValueError('resolved ancestor directory/link')
+        pins.append((str(parent), info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns))
+    expected = stat_pin(resolved.lstat())
+    flags = os.O_RDONLY | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0)
+    fd = os.open(resolved, flags)
+    try:
+        opened = stat_pin(os.fstat(fd))
+        if opened != expected:
+            error = ValueError('host open identity')
+            try:
+                note = host_open_identity_note(expected, opened)
+            except BaseException as diagnostic_error:
+                raise error from diagnostic_error
+            error.add_note('EQ083_HOST_OPEN_IDENTITY ' + note)
+            raise error
+        digest, size = hashlib.sha256(), 0
+        while True:
+            block = os.read(fd, 65536)
+            if not block:
+                break
+            size += len(block)
+            if size > MAX_FILE or size > expected[4]:
+                raise ValueError('host read growth')
+            digest.update(block)
+        if size != expected[4] or stat_pin(os.fstat(fd)) != expected or stat_pin(resolved.lstat()) != expected:
+            raise ValueError('host read identity changed')
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            os.close(fd)
+        except BaseException:
+            if not active:
+                raise
+    for parent, device, inode, mode, mtime, ctime in pins:
+        info = Path(parent).lstat()
+        if (info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns) != (device, inode, mode, mtime, ctime):
+            raise ValueError('host ancestor changed')
+    if str(p.resolve(strict=True)) != str(resolved) or stat_pin(p.lstat()) != expected:
+        raise ValueError('host original path changed/alias')
+    return dict(path=str(resolved), identity=expected, ancestors=tuple(pins), bytes=size, sha256=digest.hexdigest())
+
+def linux_maps(raw):
+    if type(raw) is not bytes or not raw or len(raw) > MAX_MAP_BYTES or not raw.endswith(b'\n'):
+        raise ValueError('complete bounded maps bytes')
+    rows, last_end = [], 0
+    for line in raw.decode('utf-8', errors='strict').splitlines():
+        match = re.fullmatch(r'([0-9a-f]+)-([0-9a-f]+) ([r-][w-][x-][ps]) ([0-9a-f]+) ([0-9a-f]+):([0-9a-f]+) ([0-9]+)(?: +(.*))?', line)
+        if match is None:
+            raise ValueError('maps closed row syntax')
+        start, end, permissions, offset, major, minor, inode, name = match.groups()
+        start, end, offset, major, minor, inode = int(start,16), int(end,16), int(offset,16), int(major,16), int(minor,16), int(inode)
+        if not 0 <= start < end <= 18446744073709551615 or start < last_end or offset > 18446744073709551615:
+            raise ValueError('maps range/ordering')
+        last_end = end
+        name = name or ''
+        if '\\' in name or '\x00' in name or name.endswith(' (deleted)'):
+            raise ValueError('maps escaped/deleted/ambiguous name')
+        if name.startswith('/'):
+            if inode == 0 or '..' in Path(name).parts:
+                raise ValueError('file mapping inode/path')
+            kind = 'file'
+        elif name in ('', '[heap]', '[stack]', '[vdso]', '[vvar]', '[vvar_vclock]', '[vsyscall]'):
+            if inode != 0 or major != 0 or minor != 0 or 'x' in permissions and name not in ('[vdso]', '[vsyscall]'):
+                raise ValueError('anonymous executable/unowned mapping')
+            kind = 'virtual'
+        else:
+            raise ValueError('unknown mapping kind')
+        rows.append(dict(start=start,end=end,permissions=permissions,offset=offset,device=(major,minor),inode=inode,path=name,kind=kind))
+        if len(rows) > MAX_MAPS:
+            raise ValueError('maps row bound')
+    return tuple(rows)
+
+def read_linux_maps():
+    # proc pseudo-file has no meaningful stat size; bound complete read by bytes.
+    fd = os.open('/proc/self/maps', os.O_RDONLY | getattr(os, 'O_CLOEXEC', 0))
+    try:
+        chunks, size = [], 0
+        while True:
+            block = os.read(fd, min(65536, MAX_MAP_BYTES + 1 - size))
+            if not block:
+                break
+            size += len(block)
+            if size > MAX_MAP_BYTES:
+                raise ValueError('proc maps read bound')
+            chunks.append(block)
+        return linux_maps(b''.join(chunks))
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            os.close(fd)
+        except BaseException:
+            if not active:
+                raise
+
+def windows_modules():
+    # Future invocation imports ctypes before the first enumeration; those
+    # resulting interpreter/native modules are included in the observation.
+    import ctypes as c
+    from ctypes import wintypes as w
+    if c.sizeof(c.c_void_p) != 8:
+        raise ValueError('Windows x64 inspector only')
+    k = c.WinDLL('kernel32', use_last_error=True)
+    current = k.GetCurrentProcess
+    current.argtypes, current.restype = [], w.HANDLE
+    enum = k.K32EnumProcessModulesEx
+    enum.argtypes, enum.restype = [w.HANDLE, c.POINTER(w.HMODULE), w.DWORD, c.POINTER(w.DWORD), w.DWORD], w.BOOL
+    filename = k.K32GetModuleFileNameExW
+    filename.argtypes, filename.restype = [w.HANDLE, w.HMODULE, w.LPWSTR, w.DWORD], w.DWORD
+    process = current()  # pseudo-handle: not owned/never CloseHandle.
+    modules, needed = (w.HMODULE * MAX_MODULES)(), w.DWORD()
+    if not enum(process, modules, c.sizeof(modules), c.byref(needed), 3):
+        raise c.WinError(c.get_last_error())
+    if needed.value == 0 or needed.value > c.sizeof(modules) or needed.value % c.sizeof(w.HMODULE):
+        raise ValueError('module array incomplete/bound')
+    result, seen = [], set()
+    for module in modules[:needed.value // c.sizeof(w.HMODULE)]:
+        if not module or module in seen:
+            raise ValueError('module handle duplicate/null')
+        seen.add(module)
+        buffer = c.create_unicode_buffer(32768)
+        count = filename(process, module, buffer, len(buffer))
+        if count == 0:
+            raise c.WinError(c.get_last_error())
+        if count >= len(buffer) or count != len(buffer.value):
+            raise ValueError('module path truncation')
+        result.append((int(module), buffer.value))
+    # Returned module handles belong to loader snapshot, not this inspector.
+    return tuple(sorted(result))
+
+def runtime_paths(system):
+    result = {}
+    for key, value in (('executable',sys.executable),('base_executable',getattr(sys,'_base_executable',None))):
+        if type(value) is not str or not Path(value).is_absolute():
+            raise ValueError('runtime executable path')
+        p = Path(value)
+        info = p.lstat()
+        link = os.readlink(p) if stat.S_ISLNK(info.st_mode) else None
+        resolved = str(p.resolve(strict=True))
+        record = actual_file(resolved,system)
+        after = p.lstat()
+        if (info.st_dev,info.st_ino,info.st_mode,info.st_mtime_ns,info.st_ctime_ns) != (after.st_dev,after.st_ino,after.st_mode,after.st_mtime_ns,after.st_ctime_ns) or (os.readlink(p) if link is not None else None) != link or str(p.resolve(strict=True)) != resolved:
+            raise ValueError('runtime executable link/identity changed')
+        result[key] = dict(requested=value,link_target=link,link_identity=(info.st_dev,info.st_ino,info.st_mode,info.st_mtime_ns,info.st_ctime_ns),resolved=record)
+    return result
+
+def observe_host(system):
+    if system not in ('Windows','Linux') or (system == 'Windows') != (os.name == 'nt') or (system == 'Linux') != sys.platform.startswith('linux'):
+        raise ValueError('host actual OS')
+    if sys.flags.isolated != 1 or sys.flags.optimize != 0 or sys.implementation.name != 'cpython':
+        raise ValueError('host isolated CPython flags')
+    enumerate_loaded = windows_modules if system == 'Windows' else read_linux_maps
+    before = enumerate_loaded()
+    runtime = runtime_paths(system)
+    paths = [row[1] for row in before] if system == 'Windows' else [row['path'] for row in before if row['kind'] == 'file']
+    files, aliases, total = {}, {}, 0
+    for path in sorted(set(paths)):
+        record = actual_file(path,system)
+        alias = record['path'].casefold() if system == 'Windows' else record['path']
+        if alias in aliases and aliases[alias] != path:
+            raise ValueError('loaded module path alias')
+        aliases[alias] = path
+        total += record['bytes']
+        if len(files) >= MAX_MODULES or total > MAX_TOTAL:
+            raise ValueError('loaded file count/total bound')
+        if system == 'Linux':
+            for row in before:
+                if row['kind'] == 'file' and row['path'] == path and (row['inode'] != record['identity'][1] or row['device'] != (os.major(record['identity'][0]),os.minor(record['identity'][0]))):
+                    raise ValueError('mapped inode-device/current file mismatch')
+        files[path] = record
+    after = enumerate_loaded()
+    if before != after or runtime_paths(system) != runtime:
+        raise ValueError('loaded mappings/runtime changed during observation')
+    for path, record in files.items():
+        if actual_file(path,system) != record:
+            raise ValueError('loaded file bytes changed before completion')
+    if runtime_paths(system) != runtime or enumerate_loaded() != before:
+        raise ValueError('loaded mappings/runtime changed during final file rehash')
+    return dict(scope='LOADED_OBSERVATION_ONLY_RESOLVER_FORM_CLOSURE_PENDING',admitted=False,system=system,pid=os.getpid(),
+                version=tuple(sys.version_info[:3]),cache_tag=sys.implementation.cache_tag,prefix=sys.prefix,base_prefix=sys.base_prefix,
+                isolated=sys.flags.isolated,optimize=sys.flags.optimize,runtime=runtime,mappings=before,files=files,total_bytes=total)
+
+MAX_REGIONS = 16384
+
+MEM_COMMIT, MEM_RESERVE, MEM_FREE = 0x1000, 0x2000, 0x10000
+
+MEM_PRIVATE, MEM_MAPPED, MEM_IMAGE = 0x20000, 0x40000, 0x1000000
+
+def section_row(address, maximum, page, fields):
+    # Pure decoding only. FREE fields except base/size/state are undefined.
+    if any(type(v) is not int for v in (address, maximum, page)) or not 0 <= address <= maximum < 2**63 or page < 4096 or page & (page - 1) or (maximum + 1) % page:
+        raise ValueError('section walk bounds')
+    if type(fields) is not tuple or len(fields) != 8 or any(type(v) is not int or not 0 <= v < 2**64 for v in fields):
+        raise ValueError('section fields')
+    base, allocation, allocation_protect, partition, size, state, protect, kind = fields
+    if base != address or base % page or size == 0 or size % page or base + size > maximum + 1:
+        raise ValueError('section range/advance')
+    if state not in (MEM_FREE, MEM_RESERVE, MEM_COMMIT):
+        raise ValueError('section state')
+    if state == MEM_FREE:
+        return base + size, None
+    if allocation > base or allocation % page or kind not in (MEM_PRIVATE, MEM_MAPPED, MEM_IMAGE) or partition != 0:
+        raise ValueError('section allocation/type/partition')
+    if allocation_protect > 0xffffffff or protect > 0xffffffff:
+        raise ValueError('section protection DWORD')
+    # Anonymous executable memory requires a separate accepted contract.
+    if kind == MEM_PRIVATE:
+        if state == MEM_COMMIT and protect & 0xf0:
+            raise ValueError('private executable memory unsupported')
+        return base + size, None
+    return base + size, dict(base=base, allocation=allocation, allocation_protect=allocation_protect,
+                             size=size, state=state, protect=protect if state == MEM_COMMIT else None, kind=kind)
+
+def device_path(name, devices):
+    # Only the CURRENT QueryDosDevice target participates; prior targets are
+    # recorded by the API reader but never accepted as current destinations.
+    if type(name) is not str or not name.startswith('\\Device\\') or len(name) > 32767 or any(c in name for c in '\x00\r\n/'):
+        raise ValueError('mapped device name')
+    if type(devices) is not tuple or not 1 <= len(devices) <= 26:
+        raise ValueError('device map shape')
+    candidates, drives = [], set()
+    for pair in devices:
+        if type(pair) is not tuple or len(pair) != 2:
+            raise ValueError('device map pair')
+        drive, targets = pair
+        if type(drive) is not str or re.fullmatch('[A-Z]:', drive) is None or drive in drives:
+            raise ValueError('device drive duplicate/shape')
+        drives.add(drive)
+        if type(targets) is not tuple or not targets or any(type(v) is not str or not v or any(c in v for c in '\x00\r\n') for v in targets):
+            raise ValueError('device targets')
+        current = targets[0]
+        # Network, SUBST, object-manager aliases and unsupported targets deny.
+        if not current.startswith('\\Device\\HarddiskVolume') or re.fullmatch(r'\\Device\\HarddiskVolume[0-9]+', current) is None:
+            continue
+        if name.casefold().startswith(current.casefold() + '\\'):
+            suffix = name[len(current):]
+            parts = suffix[1:].split('\\')
+            if any(not v or v in ('.', '..') or ':' in v or v.endswith(('.', ' ')) for v in parts):
+                raise ValueError('mapped path components')
+            candidates.append(drive + suffix)
+    if len(candidates) != 1:
+        raise ValueError('mapped device unresolved/ambiguous')
+    return candidates[0]
+
+def windows_sections():
+    # Future current-process invocation only. No process handle is opened or
+    # owned, no pages read/locked, no library probe or mapping created.
+    import ctypes as c
+    from ctypes import wintypes as w
+    if c.sizeof(c.c_void_p) != 8:
+        raise ValueError('Windows x64 section observer only')
+    class MBI(c.Structure):
+        _fields_ = [('base', c.c_void_p), ('allocation', c.c_void_p), ('allocation_protect', w.DWORD),
+                    ('partition', w.WORD), ('size', c.c_size_t), ('state', w.DWORD), ('protect', w.DWORD), ('kind', w.DWORD)]
+    class SI(c.Structure):
+        _fields_ = [('architecture', w.DWORD), ('page', w.DWORD), ('minimum', c.c_void_p), ('maximum', c.c_void_p),
+                    ('mask', c.c_size_t), ('processors', w.DWORD), ('processor_type', w.DWORD),
+                    ('granularity', w.DWORD), ('level', w.WORD), ('revision', w.WORD)]
+    if c.sizeof(MBI) != 48 or MBI.size.offset != 24 or MBI.kind.offset != 40 or c.sizeof(SI) != 48:
+        raise ValueError('Windows section ABI')
+    k = c.WinDLL('kernel32', use_last_error=True)
+    current = k.GetCurrentProcess
+    current.argtypes, current.restype = [], w.HANDLE
+    system = k.GetSystemInfo
+    system.argtypes, system.restype = [c.POINTER(SI)], None
+    query = k.VirtualQuery
+    query.argtypes, query.restype = [c.c_void_p, c.POINTER(MBI), c.c_size_t], c.c_size_t
+    mapped = k.K32GetMappedFileNameW
+    mapped.argtypes, mapped.restype = [w.HANDLE, c.c_void_p, w.LPWSTR, w.DWORD], w.DWORD
+    logical = k.GetLogicalDrives
+    logical.argtypes, logical.restype = [], w.DWORD
+    dos = k.QueryDosDeviceW
+    dos.argtypes, dos.restype = [w.LPCWSTR, w.LPWSTR, w.DWORD], w.DWORD
+    si = SI()
+    system(c.byref(si))
+    if si.architecture & 0xffff != 9 or si.architecture >> 16 or not si.maximum or not si.minimum or si.minimum > si.maximum:
+        raise ValueError('Windows x64 system bounds')
+    maximum, page = int(si.maximum), int(si.page)
+    bits = logical()
+    if not bits or bits >> 26:
+        raise ValueError('logical drives incomplete')
+    devices = []
+    for index in range(26):
+        if bits & (1 << index):
+            drive, buffer = chr(65 + index) + ':', c.create_unicode_buffer(32768)
+            count = dos(drive, buffer, len(buffer))
+            if not count:
+                raise c.WinError(c.get_last_error())
+            if count >= len(buffer):
+                raise ValueError('DOS device buffer bound')
+            raw = ''.join(buffer[:count])
+            if not raw.endswith('\x00\x00') or not raw[:-2] or '\x00\x00' in raw[:-2]:
+                raise ValueError('DOS device incomplete MULTI_SZ')
+            devices.append((drive, tuple(raw[:-2].split('\x00'))))
+    devices = tuple(devices)
+    process, address, rows, visited = current(), 0, [], 0
+    while address <= maximum:
+        visited += 1
+        if visited > MAX_REGIONS:
+            raise ValueError('section walk region bound')
+        info = MBI()
+        length = query(c.c_void_p(address), c.byref(info), c.sizeof(info))
+        if not length:
+            raise c.WinError(c.get_last_error())
+        if length != c.sizeof(info):
+            raise ValueError('section query incomplete ABI')
+        fields = (int(info.base or 0), int(info.allocation or 0), int(info.allocation_protect), int(info.partition),
+                  int(info.size), int(info.state), int(info.protect), int(info.kind))
+        next_address, row = section_row(address, maximum, page, fields)
+        if row is not None:
+            buffer = c.create_unicode_buffer(32768)
+            count = mapped(process, c.c_void_p(address), buffer, len(buffer))
+            if not count:
+                # Preserve exact failure; bounded private metadata diagnoses this mapping.
+                error_code = c.get_last_error()
+                error = c.WinError(error_code)
+                context = dict(error_code=error_code, query_address=address, section=row,
+                               page=page, minimum=int(si.minimum), maximum=maximum)
+                note = json.dumps(context, sort_keys=True, separators=(',', ':'), allow_nan=False)
+                if len(note.encode('ascii')) > 1024:
+                    raise ValueError('mapped-name failure diagnostic bound') from error
+                error.add_note('EQ083_WINDOWS_MAPPED_NAME_FAILURE ' + note)
+                raise error
+            if count >= len(buffer) or count != len(buffer.value):
+                raise ValueError('mapped filename incomplete')
+            row.update(device_path=buffer.value, path=device_path(buffer.value, devices))
+            rows.append(row)
+        address = next_address
+    return dict(devices=devices, page=page, minimum=int(si.minimum), maximum=maximum, sections=tuple(rows))
+
+def windows_coverage():
+    modules, sections = windows_modules(), windows_sections()
+    for handle, path in modules:
+        matching = [r for r in sections['sections'] if r['kind'] == MEM_IMAGE and r['allocation'] == handle]
+        if not matching or any(r['path'].casefold() != path.casefold() for r in matching):
+            raise ValueError('loader module/image section mismatch')
+    return dict(modules=modules, coverage=sections)
+
+def observe_windows_sections():
+    if os.name != 'nt' or sys.flags.isolated != 1 or sys.flags.optimize != 0 or sys.implementation.name != 'cpython':
+        raise ValueError('actual isolated Windows CPython')
+    before = windows_coverage()
+    runtime = runtime_paths('Windows')
+    paths = {r['path'] for r in before['coverage']['sections']} | {v[1] for v in before['modules']}
+    files, aliases, total = {}, {}, 0
+    for path in sorted(paths):
+        record = actual_file(path, 'Windows')
+        alias = record['path'].casefold()
+        if alias in aliases and aliases[alias] != path:
+            raise ValueError('section backing file alias')
+        aliases[alias] = path
+        total += record['bytes']
+        if len(files) >= MAX_MODULES or total > MAX_TOTAL:
+            raise ValueError('section backing files bound')
+        files[path] = record
+    if windows_coverage() != before or runtime_paths('Windows') != runtime:
+        raise ValueError('section runtime/map drift')
+    for path, record in files.items():
+        if actual_file(path, 'Windows') != record:
+            raise ValueError('section backing file rehash drift')
+    if runtime_paths('Windows') != runtime or windows_coverage() != before:
+        raise ValueError('section final rehash map/runtime drift')
+    return dict(admitted=False, scope='WINDOWS_SECTION_OBSERVATION_ONLY_FIXED_RESOLVER_FORM_PENDING',
+                mappings=before, runtime=runtime, files=files, total_bytes=total)
+
+import json
+
+import time
+
+from types import ModuleType
+
+PREFLIGHT_MAX_OUTPUT = 8388608
+
+PREFLIGHT_SECONDS = 120
+
+def preflight_clock():
+    value = time.monotonic_ns()
+    if type(value) is not int or not 0 <= value <= 9223372036854775807:
+        raise ValueError('preflight monotonic scalar')
+    return value
+
+def preflight_elapsed(state):
+    if type(state) is not list or len(state) != 2 or any(type(value) is not int or not 0 <= value <= 9223372036854775807 for value in state) or state[1] < state[0]:
+        raise ValueError('preflight private chronological clock state')
+    now = preflight_clock()
+    if now < state[1] or now - state[0] > PREFLIGHT_SECONDS * 1000000000:
+        raise ValueError('preflight backwards or overbudget clock')
+    state[1] = now
+
+def preflight_module_descriptor(name, module):
+    if type(name) is not str or not name or len(name) > 255 or type(module) is not ModuleType:
+        raise ValueError('preflight closed module/name')
+    if name == 'ssl' or name.startswith(('ssl.', 'cryptography', 'cffi', 'equity_feature', 'mcp.', 'pip.')) or name in ('_ssl', 'pip', 'mcp'):
+        raise ValueError('preflight forbidden product/thirdparty/SSL module')
+    namespace = vars(module)
+    path, cached, spec = (namespace.get(key) for key in ('__file__', '__cached__', '__spec__'))
+    if any(value is not None and (type(value) is not str or len(value) > 32767 or '\x00' in value) for value in (path, cached)):
+        raise ValueError('preflight module path/cache descriptor')
+    origin = None if spec is None else vars(spec).get('origin')
+    if origin is not None and (type(origin) is not str or len(origin) > 32767 or '\x00' in origin):
+        raise ValueError('preflight origin descriptor')
+    if path is not None and path.endswith(('.pyc', '.pyo')):
+        raise ValueError('preflight bytecode origin')
+    if path is None and origin not in ('built-in', 'frozen'):
+        raise ValueError('preflight unspecified Python origin')
+    loader = None if spec is None else vars(spec).get('loader')
+    loader_type = None if loader is None else (type(loader).__module__, type(loader).__name__)
+    return dict(module_identity=id(module), spec_identity=None if spec is None else id(spec),
+                loader_identity=None if loader is None else id(loader), origin=origin,
+                file=path, cached_descriptor=cached, loader_type=loader_type)
+
+def preflight_python_origins(system):
+    modules = tuple(sorted(sys.modules.items()))
+    if len(modules) > MAX_MODULES:
+        raise ValueError('preflight Python module count')
+    rows, files, total = {}, {}, 0
+    for name, module in modules:
+        row = preflight_module_descriptor(name, module)
+        path = row['file']
+        if path is not None and path not in files:
+            record = actual_file(path, system)
+            total += record['bytes']
+            if total > MAX_TOTAL:
+                raise ValueError('preflight Python source byte total')
+            files[path] = record
+        rows[name] = row
+    if tuple(sorted(sys.modules.items())) != modules:
+        raise ValueError('preflight Python module registry drift')
+    for path, record in files.items():
+        if actual_file(path, system) != record:
+            raise ValueError('preflight Python file rehash drift')
+    if tuple(sorted(sys.modules.items())) != modules or {name: preflight_module_descriptor(name, module) for name, module in modules} != rows:
+        raise ValueError('preflight final Python registry/descriptor drift')
+    return dict(admitted=False, scope='PYTHON_ORIGIN_DISCOVERY_NOT_IMPORT_AUTHORITY', modules=rows, files=files, total_bytes=total)
+
+def preflight_runtime_descriptor():
+    if type(sys.argv) is not list or len(sys.argv) != 1 or any(type(getattr(sys.flags, key)) is not int for key in ('isolated', 'no_site', 'optimize')) or sys.flags.isolated != 1 or sys.flags.no_site != 1 or sys.flags.optimize != 0 or sys.dont_write_bytecode is not True:
+        raise ValueError('preflight strict actual -I-B-S runtime')
+    version = tuple(sys.version_info[:3])
+    if any(type(value) is not int for value in version) or version != (3, 12, 10) or sys.implementation.name != 'cpython' or sys.implementation.cache_tag != 'cpython-312' or type(sys.maxsize) is not int or sys.maxsize != 9223372036854775807:
+        raise ValueError('preflight exact 64bit CPython version')
+    system = 'Windows' if os.name == 'nt' else 'Linux' if sys.platform.startswith('linux') else None
+    if system is None or system == 'Linux' and os.uname().machine != 'x86_64':
+        raise ValueError('preflight supported x64 actual OS')
+    if type(sys.path) is not list or any(type(path) is not str or not path or len(path) > 32767 for path in sys.path):
+        raise ValueError('preflight complete import path descriptors')
+    if any(type(value) is not str or not Path(value).is_absolute() for value in (sys.prefix, sys.base_prefix)):
+        raise ValueError('preflight actual prefix descriptors')
+    return dict(system=system, architecture='x86_64', word_bits=64, version=version,
+                cache_tag=sys.implementation.cache_tag, isolated=sys.flags.isolated, no_site=sys.flags.no_site,
+                optimize=sys.flags.optimize, dont_write_bytecode=sys.dont_write_bytecode,
+                prefix=sys.prefix, base_prefix=sys.base_prefix, import_path=tuple(sys.path))
+
+def discover_windows_sections():
+    # Future current-process invocation only. No process handle is opened or
+    # owned, no pages read/locked, no library probe or mapping created.
+    import ctypes as c
+    from ctypes import wintypes as w
+    if c.sizeof(c.c_void_p) != 8:
+        raise ValueError('Windows x64 section observer only')
+    class MBI(c.Structure):
+        _fields_ = [('base', c.c_void_p), ('allocation', c.c_void_p), ('allocation_protect', w.DWORD),
+                    ('partition', w.WORD), ('size', c.c_size_t), ('state', w.DWORD), ('protect', w.DWORD), ('kind', w.DWORD)]
+    class SI(c.Structure):
+        _fields_ = [('architecture', w.DWORD), ('page', w.DWORD), ('minimum', c.c_void_p), ('maximum', c.c_void_p),
+                    ('mask', c.c_size_t), ('processors', w.DWORD), ('processor_type', w.DWORD),
+                    ('granularity', w.DWORD), ('level', w.WORD), ('revision', w.WORD)]
+    if c.sizeof(MBI) != 48 or MBI.size.offset != 24 or MBI.kind.offset != 40 or c.sizeof(SI) != 48:
+        raise ValueError('Windows section ABI')
+    k = c.WinDLL('kernel32', use_last_error=True)
+    current = k.GetCurrentProcess
+    current.argtypes, current.restype = [], w.HANDLE
+    system = k.GetSystemInfo
+    system.argtypes, system.restype = [c.POINTER(SI)], None
+    query = k.VirtualQuery
+    query.argtypes, query.restype = [c.c_void_p, c.POINTER(MBI), c.c_size_t], c.c_size_t
+    mapped = k.K32GetMappedFileNameW
+    mapped.argtypes, mapped.restype = [w.HANDLE, c.c_void_p, w.LPWSTR, w.DWORD], w.DWORD
+    logical = k.GetLogicalDrives
+    logical.argtypes, logical.restype = [], w.DWORD
+    dos = k.QueryDosDeviceW
+    dos.argtypes, dos.restype = [w.LPCWSTR, w.LPWSTR, w.DWORD], w.DWORD
+    si = SI()
+    system(c.byref(si))
+    if si.architecture & 0xffff != 9 or si.architecture >> 16 or not si.maximum or not si.minimum or si.minimum > si.maximum:
+        raise ValueError('Windows x64 system bounds')
+    maximum, page = int(si.maximum), int(si.page)
+    bits = logical()
+    if not bits or bits >> 26:
+        raise ValueError('logical drives incomplete')
+    devices = []
+    for index in range(26):
+        if bits & (1 << index):
+            drive, buffer = chr(65 + index) + ':', c.create_unicode_buffer(32768)
+            count = dos(drive, buffer, len(buffer))
+            if not count:
+                raise c.WinError(c.get_last_error())
+            if count >= len(buffer):
+                raise ValueError('DOS device buffer bound')
+            raw = ''.join(buffer[:count])
+            if not raw.endswith('\x00\x00') or not raw[:-2] or '\x00\x00' in raw[:-2]:
+                raise ValueError('DOS device incomplete MULTI_SZ')
+            devices.append((drive, tuple(raw[:-2].split('\x00'))))
+    devices = tuple(devices)
+    process, address, rows, visited = current(), 0, [], 0
+    while address <= maximum:
+        visited += 1
+        if visited > MAX_REGIONS:
+            raise ValueError('section walk region bound')
+        info = MBI()
+        length = query(c.c_void_p(address), c.byref(info), c.sizeof(info))
+        if not length:
+            raise c.WinError(c.get_last_error())
+        if length != c.sizeof(info):
+            raise ValueError('section query incomplete ABI')
+        fields = (int(info.base or 0), int(info.allocation or 0), int(info.allocation_protect), int(info.partition),
+                  int(info.size), int(info.state), int(info.protect), int(info.kind))
+        next_address, row = section_row(address, maximum, page, fields)
+        if row is not None:
+            buffer = c.create_unicode_buffer(32768)
+            count = mapped(process, c.c_void_p(address), buffer, len(buffer))
+            if not count:
+                error_code = c.get_last_error()
+                if type(error_code) is not int or not 0 < error_code <= 0xffffffff:
+                    raise ValueError('discovery name-query error DWORD')
+                row.update(resolution='unresolved_name', error_code=error_code, device_path=None, path=None)
+            else:
+                if count >= len(buffer) or count != len(buffer.value):
+                    raise ValueError('mapped filename incomplete')
+                row.update(resolution='resolved_name', error_code=None,
+                           device_path=buffer.value, path=device_path(buffer.value, devices))
+            rows.append(row)
+        address = next_address
+    return dict(devices=devices, page=page, minimum=int(si.minimum), maximum=maximum, sections=tuple(rows))
+
+def discover_windows_coverage():
+    modules, sections = windows_modules(), discover_windows_sections()
+    for handle, path in modules:
+        matching = [r for r in sections['sections'] if r['kind'] == MEM_IMAGE and r['allocation'] == handle]
+        if not matching or any(r['resolution'] == 'resolved_name' and r['path'].casefold() != path.casefold() for r in matching):
+            raise ValueError('discovery loader/image mismatch')
+    return dict(modules=modules, coverage=sections)
+
+
+def observe_windows_discovery():
+    if os.name != 'nt' or sys.flags.isolated != 1 or sys.flags.optimize != 0 or sys.implementation.name != 'cpython':
+        raise ValueError('actual isolated Windows CPython')
+    before = discover_windows_coverage()
+    runtime = runtime_paths('Windows')
+    paths = {r['path'] for r in before['coverage']['sections'] if r['resolution'] == 'resolved_name'} | {v[1] for v in before['modules']}
+    files, aliases, total = {}, {}, 0
+    for path in sorted(paths):
+        record = actual_file(path, 'Windows')
+        alias = record['path'].casefold()
+        if alias in aliases and aliases[alias] != path:
+            raise ValueError('section backing file alias')
+        aliases[alias] = path
+        total += record['bytes']
+        if len(files) >= MAX_MODULES or total > MAX_TOTAL:
+            raise ValueError('section backing files bound')
+        files[path] = record
+    if discover_windows_coverage() != before or runtime_paths('Windows') != runtime:
+        raise ValueError('section runtime/map drift')
+    for path, record in files.items():
+        if actual_file(path, 'Windows') != record:
+            raise ValueError('section backing file rehash drift')
+    if runtime_paths('Windows') != runtime or discover_windows_coverage() != before:
+        raise ValueError('section final rehash map/runtime drift')
+    return dict(admitted=False, scope='WINDOWS_DISCOVERY_INVENTORY_AUTHORITY_UNRESOLVED', authority_unresolved=True,
+                unresolved_sections=tuple(r for r in before['coverage']['sections'] if r['resolution'] == 'unresolved_name'),
+                mappings=before, runtime=runtime, files=files, total_bytes=total)
+
+def host_preflight_discovery(clock_state):
+    preflight_elapsed(clock_state)
+    runtime = preflight_runtime_descriptor()
+    preflight_elapsed(clock_state)
+    system, paths = runtime['system'], runtime['import_path']
+    if system == 'Windows':
+        windows_native_file_api()
+        preflight_elapsed(clock_state)
+    observer = observe_windows_discovery if system == 'Windows' else lambda: observe_host('Linux')
+    before = observer()
+    preflight_elapsed(clock_state)
+    python_before = preflight_python_origins(system)
+    preflight_elapsed(clock_state)
+    after = observer()
+    preflight_elapsed(clock_state)
+    python_after = preflight_python_origins(system)
+    preflight_elapsed(clock_state)
+    if before != after or python_before != python_after or tuple(sys.path) != paths:
+        raise ValueError('preflight complete map/origin/path drift')
+    if preflight_runtime_descriptor() != runtime:
+        raise ValueError('preflight full runtime descriptor drift')
+    preflight_elapsed(clock_state)
+    return dict(admitted=False, scope='HOST_PREFLIGHT_DISCOVERY_ONLY_NO_ISSUER_FORM_OR_EXECUTION_ADMISSION',
+                system=system, architecture=runtime['architecture'], word_bits=runtime['word_bits'], pid=os.getpid(),
+                version=runtime['version'], cache_tag=runtime['cache_tag'], isolated=runtime['isolated'],
+                no_site=runtime['no_site'], optimize=runtime['optimize'], dont_write_bytecode=runtime['dont_write_bytecode'],
+                prefix=runtime['prefix'], base_prefix=runtime['base_prefix'], import_path=paths,
+                native_before=before, native_after=after, python_before=python_before, python_after=python_after,
+                caveat='Current backing-file discovery; not loaded memory, locking, source-only-cache proof, full future resolver or fresh installed forms')
+
+def encode_host_preflight_discovery(report, clock_state):
+    preflight_elapsed(clock_state)
+    if type(report) is not dict or report.get('admitted') is not False or report.get('scope') != 'HOST_PREFLIGHT_DISCOVERY_ONLY_NO_ISSUER_FORM_OR_EXECUTION_ADMISSION':
+        raise ValueError('preflight discovery-only report')
+    encoder = json.JSONEncoder(sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False)
+    raw = bytearray()
+    for chunk in encoder.iterencode(report):
+        block = chunk.encode('ascii')
+        if len(raw) + len(block) + 1 > PREFLIGHT_MAX_OUTPUT:
+            raise ValueError('preflight complete encoded output bound')
+        raw.extend(block)
+        preflight_elapsed(clock_state)
+    raw.extend(b'\n')
+    preflight_elapsed(clock_state)
+    return bytes(raw)
+
+def discovery_file_error(error, stage):
+    if type(stage) is not str or stage not in (
+            'path', 'ancestors_before', 'python_before', 'open', 'borrowed', 'native_fd_before',
+            'native_path_before', 'python_views', 'read', 'read_final', 'python_after',
+            'native_fd_after', 'native_path_after', 'ancestors_after', 'original_after', 'fd_close'):
+        raise ValueError('discovery closed file stage')
+    if not isinstance(error, (ValueError, OSError)):
+        raise error
+    codes = {}
+    for key in ('errno', 'winerror'):
+        value = getattr(error, key, None)
+        if value is not None and (type(value) is not int or not 0 <= value <= 0xffffffff):
+            raise ValueError('discovery file error scalar')
+        codes[key] = value
+    return dict(stage=stage, category='os_error' if isinstance(error, OSError) else 'contract_rejection',
+                errno=codes['errno'], winerror=codes['winerror'])
+
+
+def discovery_path_metadata(path, borrowed, record, label):
+    windows_file_handle(borrowed)
+    c, Basic, Standard, FileId, create, query, close, kind, get_handle = windows_native_file_api()
+    cleanup = dict(stage=label, acquired=False, attempted=False, succeeded=False, error=None)
+    record['path_cleanup'].append(cleanup)
+    c.set_last_error(0)
+    handle = create(path, 0x80, 0x7, None, 3, 0x00200000, None)
+    if handle is None or handle == 2**64 - 1:
+        raise windows_file_error(c)
+    if type(handle) is not int or not 0 < handle < 2**64 - 1:
+        raise ValueError('created path HANDLE representation')
+    if handle == borrowed:
+        raise ValueError('path HANDLE aliases borrowed fd')
+    try:
+        cleanup['acquired'] = True
+        windows_file_handle(handle)
+        value = windows_handle_file_info(handle)
+        record[label] = value
+        return value
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            try:
+                c.set_last_error(0)
+            finally:
+                result = close(handle)
+            cleanup['attempted'] = True
+            if type(result) is not int or not -(2**31) <= result < 2**31:
+                raise ValueError('native close BOOL result')
+            if result == 0:
+                raise windows_file_error(c)
+            cleanup['succeeded'] = True
+        except (ValueError, OSError) as error:
+            try:
+                cleanup['attempted'] = True
+                cleanup['error'] = discovery_file_error(error, label)
+            except BaseException:
+                if not active:
+                    raise
+            if not active:
+                raise
+        except BaseException:
+            try:
+                cleanup['attempted'] = True
+                cleanup['error'] = dict(stage=label, category='unexpected_cleanup_failure', errno=None, winerror=None)
+            except BaseException:
+                if not active:
+                    raise
+            if not active:
+                raise
+
+
+def discovery_windows_file(path, budget, clock_state):
+    if type(budget) is not list or len(budget) != 2 or any(type(v) is not int or v < 0 for v in budget):
+        raise ValueError('discovery private count/byte budget')
+    if budget[0] >= MAX_MODULES or budget[1] > MAX_TOTAL:
+        raise ValueError('discovery whole invocation file/byte bound')
+    budget[0] += 1
+    preflight_elapsed(clock_state)
+    record = dict(requested=path, resolved=None, ancestors_before=None, python_path_before=None,
+                  python_fd_before=None, native_fd_before=None, native_path_before=None, python_views=None,
+                  read_bytes=0, observed_sha256=None, read_complete=False, borrowed_handle_continuity=None,
+                  python_fd_after=None, python_path_after=None, native_fd_after=None, native_path_after=None,
+                  ancestors_after=None, original_resolved_after=None, original_pin_after=None,
+                  errors=[], path_cleanup=[], fd_cleanup=dict(acquired=False, attempted=False, succeeded=False, error=None),
+                  admitted=False, authority_unresolved=True, digest_authority='UNTRUSTED_OBSERVED_HELD_FD_BYTES_ONLY')
+    stage, fd = 'path', None
+    try:
+        if type(path) is not str or not path or len(path) > 32767 or any(char in path for char in '\x00\r\n'):
+            raise ValueError('host absolute path shape')
+        p = Path(path)
+        if not p.is_absolute() or '..' in p.parts or p.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:', p.drive) is None or any(':' in item for item in p.parts[1:]):
+            raise ValueError('host Windows local absolute path/no stream')
+        if p.is_symlink() or getattr(p.lstat(), 'st_file_attributes', 0) & REPARSE:
+            raise ValueError('mapped pathname link/reparse')
+        resolved = p.resolve(strict=True)
+        record['resolved'] = str(resolved)
+        stage = 'ancestors_before'
+        pins = []
+        record['ancestors_before'] = pins
+        for parent in tuple(reversed(resolved.parents)):
+            info = parent.lstat()
+            if not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & REPARSE:
+                raise ValueError('resolved ancestor directory/link')
+            pins.append((str(parent), info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns))
+        record['ancestors_before'] = tuple(pins)
+        stage = 'python_before'
+        expected = stat_pin(resolved.lstat())
+        record['python_path_before'] = expected
+        context = windows_native_file_api()
+        stage = 'open'
+        fd = os.open(resolved, os.O_RDONLY | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOINHERIT', 0))
+        try:
+            record['fd_cleanup']['acquired'] = True
+            stage = 'borrowed'
+            borrowed = windows_file_handle(context[8](fd))
+            opened = stat_pin(os.fstat(fd))
+            record['python_fd_before'] = opened
+            stage = 'native_fd_before'
+            native = windows_handle_file_info(borrowed)
+            record['native_fd_before'] = native
+            stage = 'native_path_before'
+            if discovery_path_metadata(str(resolved), borrowed, record, stage) != native:
+                raise ValueError('Windows path/fd native identity differs')
+            stage = 'python_views'
+            record['python_views'] = windows_python_file_views(str(resolved), expected, opened, native)
+            stage = 'read'
+            digest, size = hashlib.sha256(), 0
+            while True:
+                preflight_elapsed(clock_state)
+                # Reserve one extra byte to establish EOF or bounded growth, without exceeding global cap.
+                if budget[1] >= MAX_TOTAL:
+                    raise ValueError('discovery total read byte bound')
+                block = os.read(fd, min(65536, MAX_TOTAL - budget[1], MAX_FILE + 1 - size))
+                budget[1] += len(block)
+                if not block:
+                    break
+                size += len(block)
+                record['read_bytes'] = size
+                if size > MAX_FILE or size > expected[4]:
+                    raise ValueError('host read growth')
+                digest.update(block)
+            record['read_complete'] = True
+            record['observed_sha256'] = digest.hexdigest()
+            stage = 'read_final'
+            record['borrowed_handle_continuity'] = windows_file_handle(context[8](fd)) == borrowed
+            if size != expected[4] or record['borrowed_handle_continuity'] is not True:
+                raise ValueError('Windows read size/borrowed handle drift')
+            stage = 'python_after'
+            record['python_fd_after'] = stat_pin(os.fstat(fd))
+            if record['python_fd_after'] != opened:
+                raise ValueError('Windows Python descriptor drift')
+            record['python_path_after'] = stat_pin(resolved.lstat())
+            if record['python_path_after'] != expected:
+                raise ValueError('Windows Python pathname drift')
+            stage = 'native_fd_after'
+            record[stage] = windows_handle_file_info(borrowed)
+            if record[stage] != native:
+                raise ValueError('Windows native metadata drift')
+            stage = 'native_path_after'
+            if discovery_path_metadata(str(resolved), borrowed, record, stage) != native:
+                raise ValueError('Windows native metadata drift')
+        finally:
+            active = sys.exc_info()[0] is not None
+            try:
+                os.close(fd)
+                record['fd_cleanup']['attempted'] = True
+                record['fd_cleanup']['succeeded'] = True
+            except (ValueError, OSError) as error:
+                try:
+                    record['fd_cleanup']['attempted'] = True
+                    record['fd_cleanup']['error'] = discovery_file_error(error, 'fd_close')
+                except BaseException:
+                    if not active:
+                        raise
+                if not active:
+                    stage = 'fd_close'
+                    raise
+            except BaseException:
+                try:
+                    record['fd_cleanup']['attempted'] = True
+                    record['fd_cleanup']['error'] = dict(stage='fd_close', category='unexpected_cleanup_failure', errno=None, winerror=None)
+                except BaseException:
+                    if not active:
+                        raise
+                if not active:
+                    raise
+        stage = 'ancestors_after'
+        after = []
+        record['ancestors_after'] = after
+        for parent, device, inode, mode, mtime, ctime in pins:
+            info = Path(parent).lstat()
+            after.append((parent, info.st_dev, info.st_ino, info.st_mode, info.st_mtime_ns, info.st_ctime_ns))
+        record['ancestors_after'] = tuple(after)
+        if record['ancestors_after'] != tuple(pins):
+            raise ValueError('host ancestor changed')
+        stage = 'original_after'
+        record['original_resolved_after'] = str(p.resolve(strict=True))
+        record['original_pin_after'] = stat_pin(p.lstat())
+        if record['original_resolved_after'] != str(resolved) or record['original_pin_after'] != expected:
+            raise ValueError('host original path changed/alias')
+    except (ValueError, OSError) as error:
+        try:
+            record['errors'].append(discovery_file_error(error, stage))
+        except BaseException as recording_error:
+            raise error from recording_error
+    record['status'] = 'observed_consistent_samples' if not record['errors'] else 'unresolved_file_observation'
+    record['unsampled'] = tuple(key for key in (
+        'ancestors_before', 'python_path_before', 'python_fd_before', 'native_fd_before', 'native_path_before',
+        'python_views', 'python_fd_after', 'python_path_after', 'native_fd_after', 'native_path_after',
+        'ancestors_after', 'original_resolved_after', 'original_pin_after') if record[key] is None)
+    preflight_elapsed(clock_state)
+    return record
+
+
+def discovery_windows_snapshot(clock_state):
+    preflight_elapsed(clock_state)
+    runtime = preflight_runtime_descriptor()
+    modules, sections = windows_modules(), discover_windows_sections()
+    loader_errors = []
+    for handle, path in modules:
+        matching = tuple(r for r in sections['sections'] if r['kind'] == MEM_IMAGE and r['allocation'] == handle)
+        if not matching or any(r['resolution'] == 'resolved_name' and r['path'].casefold() != path.casefold() for r in matching):
+            loader_errors.append(dict(handle=handle, path=path, category='loader_image_mismatch'))
+    python = {}
+    entries = tuple(sorted(sys.modules.items()))
+    if len(entries) > MAX_MODULES:
+        raise ValueError('discovery Python module count')
+    for name, module in entries:
+        python[name] = preflight_module_descriptor(name, module)
+    if tuple(sorted(sys.modules.items())) != entries:
+        raise ValueError('discovery in-snapshot Python registry mutation')
+    executable = {}
+    for key, value in (('executable', sys.executable), ('base_executable', getattr(sys, '_base_executable', None))):
+        if type(value) is not str or not Path(value).is_absolute():
+            raise ValueError('discovery executable path')
+        executable[key] = value
+    preflight_elapsed(clock_state)
+    return dict(runtime=runtime, modules=modules, coverage=sections, loader_errors=tuple(loader_errors),
+                python=python, executables=executable, admitted=False, authority_unresolved=True)
+
+
+def discovery_snapshot_paths(snapshot):
+    return tuple(sorted({r['path'] for r in snapshot['coverage']['sections'] if r['resolution'] == 'resolved_name'}
+                        | {v[1] for v in snapshot['modules']}
+                        | {r['file'] for r in snapshot['python'].values() if r['file'] is not None}
+                        | set(snapshot['executables'].values())))
+
+
+def host_windows_failure_inventory(clock_state):
+    windows_native_file_api()
+    preflight_elapsed(clock_state)
+    snapshots, scans, budget = [], [], [0, 0]
+    snapshots.append(discovery_windows_snapshot(clock_state))
+    first_paths = discovery_snapshot_paths(snapshots[0])
+    if len(first_paths) * 2 > MAX_MODULES:
+        raise ValueError('discovery two-scan file count bound')
+    scans.append({path: discovery_windows_file(path, budget, clock_state) for path in first_paths})
+    snapshots.append(discovery_windows_snapshot(clock_state))
+    second_paths = tuple(sorted(set(first_paths) | set(discovery_snapshot_paths(snapshots[1]))))
+    if budget[0] + len(second_paths) > MAX_MODULES:
+        raise ValueError('discovery added-path file count bound')
+    scans.append({path: discovery_windows_file(path, budget, clock_state) for path in second_paths})
+    snapshots.append(discovery_windows_snapshot(clock_state))
+    unscanned_final_paths = tuple(sorted(set(discovery_snapshot_paths(snapshots[2])) - set(second_paths)))
+    changed_files = tuple(path for path in second_paths if path not in scans[0] or scans[0][path] != scans[1][path])
+    alias_groups = []
+    for number, scan in enumerate(scans):
+        aliases = {}
+        for path, record in scan.items():
+            if record['resolved'] is not None:
+                aliases.setdefault(record['resolved'].casefold(), []).append(path)
+        alias_groups.extend(dict(scan=number, paths=tuple(paths)) for paths in aliases.values() if len(paths) > 1)
+    unresolved_files = tuple(dict(scan=number, path=path) for number, scan in enumerate(scans)
+                             for path, record in scan.items() if record['status'] != 'observed_consistent_samples')
+    unresolved_sections = tuple(dict(phase=number, row=row) for number, snapshot in enumerate(snapshots)
+                                for row in snapshot['coverage']['sections'] if row['resolution'] == 'unresolved_name')
+    full_snapshots_equal = snapshots[0] == snapshots[1] == snapshots[2]
+    complete_stable_samples = (full_snapshots_equal and not changed_files and not unscanned_final_paths
+                               and not alias_groups and not unresolved_files and not unresolved_sections
+                               and not any(s['loader_errors'] for s in snapshots))
+    return dict(scope='HOST_FAILURE_DISCOVERY_ONLY_NO_ISSUER_FORM_OR_EXECUTION_ADMISSION', admitted=False,
+                authority_unresolved=True, complete_stable_samples=complete_stable_samples,
+                snapshots=tuple(snapshots), scans=tuple(scans), full_snapshots_equal=full_snapshots_equal,
+                changed_files=changed_files, unscanned_final_paths=unscanned_final_paths, aliases=tuple(alias_groups),
+                unresolved_files=unresolved_files, unresolved_sections=unresolved_sections,
+                file_observations=budget[0], total_read_bytes=budget[1],
+                caveat='Every record is discovery only; consistency is not trusted pathname, loaded-memory, resolver or fresh-form authority')
+
+
+def encode_windows_failure_inventory(report, clock_state):
+    preflight_elapsed(clock_state)
+    if (type(report) is not dict or report.get('admitted') is not False or report.get('authority_unresolved') is not True
+            or report.get('scope') != 'HOST_FAILURE_DISCOVERY_ONLY_NO_ISSUER_FORM_OR_EXECUTION_ADMISSION'):
+        raise ValueError('failure inventory discovery-only report')
+    encoder = json.JSONEncoder(sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False)
+    raw = bytearray()
+    for chunk in encoder.iterencode(report):
+        block = chunk.encode('ascii')
+        if len(raw) + len(block) + 1 > PREFLIGHT_MAX_OUTPUT:
+            raise ValueError('failure inventory complete encoded output bound')
+        raw.extend(block)
+        preflight_elapsed(clock_state)
+    raw.extend(b'\n')
+    preflight_elapsed(clock_state)
+    return bytes(raw)
+
+
+if __name__ == '__main__':
+    _started = preflight_clock()
+    _clock_state = [_started, _started]
+    if os.name == 'nt':
+        raw = encode_windows_failure_inventory(host_windows_failure_inventory(_clock_state), _clock_state)
+    else:
+        raw = encode_host_preflight_discovery(host_preflight_discovery(_clock_state), _clock_state)
+    preflight_elapsed(_clock_state)
+    written = sys.stdout.buffer.write(raw)
+    if type(written) is not int or written != len(raw):
+        raise ValueError('preflight incomplete stdout write')
+    preflight_elapsed(_clock_state)
+    sys.stdout.buffer.flush()
+    preflight_elapsed(_clock_state)

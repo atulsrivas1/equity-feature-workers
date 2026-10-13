@@ -1,0 +1,121 @@
+{
+  "schema": "eq083.vendor-worker-source-research.v1",
+  "bases": {
+    "equity-features": "adbc6336f39b5a2ab270c00dd17ced59e125ac74",
+    "equity-feature-workers": "248d5cc0592b243f1923d9c483b9f5ea0956149f"
+  },
+  "source_metadata": {
+    "repository": "https://github.com/VirtualBox/virtualbox",
+    "research_tag": {
+      "ref": "refs/tags/v7.2.14",
+      "node_id": "REF_kwDOOrL_T7FyZWZzL3RhZ3MvdjcuMi4xNA",
+      "url": "https://api.github.com/repos/VirtualBox/virtualbox/git/refs/tags/v7.2.14",
+      "object": {
+        "sha": "51d188f0a2a40015663041baa29f7aa0c10af5e5",
+        "type": "commit",
+        "url": "https://api.github.com/repos/VirtualBox/virtualbox/git/commits/51d188f0a2a40015663041baa29f7aa0c10af5e5"
+      }
+    },
+    "research_commit": "51d188f0a2a40015663041baa29f7aa0c10af5e5",
+    "scope": "13 selected official tagged license/version/storage-driver/async-worker/runtime source texts as DATA only; tag version is not entire Genode archive digest or patched build/sourcebinary/guest/host equivalence",
+    "total_bytes": 621667,
+    "new_tests": 0,
+    "files": [
+      {
+        "path": "COPYING",
+        "git_sha1": "65dcfb4a4698d43a54c1c11bbf2def150a09a524",
+        "bytes": 36037,
+        "sha256": "8d684127eb278ec9a4e80a8c34320645d8579712ef6e893fe7393393fbbf59a4",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/COPYING"
+      },
+      {
+        "path": "Version.kmk",
+        "git_sha1": "3ad6cdb5c17e2bdad466d32d1ead7db6233df6c3",
+        "bytes": 1870,
+        "sha256": "79722c17a028e73c106bdf946b3c0ac05ba142d6afecabc3f89bebcb34d24e5f",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/Version.kmk"
+      },
+      {
+        "path": "src/VBox/Devices/Storage/DrvVD.cpp",
+        "git_sha1": "5a4d5c9a06fe1ec6c9cc72386d9d3d75493bd0c3",
+        "bytes": 212270,
+        "sha256": "ec6c598dfc79755c9f9bfdd72e636f24c0b8134e81ef4dcef62927f89c7407e7",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Devices/Storage/DrvVD.cpp"
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp",
+        "git_sha1": "8c25f0bbcb0dd3c70f7b26256d4e95b94998889d",
+        "bytes": 68773,
+        "sha256": "b06080d44a487a194432fcbbdebde78afa13fa4a92b895deb4d7833b1d72813f",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletion.cpp"
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp",
+        "git_sha1": "f382a233eef6439ea1a9a7c50cf5db118487d0c7",
+        "bytes": 49141,
+        "sha256": "f8940782af1c3aa098c9605d9ac7d99a595d86659e16d936d305c53e85c9896e",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFile.cpp"
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp",
+        "git_sha1": "89fa987634b535987b22939e6176e4986314fd45",
+        "bytes": 10674,
+        "sha256": "6f9f518b7aa32e091b3264e3065452d706e435ac8fbb9c85ae3126d25b595f9d",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileFailsafe.cpp"
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp",
+        "git_sha1": "6c18d7d40f2aff1c3dc0a78b0f37e50a8fe0e1b5",
+        "bytes": 68046,
+        "sha256": "e4abe9947fc94e965f76470c564ac57e2faa4b2492ed559e5396e66938c6fe33",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3AsyncCompletionFileNormal.cpp"
+      },
+      {
+        "path": "src/VBox/VMM/VMMR3/PDMR3Thread.cpp",
+        "git_sha1": "941a1a4e9a0d6dbddf83cafb0e507d0fc9b3021c",
+        "bytes": 36894,
+        "sha256": "7f39f2c374778a0d425779379bed4c4155928d143f71ecd204ec7ec98d7e2572",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/VMM/VMMR3/PDMR3Thread.cpp"
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/fileaio-posix.cpp",
+        "git_sha1": "d4f69852765cfd39de0b87818ae49e0486462b54",
+        "bytes": 38019,
+        "sha256": "3c0962c8e3baa067f21351d51be93126afa8d874351c3934338891ecf24f1b7d",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/fileaio-posix.cpp"
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/fileio-posix.cpp",
+        "git_sha1": "d11c9fea4ec835693726807f82d204a52bd12ad2",
+        "bytes": 29246,
+        "sha256": "0d90076c421d510b9d0e7a9498ab45b9820fbc872fb9947a73979532eacc1adf",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/fileio-posix.cpp"
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/semevent-posix.cpp",
+        "git_sha1": "6f5b112c0a0cb41d49f3dc615dbd79285f63328e",
+        "bytes": 22945,
+        "sha256": "396244d0f649210b6b0dbef6b272c1698d4dac47b389db5919ef2f13915f5a32",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/semevent-posix.cpp"
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp",
+        "git_sha1": "fceb86b091a162a6fb82fa88bac6a8372e68ba62",
+        "bytes": 21637,
+        "sha256": "c39a483a331cb7b7a93f73675cb1b4ea14c33a7a3f0f8d642f016526bf955afa",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/semeventmulti-posix.cpp"
+      },
+      {
+        "path": "src/VBox/Runtime/r3/posix/thread-posix.cpp",
+        "git_sha1": "5e24500266c879d51f508744b7e95bdb1ef285bb",
+        "bytes": 26115,
+        "sha256": "0712f691cfc75b08b8dcd39cc58635bf38bf6377fb5d5998e47fe52c09ac11d0",
+        "url": "https://github.com/VirtualBox/virtualbox/blob/51d188f0a2a40015663041baa29f7aa0c10af5e5/src/VBox/Runtime/r3/posix/thread-posix.cpp"
+      }
+    ]
+  },
+  "new_tests": 0,
+  "scope": "13 selected official tagged license/version/VD-driver/async-worker/POSIX-runtime source texts as DATA; not full Genode declared archive digest or applied patched build/sourcebinary/guest/license/host equivalence",
+  "mechanism_admitted": false,
+  "new_operational_authorization": false
+}

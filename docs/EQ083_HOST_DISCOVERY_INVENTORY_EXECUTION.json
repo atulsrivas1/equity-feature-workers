@@ -1,0 +1,102 @@
+{
+  "schema": "eq083-host-discovery-inventory-failed-execution-v1",
+  "admitted": false,
+  "disposition": "FAILED_INCOMPLETE_DISCOVERY",
+  "owner_permission": "Direct yes please: reviewed readonly baseline preReady; actual fresh installation maps Test afterguardedReady",
+  "source_review": "https://github.com/atulsrivas1/equity-features/issues/93#issuecomment-6116110257",
+  "invocation": {
+    "source_heads": {
+      "equity-features": "5da916b9f45d0d94212f3fb9a2f0a386f1f9da18",
+      "equity-feature-workers": "053eb3eff04c24ef86656fd3df334558ddb3e30e"
+    },
+    "source_bytes": 37723,
+    "source_sha256": "7b14abb9ce6fab3bf1bfaa259f2ce1e270242f5cb47376567f9164ce8a2f782d",
+    "interpreter": "Existing Windows CPython3.12.10 x64 BASE, direct -I-B-S; private exact path outsideGit",
+    "flags": [
+      "-I",
+      "-B",
+      "-S"
+    ],
+    "owner_authorization": "Direct human yes please to reviewed readonly baseline preReady and actual fresh installation maps Test after Ready; bounded reviewed diagnostic correction same scope",
+    "exit_code": 1,
+    "elapsed_seconds": 0.2441059,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 1397,
+    "stderr_sha256": "c76d6206d570e719031867a403ba986974d3d252b48639e92d0883eef898b70e",
+    "admitted": false,
+    "scope": "Readonly Windows baseline diagnostic; no product/form/resolver/Ready admission"
+  },
+  "independent_failure_review": {
+    "reviewer": "/root/r7_policy_review",
+    "heads": {
+      "equity-features": "5da916b9f45d0d94212f3fb9a2f0a386f1f9da18",
+      "equity-feature-workers": "053eb3eff04c24ef86656fd3df334558ddb3e30e"
+    },
+    "source": {
+      "bytes": 37723,
+      "sha256": "7b14abb9ce6fab3bf1bfaa259f2ce1e270242f5cb47376567f9164ce8a2f782d"
+    },
+    "disposition": "DIAGNOSED_FAILED_INCOMPLETE",
+    "findings": [],
+    "exit_code": 1,
+    "elapsed_seconds": 0.2441059,
+    "raw_log_sha256": "c76d6206d570e719031867a403ba986974d3d252b48639e92d0883eef898b70e",
+    "evidence": {
+      "invocation_receipt_bytes": 1021,
+      "invocation_receipt_sha256": "f3d728a98b8e63313b36cba8464199c2640f945b9e720290691487ad5b9de4db",
+      "stderr_bytes": 1397,
+      "stderr_sha256": "c76d6206d570e719031867a403ba986974d3d252b48639e92d0883eef898b70e",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "failing_function": "actual_file",
+      "failing_line": 73,
+      "predicate": "stat_pin(os.fstat(fd)) != expected pathname lstat pin",
+      "phase": "first native discovery runtime_paths, before opened interpreter file content hash and Python origins"
+    },
+    "diagnosis": {
+      "established": "The first new Windows discovery coverage function returned far enough for runtime_paths to call actual_file. The complete seven-field fstat pin differs from pathname lstat pin, triggering host open identity before digest creation/content read. Actual comparison values and differing fields are absent from traceback.",
+      "source_hazard": "CPython v3.12.10 path stat applies filename-extension execute-bit synthesis for .exe/.bat/.cmd/.com, while fd fstat uses handle information without that filename adjustment. Exact cross-interface st_mode equality therefore has a generic executable-file incompatibility; one synthetic tuple-only control independently demonstrates the mode-only difference can trigger this comparator.",
+      "not_established": [
+        "The actual pin values, whether observed difference is only mode, inode/device/link/size/time or multiple fields, or actual file mutation.",
+        "A completed discovery inventory or source hash/Python-origin phase.",
+        "Security/authority, descriptor cleanup completion, physical resource proof or PASS."
+      ],
+      "next_source_correction": "Add separately reviewed bounded private diagnostic metadata containing named expected/opened primitive pins and differing field names before the existing equality failure, then still raise. Do not relax inode/time/mode checks or retry unchanged source based only on the generic CPython mechanism. If actual evidence confirms suffix-only mode disparity, freeze a platform-aware cross-interface comparison retaining exact path-to-path and fd-to-fd pins plus all nonsynthetic identity fields; never erase differences indiscriminately."
+    },
+    "primary_sources": [
+      {
+        "url": "https://raw.githubusercontent.com/python/cpython/v3.12.10/Modules/posixmodule.c",
+        "sections": "FSTAT macro467-471; update_st_mode_from_path1777-1798; win32_xstat_impl1977-2005; os_fstat_impl10398-10417",
+        "scope": "Tagged primary source inspected via web; source semantics only, not selected loaded binary/source-build equivalence."
+      },
+      {
+        "url": "https://raw.githubusercontent.com/python/cpython/v3.12.10/Python/fileutils.c",
+        "sections": "_Py_fstat_noraise1147-1195",
+        "scope": "Handle stat conversion without suffix helper; no actual runtime or Windows API call."
+      }
+    ],
+    "inert_checks": [
+      "One selected stat_pin function with fake regular-file predicate and synthetic tuple-only executable mode difference, no filesystem calls."
+    ],
+    "continuity": {
+      "original1006runs": "Both retained FAILED separately; latest distinct failure does not retroactively complete either.",
+      "new_status": "FAILED/no stdout/incomplete discovery; relaxed discovery mapping source itself remains nonadmitted."
+    },
+    "tool_only_history": [
+      "GitHub HTML source did not expose code to browser; read official raw tagged source instead. No artifact download, platform observer or rerun."
+    ],
+    "limitations": [
+      "Read-only raw receipts/log/Git source and primary source pages, one AST-selected primitive tuple fake only. No actual stat/fstat/hash baseline/platform/API/process/observer/preflight/native/TLS rerun or whole-module/product import/install/copy/setup.",
+      "Possible source incompatibility is not asserted as actual sole cause; private file paths and pin values are not published.",
+      "No full host/form/resolver/security/Ready/Linux/release qualification or cleanup/PASS inferred."
+    ]
+  },
+  "original_failures": "HOST_PREFLIGHT_FAILURE.json and HOST_PREFLIGHT_DIAGNOSTIC_EXECUTION.json preserved",
+  "next": "Source-only opened-file versus path identity comparison diagnosis, bounded private difference witness then source-reviewed correction if warranted. No omission, weakening, unchanged rerun or inferred file/path authority.",
+  "limitations": [
+    "New discovery source retains unresolved mappings, but actual run stopped in runtime_paths/actual_file host open identity before interpreter file hash and Pythonorigin phases. No completed discovery report or sampled inventory counts.",
+    "Trace alone does not identify differing stat field or replacement/race/source/OS cause. No failedPASS/host admission/Ready/form/Linux/fullresolver or cleanup proof.",
+    "Readonly scope only; no product/pip/collector/installer/SDKcrypto/nativeworker/TLS/certificate/key activity."
+  ]
+}

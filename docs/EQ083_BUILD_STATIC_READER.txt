@@ -1,0 +1,213 @@
+"""Fixed public wheel acquisition and static audit; never execution admission."""
+import base64
+import csv
+import email.policy
+import email.parser
+import hashlib
+import io
+import itertools
+import json
+import os
+from pathlib import Path
+import re
+import ssl
+import stat
+import sys
+import time
+import urllib.request
+import urllib.parse
+import zipfile
+
+MANIFEST = [{'filename': 'setuptools-80.9.0-py3-none-any.whl', 'size': 1201486, 'url': 'https://files.pythonhosted.org/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl', 'requires_python': '>=3.9', 'yanked': False, 'sha256': '062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922', 'name': 'setuptools', 'version': '80.9.0', 'requires_dist': ['pytest!=8.1.*,>=6; extra == "test"', 'virtualenv>=13.0.0; extra == "test"', 'wheel>=0.44.0; extra == "test"', 'pip>=19.1; extra == "test"', 'packaging>=24.2; extra == "test"', 'jaraco.envs>=2.2; extra == "test"', 'pytest-xdist>=3; extra == "test"', 'jaraco.path>=3.7.2; extra == "test"', 'build[virtualenv]>=1.0.3; extra == "test"', 'filelock>=3.4.0; extra == "test"', 'ini2toml[lite]>=0.14; extra == "test"', 'tomli-w>=1.0.0; extra == "test"', 'pytest-timeout; extra == "test"', 'pytest-perf; sys_platform != "cygwin" and extra == "test"', 'jaraco.develop>=7.21; (python_version >= "3.9" and sys_platform != "cygwin") and extra == "test"', 'pytest-home>=0.5; extra == "test"', 'pytest-subprocess; extra == "test"', 'pyproject-hooks!=1.1; extra == "test"', 'jaraco.test>=5.5; extra == "test"', 'sphinx>=3.5; extra == "doc"', 'jaraco.packaging>=9.3; extra == "doc"', 'rst.linker>=1.9; extra == "doc"', 'furo; extra == "doc"', 'sphinx-lint; extra == "doc"', 'jaraco.tidelift>=1.4; extra == "doc"', 'pygments-github-lexers==0.0.5; extra == "doc"', 'sphinx-favicon; extra == "doc"', 'sphinx-inline-tabs; extra == "doc"', 'sphinx-reredirects; extra == "doc"', 'sphinxcontrib-towncrier; extra == "doc"', 'sphinx-notfound-page<2,>=1; extra == "doc"', 'pyproject-hooks!=1.1; extra == "doc"', 'towncrier<24.7; extra == "doc"', 'packaging>=24.2; extra == "core"', 'more_itertools>=8.8; extra == "core"', 'jaraco.text>=3.7; extra == "core"', 'importlib_metadata>=6; python_version < "3.10" and extra == "core"', 'tomli>=2.0.1; python_version < "3.11" and extra == "core"', 'wheel>=0.43.0; extra == "core"', 'platformdirs>=4.2.2; extra == "core"', 'jaraco.functools>=4; extra == "core"', 'more_itertools; extra == "core"', 'pytest-checkdocs>=2.4; extra == "check"', 'pytest-ruff>=0.2.1; sys_platform != "cygwin" and extra == "check"', 'ruff>=0.8.0; sys_platform != "cygwin" and extra == "check"', 'pytest-cov; extra == "cover"', 'pytest-enabler>=2.2; extra == "enabler"', 'pytest-mypy; extra == "type"', 'mypy==1.14.*; extra == "type"', 'importlib_metadata>=7.0.2; python_version < "3.10" and extra == "type"', 'jaraco.develop>=7.21; sys_platform != "cygwin" and extra == "type"']}, {'filename': 'mypy_extensions-1.1.0-py3-none-any.whl', 'size': 4963, 'url': 'https://files.pythonhosted.org/packages/79/7b/2c79738432f5c924bef5071f933bcc9efd0473bac3b4aa584a6f7c1c8df8/mypy_extensions-1.1.0-py3-none-any.whl', 'requires_python': '>=3.8', 'yanked': False, 'sha256': '1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505', 'name': 'mypy-extensions', 'version': '1.1.0', 'requires_dist': None}, {'filename': 'mypy-1.15.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl', 'size': 12410020, 'url': 'https://files.pythonhosted.org/packages/b3/d0/92ae4cde706923a2d3f2d6c39629134063ff64b9dedca9c1388363da072d/mypy-1.15.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl', 'requires_python': '>=3.9', 'yanked': False, 'sha256': '8023ff13985661b50a5928fc7a5ca15f3d1affb41e5f0a9952cb68ef090b31ee', 'name': 'mypy', 'version': '1.15.0', 'requires_dist': ['typing_extensions>=4.6.0', 'mypy_extensions>=1.0.0', 'tomli>=1.1.0; python_version < "3.11"', 'psutil>=4.0; extra == "dmypy"', 'setuptools>=50; extra == "mypyc"', 'lxml; extra == "reports"', 'pip; extra == "install-types"', 'orjson; extra == "faster-cache"']}, {'filename': 'mypy-1.15.0-cp312-cp312-win_amd64.whl', 'size': 9366614, 'url': 'https://files.pythonhosted.org/packages/13/50/da5203fcf6c53044a0b699939f31075c45ae8a4cadf538a9069b165c1050/mypy-1.15.0-cp312-cp312-win_amd64.whl', 'requires_python': '>=3.9', 'yanked': False, 'sha256': '171a9ca9a40cd1843abeca0e405bc1940cd9b305eaeea2dda769ba096932bb22', 'name': 'mypy', 'version': '1.15.0', 'requires_dist': ['typing_extensions>=4.6.0', 'mypy_extensions>=1.0.0', 'tomli>=1.1.0; python_version < "3.11"', 'psutil>=4.0; extra == "dmypy"', 'setuptools>=50; extra == "mypyc"', 'lxml; extra == "reports"', 'pip; extra == "install-types"', 'orjson; extra == "faster-cache"']}, {'filename': 'build-1.2.2.post1-py3-none-any.whl', 'size': 22950, 'url': 'https://files.pythonhosted.org/packages/84/c2/80633736cd183ee4a62107413def345f7e6e3c01563dbca1417363cf957e/build-1.2.2.post1-py3-none-any.whl', 'requires_python': '>=3.8', 'yanked': False, 'sha256': '1d61c0887fa860c01971625baae8bdd338e517b836a2f70dd1f7aa3a6b2fc5b5', 'name': 'build', 'version': '1.2.2.post1', 'requires_dist': ['packaging>=19.1', 'pyproject_hooks', 'colorama; os_name == "nt"', 'importlib-metadata>=4.6; python_full_version < "3.10.2"', 'tomli>=1.1.0; python_version < "3.11"', 'furo>=2023.08.17; extra == "docs"', 'sphinx~=7.0; extra == "docs"', 'sphinx-argparse-cli>=1.5; extra == "docs"', 'sphinx-autodoc-typehints>=1.10; extra == "docs"', 'sphinx-issues>=3.0.0; extra == "docs"', 'build[uv,virtualenv]; extra == "test"', 'filelock>=3; extra == "test"', 'pytest>=6.2.4; extra == "test"', 'pytest-cov>=2.12; extra == "test"', 'pytest-mock>=2; extra == "test"', 'pytest-rerunfailures>=9.1; extra == "test"', 'pytest-xdist>=1.34; extra == "test"', 'wheel>=0.36.0; extra == "test"', 'setuptools>=42.0.0; extra == "test" and python_version < "3.10"', 'setuptools>=56.0.0; extra == "test" and python_version == "3.10"', 'setuptools>=56.0.0; extra == "test" and python_version == "3.11"', 'setuptools>=67.8.0; extra == "test" and python_version >= "3.12"', 'build[uv]; extra == "typing"', 'importlib-metadata>=5.1; extra == "typing"', 'mypy~=1.9.0; extra == "typing"', 'tomli; extra == "typing"', 'typing-extensions>=3.7.4.3; extra == "typing"', 'uv>=0.1.18; extra == "uv"', 'virtualenv>=20.0.35; extra == "virtualenv"']}, {'filename': 'pyproject_hooks-1.3.3-py3-none-any.whl', 'size': 10724, 'url': 'https://files.pythonhosted.org/packages/85/11/044d1ae1b4ec0d7af88ee5bc91e081be1022533032b906a7bdabdbb60977/pyproject_hooks-1.3.3-py3-none-any.whl', 'requires_python': '>=3.8', 'yanked': False, 'sha256': '5fc53fdac9f7bd63fbcdc868fb5f90b4784d78a53a3d3388cd738b807441a20b', 'name': 'pyproject-hooks', 'version': '1.3.3', 'requires_dist': None}, {'filename': 'packaging-26.3-py3-none-any.whl', 'size': 129956, 'url': 'https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl', 'requires_python': '>=3.9', 'yanked': False, 'sha256': 'd7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c', 'name': 'packaging', 'version': '26.3', 'requires_dist': None}, {'filename': 'colorama-0.4.6-py2.py3-none-any.whl', 'size': 25335, 'url': 'https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl', 'requires_python': '!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7', 'yanked': False, 'sha256': '4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6', 'name': 'colorama', 'version': '0.4.6', 'requires_dist': None}]
+ROOT_NAME = 'eq083-build-static-archives-v1'
+FILE_CAP = 67108864
+TOTAL_CAP = 1073741824
+OUTPUT_CAP = 8388608
+
+def require(ok, reason):
+    if not ok:
+        raise ValueError(reason)
+
+def tick(start):
+    require(time.monotonic() - start <= 180, 'cooperative deadline')
+
+def member_path(name):
+    require(type(name) is str and 0 < len(name) <= 1024, 'member name bound')
+    require(not any(ord(c) < 32 or ord(c) == 127 for c in name), 'member control character')
+    require('\\' not in name and ':' not in name and not name.startswith('/'), 'member path syntax')
+    parts = name.rstrip('/').split('/')
+    require(all(p not in ('', '.', '..') for p in parts), 'member traversal')
+    return name
+
+def tags_for(filename):
+    stem = filename[:-4]
+    py, abi, platform = stem.rsplit('-', 3)[-3:]
+    return sorted('-'.join(x) for x in itertools.product(py.split('.'), abi.split('.'), platform.split('.')))
+
+def headers(data):
+    require(len(data) <= 1048576, 'metadata bound')
+    text = data.decode('utf-8', 'strict')
+    message = email.parser.Parser(policy=email.policy.default).parsestr(text)
+    require(not message.defects, 'metadata parse defects')
+    return message
+
+def one(message, name):
+    values = message.get_all(name, [])
+    require(len(values) == 1, 'metadata singleton ' + name)
+    return str(values[0])
+
+def normalize(name):
+    return re.sub('[-_.]+', '-', name).lower()
+
+def audit(data, entry, start):
+    require(len(data) == entry['size'] and hashlib.sha256(data).hexdigest() == entry['sha256'], 'archive bytes')
+    with zipfile.ZipFile(io.BytesIO(data)) as archive:
+        infos = archive.infolist()
+        require(0 < len(infos) <= 4096, 'member count')
+        seen = set()
+        files = {}
+        retained = {}
+        directories = []
+        total = 0
+        for info in infos:
+            tick(start)
+            name = member_path(info.filename)
+            require(name not in seen, 'duplicate member')
+            seen.add(name)
+            require(not info.flag_bits & 1 and info.compress_type in (0, 8), 'encrypted or unsupported member')
+            mode = info.external_attr >> 16
+            kind = stat.S_IFMT(mode)
+            require(kind in (0, stat.S_IFREG, stat.S_IFDIR), 'link or special member')
+            require(0 <= info.file_size <= FILE_CAP, 'member size')
+            total += info.file_size
+            require(total <= TOTAL_CAP, 'uncompressed total')
+            if info.is_dir():
+                require(kind in (0, stat.S_IFDIR) and info.file_size == 0, 'directory shape')
+                directories.append(name)
+                continue
+            require(kind != stat.S_IFDIR, 'file directory mode')
+            digest = hashlib.sha256()
+            count = 0
+            prefix = b''
+            chunks = [] if name.endswith(('/METADATA', '/WHEEL', '/RECORD')) else None
+            with archive.open(info) as stream:
+                while True:
+                    tick(start)
+                    chunk = stream.read(65536)
+                    if not chunk:
+                        break
+                    count += len(chunk)
+                    require(count <= info.file_size and count <= FILE_CAP, 'member growth')
+                    digest.update(chunk)
+                    prefix = (prefix + chunk)[:4]
+                    if chunks is not None:
+                        require(count <= 1048576, 'metadata member bound')
+                        chunks.append(chunk)
+            require(count == info.file_size, 'member EOF size')
+            # ZipExtFile checks CRC at EOF; this is static content observation.
+            files[name] = dict(bytes=count, sha256=digest.hexdigest(), native_magic=('PE' if prefix[:2] == b'MZ' else 'ELF' if prefix == b'\x7fELF' else None))
+            if chunks is not None:
+                retained[name] = b''.join(chunks)
+        dist_roots = {n.split('/')[0] for n in files if n.split('/')[0].endswith('.dist-info')}
+        require(len(dist_roots) == 1, 'one dist-info root')
+        dist = next(iter(dist_roots))
+        expected = entry['name'].replace('-', '_') + '-' + entry['version'] + '.dist-info'
+        require(dist == expected, 'dist-info identity')
+        meta = headers(retained[dist + '/METADATA'])
+        wheel = headers(retained[dist + '/WHEEL'])
+        require(normalize(one(meta, 'Name')) == normalize(entry['name']) and one(meta, 'Version') == entry['version'], 'metadata identity')
+        require(one(meta, 'Requires-Python') == entry['requires_python'], 'Requires-Python claim')
+        requires_dist = [str(x) for x in meta.get_all('Requires-Dist', [])]
+        require(sorted(requires_dist) == sorted(entry['requires_dist'] or []), 'Requires-Dist claim')
+        require(one(wheel, 'Wheel-Version') == '1.0', 'wheel version')
+        pure = one(wheel, 'Root-Is-Purelib')
+        require(pure in ('true', 'false'), 'purelib shape')
+        tags = sorted(str(x) for x in wheel.get_all('Tag', []))
+        require(tags == tags_for(entry['filename']), 'wheel tags')
+        record_name = dist + '/RECORD'
+        record = retained[record_name].decode('utf-8', 'strict')
+        rows = list(csv.reader(io.StringIO(record, newline=''), strict=True))
+        require(len(rows) == len(files) and len(rows) <= 4096, 'complete RECORD row count')
+        indexed = {}
+        for row in rows:
+            require(len(row) == 3, 'RECORD row shape')
+            name, hash_value, size = row
+            member_path(name)
+            require(name in files and name not in indexed, 'RECORD path closure')
+            indexed[name] = True
+            if name == record_name:
+                require(hash_value == '' and size == '', 'RECORD self row')
+            else:
+                actual = files[name]
+                encoded = base64.urlsafe_b64encode(bytes.fromhex(actual['sha256'])).rstrip(b'=').decode('ascii')
+                require(hash_value == 'sha256=' + encoded and size == str(actual['bytes']), 'RECORD digest size')
+        require(set(indexed) == set(files), 'RECORD complete file set')
+        return dict(filename=entry['filename'], compressed_bytes=len(data), sha256=entry['sha256'], uncompressed_bytes=total,
+                    members=files, directories=directories, metadata=dict(name=one(meta, 'Name'), version=one(meta, 'Version'),
+                    requires_python=one(meta, 'Requires-Python'), requires_dist=requires_dist,
+                    license=[str(x) for x in meta.get_all('License', [])], license_expression=[str(x) for x in meta.get_all('License-Expression', [])],
+                    license_files=[str(x) for x in meta.get_all('License-File', [])]),
+                    wheel=dict(tags=tags, purelib=pure), record_verified=True, admitted=False)
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, hdrs, newurl):
+        raise ValueError('redirect denied')
+
+def main():
+    require(len(sys.argv) == 1 and sys.platform == 'win32' and sys.version_info[:3] == (3, 12, 10), 'fixed invocation')
+    start = time.monotonic()
+    # The frozen source resides P/equity-features/docs/stories/SOURCE.txt.
+    parent = Path(__file__).absolute().parents[3]
+    require(parent.name == 'equity-r6-postreview-20261008', 'fixed layout')
+    for path in [parent] + list(parent.parents):
+        view = path.lstat()
+        require(stat.S_ISDIR(view.st_mode) and not getattr(view, 'st_file_attributes', 0) & 0x400, 'root ancestor reparse')
+    root = parent / ROOT_NAME
+    root.mkdir()  # Refuse an existing root, including failed previous attempts.
+    # No recursive deletion: all successful or partial acquisitions remain quarantined.
+    context = ssl.create_default_context()
+    require(context.check_hostname is True and context.verify_mode == ssl.CERT_REQUIRED, 'HTTPS verification')
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect(), urllib.request.HTTPSHandler(context=context))
+    results = []
+    total = 0
+    for entry in MANIFEST:
+        tick(start)
+        parsed = urllib.parse.urlsplit(entry['url'])
+        require(parsed.scheme == 'https' and parsed.netloc == 'files.pythonhosted.org' and parsed.path.startswith('/packages/') and not parsed.query and not parsed.fragment, 'fixed public URL')
+        require(entry['filename'].endswith('.whl') and '/' not in entry['filename'] and '\\' not in entry['filename'], 'fixed filename')
+        require(type(entry['size']) is int and 0 < entry['size'] <= FILE_CAP, 'compressed size bound')
+        request = urllib.request.Request(entry['url'], headers={'Accept-Encoding': 'identity'})
+        destination = root / entry['filename']
+        with destination.open('xb') as output:
+            with opener.open(request, timeout=10) as response:
+                require(response.status == 200 and response.geturl() == entry['url'], 'exact response')
+                require(response.headers.get_all('Content-Length') == [str(entry['size'])], 'Content-Length')
+                require(response.headers.get('Content-Encoding') in (None, 'identity'), 'content encoding')
+                count = 0
+                digest = hashlib.sha256()
+                chunks = []
+                while True:
+                    tick(start)
+                    chunk = response.read(min(65536, entry['size'] - count + 1))
+                    if not chunk:
+                        break
+                    count += len(chunk)
+                    require(count <= entry['size'], 'download overflow')
+                    require(output.write(chunk) == len(chunk), 'archive write')
+                    digest.update(chunk)
+                    chunks.append(chunk)
+                require(count == entry['size'] and digest.hexdigest() == entry['sha256'], 'download bytes SHA')
+        total += count
+        require(total <= 23172048, 'compressed aggregate cap')
+        results.append(audit(b''.join(chunks), entry, start))
+    require(len(results) == 8 and total == 23172048, 'manifest aggregate')
+    report = dict(schema='eq083.static-build-archive-observation.v1', archives=results, compressed_bytes=total,
+                  archive_content_audited=True, admitted=False, security_disposition='unassessed', host_import_authority=False,
+                  cleanup='streams closed; quarantine retained; no outer-job or hostile-writer guarantee')
+    body = json.dumps(report, sort_keys=True, ensure_ascii=True, separators=(',', ':')).encode('ascii') + b'\n'
+    require(len(body) <= OUTPUT_CAP, 'output bound')
+    require(sys.stdout.buffer.write(body) == len(body), 'report write')
+    sys.stdout.buffer.flush()
+
+if __name__ == '__main__':
+    main()

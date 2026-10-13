@@ -1,0 +1,1193 @@
+"""EQ083 inert wheel payload/installed RECORD byte-map verifier SOURCE ONLY.
+
+No filesystem, installation, imports of product code or admission authority.
+Generated-byte inventory is returned as pending; this function NEVER admits a
+fresh environment. Trusted source-pinned parent collection/integration pending.
+"""
+import base64
+import csv
+import hashlib
+import io
+import re
+
+MAX_FILE = 67108864
+MAX_TOTAL = 1073741824
+MAX_ROWS = 20000
+SCHEMES = frozenset(('purelib', 'platlib', 'data', 'headers', 'scripts'))
+
+def relative_path(value):
+    if type(value) is not str or not value or len(value) > 1024:
+        raise ValueError('path shape')
+    if value.startswith('/') or any(c in value for c in '\\:\x00\r\n'):
+        raise ValueError('path syntax')
+    parts = value.split('/')
+    if any(p in ('', '.', '..') for p in parts):
+        raise ValueError('path components')
+    return value
+
+def record_destination(base, value):
+    relative_path(base)
+    if type(value) is not str or not value or len(value) > 1024:
+        raise ValueError('record path shape')
+    if value.startswith('/') or any(c in value for c in '\\:\x00\r\n'):
+        raise ValueError('record path syntax')
+    parts = base.split('/')
+    for component in value.split('/'):
+        if component in ('', '.'):
+            raise ValueError('record empty/dot component')
+        if component == '..':
+            if not parts:
+                raise ValueError('record outside venv')
+            parts.pop()
+        else:
+            parts.append(component)
+    return relative_path('/'.join(parts))
+
+def digest(data):
+    return dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+
+def byte_map(files, windows):
+    if type(files) is not dict or not files or len(files) > MAX_ROWS:
+        raise ValueError('byte map shape')
+    total = 0
+    seen = set()
+    for path, data in files.items():
+        relative_path(path)
+        identity = path.casefold() if windows else path
+        if identity in seen or type(data) is not bytes or len(data) > MAX_FILE:
+            raise ValueError('byte map collision/type/bound')
+        seen.add(identity)
+        total += len(data)
+        if total > MAX_TOTAL:
+            raise ValueError('byte map expanded bound')
+
+def parse_record(raw, files, self_path, installed_base=None):
+    if type(raw) is not bytes or len(raw) > 4194304:
+        raise ValueError('record bytes bound')
+    rows = list(csv.reader(io.StringIO(raw.decode('utf-8', errors='strict'), newline=''), strict=True))
+    if not rows or len(rows) > MAX_ROWS:
+        raise ValueError('record row bound')
+    result = {}
+    for row in rows:
+        if len(row) != 3:
+            raise ValueError('record arity')
+        path, encoded, size = row
+        path = relative_path(path) if installed_base is None else record_destination(installed_base, path)
+        if path in result or path not in files:
+            raise ValueError('record duplicate/missing bytes')
+        if path == self_path:
+            if encoded != '' or size != '':
+                raise ValueError('record self row')
+        elif encoded == '' and size == '' and installed_base is not None:
+            pass  # Only finite pyc rows may use this form; caller checks below.
+        else:
+            data = files[path]
+            expected = 'sha256=' + base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b'=').decode('ascii')
+            if encoded != expected or size != str(len(data)):
+                raise ValueError('record hash/size')
+        result[path] = (encoded, size)
+    if set(result) != set(files) or self_path not in result:
+        raise ValueError('record full fileset')
+    return result
+
+def relocate_payload(wheel, scheme, purelib, info, data_dir, windows):
+    byte_map(wheel, windows)
+    if type(scheme) is not dict or set(scheme) != SCHEMES or type(purelib) is not bool:
+        raise ValueError('scheme identity')
+    for path in scheme.values():
+        relative_path(path)
+    relative_path(info)
+    relative_path(data_dir)
+    if '/' in info or '/' in data_dir or not info.endswith('.dist-info') or not data_dir.endswith('.data'):
+        raise ValueError('wheel distribution directories')
+    if data_dir != info[:-10] + '.data' or info + '/WHEEL' not in wheel:
+        raise ValueError('wheel metadata/data directory association')
+    root_fields = [line for line in wheel[info + '/WHEEL'].decode('utf-8', errors='strict').splitlines()
+                   if line.lower().startswith('root-is-purelib:')]
+    if root_fields != ['Root-Is-Purelib: ' + ('true' if purelib else 'false')]:
+        raise ValueError('wheel purelib metadata association')
+    root = scheme['purelib' if purelib else 'platlib']
+    mapping, seen = {}, set()
+    for source in wheel:
+        parts = source.split('/')
+        if parts[0].endswith('.data'):
+            if parts[0] != data_dir or len(parts) < 3 or parts[1] not in SCHEMES:
+                raise ValueError('data scheme member')
+            target = scheme[parts[1]] + '/' + '/'.join(parts[2:])
+        else:
+            if parts[0].endswith('.dist-info') and parts[0] != info:
+                raise ValueError('foreign distribution metadata')
+            target = root + '/' + source
+        relative_path(target)
+        identity = target.casefold() if windows else target
+        if identity in seen:
+            raise ValueError('payload relocation collision')
+        seen.add(identity)
+        mapping[source] = target
+    return root, mapping
+
+def verify_payload_record(wheel, installed, recipe):
+    if type(recipe) is not dict or set(recipe) != {'system', 'scheme', 'purelib', 'info', 'data_dir', 'executable_bytes', 'generated'}:
+        raise ValueError('recipe closed shape')
+    if recipe['system'] not in ('Windows', 'Linux'):
+        raise ValueError('recipe OS')
+    windows = recipe['system'] == 'Windows'
+    byte_map(installed, windows)
+    root, mapping = relocate_payload(wheel, recipe['scheme'], recipe['purelib'], recipe['info'], recipe['data_dir'], windows)
+    source_record = recipe['info'] + '/RECORD'
+    if source_record not in wheel:
+        raise ValueError('wheel record required')
+    parse_record(wheel[source_record], wheel, source_record)
+    target_record = mapping[source_record]
+    if target_record not in installed:
+        raise ValueError('installed record required')
+    rows = parse_record(installed[target_record], installed, target_record, root)
+    executable = recipe['executable_bytes']
+    if type(executable) is not bytes or not executable or len(executable) > 4096 or any(c in executable for c in (0, 10, 13)):
+        raise ValueError('installer executable encoding')
+    for source, target in mapping.items():
+        if target not in installed:
+            raise ValueError('missing relocated payload')
+        if source == source_record:
+            continue
+        expected = wheel[source]
+        if source.startswith(recipe['data_dir'] + '/scripts/') and expected.startswith(b'#!python'):
+            expected = b'#!' + executable + (b'\r\n' if windows else b'\n') + expected.partition(b'\n')[2]
+        if installed[target] != expected or rows[target] == ('', ''):
+            raise ValueError('relocated payload changed/unhashed')
+    generated = recipe['generated']
+    if type(generated) is not dict or len(generated) > MAX_ROWS:
+        raise ValueError('finite generated map')
+    if set(installed) != set(mapping.values()) | set(generated) or set(mapping.values()) & set(generated):
+        raise ValueError('generated ownership/fileset')
+    pending = {}
+    for path, item in generated.items():
+        if type(item) is not dict or set(item) != {'kind', 'source', 'observed'}:
+            raise ValueError('generated closed identity')
+        observed = item['observed']
+        if type(observed) is not dict or set(observed) != {'bytes', 'sha256'}:
+            raise ValueError('generated observation shape')
+        if type(observed['bytes']) is not int or not 0 <= observed['bytes'] <= MAX_FILE:
+            raise ValueError('generated observation size')
+        if type(observed['sha256']) is not str or re.fullmatch('[0-9a-f]{64}', observed['sha256']) is None:
+            raise ValueError('generated observation SHA')
+        if observed != digest(installed[path]):
+            raise ValueError('generated observed bytes mismatch')
+        kind = item['kind']
+        if kind in ('INSTALLER', 'REQUESTED', 'direct_url'):
+            name = {'INSTALLER': 'INSTALLER', 'REQUESTED': 'REQUESTED', 'direct_url': 'direct_url.json'}[kind]
+            if path != root + '/' + recipe['info'] + '/' + name or item['source'] is not None or rows[path] == ('', ''):
+                raise ValueError('generated metadata origin')
+            if kind == 'INSTALLER' and installed[path] != b'pip\n' or kind == 'REQUESTED' and installed[path] != b'':
+                raise ValueError('generated metadata bytes')
+        elif kind == 'pyc':
+            source = item['source']
+            if source not in mapping.values() or not source.endswith('.py'):
+                raise ValueError('pyc source association')
+            directory, _, filename = source.rpartition('/')
+            if path != directory + '/__pycache__/' + filename[:-3] + '.cpython-312.pyc' or len(installed[path]) < 16:
+                raise ValueError('pyc exact path/header bound')
+        elif kind == 'entry_script':
+            if not path.startswith(recipe['scheme']['scripts'] + '/') or item['source'] not in mapping.values() or not item['source'].endswith('/entry_points.txt') or rows[path] == ('', ''):
+                raise ValueError('entry script finite origin')
+        else:
+            raise ValueError('unknown generated category')
+        pending[path] = item
+    return dict(scope='PAYLOAD_RECORD_ONLY_GENERATED_SEMANTICS_AND_HOST_PENDING', admitted=False,
+                payload_mapping=mapping, installed_record=digest(installed[target_record]), generated_pending=pending)
+
+
+
+"""EQ083 generated byte semantics SOURCE ONLY; no fresh/host admission.
+
+No installed code is imported, executed or unmarshalled. verify_pyc would
+compile honest admitted source ONLY after separate interpreter/source/collector
+integration approval. Source review must not invoke that compiler branch.
+"""
+import configparser
+import hashlib
+import importlib.util
+import io
+import json
+import keyword
+import marshal
+from pathlib import PurePosixPath, PureWindowsPath
+import re
+import sys
+import zipfile
+
+MAX_BYTES = 2097152
+WINDOWS_LAUNCHERS = {
+    'console': (108032, '81a618f21cb87db9076134e70388b6e9cb7c2106739011b6a51772d22cae06b7'),
+    'gui': (101888, '7a319ffaba23a017d7b1e18ba726ba6c54c53d6446db55f92af53c279894f8ad'),
+}
+SCRIPT_TEMPLATE = """# -*- coding: utf-8 -*-
+import re
+import sys
+from %(module)s import %(import_name)s
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\\.pyw|\\.exe)?$', '', sys.argv[0])
+    sys.exit(%(func)s())
+"""
+
+def bounded_bytes(data, limit=MAX_BYTES):
+    if type(data) is not bytes or len(data) > limit:
+        raise ValueError('generated bytes type/bound')
+    return data
+
+def sha(value):
+    if type(value) is not str or re.fullmatch('[0-9a-f]{64}', value) is None:
+        raise ValueError('canonical SHA')
+    return value
+
+def observe(data):
+    return dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+
+def owned_absolute(path, system):
+    if system not in ('Windows', 'Linux') or type(path) is not str or not path or len(path) > 2048 or any(c in path for c in '\x00\r\n"'):
+        raise ValueError('fixed absolute path')
+    cls = PureWindowsPath if system == 'Windows' else PurePosixPath
+    p = cls(path)
+    if not p.is_absolute() or '..' in p.parts or str(p) != path:
+        raise ValueError('canonical absolute path')
+    if system == 'Windows' and (p.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:', p.drive) is None):
+        raise ValueError('local Windows drive')
+    return p
+
+def unique_json(raw):
+    bounded_bytes(raw, 16384)
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('duplicate JSON key')
+            result[key] = value
+        return result
+    def constant(value):
+        raise ValueError('nonfinite JSON')
+    return json.loads(raw.decode('utf-8', errors='strict'), object_pairs_hook=pairs, parse_constant=constant)
+
+def verify_direct_url(data, archive_path, archive_bytes, archive_sha, system):
+    path = owned_absolute(archive_path, system)
+    bounded_bytes(archive_bytes, 67108864)
+    if hashlib.sha256(archive_bytes).hexdigest() != sha(archive_sha):
+        raise ValueError('accepted archive bytes')
+    expected = dict(url=path.as_uri(), archive_info=dict(hash='sha256=' + archive_sha, hashes=dict(sha256=archive_sha)))
+    if unique_json(data) != expected or data != json.dumps(expected, sort_keys=True).encode('utf-8'):
+        raise ValueError('entire direct URL archive provenance')
+    return dict(scope='GENERATED_SEMANTIC_ONLY_HOST_PENDING', admitted=False, observed=observe(data))
+
+def dotted_identifier(value):
+    if type(value) is not str or not value or len(value) > 256:
+        raise ValueError('entry callable shape')
+    if any(re.fullmatch('[A-Za-z_][A-Za-z_0-9]*', p) is None or keyword.iskeyword(p) for p in value.split('.')):
+        raise ValueError('entry callable syntax')
+    return value
+
+def entry_filename(name, system):
+    if system == 'Linux':
+        return name
+    if system != 'Windows':
+        raise ValueError('entry filename OS')
+    suffix = PurePosixPath(name).suffix
+    if suffix.startswith('.py'):
+        name = name[:-len(suffix)]
+    return name + '.exe'
+
+def entry_inventory(metadata, system):
+    # Fixed pip25.0.1 / CPython3.12 / ENSUREPIP_OPTIONS ABSENT semantics.
+    # This pure derivation does not attest the actual installer environment.
+    bounded_bytes(metadata, 65536)
+    parser = configparser.ConfigParser(interpolation=None, delimiters=('=',), strict=True)
+    parser.optionxform = str
+    parser.read_string(metadata.decode('utf-8', errors='strict'))
+    if parser.defaults():
+        raise ValueError('entry default inheritance')
+    groups, names = {}, set()
+    for section, kind in (('console_scripts', 'console'), ('gui_scripts', 'gui')):
+        group = {}
+        if parser.has_section(section):
+            for name, target in parser.items(section, raw=True):
+                if re.fullmatch('[A-Za-z_][A-Za-z_0-9.-]{0,127}', name) is None or name.casefold() in names:
+                    raise ValueError('entry name/collision')
+                fields = target.split(':')
+                if len(fields) != 2:
+                    raise ValueError('entry target arity/extras unsupported')
+                module, function = map(dotted_identifier, fields)
+                group[name] = dict(kind=kind, module=module, function=function)
+                names.add(name.casefold())
+        groups[kind] = group
+    if sum(len(g) for g in groups.values()) > 128:
+        raise ValueError('raw entry inventory bound')
+    console = groups['console'].copy()
+    derived = {}
+    for base, pattern, variants in (
+        ('pip', r'pip(\d+(\.\d+)?)?$', ('pip', 'pip3', 'pip3.12')),
+        ('easy_install', r'easy_install(-\d+\.\d+)?$', ('easy_install', 'easy_install-3.12')),
+    ):
+        original = console.pop(base, None)
+        if original is not None:
+            for variant in variants:
+                derived[variant] = dict(original)
+            for name in tuple(console):
+                if re.match(pattern, name):
+                    del console[name]
+    derived.update(console)
+    result, destinations, final_names = {}, set(), set()
+    for group in (derived, groups['gui']):
+        for name, entry in group.items():
+            filename = entry_filename(name, system)
+            identity = filename.casefold() if system == 'Windows' else filename
+            if name.casefold() in final_names or identity in destinations:
+                raise ValueError('derived installer entry name/destination collision')
+            final_names.add(name.casefold())
+            destinations.add(identity)
+            result[name] = dict(entry, filename=filename)
+    if len(result) > 128:
+        raise ValueError('derived entry inventory bound')
+    return result
+
+
+def expected_entry_bytes(metadata, name, executable, system, launcher=None, launcher_sha=None):
+    inventory = entry_inventory(metadata, system)
+    if type(name) is not str or name not in inventory:
+        raise ValueError('entry metadata association')
+    entry = inventory[name]
+    p = owned_absolute(executable, system)
+    if system == 'Windows' and entry['kind'] == 'gui':
+        p = p.with_name(p.name.replace('python', 'pythonw'))
+    encoded = str(p)
+    if ' ' in encoded:
+        encoded = '"' + encoded + '"'
+    encoded = encoded.encode('utf-8')
+    if system == 'Windows' or b' ' not in encoded and len(encoded) + 3 <= 127:
+        shebang = b'#!' + encoded + b'\n'
+    else:
+        shebang = b'#!/bin/sh\n' + b"'''exec' " + encoded + b' "$0" "$@"\n' + b"' '''\n"
+    body = (SCRIPT_TEMPLATE % dict(module=entry['module'], import_name=entry['function'].split('.')[0], func=entry['function'])).encode('utf-8')
+    if system == 'Linux':
+        if launcher is not None or launcher_sha is not None:
+            raise ValueError('Linux launcher unexpected')
+        return entry['filename'], shebang + body
+    bounded_bytes(launcher)
+    size, fixed_sha = WINDOWS_LAUNCHERS[entry['kind']]
+    if len(launcher) != size or sha(launcher_sha) != fixed_sha or not launcher.startswith(b'MZ') or hashlib.sha256(launcher).hexdigest() != fixed_sha:
+        raise ValueError('accepted selected console/gui launcher')
+    stream = io.BytesIO()
+    # Exact distlib SOURCE_DATE_EPOCH=1700000000 contract; other times deny.
+    info = zipfile.ZipInfo('__main__.py', (2023, 11, 14, 22, 13, 20))
+    info.create_system = 0
+    with zipfile.ZipFile(stream, 'w') as archive:
+        archive.writestr(info, body)
+    return entry['filename'], launcher + shebang + stream.getvalue()
+
+def verify_entry_script(data, metadata, name, executable, system, launcher=None, launcher_sha=None):
+    bounded_bytes(data)
+    filename, expected = expected_entry_bytes(metadata, name, executable, system, launcher, launcher_sha)
+    if data != expected:
+        raise ValueError('entire generated entry script')
+    return dict(scope='GENERATED_SEMANTIC_ONLY_HOST_PENDING', admitted=False, filename=filename, observed=observe(data))
+
+def verify_pyc(data, source, source_path, source_mtime_ns, invalidation, system):
+    bounded_bytes(data)
+    bounded_bytes(source)
+    path = owned_absolute(source_path, system)
+    if not path.name.endswith('.py') or type(source_mtime_ns) is not int or not 0 <= source_mtime_ns <= 9223372036854775807:
+        raise ValueError('pyc source identity/time')
+    if sys.implementation.name != 'cpython' or sys.implementation.cache_tag != 'cpython-312' or tuple(sys.version_info[:3]) != (3, 12, 10) or sys.flags.isolated != 1 or sys.flags.optimize != 0:
+        raise ValueError('reviewed isolated interpreter identity pending host binding')
+    magic = (3531).to_bytes(2, 'little') + b'\r\n'
+    if importlib.util.MAGIC_NUMBER != magic:
+        raise ValueError('CPython source magic')
+    if invalidation == 'timestamp':
+        header = magic + (0).to_bytes(4, 'little') + ((source_mtime_ns // 1000000000) & 0xffffffff).to_bytes(4, 'little') + len(source).to_bytes(4, 'little')
+    elif invalidation == 'checked_hash':
+        header = magic + (3).to_bytes(4, 'little') + importlib.util.source_hash(source)
+    else:
+        raise ValueError('pyc invalidation mode')
+    # Future separately approved invocation compiles admitted source to bytes;
+    # NEVER exec/eval/import source or marshal.loads any installed bytes.
+    code = compile(source, str(path), 'exec', dont_inherit=True, optimize=0)
+    expected = header + marshal.dumps(code)
+    if data != expected:
+        raise ValueError('entire pyc header/source code association')
+    cache = path.parent / '__pycache__' / (path.stem + '.cpython-312.pyc')
+    return dict(scope='GENERATED_SEMANTIC_ONLY_HOST_PENDING', admitted=False, path=str(cache), observed=observe(data), source=observe(source))
+
+
+
+import stat
+
+COMPONENT_KEYS = {'name', 'wheel_bytes', 'wheel_sha', 'archive_path', 'archive_bytes', 'archive_sha',
+                  'selected_form', 'purelib', 'info', 'data_dir', 'requested'}
+RECIPE_KEYS = {'system', 'venv', 'executable', 'installer', 'interpreter', 'source_date_epoch', 'bytecode', 'components', 'launchers', 'ensurepip_options'}
+BYTECODE_POLICY = dict(pip_no_compile=True, parent_flags=('-I', '-B'), child_flags=('-I', '-B'),
+                       dont_write_bytecode=True, expected_pyc=())
+
+
+def wheel_byte_map(raw, expected_sha, windows):
+    bounded_bytes(raw, MAX_FILE)
+    if hashlib.sha256(raw).hexdigest() != sha(expected_sha):
+        raise ValueError('selected built wheel bytes')
+    result, total = {}, 0
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        infos = archive.infolist()
+        if not infos or len(infos) > MAX_ROWS:
+            raise ValueError('wheel member count')
+        seen = set()
+        for item in infos:
+            if type(item.orig_filename) is not str or item.orig_filename != item.filename:
+                raise ValueError('ZIP original spelling rewritten/truncated/Unicode override')
+            name = item.orig_filename
+            directory = name.endswith('/')
+            path = relative_path(name[:-1] if directory else name)
+            identity = path.casefold() if windows else path
+            if identity in seen or item.flag_bits & 1 or item.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
+                raise ValueError('wheel ZIP member identity/encryption/compression')
+            seen.add(identity)
+            mode = (item.external_attr >> 16) & 0xffff
+            if stat.S_IFMT(mode) not in (0, stat.S_IFDIR if directory else stat.S_IFREG):
+                raise ValueError('wheel ZIP link/nonregular member')
+            if item.file_size > MAX_FILE or item.file_size < 0:
+                raise ValueError('wheel ZIP member size')
+            total += item.file_size
+            if total > MAX_TOTAL:
+                raise ValueError('wheel ZIP expanded total')
+            data = archive.read(item)
+            if len(data) != item.file_size or directory and data:
+                raise ValueError('wheel ZIP full member bytes')
+            if not directory:
+                result[path] = data
+    byte_map(result, windows)
+    return result
+
+
+def map_scheme(system, name):
+    if system == 'Windows':
+        library, scripts, headers = 'venv/Lib/site-packages', 'venv/Scripts', 'venv/Include/site/python3.12/' + name
+    elif system == 'Linux':
+        library, scripts, headers = 'venv/lib/python3.12/site-packages', 'venv/bin', 'venv/include/site/python3.12/' + name
+    else:
+        raise ValueError('whole map OS')
+    return dict(purelib=library, platlib=library, data='venv', headers=headers, scripts=scripts)
+
+
+def fixed_map_recipe(recipe):
+    if type(recipe) is not dict or set(recipe) != RECIPE_KEYS or recipe['system'] not in ('Windows', 'Linux'):
+        raise ValueError('whole map recipe closed shape')
+    if recipe['ensurepip_options'] is not None:
+        raise ValueError('fixed ENSUREPIP_OPTIONS absence policy')
+    system = recipe['system']
+    root = owned_absolute(recipe['venv'], system)
+    expected = root / ('Scripts/python.exe' if system == 'Windows' else 'bin/python')
+    interpreter = recipe['interpreter']
+    if type(recipe['executable']) is not str or recipe['executable'] != str(expected) or type(recipe['installer']) is not tuple or recipe['installer'] != ('pip', '25.0.1') or any(type(v) is not str for v in recipe['installer']):
+        raise ValueError('fixed executable-installer recipe')
+    if type(interpreter) is not tuple or len(interpreter) != 4 or type(interpreter[0]) is not str or type(interpreter[2]) is not str or type(interpreter[3]) is not int or type(interpreter[1]) is not tuple or any(type(v) is not int for v in interpreter[1]) or interpreter != ('cpython', (3, 12, 10), 'cpython-312', 0):
+        raise ValueError('fixed interpreter-installer recipe')
+    if type(recipe['source_date_epoch']) is not int or recipe['source_date_epoch'] != 1700000000:
+        raise ValueError('fixed script ZIP epoch')
+    policy = recipe['bytecode']
+    if type(policy) is not dict or set(policy) != set(BYTECODE_POLICY) or policy != BYTECODE_POLICY or policy['pip_no_compile'] is not True or policy['dont_write_bytecode'] is not True:
+        raise ValueError('fixed no-write bytecode policy')
+    components = recipe['components']
+    if type(components) is not tuple or not 1 <= len(components) <= 128:
+        raise ValueError('finite selected component inventory')
+    launchers = recipe['launchers']
+    if type(launchers) is not dict or set(launchers) != ({'console', 'gui'} if system == 'Windows' else set()):
+        raise ValueError('selected installer launcher inventory')
+    for kind, data in launchers.items():
+        bounded_bytes(data)
+        size, expected_sha = WINDOWS_LAUNCHERS[kind]
+        if len(data) != size or hashlib.sha256(data).hexdigest() != expected_sha:
+            raise ValueError('selected installer launcher bytes')
+    return root, map_scheme(system, 'placeholder')
+
+
+def verify_whole_installed_map(installed, recipe):
+    # Pure byte orchestration. Supplied observations/recipes are not authority;
+    # actual collector/fixed builder/host/installer/form binding is still absent.
+    root, _ = fixed_map_recipe(recipe)
+    system, windows = recipe['system'], recipe['system'] == 'Windows'
+    byte_map(installed, windows)
+    if any(path.endswith('.pyc') for path in installed):
+        raise ValueError('unexpected bytecode under fixed no-compile/no-write policy')
+    components, names, owners, reports, compressed = recipe['components'], set(), {}, {}, 0
+    for item in components:
+        if type(item) is not dict or set(item) != COMPONENT_KEYS or type(item['name']) is not str or re.fullmatch('[a-z0-9]+(?:[-_][a-z0-9]+)*', item['name']) is None:
+            raise ValueError('selected component closed identity')
+        normalized = item['name'].replace('_', '-')
+        if normalized in names or type(item['requested']) is not bool or type(item['purelib']) is not bool or item['selected_form'] not in ('wheel', 'sdist'):
+            raise ValueError('component duplicate/form/requested identity')
+        names.add(normalized)
+        bounded_bytes(item['archive_bytes'], MAX_FILE)
+        if hashlib.sha256(item['archive_bytes']).hexdigest() != sha(item['archive_sha']):
+            raise ValueError('selected original archive bytes')
+        original = owned_absolute(item['archive_path'], system)
+        if item['selected_form'] == 'wheel' and (item['archive_bytes'] != item['wheel_bytes'] or not original.name.endswith('.whl')):
+            raise ValueError('wheel selected original archive equality')
+        if item['selected_form'] == 'sdist' and not original.name.endswith('.tar.gz'):
+            raise ValueError('selected sdist original provenance')
+        wheel = wheel_byte_map(item['wheel_bytes'], item['wheel_sha'], windows)
+        metadata_path = item['info'] + '/METADATA'
+        if metadata_path not in wheel:
+            raise ValueError('selected distribution metadata required')
+        declared, last_field = [], None
+        for line in wheel[metadata_path].decode('utf-8', errors='strict').split('\n'):
+            if line.endswith('\r'):
+                line = line[:-1]  # Exactly one CR is allowed only before LF.
+            if any(ord(c) < 32 and c != '\t' or ord(c) in (127, 133, 8232, 8233) for c in line):
+                raise ValueError('metadata header control separator')
+            if line == '':
+                break  # LF and CRLF terminate headers before description text.
+            if line[:1] in (' ', '\t'):
+                if last_field is None or last_field == 'name':
+                    raise ValueError('metadata Name/initial header continuation')
+                continue
+            key, separator, value = line.partition(':')
+            if not separator or re.fullmatch('[A-Za-z0-9-]+', key) is None:
+                raise ValueError('metadata header field syntax')
+            last_field = key.casefold()
+            if last_field == 'name':
+                declared.append(value.strip())
+        if len(declared) != 1 or re.sub('[-_.]+', '-', declared[0]).lower() != normalized:
+            raise ValueError('component metadata name identity')
+        compressed += len(item['wheel_bytes']) + len(item['archive_bytes'])
+        if compressed > 536870912:
+            raise ValueError('whole compressed archive bound')
+        scheme = map_scheme(system, item['name'])
+        library, mapping = relocate_payload(wheel, scheme, item['purelib'], item['info'], item['data_dir'], windows)
+        metadata_base = library + '/' + item['info']
+        generated = {
+            metadata_base + '/INSTALLER': dict(kind='INSTALLER', source=None),
+            metadata_base + '/direct_url.json': dict(kind='direct_url', source=None),
+        }
+        if item['requested']:
+            generated[metadata_base + '/REQUESTED'] = dict(kind='REQUESTED', source=None)
+        entry_source = item['info'] + '/entry_points.txt'
+        entries = entry_inventory(wheel[entry_source], system) if entry_source in wheel else {}
+        for name, entry in entries.items():
+            path = scheme['scripts'] + '/' + entry['filename']
+            if path in generated:
+                raise ValueError('derived script/generated path collision')
+            generated[path] = dict(kind='entry_script', source=mapping[entry_source])
+        paths = set(mapping.values()) | set(generated)
+        if set(mapping.values()) & set(generated):
+            raise ValueError('generated metadata collides with archive payload')
+        subset = {}
+        for path in sorted(paths):
+            key = path.casefold() if windows else path
+            if key in owners or path not in installed:
+                raise ValueError('cross-distribution ownership collision/missing installed path')
+            owners[key] = (item['name'], path)
+            subset[path] = installed[path]
+        for path, description in generated.items():
+            description['observed'] = digest(subset[path])
+        payload = verify_payload_record(wheel, subset, dict(system=system, scheme=scheme, purelib=item['purelib'],
+                      info=item['info'], data_dir=item['data_dir'], executable_bytes=recipe['executable'].encode('utf-8'), generated=generated))
+        verify_direct_url(subset[metadata_base + '/direct_url.json'], str(original), item['archive_bytes'], item['archive_sha'], system)
+        for name, entry in entries.items():
+            launcher = recipe['launchers'].get(entry['kind']) if windows else None
+            launcher_sha = WINDOWS_LAUNCHERS[entry['kind']][1] if windows else None
+            verify_entry_script(subset[scheme['scripts'] + '/' + entry['filename']], wheel[entry_source], name,
+                                recipe['executable'], system, launcher, launcher_sha)
+        reports[item['name']] = dict(selected_form=item['selected_form'], original_archive=digest(item['archive_bytes']),
+                                     built_wheel=digest(item['wheel_bytes']), payload=payload,
+                                     generated={p: digest(subset[p]) for p in generated})
+    if {v[1] for v in owners.values()} != set(installed):
+        raise ValueError('complete installed ownership union: extra/unowned path')
+    return dict(admitted=False, scope='WHOLE_SELECTED_MAP_SEMANTICS_ONLY_COLLECTOR_BOOTSTRAP_HOST_FORM_PENDING',
+                components=reports, owners=owners, installed={p: digest(v) for p, v in installed.items()},
+                bytecode=dict(BYTECODE_POLICY))
+
+
+def compare_whole_installed_maps(before, after):
+    keys = {'admitted', 'scope', 'components', 'owners', 'installed', 'bytecode'}
+    if type(before) is not dict or type(after) is not dict or set(before) != keys or set(after) != keys or before['admitted'] is not False or after['admitted'] is not False:
+        raise ValueError('unadmitted whole map comparison shape')
+    if before['scope'] != 'WHOLE_SELECTED_MAP_SEMANTICS_ONLY_COLLECTOR_BOOTSTRAP_HOST_FORM_PENDING' or before != after:
+        raise ValueError('entire selected installed map changed')
+    return dict(admitted=False, scope=before['scope'])
+
+
+import shlex
+
+BOOTSTRAP_KEYS = {'system', 'venv', 'base_executable', 'resolved_executable', 'version',
+                  'isolated', 'no_bytecode', 'without_pip', 'copies', 'python_build',
+                  'system_site_packages', 'prompt', 'upgrade', 'clear', 'upgrade_deps'}
+TEMPLATE_NAMES = {
+    'Windows': ('common/activate', 'common/Activate.ps1', 'nt/activate.bat', 'nt/deactivate.bat'),
+    'Linux': ('common/activate', 'common/Activate.ps1', 'posix/activate.csh', 'posix/activate.fish'),
+}
+
+
+def fixed_bootstrap_recipe(recipe):
+    if type(recipe) is not dict or set(recipe) != BOOTSTRAP_KEYS:
+        raise ValueError('closed bootstrap recipe')
+    system = recipe['system']
+    root = owned_absolute(recipe['venv'], system)
+    base = owned_absolute(recipe['base_executable'], system)
+    resolved = owned_absolute(recipe['resolved_executable'], system)
+    if root.name != 'venv' or base.name != ('python.exe' if system == 'Windows' else 'python3.12'):
+        raise ValueError('fixed venv/base executable layout')
+    # Fixed simple synthetic-owned paths avoid shell-template edge policies.
+    for path in (str(root), str(base), str(resolved)):
+        if re.fullmatch(r'[A-Za-z0-9_./:\\-]+', path) is None:
+            raise ValueError('fixed bootstrap path alphabet')
+    if type(recipe['version']) is not tuple or any(type(v) is not int for v in recipe['version']) or recipe['version'] != (3, 12, 10):
+        raise ValueError('bootstrap CPython patch contract')
+    for key in ('isolated', 'no_bytecode', 'without_pip', 'copies'):
+        if recipe[key] is not True:
+            raise ValueError('required explicit bootstrap policy')
+    for key in ('python_build', 'system_site_packages', 'upgrade', 'clear', 'upgrade_deps'):
+        if recipe[key] is not False:
+            raise ValueError('unsupported bootstrap option')
+    if recipe['prompt'] is not None:
+        raise ValueError('bootstrap prompt override unsupported')
+    return root, base, resolved
+
+
+def bootstrap_file_expectations(recipe, source_bytes):
+    # Supplied bytes are source semantics, not trusted current-host authority.
+    root, base, resolved = fixed_bootstrap_recipe(recipe)
+    system = recipe['system']
+    keys = set(TEMPLATE_NAMES[system]) | ({'nt/python.exe', 'nt/pythonw.exe'} if system == 'Windows' else {'base/python3.12'})
+    if type(source_bytes) is not dict or set(source_bytes) != keys:
+        raise ValueError('complete fixed bootstrap source inventory')
+    for data in source_bytes.values():
+        bounded_bytes(data, MAX_FILE)
+        if not data:
+            raise ValueError('empty bootstrap source')
+    bin_name = 'Scripts' if system == 'Windows' else 'bin'
+    env_exe = root / bin_name / base.name
+    replacements = {'__VENV_DIR__': str(root), '__VENV_NAME__': root.name,
+                    '__VENV_PROMPT__': '(' + root.name + ') ', '__VENV_BIN_NAME__': bin_name,
+                    '__VENV_PYTHON__': str(env_exe)}
+    files = {}
+    for name in TEMPLATE_NAMES[system]:
+        text = source_bytes[name].decode('utf-8', errors='strict')
+        if name.endswith('.ps1'):
+            quote = lambda value: "'" + value.replace("'", "''") + "'"
+        elif name.endswith('.bat'):
+            quote = lambda value: value
+        else:
+            quote = shlex.quote
+        for key, value in replacements.items():
+            text = text.replace(key, quote(value))
+        files['venv/' + bin_name + '/' + name.rsplit('/', 1)[1]] = text.encode('utf-8')
+    options = ('--without-pip' if system == 'Windows' else '--copies --without-pip')
+    config = ('home = ' + str(base.parent) + '\ninclude-system-site-packages = false\n'
+              'version = 3.12.10\nexecutable = ' + str(resolved) + '\ncommand = '
+              + str(base) + ' -m venv ' + options + ' ' + str(root) + '\n')
+    files['venv/pyvenv.cfg'] = config.replace('\n', '\r\n').encode('utf-8') if system == 'Windows' else config.encode('utf-8')
+    if system == 'Windows':
+        for name in ('python.exe', 'pythonw.exe'):
+            data = source_bytes['nt/' + name]
+            if not data.startswith(b'MZ'):
+                raise ValueError('Windows fixed redirector source')
+            files['venv/Scripts/' + name] = data
+    else:
+        data = source_bytes['base/python3.12']
+        if not data.startswith(b'\x7fELF'):
+            raise ValueError('Linux fixed executable source')
+        for name in ('python', 'python3', 'python3.12'):
+            files['venv/bin/' + name] = data
+    # CPython x64 non-Darwin creates this directory link even with --copies.
+    links = {} if system == 'Windows' else {'venv/lib64': 'lib'}
+    return dict(admitted=False, scope='BOOTSTRAP_BYTES_ONLY_FIXED_HOST_COLLECTOR_PENDING',
+                files=files, links=links, sources={p: digest(b) for p, b in source_bytes.items()},
+                invocation=(str(base), '-I', '-B', '-m', 'venv', '--without-pip', '--copies', str(root)))
+
+
+def verify_bootstrap_union(complete_files, complete_links, selected_files, map_recipe, bootstrap_recipe, source_bytes):
+    expected = bootstrap_file_expectations(bootstrap_recipe, source_bytes)
+    if bootstrap_recipe['system'] != map_recipe['system'] or bootstrap_recipe['venv'] != map_recipe['venv']:
+        raise ValueError('bootstrap/selected root identity')
+    selected = verify_whole_installed_map(selected_files, map_recipe)
+    windows = map_recipe['system'] == 'Windows'
+    byte_map(complete_files, windows)
+    if type(complete_links) is not dict or any(type(p) is not str or type(t) is not str for p, t in complete_links.items()) or complete_links != expected['links']:
+        raise ValueError('full bootstrap link inventory')
+    # Files and links cannot be directories in the same physical namespace.
+    occupied = {p.casefold() if windows else p for p in complete_files}
+    occupied.update(p.casefold() if windows else p for p in complete_links)
+    for path in occupied:
+        parts = path.split('/')
+        if any('/'.join(parts[:n]) in occupied for n in range(1, len(parts))):
+            raise ValueError('file/link ancestor namespace collision')
+    owners = {p.casefold() if windows else p for p in selected_files}
+    for path, data in expected['files'].items():
+        key = path.casefold() if windows else path
+        if key in owners or complete_files.get(path) != data:
+            raise ValueError('bootstrap collision/missing/fullbyte mismatch')
+        owners.add(key)
+    if set(complete_files) != set(selected_files) | set(expected['files']):
+        raise ValueError('whole bootstrap/selected file union')
+    if any(complete_files[p] != data for p, data in selected_files.items()):
+        raise ValueError('selected file bytes changed across union')
+    if set(complete_links) & set(complete_files):
+        raise ValueError('file/link ownership collision')
+    return dict(admitted=False, scope='BOOTSTRAP_UNION_ONLY_RESOLVER_ISSUER_FORM_PENDING',
+                selected=selected, bootstrap=expected,
+                files={p: digest(b) for p, b in complete_files.items()}, links=dict(complete_links))
+
+
+PIP_WHEEL_PIN = (1841526, 'c46efd13b6aa8279f33f2864459c8ce587ea6a1a59ee20de055868d8f7688f7f')
+PIP_BOOTSTRAP_CODE = """import sys
+if sys.flags.isolated != 1 or sys.flags.optimize != 0 or sys.dont_write_bytecode is not True or sys.implementation.name != 'cpython' or sys.implementation.cache_tag != 'cpython-312' or tuple(sys.version_info[:3]) != (3, 12, 10):
+    raise SystemExit('fixed isolated no-write interpreter required')
+if len(sys.argv) != 3:
+    raise SystemExit('fixed wheel/executable arity required')
+wheel, executable = sys.argv[1:]
+if sys.executable != executable:
+    raise SystemExit('fixed venv interpreter required')
+import os
+if 'ENSUREPIP_OPTIONS' in os.environ or os.environ.get('PIP_CONFIG_FILE') != os.devnull or os.environ.get('SOURCE_DATE_EPOCH') != '1700000000':
+    raise SystemExit('fixed installer environment required')
+# This executable text is a proposed future body, NOT issued permission.
+# Separate exact host/collector/issuer binding must gate launching it.
+import runpy
+sys.path.insert(0, wheel)
+sys.argv = ['pip', '--isolated', '--disable-pip-version-check', '--no-input', '--no-cache-dir', 'install', '--no-index', '--no-deps', '--no-compile', '--no-build-isolation', wheel]
+runpy.run_module('pip', run_name='__main__', alter_sys=True)
+"""
+
+
+def fixed_pip_bootstrap_plan(bootstrap_recipe, wheel_path, wheel_bytes, system_root):
+    root, base, resolved = fixed_bootstrap_recipe(bootstrap_recipe)
+    system = bootstrap_recipe['system']
+    archive = owned_absolute(wheel_path, system)
+    if archive.name != 'pip-25.0.1-py3-none-any.whl':
+        raise ValueError('fixed pip wheel basename')
+    # Keep installer archive outside the dedicated installed venv namespace.
+    if archive == root or root in archive.parents:
+        raise ValueError('bootstrap archive inside installed ownership root')
+    bounded_bytes(wheel_bytes, MAX_FILE)
+    size, expected_sha = PIP_WHEEL_PIN
+    if len(wheel_bytes) != size or hashlib.sha256(wheel_bytes).hexdigest() != expected_sha:
+        raise ValueError('entire selected pip bootstrap wheel pin')
+    wheel = wheel_byte_map(wheel_bytes, expected_sha, system == 'Windows')
+    info = 'pip-25.0.1.dist-info'
+    parse_record(wheel[info + '/RECORD'], wheel, info + '/RECORD')
+    if any(p.endswith('.pyc') for p in wheel):
+        raise ValueError('bootstrap wheel bytecode forbidden')
+    executable = str(root / ('Scripts/python.exe' if system == 'Windows' else 'bin/python'))
+    temp = str(root.parent / 'bootstrap-tmp')
+    environment = {'PIP_CONFIG_FILE': 'nul' if system == 'Windows' else '/dev/null',
+                   'SOURCE_DATE_EPOCH': '1700000000', 'TMP': temp, 'TEMP': temp, 'TMPDIR': temp}
+    if system == 'Windows':
+        path = owned_absolute(system_root, system)
+        if path.name.casefold() != 'windows' or re.fullmatch(r'[A-Za-z]:\\Windows', str(path), re.IGNORECASE) is None:
+            raise ValueError('fixed Windows system root')
+        environment['SystemRoot'] = str(path)
+    elif system_root is not None:
+        raise ValueError('Linux Windows root unexpected')
+    return dict(admitted=False, scope='PIP_BOOTSTRAP_PLAN_ONLY_ISSUER_HOST_FORM_PENDING',
+                argv=(executable, '-I', '-B', '-c', PIP_BOOTSTRAP_CODE, str(archive), executable),
+                environment=environment, cwd=str(root.parent),
+                archive=dict(path=str(archive), **digest(wheel_bytes)),
+                wheel_members={p: digest(b) for p, b in wheel.items()},
+                installed_recipe=dict(installer=('pip', '25.0.1'), ensurepip_options=None,
+                                      bytecode=dict(BYTECODE_POLICY), source_date_epoch=1700000000))
+
+
+"""EQ083 bounded installed-tree collector SOURCE ONLY.
+
+A future trusted builder selects dedicated installation subtrees, never a
+public caller. Capturing bytes does NOT admit their provenance or host runtime.
+No capture is authorized by publishing this source. No locking or hostile
+same-user security is claimed; before/after identity checks detect observed
+changes, not arbitrary concurrent changes restored between observations.
+"""
+import hashlib
+import os
+from pathlib import Path
+import re
+import stat
+import sys
+
+MAX_FILES = 16384
+MAX_DIRS = 16384
+MAX_FILE = 67108864
+MAX_TOTAL = 1073741824
+MAX_DEPTH = 64
+REPARSE = 0x400
+
+
+def component(name, windows):
+    if type(name) is not str or not name or len(name) > 255 or name in ('.', '..') or any(ord(c) < 32 or c in '/\\:\x00' for c in name):
+        raise ValueError('tree component syntax')
+    if windows:
+        if name[-1] in ' .' or any(c in name for c in '<>"|?*'):
+            raise ValueError('Windows component alias')
+        stem = name.split('.')[0].upper()
+        if stem in {'CON', 'PRN', 'AUX', 'NUL', 'CONIN$', 'CONOUT$'} or re.fullmatch('(COM|LPT)[1-9\u00b9\u00b2\u00b3]', stem):
+            raise ValueError('Windows reserved device')
+    return name
+
+
+def identity(info, kind):
+    # atime is excluded because reading may change it. ctime/mtime are retained.
+    if type(info.st_size) is not int or info.st_size < 0 or type(info.st_nlink) is not int or info.st_nlink < 1:
+        raise ValueError('stat scalar shape')
+    if getattr(info, 'st_file_attributes', 0) & REPARSE or stat.S_ISLNK(info.st_mode):
+        raise ValueError('link/reparse forbidden')
+    if kind == 'directory':
+        if not stat.S_ISDIR(info.st_mode):
+            raise ValueError('directory required')
+    elif kind == 'file':
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size > MAX_FILE:
+            raise ValueError('regular single-link bounded file required')
+    else:
+        raise ValueError('stat kind')
+    return tuple(getattr(info, key) for key in ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')) + (getattr(info, 'st_uid', None), getattr(info, 'st_gid', None), getattr(info, 'st_file_attributes', 0))
+
+
+def checked_root(root, system):
+    if system not in ('Windows', 'Linux') or type(root) is not str or not root or len(root) > 2048 or any(c in root for c in '\x00\r\n'):
+        raise ValueError('collector root shape')
+    if (system == 'Windows') != (os.name == 'nt') or (system == 'Linux') != sys.platform.startswith('linux'):
+        raise ValueError('collector actual OS')
+    path = Path(root)
+    if not path.is_absolute() or str(path) != root or '..' in path.parts:
+        raise ValueError('canonical absolute root')
+    if system == 'Windows' and (path.drive.startswith('\\\\') or re.fullmatch('[A-Za-z]:', path.drive) is None):
+        raise ValueError('local Windows root')
+    for name in path.parts[1:]:
+        component(name, system == 'Windows')
+    ancestors = tuple(reversed(path.parents)) + (path,)
+    if len(ancestors) > MAX_DEPTH:
+        raise ValueError('root ancestor bound')
+    pins = tuple((str(item), identity(item.lstat(), 'directory')) for item in ancestors)
+    if str(path.resolve(strict=True)) != root:
+        raise ValueError('root resolved alias')
+    return path, pins
+
+
+def names_in(directory, windows):
+    # scandir is closed before recursion; no followed DirEntry type predicates.
+    names = []
+    entries = os.scandir(directory)
+    try:
+        for entry in entries:
+            component(entry.name, windows)
+            names.append(entry.name)
+            if len(names) > MAX_FILES + MAX_DIRS:
+                raise ValueError('directory entry bound')
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            entries.close()
+        except BaseException:
+            if not active:
+                raise
+    if len(set(name.casefold() if windows else name for name in names)) != len(names):
+        raise ValueError('tree case/destination collision')
+    return tuple(sorted(names))
+
+
+def read_regular(path, expected):
+    flags = os.O_RDONLY | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0)
+    fd = os.open(path, flags)
+    try:
+        if identity(os.fstat(fd), 'file') != expected or identity(path.lstat(), 'file') != expected:
+            raise ValueError('opened file identity changed')
+        chunks, size = [], 0
+        while True:
+            block = os.read(fd, min(65536, MAX_FILE + 1 - size))
+            if not block:
+                break
+            size += len(block)
+            if size > MAX_FILE or size > expected[4]:
+                raise ValueError('file grew beyond pinned size/bound')
+            chunks.append(block)
+        if size != expected[4] or identity(os.fstat(fd), 'file') != expected or identity(path.lstat(), 'file') != expected:
+            raise ValueError('read file identity/size changed')
+        return b''.join(chunks)
+    finally:
+        active = sys.exc_info()[0] is not None
+        try:
+            os.close(fd)
+        except BaseException:
+            if not active:
+                raise
+
+
+def capture_tree(root, system):
+    """Future internal capture: complete subtree, all rows, ALWAYS unadmitted.
+
+    Linux venv interpreter symlinks are not followed or silently excluded here.
+    The future fixed builder must select disjoint site-packages/scripts payload
+    roots and reconcile interpreter links in a separately reviewed host inspector.
+    This function has no accepted recipe/issuer or environment mutation path.
+    """
+    path, ancestor_pins = checked_root(root, system)
+    windows = system == 'Windows'
+    files, file_pins, directories, total = {}, {}, {}, 0
+
+    def visit(directory, relative, depth):
+        nonlocal total
+        if depth > MAX_DEPTH or len(directories) >= MAX_DIRS:
+            raise ValueError('directory count/depth bound')
+        pinned = identity(directory.lstat(), 'directory')
+        names = names_in(directory, windows)
+        directories[relative] = (pinned, names)
+        for name in names:
+            target = directory / name
+            key = relative + '/' + name if relative else name
+            observed = target.lstat()
+            if stat.S_ISDIR(observed.st_mode):
+                identity(observed, 'directory')
+                visit(target, key, depth + 1)
+            else:
+                pinned_file = identity(observed, 'file')
+                if len(files) >= MAX_FILES or total + pinned_file[4] > MAX_TOTAL:
+                    raise ValueError('file count/total bound')
+                data = read_regular(target, pinned_file)
+                total += len(data)
+                files[key], file_pins[key] = data, pinned_file
+        if identity(directory.lstat(), 'directory') != pinned or names_in(directory, windows) != names:
+            raise ValueError('directory changed during capture')
+
+    visit(path, '', 0)
+    # Recheck every recorded path/complete directory name set and every ancestor.
+    # This still is not filesystem locking or a same-user adversary boundary.
+    for key, pinned in file_pins.items():
+        if identity((path / key).lstat(), 'file') != pinned:
+            raise ValueError('file changed before snapshot completion')
+    for key, (pinned, names) in directories.items():
+        directory = path / key
+        if identity(directory.lstat(), 'directory') != pinned or names_in(directory, windows) != names:
+            raise ValueError('directory changed before snapshot completion')
+    for name, pinned in ancestor_pins:
+        if identity(Path(name).lstat(), 'directory') != pinned:
+            raise ValueError('ancestor changed before snapshot completion')
+    observed = {key: dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest()) for key, data in files.items()}
+    return dict(scope='TREE_CAPTURE_ONLY_RECIPE_HOST_AND_GENERATED_MAP_PENDING', admitted=False,
+                root=root, system=system, files=files, observed=observed, file_identities=file_pins,
+                directories=directories, ancestors=ancestor_pins, total_bytes=total)
+
+
+def compare_capture(before, after):
+    if type(before) is not dict or type(after) is not dict or before.get('admitted') is not False or after.get('admitted') is not False:
+        raise ValueError('unadmitted collector snapshots required')
+    keys = {'scope', 'admitted', 'root', 'system', 'files', 'observed', 'file_identities', 'directories', 'ancestors', 'total_bytes'}
+    if set(before) != keys or set(after) != keys or before['scope'] != 'TREE_CAPTURE_ONLY_RECIPE_HOST_AND_GENERATED_MAP_PENDING' or before != after:
+        raise ValueError('entire captured tree changed')
+    return dict(scope='TREE_CAPTURE_ONLY_RECIPE_HOST_AND_GENERATED_MAP_PENDING', admitted=False)
+
+
+
+
+def linux_link_identity(info):
+    keys = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns', 'st_uid', 'st_gid')
+    values = tuple(getattr(info, key) for key in keys)
+    if any(type(value) is not int for value in values) or values[0] < 0 or values[1] <= 0 or values[3] != 1 or values[4] != 3:
+        raise ValueError('fixed Linux link stat shape')
+    if not stat.S_ISLNK(values[2]) or getattr(info, 'st_file_attributes', 0) != 0:
+        raise ValueError('fixed Linux symlink required')
+    return values
+
+
+def observe_lib64(root):
+    # Never resolve, open, recurse through, or hash the symlink as a file.
+    link, target = root / 'lib64', root / 'lib'
+    before = linux_link_identity(link.lstat())
+    target_before = identity(target.lstat(), 'directory')
+    value = os.readlink(link)
+    if type(value) is not str or value != 'lib':
+        raise ValueError('exact lib64 relative target required')
+    if linux_link_identity(link.lstat()) != before or identity(target.lstat(), 'directory') != target_before:
+        raise ValueError('lib64 link/target changed')
+    return (before, value, target_before)
+
+
+def capture_bootstrap_tree(root, system):
+    """Future full venv capture, with exactly the CPython Linux lib64 link.
+
+    Fixed issuer/source/interpreter/form admission is still pending. This has
+    no launch or admission path; the old all-regular collector is unchanged.
+    """
+    path, ancestor_pins = checked_root(root, system)
+    if path.name != 'venv':
+        raise ValueError('fixed bootstrap root basename')
+    windows = system == 'Windows'
+    files, file_pins, directories, links, total = {}, {}, {}, {}, 0
+
+    def visit(directory, relative, depth):
+        nonlocal total
+        if depth > MAX_DEPTH or len(directories) >= MAX_DIRS:
+            raise ValueError('directory count/depth bound')
+        pinned = identity(directory.lstat(), 'directory')
+        names = names_in(directory, windows)
+        directories[relative] = (pinned, names)
+        for name in names:
+            target = directory / name
+            key = relative + '/' + name if relative else name
+            observed = target.lstat()
+            if system == 'Linux' and key == 'lib64':
+                links[key] = observe_lib64(path)
+            elif stat.S_ISDIR(observed.st_mode):
+                identity(observed, 'directory')
+                visit(target, key, depth + 1)
+            else:
+                pinned_file = identity(observed, 'file')
+                if len(files) >= MAX_FILES or total + pinned_file[4] > MAX_TOTAL:
+                    raise ValueError('file count/total bound')
+                data = read_regular(target, pinned_file)
+                total += len(data)
+                files[key], file_pins[key] = data, pinned_file
+        if identity(directory.lstat(), 'directory') != pinned or names_in(directory, windows) != names:
+            raise ValueError('directory changed during capture')
+
+    visit(path, '', 0)
+    if set(links) != (set() if windows else {'lib64'}):
+        raise ValueError('complete fixed link inventory')
+    for key, pinned in file_pins.items():
+        if identity((path / key).lstat(), 'file') != pinned:
+            raise ValueError('file changed before snapshot completion')
+    for key, (pinned, names) in directories.items():
+        directory = path / key
+        if identity(directory.lstat(), 'directory') != pinned or names_in(directory, windows) != names:
+            raise ValueError('directory changed before snapshot completion')
+    for key, pinned in links.items():
+        if observe_lib64(path) != pinned:
+            raise ValueError('link/target changed before snapshot completion')
+    for name, pinned in ancestor_pins:
+        if identity(Path(name).lstat(), 'directory') != pinned:
+            raise ValueError('ancestor changed before snapshot completion')
+    observed = {key: dict(bytes=len(data), sha256=hashlib.sha256(data).hexdigest()) for key, data in files.items()}
+    return dict(scope='BOOTSTRAP_TREE_CAPTURE_ONLY_ISSUER_HOST_FORM_PENDING', admitted=False,
+                root=root, system=system, files=files, observed=observed, file_identities=file_pins,
+                directories=directories, ancestors=ancestor_pins, total_bytes=total, links=links)
+
+
+def compare_bootstrap_capture(before, after):
+    keys = {'scope', 'admitted', 'root', 'system', 'files', 'observed', 'file_identities', 'directories', 'ancestors', 'total_bytes', 'links'}
+    if type(before) is not dict or type(after) is not dict or set(before) != keys or set(after) != keys:
+        raise ValueError('complete bootstrap capture shape')
+    if before['admitted'] is not False or after['admitted'] is not False or before['scope'] != 'BOOTSTRAP_TREE_CAPTURE_ONLY_ISSUER_HOST_FORM_PENDING' or before != after:
+        raise ValueError('entire bootstrap capture changed')
+    return dict(scope='BOOTSTRAP_TREE_CAPTURE_ONLY_ISSUER_HOST_FORM_PENDING', admitted=False)
+
+
+
+
+from types import SimpleNamespace
+
+
+def snapshot_identity(pin, kind, system):
+    keys = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns', 'st_uid', 'st_gid', 'st_file_attributes')
+    if type(pin) is not tuple or len(pin) != len(keys) or any(type(v) is not int for v in pin[:7]) or type(pin[9]) is not int:
+        raise ValueError('closed snapshot identity scalars')
+    if pin[0] < 0 or pin[1] <= 0 or pin[9] < 0 or any(v is not None and (type(v) is not int or v < 0) for v in pin[7:9]):
+        raise ValueError('snapshot device/inode/owner/attribute shape')
+    if system == 'Linux' and (pin[9] != 0 or any(type(v) is not int for v in pin[7:9])):
+        raise ValueError('Linux snapshot owner/attribute shape')
+    if identity(SimpleNamespace(**dict(zip(keys, pin))), kind) != pin:
+        raise ValueError('snapshot identity kind mismatch')
+    return pin
+
+
+def verify_collected_bootstrap(capture, map_recipe, bootstrap_recipe, source_bytes):
+    """Pure complete capture reconciliation, never capture or trust issuance."""
+    keys = {'scope', 'admitted', 'root', 'system', 'files', 'observed', 'file_identities', 'directories', 'ancestors', 'total_bytes', 'links'}
+    if type(capture) is not dict or set(capture) != keys or capture['admitted'] is not False or capture['scope'] != 'BOOTSTRAP_TREE_CAPTURE_ONLY_ISSUER_HOST_FORM_PENDING':
+        raise ValueError('closed unadmitted bootstrap capture required')
+    root, _, _ = fixed_bootstrap_recipe(bootstrap_recipe)
+    system, windows = bootstrap_recipe['system'], bootstrap_recipe['system'] == 'Windows'
+    if type(capture['root']) is not str or type(capture['system']) is not str or capture['root'] != str(root) or capture['system'] != system:
+        raise ValueError('capture/recipe root and OS identity')
+    files = capture['files']
+    byte_map(files, windows)
+    if any(type(value) is not dict for value in (capture['observed'], capture['file_identities'], capture['directories'], capture['links'])):
+        raise ValueError('capture inventory mapping shape')
+    if set(capture['observed']) != set(files) or set(capture['file_identities']) != set(files):
+        raise ValueError('complete file observation/identity inventory')
+    total, identities = 0, set()
+    for path, data in files.items():
+        pin = snapshot_identity(capture['file_identities'][path], 'file', system)
+        observation = capture['observed'][path]
+        if type(observation) is not dict or set(observation) != {'bytes', 'sha256'} or type(observation['bytes']) is not int or type(observation['sha256']) is not str or observation != digest(data) or pin[4] != len(data):
+            raise ValueError('entire observed file bytes/size/hash identity')
+        if pin[:2] in identities:
+            raise ValueError('file identity alias')
+        identities.add(pin[:2])
+        total += len(data)
+    if type(capture['total_bytes']) is not int or capture['total_bytes'] != total or total > MAX_TOTAL or len(files) > MAX_FILES:
+        raise ValueError('complete captured byte/count bound')
+    expected = bootstrap_file_expectations(bootstrap_recipe, source_bytes)
+    complete = {'venv/' + path: data for path, data in files.items()}
+    selected = {path: data for path, data in complete.items() if path not in expected['files']}
+    link_values = {}
+    if set(capture['links']) != (set() if windows else {'lib64'}):
+        raise ValueError('fixed collected link inventory')
+    for path, row in capture['links'].items():
+        if type(path) is not str or type(row) is not tuple or len(row) != 3 or type(row[0]) is not tuple or len(row[0]) != 9 or type(row[1]) is not str or row[1] != 'lib':
+            raise ValueError('closed collected link row')
+        link_pin = linux_link_identity(SimpleNamespace(**dict(zip(('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns', 'st_uid', 'st_gid'), row[0]))))
+        if link_pin != row[0] or link_pin[:2] in identities:
+            raise ValueError('collected link identity alias')
+        identities.add(link_pin[:2])
+        snapshot_identity(row[2], 'directory', system)
+        link_values['venv/' + path] = row[1]
+    semantic = verify_bootstrap_union(complete, link_values, selected, map_recipe, bootstrap_recipe, source_bytes)
+    # CPython's explicit empty include and purelib trees exist before pip runs.
+    required = {'', 'Include', 'Lib', 'Lib/site-packages', 'Scripts'} if windows else {'', 'include', 'include/python3.12', 'lib', 'lib/python3.12', 'lib/python3.12/site-packages', 'bin'}
+    for path in files:
+        parts = path.split('/')
+        required.update('/'.join(parts[:n]) for n in range(1, len(parts)))
+    directories = capture['directories']
+    if set(directories) != required or len(directories) > MAX_DIRS:
+        raise ValueError('exact derived directory/emptydirectory ownership')
+    namespace = set(files) | set(capture['links']) | required
+    folded = [path.casefold() if windows else path for path in namespace]
+    if len(namespace) != len(files) + len(capture['links']) + len(required) or len(set(folded)) != len(folded):
+        raise ValueError('file/link/directory namespace collision')
+    for path, row in directories.items():
+        if type(path) is not str or type(row) is not tuple or len(row) != 2 or type(row[1]) is not tuple:
+            raise ValueError('closed directory row')
+        if path:
+            relative_path(path)
+        pin = snapshot_identity(row[0], 'directory', system)
+        if pin[:2] in identities:
+            raise ValueError('directory identity alias')
+        identities.add(pin[:2])
+        prefix = path + '/' if path else ''
+        children = tuple(sorted(p[len(prefix):] for p in namespace if p != path and p.startswith(prefix) and '/' not in p[len(prefix):]))
+        if any(type(name) is not str for name in row[1]) or row[1] != children:
+            raise ValueError('entire directory child-name set')
+        if len(path.split('/')) > MAX_DEPTH:
+            raise ValueError('directory depth bound')
+    if not windows and capture['links']['lib64'][2] != directories['lib'][0]:
+        raise ValueError('link target/full-tree directory identity mismatch')
+    paths = tuple(str(p) for p in tuple(reversed(root.parents)) + (root,))
+    ancestors = capture['ancestors']
+    if type(ancestors) is not tuple or len(ancestors) != len(paths) or len(paths) > MAX_DEPTH:
+        raise ValueError('complete ancestor inventory')
+    ancestor_ids = set()
+    for row, path in zip(ancestors, paths):
+        if type(row) is not tuple or len(row) != 2 or type(row[0]) is not str or row[0] != path:
+            raise ValueError('ordered canonical ancestor path')
+        pin = snapshot_identity(row[1], 'directory', system)
+        if pin[:2] in ancestor_ids or path != str(root) and pin[:2] in identities:
+            raise ValueError('ancestor identity alias')
+        ancestor_ids.add(pin[:2])
+        if path == str(root) and pin != directories[''][0]:
+            raise ValueError('root ancestor/tree identity mismatch')
+    return dict(admitted=False, scope='COLLECTED_BOOTSTRAP_UNION_ONLY_ISSUER_HOST_FORM_PENDING',
+                capture=capture, semantic=semantic)
+
+
+def compare_collected_bootstrap(before, after):
+    keys = {'admitted', 'scope', 'capture', 'semantic'}
+    if type(before) is not dict or type(after) is not dict or set(before) != keys or set(after) != keys or before['admitted'] is not False or after['admitted'] is not False:
+        raise ValueError('closed unadmitted collected map comparison')
+    if before['scope'] != 'COLLECTED_BOOTSTRAP_UNION_ONLY_ISSUER_HOST_FORM_PENDING' or before != after:
+        raise ValueError('entire collected semantic union changed')
+    compare_bootstrap_capture(before['capture'], after['capture'])
+    return dict(admitted=False, scope='COLLECTED_BOOTSTRAP_UNION_ONLY_ISSUER_HOST_FORM_PENDING')
+
+
+if __name__ == '__main__':
+    raise SystemExit('SOURCE ONLY: collected ownership semantics; trusted issuer-host-form binding pending, no capture or admission')
