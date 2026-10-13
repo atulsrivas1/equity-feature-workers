@@ -80,7 +80,7 @@ def private_directory(directory, *, secure=False):
             with script.open('x', encoding='utf-8') as stream:stream.write(SCRIPT)
             returncode, stdout, stderr = capture(['powershell.exe', '-NoProfile', '-NonInteractive',
                 '-ExecutionPolicy', 'Bypass', '-File', str(script), str(path), 'secure' if secure else 'verify'],
-                cwd=path, env=dict(os.environ), seconds=10, limit=4096)
+                cwd=path, env=dict(os.environ), seconds=30, limit=4096)
             if returncode != 0 or stdout or stderr:
                 # Publish only the fixed sanitized stage/type/numeric diagnostic.
                 # Unrecognized stderr stays in the private failed directory.

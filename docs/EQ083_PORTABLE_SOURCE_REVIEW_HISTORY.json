@@ -916,5 +916,37 @@
       "https://devblogs.microsoft.com/oldnewthing/20050818-09/?p=34533"
     ],
     "new_native_execution": false
+  },
+  "hosted_self_owner_setup_timeout": {
+    "run": 38475661492,
+    "job": 115565587133,
+    "bytes": 230030,
+    "sha256": "495d6f878f4f200616b8cda45284333b31e49fc5c29a3ae1a93146b0ea70cae3",
+    "trace": [
+      "2026-10-13T22:09:10.5020740Z Traceback (most recent call last):",
+      "2026-10-13T22:09:10.5027840Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 257, in <module>",
+      "2026-10-13T22:09:10.5028618Z     main()",
+      "2026-10-13T22:09:10.5029374Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 241, in main",
+      "2026-10-13T22:09:10.5030018Z     forms = [qualify(form, {name: paths[form] for name, paths in products.items()}, dependencies,",
+      "2026-10-13T22:09:10.5030446Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "2026-10-13T22:09:10.5030996Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 146, in qualify",
+      "2026-10-13T22:09:10.5031509Z     private_directory(location, secure=True)",
+      "2026-10-13T22:09:10.5032106Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tests\\resilience\\private_directory.py\", line 81, in private_directory",
+      "2026-10-13T22:09:10.5032822Z     returncode, stdout, stderr = capture(['powershell.exe', '-NoProfile', '-NonInteractive',",
+      "2026-10-13T22:09:10.5033262Z                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "2026-10-13T22:09:10.5033848Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tests\\resilience\\bounded_capture.py\", line 43, in capture",
+      "2026-10-13T22:09:10.5034463Z     if remaining <= 0:raise CaptureFailure('timeout', buffers)",
+      "2026-10-13T22:09:10.5034755Z                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "2026-10-13T22:09:10.5035157Z bounded_capture.CaptureFailure: owned capture failed; cleanup unconfirmed: timeout",
+      "2026-10-13T22:09:10.5884226Z ##[error]Process completed with exit code 1.",
+      "2026-10-13T22:09:10.6070700Z Post job cleanup.",
+      "2026-10-13T22:09:10.7203050Z [command]\"C:\\Program Files\\Git\\bin\\git.exe\" version"
+    ]
+  },
+  "qualification_acl_setup_budget_correction": {
+    "change": "Private qualification-only PowerShell permission setup cap changes from agent-selected10 to literal30 seconds. Stream limits4096, capture kill/reap/close/reader join, sanitized diagnostics and strict User-owner/DACL criteria unchanged.",
+    "evidence": "Hosted push0689 job115565587133 timed out10 seconds before installation; ACL stage/owner result unknown. Original FAILED/cleanup-unconfirmed retained, not inferred successful. Local full Windows d6 bothforms passed, newer automaticPRjob still running.",
+    "scope": "This is pre-install permission setup, not service operation, native supervisor/provider/EOF cleanup guarantee. Owner20/supervisor25/serviceAPI30/case quotas/counters/goldens unchanged. Thirty seconds is an explicit bounded setup choice, not a promise all hosts finish; timeout/unknown remains DENY and failed-root retention.",
+    "new_execution": false
   }
 }
