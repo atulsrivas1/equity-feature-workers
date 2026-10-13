@@ -1,0 +1,1771 @@
+{
+  "schema": "eq085.measured-attribution-summary.v1",
+  "raw_report_bytes": 4759842,
+  "raw_report_sha256": "df84c1d149fabe8454d4d70504c4fd9d684d81fdb05a78fe9e95c954f2381d49",
+  "source_head": "f1b228c94acf6dff7bbcf3e25210fba317f4234f",
+  "source_sha256": {
+    "tests/pilot_fixture.py": "9e5a03483fed797a0c1c6e441991cfd66ede618f4ae26b26bfac48605ba12843",
+    "tests/pilot_memory.py": "685301f36aec8b998934abaab0c5bff2f19e756ffad3e5ed4a45742387a3d606",
+    "tests/pilot_oracle.json": "aa4920a1b3954a1803a752a7b9760417bff8c7300504d982822c51335add303a",
+    "tests/pilot_process.py": "2e473b3bc9edf56ef37c37bc0560feed8377fd8812142e9f1d7f424993e6997f",
+    "tools/profile_pipeline.py": "1918cfbecba83752baca47cc46bb0792c6172ab0adb79ac74e6df78856e4a4e9"
+  },
+  "core_benchmark_head": "a0c5f88ac7cab0f89e34ec6bd660e3763bc6b977",
+  "core_benchmark_sha256": "a481f45163d3a0061de24920357a168a57d08690aa47394b0e7e288177b12579",
+  "pipeline": [
+    {
+      "workload": "small",
+      "sink": "parquet",
+      "rows": 16,
+      "tasks": 4,
+      "samples_ns": [
+        4844471500,
+        4510140000,
+        4889353900
+      ],
+      "median_ns": 4844471500,
+      "minimum_ns": 4510140000,
+      "maximum_ns": 4889353900
+    },
+    {
+      "workload": "small",
+      "sink": "duckdb",
+      "rows": 16,
+      "tasks": 4,
+      "samples_ns": [
+        15837541800,
+        16716048200,
+        16647390600
+      ],
+      "median_ns": 16647390600,
+      "minimum_ns": 15837541800,
+      "maximum_ns": 16716048200
+    },
+    {
+      "workload": "large",
+      "sink": "parquet",
+      "rows": 4096,
+      "tasks": 16,
+      "samples_ns": [
+        21715513700,
+        20785580300,
+        20100875700
+      ],
+      "median_ns": 20785580300,
+      "minimum_ns": 20100875700,
+      "maximum_ns": 21715513700
+    },
+    {
+      "workload": "large",
+      "sink": "duckdb",
+      "rows": 4096,
+      "tasks": 16,
+      "samples_ns": [
+        57763440100,
+        55517980700,
+        59612930000
+      ],
+      "median_ns": 57763440100,
+      "minimum_ns": 55517980700,
+      "maximum_ns": 59612930000
+    },
+    {
+      "workload": "skew",
+      "sink": "parquet",
+      "rows": 2528,
+      "tasks": 16,
+      "samples_ns": [
+        20609062200,
+        18645430700,
+        20771334200
+      ],
+      "median_ns": 20609062200,
+      "minimum_ns": 18645430700,
+      "maximum_ns": 20771334200
+    },
+    {
+      "workload": "skew",
+      "sink": "duckdb",
+      "rows": 2528,
+      "tasks": 16,
+      "samples_ns": [
+        55568335000,
+        60135300300,
+        54592354000
+      ],
+      "median_ns": 55568335000,
+      "minimum_ns": 54592354000,
+      "maximum_ns": 60135300300
+    }
+  ],
+  "diagnostic_targets": [
+    {
+      "workload": "small",
+      "sink": "parquet",
+      "diagnostic_elapsed_ns": 11805457800,
+      "top_self": [
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 1.377653,
+          "function": "<method 'read' of '_io.BufferedReader' objects>",
+          "line": 0,
+          "primitive_calls": 435,
+          "self_seconds": 1.377653,
+          "source": "native",
+          "total_calls": 435
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.8756997000000002,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 2589332,
+          "self_seconds": 1.3081726,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 2589332
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 1.2574224,
+          "function": "<built-in method nt.stat>",
+          "line": 0,
+          "primitive_calls": 5011,
+          "self_seconds": 1.1826718,
+          "source": "native",
+          "total_calls": 5011
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 1.0770545,
+          "function": "<built-in method builtins.ord>",
+          "line": 0,
+          "primitive_calls": 4603170,
+          "self_seconds": 1.0770545,
+          "source": "native",
+          "total_calls": 4603170
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 4.7088247,
+          "function": "<built-in method builtins.any>",
+          "line": 0,
+          "primitive_calls": 233877,
+          "self_seconds": 0.9855863,
+          "source": "native",
+          "total_calls": 237801
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 0.9214032000000001,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 541531,
+          "self_seconds": 0.5649431,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 541531
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 2.8103262,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 51388,
+          "self_seconds": 0.44122370000000005,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 233432
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.4879564,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 10548,
+          "self_seconds": 0.3529547,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 94292
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 0.30778880000000003,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 4
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 0.48668950000000005,
+          "function": "fields",
+          "line": 1278,
+          "primitive_calls": 78509,
+          "self_seconds": 0.2890557,
+          "source": "stdlib/dataclasses.py",
+          "total_calls": 78509
+        }
+      ],
+      "top_project_self": [
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.8756997000000002,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 2589332,
+          "self_seconds": 1.3081726,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 2589332
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 0.9214032000000001,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 541531,
+          "self_seconds": 0.5649431,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 541531
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 2.8103262,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 51388,
+          "self_seconds": 0.44122370000000005,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 233432
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.4879564,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 10548,
+          "self_seconds": 0.3529547,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 94292
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 0.30778880000000003,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 4
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 0.2927054,
+          "function": "<genexpr>",
+          "line": 30,
+          "primitive_calls": 175897,
+          "self_seconds": 0.1799012,
+          "source": "installed/equity_feature_io_contracts/publication.py",
+          "total_calls": 175897
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 2.7532754,
+          "function": "_string",
+          "line": 47,
+          "primitive_calls": 164852,
+          "self_seconds": 0.1484722,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 164852
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 1.6751103,
+          "function": "_wire",
+          "line": 291,
+          "primitive_calls": 576,
+          "self_seconds": 0.1301787,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 56192
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.2404589000000001,
+          "function": "_publication_wire",
+          "line": 191,
+          "primitive_calls": 740,
+          "self_seconds": 0.087788,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 45400
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 0.1066137,
+          "function": "<genexpr>",
+          "line": 73,
+          "primitive_calls": 66240,
+          "self_seconds": 0.06639500000000001,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 66240
+        }
+      ],
+      "categories": {
+        "adapter": 0.3153115,
+        "calculation": 0.0017038,
+        "codec_and_io_validation": 2.484554499999999,
+        "contract_validation": 0.14137929999999982,
+        "opaque_native": 6.060245000000004,
+        "qualification_harness": 0.0010019,
+        "sink": 0.20106729999999998,
+        "unclassified": 1.7534043999999969,
+        "worker_orchestration": 0.9337777000000007
+      }
+    },
+    {
+      "workload": "small",
+      "sink": "duckdb",
+      "diagnostic_elapsed_ns": 29714655200,
+      "top_self": [
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 9.574035100000001,
+          "function": "<built-in method nt.stat>",
+          "line": 0,
+          "primitive_calls": 33982,
+          "self_seconds": 9.565965,
+          "source": "native",
+          "total_calls": 33982
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 1.7598494,
+          "function": "<built-in method _duckdb.connect>",
+          "line": 0,
+          "primitive_calls": 63,
+          "self_seconds": 1.7598494,
+          "source": "native",
+          "total_calls": 63
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 2.2997785,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 2719324,
+          "self_seconds": 1.6116356,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 2719324
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 2.4213842000000003,
+          "function": "_path_join",
+          "line": 96,
+          "primitive_calls": 163736,
+          "self_seconds": 1.4809682000000002,
+          "source": "generated/frozen importlib._bootstrap_external",
+          "total_calls": 163736
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 1.2882411,
+          "function": "<built-in method builtins.ord>",
+          "line": 0,
+          "primitive_calls": 4758509,
+          "self_seconds": 1.2882411,
+          "source": "native",
+          "total_calls": 4758509
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 5.2641267,
+          "function": "<built-in method builtins.any>",
+          "line": 0,
+          "primitive_calls": 246075,
+          "self_seconds": 1.1995296,
+          "source": "native",
+          "total_calls": 250075
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 1.0825577000000002,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 541531,
+          "self_seconds": 0.6668828,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 541531
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 3.4561468000000004,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 52864,
+          "self_seconds": 0.5591882,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 250812
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 12.234124300000001,
+          "function": "find_spec",
+          "line": 1597,
+          "primitive_calls": 32749,
+          "self_seconds": 0.4830027,
+          "source": "generated/frozen importlib._bootstrap_external",
+          "total_calls": 32749
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.8639546,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 11180,
+          "self_seconds": 0.43088420000000005,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 99304
+        }
+      ],
+      "top_project_self": [
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 2.2997785,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 2719324,
+          "self_seconds": 1.6116356,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 2719324
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 1.0825577000000002,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 541531,
+          "self_seconds": 0.6668828,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 541531
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 3.4561468000000004,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 52864,
+          "self_seconds": 0.5591882,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 250812
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.8639546,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 11180,
+          "self_seconds": 0.43088420000000005,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 99304
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 0.37342830000000005,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 4
+        },
+        {
+          "category": "sink",
+          "cumulative_seconds": 0.0046204,
+          "function": "_reader",
+          "line": 402,
+          "primitive_calls": 2,
+          "self_seconds": 0.30740130000000004,
+          "source": "installed/equity_feature_duckdb_sink/sink.py",
+          "total_calls": 41
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 0.3614333,
+          "function": "<genexpr>",
+          "line": 30,
+          "primitive_calls": 189157,
+          "self_seconds": 0.2233594,
+          "source": "installed/equity_feature_io_contracts/publication.py",
+          "total_calls": 189157
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 3.3830161000000003,
+          "function": "_string",
+          "line": 47,
+          "primitive_calls": 175140,
+          "self_seconds": 0.1885888,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 175140
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 1.9794402000000002,
+          "function": "_wire",
+          "line": 291,
+          "primitive_calls": 576,
+          "self_seconds": 0.15712240000000002,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 56192
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 1.4181025,
+          "function": "_publication_wire",
+          "line": 191,
+          "primitive_calls": 732,
+          "self_seconds": 0.1014486,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 44976
+        }
+      ],
+      "categories": {
+        "adapter": 0.3819647999999999,
+        "calculation": 0.0020675999999999997,
+        "codec_and_io_validation": 3.0836214999999996,
+        "contract_validation": 0.17893240000000002,
+        "opaque_native": 16.04097690000002,
+        "qualification_harness": 0.0007364000000000001,
+        "sink": 0.4339362999999999,
+        "unclassified": 4.4127307999999985,
+        "worker_orchestration": 1.1044774999999993
+      }
+    },
+    {
+      "workload": "large",
+      "sink": "parquet",
+      "diagnostic_elapsed_ns": 45986358400,
+      "top_self": [
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 5.5434874,
+          "function": "<method 'read' of '_io.BufferedReader' objects>",
+          "line": 0,
+          "primitive_calls": 1419,
+          "self_seconds": 5.5434874,
+          "source": "native",
+          "total_calls": 1419
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 7.4893912,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10377872,
+          "self_seconds": 5.205903200000001,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10377872
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 4.2744778000000005,
+          "function": "<built-in method builtins.ord>",
+          "line": 0,
+          "primitive_calls": 18441546,
+          "self_seconds": 4.2744778000000005,
+          "source": "native",
+          "total_calls": 18441546
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 18.60876,
+          "function": "<built-in method builtins.any>",
+          "line": 0,
+          "primitive_calls": 934149,
+          "self_seconds": 3.9837416,
+          "source": "native",
+          "total_calls": 949845
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 4.2649799,
+          "function": "<built-in method nt.stat>",
+          "line": 0,
+          "primitive_calls": 18247,
+          "self_seconds": 3.9702098,
+          "source": "native",
+          "total_calls": 18247
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.5780207,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2169399,
+          "self_seconds": 2.1905197000000003,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2169399
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 11.268760700000001,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 205552,
+          "self_seconds": 1.7607286000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 933728
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 5.9422036,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 42192,
+          "self_seconds": 1.356163,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 377168
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 1.1932435000000001,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 16
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 1.9842300000000002,
+          "function": "fields",
+          "line": 1278,
+          "primitive_calls": 317525,
+          "self_seconds": 1.1660195,
+          "source": "stdlib/dataclasses.py",
+          "total_calls": 317525
+        }
+      ],
+      "top_project_self": [
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 7.4893912,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10377872,
+          "self_seconds": 5.205903200000001,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10377872
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.5780207,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2169399,
+          "self_seconds": 2.1905197000000003,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2169399
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 11.268760700000001,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 205552,
+          "self_seconds": 1.7607286000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 933728
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 5.9422036,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 42192,
+          "self_seconds": 1.356163,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 377168
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 1.1932435000000001,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 16
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 1.1605585,
+          "function": "<genexpr>",
+          "line": 30,
+          "primitive_calls": 703069,
+          "self_seconds": 0.7130421,
+          "source": "installed/equity_feature_io_contracts/publication.py",
+          "total_calls": 703069
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 11.0744725,
+          "function": "_string",
+          "line": 47,
+          "primitive_calls": 659408,
+          "self_seconds": 0.6051429,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 659408
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 6.535467700000001,
+          "function": "_wire",
+          "line": 291,
+          "primitive_calls": 2304,
+          "self_seconds": 0.5067676,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 224768
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 4.8883957,
+          "function": "_publication_wire",
+          "line": 191,
+          "primitive_calls": 2960,
+          "self_seconds": 0.34350600000000003,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 181600
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 0.9582567000000001,
+          "function": "visit",
+          "line": 66,
+          "primitive_calls": 2208,
+          "self_seconds": 0.25863990000000003,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 88320
+        }
+      ],
+      "categories": {
+        "adapter": 1.3385403000000007,
+        "calculation": 0.03337170000000001,
+        "codec_and_io_validation": 9.843008900000005,
+        "contract_validation": 0.8958804999999997,
+        "opaque_native": 22.832403799999998,
+        "qualification_harness": 0.003998,
+        "sink": 0.7768062000000002,
+        "unclassified": 6.836814800000007,
+        "worker_orchestration": 3.714134799999998
+      }
+    },
+    {
+      "workload": "large",
+      "sink": "duckdb",
+      "diagnostic_elapsed_ns": 100883483100,
+      "top_self": [
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 29.647149000000002,
+          "function": "<built-in method nt.stat>",
+          "line": 0,
+          "primitive_calls": 135202,
+          "self_seconds": 29.622472300000002,
+          "source": "native",
+          "total_calls": 135202
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 6.2109195,
+          "function": "<built-in method _duckdb.connect>",
+          "line": 0,
+          "primitive_calls": 255,
+          "self_seconds": 6.2109195,
+          "source": "native",
+          "total_calls": 255
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 8.314382400000001,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10898736,
+          "self_seconds": 5.7902443,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10898736
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 8.8366288,
+          "function": "_path_join",
+          "line": 96,
+          "primitive_calls": 657656,
+          "self_seconds": 5.4029724,
+          "source": "generated/frozen importlib._bootstrap_external",
+          "total_calls": 657656
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 4.684224100000001,
+          "function": "<built-in method builtins.ord>",
+          "line": 0,
+          "primitive_calls": 19063417,
+          "self_seconds": 4.684224100000001,
+          "source": "native",
+          "total_calls": 19063417
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 18.9554096,
+          "function": "<built-in method builtins.any>",
+          "line": 0,
+          "primitive_calls": 982935,
+          "self_seconds": 4.3550135,
+          "source": "native",
+          "total_calls": 998935
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.8245994000000003,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2169399,
+          "self_seconds": 2.3407886,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2169399
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 12.5570312,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 211456,
+          "self_seconds": 2.0099620000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 1003248
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 40.1298934,
+          "function": "find_spec",
+          "line": 1597,
+          "primitive_calls": 131533,
+          "self_seconds": 1.7686332,
+          "source": "generated/frozen importlib._bootstrap_external",
+          "total_calls": 131533
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 6.683013900000001,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 44720,
+          "self_seconds": 1.5459417000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 397216
+        }
+      ],
+      "top_project_self": [
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 8.314382400000001,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10898736,
+          "self_seconds": 5.7902443,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10898736
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.8245994000000003,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2169399,
+          "self_seconds": 2.3407886,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2169399
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 12.5570312,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 211456,
+          "self_seconds": 2.0099620000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 1003248
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 6.683013900000001,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 44720,
+          "self_seconds": 1.5459417000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 397216
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 1.2383501000000001,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 16
+        },
+        {
+          "category": "sink",
+          "cumulative_seconds": 0.0056035,
+          "function": "_reader",
+          "line": 402,
+          "primitive_calls": 2,
+          "self_seconds": 0.8288482,
+          "source": "installed/equity_feature_duckdb_sink/sink.py",
+          "total_calls": 161
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 1.3172228000000001,
+          "function": "<genexpr>",
+          "line": 30,
+          "primitive_calls": 756109,
+          "self_seconds": 0.8104106000000001,
+          "source": "installed/equity_feature_io_contracts/publication.py",
+          "total_calls": 756109
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 12.2592143,
+          "function": "_string",
+          "line": 47,
+          "primitive_calls": 700560,
+          "self_seconds": 0.6778254,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 700560
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 6.995464800000001,
+          "function": "_wire",
+          "line": 291,
+          "primitive_calls": 2304,
+          "self_seconds": 0.5424073,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 224768
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 5.119356000000001,
+          "function": "_publication_wire",
+          "line": 191,
+          "primitive_calls": 2928,
+          "self_seconds": 0.36398010000000003,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 179904
+        }
+      ],
+      "categories": {
+        "adapter": 1.3853107000000005,
+        "calculation": 0.032286900000000014,
+        "codec_and_io_validation": 11.0673517,
+        "contract_validation": 0.9753107000000006,
+        "opaque_native": 51.94706350000004,
+        "qualification_harness": 0.0025143,
+        "sink": 1.289763999999999,
+        "unclassified": 15.908552300000014,
+        "worker_orchestration": 3.962850000000001
+      }
+    },
+    {
+      "workload": "skew",
+      "sink": "parquet",
+      "diagnostic_elapsed_ns": 43725716100,
+      "top_self": [
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 7.2434099000000005,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10311746,
+          "self_seconds": 5.0444247,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10311746
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 5.0011082,
+          "function": "<method 'read' of '_io.BufferedReader' objects>",
+          "line": 0,
+          "primitive_calls": 1419,
+          "self_seconds": 5.0011082,
+          "source": "native",
+          "total_calls": 1419
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 4.1612057,
+          "function": "<built-in method builtins.ord>",
+          "line": 0,
+          "primitive_calls": 18318510,
+          "self_seconds": 4.1612057,
+          "source": "native",
+          "total_calls": 18318510
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 4.1427442,
+          "function": "<built-in method nt.stat>",
+          "line": 0,
+          "primitive_calls": 18247,
+          "self_seconds": 3.8565243000000002,
+          "source": "native",
+          "total_calls": 18247
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 18.0944664,
+          "function": "<built-in method builtins.any>",
+          "line": 0,
+          "primitive_calls": 934173,
+          "self_seconds": 3.8414725,
+          "source": "native",
+          "total_calls": 949876
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.5378317000000004,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2152957,
+          "self_seconds": 2.1664286,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2152957
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 10.8769513,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 205552,
+          "self_seconds": 1.7030819000000001,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 933728
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 5.759207900000001,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 42192,
+          "self_seconds": 1.3354225000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 377168
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 1.1579495,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 16
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 1.8954637,
+          "function": "fields",
+          "line": 1278,
+          "primitive_calls": 316041,
+          "self_seconds": 1.1205316,
+          "source": "stdlib/dataclasses.py",
+          "total_calls": 316041
+        }
+      ],
+      "top_project_self": [
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 7.2434099000000005,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10311746,
+          "self_seconds": 5.0444247,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10311746
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.5378317000000004,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2152957,
+          "self_seconds": 2.1664286,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2152957
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 10.8769513,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 205552,
+          "self_seconds": 1.7030819000000001,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 933728
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 5.759207900000001,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 42192,
+          "self_seconds": 1.3354225000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 377168
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 1.1579495,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 16
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 1.1264116000000002,
+          "function": "<genexpr>",
+          "line": 30,
+          "primitive_calls": 700541,
+          "self_seconds": 0.691797,
+          "source": "installed/equity_feature_io_contracts/publication.py",
+          "total_calls": 700541
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 10.6815849,
+          "function": "_string",
+          "line": 47,
+          "primitive_calls": 659408,
+          "self_seconds": 0.5804822000000001,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 659408
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 6.461984,
+          "function": "_wire",
+          "line": 291,
+          "primitive_calls": 2304,
+          "self_seconds": 0.5040672,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 224768
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 4.764580700000001,
+          "function": "_publication_wire",
+          "line": 191,
+          "primitive_calls": 2960,
+          "self_seconds": 0.33786150000000004,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 181600
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 0.9535645,
+          "function": "visit",
+          "line": 66,
+          "primitive_calls": 2208,
+          "self_seconds": 0.2562071,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 88320
+        }
+      ],
+      "categories": {
+        "adapter": 1.2576682999999995,
+        "calculation": 0.021131200000000003,
+        "codec_and_io_validation": 9.559437100000006,
+        "contract_validation": 0.7619771000000005,
+        "opaque_native": 21.543032299999997,
+        "qualification_harness": 0.0036899,
+        "sink": 0.7658796000000003,
+        "unclassified": 6.467883300000004,
+        "worker_orchestration": 3.649866399999999
+      }
+    },
+    {
+      "workload": "skew",
+      "sink": "duckdb",
+      "diagnostic_elapsed_ns": 98516629700,
+      "top_self": [
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 28.817767000000003,
+          "function": "<built-in method nt.stat>",
+          "line": 0,
+          "primitive_calls": 135202,
+          "self_seconds": 28.792915700000002,
+          "source": "native",
+          "total_calls": 135202
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 6.215905500000001,
+          "function": "<built-in method _duckdb.connect>",
+          "line": 0,
+          "primitive_calls": 255,
+          "self_seconds": 6.215905500000001,
+          "source": "native",
+          "total_calls": 255
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 8.1565428,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10829758,
+          "self_seconds": 5.6754667,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10829758
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 8.6493546,
+          "function": "_path_join",
+          "line": 96,
+          "primitive_calls": 657656,
+          "self_seconds": 5.2920279,
+          "source": "generated/frozen importlib._bootstrap_external",
+          "total_calls": 657656
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 4.5756534,
+          "function": "<built-in method builtins.ord>",
+          "line": 0,
+          "primitive_calls": 18936760,
+          "self_seconds": 4.5756534,
+          "source": "native",
+          "total_calls": 18936760
+        },
+        {
+          "category": "opaque_native",
+          "cumulative_seconds": 18.5400351,
+          "function": "<built-in method builtins.any>",
+          "line": 0,
+          "primitive_calls": 982959,
+          "self_seconds": 4.2657292,
+          "source": "native",
+          "total_calls": 998966
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.7051765000000003,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2152957,
+          "self_seconds": 2.2708222,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2152957
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 12.307374900000001,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 211456,
+          "self_seconds": 1.9829827000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 1003248
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 39.073407,
+          "function": "find_spec",
+          "line": 1597,
+          "primitive_calls": 131533,
+          "self_seconds": 1.7367498000000001,
+          "source": "generated/frozen importlib._bootstrap_external",
+          "total_calls": 131533
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 6.593260600000001,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 44720,
+          "self_seconds": 1.5212171,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 397216
+        }
+      ],
+      "top_project_self": [
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 8.1565428,
+          "function": "<genexpr>",
+          "line": 48,
+          "primitive_calls": 10829758,
+          "self_seconds": 5.6754667,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 10829758
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 3.7051765000000003,
+          "function": "<genexpr>",
+          "line": 37,
+          "primitive_calls": 2152957,
+          "self_seconds": 2.2708222,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 2152957
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 12.307374900000001,
+          "function": "to_wire",
+          "line": 53,
+          "primitive_calls": 211456,
+          "self_seconds": 1.9829827000000002,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 1003248
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 6.593260600000001,
+          "function": "_decode",
+          "line": 84,
+          "primitive_calls": 44720,
+          "self_seconds": 1.5212171,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 397216
+        },
+        {
+          "category": "adapter",
+          "cumulative_seconds": 0.0,
+          "function": "_resolve_source",
+          "line": 213,
+          "primitive_calls": 0,
+          "self_seconds": 1.3057229000000001,
+          "source": "installed/equity_feature_duckdb/resolver.py",
+          "total_calls": 16
+        },
+        {
+          "category": "sink",
+          "cumulative_seconds": 0.0036810000000000002,
+          "function": "_reader",
+          "line": 402,
+          "primitive_calls": 2,
+          "self_seconds": 0.8294852,
+          "source": "installed/equity_feature_duckdb_sink/sink.py",
+          "total_calls": 161
+        },
+        {
+          "category": "unclassified",
+          "cumulative_seconds": 1.3004237,
+          "function": "<genexpr>",
+          "line": 30,
+          "primitive_calls": 753325,
+          "self_seconds": 0.8040853,
+          "source": "installed/equity_feature_io_contracts/publication.py",
+          "total_calls": 753325
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 12.0199434,
+          "function": "_string",
+          "line": 47,
+          "primitive_calls": 700560,
+          "self_seconds": 0.662323,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 700560
+        },
+        {
+          "category": "worker_orchestration",
+          "cumulative_seconds": 6.7815434,
+          "function": "_wire",
+          "line": 291,
+          "primitive_calls": 2304,
+          "self_seconds": 0.5255472,
+          "source": "installed/equity_feature_workers/manifests.py",
+          "total_calls": 224768
+        },
+        {
+          "category": "codec_and_io_validation",
+          "cumulative_seconds": 5.0207369,
+          "function": "_publication_wire",
+          "line": 191,
+          "primitive_calls": 2928,
+          "self_seconds": 0.35930910000000005,
+          "source": "installed/equity_feature_io_sdk/codec.py",
+          "total_calls": 179904
+        }
+      ],
+      "categories": {
+        "adapter": 1.4145476000000008,
+        "calculation": 0.0235034,
+        "codec_and_io_validation": 10.8694939,
+        "contract_validation": 0.8741252999999998,
+        "opaque_native": 50.75011799999998,
+        "qualification_harness": 0.0025363,
+        "sink": 1.2839528999999998,
+        "unclassified": 15.472090899999985,
+        "worker_orchestration": 3.822183299999998
+      }
+    }
+  ],
+  "core": [
+    {
+      "rows": 128,
+      "skew": false,
+      "aggregate": {
+        "max_ns": 1456400,
+        "median_ns": 1370500,
+        "min_ns": 1369000,
+        "rows_per_second": 93396.57059467348,
+        "samples_ns": [
+          1369000,
+          1370500,
+          1456400
+        ]
+      },
+      "copies": {
+        "arrow_visible_buffer_bytes": 7330,
+        "from_arrow": {
+          "max_ns": 1758000,
+          "median_ns": 1690600,
+          "min_ns": 1690400,
+          "rows_per_second": 75712.76469892346,
+          "samples_ns": [
+            1690400,
+            1690600,
+            1758000
+          ]
+        },
+        "from_numpy": {
+          "max_ns": 625400,
+          "median_ns": 559800,
+          "min_ns": 516100,
+          "rows_per_second": 228653.0903894248,
+          "samples_ns": [
+            625400,
+            559800,
+            516100
+          ]
+        },
+        "mutation_isolation_pass": true,
+        "numpy_arrays_and_masks_bytes": 9472,
+        "numpy_owned_array_count": 18,
+        "to_arrow": {
+          "max_ns": 485500,
+          "median_ns": 364300,
+          "min_ns": 363600,
+          "rows_per_second": 351358.77024430415,
+          "samples_ns": [
+            485500,
+            363600,
+            364300
+          ]
+        },
+        "to_numpy": {
+          "max_ns": 426000,
+          "median_ns": 342100,
+          "min_ns": 310600,
+          "rows_per_second": 374159.6024554224,
+          "samples_ns": [
+            342100,
+            426000,
+            310600
+          ]
+        }
+      },
+      "codec": {
+        "decode_result": {
+          "max_ns": 2336000,
+          "median_ns": 2133100,
+          "min_ns": 1884400,
+          "rows_per_second": 60006.56321785195,
+          "samples_ns": [
+            2336000,
+            2133100,
+            1884400
+          ]
+        },
+        "encode_result": {
+          "max_ns": 1667500,
+          "median_ns": 1301000,
+          "min_ns": 1266600,
+          "rows_per_second": 98385.85703305149,
+          "samples_ns": [
+            1667500,
+            1301000,
+            1266600
+          ]
+        }
+      },
+      "codec_bytes": 4733,
+      "result_sha256": "dcee2d68a2c45c729d0f0a4668f1d7dd60fdf348f6d47445756ea23d9c369245",
+      "runtime": {
+        "arrow_cpu_count": 1,
+        "arrow_io_thread_count": 1,
+        "clock": "QueryPerformanceCounter()",
+        "clock_resolution_seconds": 1e-07,
+        "contracts": "0.0.4a4",
+        "cpu": "Intel64 Family 6 Model 85 Stepping 4, GenuineIntel",
+        "features": "0.0.4a4",
+        "gc_policy": "default enabled",
+        "logical_cpus": 96,
+        "machine": "AMD64",
+        "numpy": "2.2.6",
+        "other_effective_backend_threads": "not independently introspected",
+        "pyarrow": "20.0.0",
+        "python": "3.12.10",
+        "release": "11",
+        "requested_thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1"
+        },
+        "system": "Windows"
+      }
+    },
+    {
+      "rows": 16384,
+      "skew": false,
+      "aggregate": {
+        "max_ns": 140691200,
+        "median_ns": 140545200,
+        "min_ns": 139946700,
+        "rows_per_second": 116574.59664221901,
+        "samples_ns": [
+          140545200,
+          139946700,
+          140691200
+        ]
+      },
+      "copies": {
+        "arrow_visible_buffer_bytes": 973978,
+        "from_arrow": {
+          "max_ns": 174169400,
+          "median_ns": 166793500,
+          "min_ns": 165678600,
+          "rows_per_second": 98229.24754262007,
+          "samples_ns": [
+            165678600,
+            166793500,
+            174169400
+          ]
+        },
+        "from_numpy": {
+          "max_ns": 63902600,
+          "median_ns": 62720100,
+          "min_ns": 57512100,
+          "rows_per_second": 261224.07330345456,
+          "samples_ns": [
+            57512100,
+            62720100,
+            63902600
+          ]
+        },
+        "mutation_isolation_pass": true,
+        "numpy_arrays_and_masks_bytes": 1343488,
+        "numpy_owned_array_count": 18,
+        "to_arrow": {
+          "max_ns": 10203500,
+          "median_ns": 9283000,
+          "min_ns": 9182200,
+          "rows_per_second": 1764946.6767208877,
+          "samples_ns": [
+            9182200,
+            9283000,
+            10203500
+          ]
+        },
+        "to_numpy": {
+          "max_ns": 30009900,
+          "median_ns": 29536700,
+          "min_ns": 28046200,
+          "rows_per_second": 554699.7464171691,
+          "samples_ns": [
+            28046200,
+            30009900,
+            29536700
+          ]
+        }
+      },
+      "codec": {
+        "decode_result": {
+          "max_ns": 1975300,
+          "median_ns": 1752600,
+          "min_ns": 1705700,
+          "rows_per_second": 9348396.667807829,
+          "samples_ns": [
+            1975300,
+            1752600,
+            1705700
+          ]
+        },
+        "encode_result": {
+          "max_ns": 2170300,
+          "median_ns": 1581900,
+          "min_ns": 1196200,
+          "rows_per_second": 10357165.433971805,
+          "samples_ns": [
+            1581900,
+            2170300,
+            1196200
+          ]
+        }
+      },
+      "codec_bytes": 4772,
+      "result_sha256": "fd386a485de94dfdeb2769e23471d3114ba37c62858f133847d270cf1f64056a",
+      "runtime": {
+        "arrow_cpu_count": 1,
+        "arrow_io_thread_count": 1,
+        "clock": "QueryPerformanceCounter()",
+        "clock_resolution_seconds": 1e-07,
+        "contracts": "0.0.4a4",
+        "cpu": "Intel64 Family 6 Model 85 Stepping 4, GenuineIntel",
+        "features": "0.0.4a4",
+        "gc_policy": "default enabled",
+        "logical_cpus": 96,
+        "machine": "AMD64",
+        "numpy": "2.2.6",
+        "other_effective_backend_threads": "not independently introspected",
+        "pyarrow": "20.0.0",
+        "python": "3.12.10",
+        "release": "11",
+        "requested_thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1"
+        },
+        "system": "Windows"
+      }
+    },
+    {
+      "rows": 16384,
+      "skew": true,
+      "aggregate": {
+        "max_ns": 148333500,
+        "median_ns": 147695600,
+        "min_ns": 146956900,
+        "rows_per_second": 110930.86049956804,
+        "samples_ns": [
+          148333500,
+          147695600,
+          146956900
+        ]
+      },
+      "copies": {
+        "arrow_visible_buffer_bytes": 973978,
+        "from_arrow": {
+          "max_ns": 191256500,
+          "median_ns": 186495900,
+          "min_ns": 178145700,
+          "rows_per_second": 87851.79727811711,
+          "samples_ns": [
+            178145700,
+            191256500,
+            186495900
+          ]
+        },
+        "from_numpy": {
+          "max_ns": 65245500,
+          "median_ns": 63337700,
+          "min_ns": 60851300,
+          "rows_per_second": 258676.90175045826,
+          "samples_ns": [
+            60851300,
+            65245500,
+            63337700
+          ]
+        },
+        "mutation_isolation_pass": true,
+        "numpy_arrays_and_masks_bytes": 1343488,
+        "numpy_owned_array_count": 18,
+        "to_arrow": {
+          "max_ns": 10189700,
+          "median_ns": 10020400,
+          "min_ns": 9918200,
+          "rows_per_second": 1635064.468484292,
+          "samples_ns": [
+            10189700,
+            10020400,
+            9918200
+          ]
+        },
+        "to_numpy": {
+          "max_ns": 28765900,
+          "median_ns": 28506600,
+          "min_ns": 28365200,
+          "rows_per_second": 574744.0943500804,
+          "samples_ns": [
+            28765900,
+            28365200,
+            28506600
+          ]
+        }
+      },
+      "codec": {
+        "decode_result": {
+          "max_ns": 2107400,
+          "median_ns": 2047400,
+          "min_ns": 1816200,
+          "rows_per_second": 8002344.436846732,
+          "samples_ns": [
+            2107400,
+            1816200,
+            2047400
+          ]
+        },
+        "encode_result": {
+          "max_ns": 2360700,
+          "median_ns": 1669200,
+          "min_ns": 1142600,
+          "rows_per_second": 9815480.469686078,
+          "samples_ns": [
+            1669200,
+            2360700,
+            1142600
+          ]
+        }
+      },
+      "codec_bytes": 4776,
+      "result_sha256": "fcf14cb0b6f243ff868e3707e05fad11b195c35d7bb884e0d4828c7ac81dba82",
+      "runtime": {
+        "arrow_cpu_count": 1,
+        "arrow_io_thread_count": 1,
+        "clock": "QueryPerformanceCounter()",
+        "clock_resolution_seconds": 1e-07,
+        "contracts": "0.0.4a4",
+        "cpu": "Intel64 Family 6 Model 85 Stepping 4, GenuineIntel",
+        "features": "0.0.4a4",
+        "gc_policy": "default enabled",
+        "logical_cpus": 96,
+        "machine": "AMD64",
+        "numpy": "2.2.6",
+        "other_effective_backend_threads": "not independently introspected",
+        "pyarrow": "20.0.0",
+        "python": "3.12.10",
+        "release": "11",
+        "requested_thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1"
+        },
+        "system": "Windows"
+      }
+    }
+  ],
+  "scope": "Observed synthetic Windows attribution, not optimization or capacity qualification"
+}

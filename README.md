@@ -1,3 +1,7 @@
+## EQ085 synthetic profiling evidence
+
+A developer tool now separates unprofiled compute/conversion/pipeline timings from diagnostic profiles, using owned synthetic inputs and complete result parity. See the [measured findings](docs/EQ085_ANALYSIS.md) and [method/command/limits](docs/PROFILING.md). Validation/materialization and broader pipeline calls are candidates for comparison; no native accelerator or speedup is delivered. Final delivery review/readback is pending. R7 remains incomplete with EQ083 parked and its automation paused.
+
 ## EQ081 optional Python client source delivery preparation
 
 The optional equity-feature-client0.1.0a0 implements authenticated bounded JSON helpers, immutable views/inert failures, verified HTTPS or literal-loopback qualification and explicit public native conversion outside calculation packages. Base imports need no local core/SDK/service/worker installation. Raw5/native4 independent fixtures preserve exact int64/nanoseconds/decimal128/IEEE signedzero/full metadata, context, quality and evidence; converted trades match independent local count3/volume10/notional1011. Schemas1.0/1.1 and accepted calculation/service/worker/I/O runtime bytes are unchanged. HTTP carries no native publication envelope/receipt/SHA; the service owns receipt verification. Initial complete producer inventory pins one source, while projected feature slices remain distinct.

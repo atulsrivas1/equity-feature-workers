@@ -1,0 +1,102 @@
+{
+  "schema": "eq085.historical-input-summary.v1",
+  "source_head": "aa2b411073dfa0385812a19e2871920bf38fb1aa",
+  "source_reports": {
+    "docs/stories/EQ-066_BENCHMARK.json": {
+      "bytes": 1919605,
+      "sha256": "51141ad524d47c72574e5d304d31c5bd5196fdb955d22125ccd899a17e486c99"
+    },
+    "docs/stories/EQ-062_MODE_COMPARISON.json": {
+      "bytes": 32878,
+      "sha256": "e7d2fd808e8d6be287515bdad0743c0b714f9e739262b2acec6336a4ca41f76a"
+    },
+    "docs/benchmarks/EQ-041_WINDOWS.json": {
+      "bytes": 16362,
+      "sha256": "b87827ad466a2333d5aefe4a141a9efee2df7bfcefac3e204c9e35fa22ee3eb1"
+    },
+    "docs/benchmarks/EQ-051_WINDOWS.json": {
+      "bytes": 6350,
+      "sha256": "1a8a00332730a0b278e55fa1a6bd70400e8badbcb611de73c491a9c843ae9f89"
+    }
+  },
+  "historical_worker_measurement_head": "0fad00d8d928165833cf2e87316455fb2750c406",
+  "historical_core_commit": "20c08c7370581d03c8a0404579667f68d67ac88b",
+  "historical_io_commit": "4603c6e50331a5e8a82b13b62a0cdd5ffaa0e4bf",
+  "measured_samples": 162,
+  "skipped_samples": 0,
+  "sequential_rows": [
+    {
+      "workload": "small",
+      "sink": "parquet",
+      "rows": 16,
+      "tasks": 4,
+      "samples": 3,
+      "pipeline_median_ns": 3687070400,
+      "calculation_span_sum_median_ns": 2292000,
+      "acquisition_span_sum_median_ns": 380614700,
+      "serialization_span_sum_median_ns": 36373800
+    },
+    {
+      "workload": "small",
+      "sink": "duckdb",
+      "rows": 16,
+      "tasks": 4,
+      "samples": 3,
+      "pipeline_median_ns": 10075568100,
+      "calculation_span_sum_median_ns": 2393000,
+      "acquisition_span_sum_median_ns": 399224800,
+      "serialization_span_sum_median_ns": 36806800
+    },
+    {
+      "workload": "large",
+      "sink": "parquet",
+      "rows": 4096,
+      "tasks": 16,
+      "samples": 3,
+      "pipeline_median_ns": 13988795200,
+      "calculation_span_sum_median_ns": 68477800,
+      "acquisition_span_sum_median_ns": 1758771400,
+      "serialization_span_sum_median_ns": 141353800
+    },
+    {
+      "workload": "large",
+      "sink": "duckdb",
+      "rows": 4096,
+      "tasks": 16,
+      "samples": 3,
+      "pipeline_median_ns": 40160779900,
+      "calculation_span_sum_median_ns": 68880200,
+      "acquisition_span_sum_median_ns": 1834958500,
+      "serialization_span_sum_median_ns": 147559900
+    },
+    {
+      "workload": "skew",
+      "sink": "parquet",
+      "rows": 2528,
+      "tasks": 16,
+      "samples": 3,
+      "pipeline_median_ns": 16210550100,
+      "calculation_span_sum_median_ns": 45870000,
+      "acquisition_span_sum_median_ns": 1742665500,
+      "serialization_span_sum_median_ns": 143401300
+    },
+    {
+      "workload": "skew",
+      "sink": "duckdb",
+      "rows": 2528,
+      "tasks": 16,
+      "samples": 3,
+      "pipeline_median_ns": 39958215300,
+      "calculation_span_sum_median_ns": 45235900,
+      "acquisition_span_sum_median_ns": 1777693100,
+      "serialization_span_sum_median_ns": 145694500
+    }
+  ],
+  "scope": "Derived historical summary, not fresh profiling or disjoint stage accounting",
+  "limitations": [
+    "Diagnostic spans may overlap or nest; do not sum them into wall elapsed or exclusive percentages",
+    "Historical worker0.1.0a11 versus current0.1.0a13: retain date/source identities and require new runs before current attribution",
+    "All owned synthetic populations, not private corpus/hosted service/production capacity",
+    "No native execution or benchmark rerun in preparation"
+  ]
+}

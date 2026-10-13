@@ -1,0 +1,72 @@
+{
+  "new_tests": 0,
+  "limitations": [
+    "No profiling, fresh environment installation, native/backend execution, numerical tests, build/CI or performance result generated. These are future implementation/Test gates, not this readiness review.",
+    "No EQ083 physical-source/native/binary audit/rejection reattempt; EQ083 parked and R7 automation PAUSED unaffected. Authorization limited to EQ085, not allR8/hosted/private/provider/registry/recurring work.",
+    "Three repeats support descriptive spread, not strong inferential confidence or production/billion-row capacity. No speedup/core optimization decision until current measurements."
+  ],
+  "sources": [
+    "https://docs.python.org/3.12/library/profile.html",
+    "https://docs.python.org/3.12/library/time.html#time.perf_counter_ns"
+  ],
+  "disposition": "APPROVED",
+  "plan_assessment": [
+    "Fixed six sequential1/backendthread1 pipeline cases, untimed reference plus three unprofiled and one diagnostic per case are bounded and appropriate for attribution, not optimizer performance promises.",
+    "cProfile diagnostics remain separate from baseline times; native extension interiors and unobserved threads/stacks stay opaque. Category mappings/unclassified rows and overlapping stage spans cannot imply additive wall shares.",
+    "Owned synthetic conversion workloads and independent accepted numerical/conversion goldens preserve mathematics and no source-independent calculation changes.",
+    "New output roots, fixture/result identity and parity-before-final-report, sanitization, nonbool elapsed/sample validation and meaningful recursion/native/report tests are specified.",
+    "BothOS installed forms/current artifacts, final-head independent review and lifecycle gates remain required; local profile observations alone do not close compatibility/release."
+  ],
+  "reviewer": "r7_policy_review independent local Codex reviewer",
+  "tool_only_history": [
+    "Read-only guessed worker root pyproject.toml absent; actual packages layout discovered.",
+    "Reviewer PowerShell Where-Object token-spacing error corrected before report. Initial median index used PowerShell rounded int cast; changed to Floor, then all six medians verified. These are tooling errors, not historical data or product failures.",
+    "Broad source/data rendering truncated; concrete profile semantics and source selections narrowed."
+  ],
+  "reviewed_files": {
+    "equity-feature-workers": {
+      "docs/EQ085_PLAN.md": {
+        "bytes": 9201,
+        "sha256": "07c29ddb63befaeb4f14dd02db8e7767a946b673ca2905b9376e38c07d8f1281"
+      },
+      "docs/EQ085_HISTORICAL_INPUTS.json": {
+        "bytes": 3480,
+        "sha256": "28a7483b055feea887762dca91f9b9144c0dd055bb49e800d3320e0b5370c566"
+      }
+    },
+    "equity-features": {
+      "docs/stories/EQ-085_HISTORICAL_INPUTS.json": {
+        "bytes": 3480,
+        "sha256": "28a7483b055feea887762dca91f9b9144c0dd055bb49e800d3320e0b5370c566"
+      },
+      "docs/stories/EQ-085_PLAN.md": {
+        "bytes": 9201,
+        "sha256": "07c29ddb63befaeb4f14dd02db8e7767a946b673ca2905b9376e38c07d8f1281"
+      }
+    }
+  },
+  "findings": [],
+  "dependency_limit": "Parent supplied live #74Done/milestone6closed and exact drafts372/43; this review verifies plan/source evidence, not a new live status/API readback or receipt replay. Public Ready/pull/assignment recording belongs to author after approval.",
+  "heads": {
+    "equity-feature-workers": "6ab297ba0e8d5e0d062c32f523f9b1aefef25830",
+    "equity-features": "e546d5a4d80fc82b077c6095d9c42929c2b194e0"
+  },
+  "native_executions": 0,
+  "checks": [
+    "Exact paired heads/clean worktrees and plan/historical-input mirrors verified; owner local-review grant read in AGENTS and CODE_REVIEW.",
+    "Historical four full GitLF report byteSHA pins independently matched at aa2b411;162 saved samples/zero skips and24 process group speedups below sequential1 verified from saved evidence.",
+    "Six sequential three-sample pipeline medians and three overlapping-stage summed-span medians per row independently recomputed and match input summary.",
+    "Current build_foundation pins core20c08c and IO19aa266; old benchmark declaration IO4603 and oldworker a11 are distinct from currentfixture/worker a13. Actual new installed source/archive origins remain mandatory.",
+    "Existing owned pilot workload generator/oracle, independent five-trade arithmetic, full encoded quality/evidence/input parity and source/sink boundaries inspected as text; no imports/execution.",
+    "Official Python3.12 profiler documentation confirms self/cumulative distinction, recursion and profiler overhead; perf_counter_ns reference consulted."
+  ],
+  "implementation_review_requirements": [
+    "Instrument the actual sequential coordinator call, not just a supervising subprocess; keep its unprofiled timing boundary and phase inclusion explicit.",
+    "Export portable JSON with exact sanitized module identities, full raw baseline repetitions and separate diagnostic timing/call-count statistics; prevent basename stripping from merging unrelated functions.",
+    "Freeze fresh installed archive/source/package identities and configured environment before import, reject source-tree fallback and preserve old benchmark receipts as historical.",
+    "Implement source/fixture/result/codec parity failures as final-report denial and test path/root collision, malformed report values and classification arithmetic without timing-rank tests.",
+    "Record conversion timing scope/allocation behavior and avoid hidden-copy, exclusive-native memory or pipeline-speedup extrapolation."
+  ],
+  "scope": "EQ085_PLAN_AND_READINESS_SOURCE_DOCUMENTATION_REVIEW_ONLY",
+  "readiness_verdict": "PLAN_AND_INPUTS_SUPPORT_READY_THEN_ASSIGNED_IN_PROGRESS_AFTER_REQUIRED_PUBLIC_STATUS_RECORDING"
+}

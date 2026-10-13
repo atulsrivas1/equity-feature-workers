@@ -1,3 +1,7 @@
+## EQ085 authorized local review — October 12, 2026
+
+The owner explicitly authorizes a separate local Codex reviewer for EQ085 #96 preparation, implementation and final delivery after owner-approved parking of EQ083. Record actual reviewer identity, exact final heads, executed checks/findings/disposition and limitations; renew relevant coverage after changes. Author self-review and CI alone are insufficient. This is automated local review, not human or hosted activation. Numerical/documentation/installed/bothOS/artifact/publication gates remain mandatory. This authorization is limited to EQ085, not all R8 or resuming EQ083/R7 automation, hosted operations, private datasets, provider access, registry publication or destructive/recurring work.
+
 ## BUG006 authorized local review — October 8, 2026
 
 The owner explicitly requested the BUG006 fix and answered "Authorize local review for BUG006". Separate local Codex reviewers may inspect its final component/canonical patch and corrective release evidence. Record identity, exact heads, checks, findings/disposition and limitations; relevant changes require renewed final-head coverage. This is local automated review, not human review or hosted activation. Numerical/documentation/native/installed/publication/readback gates remain required. The authorization is bounded to BUG006, not R6 or private generation.

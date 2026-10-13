@@ -119,7 +119,7 @@ print(json.dumps(result,sort_keys=True))
     return json.loads(subprocess.check_output([str(py), "-I", "-c", code], cwd=cwd, text=True, encoding="utf-8"))
 
 
-def qualify(dependencies, artifacts, form, packages, probe):
+def qualify(dependencies, artifacts, form, packages, probe, core_benchmark):
     with tempfile.TemporaryDirectory(prefix="install-", dir=ROOT / "work") as temporary:
         location = Path(temporary)
         run(sys.executable, "-m", "venv", location)
@@ -152,6 +152,18 @@ def qualify(dependencies, artifacts, form, packages, probe):
         run(py, "-I", probe.parent / "diagnostics_example.py", cwd=location)
         run(py, "-I", "-m", "unittest", "discover", "-s", probe.parent, "-p", "test_pilot.py", cwd=location)
         run(py, "-I", probe.parent / "pilot_fixture.py", "--installed-smoke", cwd=location)
+        run(py, "-I", "-m", "unittest", "discover", "-s", ROOT / "tests", "-p", "test_profile_evidence.py", cwd=location)
+        with tempfile.TemporaryDirectory(prefix="eq085-profile-") as profile_directory:
+            profile_base = Path(profile_directory)
+            profile_report = profile_base / "profile.json"
+            run(py, "-I", ROOT / "tools/profile_pipeline.py", "--smoke",
+                "--work-root", profile_base / "work", "--out", profile_report,
+                "--core-benchmark", core_benchmark, cwd=location)
+            profile_raw = profile_report.read_bytes()
+            profile_data = json.loads(profile_raw)
+            assert profile_data["smoke"] and len(profile_data["pipeline"]) == 2 and len(profile_data["core"]) == 1
+            (ROOT / "dist" / ("eq085-profile-" + form + ".json")).write_bytes(profile_raw)
+            profile_identity = hashlib.sha256(profile_raw).hexdigest()
         executable = py.parent / ("equity-feature-worker.exe" if os.name == "nt" else "equity-feature-worker")
         run(executable, "--demo", "both", cwd=location)
         after = fingerprint(py, location)
@@ -165,7 +177,7 @@ def qualify(dependencies, artifacts, form, packages, probe):
         source_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;import equity_feature_duckdb as source;from pathlib import Path;assert 'site-packages' in Path(source.__file__).resolve().parts;print(json.dumps({n:version(n) for n in ('equity-feature-duckdb','numpy')}))"], cwd=location, text=True, encoding="utf-8"))
         assert source_versions == {"equity-feature-duckdb":"0.1.0a8", "numpy":"2.2.6"}
-        return {"acquisition_light": light, "acquisition_full": acquisition, "acquisition_tests_sha256": sha(probe.parent / "test_acquisition.py"), "acquisition_oracle_sha256": sha(probe.parent / "acquisition_oracle.json"), "form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
+        return {"eq085_installed_profile_smoke_passed": True, "eq085_profile_report_sha256": profile_identity, "acquisition_light": light, "acquisition_full": acquisition, "acquisition_tests_sha256": sha(probe.parent / "test_acquisition.py"), "acquisition_oracle_sha256": sha(probe.parent / "acquisition_oracle.json"), "form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
 
 
 def main():
@@ -213,7 +225,7 @@ def main():
         reports = []
         for form in ("wheel", "sdist"):
             selected = [p for p in artifacts if (p.suffix == ".whl") == (form == "wheel")]
-            reports.append(qualify(deps, selected, form, packages, component_source / "tests/probe_foundation.py"))
+            reports.append(qualify(deps, selected, form, packages, component_source / "tests/probe_foundation.py", core / "benchmarks/run_baseline.py"))
         assert git(ROOT, "rev-parse", "HEAD") == component_commit
         assert not git(ROOT, "status", "--porcelain", "--", *SCOPED)
         assert all(sha(ROOT / p) == digest for p, digest in tracked.items())
