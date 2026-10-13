@@ -1,3 +1,5 @@
+EQ085 local automated review explicitly authorized for preparation/implementation/final delivery. Scope limited to #96, not allR8 or parkedEQ083. Plan/historical inputs published draftPR372/43; readiness review next, no runtime profiling yet. Preserve numerical/install/bothOS/release gates.
+
 EQ085 #96 independent Ready preparation after owner-approved EQ083 parking. Fixed synthetic compute/copy/I/O attribution plan and historical report summary prepared; no new timing/native tests/implementation. R5 accepted dependency verified. Separate local EQ085 reviewer alternative is a remaining input, not covered by boundedR7 grant. #96 remainsBacklog; EQ083 parked/automationPAUSED/#94waiting/R7incomplete. See EQ085 plan and historical inputs.
 
 ## EQ082 qualified MCP and frozen final delivery evidence

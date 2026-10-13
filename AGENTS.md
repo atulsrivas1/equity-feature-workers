@@ -1,3 +1,7 @@
+## EQ085 authorized local review — October 12, 2026
+
+The owner explicitly authorizes a separate local Codex reviewer for EQ085 #96 preparation, implementation and final delivery after owner-approved parking of EQ083. Record actual reviewer identity, exact final heads, executed checks/findings/disposition and limitations; renew relevant coverage after changes. Author self-review and CI alone are insufficient. This is automated local review, not human or hosted activation. Numerical/documentation/installed/bothOS/artifact/publication gates remain mandatory. This authorization is limited to EQ085, not all R8 or resuming EQ083/R7 automation, hosted operations, private datasets, provider access, registry publication or destructive/recurring work.
+
 ## Owner-authorized R7 local review — October 9, 2026
 
 The owner explicitly authorized separate local Codex reviewers throughout bounded R7. This applies to optional service/client/MCP companion code linked to canonical R7 stories, including exact final source/security/docs/native/installed/artifact/publication evidence. Record actual reviewer identity, inspected final head, checks, findings/disposition and limitations. Relevant changes require renewed review. Author self-review/CI alone are insufficient. This is local automated review, not human/hosted review, identity/provider rights, external operations or registry/stable publication authorization. Canonical equity-features issue/Project/milestone remains the work-status authority.
