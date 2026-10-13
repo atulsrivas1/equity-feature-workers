@@ -216,5 +216,254 @@
     "product_native_crypto_certificate_execution": false,
     "review_missed_import_name": true,
     "prior_approval_report_sha256": "c8a5a26a0be42d50b2ad1f5a826df57fb7075335f59bdb01308527be4b844bcc"
-  }
+  },
+  "first_linux_ci_wheel_record_failure": {
+    "run": 38469883128,
+    "job": 115545918626,
+    "sha256": "ada94a3333995c934ea0273ecc9f0dbd672e70508f364fe5bec3a3f3aa58db6c",
+    "bytes": 227887,
+    "failed": true,
+    "source_head": "0f3e116691c38eff28671f228f0b1fa48329db66",
+    "stage": "BOOTSTRAP_WHEEL_RECORD_BEFORE_INSTALL_OR_NATIVE_DIALOGUE",
+    "root_cause": "Existing reference-wheel checker selected every nested .dist-info/RECORD, rejecting bootstrap wheels with vendored metadata.",
+    "correction": "New qualification-only root wheel RECORD validator; complete unique entry and digest-size closure includes vendored metadata.",
+    "failed_source_not_rerun": true,
+    "native_dialogue_executed": false
+  },
+  "wheel_record_source_review": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "disposition": "REWORK",
+    "scope": "EXACT_SOURCE_IN_MEMORY_ZIP_AND_RETAINED_STATIC_BOOTSTRAP_BYTES_REVIEW_ONLY",
+    "prepared_files": {
+      "eq085-workers": {
+        "CHANGELOG.md": {
+          "bytes": 61055,
+          "sha256": "1dfd07701c1c8f9d2d7f14ea89e9f3f539bb8da9c243f5b1b1cb45b2c98d2459"
+        },
+        "docs/EQ083_PORTABLE_SOURCE_REVIEW_HISTORY.json": {
+          "bytes": 16887,
+          "sha256": "d36b1a2c68ba8638749054c275d664a5f5217c3ec1857896388b80fc6a829466"
+        },
+        "docs/PROJECT_KNOWLEDGE.md": {
+          "bytes": 302730,
+          "sha256": "881ef4064191d510a72943130166e8050d4a97f9a55148e65b230ca8ccc9fc2e"
+        },
+        "docs/SESSION_HANDOFF.md": {
+          "bytes": 413868,
+          "sha256": "c8510da8636c3f2671b4893cefa34e48957ed736533ebfce609bda02d2e88846"
+        },
+        "tests/qualification/test_resilience_records.py": {
+          "bytes": 4871,
+          "sha256": "15a293ce2d86f5e545c152c926940e02f4bb2dc9d4f4cee1f73e53c015d224ac"
+        },
+        "tools/build_resilience.py": {
+          "bytes": 17580,
+          "sha256": "7f00b952a15ff31b1e800a497fcdfe1c556ba34ae0aced2299efe7fc0da25ac7"
+        }
+      },
+      "eq085-features": {
+        "docs/CHANGELOG.md": {
+          "bytes": 80336,
+          "sha256": "99c330631c87fab3e6b953de1313dcf731f6ff85fa7a26e2c9658b06825654e9"
+        },
+        "docs/PROJECT_KNOWLEDGE.md": {
+          "bytes": 440071,
+          "sha256": "5d968d2ecc43e7e07651c43f8cc7468adaa926e2aabd7822dddfeab986087b64"
+        },
+        "docs/SESSION_HANDOFF.md": {
+          "bytes": 699322,
+          "sha256": "0d16890da3040d90c8aa3b6e691e5b7e9c8d43e083ff22e455f7769e5059e8c9"
+        },
+        "docs/stories/EQ-083_PORTABLE_SOURCE_REVIEW_HISTORY.json": {
+          "bytes": 16887,
+          "sha256": "d36b1a2c68ba8638749054c275d664a5f5217c3ec1857896388b80fc6a829466"
+        }
+      }
+    },
+    "findings": [
+      {
+        "priority": 2,
+        "id": "R7-WHEEL-ORIGINAL-SPELLING",
+        "file": "tools/build_resilience.py",
+        "function": "wheel_archive_record",
+        "title": "Validate original ZIP spelling before filename normalization",
+        "detail": "zipfile truncates a NUL in raw local/central member names. The validator checks item.filename only, so a malformed original spelling is admitted as a canonical path when RECORD agrees with the truncated name.",
+        "reproduction": {
+          "raw_original_name": "tool/a\u0000",
+          "exposed_filename": "tool/a",
+          "matching_record_name": "tool/a",
+          "actual_result": "ACCEPTED",
+          "synthetic_zip_sha256": "f6f4afaf92b7e1981ce12974b0ac344bbe202c6f47f2d86d75ccebfdbccf7c4a",
+          "synthetic_zip_base64": "UEsDBBQAAAAAADaLTV2DFtyMAQAAAAEAAAAHAAAAdG9vbC9hAHhQSwMEFAAAAAAANotNXbRRpWpYAAAAWAAAABcAAAB0b29sLTEuZGlzdC1pbmZvL1JFQ09SRHRvb2wvYSxzaGEyNTY9TFhFV1FyY21zRVFCWW55cC02d3k5Y2hURDdHUVBNVGJBaVdIRjVJYVNJRSwxDQp0b29sLTEuZGlzdC1pbmZvL1JFQ09SRCwsDQpQSwECFAAUAAAAAAA2i01dgxbcjAEAAAABAAAABwAAAAAAAAAAAAAAgAEAAAAAdG9vbC9hAFBLAQIUABQAAAAAADaLTV20UaVqWAAAAFgAAAAXAAAAAAAAAAAAAACAASYAAAB0b29sLTEuZGlzdC1pbmZvL1JFQ09SRFBLBQYAAAAAAgACAHoAAACzAAAAAAA="
+        },
+        "required_correction": "Require exact-str orig_filename==filename before validating original spelling, preserving complete RECORD closure."
+      }
+    ],
+    "current_checks": {
+      "synthetic_ordinary_controls_passed": 13,
+      "defect_reproductions": 1,
+      "retained_static_bootstrap_wheels_checked": 1,
+      "cases": [
+        {
+          "case": "valid",
+          "expected": "accept",
+          "passed": true
+        },
+        {
+          "case": "secondroot",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "missingrow",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "extra",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "duprow",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "columns",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "digest",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "size",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "selfdigest",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "selfsize",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "vendor",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "path",
+          "expected": "deny",
+          "passed": true
+        },
+        {
+          "case": "dupentry",
+          "expected": "deny",
+          "passed": true
+        }
+      ],
+      "cached_bootstrap": {
+        "file": "setuptools-80.9.0-py3-none-any.whl",
+        "bytes": 1201486,
+        "sha256": "062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922",
+        "record_suffix_matches": 17,
+        "root_validator_result": "ACCEPTED_FULL_DIGEST_SIZE_CLOSURE"
+      },
+      "pip2511_cache_found": false,
+      "exact_frozen_pins": 10
+    },
+    "actual_failure_diagnosis": {
+      "run": 38469883128,
+      "job": 115545918626,
+      "source_head": "0f3e116691c38eff28671f228f0b1fa48329db66",
+      "log_bytes": 227887,
+      "log_sha256": "ada94a3333995c934ea0273ecc9f0dbd672e70508f364fe5bec3a3f3aa58db6c",
+      "observed": "Repeat product builds logged success, then original reference_record assert len(records)==1 failed before qualify fresh-form calls. Retained setuptools wheel independently demonstrates multiple nested RECORD suffix matches and a single valid root RECORD.",
+      "failed_archive_filename": "Not printed in traceback; no exact failing archive name inferred solely from log.",
+      "fresh_install_or_native_dialogue_pass": false
+    },
+    "limits": [
+      "No HTTP/download/install/native/product/cryptography/certificate/process/builder/workflow qualification invoked. Only AST-selected verifier and safe_relative operated on in-memory ZIP fixtures and one already retained public setuptools wheel as static bytes.",
+      "Global accepted build_mcp helper and package runtime remain unchanged; prior25 helper controls are inherited and not rerun or added here.",
+      "Actual failed CI remains failed; no cancellation, unchanged rerun, fresh-form pass, physical cleanup, release or Ready-to-release claim.",
+      "Original frozen correction must be preserved before correction; renewal must verify exact new source before author validators/publication/qualification."
+    ],
+    "new_native_executions": 0
+  },
+  "wheel_record_source_review_sha256": "3ac426395fd723c9f26285abf300c3a63fef346288b164fe9a3db42050fd740f",
+  "all_initial_failed_ci_jobs": [
+    {
+      "run": 38469883128,
+      "job": 115545918626,
+      "name": "resilience (ubuntu-24.04)",
+      "conclusion": "failure",
+      "bytes": 227887,
+      "sha256": "ada94a3333995c934ea0273ecc9f0dbd672e70508f364fe5bec3a3f3aa58db6c",
+      "diagnostic": [
+        "2026-10-13T21:21:01.4267179Z python tools/build_resilience.py --core-root ../core --io-root ../io",
+        "2026-10-13T21:21:21.0777370Z   File \"/home/runner/work/equity-feature-workers/equity-feature-workers/component/tools/build_resilience.py\", line 227, in <module>",
+        "2026-10-13T21:21:21.0779634Z   File \"/home/runner/work/equity-feature-workers/equity-feature-workers/component/tools/build_resilience.py\", line 210, in main",
+        "2026-10-13T21:21:21.0808457Z     reference_record(path);shutil.copy2(path, output / path.name)",
+        "2026-10-13T21:21:21.0810125Z   File \"/home/runner/work/equity-feature-workers/equity-feature-workers/component/tools/build_mcp.py\", line 23, in reference_record",
+        "2026-10-13T21:21:21.0812281Z AssertionError"
+      ]
+    },
+    {
+      "run": 38469883128,
+      "job": 115545918971,
+      "name": "resilience (windows-latest)",
+      "conclusion": "failure",
+      "bytes": 228882,
+      "sha256": "a936a864ab7ac553e2ad9c9070032f5e9600b0cde63b1c863572241d1623a8bf",
+      "diagnostic": [
+        "2026-10-13T21:21:31.0244902Z python tools/build_resilience.py --core-root ../core --io-root ../io",
+        "2026-10-13T21:21:57.6335279Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 227, in <module>",
+        "2026-10-13T21:21:57.6337465Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 210, in main",
+        "2026-10-13T21:21:57.6338672Z     reference_record(path);shutil.copy2(path, output / path.name)",
+        "2026-10-13T21:21:57.6340332Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_mcp.py\", line 23, in reference_record",
+        "2026-10-13T21:21:57.6342360Z AssertionError"
+      ]
+    },
+    {
+      "run": 38469890976,
+      "job": 115545946101,
+      "name": "resilience (windows-latest)",
+      "conclusion": "failure",
+      "bytes": 230213,
+      "sha256": "c9e859b46f7d8a7fc8d95c0a65ed2594937b9c892a50589b7f37086254760bc3",
+      "diagnostic": [
+        "2026-10-13T21:22:34.5113348Z python tools/build_resilience.py --core-root ../core --io-root ../io",
+        "2026-10-13T21:23:09.0165417Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 227, in <module>",
+        "2026-10-13T21:23:09.0167132Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 210, in main",
+        "2026-10-13T21:23:09.0168111Z     reference_record(path);shutil.copy2(path, output / path.name)",
+        "2026-10-13T21:23:09.0169396Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_mcp.py\", line 23, in reference_record",
+        "2026-10-13T21:23:09.0171529Z AssertionError"
+      ]
+    },
+    {
+      "run": 38469890976,
+      "job": 115545946581,
+      "name": "resilience (ubuntu-24.04)",
+      "conclusion": "failure",
+      "bytes": 229237,
+      "sha256": "44d0de7e3ad4312a8360168d6036c5bcb32315d9ac1b9a2abf43483782452b98",
+      "diagnostic": [
+        "2026-10-13T21:22:45.1549567Z python tools/build_resilience.py --core-root ../core --io-root ../io",
+        "2026-10-13T21:23:00.7028515Z   File \"/home/runner/work/equity-feature-workers/equity-feature-workers/component/tools/build_resilience.py\", line 227, in <module>",
+        "2026-10-13T21:23:00.7029490Z   File \"/home/runner/work/equity-feature-workers/equity-feature-workers/component/tools/build_resilience.py\", line 210, in main",
+        "2026-10-13T21:23:00.7030066Z     reference_record(path);shutil.copy2(path, output / path.name)",
+        "2026-10-13T21:23:00.7030800Z   File \"/home/runner/work/equity-feature-workers/equity-feature-workers/component/tools/build_mcp.py\", line 23, in reference_record",
+        "2026-10-13T21:23:00.7032167Z AssertionError"
+      ]
+    }
+  ],
+  "wheel_record_spelling_correction": "Require original exactstr ZIP spelling equal exposed filename beforecanonicalpath checks; rejectcontrolchars; rootRECORD audit applies everypublishedwheel includingproducts."
 }

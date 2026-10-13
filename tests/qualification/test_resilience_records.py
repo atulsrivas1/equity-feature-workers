@@ -5,12 +5,16 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+import base64
+import csv
+import io
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tests/resilience'))
 sys.path.insert(0, str(ROOT / 'tools'))
 from certificate_pins import read_pins
-from build_resilience import safe_relative
+from build_resilience import safe_relative, wheel_archive_record
 
 
 class CertificateInventory(unittest.TestCase):
@@ -64,8 +68,47 @@ class CertificateInventory(unittest.TestCase):
 class RelocationPaths(unittest.TestCase):
     def test_closed_relative_paths(self):
         self.assertEqual(str(safe_relative('docs/owned.json')), 'docs/owned.json')
-        for value in ('', '/owned', '../owned', 'docs/../owned', 'docs//owned', 'C:owned', 'docs\\owned', True):
+        for value in ('', '/owned', '../owned', 'docs/../owned', 'docs//owned', 'C:owned', 'docs\\owned', 'docs/a\x00', 'docs/a\n', True):
             with self.subTest(value=value), self.assertRaises(ValueError):safe_relative(value)
+
+
+class VendoredWheelRecord(unittest.TestCase):
+    def wheel(self, path, *, drift=False, second_root=False):
+        files = {'tool/__init__.py': b'# synthetic tool\n',
+                 'tool/_vendor/library-1.dist-info/RECORD': b'vendored synthetic metadata\n'}
+        if second_root:files['other-1.dist-info/RECORD'] = b''
+        rows = [[name, 'sha256=' + base64.urlsafe_b64encode(hashlib.sha256(raw).digest()).rstrip(b'=').decode(), str(len(raw))]
+                for name, raw in files.items()]
+        rows.append(['tool-1.dist-info/RECORD', '', ''])
+        stream = io.StringIO();csv.writer(stream).writerows(rows)
+        files['tool-1.dist-info/RECORD'] = stream.getvalue().encode()
+        if drift:files['tool/_vendor/library-1.dist-info/RECORD'] = b'substituted vendor metadata'
+        with zipfile.ZipFile(path, 'w') as archive:
+            for name, raw in files.items():archive.writestr(name, raw)
+
+    def test_vendored_record_is_verified_and_second_root_denied(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'synthetic.whl'
+            self.wheel(path);wheel_archive_record(path)
+            self.wheel(path, drift=True)
+            with self.assertRaisesRegex(ValueError, 'file drift'):wheel_archive_record(path)
+            self.wheel(path, second_root=True)
+            with self.assertRaisesRegex(ValueError, 'root wheel RECORD'):wheel_archive_record(path)
+
+    def test_original_zip_nul_spelling_cannot_alias_record(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'synthetic.whl'
+            digest = 'sha256=' + base64.urlsafe_b64encode(hashlib.sha256(b'x').digest()).rstrip(b'=').decode()
+            with zipfile.ZipFile(path, 'w') as archive:
+                archive.writestr('tool/ax', b'x')
+                archive.writestr('tool-1.dist-info/RECORD', 'tool/a,' + digest + ',1\ntool-1.dist-info/RECORD,,\n')
+            raw = path.read_bytes();self.assertEqual(raw.count(b'tool/ax'), 2)
+            path.write_bytes(raw.replace(b'tool/ax', b'tool/a\x00'))
+            with zipfile.ZipFile(path) as archive:
+                item = archive.infolist()[0]
+                self.assertEqual(item.filename, 'tool/a')
+                self.assertEqual(item.orig_filename, 'tool/a\x00')
+            with self.assertRaisesRegex(ValueError, 'original ZIP spelling'):wheel_archive_record(path)
 
 
 if __name__ == '__main__':

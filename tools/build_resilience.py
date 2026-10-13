@@ -11,13 +11,16 @@ import sys
 import tempfile
 import tarfile
 import zipfile
+import base64
+import csv
+import io
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tests/resilience'))
 from private_directory import private_directory
 
 from build_foundation import build, fingerprint, git, run, sha, snapshot, CORE_COMMIT, IO_COMMIT
 from build_client import audit_client, wheel_record, provenance
 from build_service import audit as audit_service
-from build_mcp import audit_mcp, reference_record
+from build_mcp import audit_mcp
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUTS = ('packages', 'tools', 'tests', 'docs', '.github/workflows/resilience.yml')
@@ -25,6 +28,32 @@ GROUPS = ('R07', 'AUTHORITY', 'STATE', 'EPOCH', 'UNKNOWN', 'VERSION', 'REFERENCE
 PROJECTS = ('service', 'client', 'mcp')
 BOOTSTRAP = ('pip==25.1.1', 'setuptools==80.9.0', 'mypy==1.15.0', 'mypy_extensions==1.1.0')
 ACCEPTED_WORKER_COMMIT = '84b15c01fcb9526e4557df83d055daa5303db639'
+
+
+def wheel_archive_record(path):
+    """Root wheel RECORD owns vendored metadata files too."""
+    with zipfile.ZipFile(path) as archive:
+        entries = archive.infolist()
+        if len(entries) != len({item.filename for item in entries}):raise ValueError('duplicate wheel entry')
+        for item in entries:
+            if type(item.orig_filename) is not str or item.orig_filename != item.filename:
+                raise ValueError('owned original ZIP spelling')
+            safe_relative(item.orig_filename[:-1] if item.is_dir() else item.orig_filename)
+        names = {item.filename for item in entries if not item.is_dir()}
+        records = [name for name in names if len(PurePosixPath(name).parts) == 2
+                   and PurePosixPath(name).parts[0].endswith('.dist-info') and name.endswith('/RECORD')]
+        if len(records) != 1:raise ValueError('owned root wheel RECORD')
+        record = records[0]
+        rows = list(csv.reader(io.StringIO(archive.read(record).decode('utf-8'))))
+        if any(len(row) != 3 for row in rows) or len(rows) != len({row[0] for row in rows}) or {row[0] for row in rows} != names:
+            raise ValueError('owned wheel RECORD closure')
+        for name, digest, size in rows:
+            if name == record:
+                if digest or size:raise ValueError('owned wheel RECORD self entry')
+            else:
+                raw = archive.read(name)
+                expected = 'sha256=' + base64.urlsafe_b64encode(hashlib.sha256(raw).digest()).rstrip(b'=').decode('ascii')
+                if digest != expected or size != str(len(raw)):raise ValueError('owned wheel RECORD file drift')
 
 
 def archive_entries(path):
@@ -46,7 +75,8 @@ def archive_entries(path):
 
 
 def safe_relative(value):
-    if type(value) is not str or not value or '\\' in value or ':' in value:
+    if (type(value) is not str or not value or '\\' in value or ':' in value
+            or any(ord(char) < 32 or ord(char) == 127 for char in value)):
         raise ValueError('owned relative path')
     path = PurePosixPath(value)
     if path.is_absolute() or '..' in path.parts or '/'.join(path.parts) != value:
@@ -203,11 +233,11 @@ def main():
                 if name == 'service':audit_service(path, repeat / 'packages/service/src/equity_feature_service')
                 elif name == 'client':audit_client(path, repeat / 'packages/client')
                 else:audit_mcp(path, repeat / 'packages/mcp')
-                if path.suffix == '.whl':wheel_record(path)
+                if path.suffix == '.whl':wheel_archive_record(path)
                 shutil.copy2(path, output / path.name)
             products[name] = {('wheel' if path.suffix == '.whl' else 'sdist'): path for path in artifacts}
         for path in dependencies + reference + bootstrap:
-            reference_record(path);shutil.copy2(path, output / path.name)
+            wheel_archive_record(path);shutil.copy2(path, output / path.name)
         forms = [qualify(form, {name: paths[form] for name, paths in products.items()}, dependencies,
                          reference, bootstrap, committed, output) for form in ('wheel', 'sdist')]
         receipt = dict(schema='eq083.resilience.v1', commit=commit, core_commit=CORE_COMMIT, io_commit=IO_COMMIT,
