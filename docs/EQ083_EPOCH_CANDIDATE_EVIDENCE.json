@@ -1,0 +1,244 @@
+{
+  "full_prior_feasibility_reports": {
+    "eq083-feasibility-decision-reviewer-report.json": {
+      "disposition": "REJECT_CONFIGURATION_ONLY_CANDIDATE_FOR_EQ083_SELECTION",
+      "newtests": 0,
+      "candidate": "Configuration-only stock Genode26.08/NOVA/VirtualBox7 port as the complete EQ083 physical owner",
+      "research_stop": "Stop unsolicited adjacent-source enumeration for this configuration-only candidate. New source work is justified only by a concrete complete enforcement design and a named decisive evidence obligation whose outcome can accept or reject that design; do not add another token, counter, watchdog or status wrapper.",
+      "findings": [],
+      "limits": [
+        "Read saved reviewed reports/JSON only; no upstream reads, source rehash, source execution, native/host/API/process/VM/probe/test, CI or binary verification reattempt.",
+        "Existing source identities and results remain unchanged; no new runtime failure, vendor defect, hang/leak/attack, platform incompatibility or universal impossibility claimed.",
+        "No complete topology selected, no relaxed acceptance criteria, no Ready/all24/fresh-form/physical issuer or operational approval.",
+        "Acceptance remains at eight completed obligations as reported by parent; this decision supplies a selection boundary, not another completed acceptance test. #94 remains dependent on #93."
+      ],
+      "reasoning": [
+        "This is rejection of a particular insufficient selection contract, not a proof that every possible configuration or modified/external enforcement topology is impossible. A materially different complete enforcement design may be assessed on new decisive capability evidence.",
+        "A finite quota/request/iteration counter does not bound RPC, cancellation, provider/device completion or RCU scheduling latency. Local phase/ID/account bookkeeping does not establish all backing physically reclaimed.",
+        "Merely freezing configuration cannot by itself supply missing continuous storage byte/node caps, complete writer confinement, every allocator peak reservation and independent failure control; those mechanisms and their full lower contracts must be explicit.",
+        "Independent Windows/Linux CPython x64 four-form source/build/native/ABI/resolver/license compatibility and literal topology budgets are not established; version/release documentation is not that evidence."
+      ],
+      "agent_owned_route_forward": {
+        "required_contract": [
+          "Closed immutable donor and allocation authority covering boot/root/core/kernel/VMM/provider metadata, rounded geometry, caches, old/new overlap and all retired debt, with preallocation admission rather than requested-byte bookkeeping only",
+          "Hard allocated-storage byte and live/retired node limits plus confinement of every allowed process, device, DMA, mapped/cached and external writer edge",
+          "Independent reserved failure control with supported bounded stop/cancel/drain/reap/join/close behavior and truthful failure disposition, retaining resources until actual settlement",
+          "Complete selected source/archive/patch/build/native/guest interpreter and all four forms ABI/resolver/license contract on both OSs",
+          "Literal per-form total budgets and a finite named validation package with explicit pass/fail capability criteria"
+        ],
+        "deliverable": "One bounded complete-candidate contract and feasibility matrix, assessed before further implementation or runtime selection",
+        "selection_rule": "Select an alternative only after its complete capability contract meets the unchanged mandatory requirements. Existing stock Windows job/WinFsp/cgroup/HCS/seL4 research does not qualify a substitute by analogy.",
+        "owner_input": "No new owner input is required merely because technical work is incomplete. Research/design/integration remain agent work; ask only for an actually unavailable external fact or operation permission that a concrete supported design demonstrably requires."
+      },
+      "evidence": [
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-genode-current-quota-source-reviewer-report.json",
+          "basis": "Current core pager/PD/VM quota growth can draw from parent/core and retry recovery; selected immutable donor policy and lifetime cap were not established."
+        },
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-quota-reclamation-source-reviewer-report.json",
+          "basis": "Quota funding is distinct from physical buddy/slab peak and deferred RCU completion; full allocation call-site reservations and progress bound remain absent."
+        },
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-progress-source-reviewer-report.json",
+          "basis": "Quiet/update/timer/IPI execution gates establish conditional progress, not a whole cleanup deadline."
+        },
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vmm-graph-source-reviewer-report.json",
+          "basis": "Example guest RAM and routes do not close the full graph; GMM backing is retained, can grow, and VM/EMT shutdown requires lower complete lifetimes."
+        },
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vmm-release-source-reviewer-report.json",
+          "basis": "Selected patch texts and port stop/pause/wait paths are not applied build, all worker destruction, supported guest/native ABI or licensing closure."
+        },
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vendor-worker-source-reviewer-report.json",
+          "basis": "VD/PDM/AIO cancel, flush, drain and destroy paths include indefinite waits or unsupported cancellation; local timed join is conditional and not whole final release."
+        },
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-sandbox-authority-source-reviewer-report.json",
+          "basis": "Dynamic configuration, available quota, cooperative downgrade/yield, async closes and unchecked rollback outcomes do not establish immutable whole writer/resource authority or all retired settlement."
+        },
+        {
+          "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-runtime-service-source-reviewer-report.json",
+          "basis": "Expanding resource/upgrade waits, local/no-op/async service phases, retained heap backing, root proxy partial stages and continuing ROM producers require additional enforcement, not configuration-only inference."
+        }
+      ],
+      "heads": {
+        "equity-features": "1a552f4dfc83c610a2b85ea61f4fdf60190a4e97",
+        "equity-feature-workers": "9a24eafd1f2a0e0a7814c7ad165eaec1a00cd9dc"
+      },
+      "new_tests": 0,
+      "reviewer": "r7_policy_review independent reviewer",
+      "scope": "FEASIBILITY_DECISION_FROM_EXISTING_REVIEWED_RESEARCH_ONLY",
+      "decision": "Stronger rejection than merely pending admission is justified for this defined configuration-only proposal. Its proposed sufficient controls\u2014guest RAM, PD quotas, route configuration and stop/exit\u2014do not meet mandatory complete resource/writer ownership and bounded physical cleanup. Existing reviews expose specific replenishment, retained allocation, conditional progress and asynchronous or indefinite completion paths that the proposal has no supported enforcement contract to close. Do not select or implement it as EQ083 satisfaction on this evidence."
+    },
+    "eq083-feasibility-docs-reviewer-report.json": {
+      "new_tests": 0,
+      "newtests": 0,
+      "scope": "PREPARED_FEASIBILITY_DECISION_DOCUMENTATION_ONLY",
+      "limitations": [
+        "Prepared docs review and saved report comparison only; no upstream/source rehash, source execution, native/host/probe/CI/tests, binary qualification or old audit rerun.",
+        "Exactly five documentation files changed per repository; no product source changes under checked scope. Final publication attribution requires immutable readback.",
+        "No selected replacement, implementation, sourcebinary/ABI/license/host authority, Ready/runtime/operational approval or new owner input merely for incompleteness.",
+        "Engineering contract and capability-based selection remain agent work; no public raw chat is reproduced, only summarized work-method context and formal preserved reports."
+      ],
+      "findings": [],
+      "new_source_reads": 0,
+      "disposition": "APPROVED",
+      "semantic_review": "The prepared docs faithfully reject the defined configuration-only stock Genode/NOVA/VirtualBox7 candidate for EQ083 selection, beyond mere unadmitted status, based on reviewed missing whole resource/writer enforcement and finite physical cleanup contract. They do not claim universal impossibility, executed product failure or a qualified alternative. Adjacent inventory enumeration is ended as default method; any new source work must answer a named decisive mechanism obligation for one whole candidate contract. Numeric limits are not invented, acceptance criteria remain unchanged and progress is not increased by the decision.",
+      "bases": {
+        "equity-features": "1a552f4dfc83c610a2b85ea61f4fdf60190a4e97",
+        "equity-feature-workers": "9a24eafd1f2a0e0a7814c7ad165eaec1a00cd9dc"
+      },
+      "prepared_files": {
+        "equity-feature-workers": {
+          "docs/EQ083_FEASIBILITY_EVIDENCE.json": {
+            "sha256": "88f0ce81aad7d7117d953a0abd29aa05636a774f9b20dd91b0c4bf594a81cb59",
+            "bytes": 33792
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "30969984374004040f2137b8b6e4d98ed09ed0bd27b9a408360a032ea60e57de",
+            "bytes": 394845
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "bf16020bc25ace2558eed5e2af6cb6dccbd039182fb2a2bcedf2c22c7b7af4d7",
+            "bytes": 505983
+          },
+          "docs/EQ083_FEASIBILITY_DECISION.json": {
+            "sha256": "494e2dbcb95b42158d31b8e724b03b67dc0f1459264d80089afd9326919698c8",
+            "bytes": 8276
+          },
+          "docs/EQ083_FEASIBILITY_DECISION.md": {
+            "sha256": "6b314c608bbfdb521355a5283699a471c5ec1af37113b9b46abcc0ff09792ec3",
+            "bytes": 8564
+          }
+        },
+        "equity-features": {
+          "docs/stories/EQ-083_FEASIBILITY_DECISION.md": {
+            "sha256": "6b314c608bbfdb521355a5283699a471c5ec1af37113b9b46abcc0ff09792ec3",
+            "bytes": 8564
+          },
+          "docs/stories/EQ-083_FEASIBILITY_EVIDENCE.json": {
+            "sha256": "88f0ce81aad7d7117d953a0abd29aa05636a774f9b20dd91b0c4bf594a81cb59",
+            "bytes": 33792
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "8d1e9bbc3b1405c12ba6dc9463ee99bc8c95b51f568b2aceb2b737044d457ee5",
+            "bytes": 532176
+          },
+          "docs/stories/EQ-083_FEASIBILITY_DECISION.json": {
+            "sha256": "494e2dbcb95b42158d31b8e724b03b67dc0f1459264d80089afd9326919698c8",
+            "bytes": 8276
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "22533bb82317434b9b60a42a7427cd8df5798b14c09f36f8e36728b9fb3246a7",
+            "bytes": 791427
+          }
+        }
+      },
+      "decision_review_sha256": "d80e0985d848927a497d8acfcf28caa13a028747e375e5d4a3ab92065746b8f9",
+      "reviewer": "r7_policy_review independent reviewer",
+      "checks": [
+        {
+          "five_doc_scope": true,
+          "exact_base": true,
+          "no_source_tests_or_operation_claim": true,
+          "old_continuity_suffix": true,
+          "repo": "equity-features",
+          "full_decision_report_and_three_latest_reports_preserved": true
+        },
+        {
+          "five_doc_scope": true,
+          "exact_base": true,
+          "no_source_tests_or_operation_claim": true,
+          "old_continuity_suffix": true,
+          "repo": "equity-feature-workers",
+          "full_decision_report_and_three_latest_reports_preserved": true
+        }
+      ]
+    },
+    "eq083-feasibility-final-readback-reviewer-report.json": {
+      "published_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_FEASIBILITY_EVIDENCE.json": {
+            "bytes": 33792,
+            "sha256": "88f0ce81aad7d7117d953a0abd29aa05636a774f9b20dd91b0c4bf594a81cb59"
+          },
+          "docs/stories/EQ-083_FEASIBILITY_DECISION.md": {
+            "bytes": 8564,
+            "sha256": "6b314c608bbfdb521355a5283699a471c5ec1af37113b9b46abcc0ff09792ec3"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 532176,
+            "sha256": "8d1e9bbc3b1405c12ba6dc9463ee99bc8c95b51f568b2aceb2b737044d457ee5"
+          },
+          "docs/stories/EQ-083_FEASIBILITY_DECISION.json": {
+            "bytes": 8276,
+            "sha256": "494e2dbcb95b42158d31b8e724b03b67dc0f1459264d80089afd9326919698c8"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 791427,
+            "sha256": "22533bb82317434b9b60a42a7427cd8df5798b14c09f36f8e36728b9fb3246a7"
+          }
+        },
+        "equity-feature-workers": {
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 505983,
+            "sha256": "bf16020bc25ace2558eed5e2af6cb6dccbd039182fb2a2bcedf2c22c7b7af4d7"
+          },
+          "docs/EQ083_FEASIBILITY_DECISION.json": {
+            "bytes": 8276,
+            "sha256": "494e2dbcb95b42158d31b8e724b03b67dc0f1459264d80089afd9326919698c8"
+          },
+          "docs/EQ083_FEASIBILITY_EVIDENCE.json": {
+            "bytes": 33792,
+            "sha256": "88f0ce81aad7d7117d953a0abd29aa05636a774f9b20dd91b0c4bf594a81cb59"
+          },
+          "docs/EQ083_FEASIBILITY_DECISION.md": {
+            "bytes": 8564,
+            "sha256": "6b314c608bbfdb521355a5283699a471c5ec1af37113b9b46abcc0ff09792ec3"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 394845,
+            "sha256": "30969984374004040f2137b8b6e4d98ed09ed0bd27b9a408360a032ea60e57de"
+          }
+        }
+      },
+      "prepared_review_sha256": "201dc0813fd4229d9ec6d8a779c6c51b05fe8d66bf47df002d8e9d20aa1f3b3c",
+      "new_tests": 0,
+      "limitations": [
+        "Final published documentation byte/attribution readback only; no semantic/source/research/native/host/probe/CI/tests or rejected binary task rerun.",
+        "Preserves specific configuration-only candidate rejection and unchanged acceptance requirements; no universal platform impossibility or executed product failure.",
+        "No qualified replacement, whole physical owner, runtime/Ready/operational approval or new input request."
+      ],
+      "newtests": 0,
+      "bases": {
+        "equity-features": "1a552f4dfc83c610a2b85ea61f4fdf60190a4e97",
+        "equity-feature-workers": "9a24eafd1f2a0e0a7814c7ad165eaec1a00cd9dc"
+      },
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "reviewer": "r7_policy_review independent reviewer",
+      "new_source_reads": 0,
+      "findings": [],
+      "checks": [
+        "All ten immutable Git LF lengths/SHA256 match reviewed_git_files and normalized approved prepared bytes.",
+        "Exactly five documentation files changed per repository, no tracked source changes, approved base parent commits and paired clean codex/eq083-resilience branches.",
+        "Research decision/JSON/evidence mirrors and old PROJECT_KNOWLEDGE/SESSION_HANDOFF suffixes preserved.",
+        "Full expected Atul author/committer identity and noreply email verified; no Co-authored-by trailer."
+      ],
+      "disposition": "APPROVED",
+      "heads": {
+        "equity-features": "705a51560d6a0d9f7f2f4e9d47f1f9338cfef232",
+        "equity-feature-workers": "ab5985c48268bd44998578384b1f013bfb6589d1"
+      },
+      "attribution": {
+        "equity-features": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): reject configuration-only candidate and gate complete feasibility\n",
+        "equity-feature-workers": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): reject configuration-only candidate and gate complete feasibility\n"
+      }
+    }
+  },
+  "new_tests": 0,
+  "new_source_reads": 0,
+  "scope": "One proposed complete enforcement decomposition; all proposed changes unimplemented/unqualified, no admission or actual operations"
+}
