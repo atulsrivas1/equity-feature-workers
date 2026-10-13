@@ -731,5 +731,153 @@
     "owned_empty_cleanup": true,
     "seconds": 0.8910000000614673,
     "review_sha256": "6fe042c956b08a77ac4fcfb3a93d973c32bd9012ae8f6728dbe646d4ac885eb5"
-  }
+  },
+  "prior_linux_artifact_review": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "disposition": "REVIEWED_PRIOR_LINUX_FORMS_WITH_EVIDENCE_SCHEMA_REWORK",
+    "scope": "SAVED_SERVER_LINUX_ARTIFACT_STATIC_INTEGRITY_AND_BEHAVIORAL_REPORT_REVIEW_ONLY",
+    "findings": [
+      {
+        "priority": 3,
+        "id": "R7-LINUX-REFERENCE-FAULT-EVIDENCE-LABEL",
+        "file": "docs/EQ083_REFERENCE_FAULT_PROBE.txt",
+        "line": 676,
+        "detail": "Linux reference-fault reports retain fault_job_empty=True/fault_launcher_exit=True with no platform field. The selected Linux helper active() explicitly accounts only for the retained direct child. These values therefore do not independently witness a Windows job or all-process-group empty state. TLS reports already use explicit platform/direct_or_launcher_exit/owned_reference_active_zero fields.",
+        "observed_scope": "All10 reference-fault modes in each saved form emit these legacy fields. Behavior/counters/closed markers match source; this is a portability evidence-label defect, not an observed fault behavior or descendant-cleanup failure.",
+        "correction": "Publish platform-qualified direct-child/launcher/accounting observations, retaining Windows job evidence only on Windows. Preserve this artifact/source and scope finding; do not relabel old fields as new evidence or imply whole descendants."
+      }
+    ],
+    "actual_job_metadata": {
+      "completed_at": "2026-10-13T21:35:53Z",
+      "conclusion": "success",
+      "head_sha": "0bd282359d883148f49824ec3d9e9d6bdff27e83",
+      "id": 115549279482,
+      "name": "resilience (ubuntu-24.04)",
+      "run_id": 38470865854,
+      "status": "completed"
+    },
+    "actual_artifact_review": {
+      "artifact": {
+        "id": 11851599686,
+        "node_id": "MDg6QXJ0aWZhY3QxMTg1MTU5OTY4Ng==",
+        "name": "resilience-0bd282359d883148f49824ec3d9e9d6bdff27e83-ubuntu-24.04",
+        "size_in_bytes": 62881689,
+        "url": "https://api.github.com/repos/atulsrivas1/equity-feature-workers/actions/artifacts/11851599686",
+        "archive_download_url": "https://api.github.com/repos/atulsrivas1/equity-feature-workers/actions/artifacts/11851599686/zip",
+        "expired": false,
+        "digest": "sha256:13cdcc422cb891d189898737fbcca166c89907c8a976dee7609f3e22b092789a",
+        "created_at": "2026-10-13T21:35:49Z",
+        "updated_at": "2026-10-13T21:35:49Z",
+        "expires_at": "2026-11-12T21:35:46Z",
+        "workflow_run": {
+          "id": 38470865854,
+          "repository_id": 1408067204,
+          "head_repository_id": 1408067204,
+          "head_branch": "codex/eq083-qualification",
+          "head_sha": "0bd282359d883148f49824ec3d9e9d6bdff27e83"
+        }
+      },
+      "zip_pin": {
+        "bytes": 62881689,
+        "sha256": "13cdcc422cb891d189898737fbcca166c89907c8a976dee7609f3e22b092789a"
+      },
+      "zip_entries": 51,
+      "archive_counts": {
+        "wheels": 45,
+        "sdists": 3
+      },
+      "archive_member_files": 4308,
+      "wheel_RECORD_rows": 4246,
+      "source_maps": {
+        "worker": 345,
+        "core": 51,
+        "io": 70
+      },
+      "forms": [
+        {
+          "form": "wheel",
+          "runtime_sha256": "e32f16d14e911f320bc1eb0797c3c684e01d92589098085be82e4dded7c70f62",
+          "installed_files": 82,
+          "namespace_payload_files": 48,
+          "groups": 9,
+          "parent_report_lines": 29,
+          "R07_cases": 4,
+          "reference_fault_cases": 10,
+          "TLS_cases": 7,
+          "remaining_requests": 36
+        },
+        {
+          "form": "sdist",
+          "runtime_sha256": "63c5846cd5329e4ce4e492b18e234710dbacab31a08a75df158e9ab9ed82bbce",
+          "installed_files": 82,
+          "namespace_payload_files": 48,
+          "groups": 9,
+          "parent_report_lines": 29,
+          "R07_cases": 4,
+          "reference_fault_cases": 10,
+          "TLS_cases": 7,
+          "remaining_requests": 36
+        }
+      ],
+      "source_head": "0bd282359d883148f49824ec3d9e9d6bdff27e83"
+    },
+    "integrity_checks": [
+      "Raw62881689-byte ZIP SHA equals saved GitHub artifact digest; source/run/expiry metadata bound; live read-only job metadata completedsuccess checked",
+      "All51 rawZIP entry CRC reads/size/SHA equal saveddownload map; published_files closure equals receipt",
+      "All45 wheel root RECORDs independently checked:4246 rows, full3-column unique-name closure, originalspelling/canonical paths, everyotherfile digest-size and emptyselfrow",
+      "All3 sdist file maps and all4308 archive member file SHA-sizes equal receipt; no extraction or execution",
+      "345 worker+51 core+70 IO source input SHA maps equal exact local immutable Git blobs at declared commits",
+      "Each form82 installed-report filepins with48 namespace payload entries equal committed product source; payloads also equal original wheel members",
+      "Both runtime-report rawSHAs bind formreceipt; fourdistribution versions and native/reference version declarations match source",
+      "Allnine groups/29 parentreportlines per form read and checked: fourR07 fullproducer/nativehash/exit declarations, authorityscenario bounds, state held0 terminalqueues, epoch33, sixunknownlanes, version42/raw7,10referencefaultmodeHTTPcounts/ACKs/retainedsnapshots,7TLSmodeHTTP-handshake counts/platformexit/read0 snapshots,remaining36/raw6/sevenACK fullretainedsnapshot equality",
+      "Allfour frozen fixture producer and native JSON canonical hashes independently recomputed; bars fullproducerSHA7f864e18ec55bcf86e2c50d89ed038e40ff8e09b7faebe648ae9a2d166b4a88f retained",
+      "ExportedJSON has no private-key PEM or absolute user-home path; artifact entries are package-relative archive/report files, not privatevenv/material/log roots"
+    ],
+    "golden_limits": "Full golden values are frozen-source assertion coverage with matching reported nativeSHAs/fullproducer flags; reviewer recomputes saved expected fixture hashes and ledger reports, not numerical engine execution or unseen service responses.",
+    "cleanup_limits": "Forms report owned_private_cleanup=True only after builder exactroot/rmtree checks and groups assert scoped exit/closed predicates. This is reported tested owned-directory/process scope, not independent post-run physicalfilesystem observation or generalcleanup proof.",
+    "new_tests": 0,
+    "new_native_qualification_runs": 0,
+    "limits": [
+      "Actual prior Linux branch0bd2823 only. Currentd6 branch/finalbothOS/currentmain/release qualification remains separate; priorLinux success is not an EQ083 acceptance or EQ084 grant.",
+      "No qualification/test/reinstall/download/sourceacquisition/nativeAPI/observer/binary-declaration parsing executed. Whole native member bytes were read only for archive CRC/hash/RECORD integrity; rejected binary qualification task was not retried.",
+      "Installed actual files are no longer present; independent installed-source checks compare saved verifier output pins to original package/source bytes, not independent reinstall or livehost examination.",
+      "No completehost/nativeABI/security/physicalsettlement inference from these reports. Explicit legacy fault-field scope must be corrected before final evidence acceptance."
+    ],
+    "tool_only_history": [
+      "Initial fixture reader guessed cases rather than actual native_cases and raisedKeyError; corrected savedJSON schema, no runtime operation.",
+      "First offline ledger assertion conflated SDK baseline/followup count7 with separately reported faultHTTP; exact source/report comparison corrected the reviewer expectation and allofflinechecks passed.",
+      "Two initial overly broad metadata renderings were truncated; final rawZIP/source/maps were verified by bounded structured data checks."
+    ]
+  },
+  "prior_linux_artifact_review_sha256": "10000f1709a732ff23474ab865129f6eb8d96de1ef7d4cd430c39d0be927182c",
+  "reference_fault_platform_evidence_correction": {
+    "prior_source_bytes": 42536,
+    "prior_source_sha256": "ddc467fd9caa9d27e3d97652b34126f98775c6f7af279e2383259892401cd5a1",
+    "finding": "R7-LINUX-REFERENCE-FAULT-EVIDENCE-LABEL",
+    "change": "Add platform and rename launcher/job labels to direct-or-launcher exit and owned-reference active-zero. Existing execution, cleanup checks, request ledgers and assertions remain unchanged.",
+    "scope": "Linux retained direct child; Windows job/entry/launcher checks remain in the Windows helper. Neither label establishes whole-platform cleanup.",
+    "old_artifact_disposition": "REVIEWED_PRIOR_LINUX_FORMS_WITH_EVIDENCE_SCHEMA_REWORK",
+    "new_native_execution": false
+  },
+  "dacl_hosted_windows_failure": {
+    "run": 38473507308,
+    "job": 115558329044,
+    "raw_bytes": 319737,
+    "raw_sha256": "f3143387e4bd765a306c43ed411c699d1a8739c1ef2c74907a813cf5d2cb15c8",
+    "trace": [
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:23.4878156Z removing build\\bdist.win-amd64\\wheel",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:23.5254800Z Successfully built equity_feature_mcp-0.1.0a0.tar.gz and equity_feature_mcp-0.1.0a0-py3-none-any.whl",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7241418Z Traceback (most recent call last):",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7251426Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 257, in <module>",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7252396Z     main()",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7253165Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 241, in main",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7254368Z     forms = [qualify(form, {name: paths[form] for name, paths in products.items()}, dependencies,",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7255123Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7256111Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 146, in qualify",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7256950Z     private_directory(location, secure=True)",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7257964Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tests\\resilience\\private_directory.py\", line 72, in private_directory",
+      "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7258902Z     raise error"
+    ]
+  },
+  "dacl_hosted_diagnostic_correction": "Expose only exact fixed stage, exception type and numeric HResult/innerCode already sanitized by the trusted ACL script. Unrecognized stderr stays private; no path/SID/message output or enforcement relaxation. Actual hosted cause remains undetermined until changed diagnostic run."
 }

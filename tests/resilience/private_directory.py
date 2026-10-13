@@ -1,6 +1,7 @@
 """Owned qualification directory permissions; no account administration."""
 import os
 from pathlib import Path
+import re
 import stat
 import sys
 from bounded_capture import capture
@@ -64,7 +65,12 @@ def private_directory(directory, *, secure=False):
                 '-ExecutionPolicy', 'Bypass', '-File', str(script), str(path), 'secure' if secure else 'verify'],
                 cwd=path, env=dict(os.environ), seconds=10, limit=4096)
             if returncode != 0 or stdout or stderr:
-                error = ValueError('owned private ACL verification')
+                # Publish only the fixed sanitized stage/type/numeric diagnostic.
+                # Unrecognized stderr stays in the private failed directory.
+                detail = re.fullmatch(rb'owned_acl:(?:identity|verify_existing_owner|access_descriptor|protect_and_clear|access_rule|apply|reread|verify_identity|verify_rights|verify_protection):[A-Za-z][A-Za-z0-9]{0,127}:-?[0-9]{1,11}:-?[0-9]{1,11}\r?\n', stderr)
+                message = 'owned private ACL verification'
+                if detail is not None:message += ': ' + stderr.decode('ascii').strip()
+                error = ValueError(message)
                 try:
                     with (path / 'owned-acl-failed.log').open('xb') as stream:
                         stream.write(stderr)
