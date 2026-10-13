@@ -1,0 +1,477 @@
+{
+  "full_independent_feasibility_review": {
+    "disposition": "REJECT_CONFIGURATION_ONLY_CANDIDATE_FOR_EQ083_SELECTION",
+    "newtests": 0,
+    "candidate": "Configuration-only stock Genode26.08/NOVA/VirtualBox7 port as the complete EQ083 physical owner",
+    "research_stop": "Stop unsolicited adjacent-source enumeration for this configuration-only candidate. New source work is justified only by a concrete complete enforcement design and a named decisive evidence obligation whose outcome can accept or reject that design; do not add another token, counter, watchdog or status wrapper.",
+    "findings": [],
+    "limits": [
+      "Read saved reviewed reports/JSON only; no upstream reads, source rehash, source execution, native/host/API/process/VM/probe/test, CI or binary verification reattempt.",
+      "Existing source identities and results remain unchanged; no new runtime failure, vendor defect, hang/leak/attack, platform incompatibility or universal impossibility claimed.",
+      "No complete topology selected, no relaxed acceptance criteria, no Ready/all24/fresh-form/physical issuer or operational approval.",
+      "Acceptance remains at eight completed obligations as reported by parent; this decision supplies a selection boundary, not another completed acceptance test. #94 remains dependent on #93."
+    ],
+    "reasoning": [
+      "This is rejection of a particular insufficient selection contract, not a proof that every possible configuration or modified/external enforcement topology is impossible. A materially different complete enforcement design may be assessed on new decisive capability evidence.",
+      "A finite quota/request/iteration counter does not bound RPC, cancellation, provider/device completion or RCU scheduling latency. Local phase/ID/account bookkeeping does not establish all backing physically reclaimed.",
+      "Merely freezing configuration cannot by itself supply missing continuous storage byte/node caps, complete writer confinement, every allocator peak reservation and independent failure control; those mechanisms and their full lower contracts must be explicit.",
+      "Independent Windows/Linux CPython x64 four-form source/build/native/ABI/resolver/license compatibility and literal topology budgets are not established; version/release documentation is not that evidence."
+    ],
+    "agent_owned_route_forward": {
+      "required_contract": [
+        "Closed immutable donor and allocation authority covering boot/root/core/kernel/VMM/provider metadata, rounded geometry, caches, old/new overlap and all retired debt, with preallocation admission rather than requested-byte bookkeeping only",
+        "Hard allocated-storage byte and live/retired node limits plus confinement of every allowed process, device, DMA, mapped/cached and external writer edge",
+        "Independent reserved failure control with supported bounded stop/cancel/drain/reap/join/close behavior and truthful failure disposition, retaining resources until actual settlement",
+        "Complete selected source/archive/patch/build/native/guest interpreter and all four forms ABI/resolver/license contract on both OSs",
+        "Literal per-form total budgets and a finite named validation package with explicit pass/fail capability criteria"
+      ],
+      "deliverable": "One bounded complete-candidate contract and feasibility matrix, assessed before further implementation or runtime selection",
+      "selection_rule": "Select an alternative only after its complete capability contract meets the unchanged mandatory requirements. Existing stock Windows job/WinFsp/cgroup/HCS/seL4 research does not qualify a substitute by analogy.",
+      "owner_input": "No new owner input is required merely because technical work is incomplete. Research/design/integration remain agent work; ask only for an actually unavailable external fact or operation permission that a concrete supported design demonstrably requires."
+    },
+    "evidence": [
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-genode-current-quota-source-reviewer-report.json",
+        "basis": "Current core pager/PD/VM quota growth can draw from parent/core and retry recovery; selected immutable donor policy and lifetime cap were not established."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-quota-reclamation-source-reviewer-report.json",
+        "basis": "Quota funding is distinct from physical buddy/slab peak and deferred RCU completion; full allocation call-site reservations and progress bound remain absent."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-progress-source-reviewer-report.json",
+        "basis": "Quiet/update/timer/IPI execution gates establish conditional progress, not a whole cleanup deadline."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vmm-graph-source-reviewer-report.json",
+        "basis": "Example guest RAM and routes do not close the full graph; GMM backing is retained, can grow, and VM/EMT shutdown requires lower complete lifetimes."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vmm-release-source-reviewer-report.json",
+        "basis": "Selected patch texts and port stop/pause/wait paths are not applied build, all worker destruction, supported guest/native ABI or licensing closure."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vendor-worker-source-reviewer-report.json",
+        "basis": "VD/PDM/AIO cancel, flush, drain and destroy paths include indefinite waits or unsupported cancellation; local timed join is conditional and not whole final release."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-sandbox-authority-source-reviewer-report.json",
+        "basis": "Dynamic configuration, available quota, cooperative downgrade/yield, async closes and unchecked rollback outcomes do not establish immutable whole writer/resource authority or all retired settlement."
+      },
+      {
+        "path": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-runtime-service-source-reviewer-report.json",
+        "basis": "Expanding resource/upgrade waits, local/no-op/async service phases, retained heap backing, root proxy partial stages and continuing ROM producers require additional enforcement, not configuration-only inference."
+      }
+    ],
+    "heads": {
+      "equity-features": "1a552f4dfc83c610a2b85ea61f4fdf60190a4e97",
+      "equity-feature-workers": "9a24eafd1f2a0e0a7814c7ad165eaec1a00cd9dc"
+    },
+    "new_tests": 0,
+    "reviewer": "r7_policy_review independent reviewer",
+    "scope": "FEASIBILITY_DECISION_FROM_EXISTING_REVIEWED_RESEARCH_ONLY",
+    "decision": "Stronger rejection than merely pending admission is justified for this defined configuration-only proposal. Its proposed sufficient controls\u2014guest RAM, PD quotas, route configuration and stop/exit\u2014do not meet mandatory complete resource/writer ownership and bounded physical cleanup. Existing reviews expose specific replenishment, retained allocation, conditional progress and asynchronous or indefinite completion paths that the proposal has no supported enforcement contract to close. Do not select or implement it as EQ083 satisfaction on this evidence."
+  },
+  "full_latest_runtime_service_reports": {
+    "eq083-runtime-service-source-reviewer-report.json": {
+      "source_files": [
+        {
+          "sha256": "a2f81ee25cf684c92a0cebe12678bd6324b2a9ad2c57a6694023877c4b1081b9",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/runtime.cc",
+          "bytes": 857,
+          "path": "repos/base/src/lib/base/runtime.cc",
+          "git_sha1": "6a134a55b6d80febcc9f4cddd71fa872d9aa14bd"
+        },
+        {
+          "sha256": "1492883138de9561759be0be8cd3adbb53aea27ad300d2e8a6b0f111d9a01095",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/runtime.h",
+          "bytes": 2143,
+          "path": "repos/base/src/include/base/internal/runtime.h",
+          "git_sha1": "8e4cdcef0a7b42e4d538256eca480fe20a11a739"
+        },
+        {
+          "sha256": "d19fada69a3b7578483f819dcf65faba45d5c5eb8ea7133bd1ec3d1b0ac195ce",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_parent_client.h",
+          "bytes": 5547,
+          "path": "repos/base/src/include/base/internal/expanding_parent_client.h",
+          "git_sha1": "29ddb14072617405f574e252ee4a9a0bb2822b48"
+        },
+        {
+          "sha256": "f74641111dde8cc0dc6b3bbbb4f76131c72543675e59f4c7c458c9c58827dedf",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_pd_session_client.h",
+          "bytes": 3006,
+          "path": "repos/base/src/include/base/internal/expanding_pd_session_client.h",
+          "git_sha1": "9de285fc905878c32edd31608835591a449935f8"
+        },
+        {
+          "sha256": "fa0bfb047f29c4c77872c1efb987ad9baee422b9cafd5e3579423639c39cc7e1",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_cpu_session_client.h",
+          "bytes": 1978,
+          "path": "repos/base/src/include/base/internal/expanding_cpu_session_client.h",
+          "git_sha1": "4c5eb0284ba7c9ad9ce3cabbed8413d91d1887aa"
+        },
+        {
+          "sha256": "20f84f97beedaa9e6ad020bad6885a8a174b821f3b8f82b971d8d2425dfcc7e2",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/expanding_region_map_client.h",
+          "bytes": 1488,
+          "path": "repos/base/src/include/base/internal/expanding_region_map_client.h",
+          "git_sha1": "b06b37f85df2600667c4d9251d763067501575e3"
+        },
+        {
+          "sha256": "5239c1f9ddc3a27141e1e44e43cb0e91b1a23246578f32cafbf5ec5a48add782",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/include/base/internal/upgradeable_client.h",
+          "bytes": 1205,
+          "path": "repos/base/src/include/base/internal/upgradeable_client.h",
+          "git_sha1": "3137e22af869121f606af388920cff5e8800a8a8"
+        },
+        {
+          "sha256": "16245ba41b16e75e861c6b32d3ad98457a7de885cf2c25a0ed0a584712d8d1c0",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/service.h",
+          "bytes": 15202,
+          "path": "repos/base/include/base/service.h",
+          "git_sha1": "1c957185c698abefbbdf3190a1215f4d4cb0c14c"
+        },
+        {
+          "sha256": "6ed8c21c3fcf75c792a57e609b3441ddce535e81efd87f3a8053de84afff02fd",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/include/base/heap.h",
+          "bytes": 6439,
+          "path": "repos/base/include/base/heap.h",
+          "git_sha1": "0bca2ae032ec984ffe2830bdfe52e3023de68b4a"
+        },
+        {
+          "sha256": "113d155885d5920693778002cf21db7bdc672a8ac5975ae4670e5e412f92f3d6",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/heap.cc",
+          "bytes": 9231,
+          "path": "repos/base/src/lib/base/heap.cc",
+          "git_sha1": "b50ae558a4afcedad211657f9593037f06eedbbb"
+        },
+        {
+          "sha256": "2dee3a937aaf60f60514b65834509a7ccbe2cd8bb38d8794e13fc77fd52b21cd",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/sliced_heap.cc",
+          "bytes": 3277,
+          "path": "repos/base/src/lib/base/sliced_heap.cc",
+          "git_sha1": "3f4709ce05e0fb26c1348194a1c8efa19d396872"
+        },
+        {
+          "sha256": "022b24bc8c380d821e4336a2ad305993da259dc6e469fa88d45cae56da887d27",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/base/src/lib/base/root_proxy.cc",
+          "bytes": 7165,
+          "path": "repos/base/src/lib/base/root_proxy.cc",
+          "git_sha1": "ec26eda7a27440078186391b90269231088c19ce"
+        },
+        {
+          "sha256": "ef51fb6b753cf9de00bccb71deefef4783e6dd4a638f3da58d21aefa82e45bd3",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/session_requester.h",
+          "bytes": 2553,
+          "path": "repos/os/include/os/session_requester.h",
+          "git_sha1": "3ce7c004ae3518b7efd79a27bbe8641b86a53d16"
+        },
+        {
+          "sha256": "648d2700efec104da98a22346b1ebfb7af7b17b042c95d91147f38dfe7779118",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/dynamic_rom_session.h",
+          "bytes": 6459,
+          "path": "repos/os/include/os/dynamic_rom_session.h",
+          "git_sha1": "85cbc3c2793d5c000d2173c3861b3c78a64ffda7"
+        },
+        {
+          "sha256": "db5a1210bbb378da2cf6548ef9ffc6c0e29d2dade6b341e2f05dbf8c1a3f41f1",
+          "url": "https://codeberg.org/genodelabs/genode/src/commit/d18ee9e917200b059549e21f2dd9a55bfe61a0eb/repos/os/include/os/child_policy_dynamic_rom.h",
+          "bytes": 6229,
+          "path": "repos/os/include/os/child_policy_dynamic_rom.h",
+          "git_sha1": "95b20d2751c7d408eaa13c576448aee30148376d"
+        }
+      ],
+      "findings": [],
+      "scope": "IMMUTABLE_UTF8_SOURCE_TEXT_DATA_REVIEW_ONLY",
+      "source_count": 15,
+      "disposition": "RUNTIME_RETRY_SERVICE_PHASE_AND_BACKING_OWNERSHIP_TRACED_WHOLE_GRAPH_PENDING",
+      "receipt_sha256": "5b322c461efd034b3c069f6b3405a95ee30fc41eaf44bf4a0c3f704c55d5b2cc",
+      "tool_only_history": [
+        "Author guessed base/include/base/internal API path returned404 and corrected actual base/src/include/base/internal; no source absence or native failure inference.",
+        "Long source bodies read in bounded, line-preserving text views; no source code executed."
+      ],
+      "new_tests": 0,
+      "newtests": 0,
+      "research_commit": "d18ee9e917200b059549e21f2dd9a55bfe61a0eb",
+      "partial_scope": {
+        "whole_closure": false,
+        "prior_rehashed": false,
+        "combined_files": 186,
+        "prior_bytes": 1795265,
+        "combined_bytes": 1868044,
+        "prior_files": 171
+      },
+      "remaining_obligations": [
+        "Concrete platform Env session/upgrade/close and PD/core/kernel/parent signal/RPC implementations",
+        "Complete source/config donor-authority and writer graph with frozen physical budgets covering retained pools, metadata, rounding, partial construction, overlap and deferred provider debt",
+        "Independent reserved stop/cancel/reap/join/close control with supported finite progress and actual physical settlement, including devices/providers/VMM/kernel",
+        "Declared vendor archives/patch/effective build and native binary/ABI/resolver/license mapping, Windows and Linux CPython x64 four forms, complete physical issuer and Ready gates"
+      ],
+      "source_bytes": 72779,
+      "facts": [
+        {
+          "fact": "Common Runtime constructs expanding parent/PD/CPU/RM clients, requests environment session capabilities, attaches writable trace control and installs stack RAM/RM globals. init_runtime initializes log, RPC cap allocation, cap slab and signal receiver; init_parent_resource_requests installs fallback signaling.",
+          "boundary": "These common-runtime clients and globals are not a concrete Env session/close implementation or complete platform/kernel/accounting closure.",
+          "paths": [
+            "repos/base/src/lib/base/runtime.cc",
+            "repos/base/src/include/base/internal/runtime.h"
+          ],
+          "id": "F1",
+          "lines": "runtime.cc 20-40; runtime.h 34-68"
+        },
+        {
+          "fact": "Parent fallback resource response waits for a signal, or sleeps forever when the receiver is absent. CUSTOM resource signaling submits and returns; default installs fallback and waits. PD upgrade is translated into resource_request; other upgrades retry indefinitely on resource shortage. Exit forwards to parent and then sleeps forever.",
+          "boundary": "No finite timeout, cancellation or fixed donor budget is provided by these paths. Actual parent policy, signal delivery and independent failure control must be part of the owner graph.",
+          "paths": [
+            "repos/base/src/include/base/internal/expanding_parent_client.h"
+          ],
+          "id": "F2",
+          "lines": "78-85, 110-154, 157-209"
+        },
+        {
+          "fact": "PD RAM allocation retries shortage and requests size+4096 RAM or four caps; DENIED terminates that loop. RAM/cap transfer retries EXCEEDED via parent requests. CPU thread creation retries with 8KiB/two-cap upgrades until valid or denied. RM attach retries shortages through PD upgrades. Upgradeable_client delegates parent upgrade without independently checking its result.",
+          "boundary": "These increments are requests, not a whole physical reserve or deadline. Invalid/non-shortage results and lower transfer/allocation semantics remain distinct.",
+          "paths": [
+            "repos/base/src/include/base/internal/expanding_pd_session_client.h",
+            "repos/base/src/include/base/internal/expanding_cpu_session_client.h",
+            "repos/base/src/include/base/internal/expanding_region_map_client.h",
+            "repos/base/src/include/base/internal/upgradeable_client.h"
+          ],
+          "id": "F3",
+          "lines": "PD 41-109; CPU 41-61; RM 37-45; upgradeable 37-45"
+        },
+        {
+          "fact": "Service inherits default quota accounts; local factory creation sets AVAILABLE or denial/resource phases. Local upgrade and close invoke a matching RPC object callback, then change phase; missing dynamic_cast object only warns before those phase changes. Try_parent_service calls concrete Env.try_session/upgrade/close and owns a parent-side ID. Parent_service makes up to ten initiation attempts, issuing resource requests and restoring the prior phase after resource errors.",
+          "boundary": "Local single-session factories have no-op destroy/upgrade by design. A successful phase or ten attempts does not prove lower object destruction, bounded wait or whole backing release; actual factory and Env implementations must be selected.",
+          "paths": [
+            "repos/base/include/base/service.h"
+          ],
+          "id": "F4",
+          "lines": "37-110, 152-203, 228-286, 298-447"
+        },
+        {
+          "fact": "Async_service uses server-side metadata factory, ensures a server ID, marks async client notification and returns Ok before provider completion; wakeup delegates. Child_service uses a PD client for quota transfer, returning OK without a transfer for invalid destination caps and exposing the PD cap for account operations.",
+          "boundary": "Metadata admission, wakeup, invalid-account no-op and transfer return must not be promoted to actual provider drain or physical settlement.",
+          "paths": [
+            "repos/base/include/base/service.h"
+          ],
+          "id": "F5",
+          "lines": "453-566"
+        },
+        {
+          "fact": "Root proxy retains a registry of at most32 services, separate entrypoint/session-request ROM, sliced heap and session slab. Create calls original Root_client.session, then allocates tracking metadata and delivers the capability; upgrade invokes original root then sends OK; close invokes original root.close, destroys metadata then sends CLOSED. Requests process upgrades, closes, then creates. Announce uses a static proxy bound to the initialized Env.",
+          "boundary": "Root RPC completion is lower implementation dependent. Successful root session creation precedes tracking allocation/delivery, so partial-stage failure accounting remains necessary; no local scope shown here proves full constructor-failure unwind, provider writer quiescence or finite close.",
+          "paths": [
+            "repos/base/src/lib/base/root_proxy.cc"
+          ],
+          "id": "F6",
+          "lines": "48-106, 110-150, 155-260, 263-279"
+        },
+        {
+          "fact": "Heap defaults to UNLIMITED. Requested-size quota check precedes allocation; small allocations use retained AVL/chunk backing, adding slab/dataspace metadata and page rounding. Large allocations use separately tracked rounded dataspaces and metadata. Chunk parameter doubles up to256KiB, while request_size multiplies it by sizeof(umword_t). Small free returns the local range and decreases bookkeeping without releasing its pool dataspace; big free removes/detaches/releases the dataspace. Destructor releases allocator metadata before backing pool destruction.",
+          "boundary": "consumed/requested quota and chunk parameter are not whole physical peak. Retained slack, rounding, metadata, nested allocation, partial stage unwind and lower detach/free completion require complete reservations and defined bounded lifetime.",
+          "paths": [
+            "repos/base/include/base/heap.h",
+            "repos/base/src/lib/base/heap.cc"
+          ],
+          "id": "F7",
+          "lines": "heap.h 95-133; heap.cc 38-145, 148-249, 253-345"
+        },
+        {
+          "fact": "Sliced heap allocates a page-rounded RAM dataspace for requested bytes plus Block metadata, attaches it, records the block under mutex and retains allocation/attachment ownership. Free removes metadata under lock, detaches and releases RAM afterward; destructor iterates all blocks. Local consumed includes rounded allocation size.",
+          "boundary": "This local ownership sequence does not establish all underlying physical finalization or a finite deadline; attachment failures and allocator/RM contracts remain part of the same graph.",
+          "paths": [
+            "repos/base/src/lib/base/sliced_heap.cc",
+            "repos/base/include/base/heap.h"
+          ],
+          "id": "F8",
+          "lines": "sliced_heap.cc 27-85, 89-130"
+        },
+        {
+          "fact": "Session_requester produces current create/upgrade/close requests into dynamic ROM. Dynamic_rom_session seals an attached dataspace, calls its retained producer and doubles buffer size after production failure without a local finite attempt/cap; out-of-RAM/caps returns true under a source-commented pretend-up-to-date convention, while dataspace may be invalid. Updates/version signals remain active. Child_policy_dynamic_rom_file retains foreground/background buffers, reallocates background on demand and swaps them when the client obtains a dataspace; session close changes phase, while actual buffer/RPC ownership is tied to the policy object.",
+          "boundary": "Read-only/sealed client ROM does not make the retained producer/config authority immutable. Foreground/background overlap, retained buffers, producer faults, version progression and lower allocation/release must remain in the physical graph and selected policy.",
+          "paths": [
+            "repos/os/include/os/session_requester.h",
+            "repos/os/include/os/dynamic_rom_session.h",
+            "repos/os/include/os/child_policy_dynamic_rom.h"
+          ],
+          "id": "F9",
+          "lines": "requester 31-53, 68-91; dynamic_rom_session 119-182, 220-265; child_policy_dynamic_rom 86-121, 132-211"
+        }
+      ],
+      "limitations": [
+        "Only saved UTF8 source DATA/hash/JSON reads; no C/C++ compile/import/execution, native/API/stat/host/process/VM operations, probes/tests or rejected binary verification.",
+        "Prior171 texts and reports remain unchanged context, not rehashed/rereviewed;186 files remain a partial graph, not whole closure.",
+        "No executed runtime bug, hang, leak, attack, impossibility, total numeric budget or cleanup deadline inferred from source stage/retry observations.",
+        "No selected topology/policy/dependency/license/host, Ready/runtime/operational authorization or new required human input."
+      ],
+      "reviewer": "r7_policy_review independent reviewer"
+    },
+    "eq083-runtime-service-docs-reviewer-report.json": {
+      "new_tests": 0,
+      "prepared_files": {
+        "equity-features": {
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "00919fed44cd49bf2181fa956958f72b67e7bd0af816a42dc5fd8f715c87116c",
+            "bytes": 790995
+          },
+          "docs/stories/EQ-083_RUNTIME_SERVICE_RESEARCH.md": {
+            "sha256": "7c9e6395904734e61c32bb6a7d2e09b18d7e28160eabe5bbdb0e522e48680440",
+            "bytes": 9160
+          },
+          "docs/stories/EQ-083_RUNTIME_SERVICE_EVIDENCE.json": {
+            "sha256": "43774bce2157cd111c0fb4a794f880f5e18cee5e1ae26081a8d4a97b3d3347c5",
+            "bytes": 47434
+          },
+          "docs/stories/EQ-083_RUNTIME_SERVICE_INPUTS.json": {
+            "sha256": "fa3b9059387421a0426c10dc2f6c3c98b4378fb04714015080febbc7ffc6c84f",
+            "bytes": 6934
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "3e7c4bd6336ef34a44de1b5ab7b1377254656d3036969015a8b154aba43b3bb0",
+            "bytes": 531744
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_RUNTIME_SERVICE_INPUTS.json": {
+            "sha256": "fa3b9059387421a0426c10dc2f6c3c98b4378fb04714015080febbc7ffc6c84f",
+            "bytes": 6934
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "60594e2a8e01154db3267d878066fb584b647391d61f659ac461452f75b006a6",
+            "bytes": 394413
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "e9643916117d4da1ab312241f5a912deed149c05707cd6234bdbb46883d35b5c",
+            "bytes": 505551
+          },
+          "docs/EQ083_RUNTIME_SERVICE_RESEARCH.md": {
+            "sha256": "7c9e6395904734e61c32bb6a7d2e09b18d7e28160eabe5bbdb0e522e48680440",
+            "bytes": 9160
+          },
+          "docs/EQ083_RUNTIME_SERVICE_EVIDENCE.json": {
+            "sha256": "43774bce2157cd111c0fb4a794f880f5e18cee5e1ae26081a8d4a97b3d3347c5",
+            "bytes": 47434
+          }
+        }
+      },
+      "bases": {
+        "equity-features": "fc2edbe630aafe82abdb89d9b8f0ddbcd7ca1209",
+        "equity-feature-workers": "d7963274d3736fb46df6227d275b903eb3f0e11f"
+      },
+      "reviewer": "r7_policy_review independent reviewer",
+      "semantic_review": "The documents accurately preserve common Runtime versus concrete Env limits, CUSTOM/fallback signaling without finite hard deadline, expanding retry requests, service/factory/async phase and no-op-close limits, requested Heap accounting versus rounded retained backing, Sliced_heap lower release, Root_proxy partial stages and RPC dependence, and dynamic ROM producer/foreground-background authority and growth obligations. Deprecated policy helper is not claimed to be selected Sandbox binding. Whole physical graph, compatibility, license and finite cleanup remain pending.",
+      "newtests": 0,
+      "limitations": [
+        "Prepared docs semantic/byte review only; no source rehash/research/native/host/probe/test rerun.",
+        "Exactly five changed documentation files per repository; no tracked source changes under checked scope. Final immutable publication attribution requires separate readback.",
+        "No selected topology/policy/dependency/license/host or Ready/runtime/operational approval; no executed source discrepancy failure or new required human input.",
+        "Prior171 source texts remain preserved context and all186 remain a partial graph."
+      ],
+      "scope": "PREPARED_SOURCE_RESEARCH_DOCUMENTATION_ONLY",
+      "checks": [
+        {
+          "full_source_report_and_three_prior_reports_preserved": true,
+          "exact_base": true,
+          "repo": "equity-features",
+          "five_doc_scope": true,
+          "metadata_only_source_identities": true,
+          "old_continuity_suffix": true
+        },
+        {
+          "full_source_report_and_three_prior_reports_preserved": true,
+          "exact_base": true,
+          "repo": "equity-feature-workers",
+          "five_doc_scope": true,
+          "metadata_only_source_identities": true,
+          "old_continuity_suffix": true
+        }
+      ],
+      "disposition": "APPROVED",
+      "source_review_sha256": "17f82b690d9dd89476cf47c26a06800bcd6d6f2cf4f740fb0b8e5558a5a9dd74",
+      "findings": []
+    },
+    "eq083-runtime-service-final-readback-reviewer-report.json": {
+      "heads": {
+        "equity-features": "1a552f4dfc83c610a2b85ea61f4fdf60190a4e97",
+        "equity-feature-workers": "9a24eafd1f2a0e0a7814c7ad165eaec1a00cd9dc"
+      },
+      "bases": {
+        "equity-features": "fc2edbe630aafe82abdb89d9b8f0ddbcd7ca1209",
+        "equity-feature-workers": "d7963274d3736fb46df6227d275b903eb3f0e11f"
+      },
+      "limitations": [
+        "Final published documentation byte/attribution readback only; no semantic/source/research/native/host/probe/CI/test rerun.",
+        "Preserves partial Runtime/service/backing observations and complete physical graph/finite cleanup/compatibility authority pending.",
+        "No Ready/runtime/operational qualification or new input request."
+      ],
+      "findings": [],
+      "newtests": 0,
+      "disposition": "APPROVED",
+      "published_files": {
+        "equity-features": {
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "3e7c4bd6336ef34a44de1b5ab7b1377254656d3036969015a8b154aba43b3bb0",
+            "bytes": 531744
+          },
+          "docs/stories/EQ-083_RUNTIME_SERVICE_INPUTS.json": {
+            "sha256": "fa3b9059387421a0426c10dc2f6c3c98b4378fb04714015080febbc7ffc6c84f",
+            "bytes": 6934
+          },
+          "docs/stories/EQ-083_RUNTIME_SERVICE_EVIDENCE.json": {
+            "sha256": "43774bce2157cd111c0fb4a794f880f5e18cee5e1ae26081a8d4a97b3d3347c5",
+            "bytes": 47434
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "00919fed44cd49bf2181fa956958f72b67e7bd0af816a42dc5fd8f715c87116c",
+            "bytes": 790995
+          },
+          "docs/stories/EQ-083_RUNTIME_SERVICE_RESEARCH.md": {
+            "sha256": "7c9e6395904734e61c32bb6a7d2e09b18d7e28160eabe5bbdb0e522e48680440",
+            "bytes": 9160
+          }
+        },
+        "equity-feature-workers": {
+          "docs/EQ083_RUNTIME_SERVICE_EVIDENCE.json": {
+            "sha256": "43774bce2157cd111c0fb4a794f880f5e18cee5e1ae26081a8d4a97b3d3347c5",
+            "bytes": 47434
+          },
+          "docs/EQ083_RUNTIME_SERVICE_INPUTS.json": {
+            "sha256": "fa3b9059387421a0426c10dc2f6c3c98b4378fb04714015080febbc7ffc6c84f",
+            "bytes": 6934
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "60594e2a8e01154db3267d878066fb584b647391d61f659ac461452f75b006a6",
+            "bytes": 394413
+          },
+          "docs/EQ083_RUNTIME_SERVICE_RESEARCH.md": {
+            "sha256": "7c9e6395904734e61c32bb6a7d2e09b18d7e28160eabe5bbdb0e522e48680440",
+            "bytes": 9160
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "e9643916117d4da1ab312241f5a912deed149c05707cd6234bdbb46883d35b5c",
+            "bytes": 505551
+          }
+        }
+      },
+      "attribution": {
+        "equity-features": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): trace runtime expansion service closure and retained backing\n",
+        "equity-feature-workers": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): trace runtime expansion service closure and retained backing\n"
+      },
+      "checks": [
+        "All ten immutable Git LF lengths/SHA256 match reviewed_git_files and normalized approved prepared bytes.",
+        "Exact five documentation paths per repository changed, no tracked source changes, exact base parents and paired clean codex/eq083-resilience branches.",
+        "Mirrored research/input/evidence identities and old PROJECT_KNOWLEDGE/SESSION_HANDOFF suffixes preserved.",
+        "Expected full Atul author and committer identity/noreply email; no Co-authored-by trailer."
+      ],
+      "reviewer": "r7_policy_review independent reviewer",
+      "prepared_review_sha256": "50448fbf779b41020980d127ea37f2ef660c6c212dbd021003721c3724a39e78",
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "new_tests": 0
+    }
+  },
+  "new_tests": 0,
+  "new_source_reads": 0,
+  "scope": "Source-derived configuration-only candidate exclusion and changed feasibility method, no actual operation or whole-domain qualification",
+  "tool_history": "Large live issue history and broad rg output were truncated during mandatory context read; final original acceptance criteria and selected decision facts were already visible. No new source acquisition/hash/observer/probe/test/runtime failure. Owner progress concern incorporated as work-method correction, not permission or scope relaxation."
+}
