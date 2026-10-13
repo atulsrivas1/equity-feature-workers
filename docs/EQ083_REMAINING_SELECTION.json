@@ -1,6 +1,7 @@
 {
   "stage": "UNINVOKED_SELECTED_SOURCE_NOT_READY",
-  "assets": [
+  "accepted_helper_equivalence_base": "84b15c01fcb9526e4557df83d055daa5303db639",
+  "historical_selection_assets": [
     {
       "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
       "path": "docs/EQ083_REMAINING_OWNER.txt",
@@ -32,5 +33,25 @@
       "sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54"
     }
   ],
-  "accepted_helper_equivalence_base": "84b15c01fcb9526e4557df83d055daa5303db639"
+  "candidate_corrections": {
+    "docs/EQ083_REMAINING_OWNER.txt": {
+      "bytes": 6022,
+      "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b",
+      "commit": null,
+      "current_qualification_snapshot_required": true
+    },
+    "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt": {
+      "bytes": 20063,
+      "sha256": "2ea0cad0e95faceb6e8e98c031aeab315f99e7dc0d3063f90c801253dcb6a6ff",
+      "commit": null,
+      "current_qualification_snapshot_required": true
+    },
+    "docs/EQ083_REMAINING_PARENT_CORRECTIVE_INPUTS.json": {
+      "bytes": 4899,
+      "sha256": "ad524cc0599dcb797d7ca258c7ffa0e9e194d7c8c671c725403158df24c47f11",
+      "commit": null,
+      "current_qualification_snapshot_required": true
+    }
+  },
+  "scope": "Historical five original assets retained as source-design provenance; current owner20/parent25/hashmanifest correction is separately recorded and source renewal pending. No Ready/execution."
 }

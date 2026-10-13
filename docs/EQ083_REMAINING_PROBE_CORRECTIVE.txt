@@ -34,7 +34,7 @@ remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']
 remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
 tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
 assert len(tools)==7
-remaining_source=pinned('docs/EQ083_REMAINING_OWNER.txt',6022,'312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e')
+remaining_source=pinned('docs/EQ083_REMAINING_OWNER.txt',6022,'f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b')
 pinned('docs/EQ083_REMAINING_REFERENCE_ENTRY.txt',4461,'b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594')
 def completed(path,limit):
  marker=path.with_name(path.name+'.complete')
@@ -123,7 +123,7 @@ with tempfile.TemporaryDirectory(prefix='eq083-remaining-') as directory:
  profile=OwnedEntryProfile('eq083-remaining',remaining_source,hashlib.sha256(remaining_source).hexdigest(),(str(root/'tests/service'),str(ready),str(stop),str(control),str(ack)),True)
  supervisor=OwnedEpochSupervisor(OwnedEntryInventory((profile,)));results=[];errors=[]
  def launch():
-  try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=35,output_limit=768))
+  try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=25,output_limit=768))
   except BaseException as error:errors.append(type(error).__name__)
  thread=threading.Thread(target=launch)
  direct_count=client_count=mcp_count=sequence=0;acks=[];owner=None;saved=None;reference_exits=[]

@@ -1,5 +1,5 @@
 {
-  "scope": "UNINVOKED R04/R05 parent-reference-copier SOURCE only; no physicalissuer/Ready/installed qualification",
+  "scope": "UNINVOKED qualification-only cooperative20/supervisor25 correction within unchanged accepted30 cap;36-send/7ACK semantics retained. Null candidate commit fields resolve only through final current qualification Git snapshot; original source provenance retained.",
   "inputs": [
     {
       "repo": "equity-feature-workers",
@@ -59,11 +59,13 @@
     },
     {
       "repo": "equity-feature-workers",
-      "commit": "e367a9b06bae24230c9177b6e749f5f8ea6dd3ff",
+      "commit": null,
       "path": "docs/EQ083_REMAINING_OWNER.txt",
       "harness_path": "docs/EQ083_REMAINING_OWNER.txt",
       "bytes": 6022,
-      "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+      "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b",
+      "original_commit": "e367a9b06bae24230c9177b6e749f5f8ea6dd3ff",
+      "original_sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
     },
     {
       "repo": "equity-feature-workers",
@@ -87,7 +89,9 @@
       "path": "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt",
       "harness_path": "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt",
       "bytes": 20063,
-      "sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
+      "sha256": "2ea0cad0e95faceb6e8e98c031aeab315f99e7dc0d3063f90c801253dcb6a6ff",
+      "original_commit": null,
+      "original_sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
     }
   ],
   "reference_entry": {
@@ -96,7 +100,7 @@
   },
   "remaining_entry": {
     "bytes": 6022,
-    "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+    "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b"
   },
   "request_ledger": {
     "direct": 11,

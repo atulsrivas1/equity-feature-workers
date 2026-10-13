@@ -184,21 +184,27 @@
     },
     "docs/EQ083_REMAINING_PARENT_CORRECTIVE_INPUTS.json": {
       "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
-      "bytes": 4493,
-      "sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54",
-      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+      "bytes": 4899,
+      "sha256": "ad524cc0599dcb797d7ca258c7ffa0e9e194d7c8c671c725403158df24c47f11",
+      "materialization": "COOPERATIVE_BOUND_CORRECTED_CANDIDATE_SOURCE_REVIEW_REQUIRED_BEFORE_EXECUTION",
+      "original_bytes": 4493,
+      "original_sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54"
     },
     "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt": {
       "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
       "bytes": 20063,
-      "sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca",
-      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+      "sha256": "2ea0cad0e95faceb6e8e98c031aeab315f99e7dc0d3063f90c801253dcb6a6ff",
+      "materialization": "COOPERATIVE_BOUND_CORRECTED_CANDIDATE_SOURCE_REVIEW_REQUIRED_BEFORE_EXECUTION",
+      "original_bytes": 20063,
+      "original_sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
     },
     "docs/EQ083_REMAINING_OWNER.txt": {
       "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
       "bytes": 6022,
-      "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e",
-      "materialization": "PRESERVED_UNINVOKED_PUBLIC_SEED"
+      "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b",
+      "materialization": "COOPERATIVE_BOUND_CORRECTED_CANDIDATE_SOURCE_REVIEW_REQUIRED_BEFORE_EXECUTION",
+      "original_bytes": 6022,
+      "original_sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
     },
     "docs/EQ083_REMAINING_REFERENCE_ENTRY.txt": {
       "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
@@ -1149,12 +1155,12 @@
         },
         "remaining_entry": {
           "bytes": 6022,
-          "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+          "sha256": "f0b01fd70fc11279dac126d72d246b09ba193dbe5af0bd478eeb849fa0964b5b"
         }
       },
       "bounds": {
-        "cooperative_owner_seconds": 30,
-        "supervisor_wall_seconds": 35,
+        "cooperative_owner_seconds": 20,
+        "supervisor_wall_seconds": 25,
         "combined_output_bytes": 768,
         "owner_stop_join_seconds": 6,
         "http_request_bytes": 16384,
@@ -1187,6 +1193,7 @@
     "All timeouts retain cooperative/platform semantics, and unknown cleanup denies case success/reuse.",
     "Fixed response/status assertions are in the exact pinned source ledgers, not a scalar-only invented expectedresult.",
     "Original36send remaining parent and R07 missinginput assertions preserved; full accepted component suites/precision/typing remain required.",
-    "Four historical Windows TLS sources retain the old absolute private certificate directory. Their immutable Git pins remain design provenance; raw blobs are not republished. Derive/review exact fresh Linux/Windows trusted per-form certificate/root source after Ready; no archived TLS execution is admitted."
+    "Four historical Windows TLS sources retain the old absolute private certificate directory. Their immutable Git pins remain design provenance; raw blobs are not republished. Derive/review exact fresh Linux/Windows trusted per-form certificate/root source after Ready; no archived TLS execution is admitted.",
+    "Original remaining35 supervisor is outside accepted30 API cap and was never executed. Source-only20/25 correction requires renewed review; all earlier source approval/findings retained as provenance, not current Ready approval."
   ]
 }

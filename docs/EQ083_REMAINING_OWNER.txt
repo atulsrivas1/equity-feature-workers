@@ -57,7 +57,7 @@ def observe(action):
  elif action=='raw_restore':raw_mode='original'
  return dict(sequence=sequence+1,action=action,requests=requests,raw_reads=raw_reads,raw_mode=raw_mode,snapshot=original_snapshot)
 server=qualification_server(service);server.set_app(app);server.timeout=.05
-publish(ready,dict(port=server.server_port));deadline=time.monotonic()+30
+publish(ready,dict(port=server.server_port));deadline=time.monotonic()+20
 try:
  while requests<=36:
   if stop.exists() or time.monotonic()>=deadline:break
