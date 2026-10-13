@@ -1,0 +1,220 @@
+{
+  "stage": "INITIAL_SOURCE_REWORK_CORRECTIVE_SOURCE_PENDING_NO_EXECUTION",
+  "report": {
+    "reviewer": "r7_policy_review independent local Codex reviewer",
+    "author_response": "Author acknowledged all three defects before execution and is replacing capture/private-dir/light mechanisms. Current fixes not independently approved by this original report.",
+    "limits": [
+      "Provisional source-only REWORK, not immutable final closure or runtime/native acceptance.",
+      "No product/crypto imports, actual private ACL/permission/native/API/process/socket/build/install/runner/workflow/probe or rejectedbinary operation performed.",
+      "Windows ACL finding is missing contract verification, not evidence of key exposure or hostile-host vulnerability. Wholeplatform physical enforcement remains separated SEC374; source bounds are ordinary cooperative qualification obligations."
+    ],
+    "required_next": [
+      "Preserve original first source text/provenance and this REWORK before correction, no executed failure claimed.",
+      "Freeze exact complete corrected helper/runner/builder/portablemanifest/workflow source closure and numericcaps; renew independent source/inert review before any build/runner/crypto/native invocation or CI trigger.",
+      "Verify unrelated numerical/runtime/package/dependency behavior unchanged; actual freshbothOS forms/artifacts remain acceptance work after source review."
+    ],
+    "new_tests": 0,
+    "disposition": "REWORK",
+    "scope": "PROVISIONAL_INITIAL_UNCOMMITTED_EQ083_RESILIENCE_INTEGRATION_SOURCE_REVIEW",
+    "runtime_invocations": 0,
+    "static_checks": [
+      "Read complete initial builder/runner/cert pin validator/focused test/workflow and containment single-read diff as source only; no invocation or imports.",
+      "Initial certificate valid/wrong role alignment and <=8192TLS owner7338/reference5840 source caps read; exact portable source deltas/sourcepin closure need final renewed review after author fixes.",
+      "Observer singleproc read ENOENT/ESRCH/Z distinction present, errno imported, original3s/Windows handling retained; malformed/permission failures propagate.",
+      "Initial light and full/native phases distinguished, repeatbuild/sourceauds/RECORD/pipcheck/typing/consumer/fingerprint design inspected; author already fixing stale manifests/Linux report fields/accepted package equivalence separately."
+    ],
+    "findings": [
+      {
+        "trigger": "Light environment only checks imports/optional absence and RemoteClient discover against unrelated loopback port9 expected disconnected",
+        "file": "tools/build_resilience.py",
+        "required_correction": "Run appropriate installed light client/transport fixtures with an owned bounded synthetic peer before native installation and retain light outcomes separately. No arbitrary existing listener assumption.",
+        "consequence": "Selected real bounded synthetic peer/standalone light client-MCP protocol coverage never runs while native/service/worker/officialSDK are absent. Later service/client/mcp suites after dependency installation cannot provide that light proof.",
+        "title": "Exercise the selected light protocol before installing native/reference dependencies",
+        "location": "qualify light phase immediately before install(core)",
+        "priority": "P2"
+      },
+      {
+        "trigger": "Fixed parent emits stdout/stderr beyond declared262144 while subprocess.run captures all bytes before return",
+        "file": "tests/resilience/run_qualification.py",
+        "required_correction": "Use bounded concurrent stdout/stderr reader ownership, reject at cap, preserve failed diagnostics/unknown cleanup and prevent case continuation/reuse; original failure priority and all reader/pipe attempts reviewed.",
+        "consequence": "Later len(stdout) check and raw[:262144] private-log slice only bound acceptance/storage after full capture, not in-flight read/memory. Capture promise is not implemented by that call.",
+        "title": "Enforce capture bounds while child output is read",
+        "location": "nested invoke subprocess.run stdout/stderr PIPE",
+        "priority": "P2"
+      },
+      {
+        "trigger": "Builder/runner has no promised Windows private-directory DACL verification before helper writes unencrypted private keys",
+        "file": "tools/build_resilience.py",
+        "required_correction": "Set/verify intended private operator directory policy before venv/keywrites; inherited child file policy checked, Linux0700 retained. No claim that existing keys were exposed or actual Windows creation ACL absent.",
+        "consequence": "Prepared contract deferred inherited private operator directory validation to builder, but this integration omitted the actual check. Directory-creation permission arguments/ordinary mkdtemp alone are not the required readback.",
+        "title": "Validate private directory access before certificate material is written",
+        "location": "qualify new owned location / runner certificate helper phase",
+        "priority": "P2"
+      }
+    ],
+    "initial_source_identity": {
+      "limitation": "Initial complete source text was inspected through tool output, but no initial fileSHA/length receipt captured. Candidate edits occurred concurrently after findings. Do not label later file hashes as original initial source or claim immutable finalhead review.",
+      "whole_byte_hashes_captured": false,
+      "relative_files": [
+        "tools/build_resilience.py",
+        "tests/resilience/run_qualification.py",
+        "tests/resilience/certificate_pins.py",
+        "tests/qualification/test_resilience_records.py",
+        ".github/workflows/resilience.yml",
+        "docs/EQ083_CERTIFICATE_HELPER.txt",
+        "docs/EQ083_LINUX_REFERENCE_CHILD.txt",
+        "tests/service/test_containment.py"
+      ]
+    }
+  },
+  "initial_report_sha256": "b04b1cd5680d1ce82d4912402cfcadced4e0c36221a38fc482efa8b9b513a8a7",
+  "initial_whole_source_hashes_not_captured": true,
+  "initial_triggering_fragments_preserved": true,
+  "dispositions": [
+    "Add actual synthetic HTTP/public MCP protocol before native dependency install.",
+    "Bound both pipe streams while produced; failure retains private diagnostics and denies later groups.",
+    "Secure/read back current-user-only Windows DACL/POSIX700 before private use and certificate key writes."
+  ],
+  "execution": false,
+  "new_runtime_failure": false,
+  "frozen_source_rework_report": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "disposition": "REWORK",
+    "scope": "FROZEN_UNCOMMITTED_SOURCE_AND_INERT_FAKE_HELPER_REVIEW_ONLY",
+    "stage": "Pre-execution implementation source review; no operational qualification",
+    "prior_published_heads": {
+      "equity-features": "5552a6dcb5fe7b111ad2cbb60dfd88f881473c00",
+      "equity-feature-workers": "b3a3f36ab70ff7de92c842cab63b48be16e843cb"
+    },
+    "frozen_inventory": "r7-resilience-original-corrective-source/closure.json",
+    "inventory_scope": {
+      "worker_changed_paths": 24,
+      "canonical_changed_paths": 15
+    },
+    "reviewed_defect_source_pins": {
+      "tests/resilience/bounded_capture.py": {
+        "bytes": 2917,
+        "sha256": "1afab3c66fc053aa09d6cbfa8143447c256366d47434811659fe4c8644c86567"
+      },
+      "tests/resilience/private_directory.py": {
+        "bytes": 2601,
+        "sha256": "4378c89484f6479f80867fc6afd7779ea41b9bd199ba33ba9924c18e9dd85b26"
+      },
+      "tests/resilience/run_qualification.py": {
+        "bytes": 7101,
+        "sha256": "4b2ddd9f11d845ee7c26228e344339e5c9d4855478695ca98b80a1c22c673e81"
+      }
+    },
+    "findings": [
+      {
+        "id": "R7-RESILIENCE-P2-1",
+        "priority": 2,
+        "file": "tests/resilience/bounded_capture.py",
+        "title": "Protect the process immediately after acquisition",
+        "detail": "Popen returns an owned process and pipes before buffers, Event, error list and reader list are allocated and before the protected try. A bookkeeping MemoryError escapes without process settlement or pipe cleanup.",
+        "reproduction": "Fake Popen succeeds; injected bytearray allocation raises the original MemoryError. Kill attempts 0, wait attempts 0, both pipe close counts 0.",
+        "required_change": "Preallocate bookkeeping before acquisition and establish an ownership cleanup scope immediately on successful Popen; cover partial thread startup."
+      },
+      {
+        "id": "R7-RESILIENCE-P2-2",
+        "priority": 2,
+        "file": "tests/resilience/bounded_capture.py",
+        "title": "Attempt each reader cleanup and retain the primary failure",
+        "detail": "The final reader join and is_alive inspection are unguarded. A cleanup join fault masks the active original error and skips later readers.",
+        "reproduction": "Initial first-reader join raises RuntimeError; cleanup join raises MemoryError. The top-level error is cleanup MemoryError, join counts are [2,0], and pipe close counts are [1,1].",
+        "required_change": "Independently attempt every join and inspection, retain active primary identity, and report incomplete cleanup without claiming settlement."
+      },
+      {
+        "id": "R7-RESILIENCE-P3-3",
+        "priority": 3,
+        "file": "tests/resilience/private_directory.py",
+        "title": "Retain ACL invocation failure during temporary-script cleanup",
+        "detail": "The finally unlink can replace an active invocation error with a secondary deletion failure.",
+        "reproduction": "Fake ACL script invocation raises RuntimeError and fake unlink raises PermissionError. PermissionError becomes the top-level error.",
+        "required_change": "Retain the active primary when unlink fails, while propagating cleanup failure on an otherwise successful path."
+      },
+      {
+        "id": "R7-RESILIENCE-P3-4",
+        "priority": 3,
+        "file": "tests/resilience/run_qualification.py",
+        "title": "Retain capture failure when failure-journal recording fails",
+        "detail": "Diagnostic log creation/write and FAILED.json recording are outside an independent recording-failure guard in invoke's exception handler. A recording error masks the original capture failure. The path still fails and does not return success, but the promised failure provenance is lost as an explicit cause.",
+        "reproduction": "AST-selected invoke with fake capture RuntimeError: log-open PermissionError or FAILED recording PermissionError becomes top-level with original_as_explicit_cause false. The normal recording control retains the original as the ValueError cause.",
+        "required_change": "Guard failure recording and preserve the original capture error as primary or explicit primary cause; do not let recording faults claim successful cleanup or qualification."
+      }
+    ],
+    "actual_inert_checks": {
+      "ordinary_controls_passed": 10,
+      "defect_reproductions": 5,
+      "total_current_cases": 15,
+      "helper_controls": [
+        "normal closed capture",
+        "overflow retains bounded prefix and fails",
+        "reader failure fails",
+        "seconds True/0/181 deny",
+        "limit True/0/262145 deny",
+        "normal diagnostic recording preserves capture cause"
+      ],
+      "evidence": {
+        "r7-resilience-frozen-inert-results.json": {
+          "sha256": "dbc2f46ae5b25f5d97e2a31576c7961c199b5aa1ced8dbd481fa1b5ebdba8472",
+          "ordinary_controls": 9,
+          "reproductions": 3
+        },
+        "r7-runner-recording-inert-results.json": {
+          "sha256": "37cd25fc44cdc1a17ee554f92f77e76494e7cc74f2ec9dda4ad0141daabe7978",
+          "ordinary_controls": 1,
+          "reproductions": 2
+        }
+      }
+    },
+    "static_inspection": [
+      "Read builder, runner, bounded capture, private-directory helper, installed records, certificate pins, selected portable TLS/fault/Linux/certificate sources, workflow and qualification tests as source data.",
+      "Builder now places existing real synthetic client/transport tests before native/reference installation; accepted package source comparison and archive-entry source maps are explicit.",
+      "Installed records validate SHA256 and size for hashed RECORD rows and compare installed namespace payloads to committed source maps; this is a source inspection, not an installed execution result.",
+      "Certificate helper invokes private-directory validation before key writes; pin loader bounds and checks the four fixed private certificate/key files without publishing their bytes.",
+      "Linux report fields distinguish retained direct-child or launcher exit and owned-reference active count from Windows job accounting.",
+      "Current selected remaining cooperative/supervisor bounds stay 20/25 within the accepted 30-second API cap; this report does not rerun earlier ledger or producer controls."
+    ],
+    "history": {
+      "initial_source_review": {
+        "file": "r7-resilience-source-initial-reviewer-report.json",
+        "sha256": "b04b1cd5680d1ce82d4912402cfcadced4e0c36221a38fc482efa8b9b513a8a7",
+        "note": "Initial three integration findings are preserved. Initial complete whole-byte source hashes were not captured and are not retrospectively asserted."
+      },
+      "supersession": "Author corrected bounded_capture.py and private_directory.py after these reproductions and preserved the exact frozen originals. Those corrections have not been approved by this report. A renewed exact closure and review are required.",
+      "tool_only_history": [
+        "A read-only closure prior_heads rendering exceeded the requested output budget; it did not execute candidate code or change source. Narrowed source and result identities were retained."
+      ]
+    },
+    "limitations": [
+      "Only AST-selected functions with fake process/thread/Path/OS/capture objects were exercised. No real process, thread, filesystem writer, ACL operation, socket, product, cryptography, certificate generation, native library, builder, runner or workflow was invoked.",
+      "No inherited Linux/certificate/legacy source test counts are included in current cases.",
+      "This is partial source cleanup inspection under the approved operator-controlled cooperative R7 scope, not whole-platform finite physical settlement, ABI, hostile-writer or security qualification.",
+      "No accepted fresh wheel/sdist forms, actual 24-requirement execution, Ready-to-release, Released or Done claim is made.",
+      "Full final pin, mirror, portable-source and manifest closure must be rechecked against the renewed frozen packet after corrections; this REWORK report is not a publication or execution approval."
+    ],
+    "new_runtime_executions": 0,
+    "operational_authorization_granted": false
+  },
+  "frozen_source_rework_sha256": "4daa4e34500e42c8f643dec37fc29e04f128961627d993c8a19424a318fb0346",
+  "corrective_source_dispositions": [
+    "Allocate reader bookkeeping before Popen and track each reader before start.",
+    "Attempt poll, kill, wait, each pipe and each reader independently; preserve active original errors.",
+    "Temporary ACL script cleanup cannot replace active invocation error.",
+    "Capture-failure logs and FAILED marker are best effort; their failure cannot replace original capture cause."
+  ],
+  "original_frozen_source_retained": true,
+  "original_frozen_source_retention_scope": "Original prepared closure and exact capture/private_directory/runner source retained outsideGit; reviewer report binds inspected pins and inert controls.",
+  "validator_import_failure": {
+    "stage": "ACTUAL_VALIDATOR_IMPORT_FAILURE",
+    "exit_code": 1,
+    "methods": "unittest loader failed before validator methods",
+    "error": "ImportError: cannot import name 'audit' from 'build_client'",
+    "source": "tools/build_resilience.py line18",
+    "corrected_import": "from build_client import audit_client, wheel_record, provenance",
+    "product_native_crypto_certificate_execution": false,
+    "review_missed_import_name": true,
+    "prior_approval_report_sha256": "c8a5a26a0be42d50b2ad1f5a826df57fb7075335f59bdb01308527be4b844bcc"
+  }
+}

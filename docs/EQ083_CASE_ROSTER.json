@@ -1,5 +1,5 @@
 {
-  "stage": "SOURCE_SEEDS_AND_DESIGN_ROSTER_NOT_EXECUTABLE_ADMISSION",
+  "stage": "IMPLEMENTATION_SOURCE_CANDIDATES_UNINVOKED_AFTER_ACTUAL_READY",
   "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
   "source_assets": {
     "docs/EQ083_R07_PARENT_INPUTS.json": {
@@ -1195,5 +1195,36 @@
     "Original36send remaining parent and R07 missinginput assertions preserved; full accepted component suites/precision/typing remain required.",
     "Four historical Windows TLS sources retain the old absolute private certificate directory. Their immutable Git pins remain design provenance; raw blobs are not republished. Derive/review exact fresh Linux/Windows trusted per-form certificate/root source after Ready; no archived TLS execution is admitted.",
     "Original remaining35 supervisor is outside accepted30 API cap and was never executed. Source-only20/25 correction requires renewed review; all earlier source approval/findings retained as provenance, not current Ready approval."
-  ]
+  ],
+  "portable_candidate_assets": {
+    "docs/EQ083_CERTIFICATE_HELPER.txt": {
+      "bytes": 4493,
+      "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+    },
+    "docs/EQ083_LINUX_REFERENCE_CHILD.txt": {
+      "bytes": 5554,
+      "sha256": "906f780d8cfb5cc1c08da64deaf0f6fb087f423bf47e719fcc21bbbdcba50153"
+    },
+    "docs/EQ083_REFERENCE_FAULT_PROBE.txt": {
+      "bytes": 42536,
+      "sha256": "ddc467fd9caa9d27e3d97652b34126f98775c6f7af279e2383259892401cd5a1"
+    },
+    "docs/EQ083_TLS_OWNER_ENTRY.txt": {
+      "bytes": 7338,
+      "sha256": "1ca2544cbb46b8aabd521b1bbf8e44830790c3d6302ab16317bb82a6ce0222ea"
+    },
+    "docs/EQ083_TLS_PROBE.txt": {
+      "bytes": 49425,
+      "sha256": "3e244fcbdfdbdae7408ffe7645cb9a48a7a287f8578be62a3015dd325b05da75"
+    },
+    "docs/EQ083_TLS_REFERENCE_ENTRY.txt": {
+      "bytes": 5840,
+      "sha256": "ef068da5993ab036cc11a887ab94ee9a2319bab7110d2308ef3dd0a43c12ba2d"
+    },
+    "docs/EQ083_TLS_SESSION_TRANSPORT.txt": {
+      "bytes": 26616,
+      "sha256": "5fa3082e9e35cbdfffb567804d4e95a80e0f89676784c9a5fe52e4051d98ec98"
+    }
+  },
+  "portable_candidate_scope": "Current qualification snapshot; historical source_assets retain their original immutable provenance. No execution or fresh qualification inferred."
 }

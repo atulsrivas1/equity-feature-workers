@@ -227,7 +227,13 @@ class Containment(unittest.TestCase):
                     deadline = time.monotonic()+3
                     while time.monotonic()<deadline:
                         stat = Path('/proc')/str(child_pid)/'stat'
-                        if not stat.exists() or stat.read_text().split(') ',1)[1].split()[0] == 'Z':
+                        try:
+                            process_stat = stat.read_text()
+                        except OSError as error:
+                            if error.errno in (errno.ENOENT, errno.ESRCH):
+                                break
+                            raise
+                        if process_stat.rsplit(') ',1)[1].split()[0] == 'Z':
                             break
                         time.sleep(.01)
                     else: self.fail('original-parent death did not terminate child')

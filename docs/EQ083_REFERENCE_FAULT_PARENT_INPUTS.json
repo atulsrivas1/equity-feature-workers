@@ -1,5 +1,5 @@
 {
-  "scope": "PRE-EXECUTION Windows-only corrected atomic ownership parent; original failed run preserved; independent review pending",
+  "scope": "UNINVOKED portable source candidate under approved cooperative R7; current null commits require current qualification Git source snapshot, original pins retained; source review before execution.",
   "inputs": [
     {
       "repo": "equity-feature-workers",
@@ -86,8 +86,10 @@
       "commit": null,
       "path": "docs/EQ083_REFERENCE_FAULT_PROBE.txt",
       "harness_path": "docs/EQ083_REFERENCE_FAULT_PROBE.txt",
-      "bytes": 36601,
-      "sha256": "35c5c218461e536ff9b257ab9a48e90d6d88999b8f4984249371eff0f39a92f8"
+      "bytes": 42536,
+      "sha256": "ddc467fd9caa9d27e3d97652b34126f98775c6f7af279e2383259892401cd5a1",
+      "original_commit": null,
+      "original_sha256": "35c5c218461e536ff9b257ab9a48e90d6d88999b8f4984249371eff0f39a92f8"
     },
     {
       "repo": "equity-feature-workers",

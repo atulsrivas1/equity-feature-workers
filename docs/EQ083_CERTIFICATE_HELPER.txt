@@ -32,9 +32,12 @@ def create_certificates(directory):
     directory.mkdir(mode=0o700)
     if os.name != 'nt':
         directory.chmod(0o700)
+    sys.path.insert(0, str(parent / 'resilience'))
+    from private_directory import private_directory
+    private_directory(directory, secure=True)
     now = datetime.now(timezone.utc)
     public = {}
-    for label, address in (('valid', '127.0.0.1'), ('wrong-san', '127.0.0.2')):
+    for label, address in (('valid', '127.0.0.1'), ('wrong', '127.0.0.2')):
         key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
         name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, 'EQ083 synthetic qualification')])
         certificate = (x509.CertificateBuilder().subject_name(name).issuer_name(name)

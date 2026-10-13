@@ -15,7 +15,7 @@ class LinuxReferenceChild:
     def __init__(self, argv, expected_entry_sha256):
         if sys.platform != 'linux' or not sys.flags.isolated:
             raise ValueError('owned isolated Linux reference only')
-        if (type(argv) is not list or len(argv) != 12
+        if (type(argv) is not list or len(argv) not in (12, 13)
                 or argv[:2] != [sys.executable, '-I']
                 or any(type(value) is not str or not value or '\x00' in value for value in argv)):
             raise ValueError('owned reference arguments')
