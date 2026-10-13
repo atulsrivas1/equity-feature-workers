@@ -1,0 +1,944 @@
+{
+  "stage": "PREPARED_SOURCE_REVIEW_NOT_READY_NO_RUNTIME",
+  "reports": {
+    "r7-scope-reset-published-reviewer-report.json": {
+      "bytes": 4526,
+      "sha256": "f9f268632dcd9bad18e3699dfc602d56afa75ab51dfd80ba06c3cfedcd328894",
+      "report": {
+        "checks": [
+          "All sixteen immutable GitLF strictUTF8 lengths/SHA/noCR exactly match published map and approved raw prepared files normalized CRLF-toLF.",
+          "Exact nine/seven changed documentation paths/direct bases, all source/runtime/test/build/workflow/measurement outside scope unchanged.",
+          "Three exact mirrored docs plus revisedplan mapped relativepath parity; complete old continuity suffix retained.",
+          "Atul author/committer/no coauthors, clean pairedbranches and actual published remote branch heads verified.",
+          "Public documentation no private usernames, credentials, raw private data or operation approval; scope limitations preserved by exact approved byte equivalence."
+        ],
+        "findings": [],
+        "scope": "FINAL_PUBLISHED_SCOPE_RESET_DOCS_GIT_READBACK_ONLY",
+        "published_files": {
+          "equity-feature-workers": {
+            "docs/EQ083_REVISED_PLAN.md": {
+              "sha256": "352a43a0af828e5d1c78099dfbc9219005852fbe7438b780b6d6b5816ae1d4a4",
+              "bytes": 2268
+            },
+            "docs/R7_SUPPORT.md": {
+              "sha256": "ff9c63e5bf12b504dca352654dca6bb608253911063015eb70e4c7e7c1219d0a",
+              "bytes": 2208
+            },
+            "docs/EQ084_STAGING_PLAN.md": {
+              "sha256": "dd405c7242deab1339fe767350714ef2dc0d44b4bb2855766fdb715bac3f33e1",
+              "bytes": 5600
+            },
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "sha256": "bd8744267838af6c6a67b2d88955c79bf9b755a653191f21d949ee759f5f9577",
+              "bytes": 297864
+            },
+            "CHANGELOG.md": {
+              "sha256": "ba7d8fb5043424ff0017bc5cc0ec05b5c3ebfa650be6aeccb50df9d0858c94b4",
+              "bytes": 57213
+            },
+            "docs/R7_SCOPE_RESET.md": {
+              "sha256": "73e64acad45d6669cbf11c06cab86d3c3ee61692f0bbfcb24242a3636361c214",
+              "bytes": 5895
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "sha256": "f586d3f68a4251e28bd3fd7f6d8e9b810d46e67ddc8d593fd38d91b8911304b2",
+              "bytes": 409002
+            }
+          },
+          "equity-features": {
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "sha256": "cb7d7fa827099e66cd3cc1facd096ac38c16c798a11dbc59e06b40f731e8032d",
+              "bytes": 435205
+            },
+            "docs/api/R7_SUPPORT.md": {
+              "sha256": "ff9c63e5bf12b504dca352654dca6bb608253911063015eb70e4c7e7c1219d0a",
+              "bytes": 2208
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "sha256": "29fc11fdf200bb9ebc25b1ce1602acefa2638e248ac34e4b49a94e98ad90ddea",
+              "bytes": 694456
+            },
+            "docs/stories/EQ-084_STAGING_PLAN.md": {
+              "sha256": "dd405c7242deab1339fe767350714ef2dc0d44b4bb2855766fdb715bac3f33e1",
+              "bytes": 5600
+            },
+            "docs/CHANGELOG.md": {
+              "sha256": "6761d22877134806e5763427897da39d554aaffa45d39ea89870a7e765a3bd7d",
+              "bytes": 76494
+            },
+            "docs/stories/EQ-083_REVISED_PLAN.md": {
+              "sha256": "c5ea90bf647fbb862e5e5d1cbf1052dfe9a0b657dddb00526e236ec720e42445",
+              "bytes": 2281
+            },
+            "docs/knowledge/LESSONS.md": {
+              "sha256": "e09da74e905ec381703dc143925a9a7b2d9b48b8fc9d2346fde706821110d17f",
+              "bytes": 284896
+            },
+            "docs/BACKLOG.md": {
+              "sha256": "9e92b65112198d9c8f81ce5f05932cf4e38b46f061ee9f8493f099a345bbe673",
+              "bytes": 152696
+            },
+            "docs/decisions/R7_SCOPE_RESET.md": {
+              "sha256": "73e64acad45d6669cbf11c06cab86d3c3ee61692f0bbfcb24242a3636361c214",
+              "bytes": 5895
+            }
+          }
+        },
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "operational_runs": 0,
+        "heads": {
+          "equity-feature-workers": "b63fb617776fc591702ec6cd21369af7b58e1e98",
+          "equity-features": "cc7a2592ed9a9119b759030312072a0b11e021c6"
+        },
+        "native_runs": 0,
+        "disposition": "APPROVED",
+        "new_tests": 0,
+        "limits": [
+          "Published documentation readback only, no new semantic/source/native/runtime/probe/test or staging operation.",
+          "Prepared/source scope approvals do not establish Ready, EQ083 acceptance or staging grant. All auto-triggered final-head CI must succeed before merge; no pending check deemed PASS.",
+          "Automation remains PAUSED; SEC001 separate future Backlog and old failed/rejected proof not relabeled."
+        ],
+        "bases": {
+          "equity-feature-workers": "84b15c01fcb9526e4557df83d055daa5303db639",
+          "equity-features": "c64575977cfdb9f6b98362f6ef655079c17f17ca"
+        },
+        "prepared_review": {
+          "file": "r7-scope-reset-complete-reviewer-report.json",
+          "sha256": "6cbffcd2f40991e071414f2ee896b3725754a6198cbb278750fe40115d12012c"
+        }
+      }
+    },
+    "r7-qualification-selection-reviewer-report.json": {
+      "bytes": 4472,
+      "sha256": "73744c2f2c038f90aae0bbb1517445e65429ad77ff55500d99e480e769078698",
+      "report": {
+        "source_execution": 0,
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "limits": [
+          "Prepared selection approved as design; no Ready admission, source invocation, fresh qualification, certificate generation or staging operations.",
+          "Historical source seed rebind requires separate exact source review; no arbitrary product/runtime change authorized by this report.",
+          "No old rejected binary task/hostwide ABI collector retry; stronger wholeplatform story separate."
+        ],
+        "remaining_before_ready": [
+          "Freeze and review exact new/rebound owners/reference/helpers/certificate/builder inventories, public constructor mappings, literal per-case caps and complete expected ledgers before published invocation.",
+          "Complete actual perOS four-form light/native composition and release evidence, not componentCI substitution.",
+          "Explicitly reconcile original EQ084 hosted-release criterion with chosen private local staging channel in scope/acceptance and live issue before EQ084Ready; present conditional caveat alone is not operational acceptance.",
+          "Freeze staging numeric load/action bounds, literal commands/paths/ports/secret/recovery ownership and source-reviewed wrapper; delegated choice does not grant admin/public/spend operations."
+        ],
+        "bases": {
+          "equity-features": "cc7a2592ed9a9119b759030312072a0b11e021c6",
+          "equity-feature-workers": "b63fb617776fc591702ec6cd21369af7b58e1e98"
+        },
+        "disposition": "APPROVED_SELECTION_NOT_READY",
+        "findings": [],
+        "checks": [
+          "Full method/JSON read; mirrors exact and all24 R01-R24 unique ordered entries marked fresh_qualified false, selection_not_acceptance true.",
+          "Twenty-four immutable source/historical execution TEXT Git pins independently verified full byte size/SHA, no product execution.",
+          "Remaining corrected source retains raw11/client12/MCP13, sevenACK1-12-12-15-18-30-36/rawreads0-0-0-3-6-6-6; six vectors distinguish raw read422 protocol versus foreign mutation403 and sent config/feature422 outcome unknown. Public command digest/FeatureRef consistency kept.",
+          "Full original bars ten-key producer canonicalSHA independently reproduced from accepted client fixture7f864...; both null fraction columns, exact quality/missing_input/absent_input/2-of-2/evidence[] equal complete frozen producer.",
+          "Sameform service/client/MCP wheel or selectedsdist remains through native composition; light absence and native realSDK parent/child installed-origin/no-shadow checks, pinned dependency/RECORD/source/repeatbuild/perOS actual versions/consumer/fingerprint proofs required.",
+          "Linux reference lifecycle and portable cert/TLS changes explicitly need exact new source/inert guards; accepted race observer correction is qualification-only oneproc-read/failclosed preserve original failure. No Windows scoped PASS relabeled freshLinux.",
+          "All R19/R21 caps/control/output/cleanup reflect approved operator-controlled contract; original capacity-release/manualfollowup/non-replay/untrusted remote boundaries retained.",
+          "Owner delegated target selection is recorded as new local private loopback stage, not remotehosting or production; real drills remain after accepted93 and reviewed literal action packet."
+        ],
+        "prepared_files": {
+          "equity-features": {
+            "docs/stories/EQ-083_QUALIFICATION_SELECTION.md": {
+              "bytes": 9017,
+              "sha256": "16ce3bb34c2dccd7be7f41dc87c23cb5d4aba99fd81c834e1d58f8413df99759"
+            },
+            "docs/stories/EQ-083_QUALIFICATION_SELECTION.json": {
+              "bytes": 17098,
+              "sha256": "22823ae85ea2137292b52577b3ba9d5d1aacfd15777076411e6c426f4c01f996"
+            }
+          },
+          "equity-feature-workers": {
+            "docs/EQ083_QUALIFICATION_SELECTION.json": {
+              "bytes": 17098,
+              "sha256": "22823ae85ea2137292b52577b3ba9d5d1aacfd15777076411e6c426f4c01f996"
+            },
+            "docs/EQ083_QUALIFICATION_SELECTION.md": {
+              "bytes": 9017,
+              "sha256": "16ce3bb34c2dccd7be7f41dc87c23cb5d4aba99fd81c834e1d58f8413df99759"
+            }
+          }
+        },
+        "scope": "PREPARED_EQ083_QUALIFICATION_SELECTION_DOCUMENTATION_REVIEW",
+        "tool_only_history": [
+          "Broad JSON output truncated then named fields/source text and narrow fixtures checked; queried fixture producer absent at jobs_native level corrected actual full producer in EQ081_CLIENT_FIXTURES. No data or runtime failure."
+        ],
+        "native_runs": 0,
+        "new_tests": 0
+      }
+    },
+    "r7-linux-reference-source-reviewer-report.json": {
+      "bytes": 3173,
+      "sha256": "c66e3142d10216301e7efbfa7b7ac71ac24a70e6a2d57a4eb39ee22704bdfe93",
+      "report": {
+        "findings": [],
+        "disposition": "APPROVED",
+        "tool_only_history": [
+          "Candidate concurrently changed5200 to5544 before first inert extraction; reviewer obsolete original behavior assertion failed, no original independent reproduction claimed. Source then frozen34ac for actual20controls."
+        ],
+        "actual_inert_controls": {
+          "source_bytes": 5544,
+          "source_sha256": "34ac69e9fc2780c85202c1a504b7044f476d04792cc2d09d498c04604319e520",
+          "passing_controls": [
+            "tuple",
+            "argc",
+            "prefix",
+            "nul",
+            "empty",
+            "hashbool",
+            "hashlength",
+            "hashuppercase",
+            "normal-close-idempotent",
+            "wait-True",
+            "wait-0",
+            "wait--1",
+            "wait-5",
+            "wait-nan",
+            "wait-inf",
+            "constructor-pid-fault-fallback-closes-all-pipes",
+            "closed-inspection-fault-closes-all-pipes-denies-success",
+            "kill-fault-all-pipes-no-false-success",
+            "wait-fault-all-pipes-no-false-success",
+            "poll-fault-all-pipes-no-false-success"
+          ],
+          "passing_count": 20,
+          "reproductions": [
+            {
+              "trigger": "Popen returns process then pid property raises",
+              "original_preserved": true,
+              "process_operations": [
+                "kill",
+                "wait"
+              ],
+              "pipe_close_counts": [
+                1,
+                1,
+                1
+              ]
+            },
+            {
+              "trigger": "first pipe.closed inspection raises after close",
+              "process_operations": [
+                "kill",
+                "wait"
+              ],
+              "pipe_close_counts": [
+                1,
+                1,
+                1
+              ],
+              "ownership_closed": false
+            }
+          ],
+          "scope": "AST selected class with fake Path/process/pipe/OS only; no product import or actual filesystem/process operation by candidate"
+        },
+        "test_scope": "AST selected class with fully fake Path/process/pipe/OS, no realPopen or host calls",
+        "limits": [
+          "Source approval only, not published admission/Ready/portable runtime or actual cleanup. Trusted no-spawn reference assumption required in outer manifest.",
+          "active reports direct child only, not group accounting; parent separately bounds and joins reader threads and preserves original lifecycle errors.",
+          "Environment/sourceorigin/perOS installed proof and exact integrated parent cleanup remain required."
+        ],
+        "new_tests": 20,
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "checks": [
+          "Corrected5544 source/mirror pinned, direct child only/startnewsession/pipes/source8192cap and args12/-I guard reviewed.",
+          "Constructor property fault retains original, fallback slots close all known distinct pipes; closedinspection failure guards still attempt every pipe and denies ownership success.",
+          "Kill/wait/poll errors preserve first failure as cause; idempotent successful close/no falseownership; positive directentryPID must match actual retainedchild."
+        ],
+        "scope": "PREPARED_FIXED_LINUX_REFERENCE_HELPER_SOURCE_AND_INERT_REVIEW",
+        "source": {
+          "sha256": "34ac69e9fc2780c85202c1a504b7044f476d04792cc2d09d498c04604319e520",
+          "bytes": 5544
+        }
+      }
+    },
+    "r7-certificate-source-reviewer-report.json": {
+      "bytes": 3672,
+      "sha256": "09b05d9a94510a62a847356d3f680768667ff7e62395d08289c1b3ee44479905",
+      "report": {
+        "defect_reproductions": 2,
+        "source_checks": [
+          "Full4070 helper source/mirror read and hash matched; generation selects fixed RSA2048 and two SAN IPs via installed crypto50.0.2, boundedPEM8192/exclusivefiles/privatekey bytes not returned.",
+          "New root/no reuse, Linuxmode0700/files0600, failedpartialroot quarantine, public cert receipt only; Windows inheritedprivate operator ACL validation remains builder obligation.",
+          "No cryptography module import, actual key/cert operation or filesystem write invoked. Only selected write/finally AST with fakeOS/streams executed."
+        ],
+        "new_tests": 2,
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "findings": [
+          {
+            "file": "docs/EQ083_CERTIFICATE_HELPER.txt",
+            "title": "Preserve the original certificate write/open failure through cleanup",
+            "priority": "P2",
+            "consequence": "Top-level error becomes cleanup instead of original failure; original error priority is lost even though partial directory correctly remains incomplete.",
+            "trigger": "stream.write raises primary then context __exit__/close raises, or os.fdopen raises primary then finally os.close raises",
+            "line": 61,
+            "evidence": [
+              {
+                "case": "write-close-fault",
+                "observed_error": "cleanup",
+                "fd_close_attempts": [],
+                "primary_preserved_as_top_level": false
+              },
+              {
+                "case": "fdopen-close-fault",
+                "observed_error": "cleanup",
+                "fd_close_attempts": [
+                  19
+                ],
+                "primary_preserved_as_top_level": false
+              }
+            ],
+            "correction": "Use explicit guarded stream/fd close-once ownership; attempt cleanup, preserve active original same exception and retain cleanup as cause, deny normal cleanup failure. Avoid closing a transferred descriptor twice."
+          }
+        ],
+        "source": {
+          "bytes": 4070,
+          "sha256": "400d8e6996d79446b55c1a17a8aaee4e21cdd039d6f930248e65200fdbe0c23e"
+        },
+        "scope": "PREPARED_SYNTHETIC_CERTIFICATE_HELPER_SOURCE_AND_INERT_WRITE_REVIEW",
+        "disposition": "REWORK",
+        "actual_inert_evidence": {
+          "source_bytes": 4070,
+          "source_sha256": "400d8e6996d79446b55c1a17a8aaee4e21cdd039d6f930248e65200fdbe0c23e",
+          "passing_controls": 2,
+          "reproductions": [
+            {
+              "case": "write-close-fault",
+              "observed_error": "cleanup",
+              "fd_close_attempts": [],
+              "primary_preserved_as_top_level": false
+            },
+            {
+              "case": "fdopen-close-fault",
+              "observed_error": "cleanup",
+              "fd_close_attempts": [
+                19
+              ],
+              "primary_preserved_as_top_level": false
+            }
+          ],
+          "ordinary_results": [
+            {
+              "case": "normal",
+              "observed_error": "none",
+              "fd_close_attempts": [],
+              "primary_preserved_as_top_level": false
+            },
+            {
+              "case": "short",
+              "observed_error": "ValueError",
+              "fd_close_attempts": [],
+              "primary_preserved_as_top_level": false
+            }
+          ],
+          "scope": "Only AST selected write/finally statements with fake OS/streams; no crypto imports/generation/filesystem operations"
+        },
+        "limits": [
+          "No full cryptography-shaped generation/readback test run; correction needs exact-source review before any generation.",
+          "This finding does not assert private-key exposure, success on incomplete files, runtime failure or hostile same-user security; current full generation uninvoked.",
+          "Parent must require complete helper success/newdir manifest and retain failed roots; no operational/admission grant."
+        ]
+      }
+    },
+    "r7-certificate-source-corrective-reviewer-report.json": {
+      "bytes": 4762,
+      "sha256": "fbc8dd5050cb1f0b7557b9fec1d56b6872d84fd9e684c673ec4359c24e770725",
+      "report": {
+        "scope": "PREPARED_CERTIFICATE_CORRECTIVE_SOURCE_AND_INERT_WRITE_REVIEW",
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "checks": [
+          "Exact4348 source and mirror pins verified; original4070 retained. Only write ownership block AST changed, all generation/policy/import/main AST unchanged.",
+          "Eleven AST-selected fakeOS/stream cases passed: normal, stream-close-only fault, write/flush/fdopen primary with and without closefault, shortwrite with and without closefault, openfault before acquisition.",
+          "Original write/flush/fdopen exception objects survive cleanup failure; normal closefault propagates and cannotreturn success. Transferred descriptor closes via stream exactlyonce, untransferred fd closes exactlyonce; no doubleclose or flush afterfailedwrite."
+        ],
+        "source": {
+          "bytes": 4348,
+          "sha256": "2b1bce07a955545ed0e11a6b9f9da3cc07b14964facc62e78ac87b9e9028f774"
+        },
+        "disposition": "APPROVED",
+        "findings": [],
+        "actual_inert_controls": {
+          "source_bytes": 4348,
+          "source_sha256": "2b1bce07a955545ed0e11a6b9f9da3cc07b14964facc62e78ac87b9e9028f774",
+          "passing_count": 11,
+          "controls": [
+            {
+              "phase": "none",
+              "cleanup_fault": false,
+              "original_object_preserved": false,
+              "failed": false,
+              "calls": [
+                "fdopen",
+                "write",
+                "flush",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "none",
+              "cleanup_fault": true,
+              "original_object_preserved": false,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "write",
+                "flush",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "write",
+              "cleanup_fault": false,
+              "original_object_preserved": true,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "write",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "write",
+              "cleanup_fault": true,
+              "original_object_preserved": true,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "write",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "flush",
+              "cleanup_fault": false,
+              "original_object_preserved": true,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "write",
+                "flush",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "flush",
+              "cleanup_fault": true,
+              "original_object_preserved": true,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "write",
+                "flush",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "fdopen",
+              "cleanup_fault": false,
+              "original_object_preserved": true,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "os.close"
+              ]
+            },
+            {
+              "phase": "fdopen",
+              "cleanup_fault": true,
+              "original_object_preserved": true,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "os.close"
+              ]
+            },
+            {
+              "phase": "short",
+              "cleanup_fault": false,
+              "original_object_preserved": false,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "write",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "short",
+              "cleanup_fault": true,
+              "original_object_preserved": false,
+              "failed": true,
+              "calls": [
+                "fdopen",
+                "write",
+                "stream.close"
+              ]
+            },
+            {
+              "phase": "open",
+              "original_object_preserved": true,
+              "failed": true,
+              "calls": []
+            }
+          ],
+          "all_other_ast_unchanged": true
+        },
+        "limits": [
+          "Source correction review only, no cryptography import/generation, real paths/permissions/filesystem writes, process/API/socket operations or full crypto-shaped helper execution.",
+          "Pinned installed crypto origin, exact cert semantics and public-only receipt reviewed textually; integrated builder validates complete newroot/manifest/Windows inherited private ownership and partialroot quarantine before use.",
+          "No Ready/admission/actualcert/runtime/TLS proof from source approval; parent/child protocol/source and freshperOS fullgates remain."
+        ],
+        "new_tests": 11,
+        "original_rework": {
+          "sha256": "09b05d9a94510a62a847356d3f680768667ff7e62395d08289c1b3ee44479905",
+          "original_source_sha256": "400d8e6996d79446b55c1a17a8aaee4e21cdd039d6f930248e65200fdbe0c23e",
+          "file": "r7-certificate-source-reviewer-report.json",
+          "original_source_bytes": 4070
+        }
+      }
+    },
+    "r7-selection-complete-reviewer-report.json": {
+      "bytes": 10310,
+      "sha256": "582d7ebd174d316bd876bb6b7ac7ee0f578688d800d80ec0b4eee4b3d1d9c8a6",
+      "report": {
+        "new_tests": 0,
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "findings": [],
+        "disposition": "APPROVED_PACKET_NOT_READY",
+        "scope": "COMPLETE_PREPARED_EQ083_SELECTION_SOURCE_PROVENANCE_AND_READY_INPUT_ASSESSMENT",
+        "prepared_files": {
+          "equity-feature-workers": {
+            "docs/EQ084_TARGET.md": {
+              "bytes": 2120,
+              "sha256": "3400625be8de4fdddb3830ede5d58af75236fe1bfcfa95b3b11a3741242590b2"
+            },
+            "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt": {
+              "bytes": 20063,
+              "sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
+            },
+            "docs/EQ083_QUALIFICATION_SELECTION.md": {
+              "bytes": 9017,
+              "sha256": "16ce3bb34c2dccd7be7f41dc87c23cb5d4aba99fd81c834e1d58f8413df99759"
+            },
+            "docs/EQ083_REMAINING_OWNER.txt": {
+              "bytes": 6022,
+              "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+            },
+            "docs/EQ083_LINUX_REFERENCE_CHILD.txt": {
+              "bytes": 5544,
+              "sha256": "34ac69e9fc2780c85202c1a504b7044f476d04792cc2d09d498c04604319e520"
+            },
+            "docs/EQ083_REMAINING_REFERENCE_ENTRY.txt": {
+              "bytes": 4461,
+              "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594"
+            },
+            "docs/EQ083_REMAINING_SELECTION.json": {
+              "bytes": 1375,
+              "sha256": "8dcd5ea66461df5af33893e5aa444692f821620eea6d72516fb4492d7e8f2537"
+            },
+            "docs/EQ083_SELECTION_EVIDENCE.json": {
+              "bytes": 24932,
+              "sha256": "8d6a16285c8fbe79108b9604faa0260c899ce4127832ccefccde13e206387781"
+            },
+            "docs/EQ083_REMAINING_PARENT_CORRECTIVE_INPUTS.json": {
+              "bytes": 4493,
+              "sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54"
+            },
+            "docs/EQ083_REMAINING_FIXTURE_INPUTS.json": {
+              "bytes": 7383,
+              "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+            },
+            "docs/EQ083_REMAINING_SELECTION.md": {
+              "bytes": 1559,
+              "sha256": "b60550ba2811a7b24363005f22044d5676d3fc2e4a9cd001fd106d95b4f9d632"
+            },
+            "docs/EQ083_CERTIFICATE_HELPER_ORIGINAL.txt": {
+              "bytes": 4070,
+              "sha256": "400d8e6996d79446b55c1a17a8aaee4e21cdd039d6f930248e65200fdbe0c23e"
+            },
+            "docs/EQ083_QUALIFICATION_SELECTION.json": {
+              "bytes": 17098,
+              "sha256": "22823ae85ea2137292b52577b3ba9d5d1aacfd15777076411e6c426f4c01f996"
+            },
+            "docs/EQ083_CERTIFICATE_HELPER.txt": {
+              "bytes": 4348,
+              "sha256": "2b1bce07a955545ed0e11a6b9f9da3cc07b14964facc62e78ac87b9e9028f774"
+            }
+          },
+          "equity-features": {
+            "docs/stories/EQ-083_REMAINING_SELECTION.md": {
+              "bytes": 1559,
+              "sha256": "b60550ba2811a7b24363005f22044d5676d3fc2e4a9cd001fd106d95b4f9d632"
+            },
+            "docs/stories/EQ-083_REMAINING_SELECTION.json": {
+              "bytes": 1375,
+              "sha256": "8dcd5ea66461df5af33893e5aa444692f821620eea6d72516fb4492d7e8f2537"
+            },
+            "docs/stories/EQ-083_REMAINING_PROBE_CORRECTIVE.txt": {
+              "bytes": 20063,
+              "sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
+            },
+            "docs/stories/EQ-083_CERTIFICATE_HELPER.txt": {
+              "bytes": 4348,
+              "sha256": "2b1bce07a955545ed0e11a6b9f9da3cc07b14964facc62e78ac87b9e9028f774"
+            },
+            "docs/stories/EQ-083_CERTIFICATE_HELPER_ORIGINAL.txt": {
+              "bytes": 4070,
+              "sha256": "400d8e6996d79446b55c1a17a8aaee4e21cdd039d6f930248e65200fdbe0c23e"
+            },
+            "docs/stories/EQ-083_QUALIFICATION_SELECTION.md": {
+              "bytes": 9017,
+              "sha256": "16ce3bb34c2dccd7be7f41dc87c23cb5d4aba99fd81c834e1d58f8413df99759"
+            },
+            "docs/stories/EQ-083_SELECTION_EVIDENCE.json": {
+              "bytes": 24932,
+              "sha256": "8d6a16285c8fbe79108b9604faa0260c899ce4127832ccefccde13e206387781"
+            },
+            "docs/stories/EQ-083_LINUX_REFERENCE_CHILD.txt": {
+              "bytes": 5544,
+              "sha256": "34ac69e9fc2780c85202c1a504b7044f476d04792cc2d09d498c04604319e520"
+            },
+            "docs/stories/EQ-083_QUALIFICATION_SELECTION.json": {
+              "bytes": 17098,
+              "sha256": "22823ae85ea2137292b52577b3ba9d5d1aacfd15777076411e6c426f4c01f996"
+            },
+            "docs/stories/EQ-083_REMAINING_FIXTURE_INPUTS.json": {
+              "bytes": 7383,
+              "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+            },
+            "docs/stories/EQ-083_REMAINING_REFERENCE_ENTRY.txt": {
+              "bytes": 4461,
+              "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594"
+            },
+            "docs/stories/EQ-084_TARGET.md": {
+              "bytes": 2120,
+              "sha256": "3400625be8de4fdddb3830ede5d58af75236fe1bfcfa95b3b11a3741242590b2"
+            },
+            "docs/stories/EQ-083_REMAINING_OWNER.txt": {
+              "bytes": 6022,
+              "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+            },
+            "docs/stories/EQ-083_REMAINING_PARENT_CORRECTIVE_INPUTS.json": {
+              "bytes": 4493,
+              "sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54"
+            }
+          }
+        },
+        "checks": [
+          "Actual untracked packet exact fourteen mirrored documentation/source-data paths perrepo, no tracked/source/runtime changes in this review.",
+          "Five selected remaining source/fixture/manifest bytes independently match immutable historical GitLF pins; all seven nonEQ083 schema/helper/fixture bytes equal accepted84b15 and original referenced Git sources.",
+          "Remaining exact eleven-input provenance/relocations and36-send ledger retained; original manifest scope/history not current executable/physical authority.",
+          "All five embedded source/docs reviewer reports bytes/SHA/fullJSON equal saved originals. Certificate original4070 REWORK and corrected4348 approval retained; Linux5200 no invented original reproduction/5544 actual20 controls scope truthful.",
+          "Helper frozen5544 and cert4348 source bytes remain reviewed inputs; no generation/process/installation/actual Ready proof.",
+          "EQ084_TARGET explicitly reconciles former hosted wording to delegated local-private Windows delivery channel; no remoteavailability/Internet/productionSLO claim. Real persistent deployment/drills after accepted93, not Actions substitute; no borrowed resources/admin/public/spend grant."
+        ],
+        "native_runs": 0,
+        "ready_conclusion": "Routine fresh-builder and portable-integration code are implementation after Ready, not missing external inputs. Specific unresolved Ready inputs are complete immutable case/expected-counter/percase-bound inventory and gate publication/reconciliation. No additional wholehost resolver/kernel proof or human permission needed merely because code is unwritten.",
+        "limits": [
+          "Source/data/doc provenance review only, not actual executable admission, Ready approval or new fresh qualification.",
+          "Actual EQ084 literal paths/ports/actionlimits/privatecredentials/recovery ownership/wrapper must still freeze beforeEQ084Ready/operations; explicit localchannel amendment should be reconciled on liveissue and acceptance records.",
+          "No runtime/native tests/imports/ops/issue changes; all auto-triggered CI remains mandatory before scopepacket merge."
+        ],
+        "ready_input_assessment": [
+          {
+            "remaining": "Current accepted source/schema/package-version pins and complete remaining/bars fixtures selected; builder must record actual downloaded archive hashes/versions at Test. Freeze selected expected full producer/variablefield bindings for every case family, not just references to historical success.",
+            "status": "substantially_concrete",
+            "gate": 1
+          },
+          {
+            "remaining": "Real supervised HTTP/publicclient/officialSDK topology and remaining relocation manifest chosen. Provide exact selected immutable owner/reference seed inventory for positive/authority/state/epoch/unknown/version/TLS/fault cases, indicating planned adaptations; coding adaptations can followReady, reviewbeforeexecution mandatory.",
+            "status": "topology_concrete_case_roster_needs_freeze",
+            "gate": 2
+          },
+          {
+            "remaining": "Six mismatch vectors and full bars producer/two unavailable qualities verified. Select complete accepted scalar/otherfamily expected fixtures explicitly in same case inventory; do not rerun feasibility merely to fabricate Ready evidence.",
+            "status": "remaining_bars_inputs_established",
+            "gate": 3
+          },
+          {
+            "remaining": "Expose selected case-by-case owner/grant/expiry/cancel/failure/epoch/unknown expected status/error/provider/control/ACK table with immutable historical references. This is finite input freezing, not new runtime or fullplatform engineering.",
+            "status": "historical_matrix_available_not_yet_assembled",
+            "gate": 4
+          },
+          {
+            "remaining": "Remaining numericcaps frozen, other dialogue bounds currently referred to as source-literal. Assemble exact percase frame/source/provider/clock/output/start-stop/join limits and tested cleanup failure outcomes; trustcooperative limits/no normalization.",
+            "status": "remaining_bounds_concrete_other_case_table_pending",
+            "gate": 5
+          },
+          {
+            "remaining": "Sameform offline light/native Windows/Linux recipe and reviewed process/cert primitives adequate design basis. Implement build_resilience and portableintegration afterReady, then freeze/publish/review exact revised executable sources BEFORE their first execution. No completed builder required just to enterimplementation.",
+            "status": "fresh_recipe_design_established",
+            "gate": 6
+          },
+          {
+            "remaining": "Publish this packet and remaining finite input tables, resolve findings, record exact review/currentCI/approvedscope and real issue assignment13points/Ready thenInprogress. Current packet explicitly notReady; reviewer does not fabricate transition.",
+            "status": "publication_and_planning_gate_pending",
+            "gate": 7
+          }
+        ],
+        "source_execution": 0,
+        "bases": {
+          "equity-feature-workers": "b63fb617776fc591702ec6cd21369af7b58e1e98",
+          "equity-features": "cc7a2592ed9a9119b759030312072a0b11e021c6"
+        }
+      }
+    },
+    "r7-case-roster-reviewer-report.json": {
+      "bytes": 13310,
+      "sha256": "d14919b9b5cff20ce208355a7c79dafdbe2814956d087585c937e14f94e2bdc2",
+      "report": {
+        "disposition": "APPROVED_ROSTER_PLANNING_INPUTS_SUBJECT_TO_PUBLICATION",
+        "findings": [],
+        "scope_merge_readback": {
+          "equity-feature-workers": {
+            "author": "Atul Srivastava",
+            "reviewed_tree_equal": true,
+            "committer": "GitHub",
+            "actual_main": "6198a476289d02a0c7ae29815a245d2a9974ebe2",
+            "no_coauthors": true
+          },
+          "equity-features": {
+            "author": "Atul Srivastava",
+            "reviewed_tree_equal": true,
+            "committer": "GitHub",
+            "actual_main": "2be7564d321ba6bf4c334879106449a2d41e4649",
+            "no_coauthors": true
+          }
+        },
+        "limits": [
+          "Source/docs/static review only; no native test/import/cryptography/process/socket/copy/build/install/host or rejectedbinary operation.",
+          "Scope documentation merge is not EQ083 completion; actual fresh Windows/Linux sameform composition/runtime/mainartifact gates remain.",
+          "Source status/counter assertions reviewed as design, no actual observed values invented; no oldmocktest/WindowsPASS currentcount inflation."
+        ],
+        "runtime_invocations": 0,
+        "seed_sources": {
+          "docs/EQ083_R07_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 4797,
+            "sha256": "f3a9fb12bf13c745bb20b33e62e7e06e11ce8b49a39ef0fc5e838054b2ad765f"
+          },
+          "docs/EQ083_R07_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 16745,
+            "sha256": "403cd2a8f751fda87c94f532c08f7ee5392a8003a7a6cb38e6a29615c187eb8a"
+          },
+          "docs/EQ083_REFERENCE_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 3332,
+            "sha256": "eb878e406b0febd92a82a25b727347e65f80d97bcf9ab70b2bebf7acd3421917"
+          },
+          "docs/EQ083_REMAINING_FIXTURE_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 7383,
+            "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+          },
+          "docs/EQ083_AUTHORITY_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 4927,
+            "sha256": "5c1f29f87553d7354632ad3f5f25938f85d5e905a5c3c7febd8e39bef79e3376"
+          },
+          "docs/EQ083_AUTHORITY_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 19756,
+            "sha256": "ebd4f4fc0b45328e931b09fe443fd840e500e1304aab95ffb7ca0634900da5d7"
+          },
+          "docs/EQ083_AUTHORITY_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 4645,
+            "sha256": "3bb0a677f519ef4e3e785a85587e0b6e8550f64ea1d4581966f5aa6a37d46270"
+          },
+          "docs/EQ083_STATE_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 3965,
+            "sha256": "9305b0eddaf5a1635d49c3519b966bc0568c9eb9bc9ad1a685c6adc8259185cc"
+          },
+          "docs/EQ083_STATE_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 18066,
+            "sha256": "a0b631b3553432820ea785341ee64d1ca282cb749546bcf0cf08b3dfb4bb7c21"
+          },
+          "docs/EQ083_STATE_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 5821,
+            "sha256": "25cf443dc80b53999453c8382d69b8ad859ff7dc131795ed59461cefd7729772"
+          },
+          "docs/EQ083_EPOCH_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 3938,
+            "sha256": "2ca9302ddf1771a7c172d5a6c50204731a7bd4a83da8e35403fbff4c0eed327e"
+          },
+          "docs/EQ083_EPOCH_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 19548,
+            "sha256": "826c9a6557ffbea0bdac34a4e8f8c9c792d4e6d450d4593ab6231b3fa5a2c030"
+          },
+          "docs/EQ083_EPOCH_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 6118,
+            "sha256": "4562705ced6f7650be30072ec1062762bed035c3912e279225c67397f3fa4442"
+          },
+          "docs/EQ083_UNKNOWN_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 4176,
+            "sha256": "1f3e9fdde9eb70c64311cc4d81be94dc16ded3a1e224ef15a8fd462955e55a22"
+          },
+          "docs/EQ083_UNKNOWN_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 20317,
+            "sha256": "e32f5a51a86de93014b7424a9eef0f993cc309fa1840f8199be4ddb9faa7f3b5"
+          },
+          "docs/EQ083_UNKNOWN_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 7926,
+            "sha256": "5bab47a923af9e7e5d260da0ca2a3c37f7beaedb4de52360d2570c2371075487"
+          },
+          "docs/EQ083_VERSION_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 3964,
+            "sha256": "218b1b885af2fadb52eb126eb2e12d6d7230315c1d1e0dc3f5787cc88f9c43a7"
+          },
+          "docs/EQ083_VERSION_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 21077,
+            "sha256": "721a462d9b37df45063d8e67e2977b842f9f14723ee356b3e8d7dc17a7ea2059"
+          },
+          "docs/EQ083_VERSION_REFERENCE_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 3707,
+            "sha256": "2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41"
+          },
+          "docs/EQ083_VERSION_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 5947,
+            "sha256": "3e1098a213cdd5d70db0d5fdee42c1b017efc3e02cee556bd448c669eba5a77a"
+          },
+          "docs/EQ083_REFERENCE_FAULT_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 14476,
+            "sha256": "a8f066de2b81fe038950f58eec1f6bd4868138740ac0f971145f867ce773eb2a"
+          },
+          "docs/EQ083_REFERENCE_FAULT_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 36601,
+            "sha256": "35c5c218461e536ff9b257ab9a48e90d6d88999b8f4984249371eff0f39a92f8"
+          },
+          "docs/EQ083_REFERENCE_FAULT_OWNER.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 5139,
+            "sha256": "d92f3dae6d839e3db44e0d8e494163db15c91bae163c2bc5efb8c689fcb6f347"
+          },
+          "docs/EQ083_REFERENCE_FAULT_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 7919,
+            "sha256": "b5011dcfd728bddc12ba007836d7a5456e2b809453595a8c0b5588b6e0568a57"
+          },
+          "docs/EQ083_REFERENCE_PROCESS.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 11944,
+            "sha256": "49ea228a8552861e9e1cfef549dcaf3502ee7166ce6c171f352f03d07779928e"
+          },
+          "docs/EQ083_TLS_PARENT_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 23685,
+            "sha256": "63aba48d1fa2625005905f1b859d9f518886be110d6557e8372a398b0f951988"
+          },
+          "docs/EQ083_TLS_PROBE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 43762,
+            "sha256": "3b21ee9bff75059e225e941bfa8493f2265de89cbca88a22104c93035352185a"
+          },
+          "docs/EQ083_TLS_REFERENCE_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 5916,
+            "sha256": "298309360a5f6dab0308ffccaa28bad271fad336a14b8fe327dd5441f38e5231"
+          },
+          "docs/EQ083_TLS_OWNER_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 7687,
+            "sha256": "c69c37e90ffe415c69ba0f0732637d5ff4905f3d17095b9951c9126c17e64746"
+          },
+          "docs/EQ083_TLS_SESSION_TRANSPORT.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 20709,
+            "sha256": "f0d298ec5c3b050faa015d48c2da6bedad214624390190d36565c328382cea50"
+          },
+          "docs/EQ083_REMAINING_PARENT_CORRECTIVE_INPUTS.json": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 4493,
+            "sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54"
+          },
+          "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 20063,
+            "sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
+          },
+          "docs/EQ083_REMAINING_OWNER.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 6022,
+            "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+          },
+          "docs/EQ083_REMAINING_REFERENCE_ENTRY.txt": {
+            "original_commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+            "bytes": 4461,
+            "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594"
+          }
+        },
+        "readiness_conclusion": "No further substantive missing external/design input identified for EQ083 planning after this finite roster review. Do not treat unimplemented builder/portable adaptations as an external blocker: implement after actual Ready, independently review their exact published source before execution. Current uncommitted packet is not yet Ready/public executable admission.",
+        "new_tests": 0,
+        "seven_ready_inputs": [
+          "1 Package/source/schema/fixture pins and independent full expected producers established by selected accepted maps and prior selection. Actual artifact hashes/build outcomes belong Test.",
+          "2 Exact nine selected immutable owner/reference seed topologies and manifests now identified; portable revised code is implementation, frozen/reviewed before execution.",
+          "3 Original full unavailable/snapshot/receipt/version/scalar fixture expectations selected and reviewed; no broad or physical feasibility probe required for Ready.",
+          "4 Complete nine source-bound mode/status/provider/control/ACK/counter/epoch matrix selected; source assertions authoritative, copied manifest historical labels do not grant execution.",
+          "5 Numeric per-dialogue bounds plus literals now identified and source-checked; integrated adaptations must preserve or separately review changed bounds.",
+          "6 Fresh bothOS sameform light/native builder design and reviewed Linux/cert primitives established. Builder/code implementation may occur afterReady; sourcebeforeexecution gate remains.",
+          "7 Remaining non-substantive gate: publish selected coverage/fixtures/roster and get final exact planning review/findings disposition/currentCI, then record real story93 Ready/Inprogress/assignment13points. This report does not mutate status."
+        ],
+        "scope": "PREPARED_NINE_DIALOGUE_SOURCE_ROSTER_AND_SEVEN_READY_INPUT_REVIEW",
+        "prepared_files": {
+          "equity-feature-workers": {
+            "docs/EQ083_CASE_ROSTER.json": {
+              "bytes": 37217,
+              "sha256": "8d467f564dafcd0254bfb942ff888b2c259c5001abb0b8a639662d4816bbad19"
+            }
+          },
+          "equity-features": {
+            "docs/stories/EQ-083_CASE_ROSTER.json": {
+              "bytes": 37217,
+              "sha256": "8d467f564dafcd0254bfb942ff888b2c259c5001abb0b8a639662d4816bbad19"
+            }
+          }
+        },
+        "bases": {
+          "equity-feature-workers": "6198a476289d02a0c7ae29815a245d2a9974ebe2",
+          "equity-features": "2be7564d321ba6bf4c334879106449a2d41e4649"
+        },
+        "reviewer": "r7_policy_review independent local Codex reviewer",
+        "checks": [
+          "All34 unchanged selected TEXT/JSON seeds fullbytes match immutable parked Git history and declared pins;24 text files ASTparsed without executing imports/modulecode.",
+          "Nine group request ledgers exactly equal preserved source manifests; supervisor wall/output bounds independently derived from AST run_admitted keyword literals.",
+          "Targeted owner/source/parent assertions confirm cooperative20/25or30/35 clocks, ready128/4s/control128/ACK1024/stopjoin6s/request16384/header8192/body262144 and retained specific owner caps64/60/16/48/24/36, not universal caps.",
+          "R07<=60 whole dialogue remains bounded poll maxima, full bars producer/unavailable check at every transported bars verification. Remaining exact36/raw11/client12/MCP13/ACK1-12-12-15-18-30-36/raw0-0-0-3-6-6-6 and nohiddenretry preserved.",
+          "Authority original halfopenTTL/grant/retirement/crossprincipal no native reuse; state capacity held until actual native release; epoch fullsnapshot and actualclose-before-new; unknown one-send/manualfollowup; version42send/r7raw source; literal fault/TLS provider-vsHTTP counters/ACKs and no framing reconstruction reviewed.",
+          "Full nativeproducer/source/audit and retained scheduler snapshot/close assertions remain source-bound; statuses/error types, owner cleanup/PID witnesses and private sentinels live in pinned sources. No old scoped successful run proves fresh composition.",
+          "Windows-only old fault/TLS source constants and stale manifest pending/review strings retained as historical provenance, not renewed portable execution authority. Newly adapted source closure needs independent published review before invocation.",
+          "Actual scope merge main2be7564d/6198a476 whole trees equal reviewedcc7a/b63f; Atul authors/GitHub committers/no coauthors. This preserves runtime/package/source graph; scope-main CI not assumed PASS."
+        ]
+      }
+    }
+  },
+  "tool_only_corrections": [
+    "Issue sync local guard incorrectly assumed65536; actual existing issuebody exceeded256k characters. Guard corrected262144UTF8bytes before any issue mutation; current prefix replaced, history suffix preserved and readback exact.",
+    "Guessed root schema paths corrected to actual packaged client/MCP schema paths before selection output writes.",
+    "Guessed positive/R07/portableTLS plan filenames were missing read-only paths; actual targeted Git filenames read; no source absence/runtime failure claim.",
+    "Publication privacy guard rejected four unchanged old TLS source blobs containing the former absolute user certificate root BEFORE stage/commit/push. Blobs preserved outside new public Git; historical hashes/source records retained. Public packet has30materialized seed sources and4historical-only provenance pins; new portable TLS binding source must be reviewed before execution."
+  ],
+  "source_only_correction": "Certificate initial4070 cleanup-primary masking independently reproduced and corrected4348 before execution; initial source and REWORK retained. Linux initial5200 proactively corrected to5544 before independent inert reproduction; do not invent initial-source REWORK.",
+  "new_runtime": false,
+  "new_tests": false,
+  "local_review_inert_controls_not_native_tests": true
+}

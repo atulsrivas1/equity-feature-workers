@@ -1,0 +1,36 @@
+{
+  "stage": "UNINVOKED_SELECTED_SOURCE_NOT_READY",
+  "assets": [
+    {
+      "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_REMAINING_OWNER.txt",
+      "bytes": 6022,
+      "sha256": "312141a120da039864bf75db3cff18ac638ffeca091c801175b892a911acb30e"
+    },
+    {
+      "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_REMAINING_REFERENCE_ENTRY.txt",
+      "bytes": 4461,
+      "sha256": "b0915752343a4db385d7732a273f95c6339d1cee60e332aedcd5fc25d8601594"
+    },
+    {
+      "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_REMAINING_PROBE_CORRECTIVE.txt",
+      "bytes": 20063,
+      "sha256": "7079f6a632e36c84ae12a6f1df97cf014ced1f67e82468f373b97183aca5e7ca"
+    },
+    {
+      "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_REMAINING_FIXTURE_INPUTS.json",
+      "bytes": 7383,
+      "sha256": "998abbbf9c72322e58553e8d9d0cbb569c0036680dd5a9bbdc9644bc9cf0142d"
+    },
+    {
+      "original_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_REMAINING_PARENT_CORRECTIVE_INPUTS.json",
+      "bytes": 4493,
+      "sha256": "f82bbff30f850e8c9457d609c2e4ae2a607b696d926d2d2a744d7307be8d5d54"
+    }
+  ],
+  "accepted_helper_equivalence_base": "84b15c01fcb9526e4557df83d055daa5303db639"
+}

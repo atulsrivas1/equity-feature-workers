@@ -1,0 +1,78 @@
+import sys,time,json,hashlib
+from pathlib import Path
+if len(sys.argv)!=6:raise ValueError('owned epoch arguments')
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+ready,stop,control,ack=(Path(v) for v in sys.argv[2:6])
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
+def create():
+ scheduler,service,tokens,clock,facts=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+ service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
+ return scheduler,service,clock,facts
+def snapshot(scheduler,facts,wait):
+ with scheduler.condition:
+  if len(scheduler.jobs)!=1:raise ValueError('owned epoch single job')
+  job=next(iter(scheduler.jobs.values()));until=time.monotonic()+3
+  while scheduler._running is not None or job.expires_ns<=0:
+   remaining=until-time.monotonic()
+   if not wait or remaining<=0:raise ValueError('owned epoch physical completion unconfirmed')
+   scheduler.condition.wait(remaining)
+  sizes=[len(job.native),len(job.wire),len(job.envelope),len(job.receipt)]
+  if job.state!='succeeded' or job.result_id is None or scheduler.queue or facts['reads']!=1 or not facts['entered'].is_set() or len(facts['sink_threads'])!=1:raise ValueError('owned epoch completion facts')
+  if type(job.held) is not int or not 0<job.held==sum(sizes)<=262144 or scheduler.total_retained!=job.held or scheduler.retained!={job.principal:job.held}:raise ValueError('owned epoch retained accounting')
+  if type(job.expires_ns) is not int or not 0<job.expires_ns<=9223372036854775807:raise ValueError('owned epoch original expiry')
+  return {'epoch':scheduler.epoch,'job':job.job_id,'result':job.result_id,'expiry':job.expires_ns,'reads':facts['reads'],'held':job.held,'retained_sizes':sizes,'running':scheduler._running,'queue':len(scheduler.queue),'sink_entries':len(facts['sink_threads'])}
+def publish(path,value):
+ data=canonical(value)
+ if len(data)>1024:raise ValueError('owned epoch acknowledgement bound')
+ pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
+scheduler,service,clock,facts=create()
+old_scheduler=None;old_facts=None;old_snapshot=None;new_snapshot=None
+requests=0;per_epoch=[0,0];sequence=0;restart_closed=False;final_snapshot=None
+actions=('old_settled','restart','new_settled','final')
+def app(environ,start_response):
+ global requests
+ if requests>=60 or sequence==4:raise ValueError('owned epoch physical request budget')
+ requests+=1;per_epoch[1 if restart_closed else 0]+=1
+ return service(environ,start_response)
+def observe(action):
+ global scheduler,service,clock,facts,old_scheduler,old_facts,old_snapshot,new_snapshot,restart_closed,final_snapshot
+ if action=='old_settled':old_snapshot=snapshot(scheduler,facts,True)
+ elif action=='restart':
+  if old_snapshot is None or snapshot(scheduler,facts,False)!=old_snapshot:raise ValueError('owned old epoch changed before close')
+  if scheduler.close(2) is not True:raise ValueError('owned old scheduler exit unconfirmed')
+  if snapshot(scheduler,facts,False)!=old_snapshot:raise ValueError('owned old epoch changed during close')
+  old_scheduler,old_facts=scheduler,facts
+  scheduler,service,clock,facts=create()
+  if scheduler.epoch==old_snapshot['epoch'] or scheduler.jobs or facts['reads']!=0:raise ValueError('owned new scheduler identity')
+  restart_closed=True
+ elif action=='new_settled':
+  if not restart_closed or snapshot(old_scheduler,old_facts,False)!=old_snapshot:raise ValueError('owned old epoch preservation')
+  new_snapshot=snapshot(scheduler,facts,True)
+  if new_snapshot['job']==old_snapshot['job'] or new_snapshot['result']==old_snapshot['result']:raise ValueError('owned new native identity')
+ elif action=='final':
+  if new_snapshot is None or snapshot(old_scheduler,old_facts,False)!=old_snapshot or snapshot(scheduler,facts,False)!=new_snapshot:raise ValueError('owned post-dialogue epoch facts changed')
+  final_snapshot=[old_snapshot,new_snapshot]
+ else:raise ValueError('owned epoch action')
+ return {'sequence':sequence+1,'action':action,'requests':requests,'per_epoch':list(per_epoch),'restart_closed':restart_closed,'old':old_snapshot,'new':new_snapshot,'current_epoch':scheduler.epoch,'current_reads':facts['reads']}
+server=qualification_server(service);server.set_app(app);server.timeout=.05
+publish(ready,{'port':server.server_port});deadline=time.monotonic()+20
+try:
+ while requests<=60:
+  if stop.exists() or time.monotonic()>=deadline:break
+  slot=control.with_name(control.name+'.'+str(sequence+1))
+  if sequence<4 and slot.with_name(slot.name+'.complete').is_dir():
+   with slot.open('rb') as stream:data=stream.read(129)
+   if len(data)>128:raise ValueError('owned epoch control bound')
+   value=json.loads(data)
+   if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or value['sequence']!=sequence+1 or value['action']!=actions[sequence]:raise ValueError('owned epoch control order')
+   result=observe(value['action']);sequence+=1;publish(ack.with_name(ack.name+'.'+str(sequence)),result)
+  server.handle_request()
+ if sequence!=4 or final_snapshot is None:raise ValueError('owned epoch dialogue incomplete')
+finally:
+ server.server_close()
+ if scheduler.close(2) is not True:raise ValueError('owned final scheduler exit unconfirmed')
+if snapshot(old_scheduler,old_facts,False)!=old_snapshot or snapshot(scheduler,facts,False)!=new_snapshot:raise ValueError('owned final cleanup changed epoch facts')
+print(canonical({'marker':'eq083-epoch-http-exited','requests':requests,'per_epoch':per_epoch,'reads':[old_facts['reads'],facts['reads']],'sequence':sequence,'snapshots_sha256':hashlib.sha256(canonical(final_snapshot)).hexdigest()}).decode('ascii'),flush=True)

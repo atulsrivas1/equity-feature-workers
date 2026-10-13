@@ -1,0 +1,112 @@
+import sys,time,json,threading,hashlib
+from pathlib import Path
+from wsgiref.simple_server import WSGIRequestHandler,make_server
+if len(sys.argv)!=8:raise ValueError('owned uncertain mutation arguments')
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service._audit import OwnedAudit
+ready,stop,control,ack=(Path(v) for v in sys.argv[2:6])
+mode,lane=sys.argv[6:8]
+if mode not in ('calculate','cancel') or lane not in ('http','client','mcp'):raise ValueError('owned uncertain mutation scenario')
+gate=threading.Event()
+scheduler,service,tokens,clock,facts=setup(gate=gate,cooperative=False,actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
+requests=0;sequence=0;armed=False;dropped=False;released=False;discarded=0;discard_sha=None;terminal_snapshot=None
+actions=('arm','observed','release','terminal','final') if mode=='calculate' else ('running','arm','observed','release','terminal','final')
+expected_total={'calculate':{'http':6,'client':9,'mcp':10},'cancel':{'http':6,'client':7,'mcp':8}}[mode][lane]
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
+def publish(path,value):
+ data=canonical(value)
+ if len(data)>1024:raise ValueError('owned uncertain mutation acknowledgement bound')
+ pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
+class Discard:
+ def __init__(self):self.size=0;self.digest=hashlib.sha256()
+ def write(self,data):
+  if type(data) is not bytes or self.size+len(data)>270336:raise ValueError('owned discarded response bound')
+  self.size+=len(data);self.digest.update(data);return len(data)
+ def flush(self):pass
+class Handler(WSGIRequestHandler):
+ def log_message(self,*args):pass
+ def get_environ(self):
+  value=super().get_environ()
+  if len(self.headers.get_all('Authorization',[]))!=1:value['HTTP_AUTHORIZATION']=''
+  if len(self.headers.get_all('Content-Length',[]))!=1:value['CONTENT_LENGTH']=''
+  return value
+ def handle(self):
+  global armed,dropped,discarded,discard_sha
+  original=self.wfile;capture=Discard() if armed else None
+  if capture is not None:self.wfile=capture;armed=False
+  try:super().handle()
+  finally:self.wfile=original
+  if capture is not None:
+   if dropped or not 0<capture.size<=270336:raise ValueError('owned single lost response')
+   dropped=True;discarded=capture.size;discard_sha=capture.digest.hexdigest()
+def app(environ,start_response):
+ global requests
+ if requests>=16 or sequence==len(actions):raise ValueError('owned uncertain mutation physical request cap')
+ requests+=1
+ return service(environ,start_response)
+def snapshot(wait):
+ with scheduler.condition:
+  if len(scheduler.jobs)!=1:raise ValueError('owned single uncertain job')
+  job=next(iter(scheduler.jobs.values()));until=time.monotonic()+3
+  while scheduler._running is not None or job.expires_ns<=0:
+   remaining=until-time.monotonic()
+   if not wait or remaining<=0:raise ValueError('owned uncertain mutation completion unconfirmed')
+   scheduler.condition.wait(remaining)
+  if scheduler.queue or facts['reads']!=1 or len(facts['sink_threads'])!=1:raise ValueError('owned uncertain mutation source accounting')
+  if type(job.expires_ns) is not int or not 0<job.expires_ns<=9223372036854775807:raise ValueError('owned uncertain original expiry')
+  if mode=='calculate':
+   sizes=[len(job.native),len(job.wire),len(job.envelope),len(job.receipt)]
+   if job.state!='succeeded' or job.result_id is None or type(job.held) is not int or not 0<job.held==sum(sizes)<=262144 or scheduler.total_retained!=job.held or scheduler.retained!={job.principal:job.held}:raise ValueError('owned uncertain success accounting')
+  else:
+   sizes=[0,0,0,0]
+   if job.state!='cancelled' or job.result_id is not None or job.held!=0 or scheduler.total_retained!=0 or scheduler.retained!={job.principal:0}:raise ValueError('owned uncertain cancellation accounting')
+  return dict(job=job.job_id,result=job.result_id,state=job.state,expiry=job.expires_ns,held=job.held,sizes=sizes,reads=facts['reads'],running=scheduler._running,queue=len(scheduler.queue),sink_entries=len(facts['sink_threads']))
+def observe(action):
+ global armed,released,terminal_snapshot
+ if action in ('running','observed'):
+  if not facts['entered'].wait(3):raise ValueError('owned uncertain source entry unconfirmed')
+ with scheduler.condition:
+  jobs=tuple(scheduler.jobs.values())
+  if action=='running':
+   if requests!=1 or len(jobs)!=1 or jobs[0].state!='running' or scheduler._running!=jobs[0].job_id or facts['reads']!=1:raise ValueError('owned uncertain running barrier')
+  elif action=='arm':
+   before=0 if mode=='calculate' else (2 if lane=='mcp' else 1)
+   if armed or dropped or requests!=before:raise ValueError('owned uncertain arm order')
+   armed=True
+  elif action=='observed':
+   after=1 if mode=='calculate' else (3 if lane=='mcp' else 2)
+   state='running' if mode=='calculate' else 'cancel_requested'
+   if armed or not dropped or requests!=after or len(jobs)!=1 or jobs[0].state!=state or scheduler._running!=jobs[0].job_id or jobs[0].held!=262144 or facts['reads']!=1 or released:raise ValueError('owned uncertain post-send barrier')
+  elif action=='release':
+   after=2 if mode=='calculate' else (4 if lane=='mcp' else 3)
+   state='running' if mode=='calculate' else 'cancel_requested'
+   if not dropped or released or requests!=after or len(jobs)!=1 or jobs[0].state!=state or scheduler._running!=jobs[0].job_id or facts['reads']!=1:raise ValueError('owned uncertain manual followup order')
+   released=True;gate.set()
+  elif action=='terminal':
+   if not released:raise ValueError('owned uncertain terminal before release')
+   terminal_snapshot=snapshot(True)
+  elif action=='final':
+   if requests!=expected_total or terminal_snapshot is None or snapshot(False)!=terminal_snapshot:raise ValueError('owned uncertain final replay or expiry change')
+  else:raise ValueError('owned uncertain mutation action')
+  return dict(sequence=sequence+1,action=action,requests=requests,armed=armed,dropped=dropped,discarded=discarded,discard_sha256=discard_sha,released=released,reads=facts['reads'],job_state=jobs[0].state if jobs else None,snapshot=terminal_snapshot)
+server=make_server('127.0.0.1',0,app,handler_class=Handler);server.timeout=.05
+publish(ready,dict(port=server.server_port));deadline=time.monotonic()+20
+try:
+ while requests<=16:
+  if stop.exists() or time.monotonic()>=deadline:break
+  slot=control.with_name(control.name+'.'+str(sequence+1))
+  if sequence<len(actions) and slot.with_name(slot.name+'.complete').is_dir():
+   with slot.open('rb') as stream:data=stream.read(129)
+   if len(data)>128:raise ValueError('owned uncertain control bound')
+   value=json.loads(data)
+   if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or value['sequence']!=sequence+1 or value['action']!=actions[sequence]:raise ValueError('owned uncertain control order')
+   result=observe(value['action']);sequence+=1;publish(ack.with_name(ack.name+'.'+str(sequence)),result)
+  server.handle_request()
+ if sequence!=len(actions):raise ValueError('owned uncertain dialogue incomplete')
+finally:
+ gate.set();server.server_close()
+ if scheduler.close(2) is not True:raise ValueError('owned uncertain final physical exit unconfirmed')
+if snapshot(False)!=terminal_snapshot:raise ValueError('owned uncertain cleanup changed original result')
+print(canonical(dict(marker='eq083-unknown-http-exited',requests=requests,sequence=sequence,snapshot_sha256=hashlib.sha256(canonical(terminal_snapshot)).hexdigest())).decode('ascii'),flush=True)

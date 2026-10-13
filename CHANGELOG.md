@@ -1,3 +1,5 @@
+R7 EQ083 preparation: selected concrete cooperative three-lane/installed qualification inputs and uninvoked Linux/certificate source candidates; separate source review preserved a pre-execution certificate cleanup correction. EQ084 target explicitly selected as private local Windows staging after accepted93. No numerical/runtime/API/dependency/packageversion change or new accepted runtime/ops proof.
+
 R7 scope reset approved October13: cooperative operator-controlled service qualification and real private staging operations remain release gates; stronger whole-platform resource/finite-settlement engineering moved to separate SEC-001 #374. Eight accepted stories and failed/rejected evidence unchanged; no runtime/API/math change, new qualification pass, Ready or completion claim.
 
 EQ085 qualified main delivery: complete measured evidence, fifteen actual main jobs, bothOS fresh wheel/sdist smoke and current artifact/tree readback passed independent review. Frozen same-story delivery receipt added; no numerical/runtime package change. Final acceptance is recorded on issue96; R8 remains open and R7 parked.

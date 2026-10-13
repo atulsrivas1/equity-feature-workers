@@ -1,0 +1,40 @@
+"""Frozen trusted EQ083 reference-client entry; not a public loader."""
+import sys,json,re,hashlib,os
+from pathlib import Path
+if len(sys.argv)!=6:raise ValueError('owned arguments')
+origin,fixture,principal,pid_marker,case=sys.argv[1:]
+if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535 or principal not in ('A','B'):raise ValueError('owned origin')
+if case not in ('trades','bars','quotes','trades-adjacent-large-ns'):raise ValueError('owned case')
+if len(fixture)>1024 or len(pid_marker)>1024:raise ValueError('owned path bounds')
+import equity_feature_client,equity_feature_mcp
+if not all('site-packages' in Path(v.__file__).resolve().parts for v in (equity_feature_client,equity_feature_mcp)):raise ValueError('owned installed modules')
+from equity_feature_client import RemoteClient,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation
+from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration,RawSliceRegistration
+with Path(fixture).open('rb') as stream:raw=stream.read(76772)
+if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29':raise ValueError('owned fixture')
+fixtures=json.loads(raw)
+index=next(n for n,v in enumerate(fixtures['native_cases']) if v['case']==case)
+producer=fixtures['native_cases'][index]['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+rawcase=fixtures['raw_cases'][-1 if index==3 else index];data=rawcase['expected_raw_payload'];scope=data['scope']
+rawexpected=RawExpectation(DatasetKey(**data['dataset']),ScopeKey(scope['instrument_id'],scope['session_id'],int(scope['start_ns']),int(scope['end_ns'])),rawcase['data_kind'],tuple(v['name'] for v in data['columns']))
+profile=MCPProfile('eq083-'+case,(RawSliceRegistration('raw',rawexpected),),(CommandRegistration('command',expected),),60)
+provider_calls=0
+def provider():
+ global provider_calls
+ if provider_calls>=64:raise ValueError('owned provider cap')
+ provider_calls+=1
+ return principal*43
+client=RemoteClient(origin,provider,attempts=1,budget=5)
+server=StdioServer(client,profile)
+marker=Path(pid_marker)
+if marker.exists() or marker.with_name(marker.name+'.complete').exists():raise ValueError('owned marker')
+data=json.dumps({'pid':os.getpid()},separators=(',',':')).encode('ascii')
+if len(data)>128:raise ValueError('owned PID bounds')
+temporary=marker.with_name(marker.name+'.pending');temporary.write_bytes(data);temporary.replace(marker);marker.with_name(marker.name+'.complete').mkdir()
+server.run_stdio(sys.stdin.buffer,sys.stdout.buffer)
+closed=marker.with_name(marker.name+'.closed')
+data=json.dumps({'pid':os.getpid(),'provider_calls':provider_calls,'marker':'eq083-mcp-closed'},sort_keys=True,separators=(',',':')).encode('ascii')
+if len(data)>128:raise ValueError('owned close bounds')
+temporary=closed.with_name(closed.name+'.pending');temporary.write_bytes(data);temporary.replace(closed);closed.with_name(closed.name+'.complete').mkdir()

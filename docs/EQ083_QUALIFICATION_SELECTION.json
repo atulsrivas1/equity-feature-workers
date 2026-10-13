@@ -1,0 +1,506 @@
+{
+  "schema": "eq083.revised-selection.v1",
+  "stage": "PREPARED_NOT_READY_NO_EXECUTION",
+  "worker_input_base": "84b15c01fcb9526e4557df83d055daa5303db639",
+  "core_commit": "20c08c7370581d03c8a0404579667f68d67ac88b",
+  "io_commit": "19aa266b9debb92a6c5eb707baafeb9ae7a82942",
+  "source_inputs": [
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tools/build_foundation.py",
+      "bytes": 16462,
+      "sha256": "9de657127669eeef2a4e3581b20bf55714535eb95b6839aef3763b0ef7612aba"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tools/build_client.py",
+      "bytes": 11830,
+      "sha256": "5edd15d1f7e842298a6eecbb7097d0fe78d7f9e53598995ba837dcdd3689993e"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tools/build_service.py",
+      "bytes": 9766,
+      "sha256": "56d3560c2b8b1d207940e1a45ab12cfc3145d0d3a17034aa77501365518381af"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tools/build_mcp.py",
+      "bytes": 13459,
+      "sha256": "10790320bb5ab930c3ba20c004a78137daec12035b48b916c5dae3dfdbedb4bc"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tools/requirements-service.txt",
+      "bytes": 204,
+      "sha256": "75de0d72695732f0b552b48059c3f46c4ac06277a4622e8e325d4ee37a1553ae"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tools/requirements-mcp-reference.txt",
+      "bytes": 738,
+      "sha256": "f37fbdad94f5742ee96f7d44bbd9acd10c617ad3386ecd1423a31f8798c36205"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "docs/EQ081_CLIENT_FIXTURES.json",
+      "bytes": 76771,
+      "sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tests/service/fixtures/jobs_native.json",
+      "bytes": 22366,
+      "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tests/service/test_jobs.py",
+      "bytes": 60646,
+      "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tests/service/test_service.py",
+      "bytes": 30744,
+      "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "tests/service/test_containment.py",
+      "bytes": 14622,
+      "sha256": "482da13290648ad273dffd398727261d74600ec160e52fc5c0dc3333f9d21dbf"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt",
+      "bytes": 1828,
+      "sha256": "7d9117da97632c3c9fa93d77013f330dd893e9052ebc71174a8cf984496b40c9"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "docs/EQ082_PRODUCT_REFERENCE_PROBE.txt",
+      "bytes": 6047,
+      "sha256": "a521ab6c76e95b741315c26014c253624c8ae3d698bcff5e63bc352723b5cba0"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.schema.json",
+      "bytes": 28666,
+      "sha256": "9d5e83f1d89bb34491d959158ae628e4b7b0590155244beb13945a3b94f362a0"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "packages/client/src/equity_feature_client/schemas/remote-v1.1.schema.json",
+      "bytes": 30039,
+      "sha256": "dda0f9d2e5968ff2ea3bf79f02740a18f9ae24cd93c492f7c38033883ed8a6b2"
+    },
+    {
+      "commit": "84b15c01fcb9526e4557df83d055daa5303db639",
+      "path": "packages/mcp/src/equity_feature_mcp/schemas/tools.json",
+      "bytes": 104088,
+      "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+    }
+  ],
+  "historical_execution_inputs": [
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_POSITIVE_EXECUTION.json",
+      "bytes": 19995,
+      "sha256": "587b28ac2bbc2414eebb342408a9a49ded1d914dee54b23fa52114f7ecea6d19"
+    },
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_AUTHORITY_EXECUTION.json",
+      "bytes": 13853,
+      "sha256": "6a11133aced62e256b8f49b2186f68cb60d66efe994b12961906113c88bf9c0a"
+    },
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_STATE_EXECUTION.json",
+      "bytes": 29847,
+      "sha256": "119ea9509a229de18bd336dc1e26e5faf515084085cd554d5110c7411a7f0e61"
+    },
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_EPOCH_EXECUTION.json",
+      "bytes": 26382,
+      "sha256": "7a5d443e88d865be5690f106d1b8be367fcb2ddae47c1eef802de6162fa18eb8"
+    },
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_UNKNOWN_EXECUTION.json",
+      "bytes": 59028,
+      "sha256": "69d039ec23b6f9e5458774c8fa4add2a03e8f50d167c6c2f24ae2fd11acc7bae"
+    },
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_VERSION_EXECUTION.json",
+      "bytes": 23939,
+      "sha256": "2823e61cc4c718ad462fbba37af2febde06fecff8c3a49b6803dbbfa27960f19"
+    },
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_REFERENCE_FAULT_EXECUTION.json",
+      "bytes": 110793,
+      "sha256": "027cf93880135db609a6ae763a1601f1ddf6b9b90fdf21b2317ec477edc54086"
+    },
+    {
+      "commit": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+      "path": "docs/EQ083_TLS_EXECUTION.json",
+      "bytes": 192750,
+      "sha256": "582d76468e26c6d491905bd2a2c1ec27210758f6f070869cf339d49f567e7241"
+    }
+  ],
+  "historical_worker": "9d5d5e3ee3e8270715fb8066f5b2837e49b1b65b",
+  "requirements": [
+    {
+      "id": "R01",
+      "area": "Pins",
+      "assertion": "Exact committed package/schema/fixture/requirements inventory plus observed installed versions.",
+      "seed": "all forms",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R02",
+      "area": "Accepted input maps",
+      "assertion": "Compare baseline package sources; qualification-only changes explicitly inventoried.",
+      "seed": "all forms",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R03",
+      "area": "Repeat",
+      "assertion": "Four families complete original producer equality, stable-key source counts, explicit fresh correlation IDs.",
+      "seed": "POSITIVE",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R04",
+      "area": "Snapshot/receipt",
+      "assertion": "Six read faults + three foreign-snapshot calculations; exact 422 read protocol vs403 mutation denial.",
+      "seed": "remaining",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R05",
+      "area": "Versions",
+      "assertion": "Unsupported wire/local constructor distinctions; three config/algorithm mutations each raw/client/MCP.",
+      "seed": "VERSION + remaining",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R06",
+      "area": "Scalar fidelity",
+      "assertion": "Original int64/adjacent near9e18 ns/decimal128/float bits/signedzero, full contexts and encode_result parity.",
+      "seed": "POSITIVE + accepted scalar fixtures",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R07",
+      "area": "Unavailable",
+      "assertion": "Two bars missing-input vectors below; full original bars producer, quality and evidence.",
+      "seed": "remaining",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R08",
+      "area": "Three lanes",
+      "assertion": "Real HTTP + RemoteClient + official SDK ClientSession2025-11-25 against one supervised service.",
+      "seed": "all dialogues",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R09",
+      "area": "Authentication",
+      "assertion": "Missing/invalid/expired credentials, pre-ingress mappings and provider/backend counters.",
+      "seed": "AUTHORITY",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R10",
+      "area": "Authorization",
+      "assertion": "Authenticated B cannot read/cancel native A; foreign opaque MCP reference rejected locally.",
+      "seed": "AUTHORITY + TLS",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R11",
+      "area": "Retirement",
+      "assertion": "Revoke/purge/restore cannot resurrect original result or references.",
+      "seed": "AUTHORITY",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R12",
+      "area": "Expiry",
+      "assertion": "Original half-open native expiry, separate local TTL/tombstones; reads do not refresh.",
+      "seed": "AUTHORITY",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R13",
+      "area": "Queue",
+      "assertion": "Queued cancel held0 vs running admitted charge until real execution release.",
+      "seed": "STATE",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R14",
+      "area": "Cancel",
+      "assertion": "cancel_requested then gated real exit, original expiry, no result publication.",
+      "seed": "STATE",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R15",
+      "area": "Failure/privacy",
+      "assertion": "Native/provider/clock synthetic sentinel failures redacted; exact fields and no payload leak.",
+      "seed": "STATE + REFERENCE_FAULT",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R16",
+      "area": "Unknown mutations",
+      "assertion": "Real response discarded only after real dispatch; one send, explicit same-key followup, no replay.",
+      "seed": "UNKNOWN",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R17",
+      "area": "Epoch",
+      "assertion": "Old scheduler close2True/actualexit before new service; old IDs403 and foreign opaque ref local0.",
+      "seed": "EPOCH",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R18",
+      "area": "TLS/framing/EOF",
+      "assertion": "Real peracceptedconnection timeout before handshake; wrongtrust/wrongSAN/framing/principal; activeEOF and64prefix.",
+      "seed": "TLS + REFERENCE_FAULT",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R19",
+      "area": "Trusted bounds",
+      "assertion": "Literal per-dialogue providers/sends/control/output caps and declared cooperative deadlines; unknown cleanup fails.",
+      "seed": "all dialogues",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R20",
+      "area": "Receipt boundary",
+      "assertion": "Owned audit/commit fact distinct from public feature_result/native reconstruction.",
+      "seed": "all native dialogues",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R21",
+      "area": "Synthetic source",
+      "assertion": "OwnedEntryProfile exact<=8192 frozen bytes, OwnedAudit and OwnedEpochSupervisor; no callercode/provider acquisition.",
+      "seed": "all owners",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R22",
+      "area": "Fresh installed",
+      "assertion": "Windows/Linux each wheel/sdist x light/native; native real SDK parent andchild -I/no package shadow.",
+      "seed": "new builder",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R23",
+      "area": "Artifacts",
+      "assertion": "Everyentry/archive/RECORD/source pins/pipcheck/typing consumers/core fingerprints/repeatbuild/currentserverZIP.",
+      "seed": "new builder + actual CI",
+      "fresh_qualified": false
+    },
+    {
+      "id": "R24",
+      "area": "Delivery",
+      "assertion": "Final exacthead independent source/native/security/docs review, bothOS actualmain evidence then accepted93.",
+      "seed": "release gate",
+      "fresh_qualified": false
+    }
+  ],
+  "remaining_mutation_read_vectors": [
+    {
+      "case_id": "R04-calculate-foreign-snapshot",
+      "change": "context.dataset.snapshot_id=eq083-foreign-snapshot; public constructor recomputes command digest",
+      "raw_status": 403,
+      "typed_mcp_failure": [
+        "authorization",
+        "remote_denial",
+        "decode",
+        403
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle dataset identity guard before grants and registration comparison"
+    },
+    {
+      "case_id": "R04-raw-return-foreign-snapshot",
+      "change": "trusted RawRead callback replaces only batch.metadata.source.snapshot_id after baseline admission",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "protocol",
+        "invalid_response",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "raw_callback_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "RawDataset.produce whole admitted batch fingerprint"
+    },
+    {
+      "case_id": "R04-raw-return-foreign-receipt",
+      "change": "trusted RawRead callback preserves ENTIRE batch but changes receipt_fingerprint from a*64 to b*64 after admission",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "protocol",
+        "invalid_response",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "raw_callback_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "RawDataset.produce original receipt equality; no public receipt request field"
+    },
+    {
+      "case_id": "R05-calculate-config-digest",
+      "change": "context.config.digest=b*64 unless original equals b*64 then c*64; recompute public command digest",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "unknown",
+        "outcome_unknown",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle complete registered calculate payload equality"
+    },
+    {
+      "case_id": "R05-calculate-config-algorithm",
+      "change": "context.config.algorithm_version=eq083-unsupported; recompute public command digest",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "unknown",
+        "outcome_unknown",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle complete registered calculate payload equality"
+    },
+    {
+      "case_id": "R05-calculate-feature-algorithm",
+      "change": "context.features[0].algorithm_version=eq083-unsupported AND corresponding FeatureRef in immutable expectation inventory changed consistently; recompute public command digest",
+      "raw_status": 422,
+      "typed_mcp_failure": [
+        "unknown",
+        "outcome_unknown",
+        "decode",
+        422
+      ],
+      "provider_each": 1,
+      "http_each": 1,
+      "extra_native_reads": 0,
+      "source_route": "jobs.handle complete registered calculate payload equality; inconsistent public expectation inventory would fail locally instead"
+    }
+  ],
+  "unavailable_vectors": [
+    {
+      "case_id": "R07-bars-session.price.overnight_gap",
+      "column": {
+        "algorithm_version": "v1",
+        "dtype": "float64",
+        "entities": [
+          {
+            "instrument_id": "A",
+            "session_id": "S"
+          }
+        ],
+        "feature_id": "session.price.overnight_gap",
+        "schema_version": "1",
+        "unit": "fraction",
+        "values": [
+          null
+        ]
+      },
+      "quality": {
+        "entity": {
+          "instrument_id": "A",
+          "session_id": "S"
+        },
+        "expected": "2",
+        "feature_id": "session.price.overnight_gap",
+        "observed": "2",
+        "reasons": [
+          "absent_input"
+        ],
+        "status": "missing_input"
+      },
+      "evidence": []
+    },
+    {
+      "case_id": "R07-bars-session.price.close_close_return",
+      "column": {
+        "algorithm_version": "v1",
+        "dtype": "float64",
+        "entities": [
+          {
+            "instrument_id": "A",
+            "session_id": "S"
+          }
+        ],
+        "feature_id": "session.price.close_close_return",
+        "schema_version": "1",
+        "unit": "fraction",
+        "values": [
+          null
+        ]
+      },
+      "quality": {
+        "entity": {
+          "instrument_id": "A",
+          "session_id": "S"
+        },
+        "expected": "2",
+        "feature_id": "session.price.close_close_return",
+        "observed": "2",
+        "reasons": [
+          "absent_input"
+        ],
+        "status": "missing_input"
+      },
+      "evidence": []
+    }
+  ],
+  "bars_full_producer_sha256": "7f864e18ec55bcf86e2c50d89ed038e40ff8e09b7faebe648ae9a2d166b4a88f",
+  "native_versions": {
+    "duckdb": "1.5.6",
+    "numpy": "2.2.6",
+    "mcp": "1.30.0",
+    "protocol": "2025-11-25"
+  },
+  "fresh_forms": [
+    "Windows-wheel-light",
+    "Windows-wheel-native-reference",
+    "Windows-sdist-light",
+    "Windows-sdist-native-reference",
+    "Linux-wheel-light",
+    "Linux-wheel-native-reference",
+    "Linux-sdist-light",
+    "Linux-sdist-native-reference"
+  ],
+  "selection_not_acceptance": true
+}

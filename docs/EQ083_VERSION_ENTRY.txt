@@ -1,0 +1,82 @@
+import sys,time,json,hashlib
+from pathlib import Path
+from dataclasses import replace
+if len(sys.argv)!=6:raise ValueError('owned version arguments')
+sys.path.insert(0,sys.argv[1])
+from test_jobs import setup
+from equity_feature_service import RawRead,RawDataset
+from equity_feature_service._audit import OwnedAudit
+from equity_feature_service.loopback import qualification_server
+ready,stop,control,ack=(Path(v) for v in sys.argv[2:6])
+scheduler,service,tokens,clock,facts=setup(actions=('calculate','job_manage','retain','discover','raw_read','derived_read','export'),audit_store=OwnedAudit(owned_synthetic=True,valid_from_ns=0,expires_at_ns=300000000000))
+service.ledger.credentials=tuple(type(c).provision(c.principal,('A' if n==0 else 'B')*43,0,3600000000000) for n,c in enumerate(service.ledger.credentials))
+dataset=next(iter(service.ledger.datasets.values()))
+original=facts['batch'];bad=replace(original,metadata=replace(original.metadata,source=replace(original.metadata.source,mapping_version='eq083-foreign-map')))
+raw_reads=0;raw_bad=False;requests=0;sequence=0;original_snapshot=None
+def read(cancellation):
+ global raw_reads
+ if raw_reads>=7:raise ValueError('owned raw read cap')
+ raw_reads+=1
+ return RawRead(bad if raw_bad else original,'a'*64)
+replacement=RawDataset(dataset.identity.dataset_id,dataset.identity.revision,dataset.scope,RawRead(original,'a'*64),read,columns=dataset.columns,rights=dataset.rights,rights_owner=dataset.rights_owner,rights_evidence=dataset.rights_evidence,valid_from_ns=dataset.valid_from_ns,expires_at_ns=dataset.expires_at_ns)
+if replacement.identity!=dataset.identity or replacement.acquisition_commitment!=dataset.acquisition_commitment:raise ValueError('owned raw baseline changed')
+service.ledger.datasets={dataset.identity.dataset_id:replacement}
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
+def snapshot(wait):
+ with scheduler.condition:
+  if len(scheduler.jobs)!=1:raise ValueError('owned version single job')
+  job=next(iter(scheduler.jobs.values()));until=time.monotonic()+3
+  while scheduler._running is not None or job.expires_ns<=0:
+   remaining=until-time.monotonic()
+   if not wait or remaining<=0:raise ValueError('owned version physical completion unconfirmed')
+   scheduler.condition.wait(remaining)
+  sizes=[len(job.native),len(job.wire),len(job.envelope),len(job.receipt)]
+  if job.state!='succeeded' or job.result_id is None or scheduler.queue or facts['reads']!=1 or not facts['entered'].is_set() or len(facts['sink_threads'])!=1:raise ValueError('owned version completion facts')
+  if type(job.held) is not int or not 0<job.held==sum(sizes)<=262144 or scheduler.total_retained!=job.held or scheduler.retained!={job.principal:job.held}:raise ValueError('owned version retained accounting')
+  if type(job.expires_ns) is not int or not 0<job.expires_ns<=9223372036854775807:raise ValueError('owned version original expiry')
+  return dict(job=job.job_id,result=job.result_id,state=job.state,expiry=job.expires_ns,held=job.held,sizes=sizes,reads=facts['reads'],running=scheduler._running,queue=len(scheduler.queue),sink_entries=len(facts['sink_threads']))
+def publish(path,value):
+ data=canonical(value)
+ if len(data)>1024:raise ValueError('owned version ACK bound')
+ pending=path.with_name(path.name+'.pending');pending.write_bytes(data);pending.replace(path);path.with_name(path.name+'.complete').mkdir()
+def app(environ,start_response):
+ global requests
+ if requests>=48 or sequence==4:raise ValueError('owned version request cap')
+ requests+=1;return service(environ,start_response)
+actions=('settled','raw_bad','raw_restore','final')
+def observe(action):
+ global original_snapshot,raw_bad
+ if action=='settled':
+  if requests!=1 or raw_reads!=0:raise ValueError('owned version admission order')
+  original_snapshot=snapshot(True)
+ else:
+  if original_snapshot is None or snapshot(False)!=original_snapshot:raise ValueError('owned version original identity changed')
+  if action=='raw_bad':
+   if requests!=33 or raw_reads!=1 or raw_bad:raise ValueError('owned version raw bad order')
+   raw_bad=True
+  elif action=='raw_restore':
+   if requests!=36 or raw_reads!=4 or not raw_bad:raise ValueError('owned version raw restore order')
+   raw_bad=False
+  elif action=='final':
+   if requests!=42 or raw_reads!=7 or raw_bad:raise ValueError('owned version final counters')
+  else:raise ValueError('owned version action')
+ return dict(sequence=sequence+1,action=action,requests=requests,raw_reads=raw_reads,raw_bad=raw_bad,snapshot=original_snapshot)
+server=qualification_server(service);server.set_app(app);server.timeout=.05
+publish(ready,dict(port=server.server_port));deadline=time.monotonic()+20
+try:
+ while requests<=48:
+  if stop.exists() or time.monotonic()>=deadline:break
+  slot=control.with_name(control.name+'.'+str(sequence+1))
+  if sequence<4 and slot.with_name(slot.name+'.complete').is_dir():
+   with slot.open('rb') as stream:data=stream.read(129)
+   if len(data)>128:raise ValueError('owned version control bound')
+   value=json.loads(data)
+   if type(value) is not dict or set(value)!={'sequence','action'} or type(value['sequence']) is not int or value['sequence']!=sequence+1 or value['action']!=actions[sequence]:raise ValueError('owned version control order')
+   result=observe(value['action']);sequence+=1;publish(ack.with_name(ack.name+'.'+str(sequence)),result)
+  server.handle_request()
+ if sequence!=4:raise ValueError('owned version dialogue incomplete')
+finally:
+ server.server_close()
+ if scheduler.close(2) is not True:raise ValueError('owned version native exit unconfirmed')
+if snapshot(False)!=original_snapshot:raise ValueError('owned version cleanup changed original result')
+print(canonical(dict(marker='eq083-version-http-exited',requests=requests,raw_reads=raw_reads,sequence=sequence,snapshot_sha256=hashlib.sha256(canonical(original_snapshot)).hexdigest())).decode('ascii'),flush=True)

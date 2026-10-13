@@ -1,0 +1,264 @@
+"""Frozen EQ083 version snapshot three-lane parent; trusted installed harness only."""
+import sys,json,hashlib,math,socket,re,time,threading,tempfile,ctypes,errno
+from pathlib import Path
+from datetime import timedelta
+import anyio
+from jsonschema import Draft202012Validator
+from mcp import ClientSession,StdioServerParameters
+from mcp.client.stdio import stdio_client
+from mcp.shared.exceptions import McpError
+import mcp,equity_feature_io_sdk,equity_feature_client,equity_feature_mcp,equity_feature_service
+from equity_feature_client import RemoteClient,Request,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation,JobExpectation,ResultView
+from equity_feature_client.native import convert_result
+from equity_feature_io_sdk import encode_result
+from equity_feature_service._containment import OwnedEpochSupervisor
+from equity_feature_service._entry import OwnedEntryInventory,OwnedEntryProfile
+
+if len(sys.argv)!=2:raise ValueError('owned parent arguments')
+root=Path(sys.argv[1]).resolve()
+assert sys.flags.isolated==1 and sys.platform in ('win32','linux') and not (root/'packages').exists()
+assert all('site-packages' in Path(v.__file__).resolve().parts for v in (mcp,equity_feature_io_sdk,equity_feature_client,equity_feature_mcp,equity_feature_service))
+def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+def pinned(path,size,digest):
+ with (root/path).open('rb') as stream:value=stream.read(size+1)
+ assert len(value)==size and hashlib.sha256(value).hexdigest()==digest
+ return value
+with (root/'docs/EQ083_VERSION_PARENT_INPUTS.json').open('rb') as stream:manifest_bytes=stream.read(65537)
+assert len(manifest_bytes)<=65536
+manifest=json.loads(manifest_bytes)
+assert set(manifest)=={'scope','inputs','reference_entry','version_entry','request_ledger'}
+assert 1<=len(manifest['inputs'])<=32 and len({v['harness_path'] for v in manifest['inputs']})==len(manifest['inputs'])
+assets={item['harness_path']:pinned(item['harness_path'],item['bytes'],item['sha256']) for item in manifest['inputs']}
+fixture=json.loads(assets['docs/EQ081_CLIENT_FIXTURES.json'])
+remote=Draft202012Validator(json.loads(assets['schemas/remote-v1.1.schema.json']))
+remote_v1=Draft202012Validator(json.loads(assets['schemas/remote-v1.schema.json']))
+tools=json.loads(assets['schemas/mcp-tools.json'])['tools']
+assert len(tools)==7
+version_source=pinned('docs/EQ083_VERSION_ENTRY.txt',5947,'3e1098a213cdd5d70db0d5fdee42c1b017efc3e02cee556bd448c669eba5a77a')
+pinned('docs/EQ083_VERSION_REFERENCE_ENTRY.txt',3707,'2e3d0c6f5af8ba3d478c1789d50f9a369d52503c3d7f07042ab1f159e7faea41')
+def completed(path,limit):
+ marker=path.with_name(path.name+'.complete')
+ if not marker.exists():return None
+ assert marker.is_dir()
+ with path.open('rb') as stream:data=stream.read(limit+1)
+ assert len(data)<=limit
+ return json.loads(data)
+def wait_completed(path,limit,seconds):
+ deadline=time.monotonic()+seconds
+ while True:
+  value=completed(path,limit)
+  if value is not None:return value
+  assert time.monotonic()<deadline
+  time.sleep(.01)
+def exited(pid):
+ assert type(pid) is int and pid>0
+ if sys.platform=='linux':
+  try:value=(Path('/proc')/str(pid)/'stat').read_text(encoding='ascii')
+  except OSError as error:
+   if error.errno in (errno.ENOENT,errno.ESRCH):return True
+   raise
+  return value.rsplit(')',1)[1].strip().split()[0]=='Z'
+ kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+ kernel.OpenProcess.argtypes=[ctypes.c_uint32,ctypes.c_int,ctypes.c_uint32];kernel.OpenProcess.restype=ctypes.c_void_p
+ kernel.WaitForSingleObject.argtypes=[ctypes.c_void_p,ctypes.c_uint32];kernel.WaitForSingleObject.restype=ctypes.c_uint32
+ kernel.CloseHandle.argtypes=[ctypes.c_void_p];kernel.CloseHandle.restype=ctypes.c_int
+ handle=kernel.OpenProcess(0x100000,False,pid)
+ if not handle:
+  code=ctypes.get_last_error()
+  if code==87:return True
+  raise OSError(code,'owned process inspection')
+ try:
+  status=kernel.WaitForSingleObject(handle,0)
+  assert status in (0,258)
+  return status==0
+ finally:assert kernel.CloseHandle(handle)
+def pairs(items):
+ value={}
+ for key,item in items:
+  assert key not in value;value[key]=item
+ return value
+def number(value):
+ result=float(value);assert math.isfinite(result);return result
+def parse(raw):return json.loads(raw.decode('utf-8','strict'),object_pairs_hook=pairs,parse_float=number,parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite')))
+case=fixture['native_cases'][0];producer=case['complete_producer_payload']
+fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+def verify(value):
+ assert value==producer and hashlib.sha256(canonical(value)).hexdigest()==case['producer_payload_sha256']
+ native=convert_result(ResultView(canonical(dict(schema='equity.remote',version='1.1',request_id='native-proof',kind='result',payload=value))),expected)
+ assert native.ok and hashlib.sha256(encode_result(native.view)).hexdigest()==case['native_sha256']
+def value(outcome):assert outcome.ok;return outcome.view.payload_json()
+def denied(outcome):
+ assert not outcome.ok and outcome.view is None
+ f=outcome.failure;assert (f.category,f.code,f.phase,f.status)==('authorization','remote_denial','decode',403)
+rawcase=fixture['raw_cases'][0];raw_payload=rawcase['expected_raw_payload'];raw_scope=raw_payload['scope']
+raw_expected=RawExpectation(DatasetKey(**raw_payload['dataset']),ScopeKey(raw_scope['instrument_id'],raw_scope['session_id'],int(raw_scope['start_ns']),int(raw_scope['end_ns'])),rawcase['data_kind'],tuple(v['name'] for v in raw_payload['columns']))
+changed=expected.context_json();changed['registry_snapshot']='0'*64 if changed['registry_snapshot']!='0'*64 else '1'*64
+bad_registry=ProducerExpectation(changed,expected.scope,expected.executed_features,expected.backend_id,expected.backend_version)
+bad_backend=ProducerExpectation(expected.context_json(),expected.scope,expected.executed_features,expected.backend_id,'eq083-other-version')
+caller_context=expected.context_json();immutable=ProducerExpectation(caller_context,expected.scope,expected.executed_features,expected.backend_id,expected.backend_version)
+caller_context['dataset']['revision']='caller-mutation';copy=immutable.context_json();copy['config']['revision']='copy-mutation'
+assert immutable.context_json()==expected.context_json() and immutable.command_digest==expected.command_digest
+caller_payload=dict(operation='calculate',context=expected.context_json(),scope=expected.scope.payload_json(),idempotency_key='eq083-version-original',command_digest=expected.command_digest)
+immutable_request=Request('1.1','immutable-request',caller_payload);encoded=immutable_request.encoded
+caller_payload['context']['dataset']['revision']='caller-mutation';copy=immutable_request.payload_json();copy['context']['config']['revision']='copy-mutation'
+assert immutable_request.encoded==encoded and immutable_request.payload_json()['context']==expected.context_json()
+def failure(outcome,category,code,phase,status):
+ assert not outcome.ok and outcome.view is None
+ assert (outcome.failure.category,outcome.failure.code,outcome.failure.phase,outcome.failure.status)==(category,code,phase,status)
+with tempfile.TemporaryDirectory(prefix='eq083-version-') as directory:
+ ready,stop,control,ack,pid=(Path(directory)/name for name in ('ready','stop','control','ack','pid'))
+ profile=OwnedEntryProfile('eq083-version',version_source,hashlib.sha256(version_source).hexdigest(),(str(root/'tests/service'),str(ready),str(stop),str(control),str(ack)),True)
+ supervisor=OwnedEpochSupervisor(OwnedEntryInventory((profile,)));results=[];errors=[]
+ def launch():
+  try:results.append(supervisor.run_admitted(profile.profile_id,wall_seconds=25,output_limit=768))
+  except BaseException as error:errors.append(type(error).__name__)
+ thread=threading.Thread(target=launch);thread.start()
+ direct_count=client_count=mcp_count=sequence=0;acks=[];owner=None;saved=None;reference_exited=False
+ try:
+  address=wait_completed(ready,128,4);assert set(address)=={'port'} and type(address['port']) is int and 1<=address['port']<=65535 and thread.is_alive()
+  port=address['port'];origin='http://127.0.0.1:'+str(port)
+  def direct(payload,kind,status=200,principal='A',version='1.1'):
+   global direct_count
+   assert direct_count<16;direct_count+=1
+   request_id='eq083-http-'+str(direct_count)
+   if version=='9.0':encoded=canonical(dict(schema='equity.remote',version=version,request_id=request_id,kind='request',payload=payload))
+   else:encoded=Request(version,request_id,payload).encoded
+   assert len(encoded)<=16384
+   wire=b'POST /v1/request HTTP/1.0\r\nHost: 127.0.0.1:'+str(port).encode()+b'\r\nAuthorization: Bearer '+principal.encode('ascii')*43+b'\r\nContent-Type: application/json\r\nContent-Length: '+str(len(encoded)).encode()+b'\r\nConnection: close\r\n\r\n'+encoded
+   with socket.create_connection(('127.0.0.1',port),timeout=5) as connection:
+    connection.settimeout(5);connection.sendall(wire);response=bytearray();boundary=None
+    while True:
+     chunk=connection.recv(1024)
+     if not chunk:break
+     response.extend(chunk)
+     if boundary is None:
+      location=response.find(b'\r\n\r\n')
+      if location>=0:boundary=location+4;assert boundary<=8192
+      else:assert len(response)<=8192
+     if boundary is not None:assert len(response)-boundary<=262144
+   assert boundary is not None
+   header=bytes(response[:boundary-4]);body=bytes(response[boundary:]);lines=header.split(b'\r\n')
+   assert re.fullmatch(rb'HTTP/1\.[01] '+str(status).encode('ascii')+rb' [\x20-\x7e]*',lines[0])
+   headers={}
+   for line in lines[1:]:
+    name,separator,value=line.partition(b':');assert separator
+    name=name.decode('ascii').lower();assert name not in headers
+    headers[name]=value.strip().decode('ascii')
+   assert headers['content-type']=='application/json' and headers['cache-control']=='no-store' and headers['x-content-type-options']=='nosniff'
+   assert 'transfer-encoding' not in headers and 'content-encoding' not in headers
+   assert re.fullmatch(r'0|[1-9][0-9]*',headers['content-length']) and int(headers['content-length'])==len(body)
+   value=parse(body);(remote_v1 if value['version']=='1.0' else remote).validate(value)
+   assert (value['version'],value['request_id'],value['kind'])==(('1.0',None,'error') if version=='9.0' else (version,request_id,kind))
+   if status!=200:assert 'content-disposition' not in headers
+   if status==200 and payload['operation']=='artifact_read':assert headers['content-disposition']=='attachment; filename="result-'+hashlib.sha256(payload['result_id'].encode('ascii')).hexdigest()+'.json"'
+   return value['payload']
+  def provider():
+   global client_count
+   assert client_count<16;client_count+=1;return 'A'*43
+  owner=RemoteClient(origin,provider,attempts=1,budget=5)
+  def action(name):
+   global sequence,saved
+   assert name==('settled','raw_bad','raw_restore','final')[sequence];sequence+=1
+   slot=control.with_name(control.name+'.'+str(sequence));target=ack.with_name(ack.name+'.'+str(sequence))
+   assert not slot.exists() and not target.exists();raw=canonical(dict(sequence=sequence,action=name));assert len(raw)<=128
+   pending=slot.with_name(slot.name+'.pending');pending.write_bytes(raw);pending.replace(slot);slot.with_name(slot.name+'.complete').mkdir()
+   v=wait_completed(target,1024,4)
+   assert set(v)=={'sequence','action','requests','raw_reads','raw_bad','snapshot'}
+   assert type(v['sequence']) is int and v['sequence']==sequence and v['action']==name
+   assert type(v['requests']) is int and v['requests']==direct_count+client_count+mcp_count==(1,33,36,42)[sequence-1]
+   assert type(v['raw_reads']) is int and v['raw_reads']==(0,1,4,7)[sequence-1] and type(v['raw_bad']) is bool and v['raw_bad']==(sequence==2)
+   s=v['snapshot'];assert set(s)=={'job','result','state','expiry','held','sizes','reads','running','queue','sink_entries'}
+   assert all(re.fullmatch('[0-9a-f]{32}-[0-9a-f]{32}',s[k]) for k in ('job','result')) and s['state']=='succeeded'
+   assert type(s['expiry']) is int and s['expiry']==300000000100
+   assert type(s['held']) is int and type(s['sizes']) is list and len(s['sizes'])==4 and all(type(n) is int and n>0 for n in s['sizes']) and 0<s['held']==sum(s['sizes'])<=262144
+   assert s['running'] is None and all(type(s[k]) is int and s[k]==n for k,n in [('reads',1),('queue',0),('sink_entries',1)])
+   if saved is None:saved=s
+   else:assert s==saved
+   acks.append(v)
+  def calc(expectation=expected):return dict(operation='calculate',context=expectation.context_json(),scope=expectation.scope.payload_json(),idempotency_key='eq083-version-original',command_digest=expectation.command_digest)
+  first=direct(calc(),'job',version='1.0');action('settled');assert first['job_id']==saved['job']
+  job=JobExpectation(saved['job'],expected.command_digest)
+  result_payload=dict(operation='result_read',result_id=saved['result'],cursor=None)
+  export_payload=dict(operation='artifact_read',result_id=saved['result'],cursor=None)
+  status_payload=dict(operation='job_status',job_id=saved['job'])
+  raw_request=dict(operation='slice',dataset=raw_expected.dataset.payload_json(),scope=raw_expected.scope.payload_json(),columns=list(raw_expected.columns),cursor=None)
+  complete=None
+  for version in ('1.0','1.1'):
+   direct(dict(operation='discover'),'discovery',version=version)
+   if version=='1.1':assert direct(calc(),'job',version=version)['job_id']==saved['job']
+   observed=direct(status_payload,'job',version=version);assert (observed['job_id'],observed['result_id'],observed['state'],observed['command_digest'])==(saved['job'],saved['result'],'succeeded',expected.command_digest)
+   if complete is None:complete=observed
+   else:assert observed==complete
+   for payload in (result_payload,export_payload):
+    if version=='1.0':assert direct(payload,'error',400,version=version)==dict(category='transport',code='incompatible_version',retryable=False)
+    else:verify(direct(payload,'result',version=version))
+   value(owner.discover(request_id='typed-discover-'+version,version=version))
+   assert value(owner.calculate(expected,'eq083-version-original',request_id='typed-calc-'+version,version=version))==complete
+   assert value(owner.job_status(job,request_id='typed-status-'+version,version=version))==complete
+   for method in (owner.result_read,owner.artifact_read):
+    before=client_count;outcome=method(saved['result'],expected,request_id='typed-'+method.__name__+'-'+version,version=version)
+    if version=='1.0':failure(outcome,'configuration','invalid_request','prepare',None);assert client_count==before
+    else:verify(value(outcome));assert client_count==before+1
+  assert (direct_count,client_count)==(10,8)
+  params=StdioServerParameters(command=sys.executable,args=['-I',str(root/'docs/EQ083_VERSION_REFERENCE_ENTRY.txt'),origin,str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(pid),case['case']],encoding='utf-8',encoding_error_handler='strict')
+  async def call(session,name,arguments,backend=True):
+   global mcp_count
+   response=await session.call_tool(name,arguments);structured=response.structuredContent
+   assert len(response.content)==1 and response.content[0].type=='text' and response.content[0].text.encode('ascii')==canonical(structured) and len(canonical(structured))<=16384
+   Draft202012Validator(next(v['outputSchema'] for v in tools if v['name']==name)).validate(structured)
+   assert response.isError==(not structured['ok'])
+   if backend:mcp_count+=1;assert mcp_count<=10
+   return structured
+  async def success(session,name,args):
+   v=await call(session,name,args);assert v['ok'];return v['payload']
+  async def dialogue():
+   async with stdio_client(params) as (read,write):
+    async with ClientSession(read,write,read_timeout_seconds=timedelta(seconds=10)) as session:
+     init=await session.initialize();assert init.protocolVersion=='2025-11-25' and init.capabilities.model_dump(exclude_none=True)==dict(tools=dict(listChanged=False))
+     listed=await session.list_tools();assert [v.name for v in listed.tools]==[v['name'] for v in tools]
+     for actual,frozen in zip(listed.tools,tools):assert actual.inputSchema==frozen['inputSchema'] and actual.outputSchema==frozen['outputSchema']
+     admitted=await success(session,'equity_calculate',dict(profile='command',idempotency_key='eq083-version-original'));assert admitted['data']==complete
+     reference=admitted['reference'];assert (await success(session,'equity_job_status',dict(reference=reference)))['data']==complete
+     verify((await success(session,'equity_result_summary',dict(reference=reference)))['data'])
+     exported=await success(session,'equity_artifact_reference',dict(reference=reference));assert exported['operation']=='artifact_read'
+     verify((await success(session,'equity_result_summary',dict(reference=exported['reference'])))['data'])
+     await success(session,'equity_discover',{})
+     assert mcp_count==6
+     assert direct(calc(bad_registry),'error',422)==dict(category='contract',code='inconsistent_identity',retryable=False)
+     failure(owner.calculate(bad_registry,'eq083-version-original',request_id='bad-registry'),'unknown','outcome_unknown','decode',422)
+     rejected=await call(session,'equity_calculate',dict(profile='bad-registry',idempotency_key='eq083-version-original'))
+     assert rejected==dict(ok=False,failure=dict(source='client',category='unknown',code='outcome_unknown',phase='decode',status=422))
+     for method in (owner.result_read,owner.artifact_read):failure(method(saved['result'],bad_backend,request_id='wrong-'+method.__name__),'protocol','invalid_response','decode',200)
+     wrong_digest='0'*64 if expected.command_digest!='0'*64 else '1'*64;wrong_job=JobExpectation(saved['job'],wrong_digest)
+     failure(owner.job_status(wrong_job,request_id='wrong-job-status'),'protocol','invalid_response','decode',200)
+     failure(owner.job_cancel(wrong_job,request_id='wrong-job-cancel'),'unknown','outcome_unknown','decode',200)
+     assert direct(dict(operation='discover'),'error',400,version='9.0')==dict(category='transport',code='incompatible_version',retryable=False)
+     before=client_count;failure(owner.discover(request_id='unsupported-version',version='9.0'),'configuration','invalid_request','prepare',None);assert client_count==before
+     try:await session.call_tool('equity_discover',dict(version='9.0'))
+     except McpError as error:assert error.error.code==-32602
+     else:raise AssertionError('extra MCP version accepted')
+     assert direct(raw_request,'slice')==raw_payload
+     assert (direct_count,client_count,mcp_count)==(13,13,7);action('raw_bad')
+     assert direct(raw_request,'error',422)==dict(category='contract',code='inconsistent_identity',retryable=False)
+     failure(owner.slice_raw(raw_expected,request_id='bad-raw'),'protocol','invalid_response','decode',422)
+     rejected=await call(session,'equity_slice',dict(profile='raw'))
+     assert rejected==dict(ok=False,failure=dict(source='client',category='protocol',code='invalid_response',phase='decode',status=422))
+     action('raw_restore')
+     assert direct(raw_request,'slice')==raw_payload and value(owner.slice_raw(raw_expected,request_id='restored-raw'))==raw_payload
+     assert (await success(session,'equity_slice',dict(profile='raw')))['data']==raw_payload
+     assert direct(calc(),'job')==complete and value(owner.calculate(expected,'eq083-version-original',request_id='final-calc'))==complete
+     repeated=await success(session,'equity_calculate',dict(profile='command',idempotency_key='eq083-version-original'));assert repeated['reference']==reference and repeated['data']==complete
+   marker=wait_completed(pid,128,3);closed=wait_completed(pid.with_name(pid.name+'.closed'),128,3)
+   assert closed==dict(pid=marker['pid'],provider_calls=10,marker='eq083-mcp-closed')
+   until=time.monotonic()+3
+   while not exited(marker['pid']):assert time.monotonic()<until;time.sleep(.01)
+  anyio.run(dialogue);reference_exited=True
+  assert (direct_count,client_count,mcp_count)==(16,16,10);action('final')
+ finally:
+  if owner is not None:owner.close()
+  stop.write_bytes(b'1');thread.join(6)
+ assert not thread.is_alive() and not errors and len(results)==1
+ assert (results[0].reason,results[0].exit_code)==('exited',0),(results[0].reason,results[0].exit_code,results[0].output)
+ assert json.loads(results[0].output)==dict(marker='eq083-version-http-exited',requests=42,raw_reads=7,sequence=4,snapshot_sha256=hashlib.sha256(canonical(saved)).hexdigest())
+ print(json.dumps(dict(marker='eq083-three-lane-version',direct=direct_count,client=client_count,mcp=mcp_count,total=42,source_reads=1,raw_reads=7,acknowledgements=acks,native_exit=True,reference_exit=reference_exited,immutable_expectations=True),sort_keys=True,separators=(',',':')))
