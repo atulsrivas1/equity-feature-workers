@@ -1,0 +1,11 @@
+# R7 supported service and qualification boundary
+
+R7's revised scope is owner-approved operator-controlled service qualification. Operators install and pin trusted worker/service/client/MCP code, approved logical registrations, configuration and synthetic or explicitly licensed input data. Remote requests remain untrusted and subject to strict authentication, authorization, versions/schema/precision, admission/accounting and redacted-error rules. No caller-supplied executable, arbitrary SQL/provider/path/URL/token/TLS selector is admitted.
+
+Supported Windows/Linux forms are established by fresh installed qualification; each environment records its actual interpreter, packages, dependency/archive hashes, RECORD/source origins and protocol identities. A historical Windows-only run or source review does not establish fresh cross-platform composition.
+
+Timeouts/cancellation are cooperative or platform-scoped as explicitly documented. Require actual observed child exit, scheduler close and defined thread/socket/capture cleanup for tested cases; hold running capacity until real execution release. A possibly sent mutation remains unknown and is never automatically replayed. Unresponsive callbacks/DNS, partial-output prefixes and failed cleanup are documented failures/limits rather than disguised success or automatic restart. Service quota/accounting/process limits do not establish ownership and finite reclamation of every physical kernel/device/provider allocation. Whole-platform enforcement is future SEC-001 #374, outside R7's release dependencies.
+
+The existing qualification_server is explicitly loopback-only and a qualification server. It is not automatically qualified for Internet exposure or production hosting by this decision. EQ084 must name and actually test an approved private staging deployment, request handling/access boundaries and operation recipe. Public exposure, spending, provider/private data, host administration and new stable registry publication remain separately gated.
+
+Read the R7_SCOPE_RESET decision and live EQ083/EQ084 issues for exact scope and current evidence. No numerical/runtime/API/dependency/package-version change is made by this support note.

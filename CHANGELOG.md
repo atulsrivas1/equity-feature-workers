@@ -1,3 +1,5 @@
+R7 scope reset approved October13: cooperative operator-controlled service qualification and real private staging operations remain release gates; stronger whole-platform resource/finite-settlement engineering moved to separate SEC-001 #374. Eight accepted stories and failed/rejected evidence unchanged; no runtime/API/math change, new qualification pass, Ready or completion claim.
+
 EQ085 qualified main delivery: complete measured evidence, fifteen actual main jobs, bothOS fresh wheel/sdist smoke and current artifact/tree readback passed independent review. Frozen same-story delivery receipt added; no numerical/runtime package change. Final acceptance is recorded on issue96; R8 remains open and R7 parked.
 
 ## EQ085 synthetic attribution tooling
