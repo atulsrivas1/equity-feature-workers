@@ -1,3 +1,12 @@
+## EQ085 synthetic attribution tooling
+
+Added an external developer profiler with separate unprofiled baseline and
+diagnostic windows, complete parity/golden checks and installed-form qualification.
+Six synthetic pipeline cases and core conversion/codec/history observations are
+retained with provenance and limits. The measured targets are validation and
+materialization work, not an adopted accelerator. No formulas, public package
+API, dependencies or worker defaults changed. Final-main delivery remains pending.
+
 ## EQ082 qualified MCP and frozen final delivery evidence
 
 Current lifecycle follows [story92/live Project](https://github.com/atulsrivas1/equity-features/issues/92). SourcePR368/worker39 and correctivePR369/worker40 merged after independent source/native/security/API/docs review, current Windows/Linux artifact qualification and all30 successful candidate jobs. [Exact corrective source/qualification review](https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6103761277) applies the bounded actual-cleanup fixture correction. Qualified implementation mains canonical `5f88fd9b4b22164d0272fc8faa4cd6b366e3e82c` /worker `76363661799bf15668cd13d5ef136a647ca2f7a7`. [Independent actual-main readback](https://github.com/atulsrivas1/equity-features/issues/92#issuecomment-6103905176) verifies whole trees equal reviewed heads, changed public UTF8 Git bytes, Atul author/GitHub committer/no coauthors and accepted package/schema invariance. Runtime, calculation mathematics, worker/core/I/O/publicclient/service code and closed1.0/1.1 schemas remain unchanged by the corrective qualification test.

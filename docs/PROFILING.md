@@ -33,7 +33,13 @@ core baseline report. Package artifacts are separately bound by the foundation
 builder's archive manifests and actual native CI receipts.
 
 Profiling overhead is present in diagnostic executions and excluded from baseline
-samples. Cumulative child/recursive time is nonadditive. Self-time grouping is
+samples. The diagnostic wraps the whole checked `run_pipeline` call, including
+imports and setup before its internal `pipeline_start`; baseline
+`pipeline_elapsed_ns` starts at that internal marker. These are distinct timer
+boundaries. Their difference or ratio is not profiling overhead alone or an
+identical-boundary speed comparison. Import-related native stat/read calls cannot
+be attributed wholly to source/storage I/O. Cumulative child/recursive time is
+nonadditive. Self-time grouping is
 profiler attribution, not proof of independent physical resources, native CPU,
 copy counts or storage I/O. C extension calls remain opaque; unclassified entries
 are retained. Native process lifetime peaks and exposed array buffers have the
