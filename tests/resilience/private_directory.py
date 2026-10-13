@@ -12,11 +12,28 @@ $path = $args[0]
 $mode = $args[1]
 $stage = 'identity'
 try {
-$identity = [System.Security.Principal.WindowsIdentity]::GetCurrent().User
+$tokenIdentity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+$identity = $tokenIdentity.User
+$tokenOwner = $tokenIdentity.Owner
+if ($identity -eq $null -or $tokenOwner -eq $null) { throw 'owned token identity' }
+if ($mode -ne 'secure' -and $mode -ne 'verify') { throw 'owned ACL mode' }
 $directory = [System.IO.DirectoryInfo]::new($path)
 $stage = 'verify_existing_owner'
 $existingOwner = $directory.GetAccessControl([System.Security.AccessControl.AccessControlSections]::Owner)
-if ($existingOwner.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $identity.Value) { throw 'owned existing owner' }
+$ownerSid = $existingOwner.GetOwner([System.Security.Principal.SecurityIdentifier])
+if ($mode -eq 'secure') {
+  $stage = 'verify_new_directory'
+  $entries = @($directory.GetFileSystemInfos())
+  if ($entries.Count -ne 1 -or $entries[0].Name -ne 'owned-acl-check.ps1' -or ($entries[0].Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'owned new directory' }
+  if ($ownerSid.Value -ne $identity.Value) {
+    if ($ownerSid.Value -ne $tokenOwner.Value) { throw 'owned foreign owner' }
+    $stage = 'self_owner'
+    $existingOwner.SetOwner($identity)
+    $directory.SetAccessControl($existingOwner)
+    $ownerSid = $directory.GetAccessControl([System.Security.AccessControl.AccessControlSections]::Owner).GetOwner([System.Security.Principal.SecurityIdentifier])
+  }
+}
+if ($ownerSid.Value -ne $identity.Value) { throw 'owned existing owner' }
 if ($mode -eq 'secure') {
   $stage = 'access_descriptor'
   $acl = $directory.GetAccessControl([System.Security.AccessControl.AccessControlSections]::Access)
@@ -67,7 +84,7 @@ def private_directory(directory, *, secure=False):
             if returncode != 0 or stdout or stderr:
                 # Publish only the fixed sanitized stage/type/numeric diagnostic.
                 # Unrecognized stderr stays in the private failed directory.
-                detail = re.fullmatch(rb'owned_acl:(?:identity|verify_existing_owner|access_descriptor|protect_and_clear|access_rule|apply|reread|verify_identity|verify_rights|verify_protection):[A-Za-z][A-Za-z0-9]{0,127}:-?[0-9]{1,11}:-?[0-9]{1,11}\r?\n', stderr)
+                detail = re.fullmatch(rb'owned_acl:(?:identity|verify_existing_owner|verify_new_directory|self_owner|access_descriptor|protect_and_clear|access_rule|apply|reread|verify_identity|verify_rights|verify_protection):[A-Za-z][A-Za-z0-9]{0,127}:-?[0-9]{1,11}:-?[0-9]{1,11}\r?\n', stderr)
                 message = 'owned private ACL verification'
                 if detail is not None:message += ': ' + stderr.decode('ascii').strip()
                 error = ValueError(message)

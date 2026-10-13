@@ -879,5 +879,42 @@
       "resilience (windows-latest)\tUNKNOWN STEP\t2026-10-13T21:51:26.7258902Z     raise error"
     ]
   },
-  "dacl_hosted_diagnostic_correction": "Expose only exact fixed stage, exception type and numeric HResult/innerCode already sanitized by the trusted ACL script. Unrecognized stderr stays private; no path/SID/message output or enforcement relaxation. Actual hosted cause remains undetermined until changed diagnostic run."
+  "dacl_hosted_diagnostic_correction": "Expose only exact fixed stage, exception type and numeric HResult/innerCode already sanitized by the trusted ACL script. Unrecognized stderr stays private; no path/SID/message output or enforcement relaxation. Actual hosted cause remains undetermined until changed diagnostic run.",
+  "hosted_existing_owner_mismatch": {
+    "run": 38474885013,
+    "job": 115563008817,
+    "bytes": 229510,
+    "sha256": "ae46c13bd56b087e726a4afe55192a39cd8da4e32bad3547e81611c16ff94800",
+    "trace": [
+      "2026-10-13T22:03:03.2897330Z Traceback (most recent call last):",
+      "2026-10-13T22:03:03.2908144Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 257, in <module>",
+      "2026-10-13T22:03:03.2909219Z     main()",
+      "2026-10-13T22:03:03.2910064Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 241, in main",
+      "2026-10-13T22:03:03.2911580Z     forms = [qualify(form, {name: paths[form] for name, paths in products.items()}, dependencies,",
+      "2026-10-13T22:03:03.2912399Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "2026-10-13T22:03:03.2913415Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tools\\build_resilience.py\", line 146, in qualify",
+      "2026-10-13T22:03:03.2914333Z     private_directory(location, secure=True)",
+      "2026-10-13T22:03:03.2915422Z   File \"D:\\a\\equity-feature-workers\\equity-feature-workers\\component\\tests\\resilience\\private_directory.py\", line 78, in private_directory",
+      "2026-10-13T22:03:03.2916438Z     raise error",
+      "2026-10-13T22:03:03.2917097Z ValueError: owned private ACL verification: owned_acl:verify_existing_owner:RuntimeException:-2146233087:0",
+      "2026-10-13T22:03:03.4033881Z ##[error]Process completed with exit code 1.",
+      "2026-10-13T22:03:03.4280164Z Post job cleanup.",
+      "2026-10-13T22:03:03.6310867Z [command]\"C:\\Program Files\\Git\\bin\\git.exe\" version",
+      "2026-10-13T22:03:03.6592024Z git version 2.55.0.windows.5",
+      "2026-10-13T22:03:03.6664823Z Temporarily overriding HOME='D:\\a\\_temp\\72ccec70-6fa7-4baa-99ec-e6abd182c34a' before making global git config changes",
+      "2026-10-13T22:03:03.6665871Z Adding repository directory to the temporary git global config as a safe directory",
+      "2026-10-13T22:03:03.6677178Z [command]\"C:\\Program Files\\Git\\bin\\git.exe\" config --global --add safe.directory D:\\a\\equity-feature-workers\\equity-feature-workers\\io"
+    ]
+  },
+  "new_empty_directory_self_owner_contract": {
+    "observed": "Hosted job115563008817 secure failed at verify_existing_owner; existing owner differs from currentUser. Actual owner SID was not emitted or inferred.",
+    "change": "Secure-only new directory must contain exactly the fixed non-reparse ACL script. Existing owner must equal currentUser or current token defaultOwner. If defaultOwner differs, persist Owner-only descriptor assigning currentUser, require strict currentUser owner reread, then existing Access-only sole-user protectedDACL. Verify mode never changes owner. Foreign owner, contents, unknown identity or denied WRITE_OWNER fail closed.",
+    "permissions": "No account/group/audit/token/privilege enable or administrator setting changes. Only new owned qualification directory self-ownership using already available filesystem rights.",
+    "primary_sources": [
+      "https://learn.microsoft.com/en-us/dotnet/api/system.security.principal.windowsidentity.owner?view=netframework-4.8.1",
+      "https://learn.microsoft.com/en-us/windows/win32/secauthz/owner-of-a-new-object",
+      "https://devblogs.microsoft.com/oldnewthing/20050818-09/?p=34533"
+    ],
+    "new_native_execution": false
+  }
 }
