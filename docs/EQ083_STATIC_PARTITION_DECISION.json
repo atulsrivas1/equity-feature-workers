@@ -1,0 +1,80 @@
+{
+  "schema": "eq083.static-partition-public-contract.v1",
+  "bases": {
+    "equity-features": "012a35cf38b93b2851dfb357269d91fc2ef92ce5",
+    "equity-feature-workers": "ba9ccb09aea03da8a312c0f2230752918763a1af"
+  },
+  "disposition": "NOT_SELECTABLE_ON_REVIEWED_PUBLIC_CONTRACT",
+  "candidate": "SYSGO PikeOS static partitions",
+  "selected": false,
+  "qualified_replacement": false,
+  "criteria_changed": false,
+  "public_contract_inquiry_closed": true,
+  "source_immutable": false,
+  "new_tests": 0,
+  "native_operations": 0,
+  "full_independent_review": {
+    "reviewer": "r7_policy_review independent reviewer",
+    "unresolved_conjunction": [
+      "Exact partition-stop/shutdown/reset semantics for in-flight device, DMA, VirtIO/provider and shared-service work; whole completion and failure witnesses",
+      "Independent controller CPU/interrupt/clock/mailbox reservation and allocation-free failure path, all progress dependencies and literal supported finite bounds",
+      "Boot/kernel/PSSW/ASP/PSP/driver/provider and guest physical allocation geometry, metadata/caches/old-new overlap/retired debt with closed donors and all writers",
+      "Allocated storage byte and live/retired node enforcement including open-deleted/replacement/journal/temporary backing",
+      "Frozen supported release/hardware/configuration, source-to-build/native mappings and transitive license/build/provider authority",
+      "Exact Windows/Linux CPython3.12.10 x64 native four-form ABI/resolver/interpreter and actual qualification evidence"
+    ],
+    "limitations": [
+      "Primary vendor public documentation, not source implementation, certification-kit audit, supported-platform selection, real hardware or measured guarantee. No unreviewed internals absence inference.",
+      "No universal impossibility, vendor/product failure, incompatibility or security defect asserted. Independent restart does not imply all resources freed or every writer stopped.",
+      "No selected dependency/profile/license/host, relaxed criteria, Ready/fullR7/runtime/operational grant, new owner input requirement or fresh installation.",
+      "Initial combined context output truncated; relevant official architecture/virtualization sections reopened and local lifecycle sections read separately. No source execution or runtime failure."
+    ],
+    "actual_checks": [
+      "Read official SYSGO RTOS/hypervisor, Windows guest and virtualization pages as public documentation; assessed the requested finite whole-epoch capability conjunction.",
+      "Read current local AGENTS, public development/delivery lifecycle requirements and latest continuity/settlement decision; no lifecycle or scope transition made.",
+      "No vendor contact, archive/source/binary acquisition, installation/build, native/API/process/VM/host observation, probes or tests. No adjacent source inventory."
+    ],
+    "new_tests": 0,
+    "heads": {
+      "equity-features": "012a35cf38b93b2851dfb357269d91fc2ef92ce5",
+      "equity-feature-workers": "ba9ccb09aea03da8a312c0f2230752918763a1af"
+    },
+    "candidate": "PikeOS static-partition whole-domain physical owner",
+    "findings": [],
+    "decision_boundary": "Do not select PikeOS as a qualified substitute or implement a PASS-token wrapper from these claims. Any continuation must obtain a named precise supported completion/resource contract that can decide this whole candidate, not generic adjacent inventory. Existing NOVA stock-composition inquiry remains closed.",
+    "newtests": 0,
+    "scope": "BOUNDED_PRIMARY_PUBLIC_CONTRACT_CAPABILITY_INQUIRY_ONLY",
+    "facts": [
+      {
+        "url": "https://www.sysgo.com/rtos-hypervisor",
+        "boundary": "These architecture statements affirm partition/control capabilities; they do not specify the requested allocation-free aggregate completion interface or numerical settlement deadline.",
+        "fact": "SYSGO documents temporal CPU partitioning, spatial memory/I/O isolation and controlled inter-partition communication. PSSW reads the VMIT configuration and manages partition startup, shutdown, faults and communication.",
+        "id": "F1",
+        "lines": "103-132"
+      },
+      {
+        "url": "https://www.sysgo.com/rtos-hypervisor",
+        "boundary": "Selected device/provider topology, scheduling assumptions and recovery completion semantics are not fixed for EQ083 by these public descriptions. Restart/isolate is not an all-resource-free witness.",
+        "fact": "The page describes hardware-assisted or para-virtualized guests, native or PikeOS driver paths, time/priority scheduling, SMP/AMP choices, and Health Monitor restart, isolation or fail-safe actions.",
+        "id": "F2",
+        "lines": "166-205, 230-236"
+      },
+      {
+        "url": "https://www.sysgo.com/windows",
+        "boundary": "Windows/Linux support is affirmative, not inferred absent. This example does not attest exact CPython3.12.10, selected native artifacts/four forms or a closed EQ083 writer/provider graph.",
+        "fact": "The official demonstrator explicitly runs Windows10 and Ubuntu on an x86 industrial PC using Intel virtualization, VirtIO communication and PikeOS queuing ports. Ubuntu can reboot without affecting Windows. The demonstrator includes native/additional partitions and USB-to-network processing.",
+        "id": "F3",
+        "lines": "149-165"
+      },
+      {
+        "url": "https://www.sysgo.com/virtualization",
+        "boundary": "That description does not freeze all backing allocations, byte/node limits, actual source/build/provider rights or full transitive license approval.",
+        "fact": "SYSGO describes per-partition CPU time, memory and I/O access, scheduler/IOMMU isolation and multiple guest OS personalities. Its licensing discussion concerns separation of domains.",
+        "id": "F4",
+        "lines": "103-123, 154-186"
+      }
+    ],
+    "disposition": "NOT_SELECTABLE_ON_REVIEWED_PUBLIC_CONTRACT",
+    "assessment": "Public contracts support partition isolation, central control and predefined recovery, plus an affirmative Windows/Linux demonstration. They do not establish one independently reserved, nonblocking, allocation-free operation with a supported finite completion bound covering every execution/device/provider writer, pending queue, reference, finalizer, mapping and all physical backing. This missing positive contract prevents EQ083 selection on these pages; it is not a claim such a capability cannot exist in the product or another configuration."
+  }
+}
