@@ -1,0 +1,289 @@
+{
+  "full_independent_capability_review": {
+    "decision": "This specific composition does not implement the requested nonblocking, allocation-independent, independently progressing, finite whole-epoch stop/revoke/drain/mapping/donation/retired-CPU-RCU/provider settlement contract on reviewed evidence. Reject it as the implementation of that capability and reject selection of the proposed epoch when supported only by it. The proposed new interface is unimplemented and cannot be treated as an actual qualified replacement.",
+    "scope": "NAMED_SETTLEMENT_CAPABILITY_ASSESSMENT_FROM_EXISTING_REVIEWED_REPORTS_ONLY",
+    "findings": [],
+    "new_source_reads": 0,
+    "next_engineering_decision": {
+      "required": "Either identify a named actual effective implementation of the complete missing nonblocking epoch-settlement capability with its supported CPU/provider completion and preallocation contract, or explicitly choose engineering a new mechanism/another whole architecture. Desired interface prose is not capability evidence.",
+      "owner_input": "No new owner input merely because this capability is incomplete. Technical search/engineering choice is agent-owned; any actual external operation or scope requirement must be concrete rather than a repeated broad approval question.",
+      "stop_conditions": [
+        "Before new research, name the actual implementation and the exact capability evidence that can accept or reject it; otherwise do not start another source batch.",
+        "Reject the candidate if any of independent dispatch, allocation-free failure path, all writer/execution withdrawal, bounded provider/cross-CPU/RCU completion or truthful full settlement witness is absent or only assumed.",
+        "If invasive new kernel/provider engineering is required, retain it as unimplemented and decide its complete scope/feasibility; do not announce an isolated primitive or token wrapper as progress on satisfaction.",
+        "Even a supported settlement primitive leaves closed escrow/storage bytes-and-nodes/all-writer/source-build/bothOSABI/resolver/license/literal budgets/host gates conjunctive."
+      ]
+    },
+    "termination": "Terminate this stock-composition inquiry. Further adjacent NOVA/Genode/provider enumeration, counter/report wrappers, timers and retelling the same known paths cannot change this verdict without a materially different actual capability.",
+    "contract_counterexamples": [
+      {
+        "fact_positions": [
+          5,
+          6
+        ],
+        "functions": [
+          "Ec::sys_revoke",
+          "Pd::revoke",
+          "Pd::pre_free",
+          "Pd::free",
+          "Rcu::call",
+          "Rcu::invoke_batch"
+        ],
+        "contract_failure": "Return/notification cannot certify whole epoch settlement; the composition lacks an admitted complete completion witness and finite dependency bound.",
+        "dependency": "A successful revocation/demotion or queued pre-free operation can still precede pending reference and RCU finalizers. The report separates revoke success from later eligible deletion and physical page/IOMMU/cache release.",
+        "id": "C1",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-quota-reclamation-source-reviewer-report.json"
+      },
+      {
+        "fact_positions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "functions": [
+          "Ec::handle_hazard",
+          "Lapic::handle_timer",
+          "Ec::idl_handler",
+          "Sc::pre_free",
+          "Sc::rrq_handler",
+          "Ec::free"
+        ],
+        "contract_failure": "A clock/quantum/IPI issuance/disable is not an independent finite all-finalizer progress contract. These are static permissible dependency states, not an observed hang.",
+        "dependency": "RCU needs relevant CPUs to reach quiet/update paths, actual timer/IPI handling, scheduled callback work and released partner/cross-CPU references. The described interface admits logical disable/recall while deferred work remains; no reviewed bound requires those dependencies to finish before a chosen deadline.",
+        "id": "C2",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-nova-progress-source-reviewer-report.json"
+      },
+      {
+        "fact_positions": [
+          5,
+          6
+        ],
+        "functions": [
+          "Child::_close",
+          "Child::session_response",
+          "Child::close_all_sessions",
+          "Child::env_sessions_closed"
+        ],
+        "contract_failure": "A local CLOSED/ID absence/env eligibility flag cannot attest all provider queues/writers, account restitution, CPU/PD/RCU debt or physical backing settlement.",
+        "dependency": "Provider close may remain PENDING; client IDs can be discarded while provider work remains; quota reversal can fail separately. Retirement eligibility checks linker/log/binary state and explicitly omits CPU state.",
+        "id": "C3",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-owner-authority-source-reviewer-report.json"
+      },
+      {
+        "fact_positions": "Full saved ten-fact report",
+        "functions": [
+          "VD request wait/cancel paths",
+          "PDMTaskCancel",
+          "File manager blocking event/add/close/shutdown paths",
+          "POSIX AIO cancel/context wakeup",
+          "PDMThreadDestroy"
+        ],
+        "contract_failure": "Adding revocation, session close and RCU does not provide bounded nonblocking provider drain or an allocation-independent failure-control chain.",
+        "dependency": "Reviewed worker paths include unsupported cancellation, indefinite completion waits and conditional timed join/free eligibility. Kernel capability revocation does not by itself replace these provider completion interfaces or prove storage/worker backing released.",
+        "id": "C4",
+        "report": "C:/Users/Monikasrivas1/AppData/Local/Temp/equity-r6-postreview-20261008/eq083-vendor-worker-source-reviewer-report.json"
+      }
+    ],
+    "whole_candidate_verdict": "REJECT_PROPOSED_MEMORY_BACKED_EPOCH_FOR_SELECTION_WHEN_BACKED_ONLY_BY_THIS_STOCK_COMPOSITION",
+    "inference_limits": [
+      "Counterexamples are contract-stage/dependency mismatches supported by reviewed source reports, not executed traces or claims of vendor defects, hangs, leaks, attacks or universal platform impossibility.",
+      "No inference that an unreviewed API anywhere cannot implement a stronger contract. The verdict applies only to the named reviewed stock composition.",
+      "No actual bound for call allocation, nonblocking execution or scheduling/provider progress has been established; no guessed constant, tolerance or dropped resource class repairs it.",
+      "Keeping failed debt is necessary accounting but does not certify quiescence, release or successful cleanup."
+    ],
+    "disposition": "REJECT_REVOKE_CLOSE_RCU_COMPOSITION_AS_FINITE_EPOCH_SETTLEMENT",
+    "newtests": 0,
+    "heads": {
+      "equity-features": "cea741cdcfcd970cd42c29b3e398ce8cc97d3141",
+      "equity-feature-workers": "5840b71518faec6bd16d2fcd56a694d0da423470"
+    },
+    "composition": [
+      "NOVA Ec::sys_revoke / Pd::revoke / Pd::pre_free / Pd::free",
+      "Rcu::call / Rcu::quiet / Rcu::update / Rcu::invoke_batch",
+      "EC/SC remote finalization and CPU/interrupt/scheduling progress",
+      "Genode Child::close_all_sessions / Child::env_sessions_closed / session close callbacks",
+      "Vendor VD/PDM/AIO cancel/drain/flush/destroy completion"
+    ],
+    "limitations": [
+      "Only already reviewed saved reports and current head JSON read; no new upstream/source/hash/native/API/host/process/VM/probe/CI/test operation, old suite rerun or rejected binary task reattempt.",
+      "Prior source and reports unchanged; no product source or selected mechanism/ABI/license/build/host qualification.",
+      "No lower acceptance criteria, qualified substitute, complete epoch, Ready/runtime/operational grant or new mandatory owner input."
+    ],
+    "reviewer": "r7_policy_review independent reviewer",
+    "new_tests": 0
+  },
+  "full_prior_epoch_reviews": {
+    "eq083-epoch-candidate-docs-reviewer-report.json": {
+      "bases": {
+        "equity-features": "705a51560d6a0d9f7f2f4e9d47f1f9338cfef232",
+        "equity-feature-workers": "ab5985c48268bd44998578384b1f013bfb6589d1"
+      },
+      "disposition": "APPROVED",
+      "reviewer": "r7_policy_review independent reviewer",
+      "whole_contract_verdict": "NOT_ADMITTED",
+      "prepared_files": {
+        "equity-features": {
+          "docs/stories/EQ-083_EPOCH_CANDIDATE_CONTRACT.json": {
+            "sha256": "94d0d5a0fecb60b1849f037cad6959108775c648d8ce4a91fa41796d4fcce907",
+            "bytes": 1218
+          },
+          "docs/stories/EQ-083_EPOCH_CANDIDATE_CONTRACT.md": {
+            "sha256": "e2749e11559fd0d751a88bdffef4703937ac1e67d99b87539efda22a2e9b6b1e",
+            "bytes": 11276
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "1b66ecd9e9aab2a9f4753d13f0bae523633944ed4e156e65ed8e409aca8647e6",
+            "bytes": 791890
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "afb76bb29599ae1a2b4a06a0b2c64b41cba8ec8a36d2076931c1203c67f9c8f9",
+            "bytes": 532639
+          },
+          "docs/stories/EQ-083_EPOCH_CANDIDATE_EVIDENCE.json": {
+            "sha256": "b2ec93e768d96b7f2b51c5ce4165adda4754af782a7d2fa6e4e61d3e7b2f6b85",
+            "bytes": 16702
+          }
+        },
+        "equity-feature-workers": {
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "sha256": "ac4c166fd25403ad99ac08ad0c0676d86a4238dee7d55a90d6ae854f0f293fb8",
+            "bytes": 395308
+          },
+          "docs/EQ083_EPOCH_CANDIDATE_CONTRACT.json": {
+            "sha256": "94d0d5a0fecb60b1849f037cad6959108775c648d8ce4a91fa41796d4fcce907",
+            "bytes": 1218
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "sha256": "c18f22100e9a2b9360e32d23c1b38dd9b741b43c9d9d14a903078e50a6719e6f",
+            "bytes": 506446
+          },
+          "docs/EQ083_EPOCH_CANDIDATE_CONTRACT.md": {
+            "sha256": "e2749e11559fd0d751a88bdffef4703937ac1e67d99b87539efda22a2e9b6b1e",
+            "bytes": 11276
+          },
+          "docs/EQ083_EPOCH_CANDIDATE_EVIDENCE.json": {
+            "sha256": "b2ec93e768d96b7f2b51c5ce4165adda4754af782a7d2fa6e4e61d3e7b2f6b85",
+            "bytes": 16702
+          }
+        }
+      },
+      "new_source_reads": 0,
+      "checks": [
+        {
+          "repo": "equity-features",
+          "five_doc_scope": true,
+          "old_continuity_suffix": true,
+          "exact_base": true,
+          "three_full_prior_reports_preserved": true,
+          "unknown_values_null_and_admission_false": true
+        },
+        {
+          "repo": "equity-feature-workers",
+          "five_doc_scope": true,
+          "old_continuity_suffix": true,
+          "exact_base": true,
+          "three_full_prior_reports_preserved": true,
+          "unknown_values_null_and_admission_false": true
+        }
+      ],
+      "newtests": 0,
+      "findings": [],
+      "scope": "PREPARED_COMPLETE_CANDIDATE_DESIGN_DOCUMENTATION_ONLY",
+      "new_tests": 0,
+      "limitations": [
+        "Approval covers prepared design documentation coherence and preservation only; it does not approve implementation selection, supported feasibility, kernel primitive, enforcement, resource bound or physical cleanup.",
+        "Whole contract remains NOT_ADMITTED even if one central primitive later receives support: node/all-writer/build/bothOSABI/license/budget/host gates remain mandatory.",
+        "No upstream/source hash/research/native/host/probe/CI/tests, vendor patch/operation or binary task rerun. Exact five documentation paths per repository changed, source unchanged.",
+        "No Ready/runtime/operational grant, qualified replacement, criterion change or new owner input merely for technical incompleteness. Final publication bytes/attribution remain a separate readback."
+      ],
+      "semantic_review": "The proposed modified memory-backed whole epoch explicitly includes boot/core/controller inside total budget, preallocated escrow and all allocator/metadata/overlap/deferred debt, closed donors and writer/device boundaries, separate storage node enforcement, fixed provider queues and a new nonblocking independently progressing revoke-and-settle mechanism. Every change is unimplemented/unqualified/not selected. FAILED_RETAINED is correctly distinct from quiescence/free/success; retaining accounting cannot satisfy writer-stop or physical cleanup. Sourcebinary/build/guest ABI/license, both OS forms, node enforcement, exact budgets/deadline/host are conjunctive unknowns, not asserted capabilities. The next named full kernel/provider completion question can reject the implementation; generic adjacent-source batching or isolated mailbox/PASS wrapper is not proposed."
+    },
+    "eq083-epoch-candidate-final-readback-reviewer-report.json": {
+      "reviewer": "r7_policy_review independent reviewer",
+      "heads": {
+        "equity-features": "cea741cdcfcd970cd42c29b3e398ce8cc97d3141",
+        "equity-feature-workers": "5840b71518faec6bd16d2fcd56a694d0da423470"
+      },
+      "bases": {
+        "equity-features": "705a51560d6a0d9f7f2f4e9d47f1f9338cfef232",
+        "equity-feature-workers": "ab5985c48268bd44998578384b1f013bfb6589d1"
+      },
+      "new_tests": 0,
+      "published_files": {
+        "equity-feature-workers": {
+          "docs/EQ083_EPOCH_CANDIDATE_EVIDENCE.json": {
+            "bytes": 16702,
+            "sha256": "b2ec93e768d96b7f2b51c5ce4165adda4754af782a7d2fa6e4e61d3e7b2f6b85"
+          },
+          "docs/EQ083_EPOCH_CANDIDATE_CONTRACT.json": {
+            "bytes": 1218,
+            "sha256": "94d0d5a0fecb60b1849f037cad6959108775c648d8ce4a91fa41796d4fcce907"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 395308,
+            "sha256": "ac4c166fd25403ad99ac08ad0c0676d86a4238dee7d55a90d6ae854f0f293fb8"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 506446,
+            "sha256": "c18f22100e9a2b9360e32d23c1b38dd9b741b43c9d9d14a903078e50a6719e6f"
+          },
+          "docs/EQ083_EPOCH_CANDIDATE_CONTRACT.md": {
+            "bytes": 11276,
+            "sha256": "e2749e11559fd0d751a88bdffef4703937ac1e67d99b87539efda22a2e9b6b1e"
+          }
+        },
+        "equity-features": {
+          "docs/stories/EQ-083_EPOCH_CANDIDATE_CONTRACT.md": {
+            "bytes": 11276,
+            "sha256": "e2749e11559fd0d751a88bdffef4703937ac1e67d99b87539efda22a2e9b6b1e"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 532639,
+            "sha256": "afb76bb29599ae1a2b4a06a0b2c64b41cba8ec8a36d2076931c1203c67f9c8f9"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 791890,
+            "sha256": "1b66ecd9e9aab2a9f4753d13f0bae523633944ed4e156e65ed8e409aca8647e6"
+          },
+          "docs/stories/EQ-083_EPOCH_CANDIDATE_EVIDENCE.json": {
+            "bytes": 16702,
+            "sha256": "b2ec93e768d96b7f2b51c5ce4165adda4754af782a7d2fa6e4e61d3e7b2f6b85"
+          },
+          "docs/stories/EQ-083_EPOCH_CANDIDATE_CONTRACT.json": {
+            "bytes": 1218,
+            "sha256": "94d0d5a0fecb60b1849f037cad6959108775c648d8ce4a91fa41796d4fcce907"
+          }
+        }
+      },
+      "attribution": {
+        "equity-feature-workers": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): define one proposed epoch enforcement contract and critical gate\n",
+        "equity-features": "Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|Atul Srivastava|102820540+atulsrivas1@users.noreply.github.com|docs(EQ083): define one proposed epoch enforcement contract and critical gate\n"
+      },
+      "scope": "FINAL_PUBLISHED_DOCS_READBACK_ONLY",
+      "prepared_review_sha256": "c6715b815047e8f179832c5153035166ff59ac316dbff2d4555534231556e06b",
+      "findings": [],
+      "checks": [
+        "All ten Git LF lengths/SHA256 match reviewed_git_files and normalized approved prepared bytes.",
+        "Exact five documentation changes each, no tracked source changes, approved base parents and paired clean codex/eq083-resilience branches.",
+        "Three mirrored candidate assets match; old PROJECT_KNOWLEDGE/SESSION_HANDOFF suffixes preserved.",
+        "Full expected Atul author/committer identities and noreply email verified; no Co-authored-by trailer."
+      ],
+      "disposition": "APPROVED",
+      "whole_contract_verdict": "NOT_ADMITTED",
+      "new_source_reads": 0,
+      "limitations": [
+        "Final published documentation byte/attribution readback only; no semantic/sourcehash/research/native/host/probe/CI/tests or rejected binary task rerun.",
+        "Preserves NOT_ADMITTED whole candidate and unimplemented/unqualified control mechanism; storage nodes/bothOSABI/license/build/budgets/host remain conjunctive.",
+        "No topology implementation selection, supported physical cleanup, Ready/runtime/operational approval or new input request."
+      ],
+      "newtests": 0
+    }
+  },
+  "new_tests": 0,
+  "new_source_reads": 0,
+  "scope": "Named existing implementation composition rejected for selection; inquiry concluded/no universal no-API assertion/no actual operation"
+}
