@@ -59,3 +59,5 @@ Second changed-source native smoke7e2a57d FAILED aftersame2references/2smallcase
   }
 }
 ```
+
+Before any capability execution, separate source advice expands the original unexecuted3-control proposal to fixed6independent16-ID children: sink/source-policy × no-profile/JSON with identical hash SQL/parameters/fetch/oracle, plus sink integer-sort no-profile/JSON. Source control128MiB matches sink memory to reduce confounding; source temp512MiB/external access still differs and cannot alone prove one setting is causal. Each child15seconds plus existing owned cleanup; phases recorded privately before/after execute/fetch/EOF/connection close. New roots, no adaptive extra cases or unchanged512 rerun. No capability result yet; exact pre-execution review required.

@@ -58,10 +58,10 @@ def scheduling_decision(values):
         defaults_changed=False)
 
 
-def native_probe(settings):
+def native_probe(settings, timeout=120):
     environment = dict(os.environ, OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1', NUMEXPR_NUM_THREADS='1')
     out, err, memory, code = communicate_owned([sys.executable, '-I', str(ROOT / 'tools/scaling_probe.py')],
-        json.dumps(settings), timeout=120, env=environment,
+        json.dumps(settings), timeout=timeout, env=environment,
         creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
     if code:
         private = Path(settings['root']).parent / ('failed-' + Path(settings['root']).name + '.log')

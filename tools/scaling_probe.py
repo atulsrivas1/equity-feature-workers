@@ -143,45 +143,74 @@ def layout_case(root, count):
                 authoritative_receipts_modified=False, production_layout_adopted=False)
 
 
-def capability_case(root):
-    """Three fixed tiny changed controls; errors remain observations, never passes."""
+def capability_case(root, sink, profiled, hashes):
+    """One fixed16-ID control; parent gives each independent child a15s deadline."""
     import duckdb
     from equity_feature_duckdb_sink.schema import CONFIG
-    records = []
-    for name, sink, profiled, hashes in [('sink-unprofiled-hash', True, False, True),
-            ('source-profiled-hash', False, True, True), ('sink-profiled-integer', True, True, False)]:
-        case = root / name
-        case.mkdir()
-        temporary = case / 'temp'
-        temporary.mkdir()
-        config = dict(CONFIG) if sink else dict(threads='1', memory_limit='128MB', max_temp_directory_size='512MiB',
-            autoload_known_extensions='false', autoinstall_known_extensions='false')
-        config['temp_directory'] = str(temporary)
-        record = dict(case=name, count=16, sink=sink, profiled=profiled, hash_query=hashes)
-        try:
-            with duckdb.connect(':memory:', config=config) as con:
-                sql = ('SELECT i, md5(CAST(i AS VARCHAR)) || md5(CAST(i+16 AS VARCHAR)) AS payload '
-                       'FROM range(16) t(i) ORDER BY payload,i') if hashes else 'SELECT i FROM range(16) t(i) ORDER BY i'
-                def consume(cursor):
-                    def batches():
-                        while batch := cursor.fetchmany(4096):
-                            yield batch
-                    if hashes:
-                        return sort_oracle(batches(), 16)
-                    rows = [row for batch in batches() for row in batch]
-                    assert rows == [(i,) for i in range(16)]
-                    return dict(exact_integer_population_order=True)
-                if profiled:
-                    record.update(profile_query(con, sql, [], case / 'profile.json', consume))
-                else:
-                    record['verified'] = consume(con.execute(sql))
-                record['status'] = 'completed'
-        except duckdb.Error as error:
-            raw = traceback.format_exc().encode()
-            (case / 'private-error.log').write_bytes(raw)
-            record.update(status='failed', error_type=type(error).__name__, private_error_sha256=hashlib.sha256(raw).hexdigest())
-        records.append(record)
-    return dict(kind='capability', records=records, production_settings_changed=False)
+    config = dict(CONFIG) if sink else dict(threads='1', memory_limit='128MiB', max_temp_directory_size='512MiB',
+        autoload_known_extensions='false', autoinstall_known_extensions='false')
+    temporary = root / 'temp'
+    temporary.mkdir()
+    config['temp_directory'] = str(temporary)
+    record = dict(kind='capability', count=16, sink=sink, profiled=profiled, hash_query=hashes)
+    connection = None
+    def phase(name):
+        with (root / 'private-phases.log').open('a', encoding='utf-8') as stream:
+            stream.write(name + '\n')
+        record['last_phase'] = name
+    try:
+        phase('before-connect')
+        connection = duckdb.connect(':memory:', config=config)
+        sql = ('SELECT i, md5(CAST(i AS VARCHAR)) || md5(CAST(i+? AS VARCHAR)) AS payload '
+               'FROM range(?) t(i) ORDER BY payload,i') if hashes else 'SELECT i FROM range(?) t(i) ORDER BY i'
+        parameters = [16, 16] if hashes else [16]
+        if profiled:
+            phase('before-enable-json')
+            connection.execute("SET enable_profiling = 'json'")
+            phase('before-profile-output')
+            literal = str(root / 'profile.json').replace("'", "''")
+            connection.execute("SET profiling_output = '" + literal + "'")
+        phase('before-execute')
+        cursor = connection.execute(sql, parameters)
+        phase('after-execute')
+        def batches():
+            for index in range(3):
+                phase('before-fetch-' + str(index))
+                batch = cursor.fetchmany(4096)
+                phase('after-fetch-' + str(index))
+                if not batch:
+                    phase('eof')
+                    return
+                yield batch
+            raise AssertionError('tiny diagnostic exceeded bounded fetch count')
+        if hashes:
+            record['verified'] = sort_oracle(batches(), 16)
+        else:
+            rows = [row for batch in batches() for row in batch]
+            assert rows == [(i,) for i in range(16)]
+            record['verified'] = dict(exact_integer_population_order=True)
+        record['status'] = 'completed'
+        if profiled:
+            phase('before-disable-profile')
+            connection.execute("SET enable_profiling = 'no_output'")
+            profile = root / 'profile.json'
+            record['profile'] = public_profile(json.loads(profile.read_text(encoding='utf-8')), root) if profile.exists() else None
+    except duckdb.Error as error:
+        raw = traceback.format_exc().encode()
+        (root / 'private-error.log').write_bytes(raw)
+        record.update(status='failed', error_type=type(error).__name__, private_error_sha256=hashlib.sha256(raw).hexdigest())
+    finally:
+        if connection is not None:
+            phase('before-close')
+            try:
+                connection.close()
+                phase('after-close')
+                record['connection_close'] = 'returned'
+            except duckdb.Error as error:
+                raw = traceback.format_exc().encode()
+                (root / 'private-close-error.log').write_bytes(raw)
+                record.update(status='failed', connection_close=type(error).__name__, private_close_sha256=hashlib.sha256(raw).hexdigest())
+    return record
 
 
 def main():
@@ -192,7 +221,7 @@ def main():
     if settings['kind'] == 'sort':
         result = sort_case(root, settings['count'], settings['memory'], settings['sink'])
     elif settings['kind'] == 'capability':
-        result = capability_case(root)
+        result = capability_case(root, settings['sink'], settings['profiled'], settings['hashes'])
     elif settings['kind'] == 'layout':
         result = layout_case(root, settings['count'])
     else:
