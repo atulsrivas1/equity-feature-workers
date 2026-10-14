@@ -1,3 +1,9 @@
+## Full-run capacity diagnosis and revised caller admission — October14
+
+Frozen db7 fullrun failed after54samples/6references/0diagnostics: first64instrument capacity reference returnedRESOURCE_LIMIT. Separate bounded owned diagnostic exposed supervisor.run→ProgressRecorder.group; source/installed/input closure alltrue. Default recorder64tasks/4096spans cannot retain64preparations plus supervisor64, generation64 and catalog64. This is caller reporting admission, not evidence that the numerical worker or sink hit physical capacity. Original raw failure and54observations remain separate; no pooling into a new full run.
+
+Revision3 qualifies the same64*256 population and unchanged source/worker/sink budgets with explicit qualification-only ProgressRecorder256tasks/12800spans/same4194304bytes. Fourphase bound: 4N=256; spans N*(1+(5+3N)+1+1)=12800; reserved512+256*2048+12800*256=3801600bytes. Production recorder defaults/package code stay unchanged. All pipeline reports disclose these caller limits. New pure regression checks default rejection and complete4phase admittedreservation; source/protocol review and actual tests precede a fresh full8reference/72sample run, no prior successes substituted. Existing bothOS db7 artifacts only qualify the prior smallsmokes; changed inputs need renewed current artifacts.
+
 # EQ088 scheduling and output qualification
 
 [Canonical story99](https://github.com/atulsrivas1/equity-features/issues/99) / [protocol](https://github.com/atulsrivas1/equity-features/blob/91045a2ba1157cf94c5d7cf797fb1825c4bbe586/docs/stories/EQ-088_PROTOCOL.md). Qualification-only tool, not a numerical/worker/sink API or default change. Core20c08c/I-O19aa266 package versions and production package trees remain unchanged. No math, timing, schema, receipt, ownership, publication, optional dependency or threading policy changes.

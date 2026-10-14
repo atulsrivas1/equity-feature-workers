@@ -35,6 +35,12 @@ def counts(workload):
             definition.get('rows_each', definition.get('other_rows')) for n in range(definition['instruments'])]
 
 
+def qualification_recorder():
+    """Bound the four retained phases of the admitted N<=64 qualification graph."""
+    from equity_feature_workers import ProgressRecorder
+    return ProgressRecorder(max_tasks=256, max_spans=12800, max_bytes=4194304)
+
+
 def population(root):
     return {p.name: dict(bytes=p.stat().st_size, sha256=sha(p)) for p in sorted(root.iterdir()) if p.is_file()}
 
@@ -119,7 +125,7 @@ def run_pipeline(root, output, workload, backend, mode, workers, require_install
         c.WindowSpec(1,'S',('P','S')),availability,price_unit=unit)
     requirements=SinkRequirements(max_results=100,max_chunk_bytes=1048576,max_total_bytes=10485760,
         max_result_cells=100000,max_evidence_rows=100000)
-    recorder=ProgressRecorder(); starts={}; items=[]; setup=[]
+    recorder=qualification_recorder(); starts={}; items=[]; setup=[]
     pipeline_start=time.perf_counter_ns()
     original=ParquetSink(output/'sink',SCOPE,limits=requirements) if backend=='parquet' else DuckDBSink(output/'sink.duckdb',SCOPE,limits=requirements)
     with original as physical:
@@ -192,6 +198,7 @@ def run_pipeline(root, output, workload, backend, mode, workers, require_install
         declared_logical_budget=budget.__dict__,actual_admitted_input_bytes=outcome.admitted_input_bytes,
         logical_reserved_resident_bytes=outcome.reserved_resident_bytes,
         reporter_reserved_bytes=recorder.reserved_bytes,reporter_attempts=len(snapshot.tasks),
+        reporter_limits=dict(max_tasks=recorder.max_tasks,max_spans=recorder.max_spans,max_bytes=recorder.max_bytes),
         versions=versions|{'equity-feature-workers':worker_package.__version__},
         backend_threads=1,source_max_batch_rows=256,request_max_batch_rows=sorted({min(256,n) for n in counts(workload)}),independent_five_trade_goldens=True,
         numerical_algorithm_unchanged=True,private_pilot='NOT_ADMITTED',corrected_month='NOT_ADMITTED',annual='NOT_ADMITTED')

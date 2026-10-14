@@ -16,6 +16,31 @@ SORTED = [
 
 
 class ScalingEvidence(unittest.TestCase):
+    def test_capacity_reporting_four_phase_reservation_with_existing_byte_bound(self):
+        from pilot_fixture import qualification_recorder
+        from test_supervisor import work
+        from equity_feature_workers import ProgressRecorder, DiagnosticStatus
+        from equity_feature_io_contracts import SinkError, SinkErrorCode
+        tasks = tuple(work(f'B{i:04d}')[0].task for i in range(64))
+        default = ProgressRecorder()
+        with default.group(tasks, spans=1) as observations:
+            for observation in observations.values():
+                observation.finish(DiagnosticStatus.READY)
+        with self.assertRaises(SinkError) as caught:
+            with default.group(tasks, spans=197):
+                self.fail('default recorder must reject the unprovisioned capacity graph')
+        self.assertEqual(caught.exception.code, SinkErrorCode.RESOURCE_LIMIT)
+        recorder = qualification_recorder()
+        self.assertEqual((recorder.max_tasks, recorder.max_spans, recorder.max_bytes), (256, 12800, 4194304))
+        # Independent retained graph: prepare1, supervisor(5+3*64), generation1, catalog1 per entity.
+        for spans in (1, 197, 1, 1):
+            with recorder.group(tasks, spans=spans) as observations:
+                for observation in observations.values():
+                    observation.finish(DiagnosticStatus.READY)
+        self.assertEqual(len(recorder.snapshot().tasks), 256)
+        self.assertEqual(recorder.reserved_bytes, 3801600)
+        self.assertLess(recorder.reserved_bytes, 4194304)
+
     def test_literal_hash_sorted_population(self):
         self.assertEqual(sort_oracle([SORTED[:1], SORTED[1:]], 3)['count'], 3)
         for invalid in [SORTED[:2], [SORTED[0], SORTED[0], SORTED[2]], list(reversed(SORTED)),
