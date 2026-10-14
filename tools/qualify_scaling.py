@@ -20,6 +20,8 @@ from pilot_memory import hardware, admission
 from pilot_process import communicate_owned
 
 MODES = [('sequential', 1), ('thread', 2), ('thread', 4)]
+PIPELINE_OBSERVATIONS = {'small': (180, .01), 'large': (180, .01),
+                         'skew': (180, .01), 'capacity': (360, .025)}
 
 
 def groups(records):
@@ -118,10 +120,12 @@ def main():
         installed[name] = dict(version=dist.version, record_sha256=installed_record(dist))
     work.mkdir(parents=True)
     out.parent.mkdir(parents=True, exist_ok=True)
-    report = dict(schema='eq088-scaling1', smoke=args.smoke, head=head, source_sha256=source, installed=installed,
+    report = dict(schema='eq088-scaling1', protocol_revision=4, smoke=args.smoke, head=head, source_sha256=source, installed=installed,
         core_commit='20c08c7370581d03c8a0404579667f68d67ac88b', io_commit='19aa266b9debb92a6c5eb707baafeb9ae7a82942',
         hardware=hardware(), records=[], references=[], diagnostics=[], attempts=[], failures=[], status='running',
-        defaults_changed=False, cache='same warmed inputs; uncontrolled OS page cache/background/thermal state')
+        defaults_changed=False, cache='same warmed inputs; uncontrolled OS page cache/background/thermal state',
+        pipeline_observations={name:dict(child_timeout_seconds=seconds, nominal_sampler_interval_ns=int(interval*1e9))
+            for name,(seconds,interval) in PIPELINE_OBSERVATIONS.items()})
     def save():
         out.write_text(json.dumps(report, sort_keys=True, indent=2, allow_nan=False) + '\n', encoding='utf-8')
     def disk():
@@ -163,13 +167,15 @@ def main():
         modes = MODES[:1] if args.smoke else MODES
         repeats = 1 if args.smoke else 3
         for workload in workloads:
+            deadline, sample_interval = PIPELINE_OBSERVATIONS[workload]
             fixture = work / ('input-' + workload)
             inputs = make_fixture(fixture, workload)
             references = {}
             for backend in ('parquet', 'duckdb'):
                 assert admission(report['hardware'], 1) is None, 'reference host admission unavailable'
                 sample = attempt(dict(kind='reference', workload=workload, backend=backend, mode='sequential', workers=1),
-                    lambda: isolated_sample(fixture, work / f'{workload}-{backend}-reference', workload, backend, 'sequential', 1, True))
+                    lambda: isolated_sample(fixture, work / f'{workload}-{backend}-reference', workload, backend, 'sequential', 1, True,
+                        timeout=deadline, sample_interval=sample_interval))
                 assert 'skipped' not in sample
                 references[backend] = sample['content_sha256']
                 report['references'].append(sample)
@@ -185,7 +191,8 @@ def main():
                             report['records'].append(identity | dict(skipped=reason))
                         else:
                             sample = attempt(dict(kind='pipeline', **identity),
-                                lambda: isolated_sample(fixture, work / f'{workload}-{backend}-{mode}{workers}-{repeat}', workload, backend, mode, workers, True))
+                                lambda: isolated_sample(fixture, work / f'{workload}-{backend}-{mode}{workers}-{repeat}', workload, backend, mode, workers, True,
+                                    timeout=deadline, sample_interval=sample_interval))
                             if 'skipped' not in sample:
                                 assert sample['content_sha256'] == references[backend]
                                 assert sample['input_population'] == inputs

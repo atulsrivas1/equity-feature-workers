@@ -14,7 +14,7 @@ from importlib.metadata import version
 
 # Fixture modules only; installed qualification never adds package source roots.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pilot_memory import summary
+from pilot_memory import summary, MemorySampler
 from pilot_process import communicate_owned
 
 ORACLE = json.loads(Path(__file__).with_name('pilot_oracle.json').read_text(encoding='utf-8'))
@@ -204,18 +204,23 @@ def run_pipeline(root, output, workload, backend, mode, workers, require_install
         numerical_algorithm_unchanged=True,private_pilot='NOT_ADMITTED',corrected_month='NOT_ADMITTED',annual='NOT_ADMITTED')
 
 
-def isolated_sample(fixture, output, workload, backend, mode, workers, require_installed=False):
+def isolated_sample(fixture, output, workload, backend, mode, workers, require_installed=False, *,
+                    timeout=180, sample_interval=.01):
+    assert (timeout, sample_interval) in ((180, .01), (360, .025))
+    assert timeout == 180 or workload == 'capacity'
     settings=dict(root=str(fixture),output=str(output),workload=workload,backend=backend,mode=mode,
                   workers=workers,require_installed=require_installed)
     command=[sys.executable]+(['-I'] if require_installed else [])+[str(Path(__file__).resolve()),'--sample']
     environment=dict(os.environ,OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',NUMEXPR_NUM_THREADS='1')
     start=time.perf_counter_ns()
     stdout,stderr,memory,returncode=communicate_owned(command,json.dumps(settings),env=environment,
+        timeout=timeout,sampler_factory=lambda process: MemorySampler(process,interval=sample_interval),
         creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
     if returncode:
         # Private developer logs may inspect the exception; no raw paths/text enter public reports.
         raise RuntimeError('isolated synthetic pipeline failed: '+stderr)
     result=json.loads(stdout); result['isolated_process_wall_ns']=time.perf_counter_ns()-start
+    result['child_timeout_seconds']=timeout
     assert any(p['pid']==result['coordinator_pid'] and p['samples']>0 for p in memory['processes'].values()), 'actual coordinator memory unavailable'
     result['memory']=memory
     return result
