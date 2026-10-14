@@ -10,6 +10,8 @@ from pathlib import Path
 import statistics
 import subprocess
 import sys
+import time
+import traceback
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tests'))
@@ -70,6 +72,23 @@ def native_probe(settings):
     return result
 
 
+def installed_record(dist):
+    record = dist.read_text('RECORD')
+    if not record or not record.strip():
+        raise ValueError('installed distribution RECORD evidence unavailable')
+    return hashlib.sha256(record.encode()).hexdigest()
+
+
+def frozen_bytes(head, names):
+    hashes = {}
+    for name in names:
+        expected = subprocess.check_output(['git', 'show', head + ':' + name], cwd=ROOT)
+        actual = (ROOT / name).read_bytes()
+        assert actual == expected, 'executed worktree bytes differ from committed source'
+        hashes[name] = hashlib.sha256(actual).hexdigest()
+    return hashes
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--work-root', required=True, type=Path)
@@ -85,8 +104,8 @@ def main():
         return subprocess.check_output(['git', *a], cwd=ROOT)
     assert not git('status', '--porcelain', '--', *scoped), 'commit qualification inputs first'
     head = git('rev-parse', 'HEAD').decode().strip()
-    source = {name: hashlib.sha256(git('show', head + ':' + name)).hexdigest()
-        for name in git('ls-files', '--', *scoped).decode().splitlines()}
+    names = git('ls-files', '--', *scoped).decode().splitlines()
+    source = frozen_bytes(head, names)
     # Runtime import origins, not just sys.path claims. All product modules must be installed.
     installed = {}
     for name in ('equity-feature-contracts', 'equity-features', 'equity-feature-workers', 'equity-feature-io-contracts',
@@ -96,12 +115,12 @@ def main():
         assert 'site-packages' in site.parts
         module = import_module(name.replace('-', '_'))
         assert Path(module.__file__).resolve().is_relative_to(site), 'source-tree product fallback'
-        installed[name] = dict(version=dist.version, record_sha256=hashlib.sha256((dist.read_text('RECORD') or '').encode()).hexdigest())
+        installed[name] = dict(version=dist.version, record_sha256=installed_record(dist))
     work.mkdir(parents=True)
     out.parent.mkdir(parents=True, exist_ok=True)
     report = dict(schema='eq088-scaling1', smoke=args.smoke, head=head, source_sha256=source, installed=installed,
         core_commit='20c08c7370581d03c8a0404579667f68d67ac88b', io_commit='19aa266b9debb92a6c5eb707baafeb9ae7a82942',
-        hardware=hardware(), records=[], references=[], diagnostics=[], failures=[], status='running',
+        hardware=hardware(), records=[], references=[], diagnostics=[], attempts=[], failures=[], status='running',
         defaults_changed=False, cache='same warmed inputs; uncontrolled OS page cache/background/thermal state')
     def save():
         out.write_text(json.dumps(report, sort_keys=True, indent=2, allow_nan=False) + '\n', encoding='utf-8')
@@ -110,6 +129,35 @@ def main():
         report['observed_owned_disk_bytes'] = observed
         assert observed <= 1073741824, 'observed owned disk admission ceiling'
     save()
+    def attempt(identity, callback):
+        # Commit the attempt identity BEFORE launch; exceptions keep the same entry.
+        entry = dict(identity=identity, status='started', started_monotonic_ns=time.monotonic_ns())
+        report['attempts'].append(entry)
+        save()
+        try:
+            result = callback()
+        except BaseException as error:
+            private = work / ('failed-attempt-' + str(len(report['attempts'])) + '.log')
+            try:
+                private.write_text(traceback.format_exc(), encoding='utf-8')
+                entry['private_traceback_retained'] = True
+                entry['private_traceback_sha256'] = hashlib.sha256(private.read_bytes()).hexdigest()
+            except Exception:
+                entry['private_traceback_retained'] = False
+            entry.update(status='failed', error_type=type(error).__name__,
+                timeout=isinstance(error, subprocess.TimeoutExpired),
+                cleanup_outcome='error-notes-present' if getattr(error, '__notes__', ()) else 'not-independently-established')
+            entry['ended_monotonic_ns'] = time.monotonic_ns()
+            save()
+            raise
+        raw_result = json.dumps(result, sort_keys=True, indent=2, allow_nan=False).encode() + b'\n'
+        (work / ('attempt-result-' + str(len(report['attempts'])) + '.json')).write_bytes(raw_result)
+        entry['returned_result_sha256'] = hashlib.sha256(raw_result).hexdigest()
+        entry['returned_result_bytes'] = len(raw_result)
+        entry.update(status='returned', ended_monotonic_ns=time.monotonic_ns(),
+                     returned_status=result.get('status', 'skipped' if 'skipped' in result else 'completed'))
+        save()
+        return result
     try:
         workloads = ('small',) if args.smoke else ('small', 'large', 'skew', 'capacity')
         modes = MODES[:1] if args.smoke else MODES
@@ -120,7 +168,8 @@ def main():
             references = {}
             for backend in ('parquet', 'duckdb'):
                 assert admission(report['hardware'], 1) is None, 'reference host admission unavailable'
-                sample = isolated_sample(fixture, work / f'{workload}-{backend}-reference', workload, backend, 'sequential', 1, True)
+                sample = attempt(dict(kind='reference', workload=workload, backend=backend, mode='sequential', workers=1),
+                    lambda: isolated_sample(fixture, work / f'{workload}-{backend}-reference', workload, backend, 'sequential', 1, True))
                 assert 'skipped' not in sample
                 references[backend] = sample['content_sha256']
                 report['references'].append(sample)
@@ -135,7 +184,8 @@ def main():
                         if reason:
                             report['records'].append(identity | dict(skipped=reason))
                         else:
-                            sample = isolated_sample(fixture, work / f'{workload}-{backend}-{mode}{workers}-{repeat}', workload, backend, mode, workers, True)
+                            sample = attempt(dict(kind='pipeline', **identity),
+                                lambda: isolated_sample(fixture, work / f'{workload}-{backend}-{mode}{workers}-{repeat}', workload, backend, mode, workers, True))
                             if 'skipped' not in sample:
                                 assert sample['content_sha256'] == references[backend]
                                 assert sample['input_population'] == inputs
@@ -148,13 +198,16 @@ def main():
             for policy, memory in [('sink', '128MiB'), ('source', '32MB'), ('source', '256MB')]:
                 settings = dict(kind='sort', root=str(work / f'sort-{policy}-{memory}-{count}'), count=count,
                                 sink=policy == 'sink', memory=memory)
-                report['diagnostics'].append(native_probe(settings)); save(); disk()
-        report['diagnostics'].append(native_probe(dict(kind='layout', root=str(work / 'layout'), count=256 if args.smoke else 65536)))
+                identity = {k: v for k, v in settings.items() if k != 'root'}
+                report['diagnostics'].append(attempt(identity, lambda: native_probe(settings))); save(); disk()
+        layout_settings = dict(kind='layout', root=str(work / 'layout'), count=256 if args.smoke else 65536)
+        report['diagnostics'].append(attempt(dict(kind='layout', count=layout_settings['count']), lambda: native_probe(layout_settings)))
         report['groups'] = groups(report['records'])
         report['scheduling_decision'] = scheduling_decision(report['groups']) if not args.smoke else 'smoke-not-decision'
         report['status'] = 'completed-protocol-not-automatic-acceptance'
         assert not git('status', '--porcelain', '--', *scoped)
         assert git('rev-parse', 'HEAD').decode().strip() == head
+        assert frozen_bytes(head, names) == source
         disk(); save()
     except BaseException as error:
         report['status'] = 'failed'

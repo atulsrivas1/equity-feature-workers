@@ -5,7 +5,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 from scaling_probe import sort_oracle, public_profile, expected_cell
-from qualify_scaling import groups, scheduling_decision
+from qualify_scaling import groups, scheduling_decision, installed_record
 
 
 SORTED = [
@@ -36,6 +36,17 @@ class ScalingEvidence(unittest.TestCase):
         root = Path('/owned/scratch')
         self.assertEqual(public_profile({'extra': [str(root / 'A.parquet')]}, root),
                          {'extra': ['<owned-root>/A.parquet']})
+
+    def test_missing_record_is_not_empty_digest_evidence(self):
+        class Distribution:
+            def __init__(self, text):
+                self.text = text
+            def read_text(self, name):
+                return self.text
+        for missing in (None, '', '  \n'):
+            with self.assertRaises(ValueError):
+                installed_record(Distribution(missing))
+        self.assertEqual(len(installed_record(Distribution('module.py,sha256=example,12'))), 64)
 
     def test_group_median_and_incomplete_rejection(self):
         records = [dict(workload='small', backend='parquet', mode='sequential', workers=1, pipeline_elapsed_ns=n)

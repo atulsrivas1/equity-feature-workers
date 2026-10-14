@@ -103,7 +103,7 @@ def layout_case(root, count):
     for name, data, stats in [('A', base, False), ('B', sorted_rows, False), ('C', sorted_rows, True)]:
         path = root / (name + '.parquet')
         pq.write_table(pa.Table.from_pylist(data, schema=schema), path, version='2.6', compression='NONE',
-            use_dictionary=False, write_statistics=stats, row_group_size=4096, write_batch_size=1024)
+            use_dictionary=False, write_statistics=stats, row_group_size=4096, write_batch_size=1024, data_page_size=65536, store_schema=True)
         actual = pq.read_table(path)
         assert actual.schema.equals(schema, check_metadata=True)
         assert sorted(actual.to_pylist(), key=lambda row: row['result_ordinal']) == base
