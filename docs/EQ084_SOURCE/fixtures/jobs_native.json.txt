@@ -1,0 +1,714 @@
+{
+  "fixtures": [
+    {
+      "family": "trades",
+      "native_spec": {
+        "config": {
+          "adjustment": {
+            "action_snapshot": "none",
+            "anchor": "none",
+            "basis": "raw",
+            "policy_version": "raw-v1"
+          },
+          "algorithm_version": "v1",
+          "availability": {
+            "evaluation_ns": 210,
+            "knowledge_cutoff_ns": 210,
+            "market_cutoff_ns": 200,
+            "mode": "known_at",
+            "reconstruction_reason": null
+          },
+          "identity": "synthetic-bars",
+          "parameters": [
+            {
+              "name": "eligibility_policy",
+              "value": "example-v1"
+            }
+          ],
+          "price_unit": {
+            "currency": "USD",
+            "scale": 0
+          },
+          "schema_version": "1",
+          "session": {
+            "close_ns": 200,
+            "early_close": false,
+            "include_closing_auction": false,
+            "include_opening_auction": false,
+            "intervals": [],
+            "namespace": "demo",
+            "open_ns": 100,
+            "scheduled_close_ns": null,
+            "session_id": "S",
+            "timezone_label": "caller-supplied"
+          },
+          "window": {
+            "anchor": "prior_only",
+            "count": 1,
+            "governed_sessions": [
+              "P",
+              "S"
+            ],
+            "target_session_id": "S"
+          }
+        },
+        "destination_scope": "synthetic-conformance",
+        "family": "trades",
+        "features": [
+          {
+            "algorithm_version": "v1",
+            "dtype": "int64",
+            "feature_id": "session.trade.count",
+            "schema_version": "1",
+            "unit": "trades"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "int64",
+            "feature_id": "session.trade.volume",
+            "schema_version": "1",
+            "unit": "shares"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "decimal128",
+            "feature_id": "session.trade.notional",
+            "schema_version": "1",
+            "unit": "currency coefficient / 10^price_scale"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.trade.vwap",
+            "schema_version": "1",
+            "unit": "currency/share"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.trade.mean_size",
+            "schema_version": "1",
+            "unit": "shares/trade"
+          }
+        ],
+        "generation_id": "generation1",
+        "governed_sessions": [
+          {
+            "end_ns": 100,
+            "name": "P",
+            "start_ns": 0
+          },
+          {
+            "end_ns": 200,
+            "name": "S",
+            "start_ns": 100
+          }
+        ],
+        "job_id": "job1",
+        "max_input_bytes": 65536,
+        "ownership": "serialized_destination",
+        "partition_id": "A-S",
+        "request": {
+          "adjustment": {
+            "action_snapshot": "none",
+            "anchor": "none",
+            "basis": "raw",
+            "policy_version": "raw-v1"
+          },
+          "availability": {
+            "evaluation_ns": 210,
+            "knowledge_cutoff_ns": 210,
+            "market_cutoff_ns": 200,
+            "mode": "known_at",
+            "reconstruction_reason": null
+          },
+          "end_ns": 200,
+          "instruments": [
+            "A"
+          ],
+          "kind": "trade",
+          "max_batch_rows": 3,
+          "max_batches": 1,
+          "max_rows": 3,
+          "namespace": "demo",
+          "price_unit": {
+            "currency": "USD",
+            "scale": 0
+          },
+          "request_id": "request",
+          "sampling": "none",
+          "schema_version": "1",
+          "selection": "event_half_open",
+          "sessions": [
+            "S"
+          ],
+          "snapshot_id": "snapshot1",
+          "start_ns": 100
+        },
+        "revision_id": "revision1"
+      },
+      "request": {
+        "kind": "request",
+        "payload": {
+          "command_digest": "94abf5050a221fe5a47bd2727ee465b23f9910d044dd3dd4d26929fed49537c3",
+          "context": {
+            "availability": {
+              "evaluation_ns": "210",
+              "knowledge_cutoff_ns": "210",
+              "market_cutoff_ns": "200",
+              "mode": "known_at",
+              "reconstruction_reason": null
+            },
+            "config": {
+              "algorithm_version": "v1",
+              "config_id": "synthetic-bars",
+              "digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
+              "revision": "owned-config-v1",
+              "schema_version": "1"
+            },
+            "dataset": {
+              "dataset_id": "owned.trades",
+              "input_id": "trades",
+              "mapping_version": "map1",
+              "revision": "owned-v1",
+              "snapshot_id": "snapshot1",
+              "source_id": "synthetic"
+            },
+            "features": [
+              {
+                "algorithm_version": "v1",
+                "feature_id": "session.trade.volume"
+              }
+            ],
+            "math_policy_version": "v1",
+            "namespace": "demo",
+            "registry_snapshot": "89cf8b68c6e854a1fa4139ce264353cf8000445743c05673bdf8fefeb4b69086"
+          },
+          "idempotency_key": "owned-trades",
+          "operation": "calculate",
+          "scope": {
+            "end_ns": "200",
+            "instrument_id": "A",
+            "session_id": "S",
+            "start_ns": "100"
+          }
+        },
+        "request_id": "owned-trades",
+        "schema": "equity.remote",
+        "version": "1.0"
+      }
+    },
+    {
+      "family": "bars",
+      "native_spec": {
+        "config": {
+          "adjustment": {
+            "action_snapshot": "none",
+            "anchor": "none",
+            "basis": "raw",
+            "policy_version": "raw-v1"
+          },
+          "algorithm_version": "v1",
+          "availability": {
+            "evaluation_ns": 210,
+            "knowledge_cutoff_ns": 210,
+            "market_cutoff_ns": 200,
+            "mode": "known_at",
+            "reconstruction_reason": null
+          },
+          "identity": "synthetic-bars",
+          "parameters": [
+            {
+              "name": "eligibility_policy",
+              "value": "example-v1"
+            }
+          ],
+          "price_unit": {
+            "currency": "USD",
+            "scale": 0
+          },
+          "schema_version": "1",
+          "session": {
+            "close_ns": 200,
+            "early_close": false,
+            "include_closing_auction": false,
+            "include_opening_auction": false,
+            "intervals": [],
+            "namespace": "demo",
+            "open_ns": 100,
+            "scheduled_close_ns": null,
+            "session_id": "S",
+            "timezone_label": "caller-supplied"
+          },
+          "window": {
+            "anchor": "prior_only",
+            "count": 1,
+            "governed_sessions": [
+              "P",
+              "S"
+            ],
+            "target_session_id": "S"
+          }
+        },
+        "destination_scope": "synthetic-conformance",
+        "family": "bars",
+        "features": [
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.bar.open",
+            "schema_version": "1",
+            "unit": "currency/share"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.bar.high",
+            "schema_version": "1",
+            "unit": "currency/share"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.bar.low",
+            "schema_version": "1",
+            "unit": "currency/share"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.bar.close",
+            "schema_version": "1",
+            "unit": "currency/share"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "int64",
+            "feature_id": "session.bar.volume",
+            "schema_version": "1",
+            "unit": "shares"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "decimal128",
+            "feature_id": "session.bar.notional",
+            "schema_version": "1",
+            "unit": "currency coefficient / 10^price_scale"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.bar.close_weighted_price",
+            "schema_version": "1",
+            "unit": "currency/share; proxy"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.price.open_close_return",
+            "schema_version": "1",
+            "unit": "fraction"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.price.range_fraction",
+            "schema_version": "1",
+            "unit": "fraction"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.price.close_location",
+            "schema_version": "1",
+            "unit": "fraction"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.price.overnight_gap",
+            "schema_version": "1",
+            "unit": "fraction"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "feature_id": "session.price.close_close_return",
+            "schema_version": "1",
+            "unit": "fraction"
+          }
+        ],
+        "generation_id": "generation1",
+        "governed_sessions": [
+          {
+            "end_ns": 100,
+            "name": "P",
+            "start_ns": 0
+          },
+          {
+            "end_ns": 200,
+            "name": "S",
+            "start_ns": 100
+          }
+        ],
+        "job_id": "job1",
+        "max_input_bytes": 65536,
+        "ownership": "serialized_destination",
+        "partition_id": "A-S",
+        "request": {
+          "adjustment": {
+            "action_snapshot": "none",
+            "anchor": "none",
+            "basis": "raw",
+            "policy_version": "raw-v1"
+          },
+          "availability": {
+            "evaluation_ns": 210,
+            "knowledge_cutoff_ns": 210,
+            "market_cutoff_ns": 200,
+            "mode": "known_at",
+            "reconstruction_reason": null
+          },
+          "end_ns": 200,
+          "instruments": [
+            "A"
+          ],
+          "kind": "bar",
+          "max_batch_rows": 2,
+          "max_batches": 1,
+          "max_rows": 2,
+          "namespace": "demo",
+          "price_unit": {
+            "currency": "USD",
+            "scale": 0
+          },
+          "request_id": "req1",
+          "sampling": "none",
+          "schema_version": "1",
+          "selection": "completed_intervals",
+          "sessions": [
+            "S"
+          ],
+          "snapshot_id": "snapshot1",
+          "start_ns": 100
+        },
+        "revision_id": "revision1"
+      },
+      "request": {
+        "kind": "request",
+        "payload": {
+          "command_digest": "0d750f03db175df46824ffd7cb17a91d5a0cc4024137d0687391eb519eeb2561",
+          "context": {
+            "availability": {
+              "evaluation_ns": "210",
+              "knowledge_cutoff_ns": "210",
+              "market_cutoff_ns": "200",
+              "mode": "known_at",
+              "reconstruction_reason": null
+            },
+            "config": {
+              "algorithm_version": "v1",
+              "config_id": "synthetic-bars",
+              "digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
+              "revision": "owned-config-v1",
+              "schema_version": "1"
+            },
+            "dataset": {
+              "dataset_id": "owned.bars",
+              "input_id": "bars1",
+              "mapping_version": "map1",
+              "revision": "owned-v1",
+              "snapshot_id": "snapshot1",
+              "source_id": "synthetic"
+            },
+            "features": [
+              {
+                "algorithm_version": "v1",
+                "feature_id": "session.bar.volume"
+              }
+            ],
+            "math_policy_version": "v1",
+            "namespace": "demo",
+            "registry_snapshot": "89cf8b68c6e854a1fa4139ce264353cf8000445743c05673bdf8fefeb4b69086"
+          },
+          "idempotency_key": "owned-bars",
+          "operation": "calculate",
+          "scope": {
+            "end_ns": "200",
+            "instrument_id": "A",
+            "session_id": "S",
+            "start_ns": "100"
+          }
+        },
+        "request_id": "owned-bars",
+        "schema": "equity.remote",
+        "version": "1.0"
+      }
+    },
+    {
+      "family": "quotes",
+      "native_spec": {
+        "config": {
+          "adjustment": {
+            "action_snapshot": "none",
+            "anchor": "none",
+            "basis": "raw",
+            "policy_version": "raw-v1"
+          },
+          "algorithm_version": "v1",
+          "availability": {
+            "evaluation_ns": 210,
+            "knowledge_cutoff_ns": 210,
+            "market_cutoff_ns": 200,
+            "mode": "known_at",
+            "reconstruction_reason": null
+          },
+          "identity": "synthetic-bars",
+          "parameters": [
+            {
+              "name": "eligibility_policy",
+              "value": "example-v1"
+            },
+            {
+              "name": "observation_limit",
+              "value": 4
+            }
+          ],
+          "price_unit": {
+            "currency": "USD",
+            "scale": 0
+          },
+          "schema_version": "1",
+          "session": {
+            "close_ns": 200,
+            "early_close": false,
+            "include_closing_auction": false,
+            "include_opening_auction": false,
+            "intervals": [],
+            "namespace": "demo",
+            "open_ns": 100,
+            "scheduled_close_ns": null,
+            "session_id": "S",
+            "timezone_label": "caller-supplied"
+          },
+          "window": {
+            "anchor": "prior_only",
+            "count": 1,
+            "governed_sessions": [
+              "P",
+              "S"
+            ],
+            "target_session_id": "S"
+          }
+        },
+        "destination_scope": "synthetic-conformance",
+        "family": "quotes",
+        "features": [
+          {
+            "algorithm_version": "v1",
+            "dtype": "sampled_spread",
+            "feature_id": "session.quote.sampled_spread",
+            "schema_version": "1",
+            "unit": "currency/share; bps; observations"
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "quote_state_counts",
+            "feature_id": "session.quote.state_counts",
+            "schema_version": "1",
+            "unit": "observations"
+          }
+        ],
+        "generation_id": "generation1",
+        "governed_sessions": [
+          {
+            "end_ns": 100,
+            "name": "P",
+            "start_ns": 0
+          },
+          {
+            "end_ns": 200,
+            "name": "S",
+            "start_ns": 100
+          }
+        ],
+        "job_id": "job1",
+        "max_input_bytes": 65536,
+        "ownership": "serialized_destination",
+        "partition_id": "A-S",
+        "request": {
+          "adjustment": {
+            "action_snapshot": "none",
+            "anchor": "none",
+            "basis": "raw",
+            "policy_version": "raw-v1"
+          },
+          "availability": {
+            "evaluation_ns": 210,
+            "knowledge_cutoff_ns": 210,
+            "market_cutoff_ns": 200,
+            "mode": "known_at",
+            "reconstruction_reason": null
+          },
+          "end_ns": 200,
+          "instruments": [
+            "A"
+          ],
+          "kind": "quote",
+          "max_batch_rows": 4,
+          "max_batches": 1,
+          "max_rows": 4,
+          "namespace": "demo",
+          "price_unit": {
+            "currency": "USD",
+            "scale": 0
+          },
+          "request_id": "request",
+          "sampling": "trade_snapshot",
+          "schema_version": "1",
+          "selection": "event_half_open",
+          "sessions": [
+            "S"
+          ],
+          "snapshot_id": "snapshot1",
+          "start_ns": 100
+        },
+        "revision_id": "revision1"
+      },
+      "request": {
+        "kind": "request",
+        "payload": {
+          "command_digest": "65b4e4a79168d41383740cae040eec0ecb60204a1ca5a3a948a6bdd63202a2e9",
+          "context": {
+            "availability": {
+              "evaluation_ns": "210",
+              "knowledge_cutoff_ns": "210",
+              "market_cutoff_ns": "200",
+              "mode": "known_at",
+              "reconstruction_reason": null
+            },
+            "config": {
+              "algorithm_version": "v1",
+              "config_id": "synthetic-bars",
+              "digest": "370a0bc360a6fc7af75f9c5eb5e66b3c24e154b0cf729d9a7fe3270bd84cee57",
+              "revision": "owned-config-v1",
+              "schema_version": "1"
+            },
+            "dataset": {
+              "dataset_id": "owned.quotes",
+              "input_id": "quotes",
+              "mapping_version": "map1",
+              "revision": "owned-v1",
+              "snapshot_id": "snapshot1",
+              "source_id": "synthetic"
+            },
+            "features": [
+              {
+                "algorithm_version": "v1",
+                "feature_id": "session.quote.sampled_spread"
+              }
+            ],
+            "math_policy_version": "v1",
+            "namespace": "demo",
+            "registry_snapshot": "89cf8b68c6e854a1fa4139ce264353cf8000445743c05673bdf8fefeb4b69086"
+          },
+          "idempotency_key": "owned-quotes",
+          "operation": "calculate",
+          "scope": {
+            "end_ns": "200",
+            "instrument_id": "A",
+            "session_id": "S",
+            "start_ns": "100"
+          }
+        },
+        "request_id": "owned-quotes",
+        "schema": "equity.remote",
+        "version": "1.0"
+      }
+    }
+  ],
+  "installed_worker": true,
+  "records": [
+    {
+      "command_sha256": "6512d9b230b76c43b01cbb9ceaf9edf0c3062ef1dd10bbe4c0c41c8b17e9beef",
+      "committed_readback": true,
+      "content_sha256": "3c8703d4ce52fca2045fd604b44d96cd08ffa98acbf1fcd48737f88c077c7104",
+      "execution_features": [
+        "session.trade.count",
+        "session.trade.volume",
+        "session.trade.notional",
+        "session.trade.vwap",
+        "session.trade.mean_size"
+      ],
+      "family": "trades",
+      "native_result_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+      "plan_sha256": "93f625f280d89ab3cd2d387f3d5bba167ffbf91e7b831666aa5cdb6ae683abf6",
+      "requested_feature": "session.trade.volume",
+      "task_sha256": "8b29a0d1aef58598467138645d14fba26a1b1cd9a4e00448e18879145bfda4cb"
+    },
+    {
+      "command_sha256": "d787cd1f25bfed102d954528b213902a7678261baaab9c68357d3f160dc90e41",
+      "committed_readback": true,
+      "content_sha256": "b15f70a3e74dbe12ef2cfcd3ddcc6ecc6ec4f70dc0bf6a86648b41428dceccbe",
+      "execution_features": [
+        "session.bar.open",
+        "session.bar.high",
+        "session.bar.low",
+        "session.bar.close",
+        "session.bar.volume",
+        "session.bar.notional",
+        "session.bar.close_weighted_price",
+        "session.price.open_close_return",
+        "session.price.range_fraction",
+        "session.price.close_location",
+        "session.price.overnight_gap",
+        "session.price.close_close_return"
+      ],
+      "family": "bars",
+      "native_result_sha256": "8776f94ba6b31943da18c88a4b32eb8a0a110812030b556cff62bb4c7c358fa6",
+      "plan_sha256": "91267b56dde1e944ffc374f2f730a35caaf389bb23ab56e0d242ec4c7113b4a1",
+      "requested_feature": "session.bar.volume",
+      "task_sha256": "e19b5af0b0f655cfada5d103c49ca1fe24b8577b653962ccf38cd026586d721e"
+    },
+    {
+      "command_sha256": "fb37215b0f867ac0f8493bf725ef710c78462aee69fefc32484befa07405e830",
+      "committed_readback": true,
+      "content_sha256": "4b3f0f57651db1e3565913331eb687f304a2f9ca53fb830d83fe15e418e796ff",
+      "execution_features": [
+        "session.quote.sampled_spread",
+        "session.quote.state_counts"
+      ],
+      "family": "quotes",
+      "native_result_sha256": "0e585d4ee2f75e81d86af893c855afb29e4d100daf4031da5ee9e9f68abe7af4",
+      "plan_sha256": "f047ea542d2d86f7dac144121278af7362f7331eac2ec05601d06b2ea9b5da0a",
+      "requested_feature": "session.quote.sampled_spread",
+      "task_sha256": "c056c103aca8ab92ac44bed4989ef3f0d8e1519bf6a723e185c92b59b43c0bd0"
+    },
+    {
+      "command_sha256": "26b4da39e7d44fe4c427bbb806d7367d758773a6a1aa7942b5731b36b51da452",
+      "committed_readback": true,
+      "content_sha256": "9315a96c89dfad7b5bdda0afdffd7cb38914a6812f3a93ebd3da7128a0f9ed5c",
+      "family": "history",
+      "plan_sha256": "f85b1fcba9f58be996dcd2346b9953e5808f7e0024ea078d118bd2412e873236",
+      "requested_feature": "history.sma",
+      "task_sha256": "865c2c4cc7e53d332486a58c701f7659dbca2fcfe88848ffcd05dd436bb89ec1",
+      "value": 115.0
+    },
+    {
+      "case": "distinct_job_identities_stable_source_and_destination",
+      "full_input_bindings_and_result_bytes_equal": true,
+      "native_command_plan_task_distinct": true,
+      "original_request_preserved": true
+    },
+    {
+      "case": "postcommit_cancel",
+      "committed_receipt_preserved": true,
+      "content_sha256": "3c8703d4ce52fca2045fd604b44d96cd08ffa98acbf1fcd48737f88c077c7104",
+      "native_error": "CANCELLED",
+      "verified_readback_after_cancel": true
+    }
+  ],
+  "service_runtime_implemented": false,
+  "stage": "pre-code-native-api-feasibility",
+  "worker_version": "0.1.0a13"
+}

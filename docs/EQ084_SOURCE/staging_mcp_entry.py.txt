@@ -1,0 +1,103 @@
+"""Uninvoked fixed private staging MCP baseline entry."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import ssl
+import sys
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True,
+                      allow_nan=False).encode('ascii')
+
+
+def main(arguments):
+    if len(arguments) != 10 or not sys.flags.isolated or sys.platform != 'win32':
+        raise ValueError('staging MCP fixed invocation')
+    harness, epoch, certificates = (Path(value) for value in arguments[:3])
+    origin, cert_sha, fixture_sha, secret_sha = arguments[3:7]
+    if arguments[7:] != ['baseline', 'trades', 'fixed'] or re.fullmatch(r'https://127\.0\.0\.1:[1-9][0-9]{0,4}', origin) is None or int(origin.rsplit(':', 1)[1]) > 65535:
+        raise ValueError('staging MCP fixed origin and lane')
+    for root in (harness, epoch, certificates):
+        if not root.is_absolute() or root.is_symlink() or root.resolve(strict=True) != root:
+            raise ValueError('staging MCP owned roots')
+    def read(path, cap, digest=None):
+        if path.is_symlink() or path.resolve(strict=True) != path:
+            raise ValueError('staging MCP fixed file')
+        with path.open('rb') as stream:
+            raw = stream.read(cap + 1)
+        if not raw or len(raw) > cap or digest is not None and hashlib.sha256(raw).hexdigest() != digest:
+            raise ValueError('staging MCP fixed bytes')
+        return raw
+    request = json.loads(read(epoch / 'invoke.json', 65536))
+    total = 0
+    for name, pin in request['source_manifest'].items():
+        path = harness / name
+        if not path.is_relative_to(harness):
+            raise ValueError('staging MCP helper authority')
+        total += len(read(path, pin['bytes'], pin['sha256']))
+        if total > 393216:
+            raise ValueError('staging MCP source closure')
+    fixture = request['fixture']
+    if hashlib.sha256(canonical(fixture)).hexdigest() != fixture_sha:
+        raise ValueError('staging MCP fixture identity')
+    secret = json.loads(read(epoch / 'credentials.json', 1024, secret_sha))
+    if request['mode'] != 'good' or request['secret_sha256'] != secret_sha or request['certificate_pins_sha256'] != cert_sha:
+        raise ValueError('staging MCP baseline invocation binding')
+    sys.dont_write_bytecode = True
+    sys.path.insert(0, str(harness))
+    from certificate_pins import read_pins
+    read_pins(certificates, cert_sha)
+    context = ssl.create_default_context(cafile=str(certificates / 'valid-cert.pem'))
+    if context.verify_mode != ssl.CERT_REQUIRED or context.check_hostname is not True:
+        raise ValueError('staging MCP TLS verification')
+    import equity_feature_client
+    import equity_feature_mcp
+    if not all('site-packages' in Path(module.__file__).resolve().parts for module in (equity_feature_client, equity_feature_mcp)):
+        raise ValueError('staging MCP installed namespaces')
+    from equity_feature_client import RemoteClient, ScopeKey, FeatureRef, ProducerExpectation
+    from equity_feature_mcp import StdioServer, MCPProfile, CommandRegistration
+    producer = fixture['complete_producer_payload']
+    fields = producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+    expected = ProducerExpectation(producer['context'], ScopeKey('A', 'S', int(fields['start_ns']['value']), int(fields['end_ns']['value'])),
+        tuple(FeatureRef(**value) for value in producer['executed_features']), producer['backend_id'], producer['backend_version'])
+    calls = 0
+    def provider():
+        nonlocal calls
+        calls += 1
+        if calls > 5:
+            raise ValueError('staging MCP exact provider cap')
+        return secret['A']
+    client = RemoteClient(origin, provider, attempts=1, budget=5, ssl_context=context)
+    try:
+        server = StdioServer(client, MCPProfile('eq084-good', (), (CommandRegistration('command', expected),), 60))
+        def publish(path, value):
+            raw = canonical(value)
+            if len(raw) > 256 or path.exists() or path.with_name(path.name + '.complete').exists():
+                raise ValueError('staging MCP immutable witness')
+            pending = path.with_name(path.name + '.pending')
+            with pending.open('xb') as stream:
+                if stream.write(raw) != len(raw):
+                    raise ValueError('staging MCP incomplete witness')
+            pending.replace(path)
+            path.with_name(path.name + '.complete').mkdir()
+        marker = epoch / 'mcp-pid.json'
+        publish(marker, {'pid': os.getpid()})
+        server.run_stdio(sys.stdin.buffer, sys.stdout.buffer)
+        if calls != 5:
+            raise ValueError('staging MCP exact provider sends')
+        publish(marker.with_name(marker.name + '.closed'), {'pid': os.getpid(), 'provider_calls': calls,
+            'marker': 'eq084-mcp-closed', 'role': 'baseline', 'mode': 'good'})
+    finally:
+        active_exception = sys.exc_info()[0] is not None
+        try:
+            client.close()
+        except BaseException:
+            if not active_exception:
+                raise
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

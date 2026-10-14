@@ -1,0 +1,18 @@
+"""Fixed EQ084 admitted owner source; literal helper pins before imports."""
+import sys,json,hashlib
+from pathlib import Path,PurePosixPath
+if len(sys.argv)!=8 or not sys.flags.isolated or sys.platform!='win32':raise ValueError('staging admitted owner')
+root=Path(sys.argv[1])
+if not root.is_absolute() or root.is_symlink() or root.resolve(strict=True)!=root:raise ValueError('staging pinned root')
+pins={'staging_runtime.py': {'bytes': 12982, 'sha256': '5af148348020af32bbeb84a8a85b5edf346f5971b8787984e506545545a71003'}, 'certificate_pins.py': {'bytes': 2163, 'sha256': 'a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb'}, 'test_jobs.py': {'bytes': 60646, 'sha256': '061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f'}, 'test_service.py': {'bytes': 30744, 'sha256': '3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90'}, 'fixtures/jobs_native.json': {'bytes': 22366, 'sha256': '73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7'}}
+total=0
+for relative,pin in pins.items():
+ path=root/relative
+ if path.is_symlink() or path.resolve(strict=True)!=path or not path.is_relative_to(root):raise ValueError('staging pinned helper')
+ with path.open('rb') as stream:raw=stream.read(pin['bytes']+1)
+ total+=len(raw)
+ if total>393216 or len(raw)!=pin['bytes'] or hashlib.sha256(raw).hexdigest()!=pin['sha256']:raise ValueError('staging pinned bytes')
+sys.dont_write_bytecode=True
+sys.path.insert(0,str(root))
+from staging_runtime import main
+main(sys.argv[1:])
