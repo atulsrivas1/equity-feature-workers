@@ -1,0 +1,64 @@
+"""UNINVOKED isolated installed staging controller candidate."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True,
+                      allow_nan=False).encode('ascii')
+
+
+def main(arguments):
+    if len(arguments) != 3 or not sys.flags.isolated or sys.platform != 'win32':
+        raise ValueError('staging installed controller invocation')
+    harness, epoch = (Path(value) for value in arguments[:2])
+    for path in (harness, epoch):
+        if not path.is_absolute() or path.is_symlink() or path.resolve(strict=True) != path:
+            raise ValueError('staging installed controller roots')
+    request_path = epoch / 'invoke.json'
+    if request_path.is_symlink():raise ValueError('staging request symlink')
+    with request_path.open('rb') as stream:raw = stream.read(65537)
+    if not raw or len(raw) > 65536 or hashlib.sha256(raw).hexdigest() != arguments[2]:
+        raise ValueError('staging private invocation identity')
+    request = json.loads(raw)
+    if canonical(request) != raw or set(request) != {'epoch_alias', 'mode', 'config_sha256', 'secret_sha256',
+            'certificate_pins_sha256', 'old_ids', 'source_manifest', 'installed_source_inputs', 'fixture'}:
+        raise ValueError('staging private invocation fields')
+    if request['epoch_alias'] != epoch.name:
+        raise ValueError('staging epoch alias')
+    total = 0
+    for relative, pin in request['source_manifest'].items():
+        path = harness / relative
+        if path.is_symlink() or path.resolve(strict=True) != path or not path.is_relative_to(harness):
+            raise ValueError('staging source pin path')
+        with path.open('rb') as stream:source = stream.read(pin['bytes'] + 1)
+        total += len(source)
+        if total > 393216 or len(source) != pin['bytes'] or hashlib.sha256(source).hexdigest() != pin['sha256']:
+            raise ValueError('staging source closure')
+    sys.dont_write_bytecode = True
+    sys.path.insert(0, str(harness))
+    from installed_records import installed_records
+    installation = installed_records(request['installed_source_inputs'], Path(sys.prefix).resolve())
+    from staging_protocol import run_epoch
+    secret_path = epoch / 'credentials.json'
+    if secret_path.is_symlink():raise ValueError('staging secret symlink')
+    with secret_path.open('rb') as stream:secret_raw = stream.read(1025)
+    if len(secret_raw) > 1024 or hashlib.sha256(secret_raw).hexdigest() != request['secret_sha256']:
+        raise ValueError('staging secret identity')
+    secret = json.loads(secret_raw)
+    entry = (harness / 'owner_entry.py').read_bytes()
+    result = run_epoch(harness, epoch, epoch / 'certificates', request['mode'],
+        request['config_sha256'], request['secret_sha256'], request['certificate_pins_sha256'],
+        entry, secret, request['fixture'], request['old_ids'])
+    after = installed_records(request['installed_source_inputs'], Path(sys.prefix).resolve())
+    if after != installation:
+        raise ValueError('staging installed source changed during operation')
+    result['installed_records'] = installation
+    result['python'] = sys.version
+    print(canonical(result).decode('ascii'), flush=True)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

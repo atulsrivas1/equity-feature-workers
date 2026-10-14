@@ -1,0 +1,254 @@
+"""UNINVOKED EQ084 operator-only filesystem/install/deploy/backup controller candidate."""
+import hashlib
+import json
+import os
+from pathlib import Path, PurePosixPath
+import secrets
+import shutil
+import sys
+import tempfile
+import time
+import stat
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True,
+                      allow_nan=False).encode('ascii')
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def read_pin(root, relative, pin):
+    name = PurePosixPath(relative)
+    if (name.is_absolute() or '..' in name.parts or str(name) != relative or '\\' in relative
+            or ':' in relative or any(ord(value) < 32 for value in relative)):
+        raise ValueError('staging immutable relative name')
+    path = root / relative
+    if path.is_symlink() or path.resolve(strict=True) != path or not path.is_file():
+        raise ValueError('staging immutable input path')
+    if type(pin['bytes']) is not int or not 0 < pin['bytes'] <= 134217728:
+        raise ValueError('staging immutable input bound')
+    with path.open('rb') as stream:
+        raw = stream.read(pin['bytes'] + 1)
+    if len(raw) != pin['bytes'] or sha(raw) != pin['sha256']:
+        raise ValueError('staging immutable input identity')
+    return raw
+
+
+def write_new(path, raw):
+    if path.exists() or path.is_symlink() or path.parent.resolve(strict=True) != path.parent:
+        raise ValueError('staging fresh output path')
+    with path.open('xb') as stream:
+        if stream.write(raw) != len(raw):
+            raise ValueError('staging incomplete closed output')
+
+
+def copy_manifest(source, target, manifest):
+    if target.exists() or target.is_symlink() or target.parent.resolve(strict=True) != target.parent:
+        raise ValueError('staging fresh manifest destination')
+    total = sum(pin['bytes'] for pin in manifest.values())
+    if not 0 < total <= 134217728 or len(manifest) > 128:
+        raise ValueError('staging finite copy bound')
+    target.mkdir()
+    for relative, pin in manifest.items():
+        raw = read_pin(source, relative, pin)
+        path = target / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        write_new(path, raw)
+        if read_pin(target, relative, pin) != raw:
+            raise ValueError('staging manifest copy parity')
+    return {'entries': manifest, 'bytes': total, 'manifest_sha256': sha(canonical(manifest))}
+
+
+def cleanup_owned(root, parent, ownership):
+    if (root.parent != parent or not root.name.startswith('eq084-stage-')
+            or root.is_symlink() or root.resolve(strict=True) != root
+            or (root / 'ownership.json').read_bytes() != ownership):
+        raise ValueError('staging cleanup root authority')
+    entries = []
+    for directory, directories, files in os.walk(root, topdown=False, followlinks=False):
+        for name in files + directories:
+            path = Path(directory) / name
+            observed = path.lstat()
+            if (len(entries) >= 500000 or path.is_symlink()
+                    or getattr(observed, 'st_file_attributes', 0) & 0x400
+                    or path.resolve(strict=True) != path or not path.is_relative_to(root)):
+                raise ValueError('staging no-follow cleanup failed; retain root')
+            entries.append((path, stat.S_ISDIR(observed.st_mode)))
+    for path, directory in entries:
+        observed = path.lstat()
+        if (path.is_symlink() or getattr(observed, 'st_file_attributes', 0) & 0x400
+                or path.resolve(strict=True) != path or not path.is_relative_to(root)):
+            raise ValueError('staging cleanup drift; explicit failure')
+        if directory:path.rmdir()
+        else:path.unlink()
+    root.rmdir()
+    if root.exists():raise ValueError('staging final owned cleanup unfinished')
+    return {'owned_nodes_removed': len(entries) + 1, 'owned_root_removed': True,
+            'no_follow_checks': True}
+
+
+def main(argv):
+    sys.dont_write_bytecode = True
+    # Invocation must remain withheld until accepted93, exact full-source review and actual Ready.
+    if len(argv) != 2 or not sys.flags.isolated or sys.platform != 'win32':
+        raise ValueError('staging fixed installed invocation')
+    packet = Path(argv[0]); expected = argv[1]
+    if not packet.is_absolute() or packet.is_symlink() or packet.resolve(strict=True) != packet:
+        raise ValueError('staging fixed packet root')
+    manifest_raw = (packet / 'packet.json').read_bytes()
+    if len(manifest_raw) > 262144 or sha(manifest_raw) != expected:
+        raise ValueError('staging packet identity')
+    manifest = json.loads(manifest_raw)
+    if set(manifest) != {'schema', 'sources', 'archives', 'installed_source_inputs', 'fixture', 'qualified_receipt'} or manifest['schema'] != 'eq084.packet.v1':
+        raise ValueError('staging packet schema')
+    if manifest['qualified_receipt'] != {'bytes': 1871679, 'sha256': '51e531b0fb7ee387f65690259806565db64e5fc3a2b7f3cd30243551c21e3a0a'}:
+        raise ValueError('staging accepted93 binding')
+    source_bytes = {name: read_pin(packet / 'sources', name, pin) for name, pin in manifest['sources'].items()}
+    archive_bytes = {name: read_pin(packet / 'archives', name, pin) for name, pin in manifest['archives'].items()}
+    if not 1 <= len(source_bytes) <= 16 or not 1 <= len(archive_bytes) <= 64 or any(not name.endswith('.whl') for name in archive_bytes):
+        raise ValueError('staging closed source/archive roster')
+    if sum(len(raw) for raw in source_bytes.values()) > 393216 or sum(len(raw) for raw in archive_bytes.values()) > 134217728:
+        raise ValueError('staging bounded packet bytes')
+    sys.path.insert(0, str(packet / 'sources'))
+    from bounded_capture import capture
+    from private_directory import private_directory
+    parent = Path(tempfile.gettempdir()).resolve(strict=True)
+    root = parent / ('eq084-stage-' + secrets.token_hex(8))
+    if root.exists() or root.is_symlink():
+        raise ValueError('staging disjoint owned root')
+    # Ownership is remembered before creation; no manifest precedes secure empty-directory readback.
+    root.mkdir()
+    private_directory(root, secure=True)
+    ownership = canonical({'schema': 'eq084.owned.v1', 'root_alias': root.name,
+                           'packet_sha256': expected, 'owned': True})
+    write_new(root / 'ownership.json', ownership)
+    for name in ('archives', 'sources', 'deployments', 'epochs', 'backups', 'reports', 'scratch'):
+        (root / name).mkdir()
+    for name, raw in source_bytes.items():
+        path = root / 'sources' / name
+        path.parent.mkdir(parents=True, exist_ok=True);write_new(path, raw)
+    for name, raw in archive_bytes.items():write_new(root / 'archives' / name, raw)
+    environment = dict(os.environ)
+    environment.pop('PYTHONPATH', None)
+    environment.update(PYTHONNOUSERSITE='1', PYTHONHASHSEED='0', PYTHONDONTWRITEBYTECODE='1',
+        TMP=str(root / 'scratch'), TEMP=str(root / 'scratch'), PIP_NO_INDEX='1',
+        PIP_CONFIG_FILE=os.devnull, PIP_DISABLE_PIP_VERSION_CHECK='1')
+    reports = []
+    installations = {}
+    started = time.monotonic()
+    def command(arguments, seconds=120):
+        code, stdout, stderr = capture([str(value) for value in arguments], cwd=root,
+                                       env=environment, seconds=seconds, limit=262144)
+        if code != 0:
+            write_new(root / 'reports' / ('private-failure-' + secrets.token_hex(4) + '.log'), stdout + stderr)
+            raise ValueError('staging command failed; private evidence retained')
+        return stdout
+    def install(name, archive_root):
+        destination = root / 'deployments' / name
+        if destination.exists():raise ValueError('staging deployment reuse')
+        destination.mkdir()
+        private_directory(destination, secure=True)
+        command([sys.executable, '-I', '-m', 'venv', destination])
+        private_directory(destination)
+        python = destination / 'Scripts/python.exe'
+        wheels = [archive_root / filename for filename in sorted(manifest['archives'])]
+        command([python, '-I', '-m', 'pip', 'install', '--no-index', '--no-deps', '--no-cache-dir', *wheels])
+        command([python, '-I', '-m', 'pip', 'check'])
+        installations[name] = {'offline': True, 'pipcheck': True, 'archives_sha256': sha(canonical(manifest['archives']))}
+        return python
+    def epoch(python, name, mode, old=None):
+        location = root / 'epochs' / name
+        location.mkdir();private_directory(location, secure=True)
+        (location / 'resilience').mkdir()
+        for helper in ('private_directory.py', 'bounded_capture.py'):
+            write_new(location / 'resilience' / helper, source_bytes[helper])
+        write_new(location / 'certificate_helper.py', source_bytes['certificate_helper.py'])
+        certs = location / 'certificates'
+        command([python, '-I', location / 'certificate_helper.py', certs], seconds=15)
+        pins = {}
+        for role in ('valid', 'wrong'):
+            pins[role] = {}
+            for kind in ('cert', 'key'):
+                file = certs / (role + '-' + kind + '.pem')
+                raw = file.read_bytes()
+                if not 0 < len(raw) <= 8192 or file.is_symlink():raise ValueError('staging certificate bound')
+                pins[role][kind] = {'bytes': len(raw), 'sha256': sha(raw)}
+        pin_raw = canonical(pins);write_new(certs / 'pins.json', pin_raw)
+        config = {'schema': 'eq084.config.v1', 'request_quota': 8 if mode == 'load' else 60,
+                  'principal_transfer': 1048576, 'global_transfer': 2097152,
+                  'interval_ns': 60000000000, 'clock_ns': 100}
+        config_raw = canonical(config);write_new(location / 'config.json', config_raw)
+        secret = {role: secrets.token_urlsafe(32) for role in ('A', 'B', 'expired')}
+        secret_raw = canonical(secret);write_new(location / 'credentials.json', secret_raw)
+        request = {'epoch_alias': name, 'mode': mode, 'config_sha256': sha(config_raw),
+                   'secret_sha256': sha(secret_raw), 'certificate_pins_sha256': sha(pin_raw), 'old_ids': old,
+                   'source_manifest': manifest['sources'], 'installed_source_inputs': manifest['installed_source_inputs'],
+                   'fixture': manifest['fixture']}
+        write_new(location / 'invoke.json', canonical(request))
+        output = command([python, '-I', root / 'sources' / 'installed_controller.py',
+                          root / 'sources', location, sha(canonical(request))], seconds=120)
+        result = json.loads(output)
+        if result['mode'] != mode:raise ValueError('staging operation identity')
+        result['epoch_alias'] = name;result['config_sha256'] = sha(config_raw)
+        reports.append(result)
+        return result, location
+    good_python = install('good', root / 'archives')
+    good, good_location = epoch(good_python, 'good', 'good')
+    if not good['successful_original_close']:raise ValueError('staging good stop unconfirmed')
+    good_ids = {key: good['original'][key] for key in ('job', 'result')}
+    backup_source = root / 'backups' / 'prepared'
+    backup_source.mkdir();(backup_source / 'archives').mkdir()
+    backup_files = {}
+    for name, pin in manifest['archives'].items():
+        raw = read_pin(root / 'archives', name, pin);write_new(backup_source / 'archives' / name, raw)
+        backup_files['archives/' + name] = pin
+    for name, raw in [('config.json', (good_location / 'config.json').read_bytes()),
+                      ('fixture.json', canonical(manifest['fixture'])),
+                      ('export.json', canonical(good['export'])),
+                      ('source-manifest.json', canonical(manifest['sources']))]:
+        write_new(backup_source / name, raw);backup_files[name] = {'bytes': len(raw), 'sha256': sha(raw)}
+    backup_root = root / 'backups' / 'first'
+    backup = copy_manifest(backup_source, backup_root, backup_files)
+    write_new(backup_root / 'completed.json', canonical(backup))
+    load_python = install('changed', root / 'archives');epoch(load_python, 'changed-load', 'load')
+    rollback_python = install('rollback', root / 'archives')
+    rollback, unused = epoch(rollback_python, 'rollback', 'rollback', good_ids)
+    if rollback['config_sha256'] != good['config_sha256']:raise ValueError('staging rollback config drift')
+    epoch(good_python, 'security', 'security')
+    restored_files = root / 'backups' / 'restored'
+    restored_copy = copy_manifest(backup_root, restored_files, backup_files)
+    if restored_copy != backup:raise ValueError('staging exact restore manifest')
+    restored_python = install('restored', restored_files / 'archives')
+    restored, unused = epoch(restored_python, 'restored', 'restored', good_ids)
+    if restored['config_sha256'] != backup_files['config.json']['sha256']:
+        raise ValueError('staging restored config parity')
+    if canonical(restored['export']) != read_pin(restored_files, 'export.json', backup_files['export.json']):
+        raise ValueError('staging restored exported golden')
+    interrupted, unused = epoch(restored_python, 'interruption', 'interruption')
+    if interrupted['successful_original_close'] or interrupted['original_scheduler_close'] is not None or not all(interrupted['owned_observations'].values()):
+        raise ValueError('staging interrupted original close masquerade')
+    interrupted_ids = {key: interrupted['original'][key] for key in ('job', 'result')}
+    recovered, unused = epoch(restored_python, 'recovered', 'recovered', interrupted_ids)
+    if (recovered['config_sha256'] != backup_files['config.json']['sha256']
+            or recovered['export'] != good['export']):
+        raise ValueError('staging complete recovery parity')
+    public = {'schema': 'eq084.operations.v1', 'target': 'new private Windows loopback staging',
+              'qualified_receipt': manifest['qualified_receipt'], 'installations': installations,
+              'operations': reports, 'backup': backup, 'restore': restored_copy,
+              'elapsed_seconds': time.monotonic() - started, 'secrets_published': False,
+              'scope': 'operator-controlled cooperative observations; no production/SLO/whole-kernel reclamation'}
+    write_new(root / 'reports' / 'operations-private.json', canonical(public))
+    for name, pin in manifest['sources'].items():read_pin(packet / 'sources', name, pin)
+    for name, pin in manifest['archives'].items():read_pin(packet / 'archives', name, pin)
+    public['borrowed_inputs_unchanged'] = True
+    if len(canonical(public)) > 245760:
+        raise ValueError('staging public report bound; retain owned root')
+    public['cleanup'] = cleanup_owned(root, parent, ownership)
+    print(canonical(public).decode('ascii'), flush=True)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

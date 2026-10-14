@@ -1,0 +1,84 @@
+"""Uninvoked copier for the already qualified EQ083 Windows staging wheels."""
+from pathlib import Path, PurePosixPath
+import hashlib
+import json
+import sys
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True,
+                      allow_nan=False).encode('ascii')
+
+
+def fixed_read(path, size, digest):
+    if (path.is_symlink() or path.resolve(strict=True) != path or not path.is_file()
+            or type(size) is not int or not 0 < size <= 134217728):
+        raise ValueError('staging fixed borrowed input')
+    with path.open('rb') as stream:
+        raw = stream.read(size + 1)
+    if len(raw) != size or hashlib.sha256(raw).hexdigest() != digest:
+        raise ValueError('staging fixed borrowed bytes')
+    return raw
+
+
+def main(arguments):
+    if len(arguments) != 2:
+        raise ValueError('staging fixed copier invocation')
+    base = Path(__file__).resolve(strict=True).parent
+    packet = Path(arguments[0])
+    if (packet.parent != base or not packet.name.startswith('eq084-staging-source-prepared-v')
+            or not packet.name.removeprefix('eq084-staging-source-prepared-v').isdigit()
+            or packet.is_symlink() or packet.resolve(strict=True) != packet):
+        raise ValueError('staging prepared packet authority')
+    with (packet / 'packet.json').open('rb') as stream:
+        raw = stream.read(65537)
+    if len(raw) > 65536 or hashlib.sha256(raw).hexdigest() != arguments[1]:
+        raise ValueError('staging reviewed manifest')
+    manifest = json.loads(raw)
+    if canonical(manifest) != raw or manifest['schema'] != 'eq084.packet.v1':
+        raise ValueError('staging exact manifest')
+    receipt = json.loads((base / 'r7-eq083-metadata-main-11858868807-download.json').read_bytes())
+    if (receipt['raw_zip']['sha256'] != 'beef7967b5c0383c716b87585acd1d77b315b07728cc755671af92dcffa636e8'
+            or receipt['artifact']['workflow_run']['head_sha'] != '8579710df31c72630809b03936629608ebfc5c2b'):
+        raise ValueError('staging qualified archive authority')
+    archives = {name: pin for name, pin in receipt['every_entry'].items() if name.endswith('.whl')}
+    if archives != manifest['archives'] or len(archives) != 47:
+        raise ValueError('staging full qualified wheel map')
+    origin = base / 'r7-eq083-metadata-main-resilience-8579710' / 'Windows'
+    if origin.is_symlink() or origin.resolve(strict=True) != origin:
+        raise ValueError('staging borrowed archive root')
+    contents = {}
+    total = 0
+    for name, pin in archives.items():
+        relative = PurePosixPath(name)
+        if (relative.is_absolute() or '..' in relative.parts or str(relative) != name
+                or '\\' in name or ':' in name or len(relative.parts) != 1):
+            raise ValueError('staging literal wheel name')
+        content = fixed_read(origin / name, pin['bytes'], pin['sha256'])
+        total += len(content)
+        if total > 134217728:
+            raise ValueError('staging finite archive copy')
+        contents[name] = content
+    target = packet / 'archives'
+    if target.exists() or target.is_symlink():
+        raise ValueError('staging destination must be new')
+    target.mkdir()
+    for name, content in contents.items():
+        with (target / name).open('xb') as stream:
+            if stream.write(content) != len(content):
+                raise ValueError('staging incomplete archive copy')
+        pin = archives[name]
+        fixed_read(target / name, pin['bytes'], pin['sha256'])
+        fixed_read(origin / name, pin['bytes'], pin['sha256'])
+    result = {'schema': 'eq084.archive-copy.v1', 'packet_sha256': arguments[1],
+              'entries': archives, 'bytes': total, 'borrowed_inputs_unchanged': True,
+              'native_invoked': False}
+    with (packet / 'archive-copy.json').open('xb') as stream:
+        output = canonical(result)
+        if stream.write(output) != len(output):
+            raise ValueError('staging incomplete archive copy receipt')
+    print(json.dumps({'wheels': len(archives), 'bytes': total, 'native_invoked': False}))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

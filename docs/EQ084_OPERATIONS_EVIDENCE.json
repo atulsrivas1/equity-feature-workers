@@ -1,0 +1,1063 @@
+{
+  "schema": "eq084.pre-execution-evidence.v1",
+  "original_v2_report_raw": {
+    "bytes": 16776,
+    "sha256": "f3ca075d21354008789b59b39113e00b95c226a42dc99996c584d11ea10f5cd1"
+  },
+  "original_v2_report_public_sanitized": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "scope": "COMPLETE_EQ084_PRE_READY_STAGING_V2_SOURCE_AND_INERT_LIFECYCLE_REVIEW",
+    "disposition": "REWORK",
+    "findings": [
+      {
+        "priority": "P2",
+        "id": "missing-result-cursor",
+        "file": "sources/staging_protocol.py",
+        "lines": [
+          313,
+          345,
+          346
+        ],
+        "title": "Include required cursor:null in all result/artifact requests",
+        "evidence": "Packaged remote1.1 result/artifact request schema requires operation,result_id,cursor. Three literal dictionaries omit cursor; dynamic cross-principal security loop also omits it. Good result/export would fail400invalid_schema, and intended oldID/cross-principal403 result denials would instead fail schema validation.",
+        "correction": "Add cursor=None for every result_read/artifact_read request, including dynamic security dictionaries; retain exact declared send counts and full-producer/golden checks."
+      },
+      {
+        "priority": "P2",
+        "id": "runtime-acquisition-scope",
+        "file": "sources/staging_runtime.py",
+        "line": 40,
+        "title": "Protect scheduler/listener acquisition and setup immediately",
+        "evidence": "setup returns an owned scheduler before the protected runtime-loop try. Credential/limits/listener preparation follows outside it. Inert fake Credential.provision MemoryError after successful fake setup exits with zero scheduler.close calls. Listener configuration failure similarly has an unprotected acquired listener interval.",
+        "correction": "Initialize ownership/bookkeeping before acquisition; enter try before acquiring scheduler, and conditionally attempt every acquired scheduler/listener/connection cleanup on setup and loop failures while preserving active original error."
+      },
+      {
+        "priority": "P2",
+        "id": "owned-observer-close-priority",
+        "file": "sources/staging_protocol.py",
+        "line": 144,
+        "title": "Always attempt owned handle closes and retain the first observer failure",
+        "evidence": "Observed close catches first fake poll OSError, then a later clock MemoryError escapes before process/thread/job CloseHandle attempts. All three owned identities remain uncleared; the later error masks the first.",
+        "correction": "Protect all observation/clock/accounting work and use unconditional finally with independent per-slot lookup/CloseHandle/bookkeeping attempts. Retain earliest actual error; observations remain false/unknown and no successor admission on unresolved identity."
+      },
+      {
+        "priority": "P2",
+        "id": "thread-join-hook-priority",
+        "file": "sources/staging_protocol.py",
+        "line": 131,
+        "title": "Preserve startup errors through independent joins and safe hook restoration",
+        "evidence": "Inert partial Thread.start OSError followed by join MemoryError raises the cleanup error and leaves the replacement close hook installed. Load join finally also aborts remaining joins if an earlier caller.join raises.",
+        "correction": "Track potentially started identities before start; independently attempt joins/is_alive inspections, retain original primary/first cleanup, and restore only own hook after observer settlement. Do not report successful cleanup or permit next epoch with a live/unobserved thread."
+      },
+      {
+        "priority": "P2",
+        "id": "staged-three-lane-plan-coverage",
+        "file": "docs/stories/EQ-084_STAGING_PLAN.md",
+        "line": 15,
+        "title": "Reconcile the published staged HTTP/client/MCP baseline",
+        "evidence": "Published staging plan explicitly requires baseline authenticated HTTP/client/MCP result parity at the new staged deployment. Current v2 executes raw TLS HTTP only (native converter is not a staged typed/MCP transport lane); accepted93 three-lane qualification is prior dependency evidence, not actual94 staged lane execution.",
+        "correction": "Prefer execute the existing planned staged typed-client and MCP baseline and freeze resulting counters/source/lifetimes. Any effective-plan reconciliation must be explicit within scope and cannot silently claim inherited93 evidence as staged94 execution. Do not mark Ready while this published-versus-selected coverage obligation is unresolved."
+      }
+    ],
+    "source_root_alias": "eq084-staging-source-prepared-v2",
+    "packet": {
+      "bytes": 24935,
+      "sha256": "51241fde0cad442d7dce7e17034c2fb8039f9b94ea3284815057c7bf8a3975ff"
+    },
+    "source_files": {
+      "staging_driver.py": {
+        "bytes": 14581,
+        "sha256": "a435ac1c37477557fbc829f6ad022e1136692be1534df38e3f9f93cef958596f"
+      },
+      "staging_protocol.py": {
+        "bytes": 20238,
+        "sha256": "afc291eda97ae5b0e3ca5e96334eea08ad691ae5002b4fe506998ba07e1256e3"
+      },
+      "staging_runtime.py": {
+        "bytes": 12820,
+        "sha256": "7104098078bdd4c590a2d6cd2013dc568a84d26ca3e8d15f8de1d009ddb17a5b"
+      },
+      "installed_controller.py": {
+        "bytes": 3341,
+        "sha256": "38602556d9ca2d790f4e33d418afe0ff41ba60bb2c9d86f5cbfb09d684b3dc74"
+      },
+      "certificate_helper.py": {
+        "bytes": 4493,
+        "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+      },
+      "test_jobs.py": {
+        "bytes": 60646,
+        "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+      },
+      "test_service.py": {
+        "bytes": 30744,
+        "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+      },
+      "fixtures/jobs_native.json": {
+        "bytes": 22366,
+        "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+      },
+      "bounded_capture.py": {
+        "bytes": 3622,
+        "sha256": "d77dc17d1fb6827ee08741c3cf57aad6eb00e264c61ea981cff1ea1f7002c714"
+      },
+      "private_directory.py": {
+        "bytes": 5807,
+        "sha256": "f430b301cd12bb1ad179409ec0ff544dd9d65862daa608c23dfa15f46d2874fc"
+      },
+      "installed_records.py": {
+        "bytes": 1899,
+        "sha256": "670a7e0be7a800da0133603e45fd05f6225e545a1767c6a4fb18e54a88b272e8"
+      },
+      "certificate_pins.py": {
+        "bytes": 2163,
+        "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+      },
+      "owner_entry.py": {
+        "bytes": 1512,
+        "sha256": "2f68d7f3eda25019ed29179af2b8331cad7d13c5b30909023d660afcb2759c8a"
+      }
+    },
+    "prepared_receipt": {
+      "file": "eq084-staging-prepared-source-receipt-v2.json",
+      "pin": {
+        "bytes": 9739,
+        "sha256": "ac55ac1ed8c52e03398ce182ca287a240165ed9a8b3b14836c4b5957863475a9"
+      }
+    },
+    "static_source_evidence": {
+      "file": "eq084-staging-v2-source-static-checks.json",
+      "pin": {
+        "bytes": 2843,
+        "sha256": "5873feda01e63983822fbc863157e13dff594854f66c95d3ebfbc1e7e867a435"
+      },
+      "full_result": {
+        "packet": {
+          "bytes": 24935,
+          "sha256": "51241fde0cad442d7dce7e17034c2fb8039f9b94ea3284815057c7bf8a3975ff"
+        },
+        "source_files": {
+          "staging_driver.py": {
+            "bytes": 14581,
+            "sha256": "a435ac1c37477557fbc829f6ad022e1136692be1534df38e3f9f93cef958596f"
+          },
+          "staging_protocol.py": {
+            "bytes": 20238,
+            "sha256": "afc291eda97ae5b0e3ca5e96334eea08ad691ae5002b4fe506998ba07e1256e3"
+          },
+          "staging_runtime.py": {
+            "bytes": 12820,
+            "sha256": "7104098078bdd4c590a2d6cd2013dc568a84d26ca3e8d15f8de1d009ddb17a5b"
+          },
+          "installed_controller.py": {
+            "bytes": 3341,
+            "sha256": "38602556d9ca2d790f4e33d418afe0ff41ba60bb2c9d86f5cbfb09d684b3dc74"
+          },
+          "certificate_helper.py": {
+            "bytes": 4493,
+            "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+          },
+          "test_jobs.py": {
+            "bytes": 60646,
+            "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+          },
+          "test_service.py": {
+            "bytes": 30744,
+            "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+          },
+          "fixtures/jobs_native.json": {
+            "bytes": 22366,
+            "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+          },
+          "bounded_capture.py": {
+            "bytes": 3622,
+            "sha256": "d77dc17d1fb6827ee08741c3cf57aad6eb00e264c61ea981cff1ea1f7002c714"
+          },
+          "private_directory.py": {
+            "bytes": 5807,
+            "sha256": "f430b301cd12bb1ad179409ec0ff544dd9d65862daa608c23dfa15f46d2874fc"
+          },
+          "installed_records.py": {
+            "bytes": 1899,
+            "sha256": "670a7e0be7a800da0133603e45fd05f6225e545a1767c6a4fb18e54a88b272e8"
+          },
+          "certificate_pins.py": {
+            "bytes": 2163,
+            "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+          },
+          "owner_entry.py": {
+            "bytes": 1512,
+            "sha256": "2f68d7f3eda25019ed29179af2b8331cad7d13c5b30909023d660afcb2759c8a"
+          }
+        },
+        "reused_sources_exact": {
+          "certificate_helper.py": "docs/EQ083_CERTIFICATE_HELPER.txt",
+          "test_jobs.py": "tests/service/test_jobs.py",
+          "test_service.py": "tests/service/test_service.py",
+          "fixtures/jobs_native.json": "tests/service/fixtures/jobs_native.json",
+          "bounded_capture.py": "tests/resilience/bounded_capture.py",
+          "private_directory.py": "tests/resilience/private_directory.py",
+          "installed_records.py": "tests/resilience/installed_records.py",
+          "certificate_pins.py": "tests/resilience/certificate_pins.py"
+        },
+        "source_file_count": 13,
+        "source_bytes": 184232,
+        "selected_archive_count": 47,
+        "archive_map_exact_accepted_final_windows": true,
+        "fixture_equal_frozen_trades": true,
+        "installed_namespace_complete_maps_equal_current_qualified_Git": true,
+        "installed_namespace_count": 4,
+        "installed_namespace_payload_files": 48
+      }
+    },
+    "inert_evidence": {
+      "file": "eq084-staging-v2-inert-review-evidence.json",
+      "pin": {
+        "bytes": 1402,
+        "sha256": "ad41484c1e47ca0e895ca143f17741b977aca6bc7a029709a2e823da7800a56e"
+      },
+      "full_result": {
+        "ordinary_inert_controls_passed": 6,
+        "ordinary_controls": [
+          "canonical ordered ASCII",
+          "nonfinite canonical denies",
+          "result_read required fields positive",
+          "result_read missing cursor schema deny",
+          "artifact_read required fields positive",
+          "artifact_read missing cursor schema deny"
+        ],
+        "defect_reproductions": [
+          {
+            "id": "runtime-owned-scheduler-construction-gap",
+            "primary_type": "MemoryError",
+            "owned_scheduler_close_calls": 0,
+            "real_calls": 0
+          },
+          {
+            "id": "owned-observer-clock-mask-and-skipped-handles",
+            "original_type": "OSError",
+            "raised_type": "MemoryError",
+            "CloseHandle_attempts": 0,
+            "real_calls": 0
+          },
+          {
+            "id": "partial-thread-start-join-masks-primary-leaves-hook",
+            "original_type": "OSError",
+            "raised_type": "MemoryError",
+            "restored_original_close": false,
+            "real_calls": 0
+          },
+          {
+            "id": "all-staging-result-export-literals-missing-required-cursor",
+            "source_lines": [
+              313,
+              345,
+              346
+            ],
+            "schema_required": [
+              "operation",
+              "result_id",
+              "cursor"
+            ],
+            "real_calls": 0
+          }
+        ],
+        "source_scope": "AST-selected functions and fully fake modules/paths/threads/clocks/credential/server bindings; no product/native/SSL/process/filesystem operations.",
+        "real_runtime_calls": 0
+      }
+    },
+    "current_inert_counts": {
+      "ordinary_passed": 6,
+      "defect_reproductions": 4,
+      "inherited_tests_replayed": 0,
+      "real_product_SSL_crypto_native_process_socket_ACL_install_calls": 0
+    },
+    "coverage": [
+      "Read complete new driver/protocol/runtime/installed_controller/owner_entry source bodies; AST parsed allPython sources. All13 fullbytes/184232 and packet24935/SHA51241fde pinned unchanged.",
+      "Eight qualified reused files byte-equal immutable8579; eight-source reuse is static parity, not old test rerun.",
+      "47originalWindows wheel byte/SHA declarations exactly match accepted finalartifact11858868807 savedentrymap; no physical archivecopy/acquisition/audit invoked.",
+      "Full original frozen trades completeproducer/native fixture equals accepted EQ081_CLIENT_FIXTURES trades object; four installednamespace maps/48payloads equal committed8579 packages.",
+      "Reviewed source gates, source imports, argument counts, admitted owner<=8192, native20/supervisor25/API30 chronology, offline install/pipcheck and secret/ACL ordering. No keys or tokens printed/backup selected; root ownership remains in memory until secure empty-root readback.",
+      "Reviewed rawHTTP oneattempt/cap/framing/EOF/duplicateJSON parsing, TLSrequired/checkhostname, same-listener context negative cases, fixed ingress quotas/clock/grants and numbered control/ACK protocol.",
+      "Reviewed planned good5/load12/rollback6/security11/restored7/interruption5/recovered7 counts. Security literalresult/artifact schema defect prevents intendedmatrix until corrected. Load uses no HTTP readiness; required replies8success4quota/source0.",
+      "Reviewed expected forced os._exit73 classification preserves originalcloseUNKNOWN, distinct ownedexit/job0/handles/reader/supervisor witnesses and recovery gating; no forcedclosePASS/wholekernel cleanup assertion.",
+      "Reviewed backup fixed nonsecret fullbyte manifest, exclusive destination, restore/recompute/oldIDdenials, no volatilejobstate restore, privatefailure quarantine and owned nofollow cleanup before public report.",
+      "No package/math/API/default/schema/version modification or broaderSEC374 physicalclosure requirement imposed."
+    ],
+    "seven_Ready_inputs": {
+      "accepted93_dependency": "Satisfied by actualClosed/Done and frozen receipt51e531; no new native qualification needed merely to read these sources.",
+      "target_data_operation_authority": "Established delegatednew privateWindowsloopbacksynthetic/no admin-public-spend; no new mandatory ownerinput merely incomplete.",
+      "effective_plan_config_protocol": "Concrete fixedclock/limits/operations provided, but publishedstagedthree-lane baseline and required payload schema need reconciliation.",
+      "literal_source_and_inputs": "Exact v2 frozen, but REWORK prevents source admission; materializer newlyprepared separately is not reviewed by this report and no archivecopy has occurred.",
+      "operation_lifetime_expected_ledgers": "Macrocounts/controls provided; acquisition/observer/thread cleanup defects remain. Updated lane counts must freeze if stagedconsumerbaseline added.",
+      "independent_fixture_and_tests": "Fullgolden/source data static verified; six inert passes/four reproductions recorded. Meaningful corrective negatives/source review still required; no real operation/producer admission granted.",
+      "runbook_privacy_delivery": "Partial source design reviewed; formal public plan/runbook/source receipt/Ready route and actual deploy-drill-runbook evidence still future. Installer snapshots coverfourremote namespaces only; do not claim whole47distribution installed-record proof from that map."
+    },
+    "ready_admission": false,
+    "execution_authorized": false,
+    "operations_executed": false,
+    "limitations": [
+      "Pre-Ready source review only. No wholemodule/product/SSL/cryptography imports or process/socket/ACL/install/build/native execution. Functions extracted through AST ran only with fake paths/modules/threads/clocks/credentials/handles.",
+      "Source-level defects and mocked reproductions, not observed live staging failures, leaked real handles, product bugs or universal platform impossibility.",
+      "Materializer, immutable/public source publication, corrected v3 review and actualoperationalReady/acceptance remain separate; source freeze is not actualdeployment.",
+      "Cooperative operator-controlled scope remains; no binary declaration/ABI/hostorigin/fullresolver/kernelsettlement audit/rejectedtask retried.",
+      "Static/inert counts are current6+4 only, no inheritedR7 controls, acceptedform executions or sourceparse counts inflated.",
+      "Originalv2 source pins unchanged at finalreadback; mutable author fixes/v3 are not substituted or approved here."
+    ],
+    "tool_only_history": [
+      "Broad packet.json singleline rendering truncated; bounded structured metadata/static checks used instead.",
+      "Optional rg guessed build_workers.py and wildcard client/*.py paths missed; exact actualbuild_foundation andmodels sources read, no absence/runtime claim."
+    ]
+  },
+  "v2_findings_preserved": [
+    "required read cursors",
+    "runtime acquisition cleanup",
+    "observer first error and unconditional close",
+    "thread join/hook lifetime",
+    "staged three-lane baseline"
+  ],
+  "corrective_v4_review": "REWORK; two independently reproduced P2 source defects; no runtime operation",
+  "tool_only_history": [
+    "source-roster262144-byte preparer guard rejected expanded schema before v4 writes; changed literal source bound393216 and source-only preparation passed",
+    "read-only rg attempted nonexistent root schemas directory; actual accepted package schema path used",
+    "relative tooling Python path attempted from repository cwd and failed before execution; corrected fixed preparation-root invocation",
+    "read-only guessed service _ledger.py path did not exist; actual service source inventory used"
+  ],
+  "old_FAILED_REWORK_and_parked_SEC001_preserved": true,
+  "no_product_runtime_API_math_schema_change": true,
+  "no_staging_source_compile_import_crypto_socket_process_install_operations": true,
+  "original_v4_report_raw": {
+    "bytes": 9212,
+    "sha256": "3adb25d083cd92791fd576c6749aa3176875d2f21d38d372f54df1572420cb75"
+  },
+  "original_v4_report_public_sanitized": {
+    "reviewer": "Codex independent reviewer /root/r7_policy_review",
+    "scope": "FROZEN_V4_SOURCE_AST_AND_INERT_FAKE_REVIEW_ONLY",
+    "disposition": "REWORK",
+    "ready": false,
+    "operational_admission": false,
+    "bases": {
+      "equity-features": "6308d6a4a57096e2a3a03a42da564f099e722017",
+      "equity-feature-workers": "8579710df31c72630809b03936629608ebfc5c2b"
+    },
+    "packet": {
+      "bytes": 25270,
+      "sha256": "224e2a8c753aa918c9c96e6a4508fbc9942ea08dd01f8d87e56956da6b29691d"
+    },
+    "source_files": {
+      "bounded_capture.py": {
+        "bytes": 3622,
+        "sha256": "d77dc17d1fb6827ee08741c3cf57aad6eb00e264c61ea981cff1ea1f7002c714"
+      },
+      "certificate_helper.py": {
+        "bytes": 4493,
+        "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+      },
+      "certificate_pins.py": {
+        "bytes": 2163,
+        "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+      },
+      "fixtures/jobs_native.json": {
+        "bytes": 22366,
+        "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+      },
+      "installed_controller.py": {
+        "bytes": 3341,
+        "sha256": "c286d95670f42d7f30bdb57590d27007d989cf785711a982f0385c38a171ffbc"
+      },
+      "installed_records.py": {
+        "bytes": 1899,
+        "sha256": "670a7e0be7a800da0133603e45fd05f6225e545a1767c6a4fb18e54a88b272e8"
+      },
+      "mcp-tools.json": {
+        "bytes": 104088,
+        "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+      },
+      "owner_entry.py": {
+        "bytes": 1512,
+        "sha256": "78a1ac9b89a6c132cedc0d27175da22ed06fb23c6491ff9b2dc25e82f7c4850f"
+      },
+      "private_directory.py": {
+        "bytes": 5807,
+        "sha256": "f430b301cd12bb1ad179409ec0ff544dd9d65862daa608c23dfa15f46d2874fc"
+      },
+      "staging_driver.py": {
+        "bytes": 14809,
+        "sha256": "4c1d3c26ec2ae90c4310a76373faa6f1ef47d2eb3ed8f593a9373cd5b2799174"
+      },
+      "staging_lanes.py": {
+        "bytes": 24735,
+        "sha256": "870ef824d4e2edd8b0cf798cd4331820f8b13cae13b46459622fe20acf039a40"
+      },
+      "staging_mcp_entry.py": {
+        "bytes": 4920,
+        "sha256": "ba811fb971b46b65a4a3a493871ffee71c90795d6592137e4972d3021a73d701"
+      },
+      "staging_protocol.py": {
+        "bytes": 21876,
+        "sha256": "3314f869c1fb088f92b049f0348c8ce8d6d375b7489597d48d6c3572e90b5ec0"
+      },
+      "staging_runtime.py": {
+        "bytes": 12982,
+        "sha256": "5af148348020af32bbeb84a8a85b5edf346f5971b8787984e506545545a71003"
+      },
+      "test_jobs.py": {
+        "bytes": 60646,
+        "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+      },
+      "test_service.py": {
+        "bytes": 30744,
+        "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+      }
+    },
+    "source_count": 16,
+    "source_bytes": 320003,
+    "aggregate_source_cap": 393216,
+    "findings": [
+      {
+        "id": "EQ084-V4-P2-CLIENT-LIFETIME",
+        "priority": 2,
+        "file": "staging_mcp_entry.py",
+        "description": "The acquired RemoteClient is not protected by an explicit finally spanning StdioServer construction and PID-marker publication. A synthetic StdioServer constructor MemoryError leaves the acquired client unclosed. Protect the client immediately after acquisition, attempt close on every exit, and retain the original primary exception if close also fails. The typed lane bare close has the same primary-error obligation.",
+        "reproduction": {
+          "id": "MCP-client-unprotected-server-construction",
+          "raised_type": "MemoryError",
+          "fake_client_acquired": 1,
+          "fake_client_close_calls": 0,
+          "real_calls": 0
+        }
+      },
+      {
+        "id": "EQ084-V4-P2-OBSERVER-INSPECTION-PRIORITY",
+        "priority": 2,
+        "file": "staging_protocol.py",
+        "description": "Final thread.is_alive inspection occurs outside the primary-error guard. A synthetic start OSError followed by join MemoryError and inspection RuntimeError raises the inspection error instead of the original start failure. Protect the final inspection, preserve the earliest primary, and deny successor/retain the observer hook on unknown or live settlement; restore the hook only after affirmative settled observation.",
+        "reproduction": {
+          "id": "final-thread-inspection-masks-start-primary",
+          "original_type": "OSError",
+          "raised_type": "RuntimeError",
+          "own_hook_retained_on_unknown_inspection": true,
+          "real_calls": 0
+        }
+      }
+    ],
+    "actual_current_inert_controls": {
+      "passing": 17,
+      "ordinary_original": 6,
+      "resolved_original_defect_scenarios": 4,
+      "materializer_fixed_read": 7,
+      "new_defect_reproductions": 2,
+      "real_product_crypto_SSL_process_socket_ACL_copy_calls": 0
+    },
+    "evidence": {
+      "eq084-staging-v4-original-controls-inert-evidence.json": {
+        "bytes": 1361,
+        "sha256": "2d9e5334775f63c33cd42450ddca2ad7b0b9b71ffdd9fe8d1f8aa3a70bb5d696"
+      },
+      "eq084-staging-v4-extra-inert-evidence.json": {
+        "bytes": 862,
+        "sha256": "edb1b8cb5c3f03bb1d81b6bd4785ef98ce34a5e9deb1c13f7d987126e3303889"
+      },
+      "eq084-staging-v2-source-reviewer-report.json": {
+        "bytes": 16776,
+        "sha256": "f3ca075d21354008789b59b39113e00b95c226a42dc99996c584d11ea10f5cd1"
+      }
+    },
+    "reviewed_semantic_closure": [
+      "Read complete new driver, protocol, runtime, controller and v4 lane/MCP-entry source bodies as text; reviewed v3/v4 deltas and AST-selected fake controls without whole-module imports.",
+      "Original cursor, scheduler setup ownership, observed-close unconditional final attempts, and partial thread-start/join defects are corrected in v4; original frozen v2 evidence remains REWORK and unchanged.",
+      "Good staged baseline now implements raw five + typed four + official MCP five on the same TLS listener/native job, with owner fourteen/source one and full producer/native parity. This resolves the original raw-only plan gap as source design, not executed evidence.",
+      "Security eleven dispatches plus two failed TLS handshakes, twelve-request quota-eight load with zero prior HTTP readiness probes, rollback/restored/interruption/recovered fixed ledgers remain explicit. Forced interruption never claims original scheduler-close success.",
+      "Private ownership before key/venv writes, fixed helper/source pins, offline forty-seven-wheel installation, installed RECORD/namespace checks before and after, backup exclusion of secrets, exact restore/config parity, quarantine on unknown cleanup and borrowed-source rereads are explicit source obligations.",
+      "MCP tool source raw 104088 bytes is within aggregate 393216 source cap; compact tools reply fits 65536 frame bound. No false oversized-frame finding.",
+      "WindowsReferenceChild adaptation preserves the qualified lifecycle and changes the fixed argv count for the new private entry; no actual WinDLL/API constructor invoked.",
+      "Materializer source prevalidates all borrowed forty-seven wheel pins before new destination creation, retains partial quarantine, checks copy readback and original reread; only its fixed_read helper received seven inert controls, not an actual copy."
+    ],
+    "materializer": {
+      "bytes": 4146,
+      "sha256": "453995bafc85bb373c146959ea258a50c3298865d760eab33b9f615fa994ec8d"
+    },
+    "seven_ready_inputs": {
+      "scope_and_owner_boundary": "Concrete delegated private-loopback operator-controlled scope established; no public/admin/spend authority.",
+      "acceptance": "Operational ledgers and full staged three-lane baseline are concrete; execution evidence absent.",
+      "dependencies": "EQ083 accepted; selected accepted Windows archive/namespace inputs are pinned.",
+      "method_and_source": "REWORK: two lifetime/error-priority findings remain in exact frozen v4.",
+      "fixtures_and_correctness": "Complete frozen producer/native fixtures and parity assertions present; no new native validation performed.",
+      "delivery_and_review": "Prepared public packet requires corrected exact source closure, immutable publication/privacy review and current applicable checks before admission.",
+      "operations_and_recovery": "Plan is finite cooperative private deployment with explicit original-close UNKNOWN on forced exit; no current operation, Ready or release claim."
+    },
+    "limitations": [
+      "Source-only review is not staging execution, installation, certificate generation, native ABI/binary declaration verification, process launch, filesystem copy or operational acceptance.",
+      "No old EQ083 audits or controls were rerun or counted. Reused qualified source/archive/fixture identities do not establish new operational outcomes.",
+      "SEC-001 whole-platform guarantees remain separate. No hard kernel resource, physical all-free, hostile writer exclusion or universal cleanup deadline inferred.",
+      "Prepared documentation publication and full seven-input admission must be renewed against corrected exact source; this report grants no operation and does not change GitHub status."
+    ],
+    "tool_only_history": [
+      "A large packet Get-Content render was truncated; source pins were instead verified from bounded parsed JSON. This was a readback-output limitation, not source execution or runtime failure."
+    ]
+  },
+  "v4_findings_preserved": [
+    "MCP client acquisition-finally",
+    "final observer inspection primary-error priority"
+  ],
+  "corrective_v5_review": "APPROVED_SOURCE_ONLY at exact v5; no operations/Ready. Later borrowed-helper bytecode boundary miss retained.",
+  "v5_source_and_prepared_docs_reports": {
+    "eq084-staging-v5-source-reviewer-report.json": {
+      "raw_bytes": 10959,
+      "raw_sha256": "b4499e4c053660d1e59ef2dd41c08f0460d491f24efa170224bf2fe893040a88",
+      "public_sanitized_report": {
+        "reviewer": "Codex independent reviewer /root/r7_policy_review",
+        "scope": "EXACT_FROZEN_V5_SOURCE_AND_INERT_CONTROLS_ONLY",
+        "disposition": "APPROVED_SOURCE_ONLY",
+        "findings": [],
+        "bases": {
+          "equity-features": "6308d6a4a57096e2a3a03a42da564f099e722017",
+          "equity-feature-workers": "8579710df31c72630809b03936629608ebfc5c2b"
+        },
+        "packet": {
+          "bytes": 25270,
+          "sha256": "b408e1e6a4a7c1221995e6f6c630dc62838f1b1c0455371724505771fcf1cbf4"
+        },
+        "source_files": {
+          "bounded_capture.py": {
+            "bytes": 3622,
+            "sha256": "d77dc17d1fb6827ee08741c3cf57aad6eb00e264c61ea981cff1ea1f7002c714"
+          },
+          "certificate_helper.py": {
+            "bytes": 4493,
+            "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+          },
+          "certificate_pins.py": {
+            "bytes": 2163,
+            "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+          },
+          "fixtures/jobs_native.json": {
+            "bytes": 22366,
+            "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+          },
+          "installed_controller.py": {
+            "bytes": 3341,
+            "sha256": "c286d95670f42d7f30bdb57590d27007d989cf785711a982f0385c38a171ffbc"
+          },
+          "installed_records.py": {
+            "bytes": 1899,
+            "sha256": "670a7e0be7a800da0133603e45fd05f6225e545a1767c6a4fb18e54a88b272e8"
+          },
+          "mcp-tools.json": {
+            "bytes": 104088,
+            "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+          },
+          "owner_entry.py": {
+            "bytes": 1512,
+            "sha256": "78a1ac9b89a6c132cedc0d27175da22ed06fb23c6491ff9b2dc25e82f7c4850f"
+          },
+          "private_directory.py": {
+            "bytes": 5807,
+            "sha256": "f430b301cd12bb1ad179409ec0ff544dd9d65862daa608c23dfa15f46d2874fc"
+          },
+          "staging_driver.py": {
+            "bytes": 14809,
+            "sha256": "4c1d3c26ec2ae90c4310a76373faa6f1ef47d2eb3ed8f593a9373cd5b2799174"
+          },
+          "staging_lanes.py": {
+            "bytes": 24848,
+            "sha256": "a8a913a519de3f4769bc70f2441aa91d5a7e8d5fc3107242a2874cfe351924f5"
+          },
+          "staging_mcp_entry.py": {
+            "bytes": 5200,
+            "sha256": "33ef0319dd6264ceae94335d627e544c1ccb3ffb8093355e85d27b98e489591a"
+          },
+          "staging_protocol.py": {
+            "bytes": 22156,
+            "sha256": "b5044f9f422f4f7d2baf1260f9ad9ce4d3b06bec65d0592427136bfc524816ee"
+          },
+          "staging_runtime.py": {
+            "bytes": 12982,
+            "sha256": "5af148348020af32bbeb84a8a85b5edf346f5971b8787984e506545545a71003"
+          },
+          "test_jobs.py": {
+            "bytes": 60646,
+            "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+          },
+          "test_service.py": {
+            "bytes": 30744,
+            "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+          }
+        },
+        "source_count": 16,
+        "source_bytes": 320676,
+        "source_cap": 393216,
+        "changed_from_v4": [
+          "staging_lanes.py",
+          "staging_mcp_entry.py",
+          "staging_protocol.py"
+        ],
+        "preserved_v4_rework": {
+          "bytes": 9212,
+          "sha256": "3adb25d083cd92791fd576c6749aa3176875d2f21d38d372f54df1572420cb75"
+        },
+        "current_inert_controls": {
+          "passing": 24,
+          "original_ordinary": 6,
+          "original_corrected_scenarios": 4,
+          "materializer_fixed_read": 7,
+          "v4_defects_now_resolved": 2,
+          "additional_typed_cleanup_combinations_and_MCP_cleanup_fault": 5,
+          "real_operations": 0
+        },
+        "evidence": {
+          "eq084-staging-v5-original-controls-inert-evidence.json": {
+            "bytes": 1361,
+            "sha256": "2d9e5334775f63c33cd42450ddca2ad7b0b9b71ffdd9fe8d1f8aa3a70bb5d696"
+          },
+          "eq084-staging-v5-resolved-extra-inert-evidence.json": {
+            "bytes": 857,
+            "sha256": "1af141b153aa61094607e228986c2e5076fbf7e32eb4a364c2cc7f69a87dd8a4"
+          },
+          "eq084-staging-v5-additional-controls-inert-evidence.json": {
+            "bytes": 775,
+            "sha256": "fc121cc8fd0a73e8eca038b620bad8d3a72fe48085320488fb85a6cea349865c"
+          }
+        },
+        "correction_results": [
+          "Acquired MCP client has immediate protected scope across server construction and witness publication. Constructor MemoryError attempts close once; a simultaneous close fault preserves that exact primary.",
+          "Final observer inspection preserves earliest primary; unknown/live settlement keeps the hook and denies successor. The original start OSError survives join and inspection faults.",
+          "The typed-client actual finally block passes all four primary/cleanup fault combinations: close attempted once, earliest error object preserved, cleanup-only failure propagated.",
+          "All other thirteen source files are byte-identical to frozen v4, and only the three intended function cleanup paths change. All source manifest pins match current bytes and are LF.",
+          "Eight qualified reused helper/fixture files match exact accepted Git source. The forty-seven selected wheel pin map equals saved accepted Windows artifact inventory. No archive bytes or native declarations were re-audited.",
+          "WindowsReferenceChild whole class AST equals the accepted TLS transport class exactly at the qualified Git head. Its inherited argc guard is retained; no DLL/native object instantiated."
+        ],
+        "full_source_scope_reused": [
+          "Read complete new driver, protocol, runtime, controller and v4 lane/MCP-entry source bodies as text; reviewed v3/v4 deltas and AST-selected fake controls without whole-module imports.",
+          "Original cursor, scheduler setup ownership, observed-close unconditional final attempts, and partial thread-start/join defects are corrected in v4; original frozen v2 evidence remains REWORK and unchanged.",
+          "Good staged baseline now implements raw five + typed four + official MCP five on the same TLS listener/native job, with owner fourteen/source one and full producer/native parity. This resolves the original raw-only plan gap as source design, not executed evidence.",
+          "Security eleven dispatches plus two failed TLS handshakes, twelve-request quota-eight load with zero prior HTTP readiness probes, rollback/restored/interruption/recovered fixed ledgers remain explicit. Forced interruption never claims original scheduler-close success.",
+          "Private ownership before key/venv writes, fixed helper/source pins, offline forty-seven-wheel installation, installed RECORD/namespace checks before and after, backup exclusion of secrets, exact restore/config parity, quarantine on unknown cleanup and borrowed-source rereads are explicit source obligations.",
+          "MCP tool source raw 104088 bytes is within aggregate 393216 source cap; compact tools reply fits 65536 frame bound. No false oversized-frame finding.",
+          "WindowsReferenceChild adaptation preserves the qualified lifecycle and changes the fixed argv count for the new private entry; no actual WinDLL/API constructor invoked.",
+          "Materializer source prevalidates all borrowed forty-seven wheel pins before new destination creation, retains partial quarantine, checks copy readback and original reread; only its fixed_read helper received seven inert controls, not an actual copy."
+        ],
+        "materializer": {
+          "source": {
+            "bytes": 4146,
+            "sha256": "453995bafc85bb373c146959ea258a50c3298865d760eab33b9f615fa994ec8d"
+          },
+          "source_review": "APPROVED_FIXED_SAVED_ARCHIVE_COPY_SOURCE_ONLY",
+          "allowed_boundary": "Only copy the forty-seven already saved qualified public wheels into a fresh archives subdirectory of this exact reviewed v5 packet, validating the exact packet SHA and every wheel pin before writes, retaining partial output on failure. This is static preparation, not install, import, certificate generation or staging execution.",
+          "actual_controls": 7,
+          "actual_copy_invoked": false
+        },
+        "planning_disposition": "SOURCE_READY_FOR_PREPARED_DOCUMENTATION_AND_PUBLICATION_REVIEW_NOT_ACTUAL_READY",
+        "seven_ready_inputs": {
+          "scope": "Owner-delegated new private Windows loopback synthetic cooperative channel; accepted EQ083 dependency; strong SEC-001 excluded explicitly.",
+          "acceptance": "Concrete staged three-lane fourteen-send same-job baseline; fixed load/security/rollback/restore/interruption/recovery ledgers and runbook evidence. No executed claim.",
+          "inputs": "Frozen sixteen-source manifest, complete native fixture, forty-seven accepted wheel map, four installed namespace maps and receipt provenance. Actual archive copy still pending as bounded preparation.",
+          "method": "Exact corrected executable closure source reviewed; four fresh offline environments and distinct owned epochs, before/after installed RECORD checks and full producer parity specified.",
+          "review_and_tests": "Twenty-four meaningful current inert passes, zero real operations. Fresh operational results remain implementation/Test evidence, not a reason to demand proof before Ready.",
+          "documentation": "Public prepared packet must be updated from v4 to exact v5, preserve full superseded REWORK reports and reconcile current good fourteen/source byte total, then receive immutable pin/privacy/scope review.",
+          "delivery_and_lifecycle": "Actual Ready status is pending the reviewed current planning packet/publication/current applicable checks. Source approval does not itself set Ready, launch operations, accept release or grant any new scope."
+        },
+        "limits": [
+          "Source-only review is not staging execution, installation, certificate generation, native ABI/binary declaration verification, process launch, filesystem copy or operational acceptance.",
+          "No old EQ083 audits or controls were rerun or counted. Reused qualified source/archive/fixture identities do not establish new operational outcomes.",
+          "SEC-001 whole-platform guarantees remain separate. No hard kernel resource, physical all-free, hostile writer exclusion or universal cleanup deadline inferred.",
+          "Prepared documentation publication and full seven-input admission must be renewed against corrected exact source; this report grants no operation and does not change GitHub status.",
+          "No complete module import, cryptography, certificate, socket, process, ACL, install, filesystem-copy main, native API or real staged operation was invoked. The materializer controls use fake read streams only.",
+          "Pass-count labels in replay output refer to historical defect scenario identities; in the v5 report all six reproduced historical scenarios now pass correction expectations, not current defects.",
+          "No new human permission is required merely to implement the already delegated bounded target; actual operations must follow the exact reviewed public packet and lifecycle gate."
+        ],
+        "tool_only_history": [
+          "A packet readback was deliberately bounded instead of rendering full saved JSON. These source-data checks do not qualify native ABI or physical host enforcement.",
+          "Initial class-parity guard unnecessarily normalized argv count thirteen to twelve and failed. Direct whole-class AST comparison instead proves exact equality with the accepted TLS transport; no source change or native operation occurred."
+        ]
+      }
+    },
+    "eq084-staging-prepared-docs-reviewer-report.json": {
+      "raw_bytes": 11261,
+      "raw_sha256": "abeba08c7fc85369bb130a0eafca3e6cd859722cddb40e54dee1952c43a3a0e2",
+      "public_sanitized_report": {
+        "reviewer": "Codex independent reviewer /root/r7_policy_review",
+        "scope": "PREPARED_EQ084_DOCUMENTS_SOURCE_MIRROR_PRIVACY_AND_READY_INPUT_REVIEW_ONLY",
+        "bases": {
+          "equity-features": "6308d6a4a57096e2a3a03a42da564f099e722017",
+          "equity-feature-workers": "8579710df31c72630809b03936629608ebfc5c2b"
+        },
+        "disposition": "REWORK",
+        "findings": [
+          {
+            "id": "EQ084-DOC-P2-SELECTED-ARCHIVE-IDENTITY",
+            "priority": 2,
+            "file": "OPERATIONS_PLAN.md",
+            "description": "Immutable installation names earlier artifact11857203127, source5267b227, ZIP53552031/SHA280991d36bf654da88c837999531b71608186cf50633127bcf4dbcb87087537f. Exact v5 packet and materializer instead select accepted final delivery artifact11858868807, source8579710, ZIP53552099/SHAbeef7967b5c0383c716b87585acd1d77b315b07728cc755671af92dcffa636e8. Reconcile literal chosen provenance in both plan mirrors. Equivalent archive inputs may be linked explicitly, but are not a substitute for the selected receipt identity."
+          }
+        ],
+        "prepared_files": {
+          "equity-features": {
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "bytes": 448072,
+              "sha256": "b12c6333600fddd79d1979e3c6f196636712ca205a5ef146bd20c8b0adbc5d37"
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "bytes": 707323,
+              "sha256": "3590c2cd357f22b6117c165dd87632b3d2ac7f12d7a1c65b675c02c32f386522"
+            },
+            "docs/stories/EQ-084_OPERATIONS_EVIDENCE.json": {
+              "bytes": 28598,
+              "sha256": "6a458c88524dfd5661aa6df0d8ee442468650d04866b77e80d83af6354621539"
+            },
+            "docs/stories/EQ-084_OPERATIONS_INPUTS.json": {
+              "bytes": 46631,
+              "sha256": "198e443cd7c0c9aed2c4d57e4578f7b077c0527bff356190292a87d385633ade"
+            },
+            "docs/stories/EQ-084_OPERATIONS_PLAN.md": {
+              "bytes": 14750,
+              "sha256": "8bcecb6ccb5d7e2083e3ba91576ba17e287cca1317aae13516917848ebe43120"
+            },
+            "docs/stories/EQ-084_SOURCE/ARCHIVE_MATERIALIZER.py.txt": {
+              "bytes": 4146,
+              "sha256": "453995bafc85bb373c146959ea258a50c3298865d760eab33b9f615fa994ec8d"
+            },
+            "docs/stories/EQ-084_SOURCE/bounded_capture.py.txt": {
+              "bytes": 3622,
+              "sha256": "d77dc17d1fb6827ee08741c3cf57aad6eb00e264c61ea981cff1ea1f7002c714"
+            },
+            "docs/stories/EQ-084_SOURCE/certificate_helper.py.txt": {
+              "bytes": 4493,
+              "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+            },
+            "docs/stories/EQ-084_SOURCE/certificate_pins.py.txt": {
+              "bytes": 2163,
+              "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+            },
+            "docs/stories/EQ-084_SOURCE/fixtures/jobs_native.json.txt": {
+              "bytes": 22366,
+              "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+            },
+            "docs/stories/EQ-084_SOURCE/installed_controller.py.txt": {
+              "bytes": 3341,
+              "sha256": "c286d95670f42d7f30bdb57590d27007d989cf785711a982f0385c38a171ffbc"
+            },
+            "docs/stories/EQ-084_SOURCE/installed_records.py.txt": {
+              "bytes": 1899,
+              "sha256": "670a7e0be7a800da0133603e45fd05f6225e545a1767c6a4fb18e54a88b272e8"
+            },
+            "docs/stories/EQ-084_SOURCE/mcp-tools.json.txt": {
+              "bytes": 104088,
+              "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+            },
+            "docs/stories/EQ-084_SOURCE/owner_entry.py.txt": {
+              "bytes": 1512,
+              "sha256": "78a1ac9b89a6c132cedc0d27175da22ed06fb23c6491ff9b2dc25e82f7c4850f"
+            },
+            "docs/stories/EQ-084_SOURCE/private_directory.py.txt": {
+              "bytes": 5807,
+              "sha256": "f430b301cd12bb1ad179409ec0ff544dd9d65862daa608c23dfa15f46d2874fc"
+            },
+            "docs/stories/EQ-084_SOURCE/staging_driver.py.txt": {
+              "bytes": 14809,
+              "sha256": "4c1d3c26ec2ae90c4310a76373faa6f1ef47d2eb3ed8f593a9373cd5b2799174"
+            },
+            "docs/stories/EQ-084_SOURCE/staging_lanes.py.txt": {
+              "bytes": 24848,
+              "sha256": "a8a913a519de3f4769bc70f2441aa91d5a7e8d5fc3107242a2874cfe351924f5"
+            },
+            "docs/stories/EQ-084_SOURCE/staging_mcp_entry.py.txt": {
+              "bytes": 5200,
+              "sha256": "33ef0319dd6264ceae94335d627e544c1ccb3ffb8093355e85d27b98e489591a"
+            },
+            "docs/stories/EQ-084_SOURCE/staging_protocol.py.txt": {
+              "bytes": 22156,
+              "sha256": "b5044f9f422f4f7d2baf1260f9ad9ce4d3b06bec65d0592427136bfc524816ee"
+            },
+            "docs/stories/EQ-084_SOURCE/staging_runtime.py.txt": {
+              "bytes": 12982,
+              "sha256": "5af148348020af32bbeb84a8a85b5edf346f5971b8787984e506545545a71003"
+            },
+            "docs/stories/EQ-084_SOURCE/test_jobs.py.txt": {
+              "bytes": 60646,
+              "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+            },
+            "docs/stories/EQ-084_SOURCE/test_service.py.txt": {
+              "bytes": 30744,
+              "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+            }
+          },
+          "equity-feature-workers": {
+            "docs/EQ084_OPERATIONS_EVIDENCE.json": {
+              "bytes": 28598,
+              "sha256": "6a458c88524dfd5661aa6df0d8ee442468650d04866b77e80d83af6354621539"
+            },
+            "docs/EQ084_OPERATIONS_INPUTS.json": {
+              "bytes": 46631,
+              "sha256": "198e443cd7c0c9aed2c4d57e4578f7b077c0527bff356190292a87d385633ade"
+            },
+            "docs/EQ084_OPERATIONS_PLAN.md": {
+              "bytes": 14750,
+              "sha256": "8bcecb6ccb5d7e2083e3ba91576ba17e287cca1317aae13516917848ebe43120"
+            },
+            "docs/EQ084_SOURCE/ARCHIVE_MATERIALIZER.py.txt": {
+              "bytes": 4146,
+              "sha256": "453995bafc85bb373c146959ea258a50c3298865d760eab33b9f615fa994ec8d"
+            },
+            "docs/EQ084_SOURCE/bounded_capture.py.txt": {
+              "bytes": 3622,
+              "sha256": "d77dc17d1fb6827ee08741c3cf57aad6eb00e264c61ea981cff1ea1f7002c714"
+            },
+            "docs/EQ084_SOURCE/certificate_helper.py.txt": {
+              "bytes": 4493,
+              "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+            },
+            "docs/EQ084_SOURCE/certificate_pins.py.txt": {
+              "bytes": 2163,
+              "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+            },
+            "docs/EQ084_SOURCE/fixtures/jobs_native.json.txt": {
+              "bytes": 22366,
+              "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+            },
+            "docs/EQ084_SOURCE/installed_controller.py.txt": {
+              "bytes": 3341,
+              "sha256": "c286d95670f42d7f30bdb57590d27007d989cf785711a982f0385c38a171ffbc"
+            },
+            "docs/EQ084_SOURCE/installed_records.py.txt": {
+              "bytes": 1899,
+              "sha256": "670a7e0be7a800da0133603e45fd05f6225e545a1767c6a4fb18e54a88b272e8"
+            },
+            "docs/EQ084_SOURCE/mcp-tools.json.txt": {
+              "bytes": 104088,
+              "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+            },
+            "docs/EQ084_SOURCE/owner_entry.py.txt": {
+              "bytes": 1512,
+              "sha256": "78a1ac9b89a6c132cedc0d27175da22ed06fb23c6491ff9b2dc25e82f7c4850f"
+            },
+            "docs/EQ084_SOURCE/private_directory.py.txt": {
+              "bytes": 5807,
+              "sha256": "f430b301cd12bb1ad179409ec0ff544dd9d65862daa608c23dfa15f46d2874fc"
+            },
+            "docs/EQ084_SOURCE/staging_driver.py.txt": {
+              "bytes": 14809,
+              "sha256": "4c1d3c26ec2ae90c4310a76373faa6f1ef47d2eb3ed8f593a9373cd5b2799174"
+            },
+            "docs/EQ084_SOURCE/staging_lanes.py.txt": {
+              "bytes": 24848,
+              "sha256": "a8a913a519de3f4769bc70f2441aa91d5a7e8d5fc3107242a2874cfe351924f5"
+            },
+            "docs/EQ084_SOURCE/staging_mcp_entry.py.txt": {
+              "bytes": 5200,
+              "sha256": "33ef0319dd6264ceae94335d627e544c1ccb3ffb8093355e85d27b98e489591a"
+            },
+            "docs/EQ084_SOURCE/staging_protocol.py.txt": {
+              "bytes": 22156,
+              "sha256": "b5044f9f422f4f7d2baf1260f9ad9ce4d3b06bec65d0592427136bfc524816ee"
+            },
+            "docs/EQ084_SOURCE/staging_runtime.py.txt": {
+              "bytes": 12982,
+              "sha256": "5af148348020af32bbeb84a8a85b5edf346f5971b8787984e506545545a71003"
+            },
+            "docs/EQ084_SOURCE/test_jobs.py.txt": {
+              "bytes": 60646,
+              "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+            },
+            "docs/EQ084_SOURCE/test_service.py.txt": {
+              "bytes": 30744,
+              "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+            },
+            "docs/PROJECT_KNOWLEDGE.md": {
+              "bytes": 310721,
+              "sha256": "4c3a64b68662ec99ed42dd3f6b063202ba227e8ca128617db85ea9fb5b9272c0"
+            },
+            "docs/SESSION_HANDOFF.md": {
+              "bytes": 421859,
+              "sha256": "a35eae4002c366854fc544d8eabf105f470cf4066f737a9bb64343ccdfcb8d08"
+            }
+          }
+        },
+        "actual_static_checks": [
+          {
+            "repo": "equity-features",
+            "changed_files": 22,
+            "only_allowed_documents": true,
+            "full_source_mirror": true,
+            "packet_equal": true,
+            "privacy_no_absolute_user_path": true,
+            "old_continuity_suffix": true,
+            "original_findings_preserved": true
+          },
+          {
+            "repo": "equity-feature-workers",
+            "changed_files": 22,
+            "only_allowed_documents": true,
+            "full_source_mirror": true,
+            "packet_equal": true,
+            "privacy_no_absolute_user_path": true,
+            "old_continuity_suffix": true,
+            "original_findings_preserved": true
+          }
+        ],
+        "new_tests": 0,
+        "source_control_tests_not_repeated": true,
+        "approved_source_review": {
+          "bytes": 10959,
+          "sha256": "b4499e4c053660d1e59ef2dd41c08f0460d491f24efa170224bf2fe893040a88"
+        },
+        "semantic_checks": [
+          "Private operator-controlled Windows loopback synthetic deployment, no admin/public/spend/provider scope expansion.",
+          "Plan fourteen-send raw/typed/MCP good baseline, quota-eight twelve-send load, security eleven dispatch/thirteen accept, rollback/restore/interruption/recovery ledgers agree with corrected source.",
+          "Original forced scheduler close remains UNKNOWN; independent retained ownership witnesses required before successor; no whole-kernel physical cleanup inference.",
+          "Original v2/v4 reports and all five/two findings remain preserved; source correction does not turn old uninvoked REWORK into runtime failure or PASS.",
+          "Private source/key/token/report separation and backup exclusions remain explicit; prepared public source bytes mirror exact v5 packet and fixed materializer.",
+          "No staged operation has occurred; no Done/acceptance/Ready mutation inferred."
+        ],
+        "seven_ready_input_verdict": "Six substantive planning/source inputs established by exact v5 source and accepted dependency; selected literal provenance/documentation must be reconciled and renewed prepared/publication review/current applicable checks must complete before actual Ready. Actual drills are implementation/Test evidence after Ready, not missing human input.",
+        "limitations": [
+          "Documentation-only prepared review, not publication or current CI acceptance.",
+          "No native, process, crypto, certificate, ACL, installation, archive copy, socket, source module import, real operational or prior acceptance audit executed.",
+          "Source review twenty-four inert controls is referenced without rerunning or inflating documentation test counts.",
+          "SEC-001 remains separate; automation remains paused."
+        ]
+      }
+    }
+  },
+  "prepared_docs_review": "REWORK: selected archive identity disagreed with actual packet; corrected to final delivery artifact and full original map.",
+  "corrective_v6_review": "APPROVED_SOURCE_ONLY at exact v6; materializer bounded preparation only; actual Ready/source publication/operations pending",
+  "v6_source_review": {
+    "raw_bytes": 5942,
+    "raw_sha256": "a005319aeac29fe00f210bddc7eaaffec7e32ae0c78ff3f6c8ced328e78bdead",
+    "public_sanitized_report": {
+      "reviewer": "Codex independent reviewer /root/r7_policy_review",
+      "scope": "EXACT_V6_NO_BYTECODE_CORRECTION_AND_PRIOR_SOURCE_CLOSURE_BINDING_ONLY",
+      "disposition": "APPROVED_SOURCE_ONLY",
+      "findings": [],
+      "bases": {
+        "equity-features": "6308d6a4a57096e2a3a03a42da564f099e722017",
+        "equity-feature-workers": "8579710df31c72630809b03936629608ebfc5c2b"
+      },
+      "packet": {
+        "bytes": 25270,
+        "sha256": "44d57dde797a1ce1e3a2552f8a74cce1c5d02244e3160d2c5fdeac4630bf465d"
+      },
+      "source_files": {
+        "bounded_capture.py": {
+          "bytes": 3622,
+          "sha256": "d77dc17d1fb6827ee08741c3cf57aad6eb00e264c61ea981cff1ea1f7002c714"
+        },
+        "certificate_helper.py": {
+          "bytes": 4493,
+          "sha256": "0d62da95260d8598056ed6e60e9acd8fa60e0050da011c34a9f029cce3a0a2a2"
+        },
+        "certificate_pins.py": {
+          "bytes": 2163,
+          "sha256": "a61750a7e9ded4b90cb98f3881734fb1a0da12c828625ce5a2b55a8387529edb"
+        },
+        "fixtures/jobs_native.json": {
+          "bytes": 22366,
+          "sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7"
+        },
+        "installed_controller.py": {
+          "bytes": 3341,
+          "sha256": "c286d95670f42d7f30bdb57590d27007d989cf785711a982f0385c38a171ffbc"
+        },
+        "installed_records.py": {
+          "bytes": 1899,
+          "sha256": "670a7e0be7a800da0133603e45fd05f6225e545a1767c6a4fb18e54a88b272e8"
+        },
+        "mcp-tools.json": {
+          "bytes": 104088,
+          "sha256": "25d19e660b62a8eab2d6ee0e8b7ae70bba878adb01a221496c3cc27c405142c0"
+        },
+        "owner_entry.py": {
+          "bytes": 1512,
+          "sha256": "78a1ac9b89a6c132cedc0d27175da22ed06fb23c6491ff9b2dc25e82f7c4850f"
+        },
+        "private_directory.py": {
+          "bytes": 5807,
+          "sha256": "f430b301cd12bb1ad179409ec0ff544dd9d65862daa608c23dfa15f46d2874fc"
+        },
+        "staging_driver.py": {
+          "bytes": 14844,
+          "sha256": "d84625eaa56ede6bc8b1186a1edf79360dce9b67363a35a2db9a103b7801b242"
+        },
+        "staging_lanes.py": {
+          "bytes": 24848,
+          "sha256": "a8a913a519de3f4769bc70f2441aa91d5a7e8d5fc3107242a2874cfe351924f5"
+        },
+        "staging_mcp_entry.py": {
+          "bytes": 5200,
+          "sha256": "33ef0319dd6264ceae94335d627e544c1ccb3ffb8093355e85d27b98e489591a"
+        },
+        "staging_protocol.py": {
+          "bytes": 22156,
+          "sha256": "b5044f9f422f4f7d2baf1260f9ad9ce4d3b06bec65d0592427136bfc524816ee"
+        },
+        "staging_runtime.py": {
+          "bytes": 12982,
+          "sha256": "5af148348020af32bbeb84a8a85b5edf346f5971b8787984e506545545a71003"
+        },
+        "test_jobs.py": {
+          "bytes": 60646,
+          "sha256": "061022b52927f9e5e359dc6b11ade6effb9614a80997946ca27e7a0c1e85340f"
+        },
+        "test_service.py": {
+          "bytes": 30744,
+          "sha256": "3b69d308c90bb1ccbaeeedbc64df07afc0b60808fb596b85db3b6fc2ce279e90"
+        }
+      },
+      "source_count": 16,
+      "source_bytes": 320711,
+      "source_cap": 393216,
+      "changed_from_v5": [
+        "staging_driver.py"
+      ],
+      "preserved_v5_source_review": {
+        "bytes": 10959,
+        "sha256": "b4499e4c053660d1e59ef2dd41c08f0460d491f24efa170224bf2fe893040a88"
+      },
+      "preserved_documentation_rework": {
+        "bytes": 11261,
+        "sha256": "abeba08c7fc85369bb130a0eafca3e6cd859722cddb40e54dee1952c43a3a0e2"
+      },
+      "actual_checks": [
+        "All sixteen exact source pins match frozen v6 and source total is within the unchanged cap.",
+        "Whole driver AST equals v5 after removing the first main assignment sys.dont_write_bytecode=True; all fifteen other files byte-equal v5.",
+        "The assignment executes before all eligibility checks, sys.path insertion and borrowed packet helper imports. Top-level imports are standard library only. No helper imports precede that assignment.",
+        "Explicit flag addresses ignored environment setting under -I without changing ownership, cleanup, ledgers, deadlines, golden parity or input caps."
+      ],
+      "approval_miss_acknowledgment": "Earlier v5 source approval omitted explicit prevention of borrowed-helper __pycache__ writes. The author identified and corrected this before any invocation; no actual writes or staging failure observed. V5 approval/report remains preserved, not rewritten.",
+      "inherited_current_control_evidence": {
+        "eq084-staging-v5-original-controls-inert-evidence.json": {
+          "bytes": 1361,
+          "sha256": "2d9e5334775f63c33cd42450ddca2ad7b0b9b71ffdd9fe8d1f8aa3a70bb5d696"
+        },
+        "eq084-staging-v5-resolved-extra-inert-evidence.json": {
+          "bytes": 857,
+          "sha256": "1af141b153aa61094607e228986c2e5076fbf7e32eb4a364c2cc7f69a87dd8a4"
+        },
+        "eq084-staging-v5-additional-controls-inert-evidence.json": {
+          "bytes": 775,
+          "sha256": "fc121cc8fd0a73e8eca038b620bad8d3a72fe48085320488fb85a6cea349865c"
+        }
+      },
+      "new_inert_tests": 0,
+      "prior_v5_actual_inert_controls": 24,
+      "prior_controls_replayed": false,
+      "materializer": {
+        "source": {
+          "bytes": 4146,
+          "sha256": "453995bafc85bb373c146959ea258a50c3298865d760eab33b9f615fa994ec8d"
+        },
+        "source_review": "APPROVED_FIXED_SAVED_ARCHIVE_COPY_SOURCE_ONLY",
+        "allowed_boundary": "Only bounded preparation copy of the same forty-seven saved qualified wheels into a fresh archives directory of this exact v6 packet, with packet SHA44d57dde797a1ce1e3a2552f8a74cce1c5d02244e3160d2c5fdeac4630bf465d; no installation or staging operation.",
+        "actual_controls": 7,
+        "actual_copy_invoked": false
+      },
+      "planning_disposition": "SOURCE_READY_FOR_CORRECTED_PREPARED_DOCUMENTATION_AND_PUBLICATION_REVIEW_NOT_ACTUAL_READY",
+      "limits": [
+        "No complete source module import or staging/helper/copy/process/crypto/native/ACL/socket/install invocation.",
+        "No old archive/ABI/native acceptance review or test was rerun.",
+        "Current public prepared packet must reconcile v6 pins and selected artifact provenance, preserve all superseded reports and pass independent prepared/immutable publication review/current applicable gates before actual Ready.",
+        "No new human permission or whole-platform physical authority inferred."
+      ]
+    }
+  }
+}

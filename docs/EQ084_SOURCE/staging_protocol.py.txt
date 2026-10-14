@@ -1,0 +1,417 @@
+"""UNINVOKED private staging protocol candidate; outer setup/source pins pending."""
+import ctypes
+import hashlib
+import json
+from pathlib import Path
+import re
+import socket
+import ssl
+import threading
+import time
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True,
+                      allow_nan=False).encode('ascii')
+
+
+def read_completed(path, cap, seconds=4):
+    end = time.monotonic() + seconds
+    while not path.with_suffix('.complete').exists():
+        if time.monotonic() >= end:
+            raise ValueError('staging completion observation deadline')
+        time.sleep(0.01)
+    if path.is_symlink() or path.resolve(strict=True) != path:
+        raise ValueError('staging completed path')
+    with path.open('rb') as stream:
+        raw = stream.read(cap + 1)
+    if not raw or len(raw) > cap:
+        raise ValueError('staging completed size')
+    value = json.loads(raw)
+    if canonical(value) != raw:
+        raise ValueError('staging completed canonical JSON')
+    return value
+
+
+def publish(path, value):
+    raw = canonical(value)
+    if len(raw) > 128 or path.exists() or path.with_suffix('.complete').exists():
+        raise ValueError('staging control reuse')
+    pending = path.with_suffix('.pending')
+    with pending.open('xb') as stream:
+        if stream.write(raw) != len(raw):
+            raise ValueError('staging control incomplete')
+    pending.replace(path)
+    path.with_suffix('.complete').mkdir()
+
+
+def client_context(cert):
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
+    context.load_verify_locations(cafile=str(cert))
+    if context.verify_mode != ssl.CERT_REQUIRED or not context.check_hostname:
+        raise ValueError('staging public TLS policy')
+    return context
+
+
+def raw_request(port, context, token, payload, request_id, *, version='1.1', raw_body=None):
+    body = raw_body if raw_body is not None else canonical(
+        {'schema': 'equity.remote', 'version': version, 'kind': 'request',
+         'request_id': request_id, 'payload': payload})
+    if len(body) > 16384:
+        raise ValueError('staging request size')
+    authorization = b'' if token is None else b'Authorization: Bearer ' + token.encode('ascii') + b'\r\n'
+    headers = (b'POST /v1/request HTTP/1.0\r\nHost: 127.0.0.1:' + str(port).encode('ascii')
+               + b'\r\n' + authorization + b'Content-Type: application/json\r\nContent-Length: '
+               + str(len(body)).encode('ascii') + b'\r\nConnection: close\r\n\r\n')
+    if len(headers) > 8192:
+        raise ValueError('staging request headers')
+    response = bytearray()
+    boundary = None
+    started = time.monotonic()
+    deadline = started + 5
+    def remaining():
+        value = deadline - time.monotonic()
+        if value <= 0:
+            raise TimeoutError('staging request observation deadline')
+        return value
+    with socket.create_connection(('127.0.0.1', port), timeout=5) as raw:
+        raw.settimeout(remaining())
+        with context.wrap_socket(raw, server_hostname='127.0.0.1') as connection:
+            connection.settimeout(remaining())
+            connection.sendall(headers + body)
+            while True:
+                connection.settimeout(remaining())
+                chunk = connection.recv(4096)
+                if not chunk:
+                    break
+                response.extend(chunk)
+                if boundary is None:
+                    found = response.find(b'\r\n\r\n')
+                    if found >= 0:
+                        boundary = found + 4
+                        if boundary > 8192:
+                            raise ValueError('staging response headers')
+                    elif len(response) > 8192:
+                        raise ValueError('staging response headers')
+                if boundary is not None and len(response) - boundary > 262144:
+                    raise ValueError('staging response body')
+    if boundary is None:
+        raise ValueError('staging response EOF')
+    lines = bytes(response[:boundary - 4]).split(b'\r\n')
+    match = re.fullmatch(rb'HTTP/1\.[01] ([0-9]{3}) [\x20-\x7e]*', lines[0])
+    if match is None:
+        raise ValueError('staging response status')
+    fields = {}
+    for line in lines[1:]:
+        name, colon, value = line.partition(b':')
+        key = name.decode('ascii').lower()
+        if not colon or key in fields:
+            raise ValueError('staging response header identity')
+        fields[key] = value.strip().decode('ascii')
+    data = bytes(response[boundary:])
+    if (fields.get('content-type') != 'application/json' or fields.get('cache-control') != 'no-store'
+            or fields.get('x-content-type-options') != 'nosniff'
+            or 'transfer-encoding' in fields or 'content-encoding' in fields
+            or fields.get('content-length') != str(len(data))):
+        raise ValueError('staging complete response framing')
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('staging duplicate JSON')
+            result[key] = value
+        return result
+    parsed = json.loads(data, object_pairs_hook=pairs)
+    if set(parsed) != {'schema', 'version', 'kind', 'request_id', 'payload'} or parsed['schema'] != 'equity.remote':
+        raise ValueError('staging response envelope')
+    return int(match[1]), parsed, time.monotonic() - started
+
+
+def run_epoch(harness, epoch, certificates, mode, config_sha, secret_sha, cert_sha,
+              entry_source, secrets, fixture, old_ids=None):
+    # Invoked only from the separately reviewed installed controller after source/RECORD checks.
+    from equity_feature_service._containment import OwnedEpochSupervisor
+    import equity_feature_service._containment as containment
+    from equity_feature_service._entry import OwnedEntryInventory, OwnedEntryProfile
+    from equity_feature_client import ProducerExpectation, ScopeKey, FeatureRef, ResultView
+    from equity_feature_client.native import convert_result
+    from equity_feature_io_sdk import encode_result
+    from ctypes import wintypes as w
+    observed = {'process_exited': False, 'job_active_zero': False, 'handles_closed': False}
+    original_close = containment._WindowsChild.close
+
+    def observed_close(child):
+        failures = []
+        def attempt(callback):
+            try:
+                return callback()
+            except BaseException as failure:
+                failures.append(failure)
+                return None
+        try:
+            if child.process:
+                initial_code = attempt(child.poll)
+                if initial_code is None:
+                    attempt(child.kill)
+            end = time.monotonic() + 3
+            def exited():
+                while child.process and child.poll() is None:
+                    if time.monotonic() >= end:
+                        raise ValueError('staging owned process exit unconfirmed')
+                    time.sleep(0.01)
+                if not child.process or child.poll() is None:
+                    raise ValueError('staging owned process identity unknown')
+                observed['process_exited'] = True
+            attempt(exited)
+            class Accounting(ctypes.Structure):
+                _fields_ = [(name, ctypes.c_longlong) for name in ('user', 'kernel', 'period_user', 'period_kernel')] + [
+                    (name, w.DWORD) for name in ('page_faults', 'total', 'active', 'terminated')]
+            def quiet():
+                if not child.job:
+                    raise ValueError('staging owned job identity unknown')
+                query = child.kernel.QueryInformationJobObject
+                query.argtypes = [w.HANDLE, ctypes.c_int, ctypes.c_void_p, w.DWORD, ctypes.c_void_p]
+                query.restype = w.BOOL
+                while True:
+                    value = Accounting()
+                    if not query(child.job, 1, ctypes.byref(value), ctypes.sizeof(value), None):
+                        raise ValueError('staging owned job observation failed')
+                    if value.active == 0:
+                        observed['job_active_zero'] = True
+                        return
+                    if value.active > 1 or time.monotonic() >= end:
+                        raise ValueError('staging owned job still active')
+                    time.sleep(0.01)
+            attempt(quiet)
+        except BaseException as failure:
+            failures.append(failure)
+        finally:
+            # Explicit failed observation remains failed while each owned close is attempted.
+            for attribute in ('process', 'thread', 'job'):
+                def close_handle(attribute=attribute):
+                    handle = getattr(child, attribute)
+                    if handle:
+                        if not child.kernel.CloseHandle(handle):
+                            raise ValueError('staging owned handle close failed')
+                        setattr(child, attribute, None)
+                attempt(close_handle)
+            observed['handles_closed'] = child.process is None and child.thread is None and child.job is None
+        if failures:
+            raise failures[0]
+        if not all(observed.values()):
+            raise ValueError('staging owned handle closure unknown')
+
+    profile = OwnedEntryProfile('eq084-' + mode, entry_source, hashlib.sha256(entry_source).hexdigest(),
+        tuple(str(value) for value in (harness, epoch, certificates, mode, config_sha, secret_sha, cert_sha)), True)
+    supervisor = OwnedEpochSupervisor(OwnedEntryInventory((profile,)))
+    results = []
+    errors = []
+    def launch():
+        try:
+            results.append(supervisor.run_admitted(profile.profile_id, wall_seconds=25, output_limit=4096))
+        except BaseException as error:
+            errors.append(error)
+    thread = threading.Thread(target=launch)
+    context = client_context(certificates / 'valid-cert.pem')
+    calls = []
+    controls = []
+    original = None
+    source_result = None
+    output_export = None
+    staged_lanes = None
+    counter = 0
+    counter_lock = threading.Lock()
+    containment._WindowsChild.close = observed_close
+    primary = None
+    try:
+        thread.start()
+        ready = read_completed(epoch / 'ready.json', 512)
+        if (set(ready) != {'port', 'mode', 'config_sha256', 'certificate_pins_sha256'}
+                or ready['mode'] != mode or ready['config_sha256'] != config_sha
+                or ready['certificate_pins_sha256'] != cert_sha
+                or type(ready['port']) is not int or not 1 <= ready['port'] <= 65535 or not thread.is_alive()):
+            raise ValueError('staging exact ready')
+        port = ready['port']
+        def send(payload, *, role='A', version='1.1', raw_body=None):
+            nonlocal counter
+            with counter_lock:
+                counter += 1
+                number = counter
+            token = None if role is None else 'invalid-' + 'C' * 43 if role == 'invalid' else secrets[role]
+            status, value, duration = raw_request(port, context, token, payload, 'eq084-' + str(number),
+                                                  version=version, raw_body=raw_body)
+            with counter_lock:
+                calls.append({'number': number, 'status': status, 'seconds': duration,
+                              'operation': payload.get('operation'), 'credential_role': role,
+                              'payload_sha256': hashlib.sha256(canonical(value)).hexdigest()})
+            if status == 200 and (value['version'], value['request_id']) != ('1.1', 'eq084-' + str(number)):
+                raise ValueError('staging correlated successful response')
+            return status, value
+        def control(action):
+            index = len(controls)
+            publish(epoch / ('control-' + str(index) + '.json'), {'action': action})
+            ack = read_completed(epoch / ('ack-' + str(index) + '.json'), 4096)
+            if set(ack) != {'action', 'counters', 'original'} or ack['action'] != action:
+                raise ValueError('staging exact control ACK')
+            controls.append(ack)
+            return ack
+        def error(payload, category, code, status, **kwargs):
+            actual, value = send(payload, **kwargs)
+            if actual != status or value['kind'] != 'error' or value['payload'] != {
+                    'category': category, 'code': code, 'retryable': False}:
+                raise ValueError('staging exact rejection')
+        def succeeded(payload, kind):
+            status, value = send(payload)
+            if status != 200 or value['kind'] != kind:
+                raise ValueError('staging successful operation')
+            return value['payload']
+        producer = fixture['complete_producer_payload']
+        fields = producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
+        expected = ProducerExpectation(producer['context'], ScopeKey('A', 'S', int(fields['start_ns']['value']),
+            int(fields['end_ns']['value'])), tuple(FeatureRef(**item) for item in producer['executed_features']),
+            producer['backend_id'], producer['backend_version'])
+        def verify(payload):
+            if payload != producer or hashlib.sha256(canonical(payload)).hexdigest() != fixture['producer_payload_sha256']:
+                raise ValueError('staging complete producer golden')
+            envelope = canonical({'schema': 'equity.remote', 'version': '1.1', 'kind': 'result',
+                                  'request_id': 'native-proof', 'payload': payload})
+            native = convert_result(ResultView(envelope), expected)
+            if not native.ok or hashlib.sha256(encode_result(native.view)).hexdigest() != fixture['native_sha256']:
+                raise ValueError('staging complete native golden')
+        if mode == 'load':
+            load_errors = []
+            def load():
+                try:
+                    for unused in range(3):
+                        status, value = send({'operation': 'discover'})
+                        if status == 200:
+                            if value['kind'] != 'discovery':raise ValueError('staging load discovery')
+                        elif status != 429 or value['payload'] != {'category': 'quota', 'code': 'quota_exceeded', 'retryable': False}:
+                            raise ValueError('staging load rejection')
+                except BaseException as failure:
+                    load_errors.append(failure)
+            callers = [threading.Thread(target=load) for unused in range(4)]
+            started_callers = []
+            caller_failure = None
+            join_failures = []
+            try:
+                for caller in callers:
+                    started_callers.append(caller)
+                    caller.start()
+            except BaseException as failure:
+                caller_failure = failure
+            finally:
+                end = time.monotonic() + 20
+                for caller in started_callers:
+                    try:
+                        if caller.ident is not None:
+                            caller.join(max(0, end - time.monotonic()))
+                    except BaseException as failure:
+                        join_failures.append(failure)
+            if caller_failure is not None:
+                raise caller_failure
+            if load_errors or join_failures or any(caller.is_alive() for caller in started_callers):
+                raise ValueError('staging load callers unconfirmed')
+            if sorted(call['status'] for call in calls) != [200] * 8 + [429] * 4:
+                raise ValueError('staging exact twelve load outcomes')
+            control('stop')
+        else:
+            if mode == 'security':
+                for role in (None, 'invalid', 'expired'):
+                    error({'operation': 'discover'}, 'authentication', 'unauthenticated', 401, role=role)
+            if mode in ('good', 'restored', 'recovered', 'security', 'interruption'):
+                succeeded({'operation': 'discover'}, 'discovery')
+            if mode in ('rollback', 'restored', 'recovered'):
+                if old_ids is None:raise ValueError('staging predecessor references required')
+                error({'operation': 'job_status', 'job_id': old_ids['job']}, 'authorization', 'not_permitted', 403)
+                error({'operation': 'result_read', 'result_id': old_ids['result'], 'cursor': None}, 'authorization', 'not_permitted', 403)
+            if mode == 'security':
+                error({'operation': 'discover'}, 'transport', 'incompatible_version', 400, version='9.0')
+                error({'operation': 'discover'}, 'transport', 'invalid_json', 400, raw_body=b'{')
+            submitted = succeeded({'operation': 'calculate', 'context': expected.context_json(),
+                'scope': expected.scope.payload_json(), 'idempotency_key': 'eq084-' + mode,
+                'command_digest': expected.command_digest}, 'job')
+            original = control('settled')['original']
+            if submitted['job_id'] != original['job'] or original['state'] != 'succeeded' or original['reads'] != 1:
+                raise ValueError('staging original physical completion')
+            if mode == 'security':
+                for operation, field in (('job_status', 'job'), ('job_cancel', 'job'),
+                                         ('result_read', 'result'), ('artifact_read', 'result')):
+                    request = {'operation': operation, 'job_id' if field == 'job' else 'result_id': original[field]}
+                    if field == 'result':
+                        request['cursor'] = None
+                    error(request,
+                          'authorization', 'not_permitted', 403, role='B')
+                untrusted = ssl.create_default_context()
+                try:
+                    raw_request(port, untrusted, secrets['A'], {'operation': 'discover'}, 'untrusted')
+                except ssl.SSLCertVerificationError:
+                    pass
+                else:raise ValueError('staging untrusted TLS admitted')
+                control('wrong_context')
+                wrong = client_context(certificates / 'wrong-cert.pem')
+                try:
+                    raw_request(port, wrong, secrets['A'], {'operation': 'discover'}, 'wrong-host')
+                except ssl.SSLCertVerificationError:
+                    pass
+                else:raise ValueError('staging hostname bypass admitted')
+                control('restore_context')
+            else:
+                status = succeeded({'operation': 'job_status', 'job_id': original['job']}, 'job')
+                if status['state'] != 'succeeded':raise ValueError('staging original status')
+                source_result = succeeded({'operation': 'result_read', 'result_id': original['result'], 'cursor': None}, 'result')
+                output_export = succeeded({'operation': 'artifact_read', 'result_id': original['result'], 'cursor': None}, 'result')
+                verify(source_result);verify(output_export)
+                if mode == 'good':
+                    from staging_lanes import run_lanes
+                    invocation = json.loads((epoch / 'invoke.json').read_bytes())
+                    staged_lanes = run_lanes(harness, epoch, certificates, port, cert_sha,
+                        secret_sha, secrets, expected, original, fixture, verify,
+                        invocation['source_manifest']['staging_mcp_entry.py'])
+            terminal_action = 'interrupt' if mode == 'interruption' else 'stop'
+            final = control(terminal_action)
+            if final['original'] != original:
+                raise ValueError('staging original repeated state changed')
+    except BaseException as failure:
+        primary = failure
+    finally:
+        observer_join_failure = None
+        try:
+            if thread.ident is not None:
+                thread.join(30)
+        except BaseException as failure:
+            observer_join_failure = failure
+        if primary is None and observer_join_failure is not None:
+            primary = observer_join_failure
+        observer_settled = None
+        try:
+            observer_settled = not thread.is_alive()
+        except BaseException as failure:
+            if primary is None:
+                primary = failure
+        if observer_settled is not True:
+            # Keep the observer hook installed: unknown ownership prevents further actions.
+            if primary is not None:
+                raise primary
+            raise ValueError('staging owner observer still alive or unknown')
+        containment._WindowsChild.close = original_close
+    if primary is not None:
+        raise primary
+    if errors or len(results) != 1 or not all(observed.values()):
+        raise ValueError('staging supervised owner unconfirmed')
+    result = results[0]
+    outcome = json.loads(result.output)
+    if mode == 'interruption':
+        if result.reason != 'child_failed' or result.exit_code != 73 or outcome['outcome'] != 'expected_interrupted' or outcome['scheduler_close'] is not None:
+            raise ValueError('staging original interruption classification')
+    elif result.reason != 'exited' or result.exit_code != 0 or outcome['outcome'] != 'graceful_closed' or outcome['scheduler_close'] is not True:
+        raise ValueError('staging graceful original close')
+    if outcome['snapshot_sha256'] != hashlib.sha256(canonical(original)).hexdigest():
+        raise ValueError('staging full original close snapshot')
+    return {'mode': mode, 'calls': sorted(calls, key=lambda call: call['number']), 'controls': controls,
+            'original': original, 'export': output_export, 'supervisor': {'exit_code': result.exit_code,
+                'reason': result.reason, 'elapsed_seconds': result.elapsed_seconds},
+            'owned_observations': observed, 'original_scheduler_close': outcome['scheduler_close'],
+            'successful_original_close': mode != 'interruption', 'full_producer': source_result is not None,
+            'staged_public_lanes': staged_lanes}

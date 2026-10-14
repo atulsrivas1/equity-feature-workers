@@ -1,0 +1,261 @@
+"""UNINVOKED EQ084 trusted staging source candidate; no public caller selectors."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import ssl
+import sys
+import time
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True,
+                      allow_nan=False).encode('ascii')
+
+
+def read_fixed(path, cap, digest=None):
+    path = Path(path)
+    if not path.is_absolute() or path.is_symlink() or path.resolve(strict=True) != path:
+        raise ValueError('staging fixed file')
+    with path.open('rb') as stream:
+        raw = stream.read(cap + 1)
+    if not raw or len(raw) > cap or digest is not None and hashlib.sha256(raw).hexdigest() != digest:
+        raise ValueError('staging fixed bytes')
+    return raw
+
+
+def publish(path, value, cap=4096):
+    raw = canonical(value)
+    if len(raw) > cap or path.exists() or path.with_suffix('.complete').exists():
+        raise ValueError('staging immutable control')
+    pending = path.with_suffix('.pending')
+    with pending.open('xb') as stream:
+        if stream.write(raw) != len(raw):
+            raise ValueError('staging control write')
+    pending.replace(path)
+    path.with_suffix('.complete').mkdir()
+
+
+def main(arguments):
+    # The small admitted entry must verify every helper source pin before importing this module.
+    if len(arguments) != 7 or sys.platform != 'win32':
+        raise ValueError('staging supported invocation')
+    harness, epoch, certificates = (Path(value) for value in arguments[:3])
+    mode, config_sha, secret_sha, cert_sha = arguments[3:]
+    modes = {'good': 14, 'load': 12, 'rollback': 6, 'restored': 7,
+             'security': 11, 'interruption': 5, 'recovered': 7}
+    if mode not in modes:
+        raise ValueError('staging fixed mode')
+    for path in (harness, epoch, certificates):
+        if not path.is_absolute() or path.is_symlink() or path.resolve(strict=True) != path:
+            raise ValueError('staging owned root')
+    config_raw = read_fixed(epoch / 'config.json', 4096, config_sha)
+    config = json.loads(config_raw)
+    expected_config = {'schema': 'eq084.config.v1', 'request_quota': 8 if mode == 'load' else 60,
+                       'principal_transfer': 1048576, 'global_transfer': 2097152,
+                       'interval_ns': 60000000000, 'clock_ns': 100}
+    if config != expected_config or config_raw != canonical(expected_config):
+        raise ValueError('staging immutable config')
+    secret_raw = read_fixed(epoch / 'credentials.json', 1024, secret_sha)
+    secret = json.loads(secret_raw)
+    if set(secret) != {'A', 'B', 'expired'} or secret_raw != canonical(secret):
+        raise ValueError('staging private credentials')
+    if any(type(value) is not str or re.fullmatch('[A-Za-z0-9_-]{43,256}', value) is None
+           for value in secret.values()):
+        raise ValueError('staging credential shape')
+    if len(set(secret.values())) != 3:
+        raise ValueError('staging distinct credentials')
+    sys.path.insert(0, str(harness))
+    from certificate_pins import read_pins
+    pins = read_pins(certificates, cert_sha)
+    contexts = {}
+    for role in ('valid', 'wrong'):
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.minimum_version = ssl.TLSVersion.TLSv1_2
+        context.load_cert_chain(str(certificates / (role + '-cert.pem')),
+                                str(certificates / (role + '-key.pem')))
+        contexts[role] = context
+    from test_jobs import setup
+    from equity_feature_service import Credential, Limits
+    from equity_feature_service._audit import OwnedAudit
+    from equity_feature_service.loopback import qualification_server
+    scheduler = service = server = original_get = None
+    counters = {'accepts': 0, 'handshake_success': 0, 'handshake_failure': 0, 'dispatch': 0}
+    context_role = 'valid'
+    seen = []
+    connections = []
+    failures = []
+    original = None
+
+    def snapshot(wait=False):
+        with scheduler.condition:
+            if mode == 'load':
+                if scheduler.jobs or scheduler.queue or scheduler._running is not None or facts['reads'] != 0:
+                    raise ValueError('staging load invoked native source')
+                return None
+            end = time.monotonic() + 3
+            if len(scheduler.jobs) != 1:
+                raise ValueError('staging single native job')
+            job = next(iter(scheduler.jobs.values()))
+            while scheduler._running is not None or job.expires_ns <= 0:
+                remaining = end - time.monotonic()
+                if not wait or remaining <= 0:
+                    raise ValueError('staging native completion unconfirmed')
+                scheduler.condition.wait(remaining)
+            sizes = [len(job.native), len(job.wire), len(job.envelope), len(job.receipt)]
+            if (job.state != 'succeeded' or job.result_id is None or scheduler.queue
+                    or facts['reads'] != 1 or not facts['entered'].is_set()
+                    or len(facts['sink_threads']) != 1
+                    or facts['source_threads'] != facts['sink_threads']
+                    or type(job.expires_ns) is not int or not 0 < job.expires_ns <= 9223372036854775807
+                    or not all(type(size) is int and size > 0 for size in sizes)
+                    or job.held != sum(sizes) or not 0 < job.held <= 262144
+                    or scheduler.total_retained != job.held
+                    or scheduler.retained != {job.principal: job.held}):
+                raise ValueError('staging full native state')
+            return dict(job=job.job_id, result=job.result_id, expiry=job.expires_ns,
+                        state=job.state, held=job.held, sizes=sizes, reads=facts['reads'],
+                        running=scheduler._running, queue=len(scheduler.queue),
+                        native_sha256=hashlib.sha256(job.native).hexdigest(),
+                        wire_sha256=hashlib.sha256(job.wire).hexdigest(),
+                        envelope_sha256=hashlib.sha256(job.envelope).hexdigest(),
+                        receipt_sha256=hashlib.sha256(job.receipt).hexdigest())
+
+    def app(environ, start_response):
+        if counters['dispatch'] >= modes[mode]:
+            raise ValueError('staging dispatch cap')
+        counters['dispatch'] += 1
+        return service(environ, start_response)
+
+    def get_request():
+        raw, address = original_get()
+        connections.append(raw)
+        counters['accepts'] += 1
+        if counters['accepts'] > modes[mode] + (2 if mode == 'security' else 0):
+            raw.close()
+            raise ValueError('staging accept cap')
+        wrapped = None
+        try:
+            raw.settimeout(2)
+            wrapped = contexts[context_role].wrap_socket(raw, server_side=True,
+                                                         do_handshake_on_connect=False)
+            connections.append(wrapped)
+            wrapped.do_handshake()
+            counters['handshake_success'] += 1
+            return wrapped, address
+        except BaseException as error:
+            if isinstance(error, ssl.SSLError):
+                counters['handshake_failure'] += 1
+            else:
+                failures.append(type(error).__name__)
+            try:
+                if wrapped is not None:
+                    wrapped.close()
+                else:
+                    raw.close()
+            except BaseException as cleanup_error:
+                failures.append(type(cleanup_error).__name__)
+            raise
+
+    actions = (('settled', 'wrong_context', 'restore_context', 'stop') if mode == 'security'
+        else ('settled', 'interrupt') if mode == 'interruption' else ('settled', 'stop'))
+    if mode == 'load':
+        actions = ('stop',)
+    sequence = 0
+    closed = None
+    primary = None
+    cleanup_errors = []
+    try:
+        scheduler, service, unused_tokens, clock, facts = setup(
+            actions=('calculate', 'job_manage', 'retain', 'discover', 'raw_read', 'derived_read', 'export'),
+            audit_store=OwnedAudit(owned_synthetic=True, valid_from_ns=0, expires_at_ns=300000000000))
+        clock.n = 100
+        service.ledger.credentials = (
+            Credential.provision('A', secret['A'], 0, 3600000000000),
+            Credential.provision('B', secret['B'], 0, 3600000000000),
+            Credential.provision('expired', secret['expired'], 0, 100))
+        service.ledger.limits = Limits(config['request_quota'], config['principal_transfer'],
+                                       config['global_transfer'], config['interval_ns'])
+        server = qualification_server(service)
+        server.set_app(app)
+        server.timeout = 0.03
+        original_get = server.get_request
+        server.get_request = get_request
+        if service.ledger.audit_totals()['request_used'] != 0:
+            raise ValueError('staging zero ingress readiness')
+        publish(epoch / 'ready.json', {'port': server.server_address[1], 'mode': mode,
+                                     'config_sha256': config_sha, 'certificate_pins_sha256': cert_sha})
+        end = time.monotonic() + 20
+        while sequence < len(actions):
+            if time.monotonic() >= end:
+                raise ValueError('staging owner deadline')
+            path = epoch / ('control-' + str(sequence) + '.json')
+            if path.with_suffix('.complete').exists():
+                control_raw = read_fixed(path, 128)
+                value = json.loads(control_raw)
+                if value != {'action': actions[sequence]} or control_raw != canonical(value):
+                    raise ValueError('staging exact numbered control')
+                action = actions[sequence]
+                if failures:
+                    raise ValueError('staging unexpected handshake failure')
+                if action == 'settled':
+                    settled_count = {'good': 2, 'rollback': 3, 'restored': 4,
+                                     'security': 7, 'interruption': 2, 'recovered': 4}[mode]
+                    if counters['dispatch'] != settled_count:
+                        raise ValueError('staging settled send ledger')
+                    original = snapshot(True)
+                else:
+                    current = snapshot()
+                    if current != original:
+                        raise ValueError('staging original state drift')
+                if any(connection.fileno() != -1 for connection in connections):
+                    raise ValueError('staging connection still open')
+                if action == 'wrong_context':
+                    context_role = 'wrong'
+                elif action == 'restore_context':
+                    context_role = 'valid'
+                elif action in ('stop', 'interrupt'):
+                    extra = 2 if mode == 'security' else 0
+                    if (counters != {'accepts': modes[mode] + extra,
+                                     'handshake_success': modes[mode],
+                                     'handshake_failure': extra, 'dispatch': modes[mode]}
+                            or service.ledger.audit_totals()['request_used'] != modes[mode]):
+                        raise ValueError('staging exact final send ledger')
+                ack = {'action': action, 'counters': dict(counters), 'original': original}
+                publish(epoch / ('ack-' + str(sequence) + '.json'), ack)
+                seen.append(action)
+                sequence += 1
+                if action == 'interrupt':
+                    print(json.dumps({'outcome': 'expected_interrupted', 'scheduler_close': None,
+                                      'snapshot_sha256': hashlib.sha256(canonical(original)).hexdigest()}), flush=True)
+                    os._exit(73)
+                if action == 'stop':
+                    break
+            else:
+                server.handle_request()
+    except BaseException as error:
+        primary = error
+    finally:
+        for connection in connections:
+            try:
+                connection.close()
+            except BaseException as error:
+                cleanup_errors.append(type(error).__name__)
+        try:
+            if server is not None:server.server_close()
+        except BaseException as error:
+            cleanup_errors.append(type(error).__name__)
+        try:
+            if scheduler is not None:closed = scheduler.close(2)
+        except BaseException as error:
+            cleanup_errors.append(type(error).__name__)
+    if primary is not None:
+        raise primary
+    if cleanup_errors or failures:
+        raise ValueError('staging cleanup unconfirmed')
+    if closed is not True or snapshot() != original:
+        raise ValueError('staging original close unconfirmed')
+    print(json.dumps({'outcome': 'graceful_closed', 'scheduler_close': closed,
+                      'counters': counters, 'controls': seen,
+                      'snapshot_sha256': hashlib.sha256(canonical(original)).hexdigest()}), flush=True)
