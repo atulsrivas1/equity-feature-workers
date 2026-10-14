@@ -40,3 +40,22 @@ First fresh Windows native smoke at57d4664 FAILED after2untimed references and2m
   }
 }
 ```
+
+Second changed-source native smoke7e2a57d FAILED aftersame2references/2smallcases full parity. SETorder issue resolved; first sink512sort now raises DuckDB InternalException unique_ptrNULL during fetchmany. Exact cause unconfirmed, no spill/sort/pruning PASS. New qualification-only capability probe fixes population16 and three controls: sink/unprofiled/hash, source/profiled/hash, sink/profiled/integers. Original settings/owned120s child preserved; raw individual engine exceptions retained privately and hashed, errors never relabeled success. Separate exact capability source review before any invocation; no production setting relaxation or unchanged failed rerun.
+
+```json
+{
+  "smoke-02.json": {
+    "bytes": 53209,
+    "sha256": "5c225617254451adb72a8d4ef4a7e6ad083dd490c6a52eeb5bea6c2408b0e679"
+  },
+  "smoke-02.log": {
+    "bytes": 1505,
+    "sha256": "788c3b453e127c946077693e22ca3bbe05ac40fffea26ab35335611012ada7a9"
+  },
+  "smoke-work-02/failed-sort-sink-128MiB-512.log": {
+    "bytes": 2412,
+    "sha256": "8a06e3bf6c417670c4a1765cf2fd7d86ebbc9099fb67008fad6a311b3c4fe582"
+  }
+}
+```

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import sys
 import time
+import traceback
 
 
 def sort_oracle(rows, count):
@@ -142,12 +143,60 @@ def layout_case(root, count):
                 authoritative_receipts_modified=False, production_layout_adopted=False)
 
 
+def capability_case(root):
+    """Three fixed tiny changed controls; errors remain observations, never passes."""
+    import duckdb
+    from equity_feature_duckdb_sink.schema import CONFIG
+    records = []
+    for name, sink, profiled, hashes in [('sink-unprofiled-hash', True, False, True),
+            ('source-profiled-hash', False, True, True), ('sink-profiled-integer', True, True, False)]:
+        case = root / name
+        case.mkdir()
+        temporary = case / 'temp'
+        temporary.mkdir()
+        config = dict(CONFIG) if sink else dict(threads='1', memory_limit='128MB', max_temp_directory_size='512MiB',
+            autoload_known_extensions='false', autoinstall_known_extensions='false')
+        config['temp_directory'] = str(temporary)
+        record = dict(case=name, count=16, sink=sink, profiled=profiled, hash_query=hashes)
+        try:
+            with duckdb.connect(':memory:', config=config) as con:
+                sql = ('SELECT i, md5(CAST(i AS VARCHAR)) || md5(CAST(i+16 AS VARCHAR)) AS payload '
+                       'FROM range(16) t(i) ORDER BY payload,i') if hashes else 'SELECT i FROM range(16) t(i) ORDER BY i'
+                def consume(cursor):
+                    def batches():
+                        while batch := cursor.fetchmany(4096):
+                            yield batch
+                    if hashes:
+                        return sort_oracle(batches(), 16)
+                    rows = [row for batch in batches() for row in batch]
+                    assert rows == [(i,) for i in range(16)]
+                    return dict(exact_integer_population_order=True)
+                if profiled:
+                    record.update(profile_query(con, sql, [], case / 'profile.json', consume))
+                else:
+                    record['verified'] = consume(con.execute(sql))
+                record['status'] = 'completed'
+        except duckdb.Error as error:
+            raw = traceback.format_exc().encode()
+            (case / 'private-error.log').write_bytes(raw)
+            record.update(status='failed', error_type=type(error).__name__, private_error_sha256=hashlib.sha256(raw).hexdigest())
+        records.append(record)
+    return dict(kind='capability', records=records, production_settings_changed=False)
+
+
 def main():
     import duckdb
     settings = json.loads(sys.stdin.read())
     root = Path(settings['root']).resolve()
     root.mkdir(parents=True, exist_ok=False)
-    result = sort_case(root, settings['count'], settings['memory'], settings['sink']) if settings['kind'] == 'sort' else layout_case(root, settings['count'])
+    if settings['kind'] == 'sort':
+        result = sort_case(root, settings['count'], settings['memory'], settings['sink'])
+    elif settings['kind'] == 'capability':
+        result = capability_case(root)
+    elif settings['kind'] == 'layout':
+        result = layout_case(root, settings['count'])
+    else:
+        raise ValueError('unsupported diagnostic kind')
     result['duckdb_version'] = duckdb.__version__
     result['owned_file_bytes_after'] = sum(p.stat().st_size for p in root.rglob('*') if p.is_file())
     print(json.dumps(result, sort_keys=True, allow_nan=False))
