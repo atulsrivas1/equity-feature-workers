@@ -17,3 +17,26 @@ Foundation CI now runs six pure evidence tests and tiny installed diagnostics in
 First pure evidence-test invocation found platform path-separator expectation mismatch in public-profile redaction (4passed/1failed). Correction normalizes the redacted owned-root separator; original failure retained here. No native run occurred. Earlier readiness review found four design gaps resolved in protocol revision2 before Ready; see canonical history. No failed run is discarded or promoted to PASS.
 
 Separate initial source review00c3daef found four blockers before execution: omitted data_page_size/store_schema, missing prelaunch failure identity/private timeout journal, worktree bytes not checked against frozen Git source, and empty/missing installed RECORD accepted as a digest. All corrected before native invocation; exact renewed review remains mandatory. Attempt journal commits public identities before launch, keeps sanitized failure/timeout/cleanup-unknown status and private traceback hash; raw traceback paths remain outside public report.
+
+First fresh Windows native smoke at57d4664 FAILED after2untimed references and2measured small sequential sink cases all passed full parity/goldens. The first512-ID sink diagnostic raised DuckDB ParserException before query execution: profiling_output `.json` set while current profiler format remained query_tree. Corrected setup enables JSON first, then sets the owned output path; sink policy remains unchanged. This is instrumentation failure, not a calculation failure or spill result. Preserve raw report/log identities below; renew exact source review before changed smoke on new roots. Helper-only raw source audit first rejected core WindowsCRLF, then verified exact permitted LF materialization separately; missing-sys venv helper stopped before creation and was corrected by direct command.
+
+```json
+{
+  "smoke.json": {
+    "bytes": 53192,
+    "sha256": "145e5068e99533e35881be1e87a8fff1c38e72781e46306b4bfe4b77bc0299bf"
+  },
+  "smoke.log": {
+    "bytes": 1505,
+    "sha256": "788c3b453e127c946077693e22ca3bbe05ac40fffea26ab35335611012ada7a9"
+  },
+  "smoke-work/failed-sort-sink-128MiB-512.log": {
+    "bytes": 1728,
+    "sha256": "de3a19ea76cd9b419cd533793619e8da25ae704fa60590be58356aacba85d089"
+  },
+  "smoke-work/failed-attempt-5.log": {
+    "bytes": 919,
+    "sha256": "6a6ec14b7655c9caea851349690f523fafce3be8967cf26a87883dfa6c055a45"
+  }
+}
+```

@@ -41,8 +41,8 @@ def public_profile(profile, root):
 def profile_query(con, query, parameters, profile_path, consume):
     # SQL literal contains only our generated owned path, escaped as a literal.
     literal = str(profile_path).replace("'", "''")
-    con.execute("SET profiling_output = '" + literal + "'")
     con.execute("SET enable_profiling = 'json'")
+    con.execute("SET profiling_output = '" + literal + "'")
     start = time.perf_counter_ns()
     cursor = con.execute(query, parameters)
     value = consume(cursor)
