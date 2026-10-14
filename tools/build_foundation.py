@@ -164,6 +164,18 @@ def qualify(dependencies, artifacts, form, packages, probe, core_benchmark):
             assert profile_data["smoke"] and len(profile_data["pipeline"]) == 2 and len(profile_data["core"]) == 1
             (ROOT / "dist" / ("eq085-profile-" + form + ".json")).write_bytes(profile_raw)
             profile_identity = hashlib.sha256(profile_raw).hexdigest()
+        run(py, "-I", "-m", "unittest", "discover", "-s", ROOT / "tests", "-p", "test_scaling_evidence.py", cwd=location)
+        with tempfile.TemporaryDirectory(prefix="eq088-scaling-") as scaling_directory:
+            scaling_base = Path(scaling_directory)
+            scaling_report = scaling_base / "report.json"
+            run(py, "-I", ROOT / "tools/qualify_scaling.py", "--smoke",
+                "--work-root", scaling_base / "work", "--out", scaling_report, cwd=location)
+            scaling_raw = scaling_report.read_bytes()
+            scaling_data = json.loads(scaling_raw)
+            assert scaling_data["smoke"] and scaling_data["status"] == "completed-protocol-not-automatic-acceptance"
+            assert len(scaling_data["records"]) == 2 and len(scaling_data["diagnostics"]) == 4
+            (ROOT / "dist" / ("eq088-scaling-" + form + ".json")).write_bytes(scaling_raw)
+            scaling_identity = hashlib.sha256(scaling_raw).hexdigest()
         executable = py.parent / ("equity-feature-worker.exe" if os.name == "nt" else "equity-feature-worker")
         run(executable, "--demo", "both", cwd=location)
         after = fingerprint(py, location)
@@ -177,7 +189,7 @@ def qualify(dependencies, artifacts, form, packages, probe, core_benchmark):
         source_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;import equity_feature_duckdb as source;from pathlib import Path;assert 'site-packages' in Path(source.__file__).resolve().parts;print(json.dumps({n:version(n) for n in ('equity-feature-duckdb','numpy')}))"], cwd=location, text=True, encoding="utf-8"))
         assert source_versions == {"equity-feature-duckdb":"0.1.0a8", "numpy":"2.2.6"}
-        return {"eq085_installed_profile_smoke_passed": True, "eq085_profile_report_sha256": profile_identity, "acquisition_light": light, "acquisition_full": acquisition, "acquisition_tests_sha256": sha(probe.parent / "test_acquisition.py"), "acquisition_oracle_sha256": sha(probe.parent / "acquisition_oracle.json"), "form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
+        return {"eq088_installed_scaling_smoke_passed": True, "eq088_scaling_report_sha256": scaling_identity, "eq085_installed_profile_smoke_passed": True, "eq085_profile_report_sha256": profile_identity, "acquisition_light": light, "acquisition_full": acquisition, "acquisition_tests_sha256": sha(probe.parent / "test_acquisition.py"), "acquisition_oracle_sha256": sha(probe.parent / "acquisition_oracle.json"), "form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
 
 
 def main():
