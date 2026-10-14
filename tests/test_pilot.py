@@ -16,6 +16,7 @@ import unittest
 from pilot_fixture import ORACLE, counts, make_fixture, isolated_sample
 from pilot_memory import NativeMemory, MemorySampler, admission, quantile, simultaneous_peak
 from pilot_process import OwnedProcess, communicate_owned
+from pilot_entry import retain_entry, settle_entry, finish_entry_observation
 
 
 class Pilot(unittest.TestCase):
@@ -150,31 +151,35 @@ print('after '+str(os.getpid()),flush=True);sys.stdin.readline()
                     finally:
                         owner.close(failed=True)
                         if owner.process is not None:owner.process.communicate(timeout=5)
-            owner=OwnedProcess()
-            process=owner.start([sys.executable,'-I','-c',code],stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,stderr=subprocess.PIPE,creationflags=flags)
-            deadline=time.monotonic()+10
-            while not marker.exists() and time.monotonic()<deadline:time.sleep(.01)
-            self.assertTrue(marker.exists())
-            actual=json.loads(marker.read_text(encoding='utf-8'))['pid']
-            original_close=owner.kernel.CloseHandle;original_terminate=owner.kernel.TerminateProcess
-            retained=set(owner.handles.values());terminated=[];job=owner.job;failed=False
-            def close_once(handle):
-                nonlocal failed
-                if handle==job and not failed:failed=True;return False
-                return original_close(handle)
-            def terminate(handle,code):
-                terminated.append(handle);return original_terminate(handle,code)
+            owner=OwnedProcess();process=None;entry=None;primary=None
             try:
+                process=owner.start([sys.executable,'-I','-c',code],stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,stderr=subprocess.PIPE,creationflags=flags)
+                deadline=time.monotonic()+10
+                while not marker.exists() and time.monotonic()<deadline:time.sleep(.01)
+                self.assertTrue(marker.exists())
+                actual=json.loads(marker.read_text(encoding='utf-8'))['pid']
+                entry=retain_entry(owner.kernel,owner.job,actual)
+                original_close=owner.kernel.CloseHandle;original_terminate=owner.kernel.TerminateProcess
+                retained=set(owner.handles.values());terminated=[];job=owner.job;failed=False
+                self.assertNotIn(entry[0],retained,'observer must not alter fallback ownership')
+                def close_once(handle):
+                    nonlocal failed
+                    if handle==job and not failed:failed=True;return False
+                    return original_close(handle)
+                def terminate(handle,code):
+                    terminated.append(handle);return original_terminate(handle,code)
                 with patch.object(owner.kernel,'CloseHandle',side_effect=close_once), patch.object(owner.kernel,'TerminateProcess',side_effect=terminate):
                     with self.assertRaisesRegex(OSError,'owned job close failed'):owner.close(failed=True)
                 self.assertTrue(failed);self.assertIsNone(owner.job);self.assertFalse(owner.handles)
                 self.assertTrue(retained<=set(terminated),'held fallback was bypassed')
-                process.communicate(timeout=5)
-                self.assertNotIn(actual,NativeMemory().inventory(),'fallback/retry left interpreter alive')
+                settle_deadline=time.monotonic()+5
+                process.communicate(timeout=max(0,settle_deadline-time.monotonic()))
+                settle_entry(owner.kernel,entry,settle_deadline)
+            except BaseException as error:
+                primary=error;raise
             finally:
-                owner.close(failed=True)
-                process.communicate(timeout=5)
+                finish_entry_observation(owner,process,entry,primary)
 
     def test_existing_report_and_overlapping_paths_preserve_evidence(self):
         spec=importlib.util.spec_from_file_location('benchmark_pipeline',Path(__file__).parents[1]/'tools'/'benchmark_pipeline.py')
