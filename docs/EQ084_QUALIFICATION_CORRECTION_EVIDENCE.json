@@ -1,0 +1,275 @@
+{
+  "schema": "eq084.windows-qualification-correction.v1",
+  "actual_failed_head": "617f26a3e606f269a442f99a4e9542e0143a8d84",
+  "run": 38497147364,
+  "job": 115635404575,
+  "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38497147364/job/115635404575",
+  "raw_log": {
+    "bytes": 483918,
+    "sha256": "1553b7b7d68b5058f4b26d0f6df3fcb461ec70697a8e1bb5312f89228d056a6b"
+  },
+  "independent_failure_report_raw": {
+    "bytes": 8030,
+    "sha256": "e6b343f59de1c31a846f9a4dd783e3bf322a71cbfe63110dbde7249f442c1b0a"
+  },
+  "independent_failure_report": {
+    "reviewer": "/root/r7_policy_review (separate local Codex reviewer)",
+    "scope": "SAVED_FAILED_LOG_AND_SOURCE_MEASUREMENT_CONTRACT_REVIEW_ONLY",
+    "disposition": "REWORK_QUALIFICATION_EXIT_OBSERVER_NOT_RUNTIME_LEAK_DIAGNOSIS",
+    "heads": {
+      "equity-features": "abfa93873682289c81331489b12f0e290167d9a1",
+      "equity-feature-workers": "617f26a3e606f269a442f99a4e9542e0143a8d84"
+    },
+    "actual_failure": {
+      "run": 38497147364,
+      "job_id": 115635404575,
+      "log": "eq084-main-windows-foundation-failed.raw.log",
+      "bytes": 483918,
+      "sha256": "1553b7b7d68b5058f4b26d0f6df3fcb461ec70697a8e1bb5312f89228d056a6b",
+      "stage": "build_foundation installed-source test_pilot test_windows_prelaunch_rejection_and_failed_job_close",
+      "failed_assertion_line": 174,
+      "observed": "assertNotIn(actual, NativeMemory().inventory()) failed after launcher communicate(timeout=5); one pilot test failure caused nonzero qualification/build exit."
+    },
+    "read_source_pins": {
+      "tests/test_pilot.py": {
+        "bytes": 13896,
+        "sha256": "8943a6740ceb5dceb4ce03cfe29ccfc659021357fd13bf5a49b01c9a7582ed4d"
+      },
+      "tests/pilot_process.py": {
+        "bytes": 11553,
+        "sha256": "2e473b3bc9edf56ef37c37bc0560feed8377fd8812142e9f1d7f424993e6997f"
+      },
+      "tests/pilot_memory.py": {
+        "bytes": 13886,
+        "sha256": "685301f36aec8b998934abaab0c5bff2f19e756ffad3e5ed4a45742387a3d606"
+      }
+    },
+    "findings": [
+      {
+        "priority": 2,
+        "file": "tests/test_pilot.py",
+        "line": 174,
+        "title": "PID snapshot presence is not exact-entry termination evidence",
+        "trigger": "Controlled first owned-job CloseHandle failure, fallback retained-launcher termination and retry job close; then launcher communicate succeeds and a snapshot contains the entry marker PID.",
+        "reason": "Windows NativeMemory.inventory returns PID -> (parent PID, None) from Toolhelp without creation identity, retained exact entry handle, signaled state or exit code. OwnedProcess retains its launcher, and communicate waits that Popen process, not a separately identified interpreter entry. The assertion therefore conflates numeric snapshot membership with exact entry execution state.",
+        "correction": "Replace this liveness oracle with a separately retained, verified exact-entry process observer acquired before fault injection. Keep all existing fallback, owned-handle, controlled-error and job-close assertions; unknown observation must fail, not pass."
+      }
+    ],
+    "supported_facts": [
+      {
+        "source": "tests/pilot_memory.py:57-79",
+        "fact": "Windows inventory enumerates Toolhelp PID and parent values with no creation or exit-state measurement."
+      },
+      {
+        "source": "tests/pilot_process.py:45-57,103-143",
+        "fact": "Start retains and assigns the Popen launcher; cleanup first attempts job close, calls TerminateProcess on held handles, independently closes them, retries the job close and terminates the original Popen process. There is no retained-entry wait in this path."
+      },
+      {
+        "source": "tests/test_pilot.py:154-177",
+        "fact": "The actual entry PID comes from the synthetic marker. Fault assertions are followed by communicate(timeout=5) on the launcher and immediate global numeric snapshot exclusion."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess",
+        "fact": "External TerminateProcess initiates asynchronous termination. Microsoft recommends waiting on the process handle to establish completion; pending I/O and open process handles affect completion/object lifetime."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/windows/win32/procthread/terminating-a-process",
+        "fact": "A terminated process object becomes signaled and can remain valid while handles to it are open; launcher termination alone does not establish child termination."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+        "fact": "Waiting on a process needs SYNCHRONIZE. Require WAIT_OBJECT_0; timeout, failed or unexpected status denies. Never close the observer while its wait is pending."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodeprocess",
+        "fact": "Exit query needs query-information rights and a successful return. The controlled fixture must not use exit code STILL_ACTIVE as an application exit value; query code alone is not a substitute for the signaled-handle wait."
+      }
+    ],
+    "proposal_assessment": "The proposed qualification-only retained-entry observer is supported and more precise than the failed PID inventory oracle. Approval of actual corrective source and execution remains separate; this report approves the design direction only, without modifying runtime or enlarging its timeout.",
+    "corrective_source_obligations": [
+      "Acquire OpenProcess with explicit pointer-width HANDLE prototype and SYNCHRONIZE|PROCESS_QUERY_LIMITED_INFORMATION, noninheritable; reject null/invalid handles. Put every successful acquisition immediately inside guaranteed cleanup ownership.",
+      "Before injecting the close fault, verify GetProcessId equals the exact synthetic marker PID, GetProcessTimes creation identity succeeds and IsProcessInJob on the retained observer and original still-owned job succeeds with true membership. Do not reacquire a PID after cleanup and treat a new object as the original.",
+      "Keep the observer separate from owner.handles so fallback cleanup cannot close the handle being waited on. Preserve original controlled CloseHandle failure, fallback attempt and second-job-close assertions unchanged.",
+      "Start a single five-second settle deadline after owner cleanup, use its remaining budget for launcher communicate and exact-entry WaitForSingleObject. Do not silently create two independent five-second waits. A deadline expiry, unknown state, failed wait or failed exit query fails qualification.",
+      "Require WAIT_OBJECT_0 and successful GetExitCodeProcess with controlled-fixture code not STILL_ACTIVE. This witnesses termination of that process object, not destruction of every kernel object or full physical settlement.",
+      "Independently close the observer exactly once in finally even when acquisition verification, communicate, wait, exit query or assertions fail. Always attempt existing owned cleanup; preserve the original failure with cleanup failure as cause/note rather than replacing it. A close-only failure must fail.",
+      "Protect the entire post-launch marker/observer acquisition sequence, including marker timeout/read/identity failures, under owned launcher/job cleanup. Bind exact source deltas and add meaningful inert wait/identity/membership/deadline/close-priority negatives before any new native execution.",
+      "Preserve this original failed main run/log and the prior scoped successes truthfully in the same EQ084 corrective delivery. No unchanged rerun, no old failure promotion to PASS and no Released/Done until corrected current gates qualify."
+    ],
+    "diagnostic_limits": [
+      "The log proves the numeric entry PID appeared in the snapshot and the test/build failed. It does not contain exact-entry retained-handle signaled state, exit code or creation identity at the assertion.",
+      "Asynchronous exit, PID reuse and retained process-object/snapshot behavior are possible explanations, not established causes. The repeated parent value does not resolve liveness or identity without creation/state evidence.",
+      "No executed leak, surviving interpreter, actual runtime defect, attack or whole-kernel resource failure is established by this log alone. The failed qualification still remains a real release-blocking failure.",
+      "Prior reviewed SDK/resilience successes and scoped staging replay remain historical evidence, but no complete actual-main gate exists while this foundation failure is unresolved."
+    ],
+    "new_tests": 0,
+    "native_or_host_operations": 0,
+    "mutations": 0,
+    "tool_only_history": [
+      "An initial mixed PowerShell formatting pipeline rendered lengths instead of hash fields; repeated explicit JSON serialization obtained the pins without modifying inputs."
+    ]
+  },
+  "staging_operations_approved_unchanged": "930135aca30eab547c9d37503448c9de98c0fc7cf9d8517b240e05af17f40367",
+  "new_native_operations": 0,
+  "corrective_review": "pending",
+  "runtime_leak_inferred": false,
+  "tool_only_history": [
+    "GitHubHTTP500 read-only merge preflights preserved; bounded read-only retry/exactemptycheckpoint resume reviewedafcca, actualpairedmerge successful, no merge replay.",
+    "Issue body-file CR doubling repaired via structuredGraphQL exact historicaltail before one meaningful operationalcomment; future mutations preserve exacthistory.",
+    "Original prepared-doc4findings/merge-helper2findings/admission/source REWORK retained in previous published evidence; current source/current-main reviews remain their captured scopes."
+  ],
+  "recipe_review": {
+    "raw_receipt": {
+      "bytes": 4329,
+      "sha256": "5aa69fdbe0df25ac3f26061497b50aa2850c324dda8f71134a4701fc38e9649d"
+    },
+    "report": {
+      "schema": "eq084.final-acceptance-recipe-review.v1",
+      "reviewer": "/root/r7_policy_review (separate local Codex reviewer)",
+      "scope": "READ_ONLY_ACCEPTANCE_SEQUENCE_AND_DOCUMENTATION_POLICY_REVIEW",
+      "disposition": "REWORK_RECIPE_CONTINUITY_STEP_ONLY",
+      "recipe": {
+        "file": "eq084-final-acceptance-recipe.json",
+        "sha256": "4a044b8bbcd6afb1a8dc0865f9ff69a900aad81aad0bfa8a87e54574e2892bac"
+      },
+      "heads": {
+        "equity-features": "abfa93873682289c81331489b12f0e290167d9a1",
+        "equity-feature-workers": "617f26a3e606f269a442f99a4e9542e0143a8d84"
+      },
+      "findings": [
+        {
+          "priority": 3,
+          "target": "recipe.sequence: final continuity step",
+          "problem": "The proposed completion step names primary E10 and GitHub records but omits the required tracked SESSION_HANDOFF acceptance/resume update. Its newest existing paragraph describes the preparation-time Code review/pending release state; that capture is truthful history but cannot by itself record the later material acceptance outcome.",
+          "policy": "AGENTS.md rule 8 explicitly requires current evidence, remaining work and exact resume steps in docs/SESSION_HANDOFF.md; rule 12 requires story release documentation alongside delivery, and the knowledge agreement requires evidence-linked continuity after a meaningful result.",
+          "correction": "Add one bounded same-story tracked continuity/release-note linkage to the genuinely verified final-main gate and public acceptance/aggregate evidence. Preserve older historical paragraphs and the frozen operational evidence. Record only outcomes already observed, or explicitly pending steps; keep automation paused and the private Windows/cooperative limits. Do not regenerate an operational receipt, repeat native operations, or create documentation for every intermediate CI/status change."
+        }
+      ],
+      "checks": [
+        "Read the complete recipe and relevant AGENTS, PUBLIC_DEVELOPMENT and DELIVERY_POLICY documentation requirements.",
+        "Released readback precedes acceptance and Done/close; independent Closed/Done readback precedes child aggregate closure. This is consistent with the published lifecycle and does not require a fabricated delay.",
+        "All seventeen actual-main jobs, nine workflows and ten current two-platform SDK artifact reviews remain explicit prerequisites, not inferred from branch or operational success.",
+        "Existing merged ACTUAL_OPERATIONS, complete EVIDENCE, tested RUNBOOK, no-impact release note and lessons already cover the executed operational result and implementation documentation. No missing numerical/API redesign or new standalone acceptance receipt was identified.",
+        "Issue/PR/epic/milestone public evidence must retain exact qualified mains, artifact identities, actual Released and Done readbacks and existing operational/source review links.",
+        "Unknown mutation outcomes require checkpoint/live reconciliation rather than blind repeat. No previous story receipt regeneration is necessary.",
+        "Historical preparation-stage text is not an incorrect live Project state and need not be retroactively rewritten. The requested addition records the new meaningful outcome.",
+        "Private Windows staging is not Linux/remote production staging, whole-platform physical settlement, an administrative action or a new spending/public-exposure grant. SEC-001 remains separate."
+      ],
+      "release_documentation_conclusion": "The operational documentation is substantively complete. The recipe needs the one explicit tracked continuity step above; it does not need a self-referential receipt or recurring metadata qualification loop. Any actual new public documentation change still receives applicable source/documentation review and required publication checks, without relabeling earlier pending jobs or re-executing staging solely to record status.",
+      "limitations": [
+        "This is recipe preparation review only; final-main aggregate gate and remaining artifacts were pending at review. No Released, Done, epic closure or milestone closure is approved by this report.",
+        "No lifecycle mutation, native execution, runbook replay, archive audit, source execution or upstream research performed in this review.",
+        "Existing operational and artifact reviews are referenced by scope, not rerun or regenerated."
+      ],
+      "new_tests": 0,
+      "new_source_reads": 0,
+      "mutations_executed": false
+    }
+  },
+  "corrective_source_original_REWORK": {
+    "raw_receipt": {
+      "bytes": 5885,
+      "sha256": "95081ba4804c88aeb49f42021c702dfe936353fe9d60741124c2aaded1762c57"
+    },
+    "sanitized_report": {
+      "reviewer": "/root/r7_policy_review (separate local Codex reviewer)",
+      "scope": "PREPARED_QUALIFICATION_CORRECTION_SOURCE_DOCS_AND_PURE_API_DOUBLES_ONLY",
+      "disposition": "REWORK_PREPARED_EQ084_QUALIFICATION_CORRECTION_SOURCE",
+      "bases": {
+        "equity-features": "abfa93873682289c81331489b12f0e290167d9a1",
+        "equity-feature-workers": "617f26a3e606f269a442f99a4e9542e0143a8d84"
+      },
+      "prepared_files": {
+        "eq085-features": {
+          "docs/stories/EQ-084_QUALIFICATION_CORRECTION.md": {
+            "bytes": 3539,
+            "sha256": "21892fa626ded08b6721770ac5cb15c7a23207e8c4b1fc0418b63de6ecac0283"
+          },
+          "docs/stories/EQ-084_QUALIFICATION_CORRECTION_EVIDENCE.json": {
+            "bytes": 14581,
+            "sha256": "cdc477f9d502c7c71773a008f890a690881417e04dfd197fc42b98fbc2fcd336"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 449903,
+            "sha256": "b8f144dc2979cfadc752c6f80b2a46e53a9acfb4da847af2ae952d7c4501b043"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 709154,
+            "sha256": "f6a19adcc5aaba206a93d220e9f3a7c4c73572fb6b065216de4ab83c8f3597c4"
+          },
+          "docs/CHANGELOG.md": {
+            "bytes": 88024,
+            "sha256": "80edd3b8bf53aa36d485007991d0a9bb526be3f781c72c35e0e4eaea68b98f8d"
+          }
+        },
+        "eq085-workers": {
+          "docs/EQ084_QUALIFICATION_CORRECTION.md": {
+            "bytes": 3539,
+            "sha256": "21892fa626ded08b6721770ac5cb15c7a23207e8c4b1fc0418b63de6ecac0283"
+          },
+          "docs/EQ084_QUALIFICATION_CORRECTION_EVIDENCE.json": {
+            "bytes": 14581,
+            "sha256": "cdc477f9d502c7c71773a008f890a690881417e04dfd197fc42b98fbc2fcd336"
+          },
+          "docs/PROJECT_KNOWLEDGE.md": {
+            "bytes": 312550,
+            "sha256": "e0a6f548a35538ff955c2415fec7505e5e3a9c2940bb0fddb32538cb3e72c965"
+          },
+          "docs/SESSION_HANDOFF.md": {
+            "bytes": 423688,
+            "sha256": "0b5ec6cc1369bf7e4f6e527ceb5869cb3f0fae5256a707efc5c5c8b5ec17288c"
+          },
+          "tests/pilot_entry.py": {
+            "bytes": 4144,
+            "sha256": "ce714be4bced745cb778406e9e50c80f9800586759cb36afc0a7eb64b104d619"
+          },
+          "tests/test_pilot_entry.py": {
+            "bytes": 6063,
+            "sha256": "64cd0a372e8d4e6bff4588e2ba829f341279270d2a5090029fb80a4da45154e5"
+          },
+          "tests/test_pilot.py": {
+            "bytes": 14336,
+            "sha256": "9ba18b068b2dc4e4304ab8823affd9be12a144a4ca583d9c8261187dd9299387"
+          }
+        }
+      },
+      "findings": [
+        {
+          "priority": 3,
+          "file": "tests/pilot_entry.py",
+          "lines": [
+            46,
+            89,
+            92
+          ],
+          "title": "Diagnostic annotation can mask original or first cleanup failure",
+          "trigger": "An existing original ValueError and an independently caught cleanup OSError whose __str__ raises MemoryError.",
+          "actual_reproduction": "finish_entry_observation raised MemoryError instead of retaining the supplied original ValueError; owner close, communicate and observer close were each attempted.",
+          "reason": "Unguarded str(cleanup/error) and add_note calls occur outside the cleanup-error guards. The acquisition and secondary-cleanup annotation paths use the same pattern.",
+          "correction": "Make notes guarded best effort using bounded static exception-type descriptions; formatting or add_note failure must not replace the original/first cleanup exception object. Add pure failures for cleanup formatting/annotation on acquisition, active-primary finish and no-primary first-cleanup paths. Preserve the original prepared source and full review before correction."
+        }
+      ],
+      "actual_checks": [
+        "All twelve prepared raw UTF8 LF byte/SHA pins match manifest; exact dirty scope five canonical/seven worker paths and exact main bases.",
+        "Two correction documents mirror byte-for-byte; old tracked knowledge/handoff/changelog bytes retained as exact suffixes. Public data excludes raw private user paths and key payloads.",
+        "Full raw failed main log/independent diagnosis preserved in evidence; absence of complete main qualification and In progress rework stated truthfully. No runtime leak cause is inferred.",
+        "All test_pilot methods except named Windows qualification test have unchanged AST. Eight original prelaunch fault phases and controlled job-close/fallback assertions retained.",
+        "Observer acquired inside protected ownership scope before fault; exact PID/creation/original job/live state checked and observer excluded from fallback-owned handles.",
+        "Single original five-second post-cleanup deadline shared by launcher communicate and retained-entry wait; nonfinite, regressing, expired, boolean/unknown wait and STILL_ACTIVE values deny.",
+        "Helper stdlib ctypes structures operate solely on passed API in doubles; no WinDLL, NativeMemory, OwnedProcess or process fixture imported by the executed tests.",
+        "Existing build_foundation snapshots the complete tests directory, so new pilot_entry is available beside installed-source test_pilot; no builder modification needed.",
+        "Pure test_pilot_entry suite executed nine methods successfully in 0.011s, plus one independent diagnostic-formatting defect reproduction. No native tests or original failing case executed."
+      ],
+      "actual_inert_test_methods": 9,
+      "additional_independent_reproductions": 1,
+      "native_operations": 0,
+      "limitations": [
+        "Approval withheld only for the reproduced diagnostic primary-priority defect; current retained-handle measurement design is otherwise supported.",
+        "Current prepared source is uncommitted/unexecuted natively; this report authorizes no publication, native execution, Released or Done.",
+        "No host inventory, native failure reproduction, artifact audit, prior receipt regeneration, staging replay or public mutation performed.",
+        "Source helper/import tests used -I -B with explicit local tests directory; no bytecode writes or product/backend imports."
+      ]
+    }
+  },
+  "guarded_notes_correction": "Original nine pure methods passed and independent malformed-description reproduction replaced primary with MemoryError. Static exception-type best-effort guarded notes now preserve original/first-cleanup object even when diagnostic formatting or add_note fails. Two pure negative methods added; no native invocation."
+}
