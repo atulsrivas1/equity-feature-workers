@@ -72,7 +72,14 @@ def sort_case(root, count, memory, sink):
                     yield batch
             return sort_oracle(batches(), count)
         try:
-            result.update(profile_query(con, statement, [count, count], root / 'profile.json', consume))
+            if sink:
+                start_query = time.perf_counter_ns()
+                result['verified'] = consume(con.execute(statement, [count, count]))
+                result['elapsed_ns'] = time.perf_counter_ns() - start_query
+                result['profile'] = None
+                result['profiling_capability'] = 'unsupported-under-unchanged-sink-policy-after-controls'
+            else:
+                result.update(profile_query(con, statement, [count, count], root / 'profile.json', consume))
             result['status'] = 'completed'
         except duckdb.OutOfMemoryException:
             result['status'] = 'capacity_denied'

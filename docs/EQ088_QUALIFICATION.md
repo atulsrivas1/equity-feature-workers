@@ -61,3 +61,60 @@ Second changed-source native smoke7e2a57d FAILED aftersame2references/2smallcase
 ```
 
 Before any capability execution, separate source advice expands the original unexecuted3-control proposal to fixed6independent16-ID children: sink/source-policy × no-profile/JSON with identical hash SQL/parameters/fetch/oracle, plus sink integer-sort no-profile/JSON. Source control128MiB matches sink memory to reduce confounding; source temp512MiB/external access still differs and cannot alone prove one setting is causal. Each child15seconds plus existing owned cleanup; phases recorded privately before/after execute/fetch/EOF/connection close. New roots, no adaptive extra cases or unchanged512 rerun. No capability result yet; exact pre-execution review required.
+
+Actual6-control native run at a88b43f completed: sink/source unprofiled hash, source profiled hash and sink unprofiled integer all verified complete16-ID results; sink profiled hash and integer both InternalException at fetching. Every connectionclose returned, nativeowned observer completed. This establishes association with profiled sink policy, not a causal proof of one setting or an upstream bug diagnosis. No production configuration/dependency relaxation. Capability reportSHA256 03c4bc1b94550ae657819457f4e78383608aea7c02b3e18cbe213313818efce5.
+
+```json
+[
+  {
+    "index": 0,
+    "sink": true,
+    "profiled": false,
+    "hashes": true,
+    "status": "completed",
+    "error_type": null
+  },
+  {
+    "index": 1,
+    "sink": true,
+    "profiled": true,
+    "hashes": true,
+    "status": "failed",
+    "error_type": "InternalException"
+  },
+  {
+    "index": 2,
+    "sink": false,
+    "profiled": false,
+    "hashes": true,
+    "status": "completed",
+    "error_type": null
+  },
+  {
+    "index": 3,
+    "sink": false,
+    "profiled": true,
+    "hashes": true,
+    "status": "completed",
+    "error_type": null
+  },
+  {
+    "index": 4,
+    "sink": true,
+    "profiled": false,
+    "hashes": false,
+    "status": "completed",
+    "error_type": null
+  },
+  {
+    "index": 5,
+    "sink": true,
+    "profiled": true,
+    "hashes": false,
+    "status": "failed",
+    "error_type": "InternalException"
+  }
+]
+```
+
+Corrective qualification runs sink sorts UNPROFILED under exact originalCONFIG, marks native peak-temp profiling unsupported/null and retains elapsed/RSS/current scratch inventory plus full ID/payload/order oracle. Source profiled32MB/256MB positive spill/nonspill control remains required and unchanged. No missingcounter becomes0/PASS. Sixcontrol driver supported launch is trusted parent `python -B tools/probe_scaling_capability.py`; actual child -I remains; unsupported parent-I --help bootstrap failure was source-only before native, preserved in review05fe69ff. Renew exact corrective/evidence review before new smoke/fullprotocol.
