@@ -15,6 +15,43 @@ sys.path.insert(0, str(ROOT / 'tests/resilience'))
 sys.path.insert(0, str(ROOT / 'tools'))
 from certificate_pins import read_pins
 from build_resilience import safe_relative, wheel_archive_record
+from run_qualification import case_failure_summary
+
+
+class FailureDiagnostics(unittest.TestCase):
+    def test_stderr_without_nonzero_exit_and_private_payload_are_distinct(self):
+        private = b'PRIVATE_SYNTHETIC_TOKEN=C:\\private\\key.pem\nsecret fixture value'
+        actual = case_failure_summary('EQ083_STATE_PROBE.txt', 0, private, private)
+        self.assertEqual(actual, dict(case_group='STATE', exit_code=0,
+            nonzero_exit=False, stderr_present=True, stdout_over_limit=False))
+        self.assertNotIn('PRIVATE_SYNTHETIC', json.dumps(actual))
+        self.assertNotIn('key.pem', json.dumps(actual))
+
+    def test_windows_unsigned_exit_and_output_bound_have_independent_flags(self):
+        self.assertEqual(case_failure_summary('EQ083_REFERENCE_FAULT_PROBE.txt',
+            3221225477, b'', b''), dict(case_group='REFERENCE_FAULT',
+            exit_code=3221225477, nonzero_exit=True, stderr_present=False,
+            stdout_over_limit=False))
+        at_limit = case_failure_summary('EQ083_REMAINING_PROBE_CORRECTIVE.txt',
+                                       -1, b'x' * 262144, b'')
+        self.assertFalse(at_limit['stdout_over_limit'])
+        over_limit = case_failure_summary('EQ083_REMAINING_PROBE_CORRECTIVE.txt',
+                                         -1, b'x' * 262145, b'')
+        self.assertEqual(over_limit, dict(case_group='REMAINING', exit_code=-1,
+            nonzero_exit=True, stderr_present=False, stdout_over_limit=True))
+
+    def test_unknown_case_paths_and_wrong_scalar_types_never_echo_arguments(self):
+        values = [('C:\\private\\EQ083_STATE_PROBE.txt', 1, b'', b''),
+                  ('EQ083_STATE_PROBE.txt\nPRIVATE', 1, b'', b''),
+                  ('EQ083_STATE_PROBE.txt', True, b'', b''),
+                  ('EQ083_STATE_PROBE.txt', 2 ** 32, b'', b''),
+                  ('EQ083_STATE_PROBE.txt', -(2 ** 31) - 1, b'', b''),
+                  ('EQ083_STATE_PROBE.txt', 1, 'PRIVATE', b''),
+                  ('EQ083_STATE_PROBE.txt', 1, b'', bytearray(b'PRIVATE'))]
+        for args in values:
+            with self.subTest(types=tuple(type(v).__name__ for v in args)):
+                with self.assertRaisesRegex(ValueError, '^owned failure summary arguments$'):
+                    case_failure_summary(*args)
 
 
 class CertificateInventory(unittest.TestCase):

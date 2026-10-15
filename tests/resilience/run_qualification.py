@@ -8,6 +8,31 @@ import subprocess
 import sys
 
 
+_CASE_LABELS = {
+    'EQ083_CERTIFICATE_HELPER.txt': 'CERTIFICATE',
+    'EQ083_R07_PROBE.txt': 'R07',
+    'EQ083_AUTHORITY_PROBE.txt': 'AUTHORITY',
+    'EQ083_STATE_PROBE.txt': 'STATE',
+    'EQ083_EPOCH_PROBE.txt': 'EPOCH',
+    'EQ083_UNKNOWN_PROBE.txt': 'UNKNOWN',
+    'EQ083_VERSION_PROBE.txt': 'VERSION',
+    'EQ083_REFERENCE_FAULT_PROBE.txt': 'REFERENCE_FAULT',
+    'EQ083_TLS_PROBE.txt': 'TLS',
+    'EQ083_REMAINING_PROBE_CORRECTIVE.txt': 'REMAINING',
+}
+
+
+def case_failure_summary(case, returncode, stdout, stderr):
+    """Closed synthetic-case metadata only; never echo private output or paths."""
+    if (type(case) is not str or case not in _CASE_LABELS
+            or type(returncode) is not int or not -(2 ** 31) <= returncode < 2 ** 32
+            or type(stdout) is not bytes or type(stderr) is not bytes):
+        raise ValueError('owned failure summary arguments')
+    return dict(case_group=_CASE_LABELS[case], exit_code=returncode,
+                nonzero_exit=returncode != 0, stderr_present=bool(stderr),
+                stdout_over_limit=len(stdout) > 262144)
+
+
 def main():
     if len(sys.argv) != 3 or not sys.flags.isolated or sys.platform not in ('win32', 'linux'):
         raise ValueError('owned qualification runner arguments')
@@ -70,7 +95,9 @@ def main():
         if returncode != 0 or stderr or len(stdout) > 262144:
             (root / 'FAILED.json').write_text(json.dumps(dict(stage='case', case=path.name,
                 exit_code=returncode, cleanup='NOT_INFERRED_FROM_FAILED_RUN')), encoding='utf-8')
-            raise ValueError('owned qualification case failed')
+            summary = case_failure_summary(path.name, returncode, stdout, stderr)
+            raise ValueError('owned qualification case failed; diagnostic=' +
+                             json.dumps(summary, sort_keys=True, separators=(',', ':')))
         lines = stdout.splitlines()
         if not lines or any(not line for line in lines):
             raise ValueError('owned qualification report framing')
