@@ -42,6 +42,11 @@
       "first_rows": 2048,
       "other_rows": 32,
       "total_rows": 2528
+    },
+    "capacity": {
+      "instruments": 64,
+      "rows_each": 256,
+      "total_rows": 16384
     }
   },
   "source_ledger": {
