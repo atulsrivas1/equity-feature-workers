@@ -46,7 +46,7 @@ from importlib.metadata import distributions
 base=Path(sys.prefix).resolve();out={}
 for dist in distributions():
  names=tuple(dist.files or ())
- record=tuple(n for n in names if n.name=='RECORD' and '.dist-info' in n.as_posix())
+ record=tuple(n for n in names if len(n.parts)==2 and n.parts[0].endswith('.dist-info') and n.parts[1]=='RECORD')
  assert len(record)==1
  record_name=record[0].as_posix()
  record_path=Path(dist.locate_file(record[0])).resolve()
@@ -84,8 +84,11 @@ def installed_matches_archives(mapping,archives,auditor):
                 actual[relative]=digest
     for archive in archives:
         assert archive.suffix=='.whl'
-        for name,data in auditor.contents(archive).items():
-            if name.endswith('.dist-info/RECORD'):continue
+        files=auditor.contents(archive)
+        records=tuple(name for name in files if name.count('/')==1 and name.split('/')[0].endswith('.dist-info') and name.endswith('/RECORD'))
+        assert len(records)==1
+        for name,data in files.items():
+            if name==records[0]:continue
             assert '.data/' not in name,'unselected relocated wheel payload'
             assert actual.get(name)==hashlib.sha256(data).hexdigest(),name
 

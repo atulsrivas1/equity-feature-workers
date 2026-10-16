@@ -120,5 +120,48 @@
     },
     "qualified": false,
     "acceptance": false
+  },
+  "record_selector_correction": {
+    "status": "second_author_failed_owning_record_selector_rework",
+    "execution": {
+      "source_publication_sha256": "92f3325657c834e9f5b80f83acea72ba719961b9cea8eb4e5b26c42cb6311160",
+      "started": true,
+      "finished": true,
+      "qualified": false,
+      "new_output": "dist/mcp-evidence-author-corrective",
+      "exit_code": 1,
+      "raw_log_sha256": "ede28e11a3fa02466251274623aa234973aaac4b0bbb63d90873a3e21d62333f",
+      "failure_scope": "Actual failed author qualification; retain new output/work roots/raw log, do not rerun unchanged or infer completed cleanup."
+    },
+    "failure_comment": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6208185534",
+    "retained_roots": [
+      "dist/mcp-evidence-author-corrective",
+      "work/eq108-build-5u00xjh1",
+      "work/eq108-wheel-default-eacr9auq"
+    ],
+    "diagnostic": {
+      "file": "eq108-closure-record-selector-reviewer-diagnostic.json",
+      "sha256": "26492122d507c8ea0ea04dfcc53e39e499fe0dd4aa20baf9cea1d0a7291dad18",
+      "reviewer": "/root/r10_review",
+      "scope": "Read-only retained CSV/payload audit, not interpreter/native execution"
+    },
+    "correction": {
+      "unique_owning_top_level_RECORD": true,
+      "vendored_RECORD_payloads_remain_hashed": true,
+      "executed": false
+    },
+    "qualified": false,
+    "acceptance": false,
+    "prior_corrective_reviews": {
+      "eq108-corrective-packaging-source-reviewer-report.json": "53758e0fcc3e455a663595f0422e91b691e3ef5bb5bcaca4e8ef7cb93fa2f47a",
+      "eq108-corrective-tooling-reviewer-report.json": "0bbe217eae7bc9efc25fea6e921a6852f97ca134d77a98f3067786a284e81c7c",
+      "eq108-corrective-publication-readback-reviewer-report.json": "586adcf30f81309d7aa661a321125bdc2a11989ea5519bea2f1c72147c51c69a"
+    },
+    "collector_initial_review": {
+      "file": "eq108-collector-reviewer-report.json",
+      "sha256": "a72953d3c2b62b944b99a597f51e91fe7a43ac5cc74f2cd34bfdd135c5189f8f",
+      "findings_open": true,
+      "executed": false
+    }
   }
 }
