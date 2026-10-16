@@ -74,6 +74,36 @@ def settle_entry(kernel, entry, deadline, clock=time.monotonic):
     return int(status.value)
 
 
+def settle_entry_then_drain(kernel, process, entry, deadline, clock=time.monotonic):
+    """Observe forced exit before communicate can close the fixture's stdin."""
+    phase = 'retained entry'
+    previous = None
+    def observed_clock():
+        nonlocal previous
+        value = clock()
+        if type(value) not in (int, float) or not math.isfinite(value) or (previous is not None and value < previous):
+            raise OSError('owned settlement clock invalid')
+        previous = value
+        return value
+    try:
+        status = settle_entry(kernel, entry, deadline, clock=observed_clock)
+        phase = 'launcher drain'
+        before = observed_clock()
+        if type(before) not in (int, float) or not math.isfinite(before) or not 0 <= deadline - before <= 5:
+            raise OSError('owned launcher drain deadline expired')
+        process.communicate(timeout=deadline - before)
+        after = observed_clock()
+        if type(after) not in (int, float) or not math.isfinite(after) or not before <= after <= deadline:
+            raise OSError('owned launcher drain deadline expired')
+        return status
+    except BaseException as error:
+        try:
+            error.add_note('owned qualification settlement phase: ' + phase)
+        except BaseException:
+            pass  # Preserve the original observation or drain failure.
+        raise
+
+
 def finish_entry_observation(owner, process, entry, primary):
     """Attempt each owned cleanup independently without replacing the first failure."""
     errors = []
