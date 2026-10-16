@@ -1,0 +1,15 @@
+{
+  "discovery_bytes": 65103,
+  "discovery_limit": 65536,
+  "tool_count": 12,
+  "structured_worst_escaped_bytes": 9454,
+  "structured_limit": 16384,
+  "duplicated_worst_escaped_frame_bytes": 27696,
+  "frame_limit": 65536,
+  "measurement": "stdlib_JSON_only_conservative_schema_lengths_no_runtime_claim",
+  "old_seven_sha256": "7875895f267b37ec922cae31eca8c3aa6cc773ecbcdf3ce01e6ac615460fd47a",
+  "includes_frame_LF": true,
+  "request_ID": "64backslashes_worstlegalescaped",
+  "chunk_alphabet": "printableASCII32through126_allfourcompactpublicencodings",
+  "upper_bound_note": "Conservative independent maxima; quality counts deliberately overapproximate reachable simultaneous values. Runtime enforces exact semantic counts and chunk offsets."
+}

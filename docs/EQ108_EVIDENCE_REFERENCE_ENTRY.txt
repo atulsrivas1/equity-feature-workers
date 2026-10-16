@@ -1,0 +1,77 @@
+"""Trusted installed EQ108 preparation entry; not a public loader. UNEXECUTED."""
+import hashlib,json,os,re,sys,time
+from pathlib import Path
+if not sys.flags.isolated or len(sys.argv)!=10:raise ValueError('owned isolated arguments')
+origin,fixture,principal,marker,case,mode,closed,config_file,config_sha=sys.argv[1:]
+if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535:raise ValueError('owned origin')
+if principal!='A' or case!='trades' or mode not in ('enabled','uncatalogued','disabled'):raise ValueError('owned case')
+if any(len(v)>1024 for v in (fixture,marker,closed,config_file)):raise ValueError('owned paths')
+root=Path(fixture).resolve().parents[1]
+if Path(fixture).resolve()!=root/'docs/EQ081_CLIENT_FIXTURES.json' or Path(config_file).resolve()!=root/'tests/service/fixtures/jobs_native.json':raise ValueError('owned fixture location')
+def fixed(path,limit,digest):
+ with Path(path).open('rb') as stream:raw=stream.read(limit+1)
+ if len(raw)>limit or hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('owned fixture digest')
+ return json.loads(raw)
+raw=fixed(fixture,76771,'9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29')['native_cases'][0]
+if not re.fullmatch('[0-9a-f]{64}',config_sha):raise ValueError('owned config pin')
+config_value=next(v for v in fixed(config_file,262144,config_sha)['fixtures'] if v['family']=='trades')['native_spec']['config']
+from equity_feature_client import RemoteClient,ProducerExpectation,ScopeKey,FeatureRef,JobExpectation
+from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration
+import equity_feature_client,equity_feature_mcp
+if any('site-packages' not in Path(v.__file__).resolve().parts for v in (equity_feature_client,equity_feature_mcp)):raise ValueError('owned installed modules')
+producer=raw['complete_producer_payload']
+expected=ProducerExpectation(producer['context'],ScopeKey('A','S',100,200),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])
+profile=MCPProfile('synthetic-owner',(),(CommandRegistration('cmd',expected),),60)
+calls=0
+def credentials():
+ global calls
+ calls+=1
+ if calls>64:raise ValueError('owned provider cap')
+ return 'A'*43
+client=RemoteClient(origin,credentials,attempts=1,budget=5)
+server=None
+def publish(path,value,limit):
+ p=Path(path)
+ if p.exists() or p.with_name(p.name+'.complete').exists():raise ValueError('owned immutable marker')
+ data=json.dumps(value,sort_keys=True,separators=(',',':')).encode('ascii')
+ if len(data)>limit:raise ValueError('owned marker bytes')
+ pending=p.with_name(p.name+'.pending')
+ with pending.open('xb') as stream:stream.write(data)
+ pending.replace(p);p.with_name(p.name+'.complete').mkdir()
+try:
+ catalog=None
+ if mode!='disabled':
+  from equity_feature_client.native import convert_result
+  from equity_feature_contracts import ConfigSpec,EntityKey
+  from equity_feature_evidence import ContentFingerprint,EnvironmentDeclaration,EvidenceDisclosure,ExecutionClaim,FormulaBinding,InputFingerprint,PackageVersion,fingerprint_config,fingerprint_result,make_receipt
+  from equity_feature_explanations import explain_result
+  from equity_feature_diagnostics import DiagnosticReport,DiagnosticPolicy,DecisionContext,CheckFinding
+  from equity_feature_mcp.evidence import EvidenceCatalog,EvidenceRegistration,DiagnosticAssociation
+  cfg=ConfigSpec.from_json(json.dumps(config_value))
+  admitted=client.calculate(expected,'eq108-static-seed',request_id='owner-seed')
+  if not admitted.ok:raise ValueError('owned seed')
+  job=admitted.view.payload_json();identity=JobExpectation(job['job_id'],expected.command_digest)
+  for _ in range(20):
+   outcome=client.job_status(identity,request_id='owner-status')
+   if not outcome.ok:raise ValueError('owned seed status')
+   job=outcome.view.payload_json()
+   if job['state']=='succeeded':break
+   time.sleep(.02)
+  if job['state']!='succeeded':raise ValueError('owned seed incomplete')
+  original=client.result_read(job['result_id'],expected,request_id='owner-result')
+  if not original.ok or original.view.payload_json()!=producer:raise ValueError('owned producer parity')
+  converted=convert_result(original.view,expected,config=cfg)
+  if not converted.ok:raise ValueError('owned conversion')
+  result=converted.view
+  receipt=make_receipt(result,configuration=fingerprint_config(cfg),inputs=tuple(InputFingerprint(b.role,b.metadata.source.input_id,ContentFingerprint('canonical_batch','0'*64,0)) for b in result.metadata.inputs),output=fingerprint_result(result),formulas=tuple(FormulaBinding(v.feature_id,v.algorithm_version) for v in result.values),environment=EnvironmentDeclaration('CPython','3.12','synthetic-owner',(PackageVersion('equity-feature-contracts','0.0.4a4'),)),execution=ExecutionClaim(),evidence=EvidenceDisclosure('not_supplied',0))
+  explanation=explain_result(result,receipt,cfg,entity=EntityKey('A','S'),feature_id='session.trade.volume')
+  report=DiagnosticReport(DecisionContext('demo',EntityKey('A','S'),result.metadata.availability),DiagnosticPolicy('synthetic-advisory','advisory','deny'),(CheckFinding('observation','synthetic-output','freshness',receipt.output,'unknown','warning',('missing_observation',),False,1,None),))
+  entry=EvidenceRegistration('cmd',job['job_id'],job['result_id'],original.view,cfg,receipt=receipt,explanation=explanation,diagnostics=report,associations=(DiagnosticAssociation('observation','output'),),report_sharing_authorized=True)
+  catalog=EvidenceCatalog(profile,(entry,))
+ server=StdioServer(client,profile,evidence=catalog)
+ publish(marker,dict(pid=os.getpid(),mode=mode,prepare_calls=calls,catalog_sha256=None if catalog is None else catalog.snapshot_sha256,seed_job=None if catalog is None else job['job_id'],seed_result=None if catalog is None else job['result_id']),512)
+ server.run_stdio(sys.stdin.buffer,sys.stdout.buffer)
+finally:
+ if server is not None:server.close()
+ else:client.close()
+ publish(closed,dict(provider_calls=calls,client_closed=client._closed,server_closed=None if server is None else server._closed),128)

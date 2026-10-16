@@ -1,0 +1,412 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "representation": {
+      "const": "equity.mcp.diagnostics.v1"
+    },
+    "schema_version": {
+      "const": "1"
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "namespace": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "entity": {
+              "type": "object",
+              "properties": {
+                "instrument_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "session_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                }
+              },
+              "required": [
+                "instrument_id",
+                "session_id"
+              ],
+              "additionalProperties": false
+            },
+            "availability": {
+              "type": "object",
+              "properties": {
+                "market_cutoff_ns": {
+                  "type": "string",
+                  "pattern": "^-?(0|[1-9][0-9]{0,18})$"
+                },
+                "knowledge_cutoff_ns": {
+                  "type": "string",
+                  "pattern": "^-?(0|[1-9][0-9]{0,18})$"
+                },
+                "evaluation_ns": {
+                  "type": "string",
+                  "pattern": "^-?(0|[1-9][0-9]{0,18})$"
+                },
+                "mode": {
+                  "const": "known_at"
+                },
+                "reconstruction_reason": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "market_cutoff_ns",
+                "knowledge_cutoff_ns",
+                "evaluation_ns",
+                "mode",
+                "reconstruction_reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "namespace",
+            "entity",
+            "availability"
+          ],
+          "additionalProperties": false
+        },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "policy_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "mode": {
+              "enum": [
+                "advisory",
+                "strict"
+              ]
+            },
+            "unknown_action": {
+              "enum": [
+                "allow",
+                "deny"
+              ]
+            }
+          },
+          "required": [
+            "policy_id",
+            "mode",
+            "unknown_action"
+          ],
+          "additionalProperties": false
+        },
+        "findings": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "type": "object",
+            "properties": {
+              "check_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "subject_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "kind": {
+                "enum": [
+                  "adjustment",
+                  "declared_context",
+                  "freshness",
+                  "knowledge_time",
+                  "market_time",
+                  "membership",
+                  "revision"
+                ]
+              },
+              "content": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "domain": {
+                        "enum": [
+                          "configuration",
+                          "feature_result",
+                          "canonical_batch"
+                        ]
+                      },
+                      "digest": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "byte_length": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]{0,19})$"
+                      },
+                      "schema_version": {
+                        "const": "1"
+                      },
+                      "canonicalization": {
+                        "const": "typed-json-v1"
+                      },
+                      "algorithm": {
+                        "const": "sha256"
+                      }
+                    },
+                    "required": [
+                      "domain",
+                      "digest",
+                      "byte_length",
+                      "schema_version",
+                      "canonicalization",
+                      "algorithm"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "unknown"
+                ]
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "error",
+                  "warning"
+                ]
+              },
+              "reasons": {
+                "type": "array",
+                "maxItems": 32,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "market_bound",
+                    "missing_market_fact",
+                    "late_knowledge",
+                    "missing_knowledge",
+                    "market_cutoff_mismatch",
+                    "knowledge_cutoff_mismatch",
+                    "evaluation_mismatch",
+                    "reconstruction_context",
+                    "missing_context",
+                    "future_effective_query",
+                    "membership_absent",
+                    "membership_scope_mismatch",
+                    "ambiguous_membership",
+                    "missing_reference",
+                    "incomplete_reference",
+                    "incomplete_projection",
+                    "historical_proof_unknown",
+                    "missing_membership_text",
+                    "revision_mismatch",
+                    "missing_revision_identity",
+                    "missing_effective_start",
+                    "outside_effective_interval",
+                    "adjustment_mismatch",
+                    "missing_adjustment",
+                    "future_observation",
+                    "stale_observation",
+                    "missing_observation",
+                    "missing_session"
+                  ]
+                }
+              },
+              "assessed": {
+                "type": "boolean"
+              },
+              "unknown_prerequisites": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,19})$"
+              },
+              "age_ns": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,19})$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "check_id",
+              "subject_id",
+              "kind",
+              "content",
+              "status",
+              "severity",
+              "reasons",
+              "assessed",
+              "unknown_prerequisites",
+              "age_ns"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "requested_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "passed_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "failed_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "unknown_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "assessed_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "unknown_prerequisite_count": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,21})$"
+        },
+        "not_requested": {
+          "type": "array",
+          "maxItems": 7,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "adjustment",
+              "declared_context",
+              "freshness",
+              "knowledge_time",
+              "market_time",
+              "membership",
+              "revision"
+            ]
+          }
+        },
+        "admission": {
+          "enum": [
+            "not_applied",
+            "admitted",
+            "denied"
+          ]
+        },
+        "source_authenticated": {
+          "const": false
+        },
+        "historical_acquisition_verified": {
+          "const": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "context",
+        "policy",
+        "findings",
+        "requested_count",
+        "passed_count",
+        "failed_count",
+        "unknown_count",
+        "assessed_count",
+        "unknown_prerequisite_count",
+        "not_requested",
+        "admission",
+        "source_authenticated",
+        "historical_acquisition_verified"
+      ],
+      "additionalProperties": false
+    },
+    "associations": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "properties": {
+          "check_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "role": {
+            "enum": [
+              "configuration",
+              "output",
+              "input"
+            ]
+          },
+          "input_role": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "input_id": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "check_id",
+          "role",
+          "input_role",
+          "input_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "input_content_verified": {
+      "const": false
+    }
+  },
+  "required": [
+    "representation",
+    "schema_version",
+    "report",
+    "associations",
+    "input_content_verified"
+  ],
+  "additionalProperties": false,
+  "$comment": "Decimal strings preserve public int64/uint64 and aggregate prerequisite totals; exact public semantic bounds/counts/context/association validation is mandatory in addition to schema."
+}

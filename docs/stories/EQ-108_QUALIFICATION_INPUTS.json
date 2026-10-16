@@ -1,0 +1,173 @@
+{
+  "schema": "eq108.qualification.preparation.v1",
+  "status": "FINAL_CORRECTED_SOURCE_UNEXECUTED_REVIEW_PENDING",
+  "source_reviews": {
+    "eq108-corrected-working-source-reviewer-report.json": "97f3acaf057d8af9cae79fcb86b90790ee3307f2326f79bdf17cedfc3e69c3b9",
+    "eq108-literal-seed-source-reviewer-report.json": "bd2487368661ee9fd4bc7d4622e3ba57e81cb2f05121dc1fe21e658bf7489a3f"
+  },
+  "post_review_changes": [
+    "Fixed literal optional imports through fixed public importlib paths so default no-extra strict typing can resolve the base API.",
+    "Test reads packaged diagnostics schema with importlib.resources; copied test sources are never rewritten."
+  ],
+  "forms": [
+    "wheel-default",
+    "sdist-default",
+    "wheel-evidence",
+    "sdist-evidence"
+  ],
+  "scenarios": [
+    "enabled",
+    "uncatalogued",
+    "disabled"
+  ],
+  "source_scope": "Official ClientSession with owned bounded pipe transport, not SDK stdio process launcher; Windows atomic pre-resume job owns redirector+entry, Linux retained direct child only.",
+  "operation_ledger": {
+    "owner_seed": "enabled/uncatalogued calculate1 + status1..20 + result_read1; disabled0; exact prepare_calls in closed marker",
+    "client": "capabilities1 + calculate1 (enabled/disabled same-key; uncatalogued distinct-key job2) + status1..20 + result_summary1 + artifact_reference1 + four first evidence reads4 + exactly one artifact_read per remaining chunk + successful cached/missing receipt1 + actual denial receipt1 (one-job TTL403; two-job retirement401) + linkedtombstone0 backend sends",
+    "authority": "Unchanged audited native owner: enabled/default one-job ttl_before/ttl_exact ACKreads1 then403; two-jobuncatalogued retire ACKreads2 then401; each linkedtombstone0 provider calls. No new native owner API or replay.",
+    "accounting": "child provider_calls exactly prepare_calls + counted SDK native requests; official ClientSession init/list/notifications and local tombstone have no backend send",
+    "original_producer": "Complete fixed producer/rawSHA/nativeSDK SHA preserved; enabled/disabled source1; distinct uncatalogued source2 and distinct native job/result IDs; no replay.",
+    "report_parity": "expected_reports.py uses accepted public pure APIs independently from entry/catalog; all assembled report bytes, descriptors, full literal five-row quality summary, associations and flags must equal expected; canonical MCP text equality required."
+  },
+  "budgets": {
+    "reference_entry_bytes": 8192,
+    "ready_bytes": 512,
+    "closed_bytes": 128,
+    "provider_calls": 64,
+    "stdout_total_bytes": 1048576,
+    "stdout_frame_bytes": 65536,
+    "stderr_bytes": 4096,
+    "reader_queue_frames": 4,
+    "input_frame_bytes": 16384,
+    "marker_wait_seconds": 8,
+    "SDK_read_seconds": 8,
+    "exit_wait_seconds": 4,
+    "reader_join_seconds": 4,
+    "outer_qualification_process_seconds": 240
+  },
+  "failure_scope": "Fixed owned reference and native fixture only. No generic hard callback/DNS/kernel/filesystem deadline, all-descendant Linux guarantee, secure erase or complete-host provenance. Failed new work roots/logs retained; cleanup unknown fails qualification.",
+  "build": "Committed Git source only; full selected sdist including generated metadata materialized and repeated, per-member/source/metadata/license/RECORD audit, four distinct fresh installs, raw logs and all registered installed distribution file hashes including extension libraries. Exact declared dependency pins retained; observed CPython/platform is not full stdlib/kernel/host proof.",
+  "qualifications_executed": false,
+  "runtime_pushed": false,
+  "prepared_source_map": {
+    "docs/EQ108_EVIDENCE_REFERENCE_ENTRY.txt": "b911c98d7a73158fd233422d045e940543fba0188bfed1bb5dc8d019121058c5",
+    "docs/EQ108_EVIDENCE_REFERENCE_PROBE.txt": "355ebe876e41a3e3cddc0d95af84879309c50c4bda1f99762baaa041dd2c53ad",
+    "docs/EQ108_LEGACY_REFERENCE_PROBE.txt": "8b47565e73a22cc3c5f1870a64598e4d622743deea3e2891d447041d5fb42bd6",
+    "tools/build_mcp_evidence.py": "72047d2a867ea0b9dff7112a04111d8799e97680e198167b1f4f81adc3328988",
+    ".github/workflows/mcp.yml": "462123dce167c15d66180fd2805280bf05111111539ff0173379d08f9c166128",
+    ".github/workflows/resilience.yml": "ebebde924857582083cf8a26b23d0480c2ea7a0f867a71d56aa819b7d8536ae5",
+    "tests/mcp_evidence/expected_reports.py": "e497ee03c5ccecdf6b465de2b94318fb40b86d6b609b9861699a741becef2514",
+    "packages/mcp/pyproject.toml": "6c07c43d7e161c55a8c0e78dc1972c9fb1b5a8f4005d3add068ae7641e972179"
+  },
+  "initial_preexecution_reviews": {
+    "eq108-source-and-composition-preexecution-reviewer-report.json": "c5e672d12106dcea5e0b4b1732cc69faeed1d87fbb0480260dc91ec32cfddb67",
+    "eq108-qualification-tooling-reviewer-report.json": "b031c3dc710b5841b725d9977e5685713e895b83d83447b7f54da6d229ac03a5"
+  },
+  "author_corrections": [
+    "EQ108-COMP01: parent independently constructs complete expected reports with accepted public APIs/frozen producer/config; compares all assembled bytes/descriptors/quality/flags/associations and exact canonical MCP text.",
+    "EQ108-QUAL01: advisory diagnostic admission is not_applied, not denied; preserve policy.",
+    "EQ108-QUAL02: new MCP package metadata declares its public Repository URL; accepted inspector unchanged.",
+    "EQ108-QUAL03: uncatalogued keeps seeded catalog job1, performs distinct-key job2, proves distinct IDs and not_supplied; source2 measured separately.",
+    "EQ108-QUAL04: readiness refuses at/beyond deadline before and after read, and refuses exited child; inert controls cover timing/errors.",
+    "EQ108-QUAL05: validate all installed RECORD membership/unique rows/digests/sizes/self/unhashed pyc/containment; selected original wheel files compare to actual installed maps."
+  ],
+  "legacy_R7_baseline": {
+    "commit": "6538f21b441c8527b465899b98cfd0476e7af08a",
+    "workflow": "resilience.yml",
+    "current_MCP_composition": false,
+    "rationale": "Frozen R7 manifests/auditor qualify immutable accepted MCP0.1.0a0; explicit baseline job/artifact/receipt commit preserves source attribution. New current-head mcp.yml owns EQ1080.1.0a1 composition; baseline cannot substitute for it."
+  },
+  "inert_controls": {
+    "file": "eq108-inert-qualification-controls.json",
+    "sha256": "560b9d3841d3130751dae7b3861a27c4b29526d0d6e751e054c91b31106c1ab6",
+    "passed": 16,
+    "new_native_operations": 0
+  },
+  "second_preexecution_reviews": {
+    "eq108-corrected-composition-source-reviewer-report.json": "0724d496da718ac39528c043d1a5ef0d6f9eb82f5b4d4e0f8a4347d94808d60d",
+    "eq108-corrected-qualification-tooling-reviewer-report.json": "106aa53d09bc24fa33289678fb4ac7f8461afd807f83a59406d3611e6205be2f"
+  },
+  "publication_controller_sha256": "84d369ebe963f3008efbf236d8ce470a4d372e71060431619c540ec5f63e5d3a",
+  "author_controller_sha256": "245cf2706cacfa5ad0e10262d8fa00377544dc649c7434cbfeaf8f00dd986cb9",
+  "corrective_build_input": {
+    "status": "actual_first_author_build_failed_corrective_source_pending_review",
+    "failure": {
+      "source_publication_sha256": "4c7cafae7e6a985efc8f78b05be408a768757f798e22bc1aae00d2b3564be571",
+      "started": true,
+      "finished": true,
+      "qualified": false,
+      "new_output": "dist/mcp-evidence-author-first",
+      "exit_code": 1,
+      "raw_log_sha256": "01bdcce5bbf1330f996ae96b4724a638c6167eae69a5790866acf172db1b3f6d",
+      "failure_scope": "Actual failed author qualification; retain new output/work roots/raw log, do not rerun unchanged or infer completed cleanup."
+    },
+    "failure_comment": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6208034992",
+    "retained_roots": [
+      "dist/mcp-evidence-author-first",
+      "work/eq108-build-zwsz_ss8"
+    ],
+    "diagnostic": {
+      "reviewer": "/root/r9_plan_review",
+      "file": "eq108-selected-sdist-failure-reviewer-diagnostic.json",
+      "sha256": "de9c74c20d8c92f44c49084e8e1c2e5862a67d86fca959a5bd504644d8aaf3ce",
+      "scope": "Read-only first/repeat archive/member diagnosis; no installed/native execution"
+    },
+    "correction": {
+      "tracked_input": "packages/mcp/setup.cfg",
+      "strict_whole_archive_repeat_equality": true,
+      "generated_metadata_audit": true,
+      "executed": false
+    },
+    "qualified": false,
+    "acceptance": false
+  },
+  "record_selector_correction": {
+    "status": "second_author_failed_owning_record_selector_rework",
+    "execution": {
+      "source_publication_sha256": "92f3325657c834e9f5b80f83acea72ba719961b9cea8eb4e5b26c42cb6311160",
+      "started": true,
+      "finished": true,
+      "qualified": false,
+      "new_output": "dist/mcp-evidence-author-corrective",
+      "exit_code": 1,
+      "raw_log_sha256": "ede28e11a3fa02466251274623aa234973aaac4b0bbb63d90873a3e21d62333f",
+      "failure_scope": "Actual failed author qualification; retain new output/work roots/raw log, do not rerun unchanged or infer completed cleanup."
+    },
+    "failure_comment": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6208185534",
+    "retained_roots": [
+      "dist/mcp-evidence-author-corrective",
+      "work/eq108-build-5u00xjh1",
+      "work/eq108-wheel-default-eacr9auq"
+    ],
+    "diagnostic": {
+      "file": "eq108-closure-record-selector-reviewer-diagnostic.json",
+      "sha256": "26492122d507c8ea0ea04dfcc53e39e499fe0dd4aa20baf9cea1d0a7291dad18",
+      "reviewer": "/root/r10_review",
+      "scope": "Read-only retained CSV/payload audit, not interpreter/native execution"
+    },
+    "correction": {
+      "unique_owning_top_level_RECORD": true,
+      "vendored_RECORD_payloads_remain_hashed": true,
+      "executed": false
+    },
+    "qualified": false,
+    "acceptance": false,
+    "prior_corrective_reviews": {
+      "eq108-corrective-packaging-source-reviewer-report.json": "53758e0fcc3e455a663595f0422e91b691e3ef5bb5bcaca4e8ef7cb93fa2f47a",
+      "eq108-corrective-tooling-reviewer-report.json": "0bbe217eae7bc9efc25fea6e921a6852f97ca134d77a98f3067786a284e81c7c",
+      "eq108-corrective-publication-readback-reviewer-report.json": "586adcf30f81309d7aa661a321125bdc2a11989ea5519bea2f1c72147c51c69a"
+    },
+    "collector_initial_review": {
+      "file": "eq108-collector-reviewer-report.json",
+      "sha256": "a72953d3c2b62b944b99a597f51e91fe7a43ac5cc74f2cd34bfdd135c5189f8f",
+      "findings_open": true,
+      "executed": false
+    }
+  },
+  "completed_source_execution": {
+    "canonical": "1b3402a08759683025f9a0dc2f009e55b428eb4c",
+    "worker": "827b1ab8d29ca150b295cc6be62f7dba73c20823"
+  },
+  "actual_materialization_contract": "Pinned Git source only. Raw Git blobs, captured effective optional-source maps and complete recognized Windows LF-to-CRLF profiles are distinct. Core effective input maps are derived from Git and checked against both whole persisted core wheels; no unobserved map/config capture is claimed. Unknown/mixed/extra/missing profiles deny.",
+  "source_execution_evidence": "EQ-108_EXECUTION.json"
+}

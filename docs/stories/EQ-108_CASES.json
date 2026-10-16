@@ -1,0 +1,225 @@
+{
+  "schema": "eq108.independent.cases.v1",
+  "cases": [
+    {
+      "id": "E108-01",
+      "name": "owner_permission",
+      "trigger": "False/nonbool/missing report_sharing_authorized",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-02",
+      "name": "profile_binding",
+      "trigger": "same id but changed complete profile snapshot/command/context",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-03",
+      "name": "view_config",
+      "trigger": "public conversion failure or complete configuration mismatch",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-04",
+      "name": "receipt_output",
+      "trigger": "valid otherresult receipt or changed config/output fingerprint field",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-05",
+      "name": "receipt_declared_inputs",
+      "trigger": "matched declared input hashes without actual batches",
+      "expected": "input_content_verified_false"
+    },
+    {
+      "id": "E108-06",
+      "name": "explanation_backend",
+      "trigger": "unsupported backend/formula/focus or explanation withoutreceipt",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-07",
+      "name": "explanation_focus",
+      "trigger": "same explicit one focus and retained omissions",
+      "expected": "unchanged_full_public_encoding"
+    },
+    {
+      "id": "E108-08",
+      "name": "diagnostic_context",
+      "trigger": "same C/K/E different mode/reconstruction_reason/entity/session",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-09",
+      "name": "diagnostic_forgery",
+      "trigger": "alter any six derived counts/not_requested/admission/fixedfalseflags",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-10",
+      "name": "fingerprint_complete",
+      "trigger": "same digest changed one domain/length/version/canonicalization/algorithm",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-11",
+      "name": "input_role",
+      "trigger": "samecontent differentroles, explicit matching role+id",
+      "expected": "supplied_declaration_not_batch_verified"
+    },
+    {
+      "id": "E108-12",
+      "name": "input_ambiguity",
+      "trigger": "missing/wrong role/id or receipt absent for inputassociation",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-13",
+      "name": "null_content",
+      "trigger": "nullcontent with noassociation and unknownprerequisite",
+      "expected": "preserve_null_unknown_no_verified_claim"
+    },
+    {
+      "id": "E108-14",
+      "name": "extra_association",
+      "trigger": "duplicate/extra/nonmatchingcheck_id or association fornullcontent",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-15",
+      "name": "quality_rows",
+      "trigger": "all5statuses14reasons overlapping/multifeature/expectedNone",
+      "expected": "full_original_rows_and_exact_rowcounts"
+    },
+    {
+      "id": "E108-16",
+      "name": "catalog_bounds",
+      "trigger": "each inclusive budget passes; actual1above refuses",
+      "expected": "evidence_bounds"
+    },
+    {
+      "id": "E108-17",
+      "name": "catalog_duplicates",
+      "trigger": "duplicate profile/result or jobbinding",
+      "expected": "evidence_invalid"
+    },
+    {
+      "id": "E108-18",
+      "name": "defensive_copy",
+      "trigger": "mutate caller source/returned dict afterconstruction",
+      "expected": "prepared_bytes_unchanged"
+    },
+    {
+      "id": "E108-19",
+      "name": "base_dependency",
+      "trigger": "import base and oldtools with optionalpackagesabsent",
+      "expected": "base_usable_no_optionalimports"
+    },
+    {
+      "id": "E108-20",
+      "name": "opaque_role",
+      "trigger": "jobrole/nativeID/foreignprocess/unknownref",
+      "expected": "unknown_reference_provider0"
+    },
+    {
+      "id": "E108-21",
+      "name": "native_denied",
+      "trigger": "actualartifact_read401/403 on previouslyadmittedref",
+      "expected": "client_failure_then_reference_expired_linkedtombstones_no_cachedbytes"
+    },
+    {
+      "id": "E108-22",
+      "name": "native_expired",
+      "trigger": "nativeoriginalTTL expired but localrefstilllive",
+      "expected": "native_denial_no_refresh"
+    },
+    {
+      "id": "E108-23",
+      "name": "local_expired",
+      "trigger": "localTTL expired on read/output",
+      "expected": "reference_expired_known_tombstone_no_report"
+    },
+    {
+      "id": "E108-24",
+      "name": "complete_binding",
+      "trigger": "sameidentity but any completeproducerbytechanged",
+      "expected": "evidence_binding_linkedtombstone"
+    },
+    {
+      "id": "E108-25",
+      "name": "uncatalogued",
+      "trigger": "successfulnativeartifact_read distinct uncataloguedresult",
+      "expected": "not_supplied_no_digest_or_presenceleak"
+    },
+    {
+      "id": "E108-26",
+      "name": "disabled",
+      "trigger": "evidenceNone valid artifact-role successfulnativeartifact_read",
+      "expected": "not_enabled"
+    },
+    {
+      "id": "E108-27",
+      "name": "chunk_provider",
+      "trigger": "eachread including cachehit/missingreport",
+      "expected": "one_actual_artifact_read_no_newcompute"
+    },
+    {
+      "id": "E108-28",
+      "name": "offset_types",
+      "trigger": "True/False/1.0/-1/unaligned/overmaximum",
+      "expected": "invalid_params_minus32602_provider0"
+    },
+    {
+      "id": "E108-29",
+      "name": "offset_bounds",
+      "trigger": "aligned >=actualnonemptylength",
+      "expected": "evidence_bounds_after_one_native_read"
+    },
+    {
+      "id": "E108-30",
+      "name": "missing_offset",
+      "trigger": "missingreport+alignednonzerooffset",
+      "expected": "evidence_bounds_after_one_native_read"
+    },
+    {
+      "id": "E108-31",
+      "name": "chunks",
+      "trigger": "4096backslashes/midJSON/multichunkassembly",
+      "expected": "exact_fullSHA_length_no_truncation"
+    },
+    {
+      "id": "E108-32",
+      "name": "generic_privacy",
+      "trigger": "capabilities discovery with catalog entries",
+      "expected": "generic_modes_limits_only_noresultpresence"
+    },
+    {
+      "id": "E108-33",
+      "name": "cancel",
+      "trigger": "actualnativejobcancel vs notifications/cancelled",
+      "expected": "unchanged_distinct_semantics_no_callbackpreemption"
+    },
+    {
+      "id": "E108-34",
+      "name": "oversize",
+      "trigger": "arguments4097/frame16385/structured16385",
+      "expected": "existing_failclosed_no_native_on_invalidinput"
+    },
+    {
+      "id": "E108-35",
+      "name": "original_parity",
+      "trigger": "completeacceptedproducer/config/input/source/quality/receipt",
+      "expected": "byte_exact_old_goldens"
+    },
+    {
+      "id": "E108-36",
+      "name": "actual_client",
+      "trigger": "officialSDK againstactualinstalledserver/nativeowner",
+      "expected": "schema_discovery_canonicaltext_fullEOF_actualexit"
+    }
+  ],
+  "literal_inputs": "EQ-108_ORACLES.json",
+  "admission_and_unit_boundary_vectors": "EQ-108_ADMISSION.json",
+  "semantic_mutations": "Named seed.value plus literal JSON-pointer edit; public decode/owner admission must refuse before any native operation.",
+  "source_semantics_correction": "Known expired/tombstoned references follow existing reference_expired; unknown/foreign/job-role identifiers remain unknown_reference. No runtime behavior relaxed."
+}

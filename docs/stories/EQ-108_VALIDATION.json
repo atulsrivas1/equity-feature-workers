@@ -1,0 +1,326 @@
+{
+  "schema": "eq108.precode.validation.v1",
+  "status": "Test_actual_source_qualified_final_docs_currenthead_main_delivery_pending",
+  "implementation": true,
+  "Ready": true,
+  "new_product_tests": 34,
+  "new_native_operations": null,
+  "initial_reviews": [
+    {
+      "reviewer": "/root/r10_review",
+      "heads": {
+        "canonical": "5bec082e6944790540a5d976d745791792806a7f",
+        "worker": "c4e4b8d90f925fd1100d4f85bb7ce02eafad70a0"
+      },
+      "disposition": "approved_precode_semantic_API_security_contract_for_Ready",
+      "sha256": "0494acb4ae345ab714f26919dff30572307dcb2b13cd0930a0f6cd9fbe67e1b6",
+      "findings": []
+    },
+    {
+      "reviewer": "/root/r9_plan_review",
+      "heads": {
+        "canonical": "5bec082e6944790540a5d976d745791792806a7f",
+        "worker": "c4e4b8d90f925fd1100d4f85bb7ce02eafad70a0"
+      },
+      "disposition": "changes_requested_before_ready",
+      "sha256": "efcad549e8fc8c9248c734f7e58edd62f8d6dff430447e2b1d880b7b7877fafd",
+      "findings": [
+        {
+          "id": "EQ108-PRE-01",
+          "priority": "P2",
+          "file": "docs/stories/EQ-108_CASES.json",
+          "line": 3,
+          "title": "Freeze executable literal independent cases before Ready",
+          "problem": "All36 entries are prose trigger/expected labels. There is no concrete typed seed, literal diagnostics projection/quality expected object, known canonical byte/hash oracle or explicit chunk boundary vector. For example E108-09 cannot independently determine the exact six-count/aggregate projection, and E108-31 cannot check canonical escaping/assembly against production-independent bytes. Future tests can reproduce implementation choices while satisfying these descriptions.",
+          "requested_change": "Retain these coverage descriptions, but add pre-implementation literal seeds and independently authored expected JSON/bytes/hash/length for at least a complete diagnostic projection including association/large numeric/null/unknown semantics, all-five-status/all14-reason quality counts, a supported explanation/receipt parity fixture and multi-chunk ASCII artifact with exact offsets/next/complete. Freeze concrete mutation/refusal vectors and inclusive/one-above construction recipes for the stated budgets; do not claim newly produced/runtime evidence."
+        },
+        {
+          "id": "EQ108-PRE-02",
+          "priority": "P2",
+          "file": "docs/stories/EQ-108_CONTRACT.md",
+          "line": 14,
+          "title": "Define the manifest and exact admission accounting",
+          "problem": "The inclusive64KiB manifest and4MiB aggregate are public admission limits, and the contract includes cached quality summary and manifest bytes, but no manifest field layout/canonical representation, ordering or accounting formula is specified anywhere in the eight files. Its documented focus/diagnostic identity is referenced at line36. Implementations can therefore charge different data or different byte sequences and disagree on E108-16. Owner error codes are listed but only the dependency error has an exact exception contract.",
+          "requested_change": "Freeze an exact internal/public manifest layout (or explicitly remove it as a separate representation and define an equally precise accounting alternative), canonicalization/order and bytes counted per entry/shared profile/quality/reports; define container/key/value node accounting. State exact owner exception type/code mapping, including accepted-library limit errors versus semantic errors and constructor precedence. Add hand-computable at/one-above fixtures using that formula. This concerns deterministic logical admission, not total RSS or physical guarantees."
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "EQ108-PRE-01",
+      "change": "Freeze literal public explanation/receipt/diagnostic association+large numeric/null/unknown/quality/chunk oracles and concrete JSON-pointer refusal edits before implementation."
+    },
+    {
+      "id": "EQ108-PRE-02",
+      "change": "Freeze exact canonical manifest/entry order/accounting formula/count/depth/unit boundary scope/owner fixed exception mapping and constructor precedence."
+    }
+  ],
+  "tool_history": [
+    "Initial pre-code publisher guard stripped leading porcelain space and rejected before staging/commit/push/mutation; changed raw status parser to preserve whitespace, then paired publication passed.",
+    "Initial static frame arithmetic omitted LF/worst legal escaped ID; corrected before first commit/publication.",
+    "Correction preparer assumed both reviewer reports used heads; actual API report uses head/worker_head. KeyError occurred BEFORE repository writes; exact fields normalized and rerun corrected preparer.",
+    "Read-only wrong-cwd/missingpath and PowerShell/jq/glob quoting errors made no source/native mutation; actual inventory/plainJSON/absolute paths corrected."
+  ],
+  "limits": [
+    "No new native execution, package import/conversion/build/install or runtime qualification.",
+    "Source/API review is scoped automated local review; plan review initially requested changes; renewal mandatory.",
+    "Initial36 case descriptions are coverage requirements, not36 executed literal tests.",
+    "Paused R7 and old failed evidence retained; no scope/ops/rights/admin/spending expansion.",
+    "Existing known tombstones/local expiry return reference_expired, not unknown_reference; unknown/foreign/job-role references retain unknown_reference. Initial prose expectation corrected to preserve actual existing accepted ledger behavior; no source behavior changed for this correction."
+  ],
+  "admission": {
+    "head": "9ca968eb48ee36f7d651362b04e6894c4c24f842",
+    "worker_head": "a58af948c226d2c0bc3e0ebd930c85bf960aec6c",
+    "comment": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6207419356",
+    "reviews": {
+      "eq108-corrected-precode-api-reviewer-report.json": "253059f263c50cec8ff77edbda4af120adff793e7ddac5ad700fe46eae3a14ee",
+      "eq108-corrected-precode-plan-reviewer-report.json": "60cb7f3a276aa9f247eff55c7fb65440106cd023d529835d99af84b83e853c25"
+    },
+    "lifecycle_steps": [
+      "exact_corrected_paired_reviews_live_Atul_main_heads_deps_and_Project_verified",
+      "208_actual_Ready",
+      "assigned_Atul",
+      "208_actual_In progress",
+      "readiness_evidence_once",
+      "actual_final_readback"
+    ]
+  },
+  "source_development": {
+    "logs": {
+      "owner_first": {
+        "filename": "eq108-owner-development-first.log",
+        "sha256": "7122732e5ddef054168f182840f389d8787f07a72112b463ad8f60aea3fb8783",
+        "outcome": "FAILED:3fixtureerrors_emptyEnvironmentDeclaration.packages"
+      },
+      "owner_corrected": {
+        "filename": "eq108-owner-development-after-typing.log",
+        "sha256": "13e03763cfd5b8bf81d6731cb07c66f437811aec87e772bfcc21decb2ae23d9d",
+        "outcome": "10methodsPASS"
+      },
+      "typing_first": {
+        "filename": "eq108-typing-first.log",
+        "sha256": "5738d2b3cfb0fbf65b3d1b6ffa486b52e6b0e2681260a9e6cf35b04388f30791",
+        "outcome": "FAILED:3typingerrors"
+      },
+      "typing_corrected": {
+        "filename": "eq108-typing-corrected.log",
+        "sha256": "90377c8fd97127580c93ac5740d596c9ebc9db94dafa6560ee11fe16b4460c62",
+        "outcome": "strict6filesPASS"
+      },
+      "tools_first": {
+        "filename": "eq108-tools-development-first.log",
+        "sha256": "26a731772c2de919e072abcd3e70d4d3d8180fb41dff910208c4cd21669495fd",
+        "outcome": "FAILED:3expectedtombstoneassertions_1invalidwirefixture"
+      },
+      "tools_corrected": {
+        "filename": "eq108-tools-development-corrected.log",
+        "sha256": "69d67f1a7f9766fbfaf687410289e9a7edfaf6031d5c54adf675d4b9988447d9",
+        "outcome": "10methodsPASS"
+      },
+      "existing_server": {
+        "filename": "eq108-existing-server-development.log",
+        "sha256": "f8b9bc48bfa7c20ef7a0f49b4962c79a5ac7f37746d2037e4ba8710e66834906",
+        "outcome": "5methodsPASS"
+      },
+      "existing_ledger": {
+        "filename": "eq108-existing-ledger-development.log",
+        "sha256": "b97e0a3ccce9bf591fdca7b4fc47b0434206f01394bdb56bac4f8d0b69bc1dfc",
+        "outcome": "8methodsPASS"
+      },
+      "existing_profile": {
+        "filename": "eq108-existing-profile-development.log",
+        "sha256": "952bd90672c1cfddbc8609a1d67c4aa2a40c59d8a40dd098b70294972c999723",
+        "outcome": "6methodsPASS"
+      }
+    },
+    "passing_unique_methods": 39,
+    "new_owner_methods": 10,
+    "new_dispatch_methods": 10,
+    "existing_regression_methods": 19,
+    "strict_typing_files": 6,
+    "source_fixture_scope": "Published synthetic fixtures, pure public SDK conversion and patched public client outcomes; no new native process/service/installed/bothOS qualification.",
+    "initial_failure_disposition": "Empty environment-package fixture and wrong tombstone/wire expectations corrected without weakening accepted contracts; three typing-only errors corrected. Original failed logs preserved, not relabeled.",
+    "remaining": "Complete implementation/docs/examples/casecoverage and independent exactsource review; new entries/owner/controller/builder/workflow freeze/review BEFORE any runtime push or physical native/install qualification; final currentbothOS/main/artifacts/publication remain."
+  },
+  "new_product_tests_scope": "15owner10dispatch9admission ordinary source methods; last added independent full-report test passes, not native/installed qualification.",
+  "working_source_admission_correction": {
+    "initial_report": {
+      "filename": "eq108-working-source-reviewer-report.json",
+      "sha256": "b7f214b6595d85c6ecae749dbc24804c33ab43e92e960fab68190df959304af4"
+    },
+    "source_binding_notes": {
+      "filename": "eq108-config-context-binding-source-reviewer-notes.json",
+      "sha256": "840a78aed75816d68d0c4314473a76b95b6149c09b1bec7a98d086a6272d009c"
+    },
+    "finding": "EQ108-SRC-01",
+    "author_disposition": "Corrected; independent renewed source review pending.",
+    "logs": {
+      "eq108-owner-config-reconstruction-first.log": "54d7325427867e25c4359f8aa81a8e03b5b19e61dc0df661750177aff1aaebcb",
+      "eq108-typing-config-reconstruction-first.log": "e2702f9afc4c0f80ff1e8624f77af7a7d2689ca184512114aae5967a76229ba8",
+      "eq108-owner-frozen-vectors-first.log": "3ebe393ee2b2ec48571998932a743462319dd6feba0e9b59c1bfd60a692c5581",
+      "eq108-owner-joint-binding-first.log": "b4a36fff63507e0d104e5badfbb5e2bfda2b3e9bd36864ed8dfe6224d910048e",
+      "eq108-tools-joint-binding-first.log": "d01064e14e973fd80e11a93757d4b9b900b11acd9e7bef3e965ad613da6790b5",
+      "eq108-typing-joint-binding-first.log": "e2702f9afc4c0f80ff1e8624f77af7a7d2689ca184512114aae5967a76229ba8",
+      "eq108-example-joint-binding-first.log": "9ecdc5ab148299f748928eaeae6c4f5f6e7e37af09fde037b55918b11cc8cbbd",
+      "eq108-reviewer-forged-config-probe.log": "a9f3187be7e99f0bcb90fd913eea08a8f96df94bbc6bbdad10431c8ad18cf0de",
+      "eq108-reviewer-forged-config-corrected-probe.log": "adca35d4aa0a61833a022eee7f8cb49ec4a91c0255964c8a761d7857273a425c",
+      "eq108-reviewer-forged-view-probe.log": "f9f180c3491ac20bc9388acf123a751c2d7a4f1e08a6eac06aec4876f8b4b134"
+    },
+    "limits": {
+      "configuration_ascii_bytes": 65536,
+      "configuration_text_utf8_bytes": 65536,
+      "configuration_parameters": 256,
+      "configuration_intervals": 128,
+      "configuration_governed_sessions": 256,
+      "configuration_integer_parameter_bits": 4096,
+      "result_view_encoded_bytes": 262144
+    },
+    "source_methods": 25,
+    "strict_typing_files": 7,
+    "all_ten_literal_mutations_consumed": true,
+    "runtime_pushed": false,
+    "installed_qualified": false,
+    "native_qualified": false
+  },
+  "source_review_results": {
+    "eq108-corrected-working-source-reviewer-report.json": "97f3acaf057d8af9cae79fcb86b90790ee3307f2326f79bdf17cedfc3e69c3b9",
+    "eq108-literal-seed-source-reviewer-report.json": "bd2487368661ee9fd4bc7d4622e3ba57e81cb2f05121dc1fe21e658bf7489a3f"
+  },
+  "source_extra_logs": {
+    "eq108-admission-extra-corrected.log": "197c1896cb933f86594f0e1430d5b6fe91227330f44b3af2f3601f87a40861cd",
+    "eq108-admission-extra-final.log": "07ea748d7a42c82264c84283dc8d56e445051e040350f812dee694bf3f6df986",
+    "eq108-admission-extra-first.log": "1d6d21bd56c1cd0ae366216c5ecba45c06a4b9c2a9e0f34dc6556c6a41d83942",
+    "eq108-admission-extra-literal-corrected.log": "42325e1e1b80046ef49911fa977e9fe8110e453777f74ee518d7ee21a44a9f3a",
+    "eq108-owner-exact-literal-seeds-first.log": "4d248a2c8669d83a602539f90a4db838a1e63b58ba7aba70b09fbbdab3f68c2c",
+    "eq108-owner-installed-resource-first.log": "bfd7599142966c90baa7478d98307b583ca65a1e27d15c9adc82ba2c1058fc57",
+    "eq108-admission-fixed-import-first.log": "1f88b28b5c54429a1af2c9ec633dc8824c80bf24a2af124d2db35ee3c8603d58",
+    "eq108-typing-fixed-import-first.log": "e2702f9afc4c0f80ff1e8624f77af7a7d2689ca184512114aae5967a76229ba8"
+  },
+  "preparation_tool_failures": [
+    "Read-only guessed missing paths/cwd and PowerShell rg wildcard failures; corrected actual inventories.",
+    "One PowerShell inline quoting error before legacy-probe write; replaced with saved Python preparer.",
+    "Extra admission first fixture controls had incorrect profile error, missing age argument, wrong diagnostic reason/admission Boolean expectation; corrected to existing literal typed diagnostic/admission denied. Original failed logs retained; no runtime behavior relaxed."
+  ],
+  "qualification_preparation": "EQ-108_QUALIFICATION_INPUTS.json; unexecuted; new exact source/tooling reviews required.",
+  "qualification_preexecution_review_results": {
+    "eq108-source-and-composition-preexecution-reviewer-report.json": "c5e672d12106dcea5e0b4b1732cc69faeed1d87fbb0480260dc91ec32cfddb67",
+    "eq108-qualification-tooling-reviewer-report.json": "b031c3dc710b5841b725d9977e5685713e895b83d83447b7f54da6d229ac03a5"
+  },
+  "qualification_preexecution_corrections": "Six P2 source/preparation findings corrected; independent renewal still pending. Full history in QUALIFICATION_INPUTS.",
+  "independent_expected_report_check": {
+    "first_failed_log": "eq108-admission-full-report-expectations-first.log",
+    "first_failed_sha256": "e10e2ff67bf4f4ff33ff7bef97f4551104e12180bc7e187459ba3651734cd973",
+    "diagnosis": "Test expected one quality row but frozen complete producer has five; corrected literal to all five available rows, each expected/observed3. Product unchanged.",
+    "corrected_log": "eq108-admission-full-report-expectations-corrected.log",
+    "corrected_sha256": "76c8b64bbff1a80c74bb9371fad8cb17d6a2db6e764c977b20dbb71ad6c63097",
+    "methods": 9
+  },
+  "inert_controls": {
+    "file": "eq108-inert-qualification-controls.json",
+    "sha256": "560b9d3841d3130751dae7b3861a27c4b29526d0d6e751e054c91b31106c1ab6",
+    "checks": 16,
+    "initial_fixture_correction": "Windows text newline translation doubled CSV carriage returns in synthetic test RECORD; fixture writes newline empty before passing corrected controls. Initial trace is tool output, not a fabricated raw-log file."
+  },
+  "second_preexecution_reviews": {
+    "eq108-corrected-composition-source-reviewer-report.json": "0724d496da718ac39528c043d1a5ef0d6f9eb82f5b4d4e0f8a4347d94808d60d",
+    "eq108-corrected-qualification-tooling-reviewer-report.json": "106aa53d09bc24fa33289678fb4ac7f8461afd807f83a59406d3611e6205be2f"
+  },
+  "second_preexecution_corrections": [
+    "COMP02: two-job uncatalogued now selects unchanged retirement owner, successful not_supplied read then actual retire ACKreads2/401/tombstone; one-job enabled/default retain TTL/source1/403.",
+    "Publication guard requires a completed approved exact controller SHA; exact local/PR branch and explicit destination ref enforced before push. Both source findings retained; final renewal pending."
+  ],
+  "first_author_build_failure": {
+    "status": "actual_first_author_build_failed_corrective_source_pending_review",
+    "failure": {
+      "source_publication_sha256": "4c7cafae7e6a985efc8f78b05be408a768757f798e22bc1aae00d2b3564be571",
+      "started": true,
+      "finished": true,
+      "qualified": false,
+      "new_output": "dist/mcp-evidence-author-first",
+      "exit_code": 1,
+      "raw_log_sha256": "01bdcce5bbf1330f996ae96b4724a638c6167eae69a5790866acf172db1b3f6d",
+      "failure_scope": "Actual failed author qualification; retain new output/work roots/raw log, do not rerun unchanged or infer completed cleanup."
+    },
+    "failure_comment": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6208034992",
+    "retained_roots": [
+      "dist/mcp-evidence-author-first",
+      "work/eq108-build-zwsz_ss8"
+    ],
+    "diagnostic": {
+      "reviewer": "/root/r9_plan_review",
+      "file": "eq108-selected-sdist-failure-reviewer-diagnostic.json",
+      "sha256": "de9c74c20d8c92f44c49084e8e1c2e5862a67d86fca959a5bd504644d8aaf3ce",
+      "scope": "Read-only first/repeat archive/member diagnosis; no installed/native execution"
+    },
+    "correction": {
+      "tracked_input": "packages/mcp/setup.cfg",
+      "strict_whole_archive_repeat_equality": true,
+      "generated_metadata_audit": true,
+      "executed": false
+    },
+    "qualified": false,
+    "acceptance": false
+  },
+  "second_author_record_failure": {
+    "status": "second_author_failed_owning_record_selector_rework",
+    "execution": {
+      "source_publication_sha256": "92f3325657c834e9f5b80f83acea72ba719961b9cea8eb4e5b26c42cb6311160",
+      "started": true,
+      "finished": true,
+      "qualified": false,
+      "new_output": "dist/mcp-evidence-author-corrective",
+      "exit_code": 1,
+      "raw_log_sha256": "ede28e11a3fa02466251274623aa234973aaac4b0bbb63d90873a3e21d62333f",
+      "failure_scope": "Actual failed author qualification; retain new output/work roots/raw log, do not rerun unchanged or infer completed cleanup."
+    },
+    "failure_comment": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6208185534",
+    "retained_roots": [
+      "dist/mcp-evidence-author-corrective",
+      "work/eq108-build-5u00xjh1",
+      "work/eq108-wheel-default-eacr9auq"
+    ],
+    "diagnostic": {
+      "file": "eq108-closure-record-selector-reviewer-diagnostic.json",
+      "sha256": "26492122d507c8ea0ea04dfcc53e39e499fe0dd4aa20baf9cea1d0a7291dad18",
+      "reviewer": "/root/r10_review",
+      "scope": "Read-only retained CSV/payload audit, not interpreter/native execution"
+    },
+    "correction": {
+      "unique_owning_top_level_RECORD": true,
+      "vendored_RECORD_payloads_remain_hashed": true,
+      "executed": false
+    },
+    "qualified": false,
+    "acceptance": false,
+    "prior_corrective_reviews": {
+      "eq108-corrective-packaging-source-reviewer-report.json": "53758e0fcc3e455a663595f0422e91b691e3ef5bb5bcaca4e8ef7cb93fa2f47a",
+      "eq108-corrective-tooling-reviewer-report.json": "0bbe217eae7bc9efc25fea6e921a6852f97ca134d77a98f3067786a284e81c7c",
+      "eq108-corrective-publication-readback-reviewer-report.json": "586adcf30f81309d7aa661a321125bdc2a11989ea5519bea2f1c72147c51c69a"
+    },
+    "collector_initial_review": {
+      "file": "eq108-collector-reviewer-report.json",
+      "sha256": "a72953d3c2b62b944b99a597f51e91fe7a43ac5cc74f2cd34bfdd135c5189f8f",
+      "findings_open": true,
+      "executed": false
+    }
+  },
+  "historical_evidence_note": "Earlier fields retain dated preparation/rework scope. Current completed_source_qualification governs this snapshot; no old failed run becomes a pass.",
+  "native_operation_count_note": "Actual fixed native/reference cohorts executed; no total OS syscall count claimed. Per-scenario public request/provider/frame ledgers are in execution evidence.",
+  "completed_source_qualification": {
+    "execution_file": "EQ-108_EXECUTION.json",
+    "execution_sha256": "d21d2175a994d9069375dbc1f3a17e46539a36c6089bff5f991b2b4125d19663",
+    "author_review_sha256": "44965d0bdc424bd85e4fe25a0c7342e204c7d1bbc3b9fd05ca99af840e477f32",
+    "bothOS_review_sha256": "c0a5acb0a3d6538a9e23adfe651a25705da7c90bfdc2dc5737b87d8589e0f70f",
+    "source_heads": {
+      "canonical": "1b3402a08759683025f9a0dc2f009e55b428eb4c",
+      "worker": "827b1ab8d29ca150b295cc6be62f7dba73c20823"
+    },
+    "accepted": false
+  },
+  "retained_audit_tool_history": {
+    "eq108-collector-first-execution-failure.json": "137c2aa827f321fff697356ce1ee7ccf58b7b51b039aff78a2cdc6701d16feb5",
+    "eq108-collector-second-execution-failure.json": "272fe6cb56f8458fad4c551bffd8916df8b9c70ca2110701db996f582939217f",
+    "eq108-corrective-preparation-tooling-history.json": "eaab48d74724da0c9589dc8568ceb5ce5b20f75275370ec292f923459ac2c2ec"
+  }
+}

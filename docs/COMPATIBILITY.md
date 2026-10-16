@@ -1,3 +1,7 @@
+## EQ108 implementation candidate — unqualified/unreleased
+
+The existing MCP server0.1.0a1 proposes five optional owner-prepared evidence tools; base dependencies and accepted calculations remain unchanged. [API, authority, privacy, unknowns and migration](MCP_EVIDENCE_API.md) describes logical bounds, per-read native authorization, declared unverified inputs, retained plaintext and current qualification limits. Source review passed its recorded scope; fresh native/installed/bothOS/current artifacts/main release remain unfinished.
+
 ## BUG006 experimental a12 candidate — October 8, 2026
 
 Bounded R5.1 repair preserves foreign producer entries during supervisor drains, independent of optional diagnostics. Core/I/O/math/schema/mandatory dependencies remain unchanged. Native/installed/review/publication qualification is pending; a11 receipts below remain historical. Follow canonical [BUG006](https://github.com/atulsrivas1/equity-features/issues/337); no R6 or private generation is admitted.

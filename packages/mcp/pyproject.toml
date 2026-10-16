@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-mcp"
-version = "0.1.0a0"
+version = "0.1.0a1"
 description = "Experimental local bounded MCP tools over the public remote client"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
@@ -12,6 +12,12 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{name = "Equity Features contributors"}]
 dependencies = ["equity-feature-client==0.1.0a0", "jsonschema==4.26.0"]
+
+[project.urls]
+Repository = "https://github.com/atulsrivas1/equity-feature-workers"
+
+[project.optional-dependencies]
+evidence = ["equity-feature-client[native]==0.1.0a0", "equity-feature-evidence==0.1.0a2", "equity-feature-explanations==0.1.0a1", "equity-feature-diagnostics==0.1.0a1"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

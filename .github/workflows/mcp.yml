@@ -19,8 +19,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-features
-          ref: 20c08c7370581d03c8a0404579667f68d67ac88b
+          ref: e1b4ac52d748fd6b5f13b9acaf6a1358a8caea6c
           path: core
+          fetch-depth: 0
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-feature-io
@@ -31,11 +32,11 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements-dev.txt -r tools/requirements-service.txt
         working-directory: component
-      - run: python tools/build_mcp.py --core-root ../core --io-root ../io
+      - run: python tools/build_mcp_evidence.py --core-root ../core --io-root ../io
         working-directory: component
       - uses: actions/upload-artifact@v4
         with:
           name: mcp-${{ github.sha }}-${{ matrix.os }}
-          path: component/dist/mcp/
+          path: component/dist/mcp-evidence/
           retention-days: 30
           if-no-files-found: error

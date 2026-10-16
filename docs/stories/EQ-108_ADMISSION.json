@@ -1,0 +1,346 @@
+{
+  "schema": "eq108.admission.v1",
+  "manifest_layout": {
+    "representation": "equity.mcp.evidence.catalog.v1",
+    "schema_version": "1",
+    "owner_context_id": "synthetic-owner",
+    "profile_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "entries": [
+      {
+        "profile_id": "trades",
+        "job_id": "job1",
+        "result_id": "result1",
+        "command_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+        "report_sharing_authorized": true,
+        "artifacts": {
+          "producer": {
+            "representation": "public_producer_json",
+            "schema_version": "1",
+            "byte_length": 10,
+            "sha256": "88a7731f4d3c28d1c7b1869f003822c298d0c8e251f5e04db487705a9826cdb1",
+            "input_content_verified": false,
+            "source_authenticated": false,
+            "execution_verified": false
+          },
+          "receipt": null,
+          "explanation": null,
+          "diagnostics": null
+        },
+        "quality": {
+          "row_count": 5,
+          "expected_unknown_count": 4,
+          "statuses": {
+            "available": 1,
+            "insufficient_history": 1,
+            "missing_input": 1,
+            "incomplete_coverage": 1,
+            "not_applicable": 1
+          },
+          "reasons": {
+            "absent_input": 1,
+            "null_field": 1,
+            "observed_empty": 1,
+            "no_eligible_observations": 1,
+            "missing_action_evidence": 1,
+            "insufficient_history": 1,
+            "governed_gap": 1,
+            "unknown_availability": 5,
+            "future_knowledge": 1,
+            "partial_universe": 1,
+            "zero_denominator": 1,
+            "empty_universe": 1,
+            "ineligible": 1,
+            "future_market": 1
+          }
+        },
+        "explanation_focus": null
+      }
+    ]
+  },
+  "manifest": {
+    "value": {
+      "representation": "equity.mcp.evidence.catalog.v1",
+      "schema_version": "1",
+      "owner_context_id": "synthetic-owner",
+      "profile_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "entries": [
+        {
+          "profile_id": "trades",
+          "job_id": "job1",
+          "result_id": "result1",
+          "command_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+          "report_sharing_authorized": true,
+          "artifacts": {
+            "producer": {
+              "representation": "public_producer_json",
+              "schema_version": "1",
+              "byte_length": 10,
+              "sha256": "88a7731f4d3c28d1c7b1869f003822c298d0c8e251f5e04db487705a9826cdb1",
+              "input_content_verified": false,
+              "source_authenticated": false,
+              "execution_verified": false
+            },
+            "receipt": null,
+            "explanation": null,
+            "diagnostics": null
+          },
+          "quality": {
+            "row_count": 5,
+            "expected_unknown_count": 4,
+            "statuses": {
+              "available": 1,
+              "insufficient_history": 1,
+              "missing_input": 1,
+              "incomplete_coverage": 1,
+              "not_applicable": 1
+            },
+            "reasons": {
+              "absent_input": 1,
+              "null_field": 1,
+              "observed_empty": 1,
+              "no_eligible_observations": 1,
+              "missing_action_evidence": 1,
+              "insufficient_history": 1,
+              "governed_gap": 1,
+              "unknown_availability": 5,
+              "future_knowledge": 1,
+              "partial_universe": 1,
+              "zero_denominator": 1,
+              "empty_universe": 1,
+              "ineligible": 1,
+              "future_market": 1
+            }
+          },
+          "explanation_focus": null
+        }
+      ]
+    },
+    "canonical_ascii": "{\"entries\":[{\"artifacts\":{\"diagnostics\":null,\"explanation\":null,\"producer\":{\"byte_length\":10,\"execution_verified\":false,\"input_content_verified\":false,\"representation\":\"public_producer_json\",\"schema_version\":\"1\",\"sha256\":\"88a7731f4d3c28d1c7b1869f003822c298d0c8e251f5e04db487705a9826cdb1\",\"source_authenticated\":false},\"receipt\":null},\"command_digest\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"explanation_focus\":null,\"job_id\":\"job1\",\"profile_id\":\"trades\",\"quality\":{\"expected_unknown_count\":4,\"reasons\":{\"absent_input\":1,\"empty_universe\":1,\"future_knowledge\":1,\"future_market\":1,\"governed_gap\":1,\"ineligible\":1,\"insufficient_history\":1,\"missing_action_evidence\":1,\"no_eligible_observations\":1,\"null_field\":1,\"observed_empty\":1,\"partial_universe\":1,\"unknown_availability\":5,\"zero_denominator\":1},\"row_count\":5,\"statuses\":{\"available\":1,\"incomplete_coverage\":1,\"insufficient_history\":1,\"missing_input\":1,\"not_applicable\":1}},\"report_sharing_authorized\":true,\"result_id\":\"result1\"}],\"owner_context_id\":\"synthetic-owner\",\"profile_sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"representation\":\"equity.mcp.evidence.catalog.v1\",\"schema_version\":\"1\"}",
+    "byte_length": 1198,
+    "sha256": "24b3a53933751e59e00933bdb933e470109cc975911266ef65daa5758e2d4084"
+  },
+  "entry_order": "ASCII tuple(profile_id,result_id,job_id) ascending; entries array sorted once; all object keys lexical by canonical JSON",
+  "canonicalization": {
+    "ensure_ascii": true,
+    "sort_keys": true,
+    "separators": [
+      ",",
+      ":"
+    ],
+    "allow_nan": false,
+    "encoding": "ascii",
+    "trailing_lf": false
+  },
+  "accounting": {
+    "formula": "aggregate_bytes = len(canonical_manifest) + sum(len(artifact_bytes) for every entry and every supplied kind)",
+    "quality": "Included exactly once in each entry manifest; not separately charged.",
+    "profile": "Only owner_context_id and complete profile_sha256 appear in manifest; existing MCPProfile.snapshot is independently bounded64KiB and is NOT additionally charged.",
+    "duplicates": "Equal byte objects repeated in separate entries/kinds are charged repeatedly; no content deduplication discount.",
+    "excluded": "Python objects/dict/index/temporary/allocator/import/native/kernel memory outside logical accounting; no physical guarantee.",
+    "node_count": "Every dict/list container, each key string and each scalar/null is one node. Repeated shared objects count at each occurrence after canonical JSON parse.",
+    "depth": "Root container depth0; each child value or key increments1; maximum20 inclusive; no cycles.",
+    "manifest_nodes": 32768,
+    "manifest_depth": 20
+  },
+  "identity": {
+    "profile_id": "exact old profile label [A-Za-z0-9_.-]{1,64}",
+    "job_result_id": "exact ASCII [A-Za-z0-9_.:-]{1,128}",
+    "unique_keys": [
+      "(profile_id,result_id)",
+      "(profile_id,job_id)"
+    ],
+    "binding": "Native IDs are trusted owner associations, not inferred from ResultView encoded bytes."
+  },
+  "manifest_fields": {
+    "root": [
+      "representation",
+      "schema_version",
+      "owner_context_id",
+      "profile_sha256",
+      "entries"
+    ],
+    "entry": [
+      "profile_id",
+      "job_id",
+      "result_id",
+      "command_digest",
+      "report_sharing_authorized",
+      "artifacts",
+      "quality",
+      "explanation_focus"
+    ],
+    "artifacts": [
+      "producer",
+      "receipt",
+      "explanation",
+      "diagnostics"
+    ],
+    "explanation_focus": "null or {entity:{instrument_id,session_id},feature_id,display_limit,selected_retained_count}; all literal public values."
+  },
+  "exception_contract": {
+    "type": "ValueError",
+    "args": "Exactly one fixed code string; no caller/private/library exception message or chain.",
+    "codes": {
+      "evidence_dependency": "ImportError/ModuleNotFoundError loading fixed optional packages during owner construction only.",
+      "evidence_bounds": "Own inclusive count/byte/node/depth ceiling exceeded or accepted pure-library EvidenceError/ExplanationError/DiagnosticsError code limit_exceeded.",
+      "evidence_invalid": "Other invalid supported owner data, missing rights assertion, public conversion Outcome failure, inconsistent identity/report/derivedfields, duplicate, malformed association, or accepted-library semantic refusal."
+    },
+    "precedence": [
+      "exact supported owner types/permission/profile/IDs",
+      "public result conversion/config binding",
+      "receipt/explanation/diagnostic semantic binding",
+      "per-artifact printable canonical bytes/node/depth and manifest ceilings",
+      "duplicate tuple keys",
+      "aggregate ceiling"
+    ],
+    "excluded": "Process termination, MemoryError and unrelated runtime/environment faults are not promised to be transformed into a successful bounded owner failure. No arbitrary executable/callback accepted."
+  },
+  "arithmetic_fixture": {
+    "scope": "Isolated deterministic admission arithmetic; descriptor/raw dummy is not a semantically valid registered native result, no end-to-end boundary claim.",
+    "manifest_bytes": 1198,
+    "supplied_artifact_lengths": [
+      10
+    ],
+    "aggregate_bytes": 1208,
+    "aggregate_at_public_ceiling": {
+      "manifest_bytes": 1198,
+      "artifact_lengths": [
+        1048576,
+        1048576,
+        1048576,
+        1047378
+      ],
+      "expected_total": 4194304,
+      "expected_aggregate_check": "pass"
+    },
+    "aggregate_one_above": {
+      "manifest_bytes": 1198,
+      "artifact_lengths": [
+        1048576,
+        1048576,
+        1048576,
+        1047379
+      ],
+      "expected_total": 4194305,
+      "expected_aggregate_check": "evidence_bounds"
+    },
+    "isolated_scope": "Only aggregate arithmetic: dummy byte lengths are not valid registered reports and do not bypass kind/semantic/per-artifact limits. No full-constructor end-to-end boundary success is claimed."
+  },
+  "boundary_vectors": [
+    {
+      "name": "entries_at",
+      "observed": 8,
+      "limit": 8,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "entries_over",
+      "observed": 9,
+      "limit": 8,
+      "expected": "evidence_bounds"
+    },
+    {
+      "name": "manifest_at",
+      "observed": 65536,
+      "limit": 65536,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "manifest_over",
+      "observed": 65537,
+      "limit": 65536,
+      "expected": "evidence_bounds"
+    },
+    {
+      "name": "aggregate_at",
+      "observed": 4194304,
+      "limit": 4194304,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "aggregate_over",
+      "observed": 4194305,
+      "limit": 4194304,
+      "expected": "evidence_bounds"
+    },
+    {
+      "name": "producer_at",
+      "observed": 131072,
+      "limit": 131072,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "producer_over",
+      "observed": 131073,
+      "limit": 131072,
+      "expected": "evidence_bounds"
+    },
+    {
+      "name": "receipt_at",
+      "observed": 1048576,
+      "limit": 1048576,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "receipt_over",
+      "observed": 1048577,
+      "limit": 1048576,
+      "expected": "evidence_bounds"
+    },
+    {
+      "name": "explanation_diagnostics_at",
+      "observed": 262144,
+      "limit": 262144,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "explanation_diagnostics_over",
+      "observed": 262145,
+      "limit": 262144,
+      "expected": "evidence_bounds"
+    },
+    {
+      "name": "nodes_at",
+      "observed": 32768,
+      "limit": 32768,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "nodes_over",
+      "observed": 32769,
+      "limit": 32768,
+      "expected": "evidence_bounds"
+    },
+    {
+      "name": "depth_at",
+      "observed": 20,
+      "limit": 20,
+      "expected": "pass_budget_only"
+    },
+    {
+      "name": "depth_over",
+      "observed": 21,
+      "limit": 20,
+      "expected": "evidence_bounds"
+    }
+  ],
+  "boundary_scope": "Budget-only literal lengths/counts are independent unit controls; semantic public object limits may make an end-to-end ceiling unreachable. Real registration tests must use actual semantically valid public producer/report bytes, no forged metadata to claim a valid boundary. Aggregate actual charged bytes use the full fixed manifest formula; no invented RSS/physical promise.",
+  "configuration_preparation": {
+    "limits": {
+      "configuration_ascii_bytes": 65536,
+      "configuration_text_utf8_bytes": 65536,
+      "configuration_parameters": 256,
+      "configuration_intervals": 128,
+      "configuration_governed_sessions": 256,
+      "configuration_integer_parameter_bits": 4096,
+      "result_view_encoded_bytes": 262144
+    },
+    "exact_public_components_reconstructed": true,
+    "borrowed_records_never_validated_in_place": true,
+    "result_view_envelope_reconstructed": true,
+    "scope_start": "configuration.session.open_ns",
+    "scope_end": "configuration.availability.market_cutoff_ns",
+    "context_revision_verified": false,
+    "scope": "Logical admission only; no source truth/execution/physical-resource claim."
+  }
+}

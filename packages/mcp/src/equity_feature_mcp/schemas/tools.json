@@ -3412,6 +3412,2319 @@
         "idempotentHint": true,
         "openWorldHint": true
       }
+    },
+    {
+      "name": "equity_receipt",
+      "description": "Read first canonical receipt chunk after current artifact authorization; missing owner reports remain explicit.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "equity.mcp.evidence.v1"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "kind": {
+                    "const": "receipt"
+                  },
+                  "presence": {
+                    "enum": [
+                      "supplied",
+                      "not_supplied",
+                      "not_enabled"
+                    ]
+                  },
+                  "quality": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "row_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "expected_unknown_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "statuses": {
+                            "type": "object",
+                            "properties": {
+                              "available": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "incomplete_coverage": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "not_applicable": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "available",
+                              "insufficient_history",
+                              "missing_input",
+                              "incomplete_coverage",
+                              "not_applicable"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "reasons": {
+                            "type": "object",
+                            "properties": {
+                              "absent_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "null_field": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "observed_empty": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "no_eligible_observations": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_action_evidence": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "governed_gap": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "unknown_availability": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_knowledge": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "partial_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "zero_denominator": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "empty_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "ineligible": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_market": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "absent_input",
+                              "null_field",
+                              "observed_empty",
+                              "no_eligible_observations",
+                              "missing_action_evidence",
+                              "insufficient_history",
+                              "governed_gap",
+                              "unknown_availability",
+                              "future_knowledge",
+                              "partial_universe",
+                              "zero_denominator",
+                              "empty_universe",
+                              "ineligible",
+                              "future_market"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "row_count",
+                          "expected_unknown_count",
+                          "statuses",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "artifact": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "representation": {
+                            "enum": [
+                              "public_producer_json",
+                              "execution_receipt",
+                              "feature_explanation",
+                              "equity.mcp.diagnostics.v1"
+                            ]
+                          },
+                          "schema_version": {
+                            "const": "1"
+                          },
+                          "byte_length": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 1048576
+                          },
+                          "sha256": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{64}$"
+                          },
+                          "input_content_verified": {
+                            "const": false
+                          },
+                          "source_authenticated": {
+                            "const": false
+                          },
+                          "execution_verified": {
+                            "const": false
+                          }
+                        },
+                        "required": [
+                          "representation",
+                          "schema_version",
+                          "byte_length",
+                          "sha256",
+                          "input_content_verified",
+                          "source_authenticated",
+                          "execution_verified"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "chunk": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 4096,
+                        "pattern": "^[\\x20-\\x7e]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1044480
+                  },
+                  "next_offset": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1048576
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "kind",
+                  "presence",
+                  "quality",
+                  "artifact",
+                  "chunk",
+                  "offset",
+                  "next_offset",
+                  "complete"
+                ],
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "quality": {
+                          "type": "object"
+                        },
+                        "artifact": {
+                          "type": "object"
+                        },
+                        "chunk": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "quality": {
+                          "type": "null"
+                        },
+                        "artifact": {
+                          "type": "null"
+                        },
+                        "chunk": {
+                          "type": "null"
+                        },
+                        "offset": {
+                          "const": 0
+                        },
+                        "next_offset": {
+                          "type": "null"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": true
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "integer",
+                          "minimum": 4096,
+                          "maximum": 1044480,
+                          "multipleOf": 4096
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal",
+                          "evidence_binding",
+                          "evidence_bounds"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "equity_explanation",
+      "description": "Read first canonical explanation chunk after current artifact authorization; missing owner reports remain explicit.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "equity.mcp.evidence.v1"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "kind": {
+                    "const": "explanation"
+                  },
+                  "presence": {
+                    "enum": [
+                      "supplied",
+                      "not_supplied",
+                      "not_enabled"
+                    ]
+                  },
+                  "quality": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "row_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "expected_unknown_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "statuses": {
+                            "type": "object",
+                            "properties": {
+                              "available": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "incomplete_coverage": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "not_applicable": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "available",
+                              "insufficient_history",
+                              "missing_input",
+                              "incomplete_coverage",
+                              "not_applicable"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "reasons": {
+                            "type": "object",
+                            "properties": {
+                              "absent_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "null_field": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "observed_empty": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "no_eligible_observations": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_action_evidence": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "governed_gap": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "unknown_availability": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_knowledge": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "partial_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "zero_denominator": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "empty_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "ineligible": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_market": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "absent_input",
+                              "null_field",
+                              "observed_empty",
+                              "no_eligible_observations",
+                              "missing_action_evidence",
+                              "insufficient_history",
+                              "governed_gap",
+                              "unknown_availability",
+                              "future_knowledge",
+                              "partial_universe",
+                              "zero_denominator",
+                              "empty_universe",
+                              "ineligible",
+                              "future_market"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "row_count",
+                          "expected_unknown_count",
+                          "statuses",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "artifact": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "representation": {
+                            "enum": [
+                              "public_producer_json",
+                              "execution_receipt",
+                              "feature_explanation",
+                              "equity.mcp.diagnostics.v1"
+                            ]
+                          },
+                          "schema_version": {
+                            "const": "1"
+                          },
+                          "byte_length": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 1048576
+                          },
+                          "sha256": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{64}$"
+                          },
+                          "input_content_verified": {
+                            "const": false
+                          },
+                          "source_authenticated": {
+                            "const": false
+                          },
+                          "execution_verified": {
+                            "const": false
+                          }
+                        },
+                        "required": [
+                          "representation",
+                          "schema_version",
+                          "byte_length",
+                          "sha256",
+                          "input_content_verified",
+                          "source_authenticated",
+                          "execution_verified"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "chunk": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 4096,
+                        "pattern": "^[\\x20-\\x7e]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1044480
+                  },
+                  "next_offset": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1048576
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "kind",
+                  "presence",
+                  "quality",
+                  "artifact",
+                  "chunk",
+                  "offset",
+                  "next_offset",
+                  "complete"
+                ],
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "quality": {
+                          "type": "object"
+                        },
+                        "artifact": {
+                          "type": "object"
+                        },
+                        "chunk": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "quality": {
+                          "type": "null"
+                        },
+                        "artifact": {
+                          "type": "null"
+                        },
+                        "chunk": {
+                          "type": "null"
+                        },
+                        "offset": {
+                          "const": 0
+                        },
+                        "next_offset": {
+                          "type": "null"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": true
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "integer",
+                          "minimum": 4096,
+                          "maximum": 1044480,
+                          "multipleOf": 4096
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal",
+                          "evidence_binding",
+                          "evidence_bounds"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "equity_diagnostics",
+      "description": "Read first canonical diagnostics chunk after current artifact authorization; missing owner reports remain explicit.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "equity.mcp.evidence.v1"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "kind": {
+                    "const": "diagnostics"
+                  },
+                  "presence": {
+                    "enum": [
+                      "supplied",
+                      "not_supplied",
+                      "not_enabled"
+                    ]
+                  },
+                  "quality": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "row_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "expected_unknown_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "statuses": {
+                            "type": "object",
+                            "properties": {
+                              "available": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "incomplete_coverage": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "not_applicable": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "available",
+                              "insufficient_history",
+                              "missing_input",
+                              "incomplete_coverage",
+                              "not_applicable"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "reasons": {
+                            "type": "object",
+                            "properties": {
+                              "absent_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "null_field": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "observed_empty": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "no_eligible_observations": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_action_evidence": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "governed_gap": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "unknown_availability": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_knowledge": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "partial_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "zero_denominator": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "empty_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "ineligible": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_market": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "absent_input",
+                              "null_field",
+                              "observed_empty",
+                              "no_eligible_observations",
+                              "missing_action_evidence",
+                              "insufficient_history",
+                              "governed_gap",
+                              "unknown_availability",
+                              "future_knowledge",
+                              "partial_universe",
+                              "zero_denominator",
+                              "empty_universe",
+                              "ineligible",
+                              "future_market"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "row_count",
+                          "expected_unknown_count",
+                          "statuses",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "artifact": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "representation": {
+                            "enum": [
+                              "public_producer_json",
+                              "execution_receipt",
+                              "feature_explanation",
+                              "equity.mcp.diagnostics.v1"
+                            ]
+                          },
+                          "schema_version": {
+                            "const": "1"
+                          },
+                          "byte_length": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 1048576
+                          },
+                          "sha256": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{64}$"
+                          },
+                          "input_content_verified": {
+                            "const": false
+                          },
+                          "source_authenticated": {
+                            "const": false
+                          },
+                          "execution_verified": {
+                            "const": false
+                          }
+                        },
+                        "required": [
+                          "representation",
+                          "schema_version",
+                          "byte_length",
+                          "sha256",
+                          "input_content_verified",
+                          "source_authenticated",
+                          "execution_verified"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "chunk": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 4096,
+                        "pattern": "^[\\x20-\\x7e]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1044480
+                  },
+                  "next_offset": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1048576
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "kind",
+                  "presence",
+                  "quality",
+                  "artifact",
+                  "chunk",
+                  "offset",
+                  "next_offset",
+                  "complete"
+                ],
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "quality": {
+                          "type": "object"
+                        },
+                        "artifact": {
+                          "type": "object"
+                        },
+                        "chunk": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "quality": {
+                          "type": "null"
+                        },
+                        "artifact": {
+                          "type": "null"
+                        },
+                        "chunk": {
+                          "type": "null"
+                        },
+                        "offset": {
+                          "const": 0
+                        },
+                        "next_offset": {
+                          "type": "null"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": true
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "integer",
+                          "minimum": 4096,
+                          "maximum": 1044480,
+                          "multipleOf": 4096
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal",
+                          "evidence_binding",
+                          "evidence_bounds"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "equity_evidence_read",
+      "description": "Read one bounded canonical artifact chunk; every call reauthorizes native artifact access.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "kind": {
+            "enum": [
+              "producer",
+              "receipt",
+              "explanation",
+              "diagnostics"
+            ]
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1044480,
+            "multipleOf": 4096
+          }
+        },
+        "required": [
+          "reference",
+          "kind",
+          "offset"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "equity.mcp.evidence.v1"
+                  },
+                  "reference": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "kind": {
+                    "enum": [
+                      "producer",
+                      "receipt",
+                      "explanation",
+                      "diagnostics"
+                    ]
+                  },
+                  "presence": {
+                    "enum": [
+                      "supplied",
+                      "not_supplied",
+                      "not_enabled"
+                    ]
+                  },
+                  "quality": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "row_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "expected_unknown_count": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 32768
+                          },
+                          "statuses": {
+                            "type": "object",
+                            "properties": {
+                              "available": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "incomplete_coverage": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "not_applicable": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "available",
+                              "insufficient_history",
+                              "missing_input",
+                              "incomplete_coverage",
+                              "not_applicable"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "reasons": {
+                            "type": "object",
+                            "properties": {
+                              "absent_input": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "null_field": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "observed_empty": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "no_eligible_observations": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "missing_action_evidence": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "insufficient_history": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "governed_gap": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "unknown_availability": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_knowledge": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "partial_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "zero_denominator": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "empty_universe": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "ineligible": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              },
+                              "future_market": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 32768
+                              }
+                            },
+                            "required": [
+                              "absent_input",
+                              "null_field",
+                              "observed_empty",
+                              "no_eligible_observations",
+                              "missing_action_evidence",
+                              "insufficient_history",
+                              "governed_gap",
+                              "unknown_availability",
+                              "future_knowledge",
+                              "partial_universe",
+                              "zero_denominator",
+                              "empty_universe",
+                              "ineligible",
+                              "future_market"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "row_count",
+                          "expected_unknown_count",
+                          "statuses",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "artifact": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "representation": {
+                            "enum": [
+                              "public_producer_json",
+                              "execution_receipt",
+                              "feature_explanation",
+                              "equity.mcp.diagnostics.v1"
+                            ]
+                          },
+                          "schema_version": {
+                            "const": "1"
+                          },
+                          "byte_length": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 1048576
+                          },
+                          "sha256": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{64}$"
+                          },
+                          "input_content_verified": {
+                            "const": false
+                          },
+                          "source_authenticated": {
+                            "const": false
+                          },
+                          "execution_verified": {
+                            "const": false
+                          }
+                        },
+                        "required": [
+                          "representation",
+                          "schema_version",
+                          "byte_length",
+                          "sha256",
+                          "input_content_verified",
+                          "source_authenticated",
+                          "execution_verified"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "chunk": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 4096,
+                        "pattern": "^[\\x20-\\x7e]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1044480
+                  },
+                  "next_offset": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1048576
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "representation",
+                  "reference",
+                  "kind",
+                  "presence",
+                  "quality",
+                  "artifact",
+                  "chunk",
+                  "offset",
+                  "next_offset",
+                  "complete"
+                ],
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "quality": {
+                          "type": "object"
+                        },
+                        "artifact": {
+                          "type": "object"
+                        },
+                        "chunk": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "quality": {
+                          "type": "null"
+                        },
+                        "artifact": {
+                          "type": "null"
+                        },
+                        "chunk": {
+                          "type": "null"
+                        },
+                        "offset": {
+                          "const": 0
+                        },
+                        "next_offset": {
+                          "type": "null"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": true
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "presence": {
+                          "const": "supplied"
+                        },
+                        "complete": {
+                          "const": false
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "next_offset": {
+                          "type": "integer",
+                          "minimum": 4096,
+                          "maximum": 1044480,
+                          "multipleOf": 4096
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal",
+                          "evidence_binding",
+                          "evidence_bounds"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "equity_evidence_capabilities",
+      "description": "Authenticated generic local evidence modes and bounds; never discloses result catalog presence.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "representation": {
+                    "const": "equity.mcp.evidence.capabilities.v1"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "modes": {
+                    "const": [
+                      "local_owner_prepared"
+                    ]
+                  },
+                  "kinds": {
+                    "const": [
+                      "producer",
+                      "receipt",
+                      "explanation",
+                      "diagnostics"
+                    ]
+                  },
+                  "chunk_bytes": {
+                    "const": 4096
+                  },
+                  "automatic_reports": {
+                    "const": false
+                  },
+                  "input_content_verified": {
+                    "const": false
+                  },
+                  "source_authenticated": {
+                    "const": false
+                  },
+                  "hosted_qualified": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "representation",
+                  "enabled",
+                  "modes",
+                  "kinds",
+                  "chunk_bytes",
+                  "automatic_reports",
+                  "input_content_verified",
+                  "source_authenticated",
+                  "hosted_qualified"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "failure": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "client"
+                      },
+                      "category": {
+                        "enum": [
+                          "configuration",
+                          "credentials",
+                          "transport",
+                          "protocol",
+                          "authorization",
+                          "contract",
+                          "quota",
+                          "internal",
+                          "capability",
+                          "client",
+                          "unknown"
+                        ]
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_configuration",
+                          "invalid_origin",
+                          "invalid_request",
+                          "invalid_expectation",
+                          "token_invalid",
+                          "provider_failed",
+                          "client_closed",
+                          "busy",
+                          "timeout",
+                          "disconnected",
+                          "tls_verification_failed",
+                          "invalid_response",
+                          "inconsistent_identity",
+                          "bounds",
+                          "remote_denial",
+                          "capability_unavailable",
+                          "invalid_conversion",
+                          "outcome_unknown",
+                          "cancelled"
+                        ]
+                      },
+                      "phase": {
+                        "enum": [
+                          "prepare",
+                          "provider",
+                          "connect",
+                          "send",
+                          "read",
+                          "decode",
+                          "convert"
+                        ]
+                      },
+                      "status": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "category",
+                      "code",
+                      "phase",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "const": "mcp"
+                      },
+                      "code": {
+                        "enum": [
+                          "invalid_arguments",
+                          "unknown_registration",
+                          "unknown_reference",
+                          "reference_expired",
+                          "reference_capacity",
+                          "summary_bounds",
+                          "profile_invalid",
+                          "internal",
+                          "evidence_binding",
+                          "evidence_bounds"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "code"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ok",
+              "failure"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
     }
   ],
   "limits": {

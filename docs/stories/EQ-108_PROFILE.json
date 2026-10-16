@@ -1,0 +1,113 @@
+{
+  "schema": "equity.mcp.evidence.profile.v1",
+  "status": "source_candidate_review_pending_unqualified",
+  "versions": {
+    "mcp": "0.1.0a1",
+    "protocol": "2025-11-25",
+    "client": "0.1.0a0",
+    "contracts": "0.0.4a4",
+    "io_sdk": "0.1.0a2",
+    "evidence": "0.1.0a2",
+    "explanations": "0.1.0a1",
+    "diagnostics": "0.1.0a1"
+  },
+  "mandatory_dependencies_unchanged": [
+    "equity-feature-client==0.1.0a0",
+    "jsonschema==4.26.0"
+  ],
+  "optional_extra_evidence": [
+    "equity-feature-client[native]==0.1.0a0",
+    "equity-feature-evidence==0.1.0a2",
+    "equity-feature-explanations==0.1.0a1",
+    "equity-feature-diagnostics==0.1.0a1"
+  ],
+  "limits": {
+    "catalog_entries": 8,
+    "catalog_ascii_bytes": 4194304,
+    "manifest_ascii_bytes": 65536,
+    "producer_ascii_bytes": 131072,
+    "receipt_ascii_bytes": 1048576,
+    "explanation_ascii_bytes": 262144,
+    "diagnostics_ascii_bytes": 262144,
+    "report_nodes": 32768,
+    "report_depth": 20,
+    "chunk_ascii_bytes": 4096,
+    "reference_lifetime_records": 16,
+    "default_local_ttl_seconds": 60,
+    "maximum_local_ttl_seconds": 300,
+    "tool_structured_ascii_bytes": 16384,
+    "input_frame_bytes": 16384,
+    "output_frame_bytes": 65536,
+    "tool_arguments_ascii_bytes": 4096,
+    "configuration_ascii_bytes": 65536,
+    "configuration_text_utf8_bytes": 65536,
+    "configuration_parameters": 256,
+    "configuration_intervals": 128,
+    "configuration_governed_sessions": 256,
+    "configuration_integer_parameter_bits": 4096,
+    "result_view_encoded_bytes": 262144
+  },
+  "kinds": [
+    "producer",
+    "receipt",
+    "explanation",
+    "diagnostics"
+  ],
+  "tools": [
+    "equity_receipt",
+    "equity_explanation",
+    "equity_diagnostics",
+    "equity_evidence_read",
+    "equity_evidence_capabilities"
+  ],
+  "presence": [
+    "supplied",
+    "not_supplied",
+    "not_enabled"
+  ],
+  "quality_statuses": [
+    "available",
+    "insufficient_history",
+    "missing_input",
+    "incomplete_coverage",
+    "not_applicable"
+  ],
+  "quality_reasons": [
+    "absent_input",
+    "null_field",
+    "observed_empty",
+    "no_eligible_observations",
+    "missing_action_evidence",
+    "insufficient_history",
+    "governed_gap",
+    "unknown_availability",
+    "future_knowledge",
+    "partial_universe",
+    "zero_denominator",
+    "empty_universe",
+    "ineligible",
+    "future_market"
+  ],
+  "owner_errors": [
+    "evidence_invalid",
+    "evidence_bounds",
+    "evidence_dependency"
+  ],
+  "new_mcp_errors": [
+    "evidence_binding",
+    "evidence_bounds"
+  ],
+  "public_artifacts": {
+    "producer": "complete canonical public ResultView.payload_json ASCII JSON",
+    "receipt": "unchanged public encode_receipt bytes",
+    "explanation": "unchanged public encode_explanation bytes, one explicit focus",
+    "diagnostics": "NEW equity.mcp.diagnostics.v1 projection of exact public typed DiagnosticReport"
+  },
+  "input_batch_verification": "not_performed_no_input_batches_accepted",
+  "sharing_assertion": "owner_explicit_report_sharing_authorized_is_True",
+  "remote_selection": "opaque_artifact_reference_only_no_native_id_path_URL_code_token_TLS_SQL_provider",
+  "hosted_support": false,
+  "implementation": false,
+  "Ready": false,
+  "configuration_scope": "Existing SessionCommand: start=open, end=market cutoff; full config/context identity and availability. Revision remains owner declaration."
+}
