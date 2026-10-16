@@ -256,7 +256,7 @@ print(json.dumps(out,sort_keys=True))
     assert not (harness/'packages').exists()
     # Fixed launcher adds only owned example/test source. All packages must resolve
     # to the fresh installed environment; no repository package root is copied.
-    launch=harness/'source-tests.py';launch.write_text("import sys,unittest\nfrom pathlib import Path\nr=Path(__file__).parent\nsys.path.insert(0,str(r/'examples'));sys.path.insert(0,str(r/'tests/agent_research'))\nsuite=unittest.TestSuite()\nfor name in sys.argv[1:]:suite.addTests(unittest.defaultTestLoader.loadTestsFromName(name))\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nraise SystemExit(0 if result.wasSuccessful() else 1)\n",encoding='utf-8')
+    launch=harness/'source-tests.py';launch.write_text("import sys,unittest\nfrom pathlib import Path\nr=Path(__file__).parent\nsys.path.insert(0,str(r/'examples'));sys.path.insert(0,str(r/'tests/agent_research'))\nif sys.argv[1:]==['--typed-example']:\n import runpy\n runpy.run_path(str(r/'examples/agent_research_typed.py'),run_name='__main__')\n raise SystemExit(0)\nsuite=unittest.TestSuite()\nfor name in sys.argv[1:]:suite.addTests(unittest.defaultTestLoader.loadTestsFromName(name))\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nraise SystemExit(0 if result.wasSuccessful() else 1)\n",encoding='utf-8')
     names=files(harness)
     pins=dict(source_map=names,config_sha256=names.get('tests/service/fixtures/jobs_native.json'))
     pinfile=location/'research-pins.json';pinfile.write_text(json.dumps(pins,sort_keys=True)+'\n',encoding='utf-8')
@@ -266,7 +266,7 @@ print(json.dumps(out,sort_keys=True))
     logs.append(logged(py,[launch,*modules],location,output,form+'-methods'))
     if integration:
         logs.append(logged(py,[harness/'docs/EQ109_RESEARCH_REFERENCE_PROBE.txt',harness,pinfile],location,output,form+'-SDK-native-ledger-replay'))
-        logs.append(logged(py,[harness/'examples/agent_research_typed.py'],location,output,form+'-typed-example'))
+        logs.append(logged(py,[launch,'--typed-example'],location,output,form+'-typed-example'))
     typed=[harness/'examples/agent_research.py']+([harness/'examples/agent_research_typed.py',harness/'examples/agent_research_mcp.py'] if integration else [])
     logs.append(logged(py,['-m','mypy','--strict','--follow-imports=silent',*typed],location,output,form+'-source-typing',mypy_path=harness/'examples'))
     consumer=location/'consumer.py';consumer.write_text("from agent_research import Assessment,assess\nfrom equity_feature_contracts import ConfigSpec,CanonicalBatch,FeatureResult\ndef run(c:ConfigSpec,b:CanonicalBatch,p:FeatureResult)->Assessment:\n    return assess(c,((\"trades\",b),),p,None,None,None,\"session.trade.count=3\")\n",encoding='utf-8')

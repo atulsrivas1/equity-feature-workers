@@ -1,0 +1,421 @@
+{
+  "actual_native_log_sha256": "a7afebf2a06630edeb5f033ecfb2c3b510a1190ea6c9b3c1ecff369f50f66d56",
+  "actual_native_scenarios": {
+    "forms": [
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 15,
+        "mode": "enabled",
+        "native_requests": 11,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 3,
+        "provider_calls": 14,
+        "reference_entry_exit": true,
+        "research": {
+          "arbitrary_argument_refusal_frames": 1,
+          "decision": "DEFER",
+          "events": 26,
+          "input_coverage": 1,
+          "mode": "enabled",
+          "narrative": "matched",
+          "native_sdk_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "replay": "matched",
+          "replay_calculations": 1,
+          "retention": "complete",
+          "summary_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+          "terminal": "eda0ac344962fc5178e40ee6afb80e25a3a547eceb65dfc520ea2c09f4bff8cc",
+          "tool_calls": 11
+        }
+      },
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 14,
+        "mode": "wrong_narrative",
+        "native_requests": 11,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 3,
+        "provider_calls": 14,
+        "reference_entry_exit": true,
+        "research": {
+          "arbitrary_argument_refusal_frames": 0,
+          "decision": "REJECT",
+          "events": 26,
+          "input_coverage": 1,
+          "mode": "wrong_narrative",
+          "narrative": "mismatch",
+          "native_sdk_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "replay": "matched",
+          "replay_calculations": 1,
+          "retention": "complete",
+          "summary_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+          "terminal": "cdc1434e1e849878d583f1ddcee61fe516852cac0b89230b4002818c47ff859c",
+          "tool_calls": 11
+        }
+      },
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 14,
+        "mode": "missing_input",
+        "native_requests": 11,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 6,
+        "provider_calls": 17,
+        "reference_entry_exit": true,
+        "research": {
+          "arbitrary_argument_refusal_frames": 0,
+          "decision": "DEFER",
+          "events": 26,
+          "input_coverage": 0,
+          "mode": "missing_input",
+          "narrative": "matched",
+          "native_sdk_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "replay": "unavailable",
+          "replay_calculations": 0,
+          "retention": "complete",
+          "summary_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+          "terminal": "be93b56ecbfcacde190bb2862a6bcd19f74c8bcdf2e63a7b4087495122b47a7a",
+          "tool_calls": 11
+        }
+      },
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 14,
+        "mode": "preentry_cancel",
+        "native_requests": 11,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 3,
+        "provider_calls": 14,
+        "reference_entry_exit": true,
+        "research": {
+          "arbitrary_argument_refusal_frames": 0,
+          "decision": "DEFER",
+          "events": 26,
+          "input_coverage": 1,
+          "mode": "preentry_cancel",
+          "narrative": "matched",
+          "native_sdk_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "replay": "cancelled_before_start",
+          "replay_calculations": 0,
+          "retention": "complete",
+          "summary_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+          "terminal": "73f51798b6d12e9576dbe4c058a8954999fd5d17712f352210563b9c46f95585",
+          "tool_calls": 11
+        }
+      },
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 9,
+        "mode": "retired",
+        "native_requests": 6,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 3,
+        "provider_calls": 9,
+        "reference_entry_exit": true,
+        "research": {
+          "arbitrary_argument_refusal_frames": 0,
+          "decision": "DEFER",
+          "events": 16,
+          "input_coverage": 1,
+          "mode": "retired",
+          "narrative": "unavailable",
+          "native_sdk_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "replay": "not_requested",
+          "replay_calculations": 0,
+          "retention": "missing",
+          "summary_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+          "terminal": "9e467b75e3b76d29e422d2319f05d074d8afeab6d75d29309faf2c08085903bd",
+          "tool_calls": 6
+        }
+      },
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 13,
+        "mode": "uncatalogued",
+        "native_requests": 10,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 5,
+        "provider_calls": 15,
+        "reference_entry_exit": true,
+        "research": {
+          "arbitrary_argument_refusal_frames": 0,
+          "decision": "DEFER",
+          "events": 24,
+          "input_coverage": 1,
+          "mode": "uncatalogued",
+          "narrative": "unavailable",
+          "native_sdk_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "replay": "not_requested",
+          "replay_calculations": 0,
+          "retention": "missing",
+          "summary_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+          "terminal": "2c541280d70bf7b504d541ba17810a78aa26356aab9bb3c67eab2f59ac224114",
+          "tool_calls": 10
+        }
+      },
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 12,
+        "mode": "disabled",
+        "native_requests": 9,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 0,
+        "provider_calls": 9,
+        "reference_entry_exit": true,
+        "research": {
+          "arbitrary_argument_refusal_frames": 0,
+          "decision": "DEFER",
+          "events": 22,
+          "input_coverage": 1,
+          "mode": "disabled",
+          "narrative": "unavailable",
+          "native_sdk_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+          "replay": "not_requested",
+          "replay_calculations": 0,
+          "retention": "missing",
+          "summary_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+          "terminal": "1c605d5dfe94f00147283f89a710a678487cab75fff0db191fee4b86305a7e05",
+          "tool_calls": 9
+        }
+      },
+      {
+        "cleanup_confirmed": true,
+        "mcp_frames_sent": 10,
+        "mode": "changed_artifact",
+        "native_requests": 7,
+        "platform_scope": "atomic_Windows_redirector_entry_job",
+        "prepare_calls": 3,
+        "provider_calls": 10,
+        "reference_entry_exit": true,
+        "research": {
+          "fault_scope": "Trusted parent changes copied actual SDK continuation; no claim server emitted altered bytes.",
+          "injected_continuation": {
+            "injected_body_sha256": "464c551bd2917e5e66bf0b8673212d7a7916df17fe322d8f156eae97418c461b",
+            "original_body_sha256": "cf5de3d038ca88f7228ba3829aed4209a52465cd5f2ac6636720570a819136f7"
+          },
+          "mode": "changed_artifact",
+          "refusal": "inconsistent_evidence",
+          "replay_calculations": 0,
+          "tool_calls": 7
+        }
+      }
+    ],
+    "qualification": "EQ109_owned_ClientSession_native_research_replay"
+  },
+  "actual_rework": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6210609791",
+  "all_prior_failures_preserved": true,
+  "completed_light_forms": [
+    {
+      "application_scope": "Source example/tests only in owned harness; every package imported from fresh site-packages. Not full host/stdlib/ABI closure.",
+      "form": "wheel-light",
+      "harness_source": {
+        "docs/stories/EQ-109_CASES.json": "d34841b3308f1cf93669f535e43f85b8b42618cfaf1b043958c7888538e5915a",
+        "docs/stories/EQ-109_ORACLES.json": "f21c1a0ba6659a8e92afd1d2d56aca0c82f17ae9ecb2c0acf4035b2778201a76",
+        "docs/stories/EQ-109_PROFILE.json": "ca7fa79c341f9bb7ac3ef7894261e6780dfbb5cbe77af77ad5496e67691d5dca",
+        "examples/agent_research.py": "bd9507f0b1cadea822d0dfc18ac9825829157645e4370db5b5f41ddbb79e024c",
+        "examples/agent_research_typed.py": "793b6c07257f8e45f9b4bc8a5a63a515fd1e2573df42c3c855c8749279a5363c",
+        "source-tests.py": "880a0cfa430edb2e521212854b1f13c267284d9c4b4c27ed8408676619443e65",
+        "tests/agent_research/independent_oracle.py": "0da2e4504bf7cb3fbd0e524f0bd347222d7d7f83cf324571e499e52ed24fb0d6",
+        "tests/agent_research/test_consumer.py": "ad1bf29155813241a581b76926cbf10ba993e73f34a916693b878e6328046732",
+        "tests/agent_research/test_light.py": "1ad5ec73390681b675bd3594929d496a0e4f5f110f1411d843e8cf83c772607e",
+        "tests/agent_research/test_replay.py": "0eeb47aa2aa0dc250825e47d2a76ff5f4bb0d2f9b11d8c7c0c69f992d4865547"
+      },
+      "independent_light_absence": true,
+      "installed_map": "wheel-light-installed-map.json",
+      "installed_map_sha256": "f84d125b3dcf6bad9aa9608a95bad8828ebf5f9486faa2429acf90c95ad916a7",
+      "installed_module_origins": {
+        "equity_feature_agent_evidence": {
+          "origin": "Lib/site-packages/equity_feature_agent_evidence/__init__.py",
+          "sha256": "1b9131876b03802e158e4455655a72fc1eea8fe9a15fe5325a041a3aaf15f2be"
+        },
+        "equity_feature_agent_ledger": {
+          "origin": "Lib/site-packages/equity_feature_agent_ledger/__init__.py",
+          "sha256": "4d08323ffbbcce9f551754e9844273430320865ef9aac3870602fcb50a546eb1"
+        },
+        "equity_feature_bundles": {
+          "origin": "Lib/site-packages/equity_feature_bundles/__init__.py",
+          "sha256": "bec1f7d80c8c0ce1af8e79926750a42d400314b81d6d4b8a250a61d2a171074f"
+        },
+        "equity_feature_contracts": {
+          "origin": "Lib/site-packages/equity_feature_contracts/__init__.py",
+          "sha256": "531160c9effe06c1a5bc1ded6659430a980a21ae03be66ee4b7da800af4cb91e"
+        },
+        "equity_feature_diagnostics": {
+          "origin": "Lib/site-packages/equity_feature_diagnostics/__init__.py",
+          "sha256": "766f6f7d1825e606020c16f6d5af4e895d4c0d13b5ce634ac4e898d548f4c8f1"
+        },
+        "equity_feature_evidence": {
+          "origin": "Lib/site-packages/equity_feature_evidence/__init__.py",
+          "sha256": "f9c34293584b80ce64601ff6b453147ba4f42b5f8bf9196cea7bed6f7c126ad1"
+        },
+        "equity_feature_explanations": {
+          "origin": "Lib/site-packages/equity_feature_explanations/__init__.py",
+          "sha256": "a690498e91b5af75e5e6e0e28a7ba10a27ad68a35cda34a9ef3910a25b8594f6"
+        }
+      },
+      "logs": [
+        {
+          "log": "wheel-light-absence.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "log": "wheel-light-methods.log",
+          "sha256": "c4d6ae15ad42fad0390bda292f500aa0e99cafae95135423981f135c991acb65"
+        },
+        {
+          "log": "wheel-light-source-typing.log",
+          "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+        },
+        {
+          "log": "wheel-light-consumer-positive.log",
+          "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+        },
+        {
+          "log": "wheel-light-consumer-negative.log",
+          "sha256": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8"
+        }
+      ],
+      "negative_consumer_sha256": "1132c4d05fbe54f750f246a5e680e72bc5a6d6c91ff29c00aca5b602e107032b",
+      "original_wheel_payload_equal": true,
+      "owned_form_cleanup_completed": true,
+      "packages": [
+        "contracts",
+        "evidence",
+        "explanations",
+        "diagnostics",
+        "agent-evidence",
+        "agent-ledger",
+        "bundles"
+      ],
+      "pins_sha256": "106665294893e2bce2dc2edb12cd22b4ea0d089e5bb0ea7d48a250a135faa263",
+      "positive_consumer_sha256": "7d30cef36d920171cde91219f709d319ad4fa5f148395cd6f60359a75ae429c6",
+      "registered_RECORD_validated": true,
+      "unchanged_registered_files": true
+    },
+    {
+      "application_scope": "Source example/tests only in owned harness; every package imported from fresh site-packages. Not full host/stdlib/ABI closure.",
+      "form": "sdist-light",
+      "harness_source": {
+        "docs/stories/EQ-109_CASES.json": "d34841b3308f1cf93669f535e43f85b8b42618cfaf1b043958c7888538e5915a",
+        "docs/stories/EQ-109_ORACLES.json": "f21c1a0ba6659a8e92afd1d2d56aca0c82f17ae9ecb2c0acf4035b2778201a76",
+        "docs/stories/EQ-109_PROFILE.json": "ca7fa79c341f9bb7ac3ef7894261e6780dfbb5cbe77af77ad5496e67691d5dca",
+        "examples/agent_research.py": "bd9507f0b1cadea822d0dfc18ac9825829157645e4370db5b5f41ddbb79e024c",
+        "examples/agent_research_typed.py": "793b6c07257f8e45f9b4bc8a5a63a515fd1e2573df42c3c855c8749279a5363c",
+        "source-tests.py": "880a0cfa430edb2e521212854b1f13c267284d9c4b4c27ed8408676619443e65",
+        "tests/agent_research/independent_oracle.py": "0da2e4504bf7cb3fbd0e524f0bd347222d7d7f83cf324571e499e52ed24fb0d6",
+        "tests/agent_research/test_consumer.py": "ad1bf29155813241a581b76926cbf10ba993e73f34a916693b878e6328046732",
+        "tests/agent_research/test_light.py": "1ad5ec73390681b675bd3594929d496a0e4f5f110f1411d843e8cf83c772607e",
+        "tests/agent_research/test_replay.py": "0eeb47aa2aa0dc250825e47d2a76ff5f4bb0d2f9b11d8c7c0c69f992d4865547"
+      },
+      "independent_light_absence": true,
+      "installed_map": "sdist-light-installed-map.json",
+      "installed_map_sha256": "5611a03afcbb02a38374748f6c1c2f17beb11a086eeadea756ed2af4c5c44263",
+      "installed_module_origins": {
+        "equity_feature_agent_evidence": {
+          "origin": "Lib/site-packages/equity_feature_agent_evidence/__init__.py",
+          "sha256": "1b9131876b03802e158e4455655a72fc1eea8fe9a15fe5325a041a3aaf15f2be"
+        },
+        "equity_feature_agent_ledger": {
+          "origin": "Lib/site-packages/equity_feature_agent_ledger/__init__.py",
+          "sha256": "4d08323ffbbcce9f551754e9844273430320865ef9aac3870602fcb50a546eb1"
+        },
+        "equity_feature_bundles": {
+          "origin": "Lib/site-packages/equity_feature_bundles/__init__.py",
+          "sha256": "bec1f7d80c8c0ce1af8e79926750a42d400314b81d6d4b8a250a61d2a171074f"
+        },
+        "equity_feature_contracts": {
+          "origin": "Lib/site-packages/equity_feature_contracts/__init__.py",
+          "sha256": "531160c9effe06c1a5bc1ded6659430a980a21ae03be66ee4b7da800af4cb91e"
+        },
+        "equity_feature_diagnostics": {
+          "origin": "Lib/site-packages/equity_feature_diagnostics/__init__.py",
+          "sha256": "766f6f7d1825e606020c16f6d5af4e895d4c0d13b5ce634ac4e898d548f4c8f1"
+        },
+        "equity_feature_evidence": {
+          "origin": "Lib/site-packages/equity_feature_evidence/__init__.py",
+          "sha256": "f9c34293584b80ce64601ff6b453147ba4f42b5f8bf9196cea7bed6f7c126ad1"
+        },
+        "equity_feature_explanations": {
+          "origin": "Lib/site-packages/equity_feature_explanations/__init__.py",
+          "sha256": "a690498e91b5af75e5e6e0e28a7ba10a27ad68a35cda34a9ef3910a25b8594f6"
+        }
+      },
+      "logs": [
+        {
+          "log": "sdist-light-absence.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "log": "sdist-light-methods.log",
+          "sha256": "53bbae6298fb0729bf51697e0ba65a09267a8b2fb4c0ee77db18146fdfba6971"
+        },
+        {
+          "log": "sdist-light-source-typing.log",
+          "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+        },
+        {
+          "log": "sdist-light-consumer-positive.log",
+          "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+        },
+        {
+          "log": "sdist-light-consumer-negative.log",
+          "sha256": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8"
+        }
+      ],
+      "negative_consumer_sha256": "1132c4d05fbe54f750f246a5e680e72bc5a6d6c91ff29c00aca5b602e107032b",
+      "original_wheel_payload_equal": true,
+      "owned_form_cleanup_completed": true,
+      "packages": [
+        "contracts",
+        "evidence",
+        "explanations",
+        "diagnostics",
+        "agent-evidence",
+        "agent-ledger",
+        "bundles"
+      ],
+      "pins_sha256": "106665294893e2bce2dc2edb12cd22b4ea0d089e5bb0ea7d48a250a135faa263",
+      "positive_consumer_sha256": "7d30cef36d920171cde91219f709d319ad4fa5f148395cd6f60359a75ae429c6",
+      "registered_RECORD_validated": true,
+      "unchanged_registered_files": true
+    }
+  ],
+  "completed_project_records": 16,
+  "corrected_scope": "Typed example goes through fixed owned source-tests launcher with explicit examples/test search paths under isolated -I; no repository package root or inherited PYTHONPATH. New branch runs only the fixed typed example via runpy. Source/inert approval only; distinct fourth qualification pending.",
+  "execution": {
+    "exit_code": 1,
+    "failure_scope": "Actual failed author qualification; retain output/work roots/raw log, no unchanged rerun or completed cleanup/pass inference.",
+    "finished": true,
+    "new_output": "dist/agent-research-author-entrypoint-corrective",
+    "qualified": false,
+    "raw_log_sha256": "6e1e938cf6cc9816ce6f59492858a34313781f9fbcf571d1b483e6f1c7d170f5",
+    "source_publication_sha256": "ebb48fcc086d92038628c8a67f74047850f8fe9fd058235934f3738cbd5afc4d",
+    "started": true
+  },
+  "incomplete_form_unit_methods": 60,
+  "incomplete_integration_form": "wheel-integration",
+  "qualified": false,
+  "raw_log": "eq109-author-entrypoint-corrective.log",
+  "reports": {
+    "eq109-artifact-collector-corrected-reviewer-report.json": "013ed7c4fb501c9598228d5f95e2176c79c8d34801acf100f3e6c27460b2ee3d",
+    "eq109-artifact-collector-generated-eol-reviewer-report.json": "eee6445c826988423f23a091a48ab83b58f5d6474dcdcc10612890c26708e74a",
+    "eq109-artifact-collector-initial-reviewer-report.json": "5344df5e9d87e159143c28ba17ae172c92e5f556a55e39bf942cae3da40592f3",
+    "eq109-author-native-partial-reviewer-report.json": "dce25951aeddda8c345e30c8c31c33dfdd1243830d16d11d18d0f77da7cb78b1",
+    "eq109-author-wheel-light-partial-reviewer-report.json": "a2669a650c3a05e5c315ad69a4e199ff1c07118a480443699f199ac0df3f1b69",
+    "eq109-typed-launch-corrective-reviewer-report.json": "0772585a32437ff8b46daea3a1dfd2a3875297d5e6a50424b66befd5cb7b7075",
+    "eq109-typed-launch-failure-reviewer-report.json": "d591ab77562c0898655510969474db118c4a651e4d85d74343d8f71ccfd7a59b"
+  },
+  "retained_owned_output": "dist/agent-research-author-entrypoint-corrective",
+  "retained_owned_work": [
+    "work/eq109-build-pn0b1216",
+    "work/eq109-wheel-integration-gncugeqt"
+  ],
+  "schema": "eq109.third.qualification.failure.v1",
+  "sdist_integration_started": false,
+  "source_heads": {
+    "canonical": "79ba9a8c86128496e3618a36ded87e4e9ab29809",
+    "worker": "475e5655e5f0121af0418ebf1be24702ad99cdf6"
+  },
+  "source_review_miss_preserved": true,
+  "status": "FAILED_REWORK_NOT_QUALIFIED",
+  "whole_integration_form_completed": false
+}
