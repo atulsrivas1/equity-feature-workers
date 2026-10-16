@@ -1,60 +1,295 @@
 {
-  "schema": "eq109.precode.validation.v1",
-  "status": "Backlog_precode_design_corrected_renewal_pending",
-  "source_implementation": false,
-  "new_tests_executed": 0,
-  "new_native_operations": 0,
-  "qualification": false,
-  "Ready": false,
-  "independent_review_pending": true,
-  "dependency_acceptance": {
-    "EQ108": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6209046467",
-    "EQ108_closure_review_sha256": "229ec75da1876c3b2e4b9c690c0de08bcb66302dfe37f77661a56e2f28014945"
+  "Ready": true,
+  "actual_admission": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6209277622",
+  "current_source_checks": {
+    "all35_case_qualification": false,
+    "canonical": "47source methods (39ordinary/SQLite+8actualpure-replay), strict2files PASS at catalog-compatible source; sourceunit only, no installed/native/bothOS proof",
+    "new_light_absence": "UNEXECUTED until genuine calculator-absent fresh forms",
+    "worker": "13realdispatch/patchedpublic-outcome source methods plus strict1file PASS; not actualSDK/native composition; retainedpriorWindowsenvironment dependencyreuse only, no fresh reinstall"
   },
-  "fixture_preparation": "Data-only stdlib reference JSON/ZIP/hash; no production package import/execution, no old fixture changed.",
-  "preserved_reviews": [
-    {
-      "report": "eq109-precode-reviewer-report.json",
-      "sha256": "0ed0ebb5c95e74dc90fdb16c4ec3a0df4b23cc7d8feab9fa51117ff20633c93e",
-      "disposition": "changes_requested",
-      "findings": [
-        "EQ109-DESIGN-01",
-        "EQ109-DESIGN-02"
-      ],
-      "correction": "DEFER/REJECT-only closed assessment, separate replay/anchor/retention axes, full selected report/content binding and explicit bounded copied typed graph; ten negative controls added; renewal pending"
-    },
-    {
-      "report": "eq109-precode-tooling-reviewer-report.json",
-      "sha256": "4bac29763c56980b541377ca01b54e398753eb139bdfeba36d17496e5cb132ce",
-      "disposition": "mechanics_approved_only",
-      "semantic_coverage": false
-    },
-    {
-      "report": "eq109-precode-corrected-reviewer-report.json",
-      "sha256": "228c60263f41cea6991b9b9cc065d24b3a378c26427cf5670d2ea74b688c30f2",
-      "disposition": "changes_requested",
-      "findings": [
-        "EQ109-DESIGN-03"
-      ],
-      "resolved_prior_findings": [
-        "EQ109-DESIGN-01",
-        "EQ109-DESIGN-02"
-      ],
-      "correction": "Exactly2governed slots(P,S), not1; unchangedoracle; independent stdlib positive data-shape control, renewal pending"
-    }
-  ],
   "data_shape_control": {
-    "scope": "stdlib literal fixture data shape control only; not typed public-object preflight implementation, no product import/test/native/qualification",
+    "configuration_parameters": 1,
+    "data_nodes": {
+      "batch": 215,
+      "configuration": 118
+    },
     "governed_sessions": [
       "P",
       "S"
     ],
-    "configuration_parameters": 1,
+    "scope": "stdlib literal fixture data shape control only; not typed public-object preflight implementation, no product import/test/native/qualification",
     "session_intervals": 0,
-    "data_nodes": {
-      "configuration": 118,
-      "batch": 215
-    },
     "unchanged_oracle_sha256": "f21c1a0ba6659a8e92afd1d2d56aca0c82f17ae9ecb2c0acf4035b2778201a76"
-  }
+  },
+  "dependency_acceptance": {
+    "EQ108": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6209046467",
+    "EQ108_closure_review_sha256": "229ec75da1876c3b2e4b9c690c0de08bcb66302dfe37f77661a56e2f28014945"
+  },
+  "execution_history": [
+    {
+      "journal": "eq109-source-first-execution.json",
+      "scope": "ordinary source pure and SQLite tests, no sockets/native calculator/build/install",
+      "sha256": "6ccf89041554f072addca0c4939e3e0d6790bca7653eb41f12e0f674e4f13b41"
+    },
+    {
+      "journal": "eq109-source-replay-first-execution.json",
+      "scope": "ordinary actual pure calculator/replay source tests; no sockets/native subprocess/build/install",
+      "sha256": "1b800aed7898b1afaad85798174af042c3bad9126cc61868c7e85e844f50c98d"
+    },
+    {
+      "journal": "eq109-source-typing-first-execution.json",
+      "scope": "source typing only, not fresh installed qualification",
+      "sha256": "eef077fa4db907640cda2700fe4aa2d1a917cfcbfea533dc6bdc68e044e5c6de"
+    },
+    {
+      "journal": "eq109-source-corrected-execution.json",
+      "scope": "ordinary source pure and SQLite tests, no sockets/native calculator/build/install",
+      "sha256": "e1f9c772380aee74dacec0d42e20ccbad664e7abf98af6f050e0edec8c55465c"
+    },
+    {
+      "journal": "eq109-source-typing-corrected-execution.json",
+      "scope": "source typing only, not fresh installed qualification",
+      "sha256": "1d1987a018edd715574e12d1a0dc77e2dd011e74183d35d0734ea02f9124ebda"
+    },
+    {
+      "journal": "eq109-source-residual-corrected-execution.json",
+      "scope": "source47pure/SQLite/actualpure-replay+strict2; no native subprocess/socket/build/install; light absence test excluded until actual absentform",
+      "sha256": "4635a9a7e1e1a1a05291a5e93728ff6ee5cea09c64d08be8f0fc2f47e4b08ca3"
+    },
+    {
+      "journal": "eq109-source-typing-residual-corrected-execution.json",
+      "scope": "source typing only, not fresh installed qualification",
+      "sha256": "1d1987a018edd715574e12d1a0dc77e2dd011e74183d35d0734ea02f9124ebda"
+    },
+    {
+      "journal": "eq109-worker-source-first-execution.json",
+      "scope": "patched-public-outcomes realMCPdispatch source controls, optional actualpure replay only; no SDKprocess/socket/native/build/install",
+      "sha256": "9e1c7d5d0fc4ff357a34f0cf49312426ea31f471d0ed47ba0fbc0238a9f73685"
+    },
+    {
+      "journal": "eq109-worker-source-reference-env-execution.json",
+      "scope": "patched-public-outcomes realMCPdispatch source controls, optional actualpure replay only; no SDKprocess/socket/native/build/install",
+      "sha256": "8f051591097043a2bef1725263f20ecb7defbb419c5ab0f7372459038d6f178a"
+    },
+    {
+      "journal": "eq109-worker-source-catalog-corrected-execution.json",
+      "scope": "patched-public-outcomes realMCPdispatch source controls, optional actualpure replay only; no SDKprocess/socket/native/build/install",
+      "sha256": "52b817813d2c1c7e18bb172b80095f88d9690864dac010f362de5f4986d69504"
+    },
+    {
+      "journal": "eq109-worker-source-typed-corrected-execution.json",
+      "scope": "patched-public-outcomes realMCPdispatch source controls, optional actualpure replay only; no SDKprocess/socket/native/build/install",
+      "sha256": "7ebd849ccd8e943894afa690a15a4768c169d2ed40bba3814d76275368077b61"
+    },
+    {
+      "journal": "eq109-source-catalog-corrected-execution.json",
+      "scope": "source47pure/SQLite/actualpure-replay+strict2; no native subprocess/socket/build/install; light absence test excluded until actual absentform",
+      "sha256": "25113b5b24559e588a0ecafa0868fa4783eca9908250ce12b1f4f096796d2dfa"
+    }
+  ],
+  "failures_and_corrections": [
+    "Initial source typing nullable EventReference then later reused loop tuple type failed; explicit narrowing/variable names corrected, original logs retained.",
+    "Worker first source attempt could not import anyio before tests; no native operation. Distinct source-only check reused retained earlier EQ108default-form dependencies read-only, not fresh qualification or a repaired oldfailedrun.",
+    "Worker second source preparation all7errors evidence_invalid: accepted catalog deliberately recomputes reference-only explanations. Initial full-input explanation design/review missed this compatibility. Changed new examples/owner to reference-only count report, input_content_unverified retained; outer batch verification independent. No MCP runtime/API/version/schema/math/oldfixture change.",
+    "Worker subsequent7methods passed while strict1failed absent jsonschema stubs and Anyreturn; explicit scoped untyped-runtime import boundary and checked dictcast corrected. Latest7+strict1PASS; earlier failure retained.",
+    "Precode publisher casecount fixer broad25count assertion failed beforewrites; exactvisibletext assertions corrected, no publication duplication."
+  ],
+  "fixture_preparation": "Data-only stdlib reference JSON/ZIP/hash; no production package import/execution, no old fixture changed.",
+  "independent_review_pending": true,
+  "new_native_operations": 0,
+  "new_tests_executed": 60,
+  "pending": "Complete exact correctedbuilder/packet/controller review, publish paired reviewedsource with canonicalpin first, then freshbothOS4forms/fullsource-license-metadata-RECORD/origins/actualSDKnative/currentartifacts and main release delivery. EQ110Backlog/R11unfinished; no new owner input missing.",
+  "preserved_reviews": [
+    {
+      "correction": "DEFER/REJECT-only closed assessment, separate replay/anchor/retention axes, full selected report/content binding and explicit bounded copied typed graph; ten negative controls added; renewal pending",
+      "disposition": "changes_requested",
+      "findings": [
+        "EQ109-DESIGN-01",
+        "EQ109-DESIGN-02"
+      ],
+      "report": "eq109-precode-reviewer-report.json",
+      "sha256": "0ed0ebb5c95e74dc90fdb16c4ec3a0df4b23cc7d8feab9fa51117ff20633c93e"
+    },
+    {
+      "disposition": "mechanics_approved_only",
+      "report": "eq109-precode-tooling-reviewer-report.json",
+      "semantic_coverage": false,
+      "sha256": "4bac29763c56980b541377ca01b54e398753eb139bdfeba36d17496e5cb132ce"
+    },
+    {
+      "correction": "Exactly2governed slots(P,S), not1; unchangedoracle; independent stdlib positive data-shape control, renewal pending",
+      "disposition": "changes_requested",
+      "findings": [
+        "EQ109-DESIGN-03"
+      ],
+      "report": "eq109-precode-corrected-reviewer-report.json",
+      "resolved_prior_findings": [
+        "EQ109-DESIGN-01",
+        "EQ109-DESIGN-02"
+      ],
+      "sha256": "228c60263f41cea6991b9b9cc065d24b3a378c26427cf5670d2ea74b688c30f2"
+    }
+  ],
+  "qualification": false,
+  "qualification_preparation": {
+    "actual_source_methods": "47core+13patched dispatch; source only, strict2core+1MCP pass",
+    "allocation_correction": "35distinctcases across4forms/OS; calculator-absentC12 onlylight, notall35perintegrationform",
+    "archive_correction": "Repeatclean-sourcewheel+SDist; fullselectedSDistmaterialization/repeatwheel/completegeneratedmaps; no regenerated selectedSDist equality claim",
+    "new_light_methods_unexecuted": 2,
+    "new_native_modes_unexecuted": 8,
+    "planned_integration_methods": 60,
+    "planned_light_methods": 41,
+    "preserved_tool_only_history": [
+      "Local corefreeze initial porcelain .strip guard failed before staging; corrected raw decoded splitlines before successful localcommit.",
+      "Read-only rg/Get-ChildItem commands from parent directory missed relative worker tools/dist paths; corrected explicit worker paths; no product effect.",
+      "Initial builder reviewer record uses observed oldSHA/inert controls; full oldbuilder bytes were not backed up before author edits. Corrective source is separately preserved/reviewed."
+    ],
+    "reviewed_reports": [
+      {
+        "disposition": "changes_requested_MCP_consumer_request_binding_fallback_closed_errors",
+        "finding_ids": [
+          "EQ109-MCP-01",
+          "EQ109-MCP-02",
+          "EQ109-MCP-03"
+        ],
+        "report": "eq109-mcp-consumer-source-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "f089c6d331a207996fd619b9d7f3add949583b1e361eb340336110213bb5c707"
+      },
+      {
+        "disposition": "changes_requested_residual_MCP_origin_expiry_failure_union",
+        "finding_ids": [
+          "EQ109-MCP-04"
+        ],
+        "report": "eq109-mcp-consumer-corrected-source-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "db5d98860fc4dc25af5a9f5e632a9f7c0634368523dcc53aba507d56e28dfe93"
+      },
+      {
+        "disposition": "approved_EQ109_MCP_consumer_source_only_no_actionable_findings",
+        "finding_ids": [],
+        "report": "eq109-mcp-consumer-final-source-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "a0928aeb365cbcf07f505f9f2a026cdb8502c87e1abf0a25e530f81ff378046f"
+      },
+      {
+        "disposition": "changes_requested_native_composition_coverage",
+        "finding_ids": [
+          "EQ109-NATIVE-01"
+        ],
+        "report": "eq109-native-source-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "ad537cac10b8e8958c90f385790adb3374cc1404f37c21cd8ec7d3ff6206da72"
+      },
+      {
+        "disposition": "changes_requested_corrected_draft_counter_race",
+        "finding_ids": [
+          "EQ109-NATIVE-02"
+        ],
+        "report": "eq109-native-counter-residual-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "44a1823def5867fe14fd57cd7cc4900ee550ae5aad309e01e303c9f0462207f1"
+      },
+      {
+        "disposition": "approved_native_composition_source_only",
+        "finding_ids": [],
+        "report": "eq109-native-corrected-source-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "e9cdbf9b1aa26296eb452276f28fe22f42f1d2e827309fb0fa318775006a7ddf"
+      },
+      {
+        "disposition": "approved_light_source_delta_and_proposed_cross_form_allocation_only",
+        "finding_ids": [],
+        "report": "eq109-light-delta-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "e60df63c5b54a6702eb6ca66d2d3d4ec0a4a2a835a0c6a263fac4a91a7c901ed"
+      },
+      {
+        "disposition": "changes_requested_qualification_tooling_not_approved_for_execution",
+        "finding_ids": [
+          "EQ109-QUAL-01",
+          "EQ109-QUAL-02"
+        ],
+        "report": "eq109-builder-source-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "18f6c4ea627fbd32938a0f807e7624cf554f506781463a469ced5e5e99a4a1ba"
+      },
+      {
+        "disposition": "changes_requested_selected_sdist_build_output_guard",
+        "finding_ids": [
+          "EQ109-QUAL-03"
+        ],
+        "report": "eq109-builder-first-corrective-reviewer-report.json",
+        "scope": "Exact source/inert controls described in report; no new native/build/install qualification.",
+        "sha256": "8c8010af553172201dc7dab025cec25b1f7d45948f40496ec5edfd6a96a8c211"
+      }
+    ],
+    "status": "UNEXECUTED_PENDING_COMPLETE_TOOLING_REVIEW"
+  },
+  "review_history": [
+    {
+      "disposition": "changes_requested_precode_design_not_ready",
+      "report": "eq109-precode-reviewer-report.json",
+      "sha256": "0ed0ebb5c95e74dc90fdb16c4ec3a0df4b23cc7d8feab9fa51117ff20633c93e"
+    },
+    {
+      "disposition": "changes_requested_one_remaining_precode_fixture_cardinality_mismatch",
+      "report": "eq109-precode-corrected-reviewer-report.json",
+      "sha256": "228c60263f41cea6991b9b9cc065d24b3a378c26427cf5670d2ea74b688c30f2"
+    },
+    {
+      "disposition": "approved_complete_local_precode_contract_pending_public_head_readback",
+      "report": "eq109-precode-final-reviewer-report.json",
+      "sha256": "2046cdfcb8964014056bc31f2ed04cf69024d3a02c3db163db4731ce3a73eb57"
+    },
+    {
+      "disposition": "approved_EQ109_precode_publication_controller_mechanics_only",
+      "report": "eq109-precode-tooling-reviewer-report.json",
+      "sha256": "4bac29763c56980b541377ca01b54e398753eb139bdfeba36d17496e5cb132ce"
+    },
+    {
+      "disposition": "approved_EQ109_corrected_35case_precode_publication_controller_mechanics_only",
+      "report": "eq109-precode-tooling-corrected-reviewer-report.json",
+      "sha256": "afdf16634054ac1b16e9891057c4d558d7391f306fe84eaf7a9dcbc17b6ce3a6"
+    },
+    {
+      "disposition": "approved_exact_public_precode_packet_for_readiness",
+      "report": "eq109-public-precode-readiness-reviewer-report.json",
+      "sha256": "a40132daf6f9bb00ceb843b13b3b4d657f8876c04b9ccb2246ac59ae024f77c2"
+    },
+    {
+      "disposition": "changes_requested_admission_controller_exact_review_binding",
+      "report": "eq109-admission-tooling-reviewer-report.json",
+      "sha256": "ab5e407f36bcf52cb3175cdc27605f44c916adc1e8b8a2d0177303468d66e5f1"
+    },
+    {
+      "disposition": "approved_corrected_EQ109_admission_controller_mechanics",
+      "report": "eq109-admission-tooling-corrected-reviewer-report.json",
+      "sha256": "b5ca2f9e5db251d7c0325d2d02c61a25ac6b943e151a6074e91da9cda3427603"
+    },
+    {
+      "disposition": "changes_requested_initial_source_development",
+      "report": "eq109-initial-source-reviewer-report.json",
+      "sha256": "fa1016edf47cd298dae3eae98e21b51bd80d615e291bf9f41633e625c275f976"
+    },
+    {
+      "disposition": "changes_requested_corrected_source_two_residual_paths",
+      "report": "eq109-corrected-source-reviewer-report.json",
+      "sha256": "e0e9a70fc6b7c2c99222c673d79915d03d50f9a209ef96605bebdac5f4c8f0fa"
+    },
+    {
+      "disposition": "approved_core_source_development_only",
+      "report": "eq109-final-core-source-reviewer-report.json",
+      "sha256": "e8fa7ec185f33802d314aa95ae98cb97dd7cccaaa7bf078abded96a8f8546afe"
+    },
+    {
+      "disposition": "approved_catalog_compatible_core_source_contract_delta",
+      "report": "eq109-catalog-compatible-core-reviewer-report.json",
+      "sha256": "4716edcb455a960f5217e4ea1a9e44db3e6c97dba4641f2b481a6a0910570716"
+    }
+  ],
+  "schema": "eq109.precode.validation.v1",
+  "source_findings": "DESIGN01-03,ADMIT01,SRC01-05,MCP01-04,NATIVE01/counter race resolved in recorded scopes. Original reviews and failed checks retained. Currentcore/MCP/native-entry source reviews approved; corrected builder/full qualification packet/publication+author controllers still require exact review. No new native/build/install qualification.",
+  "source_implementation": true,
+  "status": "In_progress_source_development_NOT_QUALIFIED"
 }

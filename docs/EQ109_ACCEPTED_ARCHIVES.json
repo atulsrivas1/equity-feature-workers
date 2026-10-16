@@ -1,0 +1,126 @@
+{
+  "schema": "eq109.accepted.project.archive.baseline.v1",
+  "scope": "Exact accepted EQ108 actual-main project archives only. Additional agent/ledger/bundle archives require current complete source/member qualification; no historical archive-equality claim for absent names.",
+  "source_capture_sha256": "a339d420dfa2d56fd9ba55affaf8e5778de810414ab7bbed6e05de7097602adb",
+  "source_run": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38856216860",
+  "source_story": 208,
+  "source_worker_main": "744b7d1e04d3f4de546b1df74872dea716c9d88b",
+  "systems": {
+    "Linux": {
+      "equity_feature_client-0.1.0a0-py3-none-any.whl": {
+        "bytes": 30986,
+        "sha256": "ce763e19e46ea2ff8a77aa4af5ce554f3fb0a98de49800545d634543828e0d7c"
+      },
+      "equity_feature_contracts-0.0.4a4-py3-none-any.whl": {
+        "bytes": 69728,
+        "sha256": "acaa84fc0340c4640ced2b7cdbef04d5ba7cfaec20cd0525b866b415147635cc"
+      },
+      "equity_feature_diagnostics-0.1.0a1-py3-none-any.whl": {
+        "bytes": 13167,
+        "sha256": "2aef0c2b3134009944d562f35a7721898bdad0f0a8b458f7ebd842b2e399c9a8"
+      },
+      "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": {
+        "bytes": 27770,
+        "sha256": "2abcd7084371e82e7ec887353a1159ed900616d764df36baafe49a2b57c9c676"
+      },
+      "equity_feature_evidence-0.1.0a2-py3-none-any.whl": {
+        "bytes": 17911,
+        "sha256": "0d7002a270c06d2dc7cdaff3091f67aa3db24417a57fedebf8b0fb47f3dd8ae2"
+      },
+      "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": {
+        "bytes": 16572,
+        "sha256": "6bed73224f033f4d67ad7d519bce76c5b8d3f6076766ccc0726b6a36a9bf3bde"
+      },
+      "equity_feature_explanations-0.1.0a1-py3-none-any.whl": {
+        "bytes": 11560,
+        "sha256": "6c3fcf5489d5f75bf368a845a068d68c0e7376fe799e1fd668684c16d2aa695d"
+      },
+      "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": {
+        "bytes": 11458,
+        "sha256": "ef4deb9adc03b0e77075a36236fc20fe30d9373218386a60dc769d0145c09c99"
+      },
+      "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": {
+        "bytes": 18687,
+        "sha256": "71c2316ab93d3382b24701ce6f4990b1355f90b8f66e562c8b1d34e539d60783"
+      },
+      "equity_feature_mcp-0.1.0a1-py3-none-any.whl": {
+        "bytes": 35903,
+        "sha256": "ee7c2d28f3be58e1fd136af967cefe52118c0f450a3251b2bbd7ad10bd641efe"
+      },
+      "equity_feature_mcp-0.1.0a1.tar.gz": {
+        "bytes": 30961,
+        "sha256": "46da529980b47047267a60e738b3c8f4497907afd3205dbda3cf0c63269af7a9"
+      },
+      "equity_feature_service-0.1.0a3-py3-none-any.whl": {
+        "bytes": 53724,
+        "sha256": "6be0bb94c570429830fedda22813cfd6cc06d73072ff540250be318fa3df54d5"
+      },
+      "equity_feature_workers-0.1.0a13-py3-none-any.whl": {
+        "bytes": 71053,
+        "sha256": "a4eae3ca4ae6e37d277e941958199b47b0dd0ce150064c0952c2d0269e042faf"
+      },
+      "equity_features-0.0.4a4-py3-none-any.whl": {
+        "bytes": 65151,
+        "sha256": "cf8965e1600a3d8ef10dbefcfdea21f2d48ad8c8f80e0268abe12c365b1cd26e"
+      }
+    },
+    "Windows": {
+      "equity_feature_client-0.1.0a0-py3-none-any.whl": {
+        "bytes": 30998,
+        "sha256": "881b6059a37b3b076f26ac2ddcf14c2fa343fb0292a6aba3fc7652df500540b1"
+      },
+      "equity_feature_contracts-0.0.4a4-py3-none-any.whl": {
+        "bytes": 70077,
+        "sha256": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2"
+      },
+      "equity_feature_diagnostics-0.1.0a1-py3-none-any.whl": {
+        "bytes": 13232,
+        "sha256": "a49a2daa7e1cb71f635b694527f2a68dc11211bd951140f286dc1000ca754cb8"
+      },
+      "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": {
+        "bytes": 27794,
+        "sha256": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc"
+      },
+      "equity_feature_evidence-0.1.0a2-py3-none-any.whl": {
+        "bytes": 18001,
+        "sha256": "21de082b93de57e022ed6552260d834e517002f5cc1c3fe5f1408f386d98f639"
+      },
+      "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": {
+        "bytes": 16579,
+        "sha256": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8"
+      },
+      "equity_feature_explanations-0.1.0a1-py3-none-any.whl": {
+        "bytes": 11624,
+        "sha256": "c4955e3621a1cf987df0d4cb441343f2087b006b32e8e039057d80017a13f58c"
+      },
+      "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": {
+        "bytes": 11470,
+        "sha256": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549"
+      },
+      "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": {
+        "bytes": 18702,
+        "sha256": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb"
+      },
+      "equity_feature_mcp-0.1.0a1-py3-none-any.whl": {
+        "bytes": 35920,
+        "sha256": "15599fd9b5f47807c41894a6c4766fbc8738afe1279481582bc1ce5a52aa5b7a"
+      },
+      "equity_feature_mcp-0.1.0a1.tar.gz": {
+        "bytes": 31036,
+        "sha256": "76cccc3735b96c9cf674c40c10a810129862e430518e8919cfb5a328fcae8361"
+      },
+      "equity_feature_service-0.1.0a3-py3-none-any.whl": {
+        "bytes": 53736,
+        "sha256": "f6be07ba2dc03ae0d5fee65e21a6ac615f544344df3d5517e0eb20b64db62f56"
+      },
+      "equity_feature_workers-0.1.0a13-py3-none-any.whl": {
+        "bytes": 71072,
+        "sha256": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324"
+      },
+      "equity_features-0.0.4a4-py3-none-any.whl": {
+        "bytes": 65462,
+        "sha256": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0"
+      }
+    }
+  }
+}
