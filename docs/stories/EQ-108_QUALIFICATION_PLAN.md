@@ -1,3 +1,7 @@
+## EQ108 reviewed source; physical qualification prepared — October16,2026
+
+Completed separate source review resolved EQ108-SRC-01 public input reconstruction and EQ108-SRC-02 exact frozen mutation-seed coverage. Independent33new ordinary methods/strict7 pass; earlier19existing regressions remain scoped source evidence. Both original findings/reports/probes and source fixture/test corrections are retained. Subsequent fixed importlib optional dependencies and packaged-schema test lookup require exact renewal before publication. [Qualification preparation](EQ-108_QUALIFICATION_INPUTS.json) specifies the new UNEXECUTED entry/official ClientSession owned-pipe controller/fourfreshform builder/workflow. No new native/socket/certificate/build/install/qualification or runtime push has executed. Next resolve exact source/tooling review, commit only reviewed candidate then qualify; actual208Inprogress/Atul,209/210Backlog/R11unfinished.
+
 # EQ108 planned qualification; unexecuted
 
 Freeze independent exact pre-code schema/case review before Ready; product implementation and all new physical qualification sources are still absent. Source tests use literal cases, not regenerated expectations through implementation. Existing seven-tool behavior/operation counts/failures/TTL/tombstones and original accepted math/producer fixtures remain regressions.

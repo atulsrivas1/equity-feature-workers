@@ -125,7 +125,7 @@
       "id": "E108-21",
       "name": "native_denied",
       "trigger": "actualartifact_read401/403 on previouslyadmittedref",
-      "expected": "client_failure_linkedtombstone_no_cachedbytes"
+      "expected": "client_failure_then_reference_expired_linkedtombstones_no_cachedbytes"
     },
     {
       "id": "E108-22",
@@ -137,7 +137,7 @@
       "id": "E108-23",
       "name": "local_expired",
       "trigger": "localTTL expired on read/output",
-      "expected": "unknown_reference_no_report"
+      "expected": "reference_expired_known_tombstone_no_report"
     },
     {
       "id": "E108-24",
@@ -220,5 +220,6 @@
   ],
   "literal_inputs": "EQ-108_ORACLES.json",
   "admission_and_unit_boundary_vectors": "EQ-108_ADMISSION.json",
-  "semantic_mutations": "Named seed.value plus literal JSON-pointer edit; public decode/owner admission must refuse before any native operation."
+  "semantic_mutations": "Named seed.value plus literal JSON-pointer edit; public decode/owner admission must refuse before any native operation.",
+  "source_semantics_correction": "Known expired/tombstoned references follow existing reference_expired; unknown/foreign/job-role identifiers remain unknown_reference. No runtime behavior relaxed."
 }

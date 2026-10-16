@@ -42,11 +42,11 @@ class Server(unittest.TestCase):
     def call(self, name, args):
         return self.server._dispatch(self.request('tools/call', dict(name=name, arguments=args)))['result']['structuredContent']
 
-    def test_closed_lifecycle_ids_metadata_and_seven_tools(self):
+    def test_closed_lifecycle_ids_metadata_and_twelve_tools(self):
         self.assertEqual(self.server._dispatch(self.request('tools/list'))['error']['code'], -32600)
         self.initialize()
         response = self.server._dispatch(self.request('tools/list', identifier='X' * 64))
-        self.assertEqual(len(response['result']['tools']), 7)
+        self.assertEqual(len(response['result']['tools']), 12)
         self.assertLessEqual(len(_wire.encode_frame(response)), 65536)
         for identifier in (True, None, -1, 2147483648, '\n', 'é'):
             self.assertIsNone(self.server._dispatch(self.request('ping', identifier=identifier))['id'])

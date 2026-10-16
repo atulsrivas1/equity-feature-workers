@@ -1,0 +1,224 @@
+"""UNEXECUTED owned SDK/native qualification; review exact source before running.
+
+Uses official ClientSession over bounded owned pipes, not stdio_client's process
+launcher. Windows atomic job owns redirector+entry; Linux direct child only.
+"""
+import hashlib,json,queue,shutil,sys,tempfile,threading,time
+from pathlib import Path
+from datetime import timedelta
+import anyio
+from mcp import ClientSession,types
+from mcp.shared.message import SessionMessage
+from jsonschema import Draft202012Validator
+if not sys.flags.isolated or len(sys.argv)!=3:raise ValueError('owned isolated probe')
+root=Path(sys.argv[1]).resolve();pins=json.loads(Path(sys.argv[2]).read_bytes())
+for name,digest in pins['source_map'].items():
+ if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:raise ValueError('owned source drift')
+sys.path.insert(0,str(root/'tests/client'))
+from test_authority_http import AuthorityHTTP,completed_bytes
+import test_authority_http as authority
+from test_client import FIXTURES,producer as producer_fixture
+from equity_feature_client import RemoteClient
+import equity_feature_mcp,equity_feature_client
+if any('site-packages' not in Path(v.__file__).resolve().parts for v in (equity_feature_mcp,equity_feature_client)):raise ValueError('owned installed parent')
+if (root/'packages').exists():raise ValueError('owned harness source shadow')
+
+def canonical(v):return json.dumps(v,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+def wait_marker(path,limit,child):
+ deadline=time.monotonic()+8
+ while True:
+  if time.monotonic()>=deadline or child.poll() is not None:raise ValueError('owned marker deadline')
+  value=completed_bytes(path,limit)
+  if value is not None:
+   if time.monotonic()>=deadline or child.poll() is not None:raise ValueError('owned marker deadline')
+   return json.loads(value)
+  time.sleep(.01)
+
+def owned_child(argv):
+ name='docs/EQ083_REFERENCE_PROCESS.txt' if sys.platform=='win32' else 'docs/EQ083_LINUX_REFERENCE_CHILD.txt'
+ namespace={};exec(compile((root/name).read_bytes(),name,'exec'),namespace)
+ if sys.platform=='win32':return namespace['WindowsReferenceChild'](argv)
+ if sys.platform=='linux':return namespace['LinuxReferenceChild'](argv,pins['source_map']['docs/EQ108_EVIDENCE_REFERENCE_ENTRY.txt'])
+ raise ValueError('owned platform')
+
+def dialogue(child,mode,action,ready):
+ messages=queue.Queue(4);failures=[];stderr=[];threads=[];send_count=[0];expected_reads=[0]
+ def reader():
+  try:
+   total=0
+   while True:
+    frame=bytearray()
+    while True:
+     char=child.stdout.read(1)
+     if not char:
+      if frame:raise ValueError('owned incomplete frame')
+      messages.put(None,timeout=1);return
+     frame.extend(char);total+=1
+     if len(frame)>65536 or total>1048576:raise ValueError('owned output bound')
+     if char==b'\n':break
+    messages.put(bytes(frame),timeout=1)
+  except BaseException as error:failures.append(type(error).__name__)
+ def errors():
+  try:
+   value=child.stderr.read(4097)
+   if len(value)>4096:raise ValueError('owned stderr bound')
+   stderr.append(value)
+  except BaseException as error:failures.append(type(error).__name__)
+ try:
+  for target in (reader,errors):
+   thread=threading.Thread(target=target);threads.append(thread);thread.start()
+  async def run():
+   receive_send,receive=anyio.create_memory_object_stream(0)
+   send,send_receive=anyio.create_memory_object_stream(0)
+   async def inbound():
+    async with receive_send:
+     while True:
+      try:frame=await anyio.to_thread.run_sync(lambda:messages.get(timeout=.1))
+      except queue.Empty:
+       if failures:raise ValueError('owned reader failed')
+       continue
+      if frame is None:return
+      await receive_send.send(SessionMessage(types.JSONRPCMessage.model_validate_json(frame)))
+   async def outbound():
+    async with send_receive:
+     async for message in send_receive:
+      frame=(message.message.model_dump_json(by_alias=True,exclude_none=True)+'\n').encode('utf-8')
+      if len(frame)>16384:raise ValueError('owned request bound')
+      if child.stdin.write(frame)!=len(frame):raise ValueError('owned short request')
+      child.stdin.flush();send_count[0]+=1
+   async with anyio.create_task_group() as group:
+    group.start_soon(inbound);group.start_soon(outbound)
+    try:
+     async with ClientSession(receive,send,read_timeout_seconds=timedelta(seconds=8)) as session:
+      initialized=await session.initialize();assert initialized.protocolVersion=='2025-11-25'
+      listed=await session.list_tools();assert len(listed.tools)==12
+      schemas={v.name:v.outputSchema for v in listed.tools}
+      async def call(name,arguments):
+       answer=await session.call_tool(name,arguments)
+       assert len(answer.content)==1 and answer.content[0].type=='text'
+       value=answer.structuredContent
+       assert answer.content[0].text==canonical(value).decode('ascii') and answer.isError==(not value['ok'])
+       Draft202012Validator(schemas[name]).validate(value)
+       return value
+      assert (await call('equity_evidence_capabilities',{}))['payload']['enabled']==(mode!='disabled')
+      expected_reads[0]+=1
+      key='eq108-new-uncatalogued' if mode=='uncatalogued' else 'eq108-static-seed'
+      admitted=await call('equity_calculate',dict(profile='cmd',idempotency_key=key))
+      assert admitted['ok'];expected_reads[0]+=1;reference=admitted['payload']['reference']
+      for _ in range(20):
+       status=await call('equity_job_status',dict(reference=reference));expected_reads[0]+=1
+       assert status['ok']
+       if status['payload']['data']['state']=='succeeded':break
+       await anyio.sleep(.02)
+      assert status['payload']['data']['state']=='succeeded'
+      if mode=='uncatalogued':
+       assert status['payload']['data']['job_id']!=ready['seed_job']
+       assert status['payload']['data']['result_id']!=ready['seed_result']
+      result=await call('equity_result_summary',dict(reference=reference));expected_reads[0]+=1
+      assert result['payload']['data']==FIXTURES['native_cases'][0]['complete_producer_payload']
+      artifact=await call('equity_artifact_reference',dict(reference=reference));expected_reads[0]+=1
+      assert artifact['ok'];handle=artifact['payload']['reference']
+      reports={}
+      expected_artifacts=expected_quality=None
+      if mode=='enabled':
+       sys.path.insert(0,str(root/'tests/mcp_evidence'))
+       from expected_reports import expected_reports
+       expected_artifacts,expected_quality=expected_reports(root)
+      for kind,tool in (('producer','equity_evidence_read'),('receipt','equity_receipt'),('explanation','equity_explanation'),('diagnostics','equity_diagnostics')):
+       arguments=dict(reference=handle,kind=kind,offset=0) if kind=='producer' else dict(reference=handle)
+       answer=await call(tool,arguments);expected_reads[0]+=1;assert answer['ok'];payload=answer['payload']
+       if mode!='enabled':
+        assert payload['presence']==('not_enabled' if mode=='disabled' else 'not_supplied')
+        assert all(payload[k] is None for k in ('quality','artifact','chunk','next_offset'))
+        continue
+       assert payload['presence']=='supplied' and not payload['artifact']['input_content_verified']
+       assert payload['quality']==expected_quality
+       combined=payload['chunk'];descriptor=payload['artifact']
+       while not payload['complete']:
+        answer=await call('equity_evidence_read',dict(reference=handle,kind=kind,offset=payload['next_offset']))
+        expected_reads[0]+=1;assert answer['ok'];payload=answer['payload']
+        assert payload['artifact']==descriptor and payload['quality']==expected_quality;combined+=payload['chunk']
+       data=combined.encode('ascii');assert len(data)==descriptor['byte_length'] and hashlib.sha256(data).hexdigest()==descriptor['sha256']
+       assert data==expected_artifacts[kind]
+       representation=dict(producer='public_producer_json',receipt='execution_receipt',explanation='feature_explanation',diagnostics='equity.mcp.diagnostics.v1')[kind]
+       assert descriptor==dict(representation=representation,schema_version='1',byte_length=len(data),sha256=hashlib.sha256(expected_artifacts[kind]).hexdigest(),input_content_verified=False,source_authenticated=False,execution_verified=False)
+       reports[kind]=json.loads(data)
+      if mode=='enabled':
+       producer=FIXTURES['native_cases'][0]['complete_producer_payload']
+       assert reports['producer']==producer
+       assert hashlib.sha256(canonical(reports['producer'])).hexdigest()==FIXTURES['native_cases'][0]['producer_payload_sha256']
+       from equity_feature_client import ResultView
+       from equity_feature_client.native import convert_result
+       from equity_feature_io_sdk import encode_result
+       _,expectation=producer_fixture(FIXTURES['native_cases'][0])
+       native=convert_result(ResultView(canonical(dict(schema='equity.remote',version='1.1',kind='result',request_id='owned',payload=producer))),expectation)
+       assert native.ok and hashlib.sha256(encode_result(native.view)).hexdigest()==FIXTURES['native_cases'][0]['native_sha256']
+       from equity_feature_evidence import decode_receipt,encode_receipt
+       receipt=decode_receipt(canonical(reports['receipt']));assert encode_receipt(receipt)==canonical(reports['receipt'])
+       assert not reports['explanation']['inputs'][0]['content_verified']
+       assert reports['diagnostics']['report']['unknown_count']==1 and reports['diagnostics']['report']['admission']=='not_applied'
+       assert not reports['diagnostics']['input_content_verified']
+      # Two-job uncatalogued uses existing retirement control (401); the old
+      # half-open TTL control explicitly supports only a one-job owner (403).
+      if mode=='uncatalogued':
+       assert (await call('equity_receipt',dict(reference=handle)))['ok'];expected_reads[0]+=1
+       assert action('retire')['reads']==2
+       denial_status=401
+      else:
+       assert action('ttl_before')['reads']==1
+       assert (await call('equity_receipt',dict(reference=handle)))['ok'];expected_reads[0]+=1
+       assert action('ttl_exact')['reads']==1
+       denial_status=403
+      denied=await call('equity_receipt',dict(reference=handle));expected_reads[0]+=1
+      assert not denied['ok'] and denied['failure']['status']==denial_status
+      tombstone=await call('equity_receipt',dict(reference=handle))
+      assert not tombstone['ok'] and tombstone['failure']['code']=='reference_expired'
+    finally:
+     await send.aclose();await receive.aclose();group.cancel_scope.cancel()
+  anyio.run(run)
+ finally:
+  active_exception=sys.exc_info()[0] is not None;cleanup=[]
+  try:
+   if child.stdin is not None and not child.stdin.closed:child.stdin.close()
+   if child.wait(4)!=0:raise ValueError('owned reference exit')
+  except BaseException as error:cleanup.append(type(error).__name__)
+  try:child.close()
+  except BaseException as error:cleanup.append(type(error).__name__)
+  for thread in threads:
+   if thread.ident is not None:
+    thread.join(4)
+    if thread.is_alive():cleanup.append('reader join unconfirmed')
+  if not active_exception and (cleanup or failures or stderr!=[b'']):raise ValueError('owned reference cleanup failed')
+ return dict(mcp_frames_sent=send_count[0],native_requests=expected_reads[0],cleanup_confirmed=True)
+
+results=[]
+for mode in ('enabled','uncatalogued','disabled'):
+ fixture=AuthorityHTTP('test_authenticated_foreign_owner_and_original_half_open_ttl')
+ origins=[]
+ def capture(origin,provider,**kwargs):origins.append(origin);return RemoteClient(origin,provider,**kwargs)
+ from unittest.mock import patch
+ scenario='retire' if mode=='uncatalogued' else 'ttl'
+ with patch.object(authority,'RemoteClient',side_effect=capture),fixture.native(scenario) as (_,_,_,action):
+  assert len(origins)==2 and origins[0]==origins[1]
+  directory=tempfile.mkdtemp(prefix='eq108-reference-')
+  if directory:
+   marker=Path(directory)/'ready';closed=Path(directory)/'closed'
+   argv=[sys.executable,'-I',str(root/'docs/EQ108_EVIDENCE_REFERENCE_ENTRY.txt'),origins[0],str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(marker),'trades',mode,str(closed),str(root/'tests/service/fixtures/jobs_native.json'),pins['config_sha256']]
+   child=owned_child(argv)
+   try:
+    ready=wait_marker(marker,512,child);assert set(ready)=={'pid','mode','prepare_calls','catalog_sha256','seed_job','seed_result'} and ready['mode']==mode
+    assert type(ready['prepare_calls']) is int and 0<=ready['prepare_calls']<=22
+    if mode=='disabled':assert ready['seed_job'] is ready['seed_result'] is ready['catalog_sha256'] is None
+    else:assert all(type(ready[key]) is str and 0<len(ready[key])<=128 for key in ('seed_job','seed_result','catalog_sha256'))
+    child.verify_entry(ready['pid'])
+    result=dialogue(child,mode,action,ready)
+    witness=json.loads(completed_bytes(closed,128));assert witness['client_closed'] and witness['server_closed']
+    assert type(witness['provider_calls']) is int and type(witness['client_closed']) is type(witness['server_closed']) is bool
+    assert witness['provider_calls']==ready['prepare_calls']+result['native_requests']
+    assert child.ownership_closed
+    result.update(mode=mode,prepare_calls=ready['prepare_calls'],provider_calls=witness['provider_calls'],reference_entry_exit=True,platform_scope='atomic_Windows_redirector_entry_job' if sys.platform=='win32' else 'Linux_retained_direct_child')
+    results.append(result)
+   finally:
+    if not child.ownership_closed:child.close()
+   shutil.rmtree(directory)
+print(json.dumps(dict(qualification='EQ108_owned_ClientSession_native',forms=results),sort_keys=True))

@@ -324,5 +324,23 @@
       "expected": "evidence_bounds"
     }
   ],
-  "boundary_scope": "Budget-only literal lengths/counts are independent unit controls; semantic public object limits may make an end-to-end ceiling unreachable. Real registration tests must use actual semantically valid public producer/report bytes, no forged metadata to claim a valid boundary. Aggregate actual charged bytes use the full fixed manifest formula; no invented RSS/physical promise."
+  "boundary_scope": "Budget-only literal lengths/counts are independent unit controls; semantic public object limits may make an end-to-end ceiling unreachable. Real registration tests must use actual semantically valid public producer/report bytes, no forged metadata to claim a valid boundary. Aggregate actual charged bytes use the full fixed manifest formula; no invented RSS/physical promise.",
+  "configuration_preparation": {
+    "limits": {
+      "configuration_ascii_bytes": 65536,
+      "configuration_text_utf8_bytes": 65536,
+      "configuration_parameters": 256,
+      "configuration_intervals": 128,
+      "configuration_governed_sessions": 256,
+      "configuration_integer_parameter_bits": 4096,
+      "result_view_encoded_bytes": 262144
+    },
+    "exact_public_components_reconstructed": true,
+    "borrowed_records_never_validated_in_place": true,
+    "result_view_envelope_reconstructed": true,
+    "scope_start": "configuration.session.open_ns",
+    "scope_end": "configuration.availability.market_cutoff_ns",
+    "context_revision_verified": false,
+    "scope": "Logical admission only; no source truth/execution/physical-resource claim."
+  }
 }

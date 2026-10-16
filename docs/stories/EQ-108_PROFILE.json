@@ -1,6 +1,6 @@
 {
   "schema": "equity.mcp.evidence.profile.v1",
-  "status": "proposed_pre_code_not_Ready",
+  "status": "source_candidate_review_pending_unqualified",
   "versions": {
     "mcp": "0.1.0a1",
     "protocol": "2025-11-25",
@@ -38,7 +38,14 @@
     "tool_structured_ascii_bytes": 16384,
     "input_frame_bytes": 16384,
     "output_frame_bytes": 65536,
-    "tool_arguments_ascii_bytes": 4096
+    "tool_arguments_ascii_bytes": 4096,
+    "configuration_ascii_bytes": 65536,
+    "configuration_text_utf8_bytes": 65536,
+    "configuration_parameters": 256,
+    "configuration_intervals": 128,
+    "configuration_governed_sessions": 256,
+    "configuration_integer_parameter_bits": 4096,
+    "result_view_encoded_bytes": 262144
   },
   "kinds": [
     "producer",
@@ -101,5 +108,6 @@
   "remote_selection": "opaque_artifact_reference_only_no_native_id_path_URL_code_token_TLS_SQL_provider",
   "hosted_support": false,
   "implementation": false,
-  "Ready": false
+  "Ready": false,
+  "configuration_scope": "Existing SessionCommand: start=open, end=market cutoff; full config/context identity and availability. Revision remains owner declaration."
 }

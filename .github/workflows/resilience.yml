@@ -1,11 +1,11 @@
-name: EQ083 cooperative resilience qualification
+name: Accepted R7 baseline compatibility (immutable 6538f21b)
 on:
   push:
   pull_request:
 permissions:
   contents: read
 jobs:
-  resilience:
+  accepted-r7-baseline:
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -17,6 +17,7 @@ jobs:
         with:
           path: component
           fetch-depth: 0
+          ref: 6538f21b441c8527b465899b98cfd0476e7af08a
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-features
@@ -36,9 +37,11 @@ jobs:
         working-directory: component
       - run: python tools/build_resilience.py --core-root ../core --io-root ../io
         working-directory: component
+      - run: python -c "import json,pathlib;v=json.loads(pathlib.Path('dist/resilience/resilience-receipt.json').read_bytes());assert v['commit']=='6538f21b441c8527b465899b98cfd0476e7af08a'"
+        working-directory: component
       - uses: actions/upload-artifact@v4
         with:
-          name: resilience-${{ github.sha }}-${{ matrix.os }}
+          name: accepted-r7-baseline-6538f21b441c8527b465899b98cfd0476e7af08a-${{ matrix.os }}
           path: component/dist/resilience/
           retention-days: 30
           if-no-files-found: error

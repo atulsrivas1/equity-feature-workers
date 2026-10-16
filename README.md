@@ -1,3 +1,7 @@
+## EQ108 implementation candidate — unqualified/unreleased
+
+The existing MCP server0.1.0a1 proposes five optional owner-prepared evidence tools; base dependencies and accepted calculations remain unchanged. [API, authority, privacy, unknowns and migration](docs/MCP_EVIDENCE_API.md) describes logical bounds, per-read native authorization, declared unverified inputs, retained plaintext and current qualification limits. Source review passed its recorded scope; fresh native/installed/bothOS/current artifacts/main release remain unfinished.
+
 ## EQ085 synthetic profiling evidence
 
 A developer tool now separates unprofiled compute/conversion/pipeline timings from diagnostic profiles, using owned synthetic inputs and complete result parity. See the [measured findings](docs/EQ085_ANALYSIS.md) and [method/command/limits](docs/PROFILING.md). Validation/materialization and broader pipeline calls are candidates for comparison; no native accelerator or speedup is delivered. Final delivery review/readback is pending. R7 remains incomplete with EQ083 parked and its automation paused.

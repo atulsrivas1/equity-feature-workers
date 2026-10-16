@@ -16,6 +16,11 @@ from equity_feature_client import JobExpectation, RemoteClient, Outcome
 from .models import MCPProfile, RawSliceRegistration, FeatureSliceRegistration, CommandRegistration
 from ._ledger import Ledger, Record, ReferenceError
 from . import _wire
+from .evidence import EvidenceCatalog, _capabilities, _read
+
+
+_EVIDENCE_TOOLS = {'equity_receipt': 'receipt', 'equity_explanation': 'explanation',
+                   'equity_diagnostics': 'diagnostics', 'equity_evidence_read': None}
 
 
 def _asset(name: str) -> dict[str, Any]:
@@ -31,8 +36,10 @@ def _failure(code: str) -> dict[str, Any]:
 
 
 class StdioServer:
-    def __init__(self, client: RemoteClient, profile: MCPProfile) -> None:
+    def __init__(self, client: RemoteClient, profile: MCPProfile, *, evidence: EvidenceCatalog | None = None) -> None:
         if type(client) is not RemoteClient or type(profile) is not MCPProfile:
+            raise ValueError('profile_invalid')
+        if evidence is not None and (type(evidence) is not EvidenceCatalog or evidence.profile_snapshot != profile.snapshot):
             raise ValueError('profile_invalid')
         self._client = client
         self._profile = profile
@@ -42,10 +49,14 @@ class StdioServer:
         self._params = _asset('protocol.json')['params_schemas']
         self._tools = _asset('tools.json')['tools']
         self._active: Record | None = None
+        self._evidence = evidence
+        self._evidence_snapshot = None if evidence is None else evidence.snapshot
 
     def close(self) -> None:
         self._closed = True
         self._ledger.close()
+        self._evidence = None
+        self._evidence_snapshot = None
         self._client.close()
 
     def _error(self, identifier: object, code: int) -> dict[str, Any]:
@@ -79,7 +90,10 @@ class StdioServer:
         registration: RawSliceRegistration | FeatureSliceRegistration | CommandRegistration | None = None
         outcome: Outcome[Any]
         try:
-            if name == 'equity_discover':
+            if self._evidence is not None and self._evidence.snapshot != self._evidence_snapshot:
+                self._ledger.close()
+                return _failure('profile_invalid')
+            if name in ('equity_discover', 'equity_evidence_capabilities'):
                 outcome = self._client.discover(**keyword)
             elif name == 'equity_slice':
                 registration = next((r for r in self._profile.slices if r.profile_id == arguments['profile']), None)
@@ -101,7 +115,11 @@ class StdioServer:
                 record = self._ledger.lookup(arguments['reference'])
                 registration = next(c for c in self._profile.commands if c.profile_id == record.profile_id)
                 assert isinstance(registration, CommandRegistration)
-                if name in ('equity_job_status', 'equity_job_cancel'):
+                if name in _EVIDENCE_TOOLS:
+                    if record.mode != 'artifact' or record.result_id is None:
+                        return _failure('unknown_reference')
+                    outcome = self._client.artifact_read(record.result_id, registration.expectation, **keyword)
+                elif name in ('equity_job_status', 'equity_job_cancel'):
                     if record.mode != 'job':
                         return _failure('unknown_reference')
                     expected = JobExpectation(record.job_id, record.command_digest)
@@ -115,6 +133,9 @@ class StdioServer:
                         slot = self._ledger.reserve(record.profile_id, origin=record)
                     outcome = self._client.artifact_read(record.result_id, registration.expectation, **keyword) if name == 'equity_artifact_reference' or record.mode == 'artifact' else self._client.result_read(record.result_id, registration.expectation, **keyword)
             self._ledger.sample()
+            if self._evidence is not None and self._evidence.snapshot != self._evidence_snapshot:
+                self._ledger.close()
+                return _failure('profile_invalid')
             if outcome.failure is not None:
                 denial = outcome.failure
                 if record is not None and (denial.status in (401, 403) or denial.category in ('authorization', 'credentials')):
@@ -133,7 +154,23 @@ class StdioServer:
                     assert slot is not None
                     record = self._ledger.commit(slot, record.command_digest, record.job_id, record.result_id, record)
             self._active = record
-            if name == 'equity_discover':
+            if name == 'equity_evidence_capabilities':
+                payload = _capabilities(self._evidence is not None)
+            elif name in _EVIDENCE_TOOLS:
+                assert record is not None and record.result_id is not None
+                kind = arguments['kind'] if name == 'equity_evidence_read' else _EVIDENCE_TOOLS[name]
+                assert isinstance(kind, str)
+                prepared_payload, error = _read(self._evidence, reference=record.reference, profile_id=record.profile_id,
+                    job_id=record.job_id, result_id=record.result_id, command_digest=record.command_digest,
+                    producer=_wire.canonical(data), kind=kind, offset=arguments['offset'] if name == 'equity_evidence_read' else 0)
+                if error is not None:
+                    if error == 'evidence_binding':
+                        self._ledger.invalidate(record)
+                        self._active = None
+                    return _failure(error)
+                assert prepared_payload is not None
+                payload = prepared_payload
+            elif name == 'equity_discover':
                 payload = dict(representation='remote_discovery', data=data)
             elif name == 'equity_slice':
                 payload = dict(representation='raw_slice' if type(registration) is RawSliceRegistration else 'projected_feature_slice', data=data)
@@ -177,7 +214,7 @@ class StdioServer:
             if self._initialized:
                 return self._error(identifier, -32600)
             self._initialized = True
-            result: dict[str, Any] = dict(protocolVersion='2025-11-25', capabilities=dict(tools=dict(listChanged=False)), serverInfo=dict(name='equity-feature-mcp', version='0.1.0a0'))
+            result: dict[str, Any] = dict(protocolVersion='2025-11-25', capabilities=dict(tools=dict(listChanged=False)), serverInfo=dict(name='equity-feature-mcp', version='0.1.0a1'))
         elif method == 'ping':
             result = {}
         elif not self._ready:
@@ -188,6 +225,8 @@ class StdioServer:
             tool = next((t for t in self._tools if t['name'] == params['name']), None)
             arguments = params.get('arguments', {})
             if tool is None or len(_wire.canonical(arguments)) > 4096 or not Draft202012Validator(tool['inputSchema']).is_valid(arguments):
+                return self._error(identifier, -32602)
+            if tool['name'] == 'equity_evidence_read' and type(arguments['offset']) is not int:
                 return self._error(identifier, -32602)
             result = self._tool_result(tool, self._call(tool['name'], arguments))
         return dict(jsonrpc='2.0', id=identifier, result=result)
