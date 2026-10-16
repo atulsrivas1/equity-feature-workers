@@ -217,5 +217,8 @@
       "trigger": "officialSDK againstactualinstalledserver/nativeowner",
       "expected": "schema_discovery_canonicaltext_fullEOF_actualexit"
     }
-  ]
+  ],
+  "literal_inputs": "EQ-108_ORACLES.json",
+  "admission_and_unit_boundary_vectors": "EQ-108_ADMISSION.json",
+  "semantic_mutations": "Named seed.value plus literal JSON-pointer edit; public decode/owner admission must refuse before any native operation."
 }

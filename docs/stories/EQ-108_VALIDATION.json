@@ -1,0 +1,71 @@
+{
+  "schema": "eq108.precode.validation.v1",
+  "status": "corrected_precode_pending_renewed_review",
+  "implementation": false,
+  "Ready": false,
+  "new_product_tests": 0,
+  "new_native_operations": 0,
+  "initial_reviews": [
+    {
+      "reviewer": "/root/r10_review",
+      "heads": {
+        "canonical": "5bec082e6944790540a5d976d745791792806a7f",
+        "worker": "c4e4b8d90f925fd1100d4f85bb7ce02eafad70a0"
+      },
+      "disposition": "approved_precode_semantic_API_security_contract_for_Ready",
+      "sha256": "0494acb4ae345ab714f26919dff30572307dcb2b13cd0930a0f6cd9fbe67e1b6",
+      "findings": []
+    },
+    {
+      "reviewer": "/root/r9_plan_review",
+      "heads": {
+        "canonical": "5bec082e6944790540a5d976d745791792806a7f",
+        "worker": "c4e4b8d90f925fd1100d4f85bb7ce02eafad70a0"
+      },
+      "disposition": "changes_requested_before_ready",
+      "sha256": "efcad549e8fc8c9248c734f7e58edd62f8d6dff430447e2b1d880b7b7877fafd",
+      "findings": [
+        {
+          "id": "EQ108-PRE-01",
+          "priority": "P2",
+          "file": "docs/stories/EQ-108_CASES.json",
+          "line": 3,
+          "title": "Freeze executable literal independent cases before Ready",
+          "problem": "All36 entries are prose trigger/expected labels. There is no concrete typed seed, literal diagnostics projection/quality expected object, known canonical byte/hash oracle or explicit chunk boundary vector. For example E108-09 cannot independently determine the exact six-count/aggregate projection, and E108-31 cannot check canonical escaping/assembly against production-independent bytes. Future tests can reproduce implementation choices while satisfying these descriptions.",
+          "requested_change": "Retain these coverage descriptions, but add pre-implementation literal seeds and independently authored expected JSON/bytes/hash/length for at least a complete diagnostic projection including association/large numeric/null/unknown semantics, all-five-status/all14-reason quality counts, a supported explanation/receipt parity fixture and multi-chunk ASCII artifact with exact offsets/next/complete. Freeze concrete mutation/refusal vectors and inclusive/one-above construction recipes for the stated budgets; do not claim newly produced/runtime evidence."
+        },
+        {
+          "id": "EQ108-PRE-02",
+          "priority": "P2",
+          "file": "docs/stories/EQ-108_CONTRACT.md",
+          "line": 14,
+          "title": "Define the manifest and exact admission accounting",
+          "problem": "The inclusive64KiB manifest and4MiB aggregate are public admission limits, and the contract includes cached quality summary and manifest bytes, but no manifest field layout/canonical representation, ordering or accounting formula is specified anywhere in the eight files. Its documented focus/diagnostic identity is referenced at line36. Implementations can therefore charge different data or different byte sequences and disagree on E108-16. Owner error codes are listed but only the dependency error has an exact exception contract.",
+          "requested_change": "Freeze an exact internal/public manifest layout (or explicitly remove it as a separate representation and define an equally precise accounting alternative), canonicalization/order and bytes counted per entry/shared profile/quality/reports; define container/key/value node accounting. State exact owner exception type/code mapping, including accepted-library limit errors versus semantic errors and constructor precedence. Add hand-computable at/one-above fixtures using that formula. This concerns deterministic logical admission, not total RSS or physical guarantees."
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "EQ108-PRE-01",
+      "change": "Freeze literal public explanation/receipt/diagnostic association+large numeric/null/unknown/quality/chunk oracles and concrete JSON-pointer refusal edits before implementation."
+    },
+    {
+      "id": "EQ108-PRE-02",
+      "change": "Freeze exact canonical manifest/entry order/accounting formula/count/depth/unit boundary scope/owner fixed exception mapping and constructor precedence."
+    }
+  ],
+  "tool_history": [
+    "Initial pre-code publisher guard stripped leading porcelain space and rejected before staging/commit/push/mutation; changed raw status parser to preserve whitespace, then paired publication passed.",
+    "Initial static frame arithmetic omitted LF/worst legal escaped ID; corrected before first commit/publication.",
+    "Correction preparer assumed both reviewer reports used heads; actual API report uses head/worker_head. KeyError occurred BEFORE repository writes; exact fields normalized and rerun corrected preparer.",
+    "Read-only wrong-cwd/missingpath and PowerShell/jq/glob quoting errors made no source/native mutation; actual inventory/plainJSON/absolute paths corrected."
+  ],
+  "limits": [
+    "No new native execution, package import/conversion/build/install or runtime qualification.",
+    "Source/API review is scoped automated local review; plan review initially requested changes; renewal mandatory.",
+    "Initial36 case descriptions are coverage requirements, not36 executed literal tests.",
+    "Paused R7 and old failed evidence retained; no scope/ops/rights/admin/spending expansion."
+  ]
+}
