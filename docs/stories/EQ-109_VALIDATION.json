@@ -51,10 +51,15 @@
     "targeted_source_scope": "Independent ordinary source methods/counters only, not native/fresh installed/whole qualification."
   },
   "current_source_checks": {
-    "all35_case_qualification": false,
-    "canonical": "47source methods (39ordinary/SQLite+8actualpure-replay), strict2files PASS at catalog-compatible source; sourceunit only, no installed/native/bothOS proof",
-    "new_light_absence": "Actual third attempt: two completed fresh wheel-light/sdist-light forms,41methods each including2genuinecalculator-absent methods; source checks remain separately scoped. Whole qualification FAILED later.",
-    "worker": "13realdispatch/patchedpublic-outcome source methods plus strict1file PASS; not actualSDK/native composition; retainedpriorWindowsenvironment dependencyreuse only, no fresh reinstall"
+    "actual_fresh_cohorts": [
+      "author-Windows",
+      "CI-Windows",
+      "CI-Linux"
+    ],
+    "all35_case_allocation": "Exact documented source allocation verified; composite axes/light-only limits retained, not35 full vectors per form.",
+    "corrected_source_and_installed_controls": "Actual corrected d2ac C03/C35 required controls included in all current source cohorts; method allocation remains39pure/8replay/13patched/2light-only.",
+    "method_invocations_per_four_form_cohort": 202,
+    "official_SDK_native_scenarios_per_cohort": 16
   },
   "data_shape_control": {
     "configuration_parameters": 1,
@@ -428,6 +433,48 @@
     "typed_example_and_strict_consumer_checks_completed": true,
     "whole_integration_form_completed": false
   },
+  "historical_pre_fifth_qualification_state": {
+    "current_source_checks": {
+      "all35_case_qualification": false,
+      "canonical": "47source methods (39ordinary/SQLite+8actualpure-replay), strict2files PASS at catalog-compatible source; sourceunit only, no installed/native/bothOS proof",
+      "new_light_absence": "Actual third attempt: two completed fresh wheel-light/sdist-light forms,41methods each including2genuinecalculator-absent methods; source checks remain separately scoped. Whole qualification FAILED later.",
+      "worker": "13realdispatch/patchedpublic-outcome source methods plus strict1file PASS; not actualSDK/native composition; retainedpriorWindowsenvironment dependencyreuse only, no fresh reinstall"
+    },
+    "independent_review_pending": true,
+    "new_native_operations": {
+      "MCP_frames_sent": 101,
+      "consumer_native_HTTP_calls": 76,
+      "native_scenarios": 8,
+      "preparation_calls": 26,
+      "provider_calls": 102,
+      "pure_replay_calculations": 2,
+      "scope": "Third FAILED author run partial native scenario subprocess; not whole qualification."
+    },
+    "new_tests_executed": 60,
+    "partial_actual_validation": {
+      "integration_methods_before_failure": 60,
+      "light_forms": 2,
+      "light_methods_each": 41,
+      "native_scenarios_before_failure": 8,
+      "project_closure_records": 16,
+      "scope": "Third FAILED author run only; see third_qualification_failure actual logs/reviews.",
+      "sdist_integration_started": false,
+      "whole_integration_form_completed": false,
+      "whole_qualification": false
+    },
+    "qualification": false,
+    "qualification_preparation": {
+      "actual_wheel_integration_methods": 60,
+      "actual_wheel_integration_native_scenarios": 8,
+      "all35_case_qualification": false,
+      "completed_author_Windows_integration_forms": 0,
+      "completed_author_Windows_light_forms": 2,
+      "historical_preparation": "historical_prequalification_state.qualification_preparation",
+      "next": "Reviewed distinct fourth author/source CI qualification remains.",
+      "planned_forms_per_OS": 4,
+      "status": "EXECUTED_PARTIALLY_WHOLE_QUALIFICATION_FAILED"
+    }
+  },
   "historical_prequalification_state": {
     "current_source_checks": {
       "all35_case_qualification": false,
@@ -533,29 +580,8 @@
     },
     "scope": "Historical preparation before any actual author qualification; superseded for current execution by third_qualification_failure and partial_actual_validation."
   },
-  "independent_review_pending": true,
-  "new_native_operations": {
-    "MCP_frames_sent": 101,
-    "consumer_native_HTTP_calls": 76,
-    "native_scenarios": 8,
-    "preparation_calls": 26,
-    "provider_calls": 102,
-    "pure_replay_calculations": 2,
-    "scope": "Third FAILED author run partial native scenario subprocess; not whole qualification."
-  },
-  "new_tests_executed": 60,
-  "partial_actual_validation": {
-    "integration_methods_before_failure": 60,
-    "light_forms": 2,
-    "light_methods_each": 41,
-    "native_scenarios_before_failure": 8,
-    "project_closure_records": 16,
-    "scope": "Third FAILED author run only; see third_qualification_failure actual logs/reviews.",
-    "sdist_integration_started": false,
-    "whole_integration_form_completed": false,
-    "whole_qualification": false
-  },
-  "pending": "Exact reviewed paired publication, distinct fifth author qualification at d2ac input, Windows/Linux fourforms/current artifacts/finalcandidate/main acceptance.210Backlog/R11unfinished.",
+  "independent_review_pending": "Final qualified docs/currentfinalcandidate and actualmain artifacts/aggregate acceptance remain; completed source/author/current-source artifact reviews linked.",
+  "pending": "Current finalcandidate CI/artifacts, guarded paired merge/currentmain source+bothOS artifacts/independent delivery and lifecycle acceptance.210Backlog/R11unfinished.",
   "preserved_reviews": [
     {
       "correction": "DEFER/REJECT-only closed assessment, separate replay/anchor/retention axes, full selected report/content binding and explicit bounded copied typed graph; ten negative controls added; renewal pending",
@@ -587,17 +613,432 @@
       "sha256": "228c60263f41cea6991b9b9cc065d24b3a378c26427cf5670d2ea74b688c30f2"
     }
   ],
-  "qualification": false,
-  "qualification_preparation": {
-    "actual_wheel_integration_methods": 60,
-    "actual_wheel_integration_native_scenarios": 8,
-    "all35_case_qualification": false,
-    "completed_author_Windows_integration_forms": 0,
-    "completed_author_Windows_light_forms": 2,
-    "historical_preparation": "historical_prequalification_state.qualification_preparation",
-    "next": "Reviewed distinct fourth author/source CI qualification remains.",
-    "planned_forms_per_OS": 4,
-    "status": "EXECUTED_PARTIALLY_WHOLE_QUALIFICATION_FAILED"
+  "qualification": {
+    "CI": {
+      "all_component_checks_complete_at_preparation": false,
+      "artifacts": [
+        {
+          "independent_reinstall": false,
+          "installed_method_invocations": 202,
+          "metadata": {
+            "created_at": "2026-10-16T08:22:14Z",
+            "digest": "sha256:da1e06b1424a4b5a736977941f02d0eff354a8c5c8c92da00a8d87c68300eac8",
+            "expires_at": "2026-11-15T08:22:11Z",
+            "id": 12034292698,
+            "name": "agent-research-9d24d636c909ee4fc40bc4122da35d3bb9105fc9-ubuntu-24.04",
+            "size_in_bytes": 64072397,
+            "workflow_run": {
+              "head_branch": "codex/eq109-agent-replay",
+              "head_repository_id": 1408067204,
+              "head_sha": "9d24d636c909ee4fc40bc4122da35d3bb9105fc9",
+              "id": 38872200770,
+              "repository_id": 1408067204
+            }
+          },
+          "official_SDK_native_scenarios": 16,
+          "outer_files": {
+            "agent-research-receipt.json": "3010f383bc7f7195be3e379942f4fb6f696fc518e88f7a00e542e2410a8d8238",
+            "annotated_types-0.8.0-py3-none-any.whl": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+            "anyio-4.15.1-py3-none-any.whl": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+            "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+            "certifi-2026.7.22-py3-none-any.whl": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+            "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+            "click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+            "cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079",
+            "duckdb-1.5.6-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl": "bc9619ed7d4ffa117b5155d84b44794366bb6635178d78ed5e13a6024845c757",
+            "equity_feature_agent_evidence-0.1.0a1-py3-none-any.whl": "56071fb2717e5fffd08a7da38a34e4e1bfe55a78d0026e1d54d413d389a10ea3",
+            "equity_feature_agent_evidence-0.1.0a1.tar.gz": "d1d438ce6f2587a8c93421d853811751bd3dc272927d08ab3a9eb82cf2573bfd",
+            "equity_feature_agent_ledger-0.1.0a1-py3-none-any.whl": "4d6a2de188259177abf2a0b5a17830e78b3ea6ebce1571316cdbf7153ea80b07",
+            "equity_feature_agent_ledger-0.1.0a1.tar.gz": "bab0bb3ed827eb89ac3784a61fe5df576f65466180a17dc9d506c8daa1b1d43a",
+            "equity_feature_bundles-0.1.0a1-py3-none-any.whl": "1c823e05c1f571f7b8eb928e2ffa15ac93a4ea995661d0c648ff7c30359f6b44",
+            "equity_feature_bundles-0.1.0a1.tar.gz": "f8368496f00453417ce36fb359f3479ebe5fddbe5ae29c5137cb38f27ee8e7d4",
+            "equity_feature_client-0.1.0a0-py3-none-any.whl": "ce763e19e46ea2ff8a77aa4af5ce554f3fb0a98de49800545d634543828e0d7c",
+            "equity_feature_client-0.1.0a0.tar.gz": "d7dd0990ee9d289b1848deba30d713d5afc72f3e22d9fc1b21ae8f2dc623d54d",
+            "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "acaa84fc0340c4640ced2b7cdbef04d5ba7cfaec20cd0525b866b415147635cc",
+            "equity_feature_contracts-0.0.4a4.tar.gz": "f32a66f31759b10c9ac251f4dffb2388a3e2ce50d2e5e15c69ac7038828f97a9",
+            "equity_feature_diagnostics-0.1.0a1-py3-none-any.whl": "2aef0c2b3134009944d562f35a7721898bdad0f0a8b458f7ebd842b2e399c9a8",
+            "equity_feature_diagnostics-0.1.0a1.tar.gz": "be5b9fa258fd6df5568894f18d79121b967f37c5c94ddcdce01e4d2e9f94db29",
+            "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "2abcd7084371e82e7ec887353a1159ed900616d764df36baafe49a2b57c9c676",
+            "equity_feature_duckdb-0.1.0a8.tar.gz": "7f3d015393f1d80ea8daa4bc79be3e9f8fcd57ec34a5dfc0978c8005c90bd7ce",
+            "equity_feature_evidence-0.1.0a2-py3-none-any.whl": "0d7002a270c06d2dc7cdaff3091f67aa3db24417a57fedebf8b0fb47f3dd8ae2",
+            "equity_feature_evidence-0.1.0a2.tar.gz": "2d2cf67ce6d5e3e74abb8818e10d04b13d4c6ea63cc4647bd8d4f0adae43bd60",
+            "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "6bed73224f033f4d67ad7d519bce76c5b8d3f6076766ccc0726b6a36a9bf3bde",
+            "equity_feature_example_extensions-0.1.0a0.tar.gz": "3e56f1c9ea5210fc3570416e196c47654e1add0a1c0b2f8fdae080af78d1dac9",
+            "equity_feature_explanations-0.1.0a1-py3-none-any.whl": "6c3fcf5489d5f75bf368a845a068d68c0e7376fe799e1fd668684c16d2aa695d",
+            "equity_feature_explanations-0.1.0a1.tar.gz": "65cb5dad85372b53a7930d3ad5cf40c210846b3c90aed043726ccf1f4138b594",
+            "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "ef4deb9adc03b0e77075a36236fc20fe30d9373218386a60dc769d0145c09c99",
+            "equity_feature_io_contracts-0.1.0a2.tar.gz": "a42833344c94b9cf2a08111987d5c60b324845a87ffb0a2c6e9214a144ff8250",
+            "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "71c2316ab93d3382b24701ce6f4990b1355f90b8f66e562c8b1d34e539d60783",
+            "equity_feature_io_sdk-0.1.0a2.tar.gz": "967cad53e482786bdb7331af86da004c6c8a7cf44f85ada392efa4e61f665605",
+            "equity_feature_mcp-0.1.0a1-py3-none-any.whl": "ee7c2d28f3be58e1fd136af967cefe52118c0f450a3251b2bbd7ad10bd641efe",
+            "equity_feature_mcp-0.1.0a1.tar.gz": "46da529980b47047267a60e738b3c8f4497907afd3205dbda3cf0c63269af7a9",
+            "equity_feature_service-0.1.0a3-py3-none-any.whl": "6be0bb94c570429830fedda22813cfd6cc06d73072ff540250be318fa3df54d5",
+            "equity_feature_service-0.1.0a3.tar.gz": "159db0122c6b371d4352aebde331013bc8cb0912d635d5193c508d0ceb1fc43a",
+            "equity_feature_workers-0.1.0a13-py3-none-any.whl": "a4eae3ca4ae6e37d277e941958199b47b0dd0ce150064c0952c2d0269e042faf",
+            "equity_feature_workers-0.1.0a13.tar.gz": "0382656756abe5d89f21a5e705d4a41451a8a64d5da652ea58e846a2e3cd9e21",
+            "equity_features-0.0.4a4-py3-none-any.whl": "cf8965e1600a3d8ef10dbefcfdea21f2d48ad8c8f80e0268abe12c365b1cd26e",
+            "equity_features-0.0.4a4.tar.gz": "14e7b8b0ec1b245747d53081a73c9ef060c0f637d205ae97b5e14304b4d95c8f",
+            "h11-0.16.0-py3-none-any.whl": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+            "httpcore-1.0.9-py3-none-any.whl": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+            "httpx-0.28.1-py3-none-any.whl": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+            "httpx_sse-0.4.3-py3-none-any.whl": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+            "idna-3.20-py3-none-any.whl": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+            "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+            "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+            "mcp-1.30.0-py3-none-any.whl": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+            "mypy-1.15.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl": "8023ff13985661b50a5928fc7a5ca15f3d1affb41e5f0a9952cb68ef090b31ee",
+            "mypy_extensions-1.1.0-py3-none-any.whl": "1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505",
+            "numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "fd83c01228a688733f1ded5201c678f0c53ecc1006ffbc404db9f7a899ac6249",
+            "packaging-26.3-py3-none-any.whl": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+            "pip-25.1.1-py3-none-any.whl": "2913a38a2abf4ea6b64ab507bd9e967f3b53dc1ede74b01b0931e1ce548751af",
+            "pycparser-3.11-py3-none-any.whl": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+            "pydantic-2.14.0-py3-none-any.whl": "15fab1bea6f1dc5003b54fc2ecab230c1fd1dbade2acd4addc52d81e32416d4b",
+            "pydantic_core-2.50.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "f187030fc3d62c668feb0f09e92852e0eb414d7fcefc4748f2e67d245aade37e",
+            "pydantic_settings-2.15.0-py3-none-any.whl": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+            "pyjwt-2.15.1-py3-none-any.whl": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+            "python_dotenv-1.2.4-py3-none-any.whl": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+            "python_multipart-0.0.32-py3-none-any.whl": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+            "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+            "rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "addeda51556dac7c1a2f14cda62db8b621cd12afba3091d03a96c72932387eab",
+            "sdist-integration-SDK-native-ledger-replay.log": "46700c999e78df069b54201af90b613e5a21e8a781f6d6bfeb5e2c3f4397cc60",
+            "sdist-integration-consumer-negative.log": "6f8edb99acf58e314561ee2c643a3750f9813fd5a3f46a7f13410f3464550d5a",
+            "sdist-integration-consumer-positive.log": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e",
+            "sdist-integration-installed-map.json": "b97b790b0d15d61f12e243b0a356d081bb995478e59f662261157a79f4400084",
+            "sdist-integration-methods.log": "43b8194af1f7d079766f48e45f40ea75b314bc5e75d418623ae22ffafb788457",
+            "sdist-integration-source-typing.log": "8228fcc5ce46d42d01caf3cd941f4e9c5f2bcc372bb5b147a2f0572d2dd675a8",
+            "sdist-integration-typed-example.log": "1a86967cdc6c46916a28b0340188feb2af7851855c32bb4b5308abdaa1dbbe74",
+            "sdist-light-absence.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "sdist-light-consumer-negative.log": "6f8edb99acf58e314561ee2c643a3750f9813fd5a3f46a7f13410f3464550d5a",
+            "sdist-light-consumer-positive.log": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e",
+            "sdist-light-installed-map.json": "ec0aa6a1c66969606a94570aa58c90b07ce56018d698a418a82efb714e0ca57d",
+            "sdist-light-methods.log": "5adc3a3d8f5bd2c3c7d65e16f08d26459834798727160646bf842772089dbd40",
+            "sdist-light-source-typing.log": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e",
+            "setuptools-80.9.0-py3-none-any.whl": "062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922",
+            "sse_starlette-3.5.0-py3-none-any.whl": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+            "starlette-1.7.0-py3-none-any.whl": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+            "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+            "typing_inspection-0.4.4-py3-none-any.whl": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+            "uvicorn-0.54.0-py3-none-any.whl": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf",
+            "wheel-integration-SDK-native-ledger-replay.log": "10d98ee3cfc3f2cb04a1a9d98edae41c2d35f82e682e4c0b470b792796f772cc",
+            "wheel-integration-consumer-negative.log": "6f8edb99acf58e314561ee2c643a3750f9813fd5a3f46a7f13410f3464550d5a",
+            "wheel-integration-consumer-positive.log": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e",
+            "wheel-integration-installed-map.json": "968c3c3d37df8a65b9e538e61f7dbbaa1a4724b9760648d8605ecbe0d582f80e",
+            "wheel-integration-methods.log": "a92244e124ddb8e76f3c3735586ab1c45b7f2085e0da0ab17cd7e864b6d7da13",
+            "wheel-integration-source-typing.log": "8228fcc5ce46d42d01caf3cd941f4e9c5f2bcc372bb5b147a2f0572d2dd675a8",
+            "wheel-integration-typed-example.log": "1a86967cdc6c46916a28b0340188feb2af7851855c32bb4b5308abdaa1dbbe74",
+            "wheel-light-absence.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wheel-light-consumer-negative.log": "6f8edb99acf58e314561ee2c643a3750f9813fd5a3f46a7f13410f3464550d5a",
+            "wheel-light-consumer-positive.log": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e",
+            "wheel-light-installed-map.json": "3e1f1947558142e959b1c5f33db51eef11d3f3ea03f664df4f3ab44539e9435c",
+            "wheel-light-methods.log": "9f4ab06537a901b37f1ddcb8ebc853b6ed98c95209fd8cb77da814b17c98d98f",
+            "wheel-light-source-typing.log": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e"
+          },
+          "outer_sha256": "da1e06b1424a4b5a736977941f02d0eff354a8c5c8c92da00a8d87c68300eac8",
+          "source_export_profiles": {
+            "applications": [
+              "raw_Git"
+            ],
+            "bundles": [
+              "false",
+              "true"
+            ],
+            "client": [
+              "false",
+              "true"
+            ],
+            "component": [
+              "false",
+              "true"
+            ],
+            "core_base": [
+              "false"
+            ],
+            "io_base": [
+              "false",
+              "true"
+            ],
+            "optional": [
+              "false"
+            ],
+            "service": [
+              "false",
+              "true"
+            ],
+            "workers": [
+              "false",
+              "true"
+            ]
+          }
+        },
+        {
+          "independent_reinstall": false,
+          "installed_method_invocations": 202,
+          "metadata": {
+            "created_at": "2026-10-16T08:23:58Z",
+            "digest": "sha256:c72c34b9fb23627eaad625d1f59687da229d015878d95237eb3faca12b927543",
+            "expires_at": "2026-11-15T08:23:55Z",
+            "id": 12034970300,
+            "name": "agent-research-9d24d636c909ee4fc40bc4122da35d3bb9105fc9-windows-latest",
+            "size_in_bytes": 54814748,
+            "workflow_run": {
+              "head_branch": "codex/eq109-agent-replay",
+              "head_repository_id": 1408067204,
+              "head_sha": "9d24d636c909ee4fc40bc4122da35d3bb9105fc9",
+              "id": 38872200770,
+              "repository_id": 1408067204
+            }
+          },
+          "official_SDK_native_scenarios": 16,
+          "outer_files": {
+            "agent-research-receipt.json": "b6d416aa4251d4231a1a42cad6219cce77d82add64a45ebc86b385856ad2654a",
+            "annotated_types-0.8.0-py3-none-any.whl": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+            "anyio-4.15.1-py3-none-any.whl": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+            "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+            "certifi-2026.7.22-py3-none-any.whl": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+            "cffi-2.1.1-cp312-cp312-win_amd64.whl": "f53e442b08449d42821fa4a4fba000095af9f62742a500f978a9f557ec44339a",
+            "click-8.5.0-py3-none-any.whl": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+            "colorama-0.4.6-py2.py3-none-any.whl": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+            "cryptography-50.0.2-cp311-abi3-win_amd64.whl": "7afa5a6602a9f29af1f3a2965f831bae7c9d5d597b7cbb716d41ab3b7d89879c",
+            "duckdb-1.5.6-cp312-cp312-win_amd64.whl": "09ff51b230219f0d8b47fc8a1e17fb595ba9fab0c3d96a6de4d00b8ff86b3cf1",
+            "equity_feature_agent_evidence-0.1.0a1-py3-none-any.whl": "b945a6c672d4f70031d98358bedd55184bfe7ad5c173c76bb9ac0f2cbd2ae5a9",
+            "equity_feature_agent_evidence-0.1.0a1.tar.gz": "2a63b65289b9055d0f6372b13222f33151166b53806a0aad2c0aeb0ce1cceea4",
+            "equity_feature_agent_ledger-0.1.0a1-py3-none-any.whl": "c2381a2def8a598f18c5c31cc8a8f22876e98037e06afb3783f06740c46c033b",
+            "equity_feature_agent_ledger-0.1.0a1.tar.gz": "a73f03e7959ce2c5ff0cc606b8edce6c1e115af00c44e2753ebf551ff6b1dc8e",
+            "equity_feature_bundles-0.1.0a1-py3-none-any.whl": "46615dfc8cf4734eb8f551939c310d3a4062e803bec64b1654230ca79da4ede7",
+            "equity_feature_bundles-0.1.0a1.tar.gz": "18b63414cf87483d54d3b68818bf5fc4886310987d23df4774a0001f0bd5d617",
+            "equity_feature_client-0.1.0a0-py3-none-any.whl": "881b6059a37b3b076f26ac2ddcf14c2fa343fb0292a6aba3fc7652df500540b1",
+            "equity_feature_client-0.1.0a0.tar.gz": "fc4e2f93fbb6c382aa8842129435f7c5c176db277a414e69272af54daa9180bd",
+            "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "3fb31963c1f51b64c4b82fc874c1c38cc9c73461b933fb06d52f84bb29b7c7b2",
+            "equity_feature_contracts-0.0.4a4.tar.gz": "c0f35f1fd775b83ab9fdd48177c6332f38b1c83cc2f9986467e0852ca758ae57",
+            "equity_feature_diagnostics-0.1.0a1-py3-none-any.whl": "a49a2daa7e1cb71f635b694527f2a68dc11211bd951140f286dc1000ca754cb8",
+            "equity_feature_diagnostics-0.1.0a1.tar.gz": "b4b12f5bf0d1fea096d805ae72f1ff5f6848fe373af941af48b2ae1b1368607e",
+            "equity_feature_duckdb-0.1.0a8-py3-none-any.whl": "05bc3655de76ad87a969ee7d4b1fd6def623c9cdf31cb0b3dc4753d9629127dc",
+            "equity_feature_duckdb-0.1.0a8.tar.gz": "177b69cc4c08fb3cbe6a5c6b89da35e1d72c7bba99f6e0ecd93d4886666788bf",
+            "equity_feature_evidence-0.1.0a2-py3-none-any.whl": "21de082b93de57e022ed6552260d834e517002f5cc1c3fe5f1408f386d98f639",
+            "equity_feature_evidence-0.1.0a2.tar.gz": "1c001cb38bfe9af1de2097072337abaa6d0856b7c9d2190696467a0d8a0be29e",
+            "equity_feature_example_extensions-0.1.0a0-py3-none-any.whl": "5f18bbc83ba79485d199794b172a6ed7b7ab259625c87f2a49cb7a80a0889ab8",
+            "equity_feature_example_extensions-0.1.0a0.tar.gz": "5127b5b501b45e278de66761aa91e4c9fd718d0273d77e7b028ebbceed9fa602",
+            "equity_feature_explanations-0.1.0a1-py3-none-any.whl": "c4955e3621a1cf987df0d4cb441343f2087b006b32e8e039057d80017a13f58c",
+            "equity_feature_explanations-0.1.0a1.tar.gz": "b83bfbf2f0795a3a52d22b5c08cc57842f42836840b4c8fa30b8b0fe6ff4c19a",
+            "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549",
+            "equity_feature_io_contracts-0.1.0a2.tar.gz": "30e7211c710300da24b1765c1f5ddc6e3eaf3694b1d16dfcab138e712f317312",
+            "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb",
+            "equity_feature_io_sdk-0.1.0a2.tar.gz": "5ca8b028ecd26cc39663dade61b32271738248f7428958ab39431394e483c29a",
+            "equity_feature_mcp-0.1.0a1-py3-none-any.whl": "15599fd9b5f47807c41894a6c4766fbc8738afe1279481582bc1ce5a52aa5b7a",
+            "equity_feature_mcp-0.1.0a1.tar.gz": "76cccc3735b96c9cf674c40c10a810129862e430518e8919cfb5a328fcae8361",
+            "equity_feature_service-0.1.0a3-py3-none-any.whl": "f6be07ba2dc03ae0d5fee65e21a6ac615f544344df3d5517e0eb20b64db62f56",
+            "equity_feature_service-0.1.0a3.tar.gz": "8b0c5a7dbbdcdf954a6a5825f4ef23800ffab3cee5633ca4609768d900bfd7b6",
+            "equity_feature_workers-0.1.0a13-py3-none-any.whl": "0da17f4d4b7d53f72f2b67aba4bfb3cc912b86d769dd142550c4748a3edb2324",
+            "equity_feature_workers-0.1.0a13.tar.gz": "d1b5a702812bbac6270eb54ab20eb21ac7bc1100d522412cee9107a92e594b0e",
+            "equity_features-0.0.4a4-py3-none-any.whl": "0ff0745acf75f45ae7a2b38c7c106af200448f3026e4997fd0747101c79071f0",
+            "equity_features-0.0.4a4.tar.gz": "c25ab736eb267cd11a11d52cbeda6931d23796c94bb264164014f0dd542f1d06",
+            "h11-0.16.0-py3-none-any.whl": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+            "httpcore-1.0.9-py3-none-any.whl": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+            "httpx-0.28.1-py3-none-any.whl": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+            "httpx_sse-0.4.3-py3-none-any.whl": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+            "idna-3.20-py3-none-any.whl": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+            "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+            "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+            "mcp-1.30.0-py3-none-any.whl": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+            "mypy-1.15.0-cp312-cp312-win_amd64.whl": "171a9ca9a40cd1843abeca0e405bc1940cd9b305eaeea2dda769ba096932bb22",
+            "mypy_extensions-1.1.0-py3-none-any.whl": "1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505",
+            "numpy-2.2.6-cp312-cp312-win_amd64.whl": "c1f9540be57940698ed329904db803cf7a402f3fc200bfe599334c9bd84a40b2",
+            "packaging-26.3-py3-none-any.whl": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+            "pip-25.1.1-py3-none-any.whl": "2913a38a2abf4ea6b64ab507bd9e967f3b53dc1ede74b01b0931e1ce548751af",
+            "pycparser-3.11-py3-none-any.whl": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80",
+            "pydantic-2.14.0-py3-none-any.whl": "15fab1bea6f1dc5003b54fc2ecab230c1fd1dbade2acd4addc52d81e32416d4b",
+            "pydantic_core-2.50.0-cp312-cp312-win_amd64.whl": "1541c334af5d42cb9eb03862a9b4d2cfbfc670fd05172ec51f3ce02d704550f1",
+            "pydantic_settings-2.15.0-py3-none-any.whl": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+            "pyjwt-2.15.1-py3-none-any.whl": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+            "python_dotenv-1.2.4-py3-none-any.whl": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+            "python_multipart-0.0.32-py3-none-any.whl": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+            "pywin32-312-cp312-cp312-win_amd64.whl": "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc",
+            "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+            "rpds_py-2026.9.1-cp312-cp312-win_amd64.whl": "5ce8943f79c2210f7abcc28e86367b03b28d95027fd01c46d2472373ae70c86f",
+            "sdist-integration-SDK-native-ledger-replay.log": "ef44236f55e9c78031430e9000e4657a7c84cec9c8543ff441d479cd71b5b695",
+            "sdist-integration-consumer-negative.log": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8",
+            "sdist-integration-consumer-positive.log": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff",
+            "sdist-integration-installed-map.json": "e4aba3e2bdb5d4f033971dbee89ef57279c7c399e703a719c85e08644fcb2445",
+            "sdist-integration-methods.log": "59c5dca14572ca6710e5e1449c7d2f4bfb29b2ea764ef9d2b49dbab6303f335e",
+            "sdist-integration-source-typing.log": "281a094c39385b4d7b53e5db635f52158036861433c2a4975b9039e77a627a24",
+            "sdist-integration-typed-example.log": "6a80c27708e803fb4cc88410ae8f006051fd43fa0a0bc44f39880944ca3546e6",
+            "sdist-light-absence.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "sdist-light-consumer-negative.log": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8",
+            "sdist-light-consumer-positive.log": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff",
+            "sdist-light-installed-map.json": "f6d52a76043cee248e5e8710720d7c1f874e95e974ef003c51d004ca96fc2868",
+            "sdist-light-methods.log": "b4f5484a44ec023c9b113781bf8cab628956c0806093432c84afe340f896274d",
+            "sdist-light-source-typing.log": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff",
+            "setuptools-80.9.0-py3-none-any.whl": "062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922",
+            "sse_starlette-3.5.0-py3-none-any.whl": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+            "starlette-1.7.0-py3-none-any.whl": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+            "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+            "typing_inspection-0.4.4-py3-none-any.whl": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+            "uvicorn-0.54.0-py3-none-any.whl": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf",
+            "wheel-integration-SDK-native-ledger-replay.log": "2455d83b828b3deadf4efd6fcaa6ae977b180f6b99e70595ec66ae963891c097",
+            "wheel-integration-consumer-negative.log": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8",
+            "wheel-integration-consumer-positive.log": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff",
+            "wheel-integration-installed-map.json": "c42d6909d891800be83777170265adeae3ed9609bf954754c95de84bc0d12327",
+            "wheel-integration-methods.log": "1c7e953c36ee4d015fd0883af7c96f30a081f3e61527ab259003530f68d32968",
+            "wheel-integration-source-typing.log": "281a094c39385b4d7b53e5db635f52158036861433c2a4975b9039e77a627a24",
+            "wheel-integration-typed-example.log": "6a80c27708e803fb4cc88410ae8f006051fd43fa0a0bc44f39880944ca3546e6",
+            "wheel-light-absence.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "wheel-light-consumer-negative.log": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8",
+            "wheel-light-consumer-positive.log": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff",
+            "wheel-light-installed-map.json": "96166e06598f7e75c5a75e7cefa03ad138ceb0b764cdec56d78b7f6a1da7860e",
+            "wheel-light-methods.log": "9e64d344e2a2e1f2e5167769e4d24446051faa1f1be0070c66a593239d719454",
+            "wheel-light-source-typing.log": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+          },
+          "outer_sha256": "c72c34b9fb23627eaad625d1f59687da229d015878d95237eb3faca12b927543",
+          "source_export_profiles": {
+            "applications": [
+              "raw_Git"
+            ],
+            "bundles": [
+              "false",
+              "true"
+            ],
+            "client": [
+              "false",
+              "true"
+            ],
+            "component": [
+              "false",
+              "true"
+            ],
+            "core_base": [
+              "true"
+            ],
+            "io_base": [
+              "false",
+              "true"
+            ],
+            "optional": [
+              "true"
+            ],
+            "service": [
+              "false",
+              "true"
+            ],
+            "workers": [
+              "false",
+              "true"
+            ]
+          }
+        }
+      ],
+      "bindings": {},
+      "component_CI_preparation_snapshot": {
+        "not_success": {
+          "canonical": [],
+          "worker": [
+            {
+              "conclusion": "",
+              "name": "accepted-r7-baseline (ubuntu-24.04)",
+              "status": "IN_PROGRESS"
+            },
+            {
+              "conclusion": "",
+              "name": "accepted-r7-baseline (windows-latest)",
+              "status": "IN_PROGRESS"
+            },
+            {
+              "conclusion": "",
+              "name": "foundation (windows-latest)",
+              "status": "IN_PROGRESS"
+            }
+          ]
+        },
+        "ready": false
+      },
+      "component_CI_preparation_snapshot_sha256": "b563e4541fbff50323f5b519ee60b78e7840f152933f3432d9678d7cbe666fda",
+      "component_gate_scope": "Historical preparation snapshot only. Successful reviewed agent-research workflow is distinct from all78 component checks. Final publication requires the completed exact78 current-source gate and freshly re-verifies every binding before any push; finalcandidate/main gates remain separately required.",
+      "gate_record_sha256": null,
+      "run_attempt": 1,
+      "run_id": 38872200770,
+      "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38872200770"
+    },
+    "all_four_failed_runs_preserved": true,
+    "author": {
+      "audit_report_sha256": "9928770f2c9f618ba31bdbda5437fdd049ff756e68f3f24234a2636e566de15f",
+      "execution": {
+        "exit_code": 0,
+        "finished": true,
+        "new_output": "dist/agent-research-author-case-controls",
+        "qualified": true,
+        "raw_log_sha256": "92ab4acd12fda637647e043b071606f97ac8764e508c5a4dca2d16ff2a0d8761",
+        "receipt_sha256": "4b712722d46153fd3f67e8fb9538aa6e7ac871d99658462359d629eeba5110be",
+        "scope": "Actual author Windows fourform qualification only; independent artifacts/bothOS/currentmain/final delivery remain.",
+        "source_publication_sha256": "b3dbc5200f7b77397b351f67a56887705ba99768d06aad7ff3aca0708a556a56",
+        "started": true
+      },
+      "forms": 4,
+      "independent_reinstall": false,
+      "installed_method_invocations": 202,
+      "official_SDK_native_scenarios": 16,
+      "raw_log": "eq109-author-case-controls.log"
+    },
+    "case_coverage_corrections_included": true,
+    "closure_scope": "Selected project Git-source/archive/license/metadata and full selected-SDist materialization/repeatwheel closure; upstream reference wheels have pinned identity/metadata/member/RECORD checks, not whole transitive upstream source-binary/host ABI closure.",
+    "finite_relocated_payload_correction_included": true,
+    "limitations": [
+      "202 invocations per fresh four-form cohort, not202 unique methods or35 single-vector cases per form; C19/C21/C22 composite axes/C12 light-only remain explicit.",
+      "Three fresh cohorts: author Windows plus CI Windows/Linux; independent artifact audits do not reinstall or execute the environments.",
+      "16 actual official SDK/native scenarios per cohort; copied-continuation artifact tampering is not a server-wire mutation claim.",
+      "Captured source/archive/RECORD/static payload/generated-file/cleanup maps and raw logs retain their scope, not physical host/stdlib ABI proof, universal quotas or hard cleanup guarantees.",
+      "Unknown diagnostics remain DEFER; model labels, narrative matches, replay, hash consistency, trusted external anchor and retained content do not authenticate source/actors or grant trading authority.",
+      "Current finalcandidate CI/artifacts and actualmain/publication/acceptance remain;210Backlog/R11unfinished."
+    ],
+    "research_input": "d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d",
+    "review_record_coordination": {
+      "incident": {
+        "disposition": "restored_exact_previously_approved_frozen_report_bytes_no_product_or_publication_change",
+        "equivalence": "All original report fields, guard fixture outputs, source/controller hashes, approved disposition and empty findings are identical; supplement only appends partition controls/full-map check, delta record/source bindings and reviewer fixture-history limit. Original approved report had42 checks, not52.",
+        "findings": [],
+        "freeze_unchanged_sha256": "be18115f96679dd9f37393db59ff3bf7fa3ccac80828ed02584a66d626cfc1b0",
+        "frozen_report": {
+          "approved_findings_empty": true,
+          "file": "eq109-case-controls-tooling-reviewer-report.json",
+          "selected_actual_guard_checks": 42,
+          "sha256": "b3cecec5541836a482d0a250b1913e290d6ed1524ae2646cefb0acae6a191639"
+        },
+        "incident": "Parent froze and published while reviewer was still appending supplemental coverage to an already written approved report. This was tooling coordination error; reviewer final completion notification had not yet been delivered. No source/controller change or new qualification occurred in restoration.",
+        "prevention": "Do not consume reviewer output until explicit completion notification; preserve supplementary evidence in distinct filenames instead of extending a hash-bound report in place.",
+        "publication_unchanged_sha256": "b3dbc5200f7b77397b351f67a56887705ba99768d06aad7ff3aca0708a556a56",
+        "reconstruction": {
+          "file": "eq109-case-controls-tooling-frozen-reconstruction.json",
+          "method": "Re-executed retained review-only script with output pathname redirected, using unchanged exact reviewed controller sources and source-review maps. Result matched historical logged and frozen SHA byte-for-byte; no guessed JSON reserialization.",
+          "sha256": "b3cecec5541836a482d0a250b1913e290d6ed1524ae2646cefb0acae6a191639"
+        },
+        "scope": "Reversible local evidence-file preservation/restoration only. No Git/network/auth/publication/lifecycle/native/build/install/author-controller execution. Existing author preconditions remain mandatory.",
+        "supplemental_report": {
+          "additional_exact_current_map_check": 1,
+          "file": "eq109-case-controls-tooling-supplemental-reviewer-report.json",
+          "selected_actual_guard_checks": 52,
+          "sha256": "a9c17f2557c1aeb9a65ad7e259a9ff808c0ed341e0c26892e3685633d7a28165"
+        }
+      },
+      "incident_sha256": "9f6058ff9ef459b270782b3519c1fa87e2a872b2664d652f099fd25a1b5dd152",
+      "note": "The author froze an approved report before the reviewer finished supplemental checks. Exact frozen bytes were reconstructed and SHA-matched before author execution; supplemental final review is separately retained. Source/controllers and frozen/publication records unchanged. This is tooling coordination error, not failed runtime or fabricated review."
+    },
+    "reviews": {
+      "eq109-author-case-controls-artifact-reviewer-report.json": "9928770f2c9f618ba31bdbda5437fdd049ff756e68f3f24234a2636e566de15f",
+      "eq109-case-controls-publication-readback-reviewer-report.json": "26395de4faeb52ad5518d705db212560b36c3b9e89a3d2f530d58670a3f3919d",
+      "eq109-source-artifact-reviewer-report.json": "253c24eb31006c28ef8ab4fc0ff1276174af319ba992539188aebb118cfa6f45"
+    },
+    "schema": "eq109.synthetic.research.execution.v1",
+    "source_heads": {
+      "canonical": "180d34b0b92f086ed965f5b3c19b8e692fff77a4",
+      "worker": "9d24d636c909ee4fc40bc4122da35d3bb9105fc9"
+    },
+    "source_publication": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6211113351",
+    "status": "source_qualified_not_released",
+    "tooling_review_history": {
+      "eq109-closure-tools-initial-reviewer-report.json": "543f25845843d2544ac87549059ebf14729c839fa12cbc6081ba609211932dc7",
+      "eq109-closure-tools-reviewer-report.json": "8bda5f3f9727fa91aa55ec8436799f44824349989b9223b180d9855d772a953f",
+      "eq109-delivery-tools-reviewer-report.json": "88adf572e8a1ff0a0d123418d740bae62bc9e1b7e9543a006807bb3ad33c349c",
+      "eq109-final-docs-tooling-initial-reviewer-report.json": "fb8cd6f4cccd547a1b6a78e4b83b38d1e4d044ac08d254ee95021a44c02bf316",
+      "eq109-final-docs-tooling-reviewer-report.json": "f8ef9b05200b86df4f21375a273dc916aa838b4c555fe2f389fbe034ee5d6aa7"
+    }
   },
   "review_history": [
     {
@@ -699,9 +1140,9 @@
     "source_review_miss_preserved": true,
     "status": "FAILED_REWORK_NOT_QUALIFIED"
   },
-  "source_findings": "C03/C35 missing assertions and QUAL07 owning installed-payload projection/source-review misses preserved. Current exact source corrections independently reviewed; all four failures/partial scopes retained.",
+  "source_findings": "All four failed qualification/tooling histories and two case coverage findings remain preserved. Current corrected-input source/native/artifact reviews approved; no source-only or partial run promoted to acceptance.",
   "source_implementation": true,
-  "status": "In_progress_rework_required_cases_and_relocated_payload",
+  "status": "Test_source_qualified_final_delivery_pending",
   "third_qualification_failure": {
     "actual_native_log_sha256": "a7afebf2a06630edeb5f033ecfb2c3b510a1190ea6c9b3c1ecff369f50f66d56",
     "actual_native_scenarios": {

@@ -1,8 +1,16 @@
 {
-  "actual_fresh_installs": 0,
-  "actual_native_executions": 0,
+  "actual_fresh_installs": 12,
   "case_control_review_sha256": "35ed727f057a7c63e15a68ca039f1b44ee0980d8cd98de701f6dfaacb370bce6",
-  "counts_scope": "New corrected d2ac11 input only; no fresh qualification/native execution of these controls yet. Prior attempts and olded9 fourthcohort are separately recorded in VALIDATION.",
+  "completed_actual_SDK_native_scenarios": 48,
+  "counts_scope": "Three actual fresh corrected-input cohorts(author Windows/CI Windows/CI Linux), each4forms/202methodinvocations/16SDKnative scenarios; not unique methods or independent reviewer reinstalls.",
+  "execution_record": "EQ-109_EXECUTION.json",
+  "historical_pre_fifth_counts": {
+    "actual_fresh_installs": 0,
+    "actual_native_executions": 0,
+    "counts_scope": "New corrected d2ac11 input only; no fresh qualification/native execution of these controls yet. Prior attempts and olded9 fourthcohort are separately recorded in VALIDATION.",
+    "scope": "Prepared exact corrected-input method allocation; original35cases/expectedoutcomes unchanged. Historical source-review reports retain their original findings/limits; new4targetedsource controls and next qualification are distinct.",
+    "status": "UNEXECUTED_REVIEW_PENDING"
+  },
   "historical_superseded_replay_method_name": "test_C04_to06_missing_reports_never_invoke_calculator",
   "installed_payload_correction": {
     "archive": "pywin32-312-cp312-cp312-win_amd64.whl",
@@ -119,6 +127,6 @@
     "eq109-native-source-reviewer-report.json": "ad537cac10b8e8958c90f385790adb3374cc1404f37c21cd8ec7d3ff6206da72"
   },
   "schema": "eq109.prepared.qualification.inputs.v1",
-  "scope": "Prepared exact corrected-input method allocation; original35cases/expectedoutcomes unchanged. Historical source-review reports retain their original findings/limits; new4targetedsource controls and next qualification are distinct.",
-  "status": "UNEXECUTED_REVIEW_PENDING"
+  "scope": "Corrected d2ac source input; source/author/currentCI artifacts separately audited. Finalcandidate/main acceptance remains.",
+  "status": "source_qualified_final_delivery_pending"
 }
