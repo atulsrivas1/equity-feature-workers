@@ -163,5 +163,11 @@
       "findings_open": true,
       "executed": false
     }
-  }
+  },
+  "completed_source_execution": {
+    "canonical": "1b3402a08759683025f9a0dc2f009e55b428eb4c",
+    "worker": "827b1ab8d29ca150b295cc6be62f7dba73c20823"
+  },
+  "actual_materialization_contract": "Pinned Git source only. Raw Git blobs, captured effective optional-source maps and complete recognized Windows LF-to-CRLF profiles are distinct. Core effective input maps are derived from Git and checked against both whole persisted core wheels; no unobserved map/config capture is claimed. Unknown/mixed/extra/missing profiles deny.",
+  "source_execution_evidence": "EQ-108_EXECUTION.json"
 }

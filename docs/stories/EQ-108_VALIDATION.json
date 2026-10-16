@@ -1,10 +1,10 @@
 {
   "schema": "eq108.precode.validation.v1",
-  "status": "second_author_failed_owning_record_selector_rework",
+  "status": "Test_actual_source_qualified_final_docs_currenthead_main_delivery_pending",
   "implementation": true,
   "Ready": true,
   "new_product_tests": 34,
-  "new_native_operations": 0,
+  "new_native_operations": null,
   "initial_reviews": [
     {
       "reviewer": "/root/r10_review",
@@ -304,5 +304,23 @@
       "findings_open": true,
       "executed": false
     }
+  },
+  "historical_evidence_note": "Earlier fields retain dated preparation/rework scope. Current completed_source_qualification governs this snapshot; no old failed run becomes a pass.",
+  "native_operation_count_note": "Actual fixed native/reference cohorts executed; no total OS syscall count claimed. Per-scenario public request/provider/frame ledgers are in execution evidence.",
+  "completed_source_qualification": {
+    "execution_file": "EQ-108_EXECUTION.json",
+    "execution_sha256": "d21d2175a994d9069375dbc1f3a17e46539a36c6089bff5f991b2b4125d19663",
+    "author_review_sha256": "44965d0bdc424bd85e4fe25a0c7342e204c7d1bbc3b9fd05ca99af840e477f32",
+    "bothOS_review_sha256": "c0a5acb0a3d6538a9e23adfe651a25705da7c90bfdc2dc5737b87d8589e0f70f",
+    "source_heads": {
+      "canonical": "1b3402a08759683025f9a0dc2f009e55b428eb4c",
+      "worker": "827b1ab8d29ca150b295cc6be62f7dba73c20823"
+    },
+    "accepted": false
+  },
+  "retained_audit_tool_history": {
+    "eq108-collector-first-execution-failure.json": "137c2aa827f321fff697356ce1ee7ccf58b7b51b039aff78a2cdc6701d16feb5",
+    "eq108-collector-second-execution-failure.json": "272fe6cb56f8458fad4c551bffd8916df8b9c70ca2110701db996f582939217f",
+    "eq108-corrective-preparation-tooling-history.json": "eaab48d74724da0c9589dc8568ceb5ce5b20f75275370ec292f923459ac2c2ec"
   }
 }

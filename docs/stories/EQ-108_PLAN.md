@@ -1,4 +1,4 @@
-> Current source-development stage: EQ108 In progress after reviewed admission. Original pre-code stage statements below are historical; implementation remains unpublished/unqualified.
+> Current source qualification: actual author Windows/current CI bothOS four fresh forms completed and independently audited; final documentation/currenthead/main delivery pending, EQ108 Test. Earlier pre-code/development statements below are historical.
 
 # EQ108 — evidence tools in the existing MCP server
 
