@@ -1,6 +1,6 @@
 {
   "schema": "eq108.precode.validation.v1",
-  "status": "final_preexecution_corrections_pending_exact_renewal_unqualified",
+  "status": "actual_first_author_build_failed_corrective_source_pending_review",
   "implementation": true,
   "Ready": true,
   "new_product_tests": 34,
@@ -229,5 +229,37 @@
   "second_preexecution_corrections": [
     "COMP02: two-job uncatalogued now selects unchanged retirement owner, successful not_supplied read then actual retire ACKreads2/401/tombstone; one-job enabled/default retain TTL/source1/403.",
     "Publication guard requires a completed approved exact controller SHA; exact local/PR branch and explicit destination ref enforced before push. Both source findings retained; final renewal pending."
-  ]
+  ],
+  "first_author_build_failure": {
+    "status": "actual_first_author_build_failed_corrective_source_pending_review",
+    "failure": {
+      "source_publication_sha256": "4c7cafae7e6a985efc8f78b05be408a768757f798e22bc1aae00d2b3564be571",
+      "started": true,
+      "finished": true,
+      "qualified": false,
+      "new_output": "dist/mcp-evidence-author-first",
+      "exit_code": 1,
+      "raw_log_sha256": "01bdcce5bbf1330f996ae96b4724a638c6167eae69a5790866acf172db1b3f6d",
+      "failure_scope": "Actual failed author qualification; retain new output/work roots/raw log, do not rerun unchanged or infer completed cleanup."
+    },
+    "failure_comment": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6208034992",
+    "retained_roots": [
+      "dist/mcp-evidence-author-first",
+      "work/eq108-build-zwsz_ss8"
+    ],
+    "diagnostic": {
+      "reviewer": "/root/r9_plan_review",
+      "file": "eq108-selected-sdist-failure-reviewer-diagnostic.json",
+      "sha256": "de9c74c20d8c92f44c49084e8e1c2e5862a67d86fca959a5bd504644d8aaf3ce",
+      "scope": "Read-only first/repeat archive/member diagnosis; no installed/native execution"
+    },
+    "correction": {
+      "tracked_input": "packages/mcp/setup.cfg",
+      "strict_whole_archive_repeat_equality": true,
+      "generated_metadata_audit": true,
+      "executed": false
+    },
+    "qualified": false,
+    "acceptance": false
+  }
 }

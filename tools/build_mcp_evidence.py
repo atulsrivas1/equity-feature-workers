@@ -1,5 +1,5 @@
 """UNEXECUTED EQ108 committed-source four-form builder; exact review before run."""
-import argparse,hashlib,importlib.util,json,os,platform,shutil,subprocess,sys,tempfile
+import argparse,configparser,hashlib,importlib.util,io,json,os,platform,shutil,subprocess,sys,tempfile
 from pathlib import Path
 from build_foundation import build,fingerprint,git,run,snapshot,CORE_COMMIT,IO_COMMIT
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
@@ -12,6 +12,21 @@ INPUTS=('packages/mcp','tests/mcp','tests/mcp_evidence','tests/qualification/tes
     'docs/stories/EQ-108_ORACLES.json','docs/stories/EQ-108_ADMISSION.json','docs/stories/EQ-108_TOOL_SCHEMAS.json','docs/stories/EQ-108_WIRE_BOUNDS.json',
     '.github/workflows/mcp.yml')
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def generated_config(source,sdist,auditor):
+    """Bind the tracked input and complete platform-rendered generated metadata."""
+    raw=(source/'setup.cfg').read_bytes()
+    assert raw==b'[egg_info]\ntag_build =\ntag_date = 0\n'
+    parser=configparser.ConfigParser(interpolation=None)
+    parser.read_string(raw.decode('ascii'))
+    assert parser.sections()==['egg_info'] and dict(parser['egg_info'])==dict(tag_build='',tag_date='0')
+    rendered=io.StringIO();parser.write(rendered)
+    expected=rendered.getvalue().replace('\n',os.linesep).encode('ascii')
+    files=auditor.contents(sdist);prefix=sdist.name.removesuffix('.tar.gz')+'/'
+    actual=files[prefix+'setup.cfg'];sources=files[prefix+'src/equity_feature_mcp.egg-info/SOURCES.txt']
+    assert actual==expected and sources.decode('utf-8').splitlines().count('setup.cfg')==1
+    return dict(tracked_setup_sha256=hashlib.sha256(raw).hexdigest(),generated_setup_sha256=hashlib.sha256(actual).hexdigest(),
+        generated_sources_sha256=hashlib.sha256(sources).hexdigest(),generated_setup_bytes=len(actual),setup_listed_once=True)
 
 def logged(py,args,location,output,label):
     path=output/(label+'.log');assert not path.exists()
@@ -168,6 +183,7 @@ def main():
     build(committed/'packages/mcp',temp/'first')
     first={p.name:sha(p) for p in (temp/'first').iterdir()};assert len(first)==2
     sdist=next((temp/'first').glob('*.tar.gz'));files=auditor.contents(sdist);prefix=sdist.name.removesuffix('.tar.gz')+'/'
+    configuration=generated_config(committed/'packages/mcp',sdist,auditor)
     selected=temp/'selected-sdist';selected.mkdir()
     for name,data in files.items():
         assert name.startswith(prefix);target=selected/name.removeprefix(prefix);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
@@ -184,7 +200,7 @@ def main():
         client_commit=CLIENT_COMMIT,service_commit=SERVICE_COMMIT,worker_commit=WORKER_COMMIT,source_inputs=provenance(committed),client_source_inputs=provenance(client),
         service_source_inputs=provenance(service),worker_source_inputs=provenance(workers),optional_source_inputs=provenance(optional),io_source_inputs=provenance(io_source),
         repeat_artifacts=first,artifacts=artifacts,forms=forms,dependencies={p.name:sha(p) for p in deps+extras},reference_dependencies={p.name:sha(p) for p in reference},
-        selected_sdist_source={n:hashlib.sha256(v).hexdigest() for n,v in files.items()},python=platform.python_version(),system=platform.system(),machine=platform.machine())
+        selected_sdist_source={n:hashlib.sha256(v).hexdigest() for n,v in files.items()},generated_configuration=configuration,python=platform.python_version(),system=platform.system(),machine=platform.machine())
     (output/'mcp-evidence-receipt.json').write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n',encoding='utf-8',newline='\n')
     shutil.rmtree(temp)
     print('EQ108 actual four fresh default/evidence forms complete; see raw logs and scoped receipt.')
