@@ -1,0 +1,1170 @@
+{
+  "schema": "eq109.independent.data.oracles.v1",
+  "status": "pre_code_data_not_execution",
+  "provenance": {
+    "native_fixture_sha256": "9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29",
+    "native_jobs_fixture_sha256": "73108af4d8678fc16beae1d099548895f3d6da92ef51625eae4877d7fb885ba7",
+    "unchanged_R9_bundle_oracle_sha256": "383b19f5682f0efab728079cebb8be0c489b5f9defa2b604a72e355845e5b455",
+    "derivation": "Independent stdlib JSON/ZIP/hash only; clone accepted typed-JSON template and explicitly change native config identity/timezone and input_id. Original fixtures unchanged; no production package imported."
+  },
+  "configuration": {
+    "value": {
+      "algorithm": "sha256",
+      "canonicalization": "typed-json-v1",
+      "contracts_version": "0.0.4a4",
+      "domain": "configuration",
+      "project": "equity-features",
+      "schema_version": "1",
+      "value": {
+        "fields": {
+          "adjustment": {
+            "fields": {
+              "action_snapshot": "none",
+              "anchor": "none",
+              "basis": "raw",
+              "policy_version": "raw-v1"
+            },
+            "type": "inputs.AdjustmentSpec"
+          },
+          "algorithm_version": "v1",
+          "availability": {
+            "fields": {
+              "evaluation_ns": 210,
+              "knowledge_cutoff_ns": 210,
+              "market_cutoff_ns": 200,
+              "mode": "known_at",
+              "reconstruction_reason": null
+            },
+            "type": "specs.AvailabilitySpec"
+          },
+          "identity": "synthetic-bars",
+          "parameters": [
+            {
+              "fields": {
+                "name": "eligibility_policy",
+                "value": "example-v1"
+              },
+              "type": "specs.Parameter"
+            }
+          ],
+          "price_unit": {
+            "fields": {
+              "currency": "USD",
+              "scale": 0
+            },
+            "type": "inputs.PriceUnit"
+          },
+          "schema_version": "1",
+          "session": {
+            "fields": {
+              "close_ns": 200,
+              "early_close": false,
+              "include_closing_auction": false,
+              "include_opening_auction": false,
+              "intervals": [],
+              "namespace": "demo",
+              "open_ns": 100,
+              "scheduled_close_ns": null,
+              "session_id": "S",
+              "timezone_label": "caller-supplied"
+            },
+            "type": "specs.SessionSpec"
+          },
+          "window": {
+            "fields": {
+              "anchor": "prior_only",
+              "count": 1,
+              "governed_sessions": [
+                "P",
+                "S"
+              ],
+              "target_session_id": "S"
+            },
+            "type": "specs.WindowSpec"
+          }
+        },
+        "type": "specs.ConfigSpec"
+      }
+    },
+    "bytes": 1186,
+    "sha256": "84623ae5ac7b5d30f2683822b11db487d37c3166f00265c09aa61c30ff8c2a67",
+    "public_ConfigSpec_JSON": {
+      "adjustment": {
+        "action_snapshot": "none",
+        "anchor": "none",
+        "basis": "raw",
+        "policy_version": "raw-v1"
+      },
+      "algorithm_version": "v1",
+      "availability": {
+        "evaluation_ns": 210,
+        "knowledge_cutoff_ns": 210,
+        "market_cutoff_ns": 200,
+        "mode": "known_at",
+        "reconstruction_reason": null
+      },
+      "identity": "synthetic-bars",
+      "parameters": [
+        {
+          "name": "eligibility_policy",
+          "value": "example-v1"
+        }
+      ],
+      "price_unit": {
+        "currency": "USD",
+        "scale": 0
+      },
+      "schema_version": "1",
+      "session": {
+        "close_ns": 200,
+        "early_close": false,
+        "include_closing_auction": false,
+        "include_opening_auction": false,
+        "intervals": [],
+        "namespace": "demo",
+        "open_ns": 100,
+        "scheduled_close_ns": null,
+        "session_id": "S",
+        "timezone_label": "caller-supplied"
+      },
+      "window": {
+        "anchor": "prior_only",
+        "count": 1,
+        "governed_sessions": [
+          "P",
+          "S"
+        ],
+        "target_session_id": "S"
+      }
+    }
+  },
+  "batch": {
+    "value": {
+      "algorithm": "sha256",
+      "canonicalization": "typed-json-v1",
+      "contracts_version": "0.0.4a4",
+      "domain": "canonical_batch",
+      "project": "equity-features",
+      "schema_version": "1",
+      "value": {
+        "fields": {
+          "columns": [
+            {
+              "fields": {
+                "name": "eligible",
+                "values": [
+                  true,
+                  true,
+                  true
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "event_id",
+                "values": [
+                  "t1",
+                  "t2",
+                  "t3"
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "event_ns",
+                "values": [
+                  110,
+                  130,
+                  160
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "instrument_id",
+                "values": [
+                  "A",
+                  "A",
+                  "A"
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "known_at_ns",
+                "values": [
+                  110,
+                  130,
+                  210
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "order_key",
+                "values": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "price",
+                "values": [
+                  100,
+                  102,
+                  101
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "session_id",
+                "values": [
+                  "S",
+                  "S",
+                  "S"
+                ]
+              },
+              "type": "inputs.Column"
+            },
+            {
+              "fields": {
+                "name": "size",
+                "values": [
+                  2,
+                  3,
+                  5
+                ]
+              },
+              "type": "inputs.Column"
+            }
+          ],
+          "kind": "trade",
+          "metadata": {
+            "fields": {
+              "adjustment": {
+                "fields": {
+                  "action_snapshot": "none",
+                  "anchor": "none",
+                  "basis": "raw",
+                  "policy_version": "raw-v1"
+                },
+                "type": "inputs.AdjustmentSpec"
+              },
+              "coverage": {
+                "fields": {
+                  "complete": true,
+                  "expected": 3,
+                  "observed": 3
+                },
+                "type": "inputs.Coverage"
+              },
+              "duplicate_policy": "reject",
+              "interval_coverage": [],
+              "namespace": "demo",
+              "ordering": "declared",
+              "price_unit": {
+                "fields": {
+                  "currency": "USD",
+                  "scale": 0
+                },
+                "type": "inputs.PriceUnit"
+              },
+              "quantity_unit": "shares",
+              "sampling": "none",
+              "scope": {
+                "fields": {
+                  "eligibility_policy": "example-v1",
+                  "end_ns": 200,
+                  "include_closing_auction": false,
+                  "include_opening_auction": false,
+                  "start_ns": 100
+                },
+                "type": "inputs.InputScope"
+              },
+              "source": {
+                "fields": {
+                  "input_id": "trades",
+                  "mapping_version": "map1",
+                  "snapshot_id": "snapshot1",
+                  "source_id": "synthetic"
+                },
+                "type": "inputs.SourceBinding"
+              }
+            },
+            "type": "inputs.BatchMetadata"
+          }
+        },
+        "type": "inputs.CanonicalBatch"
+      }
+    },
+    "bytes": 1751,
+    "sha256": "aa3697b5c4c1d5939570dda4396344b8fad7b9eef499eb7c65716d6858fa78bb"
+  },
+  "producer": {
+    "case": "trades",
+    "complete_producer_payload": {
+      "backend_id": "python-exact",
+      "backend_version": "0.0.4a4",
+      "columns": [
+        {
+          "algorithm_version": "v1",
+          "dtype": "int64",
+          "entities": [
+            {
+              "instrument_id": "A",
+              "session_id": "S"
+            }
+          ],
+          "feature_id": "session.trade.count",
+          "schema_version": "1",
+          "unit": "trades",
+          "values": [
+            {
+              "type": "int64",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "algorithm_version": "v1",
+          "dtype": "int64",
+          "entities": [
+            {
+              "instrument_id": "A",
+              "session_id": "S"
+            }
+          ],
+          "feature_id": "session.trade.volume",
+          "schema_version": "1",
+          "unit": "shares",
+          "values": [
+            {
+              "type": "int64",
+              "value": "10"
+            }
+          ]
+        },
+        {
+          "algorithm_version": "v1",
+          "dtype": "decimal128",
+          "entities": [
+            {
+              "instrument_id": "A",
+              "session_id": "S"
+            }
+          ],
+          "feature_id": "session.trade.notional",
+          "schema_version": "1",
+          "unit": "currency coefficient / 10^price_scale",
+          "values": [
+            {
+              "coefficient": "1011",
+              "scale": 0,
+              "type": "decimal128"
+            }
+          ]
+        },
+        {
+          "algorithm_version": "v1",
+          "dtype": "float64",
+          "entities": [
+            {
+              "instrument_id": "A",
+              "session_id": "S"
+            }
+          ],
+          "feature_id": "session.trade.vwap",
+          "schema_version": "1",
+          "unit": "currency/share",
+          "values": [
+            {
+              "bits": "4059466666666666",
+              "type": "float64"
+            }
+          ]
+        },
+        {
+          "algorithm_version": "v1",
+          "dtype": "float64",
+          "entities": [
+            {
+              "instrument_id": "A",
+              "session_id": "S"
+            }
+          ],
+          "feature_id": "session.trade.mean_size",
+          "schema_version": "1",
+          "unit": "shares/trade",
+          "values": [
+            {
+              "bits": "400aaaaaaaaaaaab",
+              "type": "float64"
+            }
+          ]
+        }
+      ],
+      "command_digest": "94abf5050a221fe5a47bd2727ee465b23f9910d044dd3dd4d26929fed49537c3",
+      "context": {
+        "availability": {
+          "evaluation_ns": "210",
+          "knowledge_cutoff_ns": "210",
+          "market_cutoff_ns": "200",
+          "mode": "known_at",
+          "reconstruction_reason": null
+        },
+        "config": {
+          "algorithm_version": "v1",
+          "config_id": "synthetic-bars",
+          "digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
+          "revision": "owned-config-v1",
+          "schema_version": "1"
+        },
+        "dataset": {
+          "dataset_id": "owned.trades",
+          "input_id": "trades",
+          "mapping_version": "map1",
+          "revision": "owned-v1",
+          "snapshot_id": "snapshot1",
+          "source_id": "synthetic"
+        },
+        "features": [
+          {
+            "algorithm_version": "v1",
+            "feature_id": "session.trade.volume"
+          }
+        ],
+        "math_policy_version": "v1",
+        "namespace": "demo",
+        "registry_snapshot": "89cf8b68c6e854a1fa4139ce264353cf8000445743c05673bdf8fefeb4b69086"
+      },
+      "evidence": [],
+      "executed_features": [
+        {
+          "algorithm_version": "v1",
+          "feature_id": "session.trade.count"
+        },
+        {
+          "algorithm_version": "v1",
+          "feature_id": "session.trade.volume"
+        },
+        {
+          "algorithm_version": "v1",
+          "feature_id": "session.trade.notional"
+        },
+        {
+          "algorithm_version": "v1",
+          "feature_id": "session.trade.vwap"
+        },
+        {
+          "algorithm_version": "v1",
+          "feature_id": "session.trade.mean_size"
+        }
+      ],
+      "metadata": {
+        "fields": {
+          "availability": {
+            "fields": {
+              "evaluation_ns": {
+                "type": "int64",
+                "value": "210"
+              },
+              "knowledge_cutoff_ns": {
+                "type": "int64",
+                "value": "210"
+              },
+              "market_cutoff_ns": {
+                "type": "int64",
+                "value": "200"
+              },
+              "mode": {
+                "type": "string",
+                "value": "known_at"
+              },
+              "reconstruction_reason": null
+            },
+            "name": "AvailabilitySpec",
+            "type": "record"
+          },
+          "backend_id": {
+            "type": "string",
+            "value": "python-exact"
+          },
+          "backend_version": {
+            "type": "string",
+            "value": "0.0.4a4"
+          },
+          "config_digest": {
+            "type": "string",
+            "value": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931"
+          },
+          "evidence_limit": {
+            "type": "int64",
+            "value": "0"
+          },
+          "inputs": {
+            "items": [
+              {
+                "fields": {
+                  "kind": {
+                    "type": "string",
+                    "value": "trade"
+                  },
+                  "metadata": {
+                    "fields": {
+                      "adjustment": {
+                        "fields": {
+                          "action_snapshot": {
+                            "type": "string",
+                            "value": "none"
+                          },
+                          "anchor": {
+                            "type": "string",
+                            "value": "none"
+                          },
+                          "basis": {
+                            "type": "string",
+                            "value": "raw"
+                          },
+                          "policy_version": {
+                            "type": "string",
+                            "value": "raw-v1"
+                          }
+                        },
+                        "name": "AdjustmentSpec",
+                        "type": "record"
+                      },
+                      "coverage": {
+                        "fields": {
+                          "complete": {
+                            "type": "bool",
+                            "value": true
+                          },
+                          "expected": {
+                            "type": "int64",
+                            "value": "3"
+                          },
+                          "observed": {
+                            "type": "int64",
+                            "value": "3"
+                          }
+                        },
+                        "name": "Coverage",
+                        "type": "record"
+                      },
+                      "duplicate_policy": {
+                        "type": "string",
+                        "value": "reject"
+                      },
+                      "interval_coverage": {
+                        "items": [],
+                        "type": "list"
+                      },
+                      "namespace": {
+                        "type": "string",
+                        "value": "demo"
+                      },
+                      "ordering": {
+                        "type": "string",
+                        "value": "declared"
+                      },
+                      "price_unit": {
+                        "fields": {
+                          "currency": {
+                            "type": "string",
+                            "value": "USD"
+                          },
+                          "scale": {
+                            "type": "int64",
+                            "value": "0"
+                          }
+                        },
+                        "name": "PriceUnit",
+                        "type": "record"
+                      },
+                      "quantity_unit": {
+                        "type": "string",
+                        "value": "shares"
+                      },
+                      "sampling": {
+                        "type": "string",
+                        "value": "none"
+                      },
+                      "scope": {
+                        "fields": {
+                          "eligibility_policy": {
+                            "type": "string",
+                            "value": "example-v1"
+                          },
+                          "end_ns": {
+                            "type": "int64",
+                            "value": "200"
+                          },
+                          "include_closing_auction": {
+                            "type": "bool",
+                            "value": false
+                          },
+                          "include_opening_auction": {
+                            "type": "bool",
+                            "value": false
+                          },
+                          "start_ns": {
+                            "type": "int64",
+                            "value": "100"
+                          }
+                        },
+                        "name": "InputScope",
+                        "type": "record"
+                      },
+                      "source": {
+                        "fields": {
+                          "input_id": {
+                            "type": "string",
+                            "value": "trades"
+                          },
+                          "mapping_version": {
+                            "type": "string",
+                            "value": "map1"
+                          },
+                          "snapshot_id": {
+                            "type": "string",
+                            "value": "snapshot1"
+                          },
+                          "source_id": {
+                            "type": "string",
+                            "value": "synthetic"
+                          }
+                        },
+                        "name": "SourceBinding",
+                        "type": "record"
+                      }
+                    },
+                    "name": "BatchMetadata",
+                    "type": "record"
+                  },
+                  "role": {
+                    "type": "string",
+                    "value": "trades"
+                  },
+                  "schema_version": {
+                    "type": "string",
+                    "value": "1"
+                  }
+                },
+                "name": "InputBinding",
+                "type": "record"
+              }
+            ],
+            "type": "list"
+          },
+          "math_policy_version": {
+            "type": "string",
+            "value": "v1"
+          },
+          "namespace": {
+            "type": "string",
+            "value": "demo"
+          },
+          "schema_version": {
+            "type": "string",
+            "value": "1"
+          },
+          "session_id": {
+            "type": "string",
+            "value": "S"
+          }
+        },
+        "name": "ResultMetadata",
+        "type": "record"
+      },
+      "next_cursor": null,
+      "quality": [
+        {
+          "entity": {
+            "instrument_id": "A",
+            "session_id": "S"
+          },
+          "expected": "3",
+          "feature_id": "session.trade.count",
+          "observed": "3",
+          "reasons": [],
+          "status": "available"
+        },
+        {
+          "entity": {
+            "instrument_id": "A",
+            "session_id": "S"
+          },
+          "expected": "3",
+          "feature_id": "session.trade.volume",
+          "observed": "3",
+          "reasons": [],
+          "status": "available"
+        },
+        {
+          "entity": {
+            "instrument_id": "A",
+            "session_id": "S"
+          },
+          "expected": "3",
+          "feature_id": "session.trade.notional",
+          "observed": "3",
+          "reasons": [],
+          "status": "available"
+        },
+        {
+          "entity": {
+            "instrument_id": "A",
+            "session_id": "S"
+          },
+          "expected": "3",
+          "feature_id": "session.trade.vwap",
+          "observed": "3",
+          "reasons": [],
+          "status": "available"
+        },
+        {
+          "entity": {
+            "instrument_id": "A",
+            "session_id": "S"
+          },
+          "expected": "3",
+          "feature_id": "session.trade.mean_size",
+          "observed": "3",
+          "reasons": [],
+          "status": "available"
+        }
+      ]
+    },
+    "family": "trades",
+    "native_content_receipt_verification": "PASS",
+    "native_result": {
+      "fields": {
+        "evidence": [],
+        "metadata": {
+          "fields": {
+            "availability": {
+              "fields": {
+                "evaluation_ns": {
+                  "int": "210"
+                },
+                "knowledge_cutoff_ns": {
+                  "int": "210"
+                },
+                "market_cutoff_ns": {
+                  "int": "200"
+                },
+                "mode": "known_at",
+                "reconstruction_reason": null
+              },
+              "record": "specs.AvailabilitySpec"
+            },
+            "backend_id": "python-exact",
+            "backend_version": "0.0.4a4",
+            "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
+            "evidence_limit": {
+              "int": "0"
+            },
+            "inputs": [
+              {
+                "fields": {
+                  "kind": {
+                    "enum": "inputs.DataKind",
+                    "value": "trade"
+                  },
+                  "metadata": {
+                    "fields": {
+                      "adjustment": {
+                        "fields": {
+                          "action_snapshot": "none",
+                          "anchor": "none",
+                          "basis": "raw",
+                          "policy_version": "raw-v1"
+                        },
+                        "record": "inputs.AdjustmentSpec"
+                      },
+                      "coverage": {
+                        "fields": {
+                          "complete": true,
+                          "expected": {
+                            "int": "3"
+                          },
+                          "observed": {
+                            "int": "3"
+                          }
+                        },
+                        "record": "inputs.Coverage"
+                      },
+                      "duplicate_policy": "reject",
+                      "interval_coverage": [],
+                      "namespace": "demo",
+                      "ordering": "declared",
+                      "price_unit": {
+                        "fields": {
+                          "currency": "USD",
+                          "scale": {
+                            "int": "0"
+                          }
+                        },
+                        "record": "inputs.PriceUnit"
+                      },
+                      "quantity_unit": "shares",
+                      "sampling": "none",
+                      "scope": {
+                        "fields": {
+                          "eligibility_policy": "example-v1",
+                          "end_ns": {
+                            "int": "200"
+                          },
+                          "include_closing_auction": false,
+                          "include_opening_auction": false,
+                          "start_ns": {
+                            "int": "100"
+                          }
+                        },
+                        "record": "inputs.InputScope"
+                      },
+                      "source": {
+                        "fields": {
+                          "input_id": "trades",
+                          "mapping_version": "map1",
+                          "snapshot_id": "snapshot1",
+                          "source_id": "synthetic"
+                        },
+                        "record": "inputs.SourceBinding"
+                      }
+                    },
+                    "record": "inputs.BatchMetadata"
+                  },
+                  "role": "trades",
+                  "schema_version": "1"
+                },
+                "record": "results.InputBinding"
+              }
+            ],
+            "math_policy_version": "v1",
+            "namespace": "demo",
+            "schema_version": "1",
+            "session_id": "S"
+          },
+          "record": "results.ResultMetadata"
+        },
+        "quality": [
+          {
+            "fields": {
+              "entity": {
+                "fields": {
+                  "instrument_id": "A",
+                  "session_id": "S"
+                },
+                "record": "results.EntityKey"
+              },
+              "expected": {
+                "int": "3"
+              },
+              "feature_id": "session.trade.count",
+              "observed": {
+                "int": "3"
+              },
+              "reasons": [],
+              "status": {
+                "enum": "results.Status",
+                "value": "available"
+              }
+            },
+            "record": "results.QualityRow"
+          },
+          {
+            "fields": {
+              "entity": {
+                "fields": {
+                  "instrument_id": "A",
+                  "session_id": "S"
+                },
+                "record": "results.EntityKey"
+              },
+              "expected": {
+                "int": "3"
+              },
+              "feature_id": "session.trade.volume",
+              "observed": {
+                "int": "3"
+              },
+              "reasons": [],
+              "status": {
+                "enum": "results.Status",
+                "value": "available"
+              }
+            },
+            "record": "results.QualityRow"
+          },
+          {
+            "fields": {
+              "entity": {
+                "fields": {
+                  "instrument_id": "A",
+                  "session_id": "S"
+                },
+                "record": "results.EntityKey"
+              },
+              "expected": {
+                "int": "3"
+              },
+              "feature_id": "session.trade.notional",
+              "observed": {
+                "int": "3"
+              },
+              "reasons": [],
+              "status": {
+                "enum": "results.Status",
+                "value": "available"
+              }
+            },
+            "record": "results.QualityRow"
+          },
+          {
+            "fields": {
+              "entity": {
+                "fields": {
+                  "instrument_id": "A",
+                  "session_id": "S"
+                },
+                "record": "results.EntityKey"
+              },
+              "expected": {
+                "int": "3"
+              },
+              "feature_id": "session.trade.vwap",
+              "observed": {
+                "int": "3"
+              },
+              "reasons": [],
+              "status": {
+                "enum": "results.Status",
+                "value": "available"
+              }
+            },
+            "record": "results.QualityRow"
+          },
+          {
+            "fields": {
+              "entity": {
+                "fields": {
+                  "instrument_id": "A",
+                  "session_id": "S"
+                },
+                "record": "results.EntityKey"
+              },
+              "expected": {
+                "int": "3"
+              },
+              "feature_id": "session.trade.mean_size",
+              "observed": {
+                "int": "3"
+              },
+              "reasons": [],
+              "status": {
+                "enum": "results.Status",
+                "value": "available"
+              }
+            },
+            "record": "results.QualityRow"
+          }
+        ],
+        "values": [
+          {
+            "fields": {
+              "algorithm_version": "v1",
+              "dtype": {
+                "enum": "results.ValueType",
+                "value": "int64"
+              },
+              "entities": [
+                {
+                  "fields": {
+                    "instrument_id": "A",
+                    "session_id": "S"
+                  },
+                  "record": "results.EntityKey"
+                }
+              ],
+              "feature_id": "session.trade.count",
+              "schema_version": "1",
+              "unit": "trades",
+              "values": [
+                {
+                  "int": "3"
+                }
+              ]
+            },
+            "record": "results.FeatureColumn"
+          },
+          {
+            "fields": {
+              "algorithm_version": "v1",
+              "dtype": {
+                "enum": "results.ValueType",
+                "value": "int64"
+              },
+              "entities": [
+                {
+                  "fields": {
+                    "instrument_id": "A",
+                    "session_id": "S"
+                  },
+                  "record": "results.EntityKey"
+                }
+              ],
+              "feature_id": "session.trade.volume",
+              "schema_version": "1",
+              "unit": "shares",
+              "values": [
+                {
+                  "int": "10"
+                }
+              ]
+            },
+            "record": "results.FeatureColumn"
+          },
+          {
+            "fields": {
+              "algorithm_version": "v1",
+              "dtype": {
+                "enum": "results.ValueType",
+                "value": "decimal128"
+              },
+              "entities": [
+                {
+                  "fields": {
+                    "instrument_id": "A",
+                    "session_id": "S"
+                  },
+                  "record": "results.EntityKey"
+                }
+              ],
+              "feature_id": "session.trade.notional",
+              "schema_version": "1",
+              "unit": "currency coefficient / 10^price_scale",
+              "values": [
+                {
+                  "int": "1011"
+                }
+              ]
+            },
+            "record": "results.FeatureColumn"
+          },
+          {
+            "fields": {
+              "algorithm_version": "v1",
+              "dtype": {
+                "enum": "results.ValueType",
+                "value": "float64"
+              },
+              "entities": [
+                {
+                  "fields": {
+                    "instrument_id": "A",
+                    "session_id": "S"
+                  },
+                  "record": "results.EntityKey"
+                }
+              ],
+              "feature_id": "session.trade.vwap",
+              "schema_version": "1",
+              "unit": "currency/share",
+              "values": [
+                {
+                  "float64": "0x1.9466666666666p+6"
+                }
+              ]
+            },
+            "record": "results.FeatureColumn"
+          },
+          {
+            "fields": {
+              "algorithm_version": "v1",
+              "dtype": {
+                "enum": "results.ValueType",
+                "value": "float64"
+              },
+              "entities": [
+                {
+                  "fields": {
+                    "instrument_id": "A",
+                    "session_id": "S"
+                  },
+                  "record": "results.EntityKey"
+                }
+              ],
+              "feature_id": "session.trade.mean_size",
+              "schema_version": "1",
+              "unit": "shares/trade",
+              "values": [
+                {
+                  "float64": "0x1.aaaaaaaaaaaabp+1"
+                }
+              ]
+            },
+            "record": "results.FeatureColumn"
+          }
+        ]
+      },
+      "record": "results.FeatureResult"
+    },
+    "native_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+    "ns_offset_decimal": "0",
+    "producer_payload_sha256": "1bce9e3d97fa1e91c890f462e4196714f054882dafc02cf9bb366a65d03d97e3",
+    "source_reads": 1
+  },
+  "mathematics": {
+    "count": 3,
+    "volume": 10,
+    "notional": 1011,
+    "vwap": 101.1,
+    "mean_size_float64_hex": "0x1.aaaaaaaaaaaabp+1",
+    "derivation": "count3;2+3+5=10;100*2+102*3+101*5=1011;1011/10=101.1;10/3",
+    "quality": "five available rows, expected=observed=3, no reasons"
+  },
+  "unknown_mutation": {
+    "column": "known_at_ns",
+    "index": 2,
+    "value": 211,
+    "expected_values": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "quality_status": "missing_input",
+    "quality_reasons": [
+      "future_knowledge"
+    ],
+    "expected": 3,
+    "observed": 3
+  },
+  "narratives": [
+    {
+      "text": "session.trade.count=3",
+      "expected": "matched"
+    },
+    {
+      "text": "session.trade.count=4",
+      "expected": "mismatch"
+    },
+    {
+      "text": "buy now",
+      "expected": "unsupported"
+    }
+  ]
+}

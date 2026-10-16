@@ -1,0 +1,257 @@
+"""UNEXECUTED owned SDK/native qualification; review exact source before running.
+
+Uses official ClientSession over bounded owned pipes, not stdio_client's process
+launcher. Windows atomic job owns redirector+entry; Linux direct child only.
+"""
+import hashlib,json,queue,shutil,sys,tempfile,threading,time
+from pathlib import Path
+from datetime import timedelta
+import anyio
+from mcp import ClientSession,types
+from mcp.shared.message import SessionMessage
+from jsonschema import Draft202012Validator
+if not sys.flags.isolated or len(sys.argv)!=3:raise ValueError('owned isolated probe')
+root=Path(sys.argv[1]).resolve();pins=json.loads(Path(sys.argv[2]).read_bytes())
+for name,digest in pins['source_map'].items():
+ if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:raise ValueError('owned source drift')
+sys.path.insert(0,str(root/'examples'))
+sys.path.insert(0,str(root/'tests/agent_research'))
+sys.path.insert(0,str(root/'tests/client'))
+from test_authority_http import AuthorityHTTP,completed_bytes
+import test_authority_http as authority
+from test_client import FIXTURES,producer as producer_fixture
+from equity_feature_client import RemoteClient
+import equity_feature_mcp,equity_feature_client
+if any('site-packages' not in Path(v.__file__).resolve().parts for v in (equity_feature_mcp,equity_feature_client)):raise ValueError('owned installed parent')
+if (root/'packages').exists():raise ValueError('owned harness source shadow')
+
+def canonical(v):return json.dumps(v,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
+def wait_marker(path,limit,child):
+ deadline=time.monotonic()+8
+ while True:
+  if time.monotonic()>=deadline or child.poll() is not None:raise ValueError('owned marker deadline')
+  value=completed_bytes(path,limit)
+  if value is not None:
+   if time.monotonic()>=deadline or child.poll() is not None:raise ValueError('owned marker deadline')
+   return json.loads(value)
+  time.sleep(.01)
+
+def owned_child(argv):
+ name='docs/EQ083_REFERENCE_PROCESS.txt' if sys.platform=='win32' else 'docs/EQ083_LINUX_REFERENCE_CHILD.txt'
+ namespace={};exec(compile((root/name).read_bytes(),name,'exec'),namespace)
+ if sys.platform=='win32':return namespace['WindowsReferenceChild'](argv)
+ if sys.platform=='linux':return namespace['LinuxReferenceChild'](argv,pins['source_map']['docs/EQ109_RESEARCH_REFERENCE_ENTRY.txt'])
+ raise ValueError('owned platform')
+
+def dialogue(child,mode,action,ready):
+ messages=queue.Queue(4);failures=[];stderr=[];threads=[];send_count=[0];forbidden_frames=[0];expected_reads=[0];observations=[]
+ def reader():
+  try:
+   total=0
+   while True:
+    frame=bytearray()
+    while True:
+     char=child.stdout.read(1)
+     if not char:
+      if frame:raise ValueError('owned incomplete frame')
+      messages.put(None,timeout=1);return
+     frame.extend(char);total+=1
+     if len(frame)>65536 or total>1048576:raise ValueError('owned output bound')
+     if char==b'\n':break
+    messages.put(bytes(frame),timeout=1)
+  except BaseException as error:failures.append(type(error).__name__)
+ def errors():
+  try:
+   value=child.stderr.read(4097)
+   if len(value)>4096:raise ValueError('owned stderr bound')
+   stderr.append(value)
+  except BaseException as error:failures.append(type(error).__name__)
+ try:
+  for target in (reader,errors):
+   thread=threading.Thread(target=target);threads.append(thread);thread.start()
+  async def run():
+   receive_send,receive=anyio.create_memory_object_stream(0)
+   send,send_receive=anyio.create_memory_object_stream(0)
+   async def inbound():
+    async with receive_send:
+     while True:
+      try:frame=await anyio.to_thread.run_sync(lambda:messages.get(timeout=.1))
+      except queue.Empty:
+       if failures:raise ValueError('owned reader failed')
+       continue
+      if frame is None:return
+      await receive_send.send(SessionMessage(types.JSONRPCMessage.model_validate_json(frame)))
+   async def outbound():
+    async with send_receive:
+     async for message in send_receive:
+      frame=(message.message.model_dump_json(by_alias=True,exclude_none=True)+'\n').encode('utf-8')
+      if len(frame)>16384:raise ValueError('owned request bound')
+      if child.stdin.write(frame)!=len(frame):raise ValueError('owned short request')
+      child.stdin.flush();send_count[0]+=1
+      wire=json.loads(frame)
+      if wire.get('method')=='tools/call' and wire.get('params',{}).get('arguments',{}).get('code')=='caller-code':
+       forbidden_frames[0]+=1
+   async with anyio.create_task_group() as group:
+    group.start_soon(inbound);group.start_soon(outbound)
+    try:
+     async with ClientSession(receive,send,read_timeout_seconds=timedelta(seconds=8)) as session:
+      initialized=await session.initialize();assert initialized.protocolVersion=='2025-11-25'
+      from agent_research_mcp import collect
+      import agent_research as research
+      from independent_oracle import independent_chain
+      from test_consumer import reports as independent_reports
+      import equity_feature_agent_evidence as events
+      import equity_feature_agent_ledger as ledger
+      from equity_features.session import compute_trades
+      from unittest.mock import patch
+      if mode=='enabled':
+       from mcp.shared.exceptions import McpError
+       assert forbidden_frames[0]==0
+       try:await session.call_tool('equity_result_summary',dict(reference='A'*43,code='caller-code'))
+       except McpError as error:assert error.error.code==-32602
+       else:raise AssertionError('arbitrary argument admitted')
+       assert forbidden_frames[0]==1
+       # This actual server refusal is not a tool-result record in collect.
+       # Final provider accounting requires it to have performed no HTTP call.
+      if mode=='changed_artifact':
+       called=[0];injected=[];first_chunk=[]
+       class ChangedArtifactSession:
+        async def list_tools(self):return await session.list_tools()
+        async def call_tool(self,name,arguments):
+         answer=await session.call_tool(name,arguments);called[0]+=1
+         if name=='equity_evidence_read' and arguments['offset']==0 and not first_chunk:
+          assert answer.structuredContent['payload']['next_offset'] is not None
+          first_chunk.append(arguments['reference'])
+         if name=='equity_evidence_read' and arguments['offset']>0 and not injected:
+          assert first_chunk==[arguments['reference']]
+          copied=answer.model_copy(deep=True)
+          original=canonical(copied.structuredContent)
+          copied.structuredContent['payload']['artifact']['sha256']='0'*64
+          copied.content[0].text=canonical(copied.structuredContent).decode('ascii')
+          injected.append(dict(original_body_sha256=hashlib.sha256(original).hexdigest(),
+           injected_body_sha256=hashlib.sha256(canonical(copied.structuredContent)).hexdigest()))
+          return copied
+         return answer
+       with patch('equity_features.session.compute_trades',wraps=compute_trades) as counter:
+        try:await collect(ChangedArtifactSession())
+        except research.ResearchExampleError as error:assert error.code=='inconsistent_evidence'
+        else:raise AssertionError('changed continuation admitted')
+       assert counter.call_count==0 and len(injected)==1 and action('retire')['reads']==1
+       expected_reads[0]=called[0]
+       observations.append(dict(mode=mode,tool_calls=called[0],refusal='inconsistent_evidence',
+        replay_calculations=0,injected_continuation=injected[0],
+        fault_scope='Trusted parent changes copied actual SDK continuation; no claim server emitted altered bytes.'))
+       return
+      requested='enabled' if mode in ('wrong_narrative','missing_input','preentry_cancel','retired') else mode
+      class RetiringSession:
+       async def list_tools(self):return await session.list_tools()
+       async def call_tool(self,name,arguments):
+        answer=await session.call_tool(name,arguments)
+        if name=='equity_artifact_reference':
+         assert action('retire')['reads']==1
+        return answer
+      target=RetiringSession() if mode=='retired' else session
+      with patch('equity_features.session.compute_trades',wraps=compute_trades) as replay_counter:
+       collected=await collect(target,mode=requested,narrative='session.trade.count=4' if mode=='wrong_narrative' else 'session.trade.count=3',retain_input=mode!='missing_input',cancel_replay=mode=='preentry_cancel')
+      expected_reads[0]=len(collected.calls)
+      if mode!='retired':assert action('retire')['reads']==(2 if mode=='uncatalogued' else 1)
+      assert expected_reads[0]<=32 and replay_counter.call_count==collected.replay.calculation_count
+      expected_replay=('unavailable',0) if mode=='missing_input' else ('cancelled_before_start',0) if mode=='preentry_cancel' else ('not_requested',0) if mode in ('retired','uncatalogued','disabled') else ('matched',1)
+      assert (collected.replay.status,collected.replay.calculation_count)==expected_replay
+      expected_narrative='mismatch' if mode=='wrong_narrative' else 'unavailable' if mode in ('retired','uncatalogued','disabled') else 'matched'
+      assert collected.assessment.narrative_status==expected_narrative
+      assert collected.assessment.decision==('REJECT' if mode=='wrong_narrative' else 'DEFER')
+      assert collected.assessment.verified_input_count==(0 if mode=='missing_input' else 1)
+      assert not collected.assessment.source_authenticated and not collected.assessment.execution_verified
+      actual_summary=next(json.loads(raw)['payload']['data'] for name,raw,outcome in collected.calls if name=='equity_result_summary' and outcome=='succeeded')
+      producer=FIXTURES['native_cases'][0]['complete_producer_payload']
+      assert actual_summary==producer and hashlib.sha256(canonical(actual_summary)).hexdigest()==FIXTURES['native_cases'][0]['producer_payload_sha256']
+      from equity_feature_client import ResultView
+      from equity_feature_client.native import convert_result
+      from equity_feature_io_sdk import encode_result
+      _,expectation=producer_fixture(FIXTURES['native_cases'][0])
+      native=convert_result(ResultView(canonical(dict(schema='equity.remote',version='1.1',kind='result',request_id='owned',payload=actual_summary))),expectation)
+      assert native.ok and hashlib.sha256(encode_result(native.view)).hexdigest()==FIXTURES['native_cases'][0]['native_sha256']
+      payload_by_sha={hashlib.sha256(raw).hexdigest():raw for raw in collected.retained_payloads}
+      if requested=='enabled' and mode!='retired':
+       expected=dict(zip(('receipt','explanation','diagnostics'),independent_reports(),strict=True))
+       for kind,digest in collected.assessment.retained_payload_digests:assert payload_by_sha[digest]==expected[kind]
+      wires,digest=independent_chain(collected.events)
+      assert wires==tuple(events.encode_event(event) for event in collected.events)
+      terminal=ledger.Checkpoint('demo:research',len(wires),digest)
+      database=Path(directory)/'agent-events.sqlite'
+      terminal_file=Path(directory)/'external-terminal.json'
+      terminal_file.write_bytes(ledger.encode_checkpoint(terminal))
+      # Independent terminal is retained OUTSIDE SQLite before first append.
+      store=ledger.Ledger.create(str(database.resolve()),'demo:research')
+      try:
+       observed=research.record(store,collected.events,store.head())
+       assert observed==terminal
+      finally:store.close()
+      reopened=ledger.Ledger.open(str(database.resolve()))
+      try:
+       retained_terminal=ledger.decode_checkpoint(terminal_file.read_bytes())
+       checked=research.inspect_ledger(reopened,retained_terminal,wires,collected.retained_payloads,collected.assessment.retained_payload_digests)
+       assert checked.consistency=='verified' and checked.anchor=='matched'
+       assert checked.payload_retention==('missing' if mode in ('retired','uncatalogued','disabled') else 'complete')
+      finally:reopened.close()
+      if mode=='retired':
+       failed=json.loads(collected.calls[-1][1]);assert not failed['ok'] and failed['failure']['status']==401
+      observations.append(dict(mode=mode,tool_calls=len(collected.calls),events=len(wires),terminal=digest,
+       arbitrary_argument_refusal_frames=forbidden_frames[0],
+       narrative=collected.assessment.narrative_status,decision=collected.assessment.decision,
+       input_coverage=collected.assessment.verified_input_count,replay=collected.replay.status,
+       replay_calculations=collected.replay.calculation_count,retention=checked.payload_retention,
+       native_sdk_sha256=hashlib.sha256(encode_result(native.view)).hexdigest(),
+       summary_sha256=hashlib.sha256(canonical(actual_summary)).hexdigest()))
+    finally:
+     await send.aclose();await receive.aclose();group.cancel_scope.cancel()
+  anyio.run(run)
+ finally:
+  active_exception=sys.exc_info()[0] is not None;cleanup=[]
+  try:
+   if child.stdin is not None and not child.stdin.closed:child.stdin.close()
+   if child.wait(4)!=0:raise ValueError('owned reference exit')
+  except BaseException as error:cleanup.append(type(error).__name__)
+  try:child.close()
+  except BaseException as error:cleanup.append(type(error).__name__)
+  for thread in threads:
+   if thread.ident is not None:
+    thread.join(4)
+    if thread.is_alive():cleanup.append('reader join unconfirmed')
+  if not active_exception and (cleanup or failures or stderr!=[b'']):raise ValueError('owned reference cleanup failed')
+ assert len(observations)==1
+ return dict(mcp_frames_sent=send_count[0],native_requests=expected_reads[0],cleanup_confirmed=True,research=observations[0])
+
+results=[]
+for mode in ('enabled','wrong_narrative','missing_input','preentry_cancel','retired','uncatalogued','disabled','changed_artifact'):
+ fixture=AuthorityHTTP('test_authenticated_foreign_owner_and_original_half_open_ttl')
+ origins=[]
+ def capture(origin,provider,**kwargs):origins.append(origin);return RemoteClient(origin,provider,**kwargs)
+ from unittest.mock import patch
+ scenario='retire'
+ entry_mode=mode if mode in ('uncatalogued','disabled') else 'enabled'
+ with patch.object(authority,'RemoteClient',side_effect=capture),fixture.native(scenario) as (_,_,_,action):
+  assert len(origins)==2 and origins[0]==origins[1]
+  directory=tempfile.mkdtemp(prefix='eq109-reference-')
+  if directory:
+   marker=Path(directory)/'ready';closed=Path(directory)/'closed'
+   argv=[sys.executable,'-I',str(root/'docs/EQ109_RESEARCH_REFERENCE_ENTRY.txt'),origins[0],str(root/'docs/EQ081_CLIENT_FIXTURES.json'),'A',str(marker),'trades',entry_mode,str(closed),str(root/'tests/service/fixtures/jobs_native.json'),pins['config_sha256']]
+   child=owned_child(argv)
+   try:
+    ready=wait_marker(marker,512,child);assert set(ready)=={'pid','mode','prepare_calls','catalog_sha256','seed_job','seed_result'} and ready['mode']==entry_mode
+    assert type(ready['prepare_calls']) is int and 0<=ready['prepare_calls']<=22
+    if entry_mode=='disabled':assert ready['seed_job'] is ready['seed_result'] is ready['catalog_sha256'] is None
+    else:assert all(type(ready[key]) is str and 0<len(ready[key])<=128 for key in ('seed_job','seed_result','catalog_sha256'))
+    child.verify_entry(ready['pid'])
+    result=dialogue(child,mode,action,ready)
+    witness=json.loads(completed_bytes(closed,128));assert witness['client_closed'] and witness['server_closed']
+    assert type(witness['provider_calls']) is int and type(witness['client_closed']) is type(witness['server_closed']) is bool
+    assert witness['provider_calls']==ready['prepare_calls']+result['native_requests']
+    assert child.ownership_closed
+    result.update(mode=mode,prepare_calls=ready['prepare_calls'],provider_calls=witness['provider_calls'],reference_entry_exit=True,platform_scope='atomic_Windows_redirector_entry_job' if sys.platform=='win32' else 'Linux_retained_direct_child')
+    results.append(result)
+   finally:
+    if not child.ownership_closed:child.close()
+   shutil.rmtree(directory)
+print(json.dumps(dict(qualification='EQ109_owned_ClientSession_native_research_replay',forms=results),sort_keys=True))

@@ -1,0 +1,395 @@
+{
+  "schema": "eq109.consumer.profile.v1",
+  "status": "PROPOSED_UNIMPLEMENTED_NOT_READY",
+  "package_choice": "No new package/version or agent framework. Deterministic external source examples; existing public APIs only.",
+  "bases": {
+    "canonical": "980a7b68571737ddd1caf69f1b76da10d00b34b5",
+    "worker": "744b7d1e04d3f4de546b1df74872dea716c9d88b"
+  },
+  "dependencies": {
+    "contracts": "0.0.4a4",
+    "features": "0.0.4a4",
+    "evidence": "0.1.0a2",
+    "explanations": "0.1.0a1",
+    "diagnostics": "0.1.0a1",
+    "bundles": "0.1.0a1",
+    "agent-evidence": "0.1.0a1",
+    "agent-ledger": "0.1.0a1",
+    "client": "0.1.0a0",
+    "mcp": "0.1.0a1",
+    "official_MCP_SDK": "1.30.0",
+    "protocol": "2025-11-25"
+  },
+  "source_placement": {
+    "canonical": [
+      "examples/agent_research.py",
+      "examples/agent_research_typed.py",
+      "tests/agent_research/independent_oracle.py",
+      "tests/agent_research/test_consumer.py"
+    ],
+    "worker": [
+      "examples/agent_research_mcp.py",
+      "docs/EQ109_RESEARCH_REFERENCE_ENTRY.txt",
+      "docs/EQ109_RESEARCH_REFERENCE_PROBE.txt",
+      "tools/build_agent_research.py",
+      ".github/workflows/agent-research.yml"
+    ]
+  },
+  "trusted_owner": "New frozen qualification-only entry derives accepted bounded EQ108 ownership and SDK transport; owns actual fixed native batch/config and constructs a content-consistent receipt using public make_content_receipt after complete native-producer verification. Never alter accepted EQ108 zero-hash declaration fixture or reconstruct a native HTTP receipt.",
+  "boundaries": [
+    "Calculation packages unchanged/source-independent; no source, sink, ledger or model inside calculation/MCP handlers.",
+    "MCP descriptors retain input_content_verified=False/source_authenticated=False/execution_verified=False. Outer supplied-content consistency is separate.",
+    "Ledger consistency, independently retained terminal anchor, payload retention, narrative fidelity, replay and diagnostic admission are separate observations.",
+    "No unstructured-language understanding, paid inference, actual human approval, trading execution, authenticity, physical quota/hard cleanup/power-loss/hosted claim."
+  ],
+  "example_operations": {
+    "assess": "assess(configuration:ConfigSpec, inputs:tuple[tuple[str,CanonicalBatch],...], producer:FeatureResult, receipt:bytes|None, explanation:bytes|None, diagnostics:bytes|None, narrative:str)->Assessment. Examples-only immutable closed record defined below. Safe bounded exact-type preflight precedes traversal, conversion, fingerprints, validators and hashing. No file/network/calculator call. No general explanation/diagnostics decoder is introduced.",
+    "record": "record(store:Ledger, records:tuple[EventRecord,...], expected_before:Checkpoint)->Checkpoint; outer explicit append/CAS once each, no retry; uncertain outcome propagates and requires accepted manual reconciliation.",
+    "replay": "Explicit replay_bundle on validated retained data-only bundle only; unchanged fixed session.compute_trades.v1 and one actual calculator invocation, or existing zero-call unavailable/incompatible/pre-entry-cancel.",
+    "MCP": "Fixed public ClientSession,12tool discovery/output-schema/full text-structured parity; calculate/status/result/artifact/producer/receipt/explanation/diagnostics actual grant-backed reads and4096aligned chunks. No caller origin/token/TLS/provider/path/code/SQL selector."
+  },
+  "narrative": {
+    "grammar": "Exact ASCII session.trade.count=<canonical nonnegative decimal integer>; max128bytes; no whitespace, leading plus/zeros, bool/float aliases or free prose accepted as verified.",
+    "outcomes": [
+      "matched",
+      "mismatch",
+      "unavailable",
+      "unsupported"
+    ],
+    "rule": "Only supplied available count at exact A/S context may match; unavailable value never matches a literal null or grants permission. Matching arithmetic does not override unknown diagnostics.",
+    "missing_input_rule": "Known result/narrative may still match when an input is missing; supplied config/result/receipt bindings must validate and all actually supplied bytes must match. Use a reference-only bundle and report replay unavailable0, never call full-input verification with a missing batch as if verified."
+  },
+  "event_sequence": [
+    "request",
+    "model_declaration(not_supplied)",
+    "one ToolCall/ToolResult pair per actual consumer call_tool operation, including every chunk continuation",
+    "feature_read referring actual result event and complete/missing retained receipt reference",
+    "decision referring request+feature_read"
+  ],
+  "event_contract": "Use unchanged EQ106 subjects/16KiB event bounds. <=32actual tool calls =><=68events (2request/model+64call/result+1read+1decision). Init/list/control/preparation are separately witnessed protocol/owner activity, not falsely claimed full agent history. Store exports use fixed terminal and enough <=64event pages; entire store.verify(expected) and independent full chain compare. Each event references <=16indexed earlier targets; pure per-event checks supply only required retained targets, not an over-limit whole context. Payloads retained externally; every actual ToolResult wire is distinguished from assembled report/receipt bytes. Independent stdlib canonical JSON+SHA256 computes expected actual event bytes/links before append and terminal is retained outside SQLite.",
+  "decision_precedence": [
+    "Exact type/size/graph admission failure -> fixed error before encoding/hash; invalid_input for types, limit_exceeded for bounds.",
+    "Any present malformed/noncanonical/wrong-context/wrong-content report or inconsistent supplied content -> inconsistent_evidence; absence is not corruption.",
+    "After all present evidence validates, narrative mismatch -> REJECT/mismatch.",
+    "Missing report, missing retained input, unavailable count or unsupported narrative -> DEFER/incomplete_evidence.",
+    "Otherwise -> DEFER/diagnostic_not_admitted: selected advisory unknown report always has not_applied admission. No OBSERVE/ADMIT branch."
+  ],
+  "bounds": {
+    "input_rows": 3,
+    "events": 68,
+    "event_bytes": 16384,
+    "aggregate_retained_report_bytes": 65536,
+    "MCP_report_count": 4,
+    "MCP_chunk_bytes": 4096,
+    "MCP_tool_calls": 32,
+    "owner_preparation_HTTP_calls": 22,
+    "total_HTTP_upper_bound": 54,
+    "service_existing_request_limit": 60,
+    "provider_cap": 64,
+    "narrative_bytes": 128,
+    "frame_bytes": 65536,
+    "transport_total_bytes": 1048576,
+    "stderr_bytes": 4096,
+    "transport_queue_frames": 4,
+    "SDK_call_seconds": 8,
+    "owner_ready_seconds": 8,
+    "owned_join_seconds": 4,
+    "scope": "Application/qualification bounds only; no total physical resource or active-callback/kernel deadline promise. Exact operation ledgers/source/owner/helper identities must be frozen/reviewed before execution.",
+    "typed_graph_nodes": 4096,
+    "typed_graph_depth": 16,
+    "typed_tuple_length": 64,
+    "typed_text_ASCII": 128,
+    "report_bytes": 32768,
+    "canonical_typed_bytes_per_root": 16384
+  },
+  "privacy": "Synthetic fixed labels only; no prompts/credentials/environment capture/hidden chain-of-thought. Caller labels and model/human-review times remain unauthenticated. Redact before event append; original plaintext/backups persist.",
+  "error_policy": "Examples expose closed ResearchExampleError codes invalid_input,inconsistent_evidence,limit_exceeded,unsupported; no raw payloads/SQL/token/backend messages in public summaries. Existing public package errors keep their accepted semantics; no best-effort repair or mutation replay.",
+  "native_lanes": {
+    "supported": "Owner precomputes one fixed native result before agent calls (<=22prepare HTTP). Actual same-key MCP calculate attaches it; exactly one status call must be succeeded or qualification refuses. <=32consumerHTTP =><=54total, service60/provider64. Original computation1 predates the recorded request, not claimed agent-caused.",
+    "uncatalogued": "Owner prepares one catalogued job; consumer distinct-key calculation creates actual second source compute. <=20status polls counted, cap/calculate/summary/artifact/four missing-report lookups =><=28consumerHTTP,<=50total. No report chunks on missing presence. Original native computations2; replay0.",
+    "disabled": "No prepared catalog/seed; consumer original native compute1 and <=28consumerHTTP/provider64; reports not_enabled and replay0.",
+    "future_known_pure": "Actual fixed public pure compute_trades with lastknown211 produces five missing_input/future_knowledge rows, original pure computation1 and replay1; no claim this is new native/MCP producer proof.",
+    "control_scope": "Expiry/retirement uses a separately frozen trusted owner control, never a caller provider/clock selector. Every grant-backed read remains actual backend authority; no token replay or guessed clock outcome."
+  },
+  "assessment_schema": {
+    "representation": "Frozen examples-only Assessment dataclass, exact fields; no dict/subclass/extra fields. Not a public package schema.",
+    "fields": {
+      "narrative_status": "str: matched|mismatch|unavailable|unsupported",
+      "configuration_status": "str: verified (only returned after full selected configuration match)",
+      "output_status": "str: verified (only returned after full selected result content match)",
+      "receipt_status": "str: verified|unavailable",
+      "explanation_status": "str: verified|unavailable",
+      "diagnostics_status": "str: verified|unavailable",
+      "expected_input_count": "int (not bool): 1",
+      "verified_input_count": "int (not bool): 0|1",
+      "input_content_status": "str: complete|missing",
+      "diagnostic_admission": "str: not_applied|unavailable",
+      "decision": "str: DEFER|REJECT",
+      "reason_code": "str: incomplete_evidence|diagnostic_not_admitted|mismatch",
+      "retained_payload_digests": "tuple[tuple[str,str],...], sorted unique kind receipt|explanation|diagnostics and lowercase64hex SHA256 of every present validated report; absent omitted",
+      "source_authenticated": "literal False",
+      "execution_verified": "literal False"
+    },
+    "mapping": "DEFER maps to unchanged public DecisionAction.DEFER (value defer); REJECT maps to DecisionAction.REJECT (value reject). No accepted enum/schema change.",
+    "missing": "C07 retains valid full receipt/reference-only explanation/diagnostics but verified_input_count0 and missing. Explanation input content_verifiedFalse in BOTH full and missing-input cases; outer complete/missing supplied-content comparison is separate and does not change MCP declarations. No full-input verification is called on empty input."
+  },
+  "outer_result_schema": {
+    "representation": "Frozen ResearchObservation(assessment:Assessment, replay:ReplayObservation, ledger:LedgerObservation, model_status:str). Closed exact fields, no payloads in summary.",
+    "ReplayObservation": {
+      "status": "str: not_requested OR unchanged accepted ReplayReport.status; never fabricate a ReplayReport",
+      "calculation_count": "int not bool: 0|1; not_requested0, unavailable/incompatible/cancelled_before_start0, matched1 in chosen cases",
+      "rule": "Capture actual public report and actual invocation count. Missing required report ->not_requested0; missing retained input with reference-only bundle ->actual unavailable0. Changed evidence refuses before invocation."
+    },
+    "LedgerObservation": {
+      "consistency": "str: verified|unavailable; verified only from actual complete store.verify result and independent full event chain equality",
+      "anchor": "str: matched|not_supplied|not_covered|mismatch|unavailable; preserve actual expected-terminal semantics, never equate valid prefix with corruption",
+      "payload_retention": "str: complete|missing; full current referenced bytes checked independently",
+      "rule": "No supplied external terminal ->not_supplied. Absent store ->unavailable. A shortened consistent prefix with later external anchor reports not_covered/mismatch and refuses anchored success; no repaired success."
+    },
+    "model_status": "literal not_supplied in this selected example; model label unavailable unauthenticated. Matching replay/anchor/retention cannot override DEFER. Missing anchor/retention also requires DEFER unless already REJECT; preserves separate factual axes."
+  },
+  "report_verification": {
+    "order": [
+      "preflight all sizes/typed graphs",
+      "compare full canonical configuration/result to selected independent fixture variant",
+      "decode_receipt via public decoder, roundtrip encode_receipt identical, exact full receipt metadata/formulas/config/output and all declared input bindings",
+      "verify every actually supplied batch fingerprint and complete typed content against selected fixture; absent batch stays missing",
+      "full expected explanation comparison",
+      "full expected diagnostics projection comparison",
+      "only then narrative classification and immutable assessment"
+    ],
+    "fixture_variants": "Only base native fixed3row and pure future_known last known211 variants from ORACLES. C08/C09/C10 mutate supplied content but keep original declared context and refuse. No arbitrary batch/config/result profile is admitted. Wrong source id, context, unit, metadata, quality, evidence or availability refuses. Complete equality includes all fields, not metadata/digest-only.",
+    "receipt": "Expected public make_content_receipt from independently reconstructed literal complete selected fixture, full result and explicit frozen EnvironmentDeclaration/ExecutionClaim/EvidenceDisclosure of new owner. Freeze these declaration fields with new owner source before execution; compare entire decoded receipt to that independently built expected receipt. No trusting caller execution/authentication claims. For C07 the literal retained owner input is available to EXPECTATION construction only, not inserted into supplied inputs or replay; count stays0. No fixture hash substitutes for original consumption proof.",
+    "explanation": "Exact expected bytes encode_explanation(explain_result(selected_result, expected_receipt, selected_configuration, entity=EntityKey(A,S), feature_id=session.trade.count, evidence_limit=16)) with NO inputs argument. The accepted MCP catalog deliberately recomputes this reference-only explanation and rejects input-content-verified explanations. Full expected bytes equality binds all focus/quality/reasons/formula/evidence/receipt/input summaries; input_content_unverified/content_verifiedFalse is preserved even when the OUTER consumer independently verifies actual supplied inputs. No new MCP API/runtime/version. Wrong focus, context, receipt, summary, quality or byte mutation refuses.",
+    "diagnostics": "Exact canonical ASCII JSON equality against frozen projection recipe below; duplicate keys/noncanonical/extra/missing fields cannot equal. Use public DiagnosticReport constructors to cross-check derived counts during source qualification; independent test projection freezes all fields without new consumer code. No claim general report decoder.",
+    "diagnostic_profile": {
+      "representation": "equity.mcp.diagnostics.v1",
+      "schema_version": "1",
+      "report": {
+        "schema_version": "1",
+        "context": "namespace demo/entity instrument_id A,session_id S/full selected availability; timestamps canonical decimal strings, reconstruction_reason preserved",
+        "policy": {
+          "policy_id": "synthetic-advisory",
+          "mode": "advisory",
+          "unknown_action": "deny"
+        },
+        "findings": [
+          {
+            "check_id": "observation",
+            "subject_id": "synthetic-output",
+            "kind": "freshness",
+            "content": "full expected_receipt.output fingerprint projection, all identity/version/algorithm/canonicalization/digest/byte_length fields; byte_length decimal string as accepted wire",
+            "status": "unknown",
+            "severity": "warning",
+            "reasons": [
+              "missing_observation"
+            ],
+            "assessed": false,
+            "unknown_prerequisites": "1",
+            "age_ns": null
+          }
+        ],
+        "requested_count": 1,
+        "passed_count": 0,
+        "failed_count": 0,
+        "unknown_count": 1,
+        "assessed_count": 0,
+        "unknown_prerequisite_count": "1",
+        "not_requested": [
+          "adjustment",
+          "declared_context",
+          "knowledge_time",
+          "market_time",
+          "membership",
+          "revision"
+        ],
+        "admission": "not_applied",
+        "source_authenticated": false,
+        "historical_acquisition_verified": false
+      },
+      "associations": [
+        {
+          "check_id": "observation",
+          "role": "output",
+          "input_role": null,
+          "input_id": null
+        }
+      ],
+      "input_content_verified": false
+    },
+    "missing_reports": "None only denotes absent. Present empty/garbage/unsupported bytes refuse, never unavailable. Missing receipt does not permit ignoring present wrong reports: validate present reports against independently expected complete fixture receipt. narrative_statusunavailable whenever any required report absent; all other verified field observations remain explicit."
+  },
+  "safe_admission": {
+    "borrowed_objects": "Trusted local application objects only, not hostile Python execution sandbox. exact type, reject subclasses/custom containers/descriptors; use literal field map below bound to public classes, no dataclasses.asdict/reflection/custom iterators/caller callbacks. Fields read only after exact class admission; unknown object refuses before repr/eq/str/hash. No locks against hostile concurrent mutation claimed; reconstruct private validated copies after bounded preflight and use only copies.",
+    "steps": [
+      "Validate optional report arguments exact bytes/None, narrative exactstr ASCII<=128, inputs exacttuple len<=1 and exactpair len2 role exactstr trades before any encoding. Sum report bytes<=65536, each<=32768.",
+      "Iterative depth-first field walk with counters checked BEFORE pushing/iterating children: max4096visited nodes, depth16, each tuple<=64, each exactstr<=128codepoints ASCII, int notbool within signed128, finite exactfloat, exactbool/None, only literal public inputs.DataKind/results.ValueType/results.Status/results.Reason enums after exact enum-type check. Detect repeated ancestor identities/cycles and refuse. Read no extra __dict__ state.",
+      "Reconstruct known public classes from copied primitive/tuple fields using explicit constructors; public constructor validity must pass. Require exact fixed shape: 1config parameter, 0session intervals, exactly2governed session slots(P,S),1inputrole, <=16batch columns each exactly3values,5feature columns each1A/Sentity+1cell,5qualityrows,<=16evidencerows,1metadata input binding,0intervalcoverage.",
+      "Only after these bounds and private copies: canonical_content/fingerprints; each config/batch/result encoding<=16384 and combined<=49152. Full equality to independent selected fixture canonical content required. Unknown class/shape/fixture refuses; arbitrary supported public ConfigSpec is outside this examples-only selection."
+    ],
+    "public_class_fields": {
+      "inputs.CanonicalBatch": [
+        "kind",
+        "columns",
+        "metadata"
+      ],
+      "inputs.Column": [
+        "name",
+        "values"
+      ],
+      "inputs.BatchMetadata": [
+        "namespace",
+        "source",
+        "coverage",
+        "price_unit",
+        "adjustment",
+        "sampling",
+        "quantity_unit",
+        "ordering",
+        "duplicate_policy",
+        "scope",
+        "interval_coverage"
+      ],
+      "inputs.SourceBinding": [
+        "source_id",
+        "snapshot_id",
+        "mapping_version",
+        "input_id"
+      ],
+      "inputs.Coverage": [
+        "expected",
+        "observed",
+        "complete"
+      ],
+      "inputs.PriceUnit": [
+        "scale",
+        "currency"
+      ],
+      "inputs.AdjustmentSpec": [
+        "basis",
+        "policy_version",
+        "action_snapshot",
+        "anchor"
+      ],
+      "inputs.InputScope": [
+        "start_ns",
+        "end_ns",
+        "eligibility_policy",
+        "include_opening_auction",
+        "include_closing_auction"
+      ],
+      "inputs.IntervalCoverage": [
+        "name",
+        "start_ns",
+        "end_ns",
+        "coverage"
+      ],
+      "specs.ConfigSpec": [
+        "identity",
+        "algorithm_version",
+        "parameters",
+        "session",
+        "window",
+        "availability",
+        "adjustment",
+        "price_unit",
+        "schema_version"
+      ],
+      "specs.Parameter": [
+        "name",
+        "value"
+      ],
+      "specs.SessionSpec": [
+        "namespace",
+        "session_id",
+        "open_ns",
+        "close_ns",
+        "timezone_label",
+        "intervals",
+        "scheduled_close_ns",
+        "early_close",
+        "include_opening_auction",
+        "include_closing_auction"
+      ],
+      "specs.IntervalSpec": [
+        "name",
+        "start_ns",
+        "end_ns"
+      ],
+      "specs.WindowSpec": [
+        "count",
+        "target_session_id",
+        "governed_sessions",
+        "anchor"
+      ],
+      "specs.AvailabilitySpec": [
+        "market_cutoff_ns",
+        "knowledge_cutoff_ns",
+        "evaluation_ns",
+        "mode",
+        "reconstruction_reason"
+      ],
+      "results.FeatureResult": [
+        "values",
+        "quality",
+        "metadata",
+        "evidence"
+      ],
+      "results.FeatureColumn": [
+        "feature_id",
+        "algorithm_version",
+        "dtype",
+        "unit",
+        "entities",
+        "values",
+        "schema_version"
+      ],
+      "results.EntityKey": [
+        "instrument_id",
+        "session_id"
+      ],
+      "results.QualityRow": [
+        "entity",
+        "feature_id",
+        "status",
+        "expected",
+        "observed",
+        "reasons"
+      ],
+      "results.ResultMetadata": [
+        "namespace",
+        "session_id",
+        "availability",
+        "config_digest",
+        "inputs",
+        "backend_id",
+        "backend_version",
+        "evidence_limit",
+        "schema_version",
+        "math_policy_version"
+      ],
+      "results.InputBinding": [
+        "role",
+        "kind",
+        "metadata",
+        "schema_version"
+      ],
+      "results.EvidenceRow": [
+        "entity",
+        "feature_id",
+        "input_id",
+        "row_id",
+        "event_ns",
+        "known_at_ns",
+        "effective_start_ns",
+        "effective_end_ns",
+        "use",
+        "exclusion_reason",
+        "boundary"
+      ]
+    },
+    "error_precedence": "Wrong type/unknown class/cycle/invalid constructor ->invalid_input; exceeded bound ->limit_exceeded; well-formed graph/bytes with wrong selected fixture/report content ->inconsistent_evidence. Unsupported narrative alone returnsunsupported rather than error. Byte bound refusal precedes parsing; no physical memory/quota promise.",
+    "positive_fixture_control": "Independent data-only preflight of configuration.value fields confirms exactly two prior-only governed session slots(P,S), one eligibility_policy parameter, zero intervals; existing native config/oracle unchanged. Source/installed controls must admit this complete fixed positive before negative graph controls; one slot is not the chosen fixture."
+  },
+  "compatibility_correction": "Initial35case precode selected a fully supplied-input explanation. Ordinary worker source preparation failed evidence_invalid because accepted EvidenceCatalog recomputes reference-only explanations. Corrected selected wire uses unchanged catalog reference-only report; outer supplied-content verification remains complete where actualbatch retained. No accepted fixture/math/runtime/schema/packageversion changed; final exact source/contract review required."
+}

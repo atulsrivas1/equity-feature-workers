@@ -1,0 +1,37 @@
+{
+  "actual_entrypoint_bytes": 74,
+  "actual_rework": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6210308008",
+  "completed_project_records": 12,
+  "corrected_scope": "Pinned setuptools80.9 sorted groups/names renderer matches exact metadata; no normalization of received archive bytes. Source/inert approval only, distinct qualification pending.",
+  "execution": {
+    "exit_code": 1,
+    "failure_scope": "Actual failed author qualification; retain output/work roots/raw log, no unchanged rerun or completed cleanup/pass inference.",
+    "finished": true,
+    "new_output": "dist/agent-research-author-source-map-corrective",
+    "qualified": false,
+    "raw_log_sha256": "f4dee73c1ae6acbabc9268ea0cd8468b7541116e04f701d53ffa7317d8bee193",
+    "source_publication_sha256": "7b2784af96a2e0ecd2e4b1f4f21ee14edd0820b33ae060212e0562840653a14b",
+    "started": true
+  },
+  "expected_entrypoint_bytes": 75,
+  "failed_worker_wheel_equal_accepted_EQ108_Windows": true,
+  "first_source_map_correction_membership": "39 expected and39 observed",
+  "fresh_installed_forms": 0,
+  "native_dialogues": 0,
+  "prior_failure_preserved": true,
+  "qualified": false,
+  "raw_log": "eq109-author-source-map-corrective.log",
+  "reports": {
+    "eq109-entrypoint-corrective-reviewer-report.json": "ab59ae79b5bbef0d43c68a13309eb611bcfdca46600d22c31f98f04c05d1b883",
+    "eq109-entrypoint-failure-reviewer-report.json": "bc06c85d44330c5e0f4769daeeddf18e6bd709c08daf78a980236fdb4c253423"
+  },
+  "retained_owned_output": "dist/agent-research-author-source-map-corrective",
+  "retained_owned_work": "work/eq109-build-z5srbfl7",
+  "schema": "eq109.second.qualification.failure.v1",
+  "source_heads": {
+    "canonical": "248a9734bb55544df893056e2479ad86ccccc0c3",
+    "worker": "ccd8acb2b46036fa6f3b8e4010ca1768e8c50ccd"
+  },
+  "source_review_miss_preserved": true,
+  "status": "FAILED_REWORK_NOT_QUALIFIED"
+}
