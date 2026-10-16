@@ -1,0 +1,49 @@
+{
+  "acceptance": false,
+  "actual_rework": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6210814315",
+  "composite_case_limits": "C19/C21/C22 independent orthogonal assertions remain composite evidence, not falsely claimed single full-vector execution. C12 light-only, C18 copied continuation injection, C24 actual forbidden-call step distinct from enabled replay1.",
+  "corrected_research_input": "d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d",
+  "finding_ids": [
+    "CASE01_C03_missing_DEFER_assertion",
+    "CASE02_C35_missing_wrong_explanation_vector"
+  ],
+  "fourth_runtime_at_case_recording": {
+    "finished": false,
+    "new_output": "dist/agent-research-author-typed-launch-corrective",
+    "qualified": false,
+    "source_publication_sha256": "506877cca154cf1e67adfccdfda2ed1efe41f9a6983986c9f1962e3145a01ae5",
+    "started": true
+  },
+  "fourth_scope": "Immutable old ed9 application/test cohort; its later actual outcome is separate and cannot establish corrected C03/C35 execution. All prior three FAILED logs/roots and scoped partial results remain preserved.",
+  "method_counts_unchanged": {
+    "integration": 60,
+    "light": 41,
+    "patched_dispatch": 13,
+    "per_OS_invocations": 202,
+    "pure": 39,
+    "replay": 8
+  },
+  "old_research_input": "ed9dc8c6dc338902a2c9ffc5ca8d03cb79cf0cf7",
+  "qualified_new_controls": false,
+  "review_reports": {
+    "eq109-case-allocation-source-reviewer-report.json": "f908259c4ad6525fb0262f89db0437db07bc028832c0de917f1d3be0af2b705d",
+    "eq109-case-controls-corrective-reviewer-report.json": "35ed727f057a7c63e15a68ca039f1b44ee0980d8cd98de701f6dfaacb370bce6",
+    "eq109-case-pin-source-reviewer-report.json": "b9d4eb36280cb7cf895ef1252722013466dd78f0dfb3c364a868c8c4be4a908e"
+  },
+  "schema": "eq109.case.coverage.rework.v1",
+  "source_pin_preparation": {
+    "head": "d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d",
+    "parent": "d99fcd661cb6173eafdb96ab56cb044613ab9906",
+    "pushed": false,
+    "qualification": false,
+    "review_sha256": "35ed727f057a7c63e15a68ca039f1b44ee0980d8cd98de701f6dfaacb370bce6",
+    "scope": "Approved local canonical source/docs commit only, no public runtime push or new native/build/install; fixed identity for workerbuilder review",
+    "source_map": {
+      "tests/agent_research/test_consumer.py": "b9337ec0cf3bbb80df565869a0a8b58d8c4980316117817a0ba1d8dcb4a761eb",
+      "tests/agent_research/test_replay.py": "f6e42f23e04c13cb86140d7bbb09db07b96c8ec597cc88bfff136233799c522f"
+    }
+  },
+  "status": "REVIEWED_SOURCE_CONTROLS_NEW_QUALIFICATION_REQUIRED",
+  "targeted_source_methods_passed": 4,
+  "targeted_source_scope": "Independent ordinary source methods/counters only, not native/fresh installed/whole qualification."
+}

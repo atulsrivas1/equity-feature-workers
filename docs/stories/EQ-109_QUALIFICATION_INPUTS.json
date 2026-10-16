@@ -1,6 +1,28 @@
 {
   "actual_fresh_installs": 0,
   "actual_native_executions": 0,
+  "case_control_review_sha256": "35ed727f057a7c63e15a68ca039f1b44ee0980d8cd98de701f6dfaacb370bce6",
+  "counts_scope": "New corrected d2ac11 input only; no fresh qualification/native execution of these controls yet. Prior attempts and olded9 fourthcohort are separately recorded in VALIDATION.",
+  "historical_superseded_replay_method_name": "test_C04_to06_missing_reports_never_invoke_calculator",
+  "installed_payload_correction": {
+    "archive": "pywin32-312-cp312-cp312-win_amd64.whl",
+    "archive_sha256": "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc",
+    "independent_negative_controls": 22,
+    "members": {
+      "pywin32-312.data/scripts/pywin32_postinstall.py": {
+        "bytes": 25576,
+        "sha256": "453dd1a2020102b3148510856a2bd6925d8db15670afd70d35dda172c5d4054e"
+      },
+      "pywin32-312.data/scripts/pywin32_testall.py": {
+        "bytes": 3847,
+        "sha256": "158be3c78ded85dbdb91669888b3135f7f51c6c14bd1cfb5a3ec58dae76506a0"
+      }
+    },
+    "new_qualification_pending": true,
+    "scope": "EQ109-local builder and independent collector map exactly two pinned Windows pywin32 .data/scripts members to their actual owning Scripts paths with original byte/hash/size equality. Every other relocation is rejected. Shared accepted EQ108 helper unchanged.",
+    "source_and_retained_file_checks_only": true
+  },
+  "installed_payload_source_review_sha256": "1a5d595c93073e97c9e2d21d5d129e060931e2248fffd16c9acff31989c10e37",
   "methods": {
     "core/test_consumer.py": [
       "test_independent_literal_fixture_and_cardinality",
@@ -51,7 +73,7 @@
       "test_C01_original_and_replay_complete_parity",
       "test_C02_wrong_narrative_independent_of_matched_replay",
       "test_C03_unsupported_narrative_replay_still_explicit",
-      "test_C04_to06_missing_reports_never_invoke_calculator",
+      "test_C04_to06_and_C35_missing_or_wrong_reports_never_invoke_calculator",
       "test_C07_reference_only_bundle_unavailable_zero",
       "test_C13_preentry_cancel_zero",
       "test_C14_future_known_actual_producer_not_filtered",
@@ -86,6 +108,7 @@
   "planned_integration_methods": 60,
   "planned_light_methods": 41,
   "planned_per_OS_method_invocations": 202,
+  "research_input_head": "d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d",
   "reviewed_source_reports": {
     "eq109-builder-source-reviewer-report.json": "18f6c4ea627fbd32938a0f807e7624cf554f506781463a469ced5e5e99a4a1ba",
     "eq109-catalog-compatible-core-reviewer-report.json": "4716edcb455a960f5217e4ea1a9e44db3e6c97dba4641f2b481a6a0910570716",
@@ -96,6 +119,6 @@
     "eq109-native-source-reviewer-report.json": "ad537cac10b8e8958c90f385790adb3374cc1404f37c21cd8ec7d3ff6206da72"
   },
   "schema": "eq109.prepared.qualification.inputs.v1",
-  "scope": "Planned allocation/observed completed source-review reports only; not qualification or acceptance.",
+  "scope": "Prepared exact corrected-input method allocation; original35cases/expectedoutcomes unchanged. Historical source-review reports retain their original findings/limits; new4targetedsource controls and next qualification are distinct.",
   "status": "UNEXECUTED_REVIEW_PENDING"
 }

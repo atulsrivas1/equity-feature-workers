@@ -1,6 +1,55 @@
 {
   "Ready": true,
   "actual_admission": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6209277622",
+  "case_coverage_rework": {
+    "acceptance": false,
+    "actual_rework": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6210814315",
+    "composite_case_limits": "C19/C21/C22 independent orthogonal assertions remain composite evidence, not falsely claimed single full-vector execution. C12 light-only, C18 copied continuation injection, C24 actual forbidden-call step distinct from enabled replay1.",
+    "corrected_research_input": "d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d",
+    "finding_ids": [
+      "CASE01_C03_missing_DEFER_assertion",
+      "CASE02_C35_missing_wrong_explanation_vector"
+    ],
+    "fourth_runtime_at_case_recording": {
+      "finished": false,
+      "new_output": "dist/agent-research-author-typed-launch-corrective",
+      "qualified": false,
+      "source_publication_sha256": "506877cca154cf1e67adfccdfda2ed1efe41f9a6983986c9f1962e3145a01ae5",
+      "started": true
+    },
+    "fourth_scope": "Immutable old ed9 application/test cohort; its later actual outcome is separate and cannot establish corrected C03/C35 execution. All prior three FAILED logs/roots and scoped partial results remain preserved.",
+    "method_counts_unchanged": {
+      "integration": 60,
+      "light": 41,
+      "patched_dispatch": 13,
+      "per_OS_invocations": 202,
+      "pure": 39,
+      "replay": 8
+    },
+    "old_research_input": "ed9dc8c6dc338902a2c9ffc5ca8d03cb79cf0cf7",
+    "qualified_new_controls": false,
+    "review_reports": {
+      "eq109-case-allocation-source-reviewer-report.json": "f908259c4ad6525fb0262f89db0437db07bc028832c0de917f1d3be0af2b705d",
+      "eq109-case-controls-corrective-reviewer-report.json": "35ed727f057a7c63e15a68ca039f1b44ee0980d8cd98de701f6dfaacb370bce6",
+      "eq109-case-pin-source-reviewer-report.json": "b9d4eb36280cb7cf895ef1252722013466dd78f0dfb3c364a868c8c4be4a908e"
+    },
+    "schema": "eq109.case.coverage.rework.v1",
+    "source_pin_preparation": {
+      "head": "d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d",
+      "parent": "d99fcd661cb6173eafdb96ab56cb044613ab9906",
+      "pushed": false,
+      "qualification": false,
+      "review_sha256": "35ed727f057a7c63e15a68ca039f1b44ee0980d8cd98de701f6dfaacb370bce6",
+      "scope": "Approved local canonical source/docs commit only, no public runtime push or new native/build/install; fixed identity for workerbuilder review",
+      "source_map": {
+        "tests/agent_research/test_consumer.py": "b9337ec0cf3bbb80df565869a0a8b58d8c4980316117817a0ba1d8dcb4a761eb",
+        "tests/agent_research/test_replay.py": "f6e42f23e04c13cb86140d7bbb09db07b96c8ec597cc88bfff136233799c522f"
+      }
+    },
+    "status": "REVIEWED_SOURCE_CONTROLS_NEW_QUALIFICATION_REQUIRED",
+    "targeted_source_methods_passed": 4,
+    "targeted_source_scope": "Independent ordinary source methods/counters only, not native/fresh installed/whole qualification."
+  },
   "current_source_checks": {
     "all35_case_qualification": false,
     "canonical": "47source methods (39ordinary/SQLite+8actualpure-replay), strict2files PASS at catalog-compatible source; sourceunit only, no installed/native/bothOS proof",
@@ -137,6 +186,248 @@
     "status": "FAILED_REWORK_NOT_QUALIFIED"
   },
   "fixture_preparation": "Data-only stdlib reference JSON/ZIP/hash; no production package import/execution, no old fixture changed.",
+  "fourth_qualification_failure": {
+    "actual_failure": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6211029560",
+    "actual_native_scenarios": 8,
+    "all_four_failed_runs_preserved": true,
+    "completed_light_forms": [
+      {
+        "application_scope": "Source example/tests only in owned harness; every package imported from fresh site-packages. Not full host/stdlib/ABI closure.",
+        "form": "wheel-light",
+        "harness_source": {
+          "docs/stories/EQ-109_CASES.json": "d34841b3308f1cf93669f535e43f85b8b42618cfaf1b043958c7888538e5915a",
+          "docs/stories/EQ-109_ORACLES.json": "f21c1a0ba6659a8e92afd1d2d56aca0c82f17ae9ecb2c0acf4035b2778201a76",
+          "docs/stories/EQ-109_PROFILE.json": "ca7fa79c341f9bb7ac3ef7894261e6780dfbb5cbe77af77ad5496e67691d5dca",
+          "examples/agent_research.py": "bd9507f0b1cadea822d0dfc18ac9825829157645e4370db5b5f41ddbb79e024c",
+          "examples/agent_research_typed.py": "793b6c07257f8e45f9b4bc8a5a63a515fd1e2573df42c3c855c8749279a5363c",
+          "source-tests.py": "ffa286750d26a6ce6c70b4095708937e00989da2756e4951a8485d679cbfef33",
+          "tests/agent_research/independent_oracle.py": "0da2e4504bf7cb3fbd0e524f0bd347222d7d7f83cf324571e499e52ed24fb0d6",
+          "tests/agent_research/test_consumer.py": "ad1bf29155813241a581b76926cbf10ba993e73f34a916693b878e6328046732",
+          "tests/agent_research/test_light.py": "1ad5ec73390681b675bd3594929d496a0e4f5f110f1411d843e8cf83c772607e",
+          "tests/agent_research/test_replay.py": "0eeb47aa2aa0dc250825e47d2a76ff5f4bb0d2f9b11d8c7c0c69f992d4865547"
+        },
+        "independent_light_absence": true,
+        "installed_map": "wheel-light-installed-map.json",
+        "installed_map_sha256": "415d916aa9b68e6cb164e95447ab7c7f45c6507f40a77b71706261f75d58146e",
+        "installed_module_origins": {
+          "equity_feature_agent_evidence": {
+            "origin": "Lib/site-packages/equity_feature_agent_evidence/__init__.py",
+            "sha256": "1b9131876b03802e158e4455655a72fc1eea8fe9a15fe5325a041a3aaf15f2be"
+          },
+          "equity_feature_agent_ledger": {
+            "origin": "Lib/site-packages/equity_feature_agent_ledger/__init__.py",
+            "sha256": "4d08323ffbbcce9f551754e9844273430320865ef9aac3870602fcb50a546eb1"
+          },
+          "equity_feature_bundles": {
+            "origin": "Lib/site-packages/equity_feature_bundles/__init__.py",
+            "sha256": "bec1f7d80c8c0ce1af8e79926750a42d400314b81d6d4b8a250a61d2a171074f"
+          },
+          "equity_feature_contracts": {
+            "origin": "Lib/site-packages/equity_feature_contracts/__init__.py",
+            "sha256": "531160c9effe06c1a5bc1ded6659430a980a21ae03be66ee4b7da800af4cb91e"
+          },
+          "equity_feature_diagnostics": {
+            "origin": "Lib/site-packages/equity_feature_diagnostics/__init__.py",
+            "sha256": "766f6f7d1825e606020c16f6d5af4e895d4c0d13b5ce634ac4e898d548f4c8f1"
+          },
+          "equity_feature_evidence": {
+            "origin": "Lib/site-packages/equity_feature_evidence/__init__.py",
+            "sha256": "f9c34293584b80ce64601ff6b453147ba4f42b5f8bf9196cea7bed6f7c126ad1"
+          },
+          "equity_feature_explanations": {
+            "origin": "Lib/site-packages/equity_feature_explanations/__init__.py",
+            "sha256": "a690498e91b5af75e5e6e0e28a7ba10a27ad68a35cda34a9ef3910a25b8594f6"
+          }
+        },
+        "logs": [
+          {
+            "log": "wheel-light-absence.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "log": "wheel-light-methods.log",
+            "sha256": "d521523f11a265b6d629e072a140e6e3a5b764b35843cdf2a0b757273c1aa80f"
+          },
+          {
+            "log": "wheel-light-source-typing.log",
+            "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+          },
+          {
+            "log": "wheel-light-consumer-positive.log",
+            "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+          },
+          {
+            "log": "wheel-light-consumer-negative.log",
+            "sha256": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8"
+          }
+        ],
+        "negative_consumer_sha256": "1132c4d05fbe54f750f246a5e680e72bc5a6d6c91ff29c00aca5b602e107032b",
+        "original_wheel_payload_equal": true,
+        "owned_form_cleanup_completed": true,
+        "packages": [
+          "contracts",
+          "evidence",
+          "explanations",
+          "diagnostics",
+          "agent-evidence",
+          "agent-ledger",
+          "bundles"
+        ],
+        "pins_sha256": "acb1c8dc97724b2d763ce081aefef56421f2671eee6f05d90be089faac856622",
+        "positive_consumer_sha256": "7d30cef36d920171cde91219f709d319ad4fa5f148395cd6f60359a75ae429c6",
+        "registered_RECORD_validated": true,
+        "unchanged_registered_files": true
+      },
+      {
+        "application_scope": "Source example/tests only in owned harness; every package imported from fresh site-packages. Not full host/stdlib/ABI closure.",
+        "form": "sdist-light",
+        "harness_source": {
+          "docs/stories/EQ-109_CASES.json": "d34841b3308f1cf93669f535e43f85b8b42618cfaf1b043958c7888538e5915a",
+          "docs/stories/EQ-109_ORACLES.json": "f21c1a0ba6659a8e92afd1d2d56aca0c82f17ae9ecb2c0acf4035b2778201a76",
+          "docs/stories/EQ-109_PROFILE.json": "ca7fa79c341f9bb7ac3ef7894261e6780dfbb5cbe77af77ad5496e67691d5dca",
+          "examples/agent_research.py": "bd9507f0b1cadea822d0dfc18ac9825829157645e4370db5b5f41ddbb79e024c",
+          "examples/agent_research_typed.py": "793b6c07257f8e45f9b4bc8a5a63a515fd1e2573df42c3c855c8749279a5363c",
+          "source-tests.py": "ffa286750d26a6ce6c70b4095708937e00989da2756e4951a8485d679cbfef33",
+          "tests/agent_research/independent_oracle.py": "0da2e4504bf7cb3fbd0e524f0bd347222d7d7f83cf324571e499e52ed24fb0d6",
+          "tests/agent_research/test_consumer.py": "ad1bf29155813241a581b76926cbf10ba993e73f34a916693b878e6328046732",
+          "tests/agent_research/test_light.py": "1ad5ec73390681b675bd3594929d496a0e4f5f110f1411d843e8cf83c772607e",
+          "tests/agent_research/test_replay.py": "0eeb47aa2aa0dc250825e47d2a76ff5f4bb0d2f9b11d8c7c0c69f992d4865547"
+        },
+        "independent_light_absence": true,
+        "installed_map": "sdist-light-installed-map.json",
+        "installed_map_sha256": "c4de6952e5e70293c9a848ea03e0ec9648c71057c7d3a370125ef28889502cf6",
+        "installed_module_origins": {
+          "equity_feature_agent_evidence": {
+            "origin": "Lib/site-packages/equity_feature_agent_evidence/__init__.py",
+            "sha256": "1b9131876b03802e158e4455655a72fc1eea8fe9a15fe5325a041a3aaf15f2be"
+          },
+          "equity_feature_agent_ledger": {
+            "origin": "Lib/site-packages/equity_feature_agent_ledger/__init__.py",
+            "sha256": "4d08323ffbbcce9f551754e9844273430320865ef9aac3870602fcb50a546eb1"
+          },
+          "equity_feature_bundles": {
+            "origin": "Lib/site-packages/equity_feature_bundles/__init__.py",
+            "sha256": "bec1f7d80c8c0ce1af8e79926750a42d400314b81d6d4b8a250a61d2a171074f"
+          },
+          "equity_feature_contracts": {
+            "origin": "Lib/site-packages/equity_feature_contracts/__init__.py",
+            "sha256": "531160c9effe06c1a5bc1ded6659430a980a21ae03be66ee4b7da800af4cb91e"
+          },
+          "equity_feature_diagnostics": {
+            "origin": "Lib/site-packages/equity_feature_diagnostics/__init__.py",
+            "sha256": "766f6f7d1825e606020c16f6d5af4e895d4c0d13b5ce634ac4e898d548f4c8f1"
+          },
+          "equity_feature_evidence": {
+            "origin": "Lib/site-packages/equity_feature_evidence/__init__.py",
+            "sha256": "f9c34293584b80ce64601ff6b453147ba4f42b5f8bf9196cea7bed6f7c126ad1"
+          },
+          "equity_feature_explanations": {
+            "origin": "Lib/site-packages/equity_feature_explanations/__init__.py",
+            "sha256": "a690498e91b5af75e5e6e0e28a7ba10a27ad68a35cda34a9ef3910a25b8594f6"
+          }
+        },
+        "logs": [
+          {
+            "log": "sdist-light-absence.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "log": "sdist-light-methods.log",
+            "sha256": "fa6251fdebeb4f3f2d3c25bd25c01080db4be7a99eb7369c7a061f7d1b267d6a"
+          },
+          {
+            "log": "sdist-light-source-typing.log",
+            "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+          },
+          {
+            "log": "sdist-light-consumer-positive.log",
+            "sha256": "8e63ae22e8213e327a5e9cbd584067681681bd8ef7f25c869877887ccdcfc4ff"
+          },
+          {
+            "log": "sdist-light-consumer-negative.log",
+            "sha256": "9d05d5b6230783c120e5b44abeae4e3f907b886015a818d06cffd7b676e530f8"
+          }
+        ],
+        "negative_consumer_sha256": "1132c4d05fbe54f750f246a5e680e72bc5a6d6c91ff29c00aca5b602e107032b",
+        "original_wheel_payload_equal": true,
+        "owned_form_cleanup_completed": true,
+        "packages": [
+          "contracts",
+          "evidence",
+          "explanations",
+          "diagnostics",
+          "agent-evidence",
+          "agent-ledger",
+          "bundles"
+        ],
+        "pins_sha256": "acb1c8dc97724b2d763ce081aefef56421f2671eee6f05d90be089faac856622",
+        "positive_consumer_sha256": "7d30cef36d920171cde91219f709d319ad4fa5f148395cd6f60359a75ae429c6",
+        "registered_RECORD_validated": true,
+        "unchanged_registered_files": true
+      }
+    ],
+    "completed_project_records": 16,
+    "correction": {
+      "archive": "pywin32-312-cp312-cp312-win_amd64.whl",
+      "archive_sha256": "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc",
+      "independent_negative_controls": 22,
+      "members": {
+        "pywin32-312.data/scripts/pywin32_postinstall.py": {
+          "bytes": 25576,
+          "sha256": "453dd1a2020102b3148510856a2bd6925d8db15670afd70d35dda172c5d4054e"
+        },
+        "pywin32-312.data/scripts/pywin32_testall.py": {
+          "bytes": 3847,
+          "sha256": "158be3c78ded85dbdb91669888b3135f7f51c6c14bd1cfb5a3ec58dae76506a0"
+        }
+      },
+      "new_qualification_pending": true,
+      "scope": "EQ109-local builder and independent collector map exactly two pinned Windows pywin32 .data/scripts members to their actual owning Scripts paths with original byte/hash/size equality. Every other relocation is rejected. Shared accepted EQ108 helper unchanged.",
+      "source_and_retained_file_checks_only": true
+    },
+    "execution": {
+      "exit_code": 1,
+      "failure_scope": "Actual failed author qualification; retain output/work roots/raw log, no unchanged rerun or completed cleanup/pass inference.",
+      "finished": true,
+      "new_output": "dist/agent-research-author-typed-launch-corrective",
+      "qualified": false,
+      "raw_log_sha256": "83e64ecad924fc652a96d097e4f8381b6d955e54baa9f40d9b228be998cd6043",
+      "source_publication_sha256": "506877cca154cf1e67adfccdfda2ed1efe41f9a6983986c9f1962e3145a01ae5",
+      "started": true
+    },
+    "incomplete_form": "wheel-integration",
+    "incomplete_form_methods": 60,
+    "limits": [
+      "Actual fourth old-input partial results cannot qualify the corrected d2ac required-case controls.",
+      "No completed integration/cleanup/four-form qualification or acceptance; no established mathematics/native runtime defect.",
+      "Exact original script bytes; generated entrypoint executables remain separately declared outputs, not original wheel payload parity."
+    ],
+    "qualified": false,
+    "raw_log": "eq109-author-typed-launch-corrective.log",
+    "reports": {
+      "eq109-artifact-collector-relocation-reviewer-report.json": "e0d851d2688d9ee596d67fc0cbcc6ba54e12e249b8a693a7517cf1592a54017c",
+      "eq109-fourth-failure-tooling-reviewer-report.json": "300e72380e20efb3555aa8c8b41efacbf539d4fab3d827913d5620f94781c384",
+      "eq109-relocated-payload-corrective-initial-reviewer-report.json": "f40f2c7a011082d5f8aab05478d7d45b0e377fffc70555eb3f4d420b9a312af9",
+      "eq109-relocated-payload-corrective-reviewer-report.json": "1a5d595c93073e97c9e2d21d5d129e060931e2248fffd16c9acff31989c10e37",
+      "eq109-relocated-payload-failure-reviewer-report.json": "4f16a8ce98f086283d48e995d8c75a70ed08e71add0888258dd3b8ff2884d35a"
+    },
+    "research_input": "ed9dc8c6dc338902a2c9ffc5ca8d03cb79cf0cf7",
+    "retained_owned_output": "dist/agent-research-author-typed-launch-corrective",
+    "retained_owned_work": [
+      "work/eq109-build-xus1et69",
+      "work/eq109-wheel-integration-keevnt4m"
+    ],
+    "schema": "eq109.fourth.qualification.failure.v1",
+    "sdist_integration_started": false,
+    "source_heads": {
+      "canonical": "d99fcd661cb6173eafdb96ab56cb044613ab9906",
+      "worker": "d5a02731043f776e5687f6d6a2f9f0c51bea22bf"
+    },
+    "source_review_miss_preserved": true,
+    "status": "FAILED_REWORK_NOT_QUALIFIED",
+    "typed_example_and_strict_consumer_checks_completed": true,
+    "whole_integration_form_completed": false
+  },
   "historical_prequalification_state": {
     "current_source_checks": {
       "all35_case_qualification": false,
@@ -264,7 +555,7 @@
     "whole_integration_form_completed": false,
     "whole_qualification": false
   },
-  "pending": "Distinct reviewed publication/fourthqualification, Windows/Linux4forms/currentartifacts/finalcandidate/main acceptance.210Backlog/R11unfinished.",
+  "pending": "Exact reviewed paired publication, distinct fifth author qualification at d2ac input, Windows/Linux fourforms/current artifacts/finalcandidate/main acceptance.210Backlog/R11unfinished.",
   "preserved_reviews": [
     {
       "correction": "DEFER/REJECT-only closed assessment, separate replay/anchor/retention axes, full selected report/content binding and explicit bounded copied typed graph; ten negative controls added; renewal pending",
@@ -408,9 +699,9 @@
     "source_review_miss_preserved": true,
     "status": "FAILED_REWORK_NOT_QUALIFIED"
   },
-  "source_findings": "QUAL06 isolatedtypedexample invocation/source-review miss preserved. Fixedownedlauncher correction reviewed; all prior failures and collector01-04 finding/correction histories retained. Native8scenario actual scope is distinct from incompleteintegration/wholequalification.",
+  "source_findings": "C03/C35 missing assertions and QUAL07 owning installed-payload projection/source-review misses preserved. Current exact source corrections independently reviewed; all four failures/partial scopes retained.",
   "source_implementation": true,
-  "status": "In_progress_rework_isolated_typed_example_launcher",
+  "status": "In_progress_rework_required_cases_and_relocated_payload",
   "third_qualification_failure": {
     "actual_native_log_sha256": "a7afebf2a06630edeb5f033ecfb2c3b510a1190ea6c9b3c1ecff369f50f66d56",
     "actual_native_scenarios": {

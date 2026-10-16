@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-features
-          ref: ed9dc8c6dc338902a2c9ffc5ca8d03cb79cf0cf7
+          ref: d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d
           path: core
           fetch-depth: 0
       - uses: actions/checkout@v4

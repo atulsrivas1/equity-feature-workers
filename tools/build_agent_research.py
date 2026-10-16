@@ -12,10 +12,10 @@ from packaging.specifiers import SpecifierSet
 from build_foundation import git,snapshot,normalize,CORE_COMMIT
 from build_client import WORKER_COMMIT,SERVICE_COMMIT
 from build_mcp import CLIENT_COMMIT,CLIENT_INPUTS
-from build_mcp_evidence import closure,installed_matches_archives
+from build_mcp_evidence import closure
 
 ROOT=Path(__file__).resolve().parents[1]
-CORE_RESEARCH='ed9dc8c6dc338902a2c9ffc5ca8d03cb79cf0cf7'
+CORE_RESEARCH='d2ac11ebca5fe2cd151c35fa7f889a1d70a61d6d'
 IO_RESEARCH='18d86761aa3eebb7414e51e8fa2aba089717b5eb'
 IO_BASE='19aa266b9debb92a6c5eb707baafeb9ae7a82942'
 EPOCH='1700000000'
@@ -223,6 +223,41 @@ def project_pair(name,source,temp,output,auditor):
         selected_sdist_repeat_wheel_sha256=sha(repeated),selected_sdist_full_materialization=True)
 
 
+def installed_matches_archives(mapping,archives,auditor):
+    """Exact owning-wheel payload parity, including two fixed pywin32 relocations."""
+    normalize_name=lambda name:re.sub(r'[-_.]+','-',name).lower()
+    installed={normalize_name(name):record for name,record in mapping.items()}
+    assert len(installed)==len(mapping)
+    site='Lib/site-packages/' if os.name=='nt' else 'lib/python3.12/site-packages/'
+    data_members={'pywin32-312.data/scripts/pywin32_postinstall.py','pywin32-312.data/scripts/pywin32_testall.py'}
+    relocated=[]
+    for archive in archives:
+        assert archive.suffix=='.whl'
+        entries=auditor.contents(archive)
+        records=[name for name in entries if name.count('/')==1 and name.endswith('.dist-info/RECORD')]
+        assert len(records)==1;owning=records[0];info=owning.rsplit('/',1)[0]+'/'
+        metadata=BytesParser().parsebytes(entries[info+'METADATA'])
+        identity=normalize_name(metadata['Name']);record=installed[identity]
+        if identity=='pywin32':assert archive.name=='pywin32-312-cp312-cp312-win_amd64.whl' and sha(archive)=='b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc'
+        assert record['version']==metadata['Version']
+        assert site+owning in record['files']
+        observed=set()
+        for name,data in entries.items():
+            if name==owning:continue
+            target=site+name
+            if name.split('/',1)[0].endswith('.data'):
+                assert os.name=='nt' and identity=='pywin32' and metadata['Version']=='312'
+                assert archive.name=='pywin32-312-cp312-cp312-win_amd64.whl'
+                assert name in data_members,'unsupported relocated wheel member'
+                assert not data.splitlines(keepends=True)[0].startswith(b'#!python'),'unselected pip shebang rewrite'
+                target='Scripts/'+name.rsplit('/',1)[1];observed.add(name)
+                relocated.append(dict(archive=archive.name,distribution=metadata['Name'],version=metadata['Version'],member=name,installed_path=target,sha256=digest(data),bytes=len(data)))
+            assert record['files'].get(target)==digest(data),(metadata['Name'],name,target)
+        if identity=='pywin32':assert metadata['Version']=='312' and observed==data_members
+    assert len(relocated) in (0,2)
+    return sorted(relocated,key=lambda item:item['member'])
+
+
 def qualify(form,projects,support,reference,component,apps,client,service,output,temp,auditor):
     integration=form.endswith('integration');sdist=form.startswith('sdist')
     location=Path(tempfile.mkdtemp(prefix='eq109-'+form+'-',dir=ROOT/'work')).resolve()
@@ -281,11 +316,11 @@ print(json.dumps(out,sort_keys=True))
     negfile=output/(form+'-consumer-negative.log');negfile.write_text(negative.stdout+negative.stderr,encoding='utf-8');logs.append(dict(log=negfile.name,sha256=sha(negfile)))
     after=closure(py,location);assert after==before
     wheel_archives=[projects[name]['wheel'] for name in selected]+support+(reference if integration else [])
-    installed_matches_archives(after,wheel_archives,auditor)
+    relocated=installed_matches_archives(after,wheel_archives,auditor)
     mapfile=output/(form+'-installed-map.json');mapfile.write_text(json.dumps(after,sort_keys=True,indent=2)+'\n',encoding='utf-8')
     record=dict(form=form,logs=logs,installed_map=mapfile.name,installed_map_sha256=sha(mapfile),
         packages=selected,harness_source=names,independent_light_absence=not integration,
-        installed_module_origins=origins,pins_sha256=sha(pinfile),
+        installed_module_origins=origins,pins_sha256=sha(pinfile),relocated_wheel_payloads=relocated,
         positive_consumer_sha256=positive_consumer_sha256,negative_consumer_sha256=negative_consumer_sha256,
         unchanged_registered_files=True,registered_RECORD_validated=True,original_wheel_payload_equal=True,
         application_scope='Source example/tests only in owned harness; every package imported from fresh site-packages. Not full host/stdlib/ABI closure.')
