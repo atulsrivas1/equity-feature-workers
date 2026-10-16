@@ -51,13 +51,16 @@ def build(source,output):
 
 
 def entrypoint_text(project):
-    parser=configparser.ConfigParser(interpolation=None);parser.optionxform=str
-    for group,values in project.get('entry-points',{}).items():parser[group]=values
+    # Match the pinned setuptools80.9 renderer; received archive bytes stay exact.
+    groups=dict(project.get('entry-points',{}))
     for field,group in (('scripts','console_scripts'),('gui-scripts','gui_scripts')):
-        if project.get(field):parser[group]=project[field]
-    if not parser.sections():return None
-    text=io.StringIO();parser.write(text)
-    return text.getvalue().encode('utf-8')
+        if project.get(field):groups[group]=project[field]
+    groups={group:values for group,values in groups.items() if values}
+    if not groups:return None
+    return '\n'.join(
+        '['+group+']\n'+'\n'.join(name+' = '+values[name] for name in sorted(values))+'\n'
+        for group,values in sorted(groups.items())
+    ).encode('utf-8')
 
 
 def source_record(repository,commit,materialized,scopes):
