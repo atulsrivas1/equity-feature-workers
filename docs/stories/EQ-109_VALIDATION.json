@@ -94,11 +94,53 @@
     "Worker subsequent7methods passed while strict1failed absent jsonschema stubs and Anyreturn; explicit scoped untyped-runtime import boundary and checked dictcast corrected. Latest7+strict1PASS; earlier failure retained.",
     "Precode publisher casecount fixer broad25count assertion failed beforewrites; exactvisibletext assertions corrected, no publication duplication."
   ],
+  "first_qualification_failure": {
+    "actual_rework": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6210006576",
+    "corrected_scope": "Fixed auditor import suppresses bytecode only for its loader and restores prior flag in finally. Exact source membership remains mandatory; no cache ignore. Six isolated dummy controls pass; actual corrected auditor/build/install/native still unexecuted.",
+    "execution": {
+      "exit_code": 1,
+      "failure_scope": "Actual failed author qualification; retain output/work roots/raw log, no unchanged rerun or completed cleanup/pass inference.",
+      "finished": true,
+      "new_output": "dist/agent-research-author-first",
+      "qualified": false,
+      "raw_log_sha256": "29d82d1e1d212ee4e2bde4207c4d10346dd6178820e4008b89f7ce3278cfe999",
+      "source_publication_sha256": "baf0beb72e66eb372a42e3a84b0da4c5bf02bfc386cfae92cb91ac55f9ec4ef3",
+      "started": true
+    },
+    "expected_source_files": 39,
+    "fresh_installs": 0,
+    "native_dialogues": 0,
+    "observed_source_files": 40,
+    "only_extra": "tools/__pycache__/build_agent_ledger.cpython-312.pyc",
+    "original_bytes_profiles": {
+      "legacy_CRLF": 19,
+      "raw_Git": 20
+    },
+    "original_files_accounted": true,
+    "package_builds": 0,
+    "qualified": false,
+    "raw_log": "eq109-author-first.log",
+    "reports": {
+      "eq109-final-tooling-corrected-reviewer-report.json": "379a8e272f2fc520e0042b5304dad932f88913ed5f590054f4fcd28a66aa494c",
+      "eq109-final-working-source-reviewer-report.json": "a52eb78afd54a8ed760b79df5a0888aa9cdf2d148c61f820d33e41f59871cc7b",
+      "eq109-first-source-map-failure-reviewer-report.json": "021f11e8b734fa86f107a79f0b8d7d9cbce22664d5ccbdf7ea163cc75fcfcdfa",
+      "eq109-source-map-corrective-reviewer-report.json": "6eb4853f2528702d1d680fc228bfc36f00000febc0f99691da58672592c80b02"
+    },
+    "retained_owned_output": "dist/agent-research-author-first",
+    "retained_owned_work": "work/eq109-build-a_enxi2l",
+    "schema": "eq109.first.qualification.failure.v1",
+    "source_heads": {
+      "canonical": "ed9dc8c6dc338902a2c9ffc5ca8d03cb79cf0cf7",
+      "worker": "496c72f7ae2d09276874d8913977bd2c1be3e3a6"
+    },
+    "source_review_miss_preserved": true,
+    "status": "FAILED_REWORK_NOT_QUALIFIED"
+  },
   "fixture_preparation": "Data-only stdlib reference JSON/ZIP/hash; no production package import/execution, no old fixture changed.",
   "independent_review_pending": true,
   "new_native_operations": 0,
   "new_tests_executed": 60,
-  "pending": "Complete exact correctedbuilder/packet/controller review, publish paired reviewedsource with canonicalpin first, then freshbothOS4forms/fullsource-license-metadata-RECORD/origins/actualSDKnative/currentartifacts and main release delivery. EQ110Backlog/R11unfinished; no new owner input missing.",
+  "pending": "Exact corrective source/docs/publication-author controller review, distinct new Windows/Linux fresh4forms/currentartifacts, finalcandidate/main acceptance. Core ed9 research inputs unchanged; no failed-run pass.210Backlog/R11unfinished.",
   "preserved_reviews": [
     {
       "correction": "DEFER/REJECT-only closed assessment, separate replay/anchor/retention axes, full selected report/content binding and explicit bounded copied typed graph; ten negative controls added; renewal pending",
@@ -289,7 +331,7 @@
     }
   ],
   "schema": "eq109.precode.validation.v1",
-  "source_findings": "DESIGN01-03,ADMIT01,SRC01-05,MCP01-04,NATIVE01/counter race resolved in recorded scopes. Original reviews and failed checks retained. Currentcore/MCP/native-entry source reviews approved; corrected builder/full qualification packet/publication+author controllers still require exact review. No new native/build/install qualification.",
+  "source_findings": "Earlier source/native/metadata/environment/buildcopy/controller findings resolved in recorded scopes; QUAL04 actualauditorbytecode source-map failure and earlier review miss now preserved. Scoped loader correction reviewed via six dummy controls; new fullsource/controller review and distinct physical qualification remain.",
   "source_implementation": true,
-  "status": "In_progress_source_development_NOT_QUALIFIED"
+  "status": "In_progress_rework_source_map_failure_before_package_builds"
 }

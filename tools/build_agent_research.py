@@ -80,7 +80,11 @@ def raw_application(repository,commit,dest,scopes):
 
 def load_auditor(path):
     spec=importlib.util.spec_from_file_location('eq109_archive_auditor',path)
-    value=importlib.util.module_from_spec(spec);spec.loader.exec_module(value);return value
+    value=importlib.util.module_from_spec(spec)
+    previous=sys.dont_write_bytecode;sys.dont_write_bytecode=True
+    try:spec.loader.exec_module(value)
+    finally:sys.dont_write_bytecode=previous
+    return value
 
 
 def reference_archive(path,auditor):

@@ -1,0 +1,42 @@
+{
+  "actual_rework": "https://github.com/atulsrivas1/equity-features/issues/209#issuecomment-6210006576",
+  "corrected_scope": "Fixed auditor import suppresses bytecode only for its loader and restores prior flag in finally. Exact source membership remains mandatory; no cache ignore. Six isolated dummy controls pass; actual corrected auditor/build/install/native still unexecuted.",
+  "execution": {
+    "exit_code": 1,
+    "failure_scope": "Actual failed author qualification; retain output/work roots/raw log, no unchanged rerun or completed cleanup/pass inference.",
+    "finished": true,
+    "new_output": "dist/agent-research-author-first",
+    "qualified": false,
+    "raw_log_sha256": "29d82d1e1d212ee4e2bde4207c4d10346dd6178820e4008b89f7ce3278cfe999",
+    "source_publication_sha256": "baf0beb72e66eb372a42e3a84b0da4c5bf02bfc386cfae92cb91ac55f9ec4ef3",
+    "started": true
+  },
+  "expected_source_files": 39,
+  "fresh_installs": 0,
+  "native_dialogues": 0,
+  "observed_source_files": 40,
+  "only_extra": "tools/__pycache__/build_agent_ledger.cpython-312.pyc",
+  "original_bytes_profiles": {
+    "legacy_CRLF": 19,
+    "raw_Git": 20
+  },
+  "original_files_accounted": true,
+  "package_builds": 0,
+  "qualified": false,
+  "raw_log": "eq109-author-first.log",
+  "reports": {
+    "eq109-final-tooling-corrected-reviewer-report.json": "379a8e272f2fc520e0042b5304dad932f88913ed5f590054f4fcd28a66aa494c",
+    "eq109-final-working-source-reviewer-report.json": "a52eb78afd54a8ed760b79df5a0888aa9cdf2d148c61f820d33e41f59871cc7b",
+    "eq109-first-source-map-failure-reviewer-report.json": "021f11e8b734fa86f107a79f0b8d7d9cbce22664d5ccbdf7ea163cc75fcfcdfa",
+    "eq109-source-map-corrective-reviewer-report.json": "6eb4853f2528702d1d680fc228bfc36f00000febc0f99691da58672592c80b02"
+  },
+  "retained_owned_output": "dist/agent-research-author-first",
+  "retained_owned_work": "work/eq109-build-a_enxi2l",
+  "schema": "eq109.first.qualification.failure.v1",
+  "source_heads": {
+    "canonical": "ed9dc8c6dc338902a2c9ffc5ca8d03cb79cf0cf7",
+    "worker": "496c72f7ae2d09276874d8913977bd2c1be3e3a6"
+  },
+  "source_review_miss_preserved": true,
+  "status": "FAILED_REWORK_NOT_QUALIFIED"
+}
