@@ -1,0 +1,25 @@
+# EQ109 — synthetic agent research consumer and replay
+
+[Story209](https://github.com/atulsrivas1/equity-features/issues/209), E15#195/milestone12, five provisional complexity points, not days. This is a concrete pre-code proposal, no implementation/Ready/runtime qualification. One active runtime story; EQ110 remains Backlog. All-R11 local-review grant persists.
+
+EQ108 is [accepted Closed/Done](https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6209046467) at canonical980a7b6/worker744b7d1/PR410+53. All74finalcandidate/37main checks and separate source/finaldocs/author+bothOS artifacts/actualmain/closure audits passed. EQ107/EQ098 are accepted dependencies; verify live Project before admission rather than rerun accepted receipts. Earlier failed EQ108 author/reader/tooling histories remain retained; no failed pass.
+
+## Selected bounded design
+
+A deterministic synthetic external consumer uses existing public event/ledger/bundle/replay and the one existing MCP server. No new package, model/framework service, mathematics or uploaded executable code. [Exact profile](EQ-109_PROFILE.json), [35 independent outcome cases](EQ-109_CASES.json), [literal source-data/oracle](EQ-109_ORACLES.json) and [qualification](EQ-109_QUALIFICATION_PLAN.md) define the required supported surface, failures and limits. Existing package/schema/algorithm versions remain unchanged.
+
+The critical bridge is actual retained input. EQ108's historical zero-hash/zero-length supplied input declarations never claimed retained batches and cannot become replay receipts. A new fixed trusted owner has its actual synthetic batch/config/native result and uses public make_content_receipt after complete original producer verification. MCP still reports input_content_verifiedFalse; external supplied-content verification is separate and does not authenticate source, original consumption or execution. No receipt is reconstructed from HTTP metadata.
+
+The accepted native fixture uses config identity synthetic-bars/timezone caller-supplied/input_id trades, distinct from the R9 public demo config. Clone explicit independent typed-JSON input/config oracles without changing old fixtures. Preserve complete native producer/SDK golden, all five output/quality rows and full original source/config/input/result/receipt bytes. Supported replay remains only session.compute_trades.v1, actual replay count1 or explicitly zero-call unavailable/incompatible/pre-entry cancellation; no callbacks/plugins/new source acquisition.
+
+Closed synthetic narrative session.trade.count=3 is checked against actual available count3;4 mismatches, unsupported prose is not checked, future/unavailable results never become matched admission. Explicit unknown/not_applied diagnostics produce DEFER even when replay matches. Events retain kind-specific payload references and declared/missing model identity, no hidden reasoning or automatic secret capture. Independent expected bytes/links and externally retained terminal distinguish consistency/anchor coverage/retention; no trustworthy actor/clock/human approval or trading execution.
+
+## Delivery and documentation
+
+Complete separate exact readiness review then real Ready→Inprogress/Atul. Implement examples/targeted fixtures only after admission, then renew source/entry/qualification-controller reviews before new physical execution. The new public synthetic consumer must actually use installed APIs; ordinary static/unit/fake wire checks cannot replace official SDK/native/ledger/replay composition. Source-only owner design is not completed qualification. Original equations/core schemas/accepted fixtures have no impact and remain unchanged.
+
+Same-story docs cover API/example invocation, exact optional dependencies, model absence/narrative/diagnostic/replay/anchor/retention limits, compatibility/security/rights, decisions, changelog/lesson/handoff and GitHub issue/PR evidence. Currentcandidate/main source+bothOS artifacts and independent actualpublication/lifecycle gates precede Released/Done. No deadline, speedup, physical quota, power-loss/hosted recovery, authenticity/compliance/profitability claim; no R12/provider/private/paid/public-service/account/registry/recurring scope.
+
+## Pre-code review correction
+
+Preserved independent DESIGN01/02 findings require the closed DEFER/REJECT-only advisory Assessment and separate input coverage/replay/anchor/retention observations in the profile. Full expected count-focused explanation bytes and exact selected diagnostic projection must match all context/content/derived fields; present invalid bytes refuse, missing bytes remain unavailable. Explicit known-class field/graph bounds and private constructor copies precede fingerprints; accepted public wrappers alone are insufficient. Ten wrong-context/content/graph/incomplete-input controls bring the planned table to35. No generic report decoder, source authenticity or decision admission is added. Exact renewed semantic review and public-head readiness remain pending; no implementation/qualification.

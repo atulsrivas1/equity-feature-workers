@@ -1,0 +1,343 @@
+{
+  "schema": "eq109.independent.case.table.v1",
+  "status": "PLANNED_NOT_EXECUTED",
+  "scope": "Per-case replay invocation count is separate from the one actual original native computation in supported MCP integration. Unknown/reference-only tests do not invent original execution.",
+  "cases": [
+    {
+      "id": "C01",
+      "name": "full_unknown_diagnostic",
+      "narrative": "matched",
+      "replay": "matched",
+      "replay_calculations": 1,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C02",
+      "name": "wrong_narrative",
+      "narrative": "mismatch",
+      "replay": "matched",
+      "replay_calculations": 1,
+      "decision": "REJECT",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C03",
+      "name": "unsupported_prose",
+      "narrative": "unsupported",
+      "replay": "matched",
+      "replay_calculations": 1,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C04",
+      "name": "missing_receipt",
+      "narrative": "unavailable",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C05",
+      "name": "missing_explanation",
+      "narrative": "unavailable",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C06",
+      "name": "missing_diagnostics",
+      "narrative": "unavailable",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C07",
+      "name": "missing_retained_input",
+      "narrative": "matched",
+      "replay": "unavailable",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C08",
+      "name": "changed_input_same_metadata",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C09",
+      "name": "changed_result_same_metadata",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C10",
+      "name": "changed_configuration",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C11",
+      "name": "wrong_receipt_result_binding",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C12",
+      "name": "unsupported_installed_calculator",
+      "narrative": "matched",
+      "replay": "incompatible",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "light_no_features"
+    },
+    {
+      "id": "C13",
+      "name": "cancel_before_replay",
+      "narrative": "matched",
+      "replay": "cancelled_before_start",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C14",
+      "name": "future_known_row",
+      "narrative": "unavailable",
+      "replay": "matched",
+      "replay_calculations": 1,
+      "decision": "DEFER",
+      "lane": "pure_actual_producer"
+    },
+    {
+      "id": "C15",
+      "name": "MCP_disabled",
+      "narrative": "unavailable",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "real_MCP_integration"
+    },
+    {
+      "id": "C16",
+      "name": "MCP_uncatalogued",
+      "narrative": "unavailable",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "real_MCP_integration"
+    },
+    {
+      "id": "C17",
+      "name": "native_grant_retired",
+      "narrative": "unavailable",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "real_MCP_integration"
+    },
+    {
+      "id": "C18",
+      "name": "artifact_changed_mid_read",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "real_MCP_integration"
+    },
+    {
+      "id": "C19",
+      "name": "anchor_not_supplied",
+      "narrative": "matched",
+      "replay": "matched",
+      "replay_calculations": 1,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C20",
+      "name": "anchored_suffix_removed",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C21",
+      "name": "valid_unanchored_prefix",
+      "narrative": "matched",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C22",
+      "name": "unknown_model_identity",
+      "narrative": "matched",
+      "replay": "matched",
+      "replay_calculations": 1,
+      "decision": "DEFER",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C23",
+      "name": "oversize_report",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "orchestration_with_frozen_actual_content"
+    },
+    {
+      "id": "C24",
+      "name": "arbitrary_tool_arguments",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "real_MCP_integration"
+    },
+    {
+      "id": "C25",
+      "name": "unsupported_registry_bytes",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "closed_bundle_parser",
+      "reason": "Unsupported manifest registry refuses before replay; do not mislabel parser refusal as incompatible report."
+    },
+    {
+      "id": "C26",
+      "name": "wrong_explanation_focus",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "full report volume substituted for count"
+    },
+    {
+      "id": "C27",
+      "name": "wrong_explanation_context",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "entity/session changed in complete otherwise canonical explanation"
+    },
+    {
+      "id": "C28",
+      "name": "wrong_explanation_input_summary",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "same metadata but wrong content fingerprint or content_verified summary"
+    },
+    {
+      "id": "C29",
+      "name": "wrong_diagnostic_context",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "changed availability/entity/namespace"
+    },
+    {
+      "id": "C30",
+      "name": "wrong_diagnostic_content_association",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "wrong output fingerprint or input association"
+    },
+    {
+      "id": "C31",
+      "name": "wrong_diagnostic_derived_count",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "changed derived counts/admission or extra JSON field"
+    },
+    {
+      "id": "C32",
+      "name": "present_empty_report",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "empty bytes is invalid, None alone absent"
+    },
+    {
+      "id": "C33",
+      "name": "oversized_configuration_graph",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "too many parameters/string/container before fingerprint"
+    },
+    {
+      "id": "C34",
+      "name": "forged_nested_type",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "subclass/custom nested object refused without callbacks"
+    },
+    {
+      "id": "C35",
+      "name": "missing_input_wrong_present_report",
+      "narrative": "refused",
+      "replay": "not_requested",
+      "replay_calculations": 0,
+      "decision": "error",
+      "lane": "bounded_pure_admission",
+      "reason": "C07 plus wrong explanation refuses rather than unavailable"
+    }
+  ],
+  "original_fixture_no_changes": true,
+  "anchor_semantics": "A valid shortened prefix can open and be internally consistent. Expected later terminal returns not_covered/mismatch as applicable; consumer refuses a full anchored-success claim, preserving actual status. Do not invent database corruption.",
+  "assessment_expectations": {
+    "C01": "all report statusesverified; expected1/verified1/complete; not_applied; DEFERdiagnostic_not_admitted",
+    "C07": "config/output/receipt/explanation/diagnosticsverified; expected1/verified0/missing; not_applied; actual unavailable replay0; DEFERincomplete_evidence",
+    "C04_C05_C06": "only absent reportunavailable; every present report fullyvalidated; narrativeunavailable; DEFERincomplete_evidence",
+    "C14": "complete supplied content and verified reports can describe missing_input/future_knowledge; narrativeunavailable; replaymatched1; DEFERincomplete_evidence",
+    "refusals": "No Assessment/outer success object created; payload-free error, zero replay."
+  },
+  "cohort_allocation": "All35 cases in source development where dependency appropriate. Light forms execute all pure admission/narrative/ledger/parser cases, replace calculator-required positive replay with explicitly incompatible0 (not same case pass), never count native MCP cases. Integration forms execute all35 including actual supported and future pure replay; real MCP C15-C18/C24 require native SDK choreography. Exact installed method/case ledger frozen before qualification; no skipped case counted as success."
+}

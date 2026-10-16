@@ -1,3 +1,13 @@
+## EQ109 pre-code design review correction — October16,2026
+
+Initial DESIGN01/02 and residual DESIGN03 findings are preserved in EQ-109_VALIDATION: unreachable OBSERVE removed from the selected advisory example; exact immutable assessment/full report/context/content binding, missing-input coverage, separate replay/anchor/retention axes and safe copied typed-graph bounds specified.Fixed governed-session preflight admits exact(P,S)2slots from unchanged oracle; independent data-only shape control passes.35planned controls, no product tests or product/native execution. Renewed exact semantic approval/publication/readiness remain pending;209Backlog/unassigned,210Backlog/R11unfinished. Older snapshots below retain their historical scope.
+
+## EQ108 accepted; EQ109 pre-code preparation — October16,2026
+
+EQ108 is [Closed/Done](https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6209046467) at canonical980a7b6/worker744b7d1/PR410+53, all74candidate/37main checks and separate finalsource/docs/currentbothOS/publicmain/closure reviews approved findings[]. Both failed author/reader/tooling histories remain retained. Experimental MCP evidence declarations and actual grants are scoped; no source authenticity/full host/physical quota/hard cleanup/hosted claim.
+
+EQ109209 now has a proposed [synthetic external consumer/replay packet](stories/EQ-109_PLAN.md), profile/35outcome cases/independent native input-config/producer data oracles and bothOS qualification plan. It remains Backlog/unassigned pending exact readiness review; no consumer product code/import/build/install/native execution or qualification. New content-consistent owner receipts require actual retained fixed batch/config; accepted EQ108 zero-hash declarations cannot be relabeled replay proof. Closed narrative/unknown diagnostics/anchor/retention/replay axes are distinct. EQ110210Backlog/E15milestone12open/R11unfinished. All-R11 review grant persists; R7automation remains paused and unrelated primary edits preserved. Older snapshots below are historical.
+
 ## EQ108 actual source qualification; final delivery pending — October16,2026
 
 Reviewed source core1b3402a/worker827b1ab has completed actual author Windows and current CI Windows/Linux four-form default/evidence wheel/sdist qualification. Each cohort passes248installed method invocations, official SDK/native cases and strict/absence/RECORD/source controls. Independent artifact reviews found no actionable issue within their recorded scope. [Execution evidence](stories/EQ-108_EXECUTION.json) binds actual raw logs/server ZIPs/archives/captured maps/reviews. This is source qualification, not release or acceptance; actual208Test,209/210Backlog/R11unfinished.

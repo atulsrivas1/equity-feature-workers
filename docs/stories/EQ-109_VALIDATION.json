@@ -1,0 +1,60 @@
+{
+  "schema": "eq109.precode.validation.v1",
+  "status": "Backlog_precode_design_corrected_renewal_pending",
+  "source_implementation": false,
+  "new_tests_executed": 0,
+  "new_native_operations": 0,
+  "qualification": false,
+  "Ready": false,
+  "independent_review_pending": true,
+  "dependency_acceptance": {
+    "EQ108": "https://github.com/atulsrivas1/equity-features/issues/208#issuecomment-6209046467",
+    "EQ108_closure_review_sha256": "229ec75da1876c3b2e4b9c690c0de08bcb66302dfe37f77661a56e2f28014945"
+  },
+  "fixture_preparation": "Data-only stdlib reference JSON/ZIP/hash; no production package import/execution, no old fixture changed.",
+  "preserved_reviews": [
+    {
+      "report": "eq109-precode-reviewer-report.json",
+      "sha256": "0ed0ebb5c95e74dc90fdb16c4ec3a0df4b23cc7d8feab9fa51117ff20633c93e",
+      "disposition": "changes_requested",
+      "findings": [
+        "EQ109-DESIGN-01",
+        "EQ109-DESIGN-02"
+      ],
+      "correction": "DEFER/REJECT-only closed assessment, separate replay/anchor/retention axes, full selected report/content binding and explicit bounded copied typed graph; ten negative controls added; renewal pending"
+    },
+    {
+      "report": "eq109-precode-tooling-reviewer-report.json",
+      "sha256": "4bac29763c56980b541377ca01b54e398753eb139bdfeba36d17496e5cb132ce",
+      "disposition": "mechanics_approved_only",
+      "semantic_coverage": false
+    },
+    {
+      "report": "eq109-precode-corrected-reviewer-report.json",
+      "sha256": "228c60263f41cea6991b9b9cc065d24b3a378c26427cf5670d2ea74b688c30f2",
+      "disposition": "changes_requested",
+      "findings": [
+        "EQ109-DESIGN-03"
+      ],
+      "resolved_prior_findings": [
+        "EQ109-DESIGN-01",
+        "EQ109-DESIGN-02"
+      ],
+      "correction": "Exactly2governed slots(P,S), not1; unchangedoracle; independent stdlib positive data-shape control, renewal pending"
+    }
+  ],
+  "data_shape_control": {
+    "scope": "stdlib literal fixture data shape control only; not typed public-object preflight implementation, no product import/test/native/qualification",
+    "governed_sessions": [
+      "P",
+      "S"
+    ],
+    "configuration_parameters": 1,
+    "session_intervals": 0,
+    "data_nodes": {
+      "configuration": 118,
+      "batch": 215
+    },
+    "unchanged_oracle_sha256": "f21c1a0ba6659a8e92afd1d2d56aca0c82f17ae9ecb2c0acf4035b2778201a76"
+  }
+}
