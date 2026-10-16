@@ -16,7 +16,7 @@ import unittest
 from pilot_fixture import ORACLE, counts, make_fixture, isolated_sample
 from pilot_memory import NativeMemory, MemorySampler, admission, quantile, simultaneous_peak
 from pilot_process import OwnedProcess, communicate_owned
-from pilot_entry import retain_entry, settle_entry, finish_entry_observation
+from pilot_entry import retain_entry, settle_entry_then_drain, finish_entry_observation
 
 
 class Pilot(unittest.TestCase):
@@ -174,8 +174,7 @@ print('after '+str(os.getpid()),flush=True);sys.stdin.readline()
                 self.assertTrue(failed);self.assertIsNone(owner.job);self.assertFalse(owner.handles)
                 self.assertTrue(retained<=set(terminated),'held fallback was bypassed')
                 settle_deadline=time.monotonic()+5
-                process.communicate(timeout=max(0,settle_deadline-time.monotonic()))
-                settle_entry(owner.kernel,entry,settle_deadline)
+                settle_entry_then_drain(owner.kernel,process,entry,settle_deadline)
             except BaseException as error:
                 primary=error;raise
             finally:

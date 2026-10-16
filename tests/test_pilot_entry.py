@@ -1,7 +1,7 @@
 """Pure API doubles for identity-bound qualification observation; no process launch."""
 import unittest
 from unittest.mock import Mock
-from pilot_entry import retain_entry, settle_entry, finish_entry_observation
+from pilot_entry import retain_entry, settle_entry, settle_entry_then_drain, finish_entry_observation
 
 
 def kernel():
@@ -29,6 +29,53 @@ def kernel():
 
 
 class EntryObservation(unittest.TestCase):
+    def test_forced_entry_observed_before_stdin_close_with_shared_budget(self):
+        api = kernel();entry = retain_entry(api, 7, 42);api.status = 1
+        process = Mock();process.stdin.closed = False;order = []
+        def wait(handle, milliseconds):
+            self.assertFalse(process.stdin.closed)
+            order.append('entry');return 0
+        def drain(*, timeout):
+            self.assertEqual(order, ['entry'])
+            self.assertAlmostEqual(timeout, .8)
+            process.stdin.closed = True;order.append('drain')
+        api.WaitForSingleObject.side_effect = wait;process.communicate.side_effect = drain
+        result = settle_entry_then_drain(api, process, entry, 5, clock=iter([4, 4.1, 4.2, 4.3]).__next__)
+        self.assertEqual(result, 1);self.assertEqual(order, ['entry', 'drain'])
+        api.WaitForSingleObject.assert_called_once_with(101, 1000)
+        process.communicate.assert_called_once()
+
+    def test_entry_failure_never_closes_stdin_and_preserves_primary(self):
+        api = kernel();entry = retain_entry(api, 7, 42)
+        error = OSError('controlled retained entry wait failure')
+        api.WaitForSingleObject.side_effect = error;process = Mock()
+        with self.assertRaises(OSError) as caught:
+            settle_entry_then_drain(api, process, entry, 5, clock=lambda: 4)
+        self.assertIs(caught.exception, error);process.communicate.assert_not_called()
+        self.assertIn('owned qualification settlement phase: retained entry', error.__notes__)
+
+    def test_drain_expired_remaining_budget_never_resets_or_communicates(self):
+        for value in (5.1, 4.0, float('nan'), True):
+            with self.subTest(value=value):
+                api = kernel();entry = retain_entry(api, 7, 42);api.status = 1;process = Mock()
+                with self.assertRaises(OSError):
+                    settle_entry_then_drain(api, process, entry, 5, clock=iter([4, 4.1, value]).__next__)
+                process.communicate.assert_not_called()
+
+    def test_late_backward_invalid_or_failed_drain_cannot_pass(self):
+        for value in (5.1, 4.1, float('nan'), True):
+            with self.subTest(value=value):
+                api = kernel();entry = retain_entry(api, 7, 42);api.status = 1;process = Mock()
+                with self.assertRaises(OSError):
+                    settle_entry_then_drain(api, process, entry, 5, clock=iter([4, 4.1, 4.2, value]).__next__)
+                process.communicate.assert_called_once()
+        api = kernel();entry = retain_entry(api, 7, 42);api.status = 1;process = Mock()
+        error = TimeoutError('controlled drain timeout');process.communicate.side_effect = error
+        with self.assertRaises(TimeoutError) as caught:
+            settle_entry_then_drain(api, process, entry, 5, clock=iter([4, 4.1, 4.2]).__next__)
+        self.assertIs(caught.exception, error)
+        self.assertIn('owned qualification settlement phase: launcher drain', error.__notes__)
+
     def test_cleanup_description_cannot_replace_primary(self):
         class BadDescription(OSError):
             def __str__(self):raise MemoryError('unavailable diagnostic')
