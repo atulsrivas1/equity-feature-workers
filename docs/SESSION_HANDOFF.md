@@ -1,3 +1,13 @@
+## R11 aggregate delivery resume
+
+Start with the [R11 receipt](https://github.com/atulsrivas1/equity-features/blob/main/docs/R11_ACCEPTANCE.md), [EQ110](https://github.com/atulsrivas1/equity-features/issues/210), [E15](https://github.com/atulsrivas1/equity-features/issues/195) and current milestone12. EQ106–109/GOV023 retain accepted child receipts. The exact EQ110 documentation allowlist excludes package/source/example/test/workflow/config changes; full effective-input maps and current artifact identities distinguish retained qualification from actual new-head CI. Finish the actual remaining EQ110 review/check/main/artifact/lifecycle gates, verify the five stories plus GOV023 are Closed/Done, then complete the epic’s remaining real lifecycle and close it. Only after that, verify the exact seven milestone members are all Closed/Done with zero open before closing the milestone.
+
+Separate local review throughout R11 is authorized. Preserve original failed runs/review findings, retained-input unavailable0 versus valid unavailable-quality replay match, advisory/strict unknown distinctions, source-truth/anchor/retention limits, accepted prior releases, unrelated primary edits and paused R7 automation. Do not start R12 or new hosted/model/provider/paid/admin/registry work from historical instructions.
+
+## Historical scoped notes
+
+The earlier delivery snapshots below are retained history; their source contracts and failure evidence keep their stated scopes. Current aggregate delivery is linked above.
+
 ## EQ109 public-guide completeness correction — October16,2026
 
 An additional independent pre-acceptance review found stale undated current qualification labels in five public guide/compatibility/roadmap pages outside the previous final-doc packet. [Correction evidence](stories/EQ-109_DOCS_CORRECTION.json) preserves GUIDE01/02 and their exact review. Timeless example/compatibility text now links actual execution and live delivery status; the original topology and dated historical tails retain their preparation scope. Runtime/packages/examples/tests/workflows and source qualification are unchanged. All four failed author runs and earlier scoped reviews remain preserved.

@@ -1,3 +1,11 @@
+## R11 local surface and aggregate delivery
+
+The accepted event/ledger/MCP/synthetic-consumer children are connected by the [R11 receipt](https://github.com/atulsrivas1/equity-features/blob/main/docs/R11_ACCEPTANCE.md) and [EQ110 aggregate authority](https://github.com/atulsrivas1/equity-features/issues/210). Whole tracked source/config/workflow/test/package/example invariance binds reused runtime evidence to its actual execution heads; any automatically generated required current CI/artifacts have their own provenance. Current public documentation/attribution, final-head/main checks, artifact audits, original criteria and lifecycle are independently verified before completion. All four EQ109 failures and corrected RECP01 retained-input/quality/policy wording remain scoped history. Read live E15/milestone12 for closure; source qualification, merge or preparation alone is insufficient. R12 unselected; unrelated primary work and paused R7 automation preserved.
+
+## Historical scoped notes
+
+The earlier delivery snapshots below are retained history; their source contracts and failure evidence keep their stated scopes. Current aggregate delivery is linked above.
+
 ## EQ109 public-guide completeness correction — October16,2026
 
 An additional independent pre-acceptance review found stale undated current qualification labels in five public guide/compatibility/roadmap pages outside the previous final-doc packet. [Correction evidence](stories/EQ-109_DOCS_CORRECTION.json) preserves GUIDE01/02 and their exact review. Timeless example/compatibility text now links actual execution and live delivery status; the original topology and dated historical tails retain their preparation scope. Runtime/packages/examples/tests/workflows and source qualification are unchanged. All four failed author runs and earlier scoped reviews remain preserved.
