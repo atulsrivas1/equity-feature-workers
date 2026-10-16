@@ -1,3 +1,7 @@
+## EQ109 external examples and compatibility
+
+[Agent research](AGENT_RESEARCH.md) adds examples, not package/public protocol/schema/algorithm changes. Fixed optional dependencies remain frozen in its profile. MCP explanations stay reference-only (`content_verified=False`); outer supplied-batch consistency is separate. Existing content/receipt/event/ledger identities, native authority and no automatic replay semantics remain. No migration is required for accepted package users. [Executed source qualification](stories/EQ-109_EXECUTION.json) records fresh author/current-CI cohorts and scoped audits; current delivery/acceptance is authoritative on [story209](https://github.com/atulsrivas1/equity-features/issues/209). A source-qualified example is not a source-authenticity, production-hosting or trading certification. Earlier dated candidate entries below retain historical scope.
+
 ## EQ108 implementation candidate — unqualified/unreleased
 
 The existing MCP server0.1.0a1 proposes five optional owner-prepared evidence tools; base dependencies and accepted calculations remain unchanged. [API, authority, privacy, unknowns and migration](MCP_EVIDENCE_API.md) describes logical bounds, per-read native authorization, declared unverified inputs, retained plaintext and current qualification limits. Source review passed its recorded scope; fresh native/installed/bothOS/current artifacts/main release remain unfinished.

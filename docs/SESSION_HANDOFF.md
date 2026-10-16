@@ -1,3 +1,9 @@
+## EQ109 public-guide completeness correction — October16,2026
+
+An additional independent pre-acceptance review found stale undated current qualification labels in five public guide/compatibility/roadmap pages outside the previous final-doc packet. [Correction evidence](stories/EQ-109_DOCS_CORRECTION.json) preserves GUIDE01/02 and their exact review. Timeless example/compatibility text now links actual execution and live delivery status; the original topology and dated historical tails retain their preparation scope. Runtime/packages/examples/tests/workflows and source qualification are unchanged. All four failed author runs and earlier scoped reviews remain preserved.
+
+EQ109 remains Test while this narrow documentation correction receives exact review/publication and current finalcandidate/main/artifact acceptance gates. No source-only release, new runtime qualification, version or mathematical change is inferred. EQ110 remains Backlog until accepted209; R11 is unfinished. PausedR7/unrelatedprimary and all-R11 review grant persist. Older snapshots below are history.
+
 ## EQ109 actual corrected-input qualification; final delivery pending — October16,2026
 
 Reviewed paired source 180d34b0b92f086ed965f5b3c19b8e692fff77a4 / 9d24d636c909ee4fc40bc4122da35d3bb9105fc9 completed author Windows and [current source CI Windows/Linux](https://github.com/atulsrivas1/equity-feature-workers/actions/runs/38872200770) qualification. Each fresh cohort completed wheel/SDist light and integration forms,202 installed method invocations and16 actual official SDK/native scenarios. Corrected C03/C35 controls use d2ac input; exact finite owning pywin32 payload mapping is included. Independent full source/archive/metadata/license/RECORD/captured-map/raw-log audits approved. [Execution evidence](stories/EQ-109_EXECUTION.json) binds exact heads, source profiles, current ZIP metadata/every-file hashes and reviews.

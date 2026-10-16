@@ -1,0 +1,28 @@
+{
+  "all_four_failed_author_runs_preserved": true,
+  "correction": "Timeless experimental-example/compatibility wording links actual corrected-input execution and live delivery status, and labels the original topology as preparation history. Dated historical tails remain unchanged.",
+  "finalcandidate_main_and_acceptance_pending": true,
+  "finding_ids": [
+    "GUIDE01",
+    "GUIDE02"
+  ],
+  "finding_review_sha256": "109e39d2f453a630fda82febfa35c569d7ff4c0d1ccc90324592328af2ea391a",
+  "prior_final_docs_heads": {
+    "canonical": "0a85a1423b17c03c4b98f8f1ebe4d7ee9b9707fa",
+    "worker": "b5cc3fd0af9c86081b681a6510ff5797d2192ea5"
+  },
+  "problem": "Five public guide/compatibility/roadmap pages retained undated current In-progress/unqualified/unexecuted labels after actual source qualification. They were outside the earlier six/five-file final-doc review scope; that scoped approval is preserved.",
+  "publisher_preexecution_correction": {
+    "correction": "Before any publication, require headRefName codex/eq109-agent-replay and baseRefName main in both preflight and final PR readbacks, in addition to exact SHAs/state/draft/body. Explicit target push remains unchanged.",
+    "finding": "GUIDEPUB01",
+    "initial_review_sha256": "cc7c974838bc8cdca615074dc74a53e0a2f743dc3861b86ee3bbbd16753896a1",
+    "problem": "PR publication guards checked head/base SHAs but omitted exact branch names; retargeting another branch at the same SHA could pass.",
+    "scope": "Source/inert guard review correction only; no prior incorrect publication or native runtime failure inferred."
+  },
+  "review_scope": "Documentation correction before Ready to release; no calculation/native runtime defect or completed release inferred.",
+  "runtime_API_math_schema_version_changes": false,
+  "schema": "eq109.public.guide.correction.v1",
+  "source_qualification_unchanged": true,
+  "status": "PRE_ACCEPTANCE_DOCUMENTATION_REWORK",
+  "tooling_preparation_history": "Initial docs preparer guarded against an assumed worker EQ109 compatibility header. Worker page actually began with historical EQ108, so the guard refused after partial docs writes. Exact partial-state checks resumed by prepending the missing current EQ109 summary, preserving the entire old worker compatibility page. No runtime, Git publication or lifecycle mutation occurred."
+}
