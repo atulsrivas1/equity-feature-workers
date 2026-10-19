@@ -5,9 +5,11 @@ import tempfile
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'tools'))
-from benchmark_supplied_inputs import decision, distribution, original_oracle, freeze_baseline, digest, PROFILES, REPEATS, SERIES, WARMUPS
+from benchmark_supplied_inputs import (decision, distribution, original_oracle, freeze_baseline, digest,
+    bound_expected, bound_runtime, complete_sample, wire, PROFILES, REPEATS, SERIES, WARMUPS)
 
 
 class SuppliedBenchmark(unittest.TestCase):
@@ -81,6 +83,43 @@ class SuppliedBenchmark(unittest.TestCase):
             self.assertEqual(json.loads((folder/'baseline-sha256.json').read_bytes())['sha256'], digest(frozen))
             with self.assertRaises(AssertionError): freeze_baseline(record, folder, 'b'*40)
             self.assertEqual((folder/'baseline.json').read_bytes(), frozen)
+
+    def test_expected_file_bytes_and_installed_map_are_bound(self):
+        reference = {'runtime': {'selected': {'sha256': 'original'}}}
+        with tempfile.TemporaryDirectory() as name:
+            path = Path(name)/'expected.json'; path.write_bytes(wire(reference))
+            frozen = digest(path.read_bytes())
+            self.assertEqual(bound_expected(path, frozen), reference)
+            with patch('benchmark_supplied_inputs.installed_runtime', return_value=reference['runtime']):
+                self.assertEqual(bound_runtime(reference['runtime']), digest(wire(reference['runtime'])))
+            with patch('benchmark_supplied_inputs.installed_runtime', return_value={'changed': {}}):
+                with self.assertRaises(AssertionError): bound_runtime(reference['runtime'])
+            path.write_bytes(wire(reference)+b' ')
+            with self.assertRaises(AssertionError): bound_expected(path, frozen)
+
+    def test_post_phase_binding_failure_preserves_actual_phase_evidence(self):
+        reference = {'runtime': {'selected': {'sha256': 'original'}}}
+        with tempfile.TemporaryDirectory() as name:
+            folder = Path(name); expected = folder/'expected.json'; expected.write_bytes(wire(reference))
+            frozen = digest(expected.read_bytes()); runtime_sha = digest(wire(reference['runtime']))
+            for fault in ('runtime', 'expected', 'none'):
+                with self.subTest(fault=fault):
+                    expected.write_bytes(wire(reference))
+                    if fault == 'expected': expected.write_bytes(b'changed')
+                    result = {'status': 'phase_complete_pending_runtime', 'phase_wall_ns': 123,
+                        'phase_cpu_seconds': .125, 'stable': [{'task_sha256': 'a'*64, 'result_sha256': 'b'*64}]}
+                    path = folder/(fault+'.json')
+                    installed = {'changed': {}} if fault == 'runtime' else reference['runtime']
+                    with patch('benchmark_supplied_inputs.installed_runtime', return_value=installed):
+                        if fault == 'none':
+                            complete_sample(path, result, reference, expected, frozen, runtime_sha)
+                        else:
+                            with self.assertRaises(AssertionError):
+                                complete_sample(path, result, reference, expected, frozen, runtime_sha)
+                    saved = json.loads(path.read_bytes())
+                    self.assertEqual((saved['phase_wall_ns'], saved['phase_cpu_seconds'], saved['stable']),
+                        (123, .125, result['stable']))
+                    self.assertEqual(saved['status'], 'completed' if fault == 'none' else 'failed_after_phase')
 
 
 if __name__ == '__main__':

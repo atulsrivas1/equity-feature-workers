@@ -96,13 +96,52 @@ def installed_runtime():
             relative = str(name).replace('\\', '/')
             if '__pycache__' in relative or relative.endswith(('.pyc', '.pyo')):
                 continue
-            path = Path(dist.locate_file(name)).resolve()
+            declared_path = Path(dist.locate_file(name))
+            assert not declared_path.is_symlink()
+            path = declared_path.resolve()
             assert path.is_relative_to(root) and path.is_file()
             files[relative] = {'sha256': digest(path.read_bytes()), 'bytes': path.stat().st_size}
+        site = Path(dist.locate_file('')).resolve()
+        info = module+'-'+version+'.dist-info'
+        for namespace in (module, info):
+            actual = set()
+            for entry in (site/namespace).rglob('*'):
+                assert not entry.is_symlink()
+                if entry.is_file() and '__pycache__' not in entry.parts:
+                    actual.add(entry.relative_to(site).as_posix())
+            assert actual == {name for name in files if name.startswith(namespace+'/')}, 'unexpected installed namespace member'
         direct = json.loads(dist.read_text('direct_url.json'))
         assert direct.get('dir_info', {}).get('editable') is not True
         result[module] = {'version': version, 'origin': location.relative_to(root).as_posix(), 'files': files}
     return result
+
+
+def bound_expected(path, expected_sha256):
+    body = path.read_bytes()
+    assert digest(body) == expected_sha256, 'changed expected-file bytes'
+    return json.loads(body)
+
+
+def bound_runtime(expected):
+    actual = installed_runtime()
+    assert actual == expected, 'runner installed runtime differs from frozen admission'
+    return digest(wire(actual))
+
+
+def complete_sample(path, result, reference, expected_path, expected_sha256, runtime_before):
+    """Persist phase evidence even when the after-phase binding rejects it."""
+    save(path, result)
+    checked = time.perf_counter_ns()
+    try:
+        assert bound_expected(expected_path, expected_sha256) == reference
+        result['runtime_after_sha256'] = bound_runtime(reference['runtime'])
+        assert result['runtime_after_sha256'] == runtime_before
+        result['status'] = 'completed'
+        result['post_phase_runtime_validation_ns'] = time.perf_counter_ns()-checked
+        save(path, result)
+    except BaseException as error:
+        result.update(status='failed_after_phase', failure_type=type(error).__name__)
+        save(path, result); raise
 
 
 def items_for(profile):
@@ -187,7 +226,14 @@ def runner(args):
     from equity_feature_io_sdk import encode_result
     from equity_feature_workers import BoundedSupervisor, ResourceBudget, ProgressRecorder, encode_output
     imports_done = time.perf_counter_ns()
-    expected = json.loads(args.expected.read_bytes())['profiles'][args.profile]
+    try:
+        reference = bound_expected(args.expected, args.expected_sha256)
+        runtime_before = bound_runtime(reference['runtime'])
+        expected = reference['profiles'][args.profile]
+    except BaseException as error:
+        save(args.output, {'status': 'failed_before_phase', 'failure_type': type(error).__name__})
+        raise
+    runtime_admitted = time.perf_counter_ns()
     items, _ = items_for(args.profile)
     admitted = time.perf_counter_ns()
     budget = ResourceBudget(max_tasks=16, workers=args.degree, max_cpu_slots=args.cpu_slots,
@@ -221,15 +267,21 @@ def runner(args):
     finish = time.perf_counter_ns(); after = counters(args.job)
     delta = {key: after[key]-before[key] for key in ('user', 'kernel')}
     assert all(value >= 0 for value in delta.values())
-    save(args.output, {'schema': 'supplied-sample:1', 'mode': args.mode, 'degree': args.degree,
+    result = {'schema': 'supplied-sample:1', 'status': 'phase_complete_pending_runtime',
+        'runtime_before_sha256': runtime_before, 'expected_sha256': args.expected_sha256,
+        'mode': args.mode, 'degree': args.degree,
         'profile': args.profile, 'series': args.series, 'phase_wall_ns': finish-begin,
         'phase_before': before, 'phase_after': after, 'phase_cpu_seconds': sum(delta.values())/10000000,
-        'runner_import_ns': imports_done-started, 'source_admission_ns': admitted-imports_done,
+        'runner_import_ns': imports_done-started, 'reference_runtime_admission_ns': runtime_admitted-imports_done,
+        'source_admission_ns': admitted-runtime_admitted,
         'stable': stable, 'diagnostic_projection': projection, 'diagnostics': json.loads(diagnostics.encode()),
         'stage_observations': stage_observations, 'row_ledger': outcome.row_ledger,
         'distinct_reuse_rows': outcome.distinct_reuse_rows, 'admitted_input_bytes': outcome.admitted_input_bytes,
         'reserved_resident_bytes': outcome.reserved_resident_bytes, 'result_bytes': outcome.result_bytes,
-        'copy_limits': 'Pickled input/result sizes and stage observations; no claim to count every physical copy or exclusive stage.'})
+        'copy_limits': 'Pickled input/result sizes and stage observations; no claim to count every physical copy or exclusive stage.'}
+    # Persist the completed phase before checking the post-phase environment:
+    # rejection must retain actual phase results rather than erase them.
+    complete_sample(args.output, result, reference, args.expected, args.expected_sha256, runtime_before)
 
 
 def distribution(samples):
@@ -298,6 +350,7 @@ def main():
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--runner', action='store_true')
     parser.add_argument('--expected', type=Path)
+    parser.add_argument('--expected-sha256')
     parser.add_argument('--profile', choices=tuple(PROFILES))
     parser.add_argument('--series', choices=SERIES)
     parser.add_argument('--mode', choices=('sequential', 'thread', 'process'))
@@ -324,7 +377,7 @@ def main():
             p.relative_to(installed).as_posix(): p.read_bytes() for p in installed.rglob('*')
             if p.is_file() and '__pycache__' not in p.parts}, 'installed worker differs from measured source'
         expected_path = args.output/'expected.json'
-        save(expected_path, {'profiles': {profile: preflight(profile) for profile in PROFILES}})
+        save(expected_path, {'runtime': runtime, 'profiles': {profile: preflight(profile) for profile in PROFILES}})
         controls = subprocess.run([sys.executable, '-I', '-B', '-m', 'unittest', 'discover', '-s', str(ROOT/'tests'), '-p', 'test_supplied_native.py'], cwd=ROOT)
         assert controls.returncode == 0
         closure(); qualification.update(status='completed', runtime=runtime, machine=machine_info,
@@ -340,10 +393,13 @@ def main():
     raw = args.output/'samples.json'; save(raw, record)
     def sample(series, profile, mode, degree, index, warmup):
         closure()
+        assert digest(expected_path.read_bytes()) == record['expected_sha256']
+        assert installed_runtime() == runtime
         label = f'{series}-{profile}-{mode}-{degree}-'+('warmup' if warmup else 'retained')+str(index)
         destination = args.output/(label+'.json')
         command = [sys.executable, '-I', '-B', str(Path(__file__).resolve()), '--runner', '--output', str(destination),
-            '--expected', str(expected_path), '--profile', profile, '--series', series, '--mode', mode, '--degree', str(degree),
+            '--expected', str(expected_path), '--expected-sha256', record['expected_sha256'],
+            '--profile', profile, '--series', series, '--mode', mode, '--degree', str(degree),
             '--cpu-slots', str(machine_info['allowed_cpu_slots']), '--memory-cap', str(machine_info['memory_cap_bytes']), '--job', '{job_name}']
         begin = time.perf_counter_ns()
         try:
@@ -352,6 +408,9 @@ def main():
             result = json.loads(destination.read_bytes())
             wall = time.perf_counter_ns()-begin
             assert native['final_accounting']['active_processes'] == 0
+            assert result['status'] == 'completed' and result['expected_sha256'] == record['expected_sha256']
+            assert result['runtime_before_sha256'] == result['runtime_after_sha256'] == digest(wire(runtime))
+            assert digest(expected_path.read_bytes()) == record['expected_sha256']
             result.update(native=native, wall_seconds=(wall if series == 'e2e' else result['phase_wall_ns'])/1000000000,
                 cpu_seconds=native['cpu_seconds'] if series == 'e2e' else result['phase_cpu_seconds'],
                 warmup=warmup, sample=index)
