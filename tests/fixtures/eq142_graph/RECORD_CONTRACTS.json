@@ -707,9 +707,39 @@
       "failure_reason": "null or trace.failure_codes member",
       "spans": "bounded array<span> within this invocation/collector reservation",
       "counters": "array<counter>, maximum1024 unique keys; list required even for zero spans; exact operation/scope/byte joins",
-      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping"
+      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping",
+      "process_binding": "fragment_process_binding",
+      "clock": "fragment_clock",
+      "timeline_bindings": "array<fragment_timeline_binding>, maximum64, exact referenced local timeline IDs"
     },
     "limits": "Each fragment independently closes local event IDs, same-timeline parent relations, acyclic depth<=64, interval union/exclusive identity and counter/byte joins. It is not the complete source/product/native sample envelope. Encoded sidecar bytes are bounded separately from Python heap; actual whole-Job RSS remains mandatory. Partial raw evidence is retained on rejection. Shared actual timeline identities remain stable across reused invocations.",
     "publication": "Exclusive temporary creation and exclusive hard-link final publication; never replace an existing final file. Both temporary/final names count toward the file bound; no physical durability claim."
+  },
+  "fragment_process_binding": {
+    "fields": {
+      "pid": "positive actual OS process ID, never bool",
+      "process_startup_nonce": "32 lowercase hex process startup nonce; not PID alone"
+    }
+  },
+  "fragment_clock": {
+    "fields": {
+      "name": "constant perf_counter",
+      "implementation": "actual get_clock_info implementation string,1..256characters",
+      "monotonic": "constant true",
+      "adjustable": "constant false",
+      "reported_resolution_seconds": "positive canonical decimal string from actual nominal metadata; not empirical resolution",
+      "qpc_frequency_hz": "nullable positive integer; null means not separately observed",
+      "cross_process_raw_ticks_qualified": "constant false"
+    },
+    "join": "Full sample assigns global process ordinals from actual retained process bindings; local fragments do not invent a shared epoch or numeric global critical path."
+  },
+  "fragment_timeline_binding": {
+    "fields": {
+      "id": "stable process/thread nonce ID matching the process binding and local ordinal",
+      "thread_ordinal": "integer0..63, never bool",
+      "thread_startup_nonce": "32 lowercase hex",
+      "native_thread_id": "positive actual native thread ID, never bool"
+    },
+    "join": "Every local span references exactly one retained binding; ordinals/nonces stay stable across reused invocations; full sample preserves identity and validates owned-process witnesses. Native thread IDs can recycle; nonce+actual lifetime remains distinct."
   }
 }

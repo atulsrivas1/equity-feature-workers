@@ -1,0 +1,103 @@
+{
+  "schema": "eq142-python-runtime-source-variants:1",
+  "stage": "PROPOSED_EXACT_SOURCE_VARIANTS_NOT_PLATFORM_ACCEPTANCE",
+  "scope": "Original measured Windows3.12.10 source remains unchanged. Existing accepted Linux six-wheel qualification reports actual CPython3.12.15. Correctness tools may select only the exact official source hashes below for these inspected runtime modules; changed runtime/unknown hashes remain rejected. No arbitrary expected-from-actual hash regeneration or timing relabeling.",
+  "line_ending_policy": "Only the explicit LF and CRLF raw SHA256 values derived from each exact official tagged file are accepted. This preserves raw-byte identities; it does not broadly normalize/ignore changed source or admit arbitrary observed files.",
+  "versions": {
+    "3.12.10": {
+      "official_tag": "v3.12.10",
+      "tag_sha": "f86fdcac4c104bb671f86eb77cf98a6aa764c04e",
+      "commit": "0cc81280367df838c4b199f8f0378837165071c2",
+      "modules": {
+        "concurrent.futures._base": {
+          "repository_path": "Lib/concurrent/futures/_base.py",
+          "git_blob": "6742a07753c9217802f8a267f20e7fe6ffc28fb6",
+          "sha256": "8c6d5f09f7c535d40fa1c30ebfcb35e0601c2abf32286a82cf151af7ddf72473",
+          "raw_sha256_variants": {
+            "LF": "8c6d5f09f7c535d40fa1c30ebfcb35e0601c2abf32286a82cf151af7ddf72473",
+            "CRLF": "a5a450b5ccf2bc5abf458be32c7b2eb4e26c02c3d504eef0e0682b5cfcfc6f52"
+          },
+          "definitions": {
+            "concurrent.futures._base.Future.result": 428,
+            "concurrent.futures._base.wait": 263
+          },
+          "url": "https://github.com/python/cpython/blob/0cc81280367df838c4b199f8f0378837165071c2/Lib/concurrent/futures/_base.py"
+        },
+        "concurrent.futures.process": {
+          "repository_path": "Lib/concurrent/futures/process.py",
+          "git_blob": "ff7c17efaab694c987fd524b60b6177c7770d55e",
+          "sha256": "66b4fe880563a604ac4a094b72c6535b56b3bb8b14f4b6025705d53d28816fba",
+          "raw_sha256_variants": {
+            "LF": "66b4fe880563a604ac4a094b72c6535b56b3bb8b14f4b6025705d53d28816fba",
+            "CRLF": "86740b978bb5b56c9da50a23e38872154688ef57dcf30214eeeb4064cc79118a"
+          },
+          "definitions": {
+            "concurrent.futures.process.ProcessPoolExecutor.submit": 802
+          },
+          "url": "https://github.com/python/cpython/blob/0cc81280367df838c4b199f8f0378837165071c2/Lib/concurrent/futures/process.py"
+        },
+        "concurrent.futures.thread": {
+          "repository_path": "Lib/concurrent/futures/thread.py",
+          "git_blob": "61dbff8a485bcdf38ad095d50ed0eeb705615a97",
+          "sha256": "fe940a20adc4d3e66a8ea42a4c7e6c16957b011e8ada50c4e7a7bddbcbbffa0d",
+          "raw_sha256_variants": {
+            "LF": "fe940a20adc4d3e66a8ea42a4c7e6c16957b011e8ada50c4e7a7bddbcbbffa0d",
+            "CRLF": "9630b4be940801bfc0c62e389dac4d4f527d7cf1d44fcc88ffcd7048a608fee3"
+          },
+          "definitions": {
+            "concurrent.futures.thread.ThreadPoolExecutor.submit": 165
+          },
+          "url": "https://github.com/python/cpython/blob/0cc81280367df838c4b199f8f0378837165071c2/Lib/concurrent/futures/thread.py"
+        }
+      }
+    },
+    "3.12.15": {
+      "official_tag": "v3.12.15",
+      "tag_sha": "f9e83c56c657be0a74ede2b5c523de4f9191d117",
+      "commit": "e848e4b09ca4bc67c0041c9ce7526dae471d4c36",
+      "modules": {
+        "concurrent.futures._base": {
+          "repository_path": "Lib/concurrent/futures/_base.py",
+          "git_blob": "6742a07753c9217802f8a267f20e7fe6ffc28fb6",
+          "sha256": "8c6d5f09f7c535d40fa1c30ebfcb35e0601c2abf32286a82cf151af7ddf72473",
+          "raw_sha256_variants": {
+            "LF": "8c6d5f09f7c535d40fa1c30ebfcb35e0601c2abf32286a82cf151af7ddf72473",
+            "CRLF": "a5a450b5ccf2bc5abf458be32c7b2eb4e26c02c3d504eef0e0682b5cfcfc6f52"
+          },
+          "definitions": {
+            "concurrent.futures._base.Future.result": 428,
+            "concurrent.futures._base.wait": 263
+          },
+          "url": "https://github.com/python/cpython/blob/e848e4b09ca4bc67c0041c9ce7526dae471d4c36/Lib/concurrent/futures/_base.py"
+        },
+        "concurrent.futures.process": {
+          "repository_path": "Lib/concurrent/futures/process.py",
+          "git_blob": "ff7c17efaab694c987fd524b60b6177c7770d55e",
+          "sha256": "66b4fe880563a604ac4a094b72c6535b56b3bb8b14f4b6025705d53d28816fba",
+          "raw_sha256_variants": {
+            "LF": "66b4fe880563a604ac4a094b72c6535b56b3bb8b14f4b6025705d53d28816fba",
+            "CRLF": "86740b978bb5b56c9da50a23e38872154688ef57dcf30214eeeb4064cc79118a"
+          },
+          "definitions": {
+            "concurrent.futures.process.ProcessPoolExecutor.submit": 802
+          },
+          "url": "https://github.com/python/cpython/blob/e848e4b09ca4bc67c0041c9ce7526dae471d4c36/Lib/concurrent/futures/process.py"
+        },
+        "concurrent.futures.thread": {
+          "repository_path": "Lib/concurrent/futures/thread.py",
+          "git_blob": "61dbff8a485bcdf38ad095d50ed0eeb705615a97",
+          "sha256": "fe940a20adc4d3e66a8ea42a4c7e6c16957b011e8ada50c4e7a7bddbcbbffa0d",
+          "raw_sha256_variants": {
+            "LF": "fe940a20adc4d3e66a8ea42a4c7e6c16957b011e8ada50c4e7a7bddbcbbffa0d",
+            "CRLF": "9630b4be940801bfc0c62e389dac4d4f527d7cf1d44fcc88ffcd7048a608fee3"
+          },
+          "definitions": {
+            "concurrent.futures.thread.ThreadPoolExecutor.submit": 165
+          },
+          "url": "https://github.com/python/cpython/blob/e848e4b09ca4bc67c0041c9ce7526dae471d4c36/Lib/concurrent/futures/thread.py"
+        }
+      }
+    }
+  },
+  "primary_source_license": "https://github.com/python/cpython/blob/v3.12.15/LICENSE"
+}

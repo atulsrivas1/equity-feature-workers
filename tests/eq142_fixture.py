@@ -2,11 +2,14 @@
 from dataclasses import fields
 from enum import Enum
 import importlib
+from importlib.util import find_spec
 import json
 from pathlib import Path
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / 'tests/fixtures/eq142_graph'
+HAVE_INTRADAY=find_spec('equity_features_intraday') is not None
 
 
 def load(name):
@@ -16,6 +19,18 @@ def load(name):
 def qualification():
     from eq142_graph import bind_source, digest
     hooks = load('HOOK_INVENTORY.json')
+    runtime_version='.'.join(map(str,sys.version_info[:3]))
+    supported=load('PYTHON_RUNTIME_SOURCE_HASHES.json')['versions']
+    if runtime_version not in supported:raise AssertionError('Unqualified Python runtime source version')
+    from eq142_graph import digest
+    for record in hooks['records']:
+        if record['source_category']!='python_runtime':continue
+        approved=supported[runtime_version]['modules'][record['source_module']]
+        actual=digest(Path(importlib.import_module(record['source_module']).__file__).read_bytes())
+        if actual not in approved['raw_sha256_variants'].values():raise AssertionError('Unexpected Python runtime file bytes')
+        record['source_sha256']=actual
+        record['definition_line']=approved['definitions'][record['definition']]
+    hooks['runtime']='CPython '+runtime_version
     protocol = load('BENCHMARK_PROTOCOL.json')
     source = {'canonical_docs_head':'a54f9196cada1fc9b3bea334711b4e4db9ac1d81',
         'package_build_sources':{'core':protocol['sources']['baseline_core_package_build'],
@@ -27,7 +42,28 @@ def qualification():
         'tool_sha256':{'eq142_graph.py':digest((ROOT/'tools/eq142_graph.py').read_bytes())},
         'protocol_sha256':digest((FIXTURES/'BENCHMARK_PROTOCOL.json').read_bytes()),
         'expected_fixture_sha256':digest((FIXTURES/'CANONICAL_CASES.json').read_bytes())}
-    return bind_source({'hooks':hooks,'source':source})
+    bound=bind_source({'hooks':hooks,'source':source})
+    return bound
+
+
+def bound_inventory(bound):
+    """The exact already-bound runtime variant, not an arbitrary new observation."""
+    hooks=load('HOOK_INVENTORY.json')
+    version='.'.join(map(str,sys.version_info[:3]))
+    supported=load('PYTHON_RUNTIME_SOURCE_HASHES.json')['versions'][version]
+    for record in hooks['records']:
+        if record['source_category']=='python_runtime':
+            approved=supported['modules'][record['source_module']]
+            actual=digest_file(Path(importlib.import_module(record['source_module']).__file__))
+            if actual not in approved['raw_sha256_variants'].values():raise AssertionError('Unexpected Python runtime file bytes')
+            record['source_sha256']=actual;record['definition_line']=approved['definitions'][record['definition']]
+    hooks['runtime']='CPython '+version
+    return {'hooks':hooks,'source':bound.source}
+
+
+def digest_file(path):
+    import hashlib
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def typed_batches(body):

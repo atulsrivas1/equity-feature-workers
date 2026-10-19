@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from dataclasses import dataclass
+from decimal import Decimal
 import functools
 import inspect
 import json
@@ -60,9 +61,27 @@ def timeline():
         current=threading.current_thread()
         if current not in _THREADS:
             if len(_THREADS)>=64:raise TraceSpecificationError('map_limit')
-            _THREADS[current]=(len(_THREADS),uuid.uuid4().hex)
-        ordinal,nonce=_THREADS[current]
+            _THREADS[current]=(len(_THREADS),uuid.uuid4().hex,threading.get_native_id())
+        ordinal,nonce,_=_THREADS[current]
         return 'p'+_PROCESS_NONCE+':t'+str(ordinal)+':'+nonce
+
+
+def fragment_clock_and_timelines(ids):
+    """Actual local clock/process/thread bindings; no global clock ordinal yet."""
+    info=time.get_clock_info('perf_counter')
+    if info.monotonic is not True or info.adjustable is not False:raise TraceSpecificationError('invalid_clock')
+    clock={'name':'perf_counter','implementation':info.implementation,'monotonic':True,'adjustable':False,
+        'reported_resolution_seconds':format(Decimal(str(info.resolution)),'f'),
+        'qpc_frequency_hz':None,'cross_process_raw_ticks_qualified':False}
+    with _IDENTITY_LOCK:
+        bindings=[]
+        for ordinal,nonce,native_id in _THREADS.values():
+            tid='p'+_PROCESS_NONCE+':t'+str(ordinal)+':'+nonce
+            if tid in ids:
+                bindings.append({'id':tid,'thread_ordinal':ordinal,'thread_startup_nonce':nonce,
+                    'native_thread_id':native_id})
+        if {t['id'] for t in bindings}!=set(ids):raise TraceSpecificationError('unknown_timeline')
+        return {'pid':os.getpid(),'process_startup_nonce':_PROCESS_NONCE},clock,bindings
 
 
 @dataclass
@@ -208,9 +227,11 @@ class Collector:
                 'rejected':v[2],'byte_observation':obs,'returned_observed_bytes':None if obs=='unavailable' else v[3],
                 'unique_physical_allocation_bytes':None} for (op,scope,obs),v in sorted(self.counters.items())]
             if self.failure_reason is None and (len(spans)!=self.attempts or sum(c['attempts'] for c in counters)!=self.attempts):self.failure('count_mismatch')
+            process,clock,timelines=fragment_clock_and_timelines({s['timeline_id'] for s in spans})
             return {'schema':'eq142-local-trace-fragment:1','reservation_id':self.reservation_id,'complete':self.failure_reason is None,
                 'failure_reason':self.failure_reason,'spans':spans,'counters':counters,
-                'exclusive_cost_disposition':EXCLUSIVE_DISPOSITION}
+                'exclusive_cost_disposition':EXCLUSIVE_DISPOSITION,'process_binding':process,
+                'clock':clock,'timeline_bindings':timelines}
 
     def persist(self,path):
         """Bounded incremental exclusive creation; never overwrite prior evidence."""
@@ -317,15 +338,32 @@ def validate_fragment(fragment):
     """
     from eq142_graph import closed
     try:
-        closed(fragment,'schema reservation_id complete failure_reason spans counters exclusive_cost_disposition')
+        closed(fragment,'schema reservation_id complete failure_reason spans counters exclusive_cost_disposition process_binding clock timeline_bindings')
         if fragment['schema']!='eq142-local-trace-fragment:1' or fragment['complete'] is not True or fragment['failure_reason'] is not None:raise TraceSpecificationError('collector_error')
         if type(fragment['reservation_id']) is not str or re.fullmatch('[a-z][a-z0-9_.:-]{0,63}',fragment['reservation_id']) is None:raise TraceSpecificationError('unknown_invocation')
         if fragment['exclusive_cost_disposition']!=EXCLUSIVE_DISPOSITION:raise TraceSpecificationError('collector_error')
         if type(fragment['counters']) is not list or len(fragment['counters'])>1024:raise TraceSpecificationError('map_limit')
+        process=fragment['process_binding'];closed(process,'pid process_startup_nonce')
+        if type(process['pid']) is not int or process['pid']<=0 or type(process['process_startup_nonce']) is not str or re.fullmatch('[0-9a-f]{32}',process['process_startup_nonce']) is None:raise TraceSpecificationError('unknown_timeline')
+        clock=fragment['clock'];closed(clock,'name implementation monotonic adjustable reported_resolution_seconds qpc_frequency_hz cross_process_raw_ticks_qualified')
+        if clock['name']!='perf_counter' or type(clock['implementation']) is not str or not 1<=len(clock['implementation'])<=256 or clock['monotonic'] is not True or clock['adjustable'] is not False or clock['cross_process_raw_ticks_qualified'] is not False:raise TraceSpecificationError('invalid_clock')
+        resolution=clock['reported_resolution_seconds']
+        if type(resolution) is not str or re.fullmatch(r'0\.[0-9]{1,32}|[1-9][0-9]{0,8}(?:\.[0-9]{1,32})?',resolution) is None or Decimal(resolution)<=0:raise TraceSpecificationError('invalid_clock')
+        if clock['qpc_frequency_hz'] is not None and (type(clock['qpc_frequency_hz']) is not int or clock['qpc_frequency_hz']<=0):raise TraceSpecificationError('invalid_clock')
+        bindings=fragment['timeline_bindings']
+        if type(bindings) is not list or len(bindings)>64:raise TraceSpecificationError('map_limit')
+        timelines={}
+        for binding in bindings:
+            closed(binding,'id thread_ordinal thread_startup_nonce native_thread_id')
+            if type(binding['thread_ordinal']) is not int or not 0<=binding['thread_ordinal']<64 or type(binding['native_thread_id']) is not int or binding['native_thread_id']<=0 or type(binding['thread_startup_nonce']) is not str or re.fullmatch('[0-9a-f]{32}',binding['thread_startup_nonce']) is None:raise TraceSpecificationError('unknown_timeline')
+            expected='p'+process['process_startup_nonce']+':t'+str(binding['thread_ordinal'])+':'+binding['thread_startup_nonce']
+            if binding['id']!=expected or expected in timelines:raise TraceSpecificationError('unknown_timeline')
+            timelines[expected]=binding
         spans=fragment['spans']
         if type(spans) is not list or len(spans)>131072:raise TraceSpecificationError('event_limit')
         byid={s['id']:s for s in spans}
         if len(byid)!=len(spans):raise TraceSpecificationError('invalid_nesting')
+        if {s['timeline_id'] for s in spans}!=set(timelines):raise TraceSpecificationError('unknown_timeline')
         sums={};children={key:[] for key in byid}
         for s in spans:
             closed(s,'id parent_id reservation_id timeline_id operation scope_id task_sha256 start_ns end_ns inclusive_ns exclusive_ns status error_type byte_observation observed_bytes')

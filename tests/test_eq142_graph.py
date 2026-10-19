@@ -10,13 +10,14 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'))
 sys.path.insert(0,str(ROOT/'tests'))
 from eq142_graph import GraphSpecificationError, describe_task, describe_item, validate_graph, describe_job, validate_job
-from eq142_fixture import qualification, canonical_cases, load
+from eq142_fixture import qualification, canonical_cases, load,HAVE_INTRADAY
 
 
 def never_called(task,batches):
     raise AssertionError('Description must not execute callbacks')
 
 
+@unittest.skipUnless(HAVE_INTRADAY,'Optional installed intraday extra is absent')
 class OutputGraphs(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

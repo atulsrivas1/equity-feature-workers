@@ -1,6 +1,7 @@
 """Independent known call/byte/exception/alias/interval/bounds controls."""
 from copy import deepcopy
 import inspect
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -12,7 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tests'))
 from eq142_graph import resolve
 from eq142_trace import Collector,HookSession,TraceSpecificationError,validate_fragment
-from eq142_fixture import qualification,load,canonical_cases
+from eq142_fixture import qualification,load,canonical_cases,HAVE_INTRADAY,bound_inventory
 
 
 def collector(name='parent',max_spans=16384,max_bytes=8388608):
@@ -20,9 +21,15 @@ def collector(name='parent',max_spans=16384,max_bytes=8388608):
         operations=load('RECORD_CONTRACTS.json')['trace']['operations'])
 
 
+def session_for(c):
+    bound=qualification()
+    return HookSession(bound,bound_inventory(bound)['hooks'],c)
+
+
+@unittest.skipUnless(HAVE_INTRADAY,'Optional installed intraday extra is absent')
 class LocalTracing(unittest.TestCase):
     def test_known_leaf_calls_bytes_exceptions_and_no_digest_length_claim(self):
-        c=collector();bound=qualification();session=HookSession(bound,load('HOOK_INVENTORY.json'),c)
+        c=collector();bound=qualification();session=HookSession(bound,bound_inventory(bound)['hooks'],c)
         marker=ValueError('private exception text must not escape')
         def leaf(value):
             if value is marker:raise marker
@@ -45,7 +52,7 @@ class LocalTracing(unittest.TestCase):
         from equity_feature_workers.intraday import compute_intraday_inputs
         case,task,batches=next(canonical_cases());bound=qualification()
         expected=compute_intraday_inputs(task,batches);expected_bytes=encode_result(expected[0])
-        hooks=load('HOOK_INVENTORY.json');originals=[]
+        hooks=bound_inventory(bound)['hooks'];originals=[]
         for record in hooks['records']:
             for site in record['patch_sites']:
                 owner,name=resolve(site);originals.append((owner,name,inspect.getattr_static(owner,name)))
@@ -65,7 +72,7 @@ class LocalTracing(unittest.TestCase):
         self.assertEqual(sum(x['returned_observed_bytes'] or 0 for x in fragment['counters'] if x['operation']=='sdk.encode_result'),len(expected_bytes))
 
     def test_observer_failure_does_not_mask_original_outcome(self):
-        c=collector();session=HookSession(qualification(),load('HOOK_INVENTORY.json'),c)
+        c=collector();session=session_for(c)
         marker=RuntimeError('original marker')
         def original(fail=False):
             if fail:raise marker
@@ -79,7 +86,7 @@ class LocalTracing(unittest.TestCase):
         self.assertEqual(c.snapshot()['failure_reason'],'collector_error')
 
     def test_independent_interval_union_validation_rejects_corruption(self):
-        c=collector();session=HookSession(qualification(),load('HOOK_INVENTORY.json'),c)
+        c=collector();session=session_for(c)
         inner=session.wrapper(lambda:7,'trace.bookkeeping')
         outer=session.wrapper(lambda:inner()+inner(),'delegate.original_partition')
         self.assertEqual(outer(),14)
@@ -90,12 +97,12 @@ class LocalTracing(unittest.TestCase):
         with self.assertRaises(TraceSpecificationError):validate_fragment(broken)
 
     def test_bounds_partial_evidence_and_duplicate_files(self):
-        c=collector(max_spans=2);session=HookSession(qualification(),load('HOOK_INVENTORY.json'),c)
+        c=collector(max_spans=2);session=session_for(c)
         called=[];wrapped=session.wrapper(lambda:called.append(1),'trace.bookkeeping')
         for _ in range(3):wrapped()
         self.assertEqual(len(called),3);self.assertFalse(c.snapshot()['complete'])
         self.assertEqual(c.snapshot()['failure_reason'],'event_limit')
-        other=collector('persist');session=HookSession(qualification(),load('HOOK_INVENTORY.json'),other)
+        other=collector('persist');session=session_for(other)
         session.wrapper(lambda:5,'trace.bookkeeping')()
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'trace.json';size=other.persist(path)
@@ -112,13 +119,23 @@ class LocalTracing(unittest.TestCase):
             frame=thread_collector.begin('trace.bookkeeping',());thread_collector.finish(frame,result=1)
         thread=threading.Thread(target=work);thread.start();thread.join()
         self.assertNotEqual(first.snapshot()['spans'][0]['timeline_id'],thread_collector.snapshot()['spans'][0]['timeline_id'])
+        observed=first.snapshot()
+        self.assertEqual(observed['process_binding']['pid'],os.getpid())
+        self.assertEqual(observed['timeline_bindings'][0]['native_thread_id'],threading.get_native_id())
+        self.assertTrue(observed['clock']['monotonic']);self.assertFalse(observed['clock']['adjustable'])
+        self.assertFalse(observed['clock']['cross_process_raw_ticks_qualified'])
+        for mutate in [lambda f:f['clock'].update(monotonic=False),
+            lambda f:f['timeline_bindings'][0].update(native_thread_id=False),
+            lambda f:f['process_binding'].update(pid=False)]:
+            bad=deepcopy(observed);mutate(bad)
+            with self.assertRaises(TraceSpecificationError):validate_fragment(bad)
 
     def test_closed_empty_fragment_and_rejected_error_type(self):
         empty=collector('empty').snapshot();validate_fragment(empty)
         for field,value in [('reservation_id',{}),('reservation_id',''),('counters',{})]:
             bad=deepcopy(empty);bad[field]=value
             with self.assertRaises(TraceSpecificationError):validate_fragment(bad)
-        c=collector();session=HookSession(qualification(),load('HOOK_INVENTORY.json'),c)
+        c=collector();session=session_for(c)
         def reject():raise ValueError('synthetic')
         with self.assertRaises(ValueError):session.wrapper(reject,'trace.bookkeeping')()
         valid=c.snapshot();validate_fragment(valid)
