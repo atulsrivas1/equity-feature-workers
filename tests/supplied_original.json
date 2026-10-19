@@ -1,0 +1,245 @@
+{
+  "scope": "Original synthetic hand-derived EQ140 fixture specification; not executed producer/worker/SDK evidence; incomplete pre-code preparation.",
+  "cases": [
+    {
+      "id": "bars_prior_and_structure",
+      "scale": 0,
+      "session_ns": [
+        0,
+        30
+      ],
+      "intervals_ns": {
+        "first": [
+          0,
+          20
+        ],
+        "last": [
+          20,
+          30
+        ]
+      },
+      "bars": [
+        {
+          "start": 0,
+          "end": 10,
+          "open": 100,
+          "high": 105,
+          "low": 99,
+          "close": 104,
+          "volume": 10,
+          "actual_notional": 1010
+        },
+        {
+          "start": 10,
+          "end": 20,
+          "open": 104,
+          "high": 108,
+          "low": 102,
+          "close": 106,
+          "volume": 20,
+          "actual_notional": 2100
+        },
+        {
+          "start": 20,
+          "end": 30,
+          "open": 106,
+          "high": 107,
+          "low": 103,
+          "close": 105,
+          "volume": 30,
+          "actual_notional": 3180
+        }
+      ],
+      "actual_previous_close": 98,
+      "expected": {
+        "volume": 60,
+        "open": 100,
+        "high": 108,
+        "low": 99,
+        "close": 105,
+        "notional": 6290,
+        "close_weighted_price_fraction": "631/6",
+        "open_close_return_fraction": "1/20",
+        "range_fraction": "3/35",
+        "close_location_fraction": "2/3",
+        "overnight_gap_fraction": "1/49",
+        "close_close_return_fraction": "1/14",
+        "interval_ohlcv": {
+          "first": [
+            100,
+            108,
+            99,
+            106,
+            30
+          ],
+          "last": [
+            106,
+            107,
+            103,
+            105,
+            30
+          ]
+        },
+        "interval_shares": {
+          "first": "1/2",
+          "last": "1/2"
+        }
+      }
+    },
+    {
+      "id": "bars_prior_absent",
+      "based_on": "bars_prior_and_structure",
+      "actual_previous_close": null,
+      "expected": "All ten nonprior outputs unchanged/available; overnight_gap and close_close_return missing_input/absent_input only. Metadata has only actual bars binding; no invented missing input binding."
+    },
+    {
+      "id": "structure_interval_independent_from_whole_session_gap",
+      "based_on": "bars_prior_and_structure",
+      "remove_bar_start": 20,
+      "whole_coverage": {
+        "expected": 3,
+        "observed": 2,
+        "complete": false
+      },
+      "expected": "First interval OHLCV available [100,108,99,106,30] under independently complete first interval delivery; its volume share incomplete_coverage/governed_gap because whole-session denominator is incomplete. Missing last interval row quality and aggregate header quality follow exact accepted core semantics."
+    },
+    {
+      "id": "top_k_size_not_price_stable_tie",
+      "k": 2,
+      "trades": [
+        {
+          "id": "A",
+          "event": 1,
+          "order": 1,
+          "price": 500,
+          "size": 20,
+          "eligible": true
+        },
+        {
+          "id": "B",
+          "event": 1,
+          "order": 2,
+          "price": 900,
+          "size": 20,
+          "eligible": true
+        },
+        {
+          "id": "C",
+          "event": 2,
+          "order": 0,
+          "price": 1,
+          "size": 25,
+          "eligible": true
+        },
+        {
+          "id": "D",
+          "event": 3,
+          "order": 0,
+          "price": 999,
+          "size": 100,
+          "eligible": false
+        }
+      ],
+      "expected_ids": [
+        "C",
+        "A"
+      ],
+      "expected_evidence_ids": [
+        "C",
+        "A"
+      ],
+      "expected_quality_observed": 4,
+      "rationale": "Rank (-size,event_ns,order_key,event_id); ineligible row excluded, price does not rank."
+    },
+    {
+      "id": "continuous_seed_original_anchor_and_expiry",
+      "scale": 0,
+      "session_ns": [
+        0,
+        100
+      ],
+      "max_age_ns": 30,
+      "initial_state": "seed",
+      "seed": {
+        "event": -10,
+        "bid": 99,
+        "ask": 101,
+        "target_session_id": true,
+        "preopen_scope": [
+          -10,
+          0
+        ]
+      },
+      "quotes": [
+        {
+          "event": 10,
+          "bid": 100,
+          "ask": 104
+        },
+        {
+          "event": 50,
+          "bid": 102,
+          "ask": 102
+        }
+      ],
+      "expected": {
+        "durations_ns": {
+          "normal": 40,
+          "locked": 30,
+          "crossed": 0,
+          "invalid": 0,
+          "expired": 30,
+          "unknown": 0
+        },
+        "spread_fraction": "2",
+        "bps_fraction": "23400/119",
+        "status": "available",
+        "seed_evidence": "consumed"
+      },
+      "rationale": "Normal spread2 for10ns and spread4 for30ns, then locked30ns; gaps expired10+20ns. Valid duration70ns. Expiry anchored to actual update; no implicit age reset at session open."
+    },
+    {
+      "id": "continuous_unknown_initial_value_structure",
+      "based_on": "continuous_seed_original_anchor_and_expiry",
+      "initial_state": "unknown",
+      "seed": null,
+      "expected": {
+        "durations_ns": {
+          "normal": 30,
+          "locked": 30,
+          "crossed": 0,
+          "invalid": 0,
+          "expired": 30,
+          "unknown": 10
+        },
+        "spread": null,
+        "bps": null,
+        "status": "incomplete_coverage",
+        "reasons": [
+          "unknown_availability"
+        ],
+        "table_value_present": true
+      },
+      "rationale": "Preserve typed duration summary even when means unavailable; do not replace the full table value with null."
+    },
+    {
+      "id": "continuous_inactive_initial",
+      "based_on": "continuous_seed_original_anchor_and_expiry",
+      "initial_state": "inactive",
+      "seed": null,
+      "expected": {
+        "durations_ns": {
+          "normal": 30,
+          "locked": 30,
+          "crossed": 0,
+          "invalid": 10,
+          "expired": 30,
+          "unknown": 0
+        },
+        "spread_fraction": "2",
+        "bps_fraction": "10000/51",
+        "status": "available"
+      }
+    }
+  ]
+}

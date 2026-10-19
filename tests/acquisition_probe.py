@@ -8,7 +8,7 @@ import tempfile
 
 import equity_feature_workers as worker
 
-assert worker.__version__=='0.1.0a13'
+assert worker.__version__=='0.1.0a14'
 assert 'site-packages' in Path(worker.__file__).resolve().parts
 assert not any(n.startswith(('equity_feature_files','equity_feature_acquisition')) for n in sys.modules)
 assert {'SourceOffer','AcquisitionPlan','ExecutionApproval','plan_acquisition','execute_plan'} <= set(worker.__all__)

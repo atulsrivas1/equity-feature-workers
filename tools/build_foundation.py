@@ -23,7 +23,7 @@ SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflo
 EXPECTED = {
     "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],
     "equity-feature-io-sdk": ["equity-feature-io-contracts==0.1.0a2"],
-    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a4"],
+    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a4", 'equity-features-intraday==0.1.0a3; extra == "intraday"'],
 }
 
 

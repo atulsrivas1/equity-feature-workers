@@ -3,30 +3,36 @@ from __future__ import annotations
 
 from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass, replace
+import json
 import threading
 from typing import Iterator
 
 from equity_feature_contracts import FeatureResult
 from equity_feature_io_contracts import PublicationState, ResultSink, SinkError, SinkErrorCode, SinkRequirements
-from equity_feature_io_sdk import Cancellation, admit_sink, prepare_publication, publish
+from equity_feature_io_sdk import Cancellation, admit_sink, encode_receipt, prepare_publication, publish
 
 from .barriers import BarrierLimits, Dependency, _admit_dependencies, _admit_entities, inspect_barrier
 from .commands import CommandError, NeverCancelled
 from .diagnostics import (ProgressRecorder, DiagnosticStage, DiagnosticStatus, _Attempt,
                           counter, interval, fixed_reason)
-from .manifests import OutputManifest, TaskManifest, integer, label
+from .manifests import MAX_MANIFEST_BYTES, OutputManifest, TaskManifest, encode_output, integer, label
 
 
 @dataclass(frozen=True)
 class PublicationLimits:
     max_pending_tasks: int = 64
     max_pending_bytes: int = 8388608
+    max_receipt_wire_bytes: int | None = None
 
     def __post_init__(self) -> None:
         try:
             integer(self.max_pending_tasks, 1); integer(self.max_pending_bytes, 1)
             if self.max_pending_tasks > 4096:
                 raise ValueError
+            if self.max_receipt_wire_bytes is not None:
+                integer(self.max_receipt_wire_bytes, 1)
+                if self.max_receipt_wire_bytes > MAX_MANIFEST_BYTES:
+                    raise ValueError
         except Exception:
             raise SinkError(SinkErrorCode.INVALID_CONFIG) from None
 
@@ -151,6 +157,9 @@ class SerialPublisher:
             declaration = OutputManifest(task, envelope)
             provisional = _Pending(declaration, results, 0)
             size = _admit_dependencies((self._dependency(provisional),), self._bounds(), self._requirements)
+            receipt_bound = self._limits.max_receipt_wire_bytes
+            if receipt_bound is not None and len(encode_output(declaration)) - 4 + receipt_bound > MAX_MANIFEST_BYTES:
+                raise SinkError(SinkErrorCode.RESOURCE_LIMIT)
             entry = _Pending(declaration, results, size, counter() if _observation else None)
         with _observation.stage(DiagnosticStage.QUEUE_PROBE, probes=1) if _observation else nullcontext():
             acquired = self._lock.acquire(blocking=False)
@@ -180,12 +189,24 @@ class SerialPublisher:
         finally:
             self._lock.release()
 
+    def _committed(self, output: OutputManifest) -> OutputManifest:
+        """A bound violation leaves the pending task; commit is not rolled back."""
+        bound = self._limits.max_receipt_wire_bytes
+        if bound is not None:
+            if output.receipt is None:
+                raise SinkError(SinkErrorCode.INVALID_CONTENT)
+            text = encode_receipt(output.receipt).decode('ascii')
+            size = len(json.dumps(text, ensure_ascii=True, allow_nan=False, separators=(',', ':')).encode('ascii'))
+            if size > bound:
+                raise SinkError(SinkErrorCode.RESOURCE_LIMIT)
+        return output
+
     def _one(self, entry: _Pending, available: int, token: Cancellation) -> PublicationProgress:
         dependency = self._dependency(entry)
         barrier = inspect_barrier((dependency,), limits=self._bounds(1, available),
                                   requirements=self._requirements, cancellation=token)
         if barrier.verified:
-            return PublicationProgress(dependency.task.task_sha256, barrier.verified[0].command.output, None)
+            return PublicationProgress(dependency.task.task_sha256, self._committed(barrier.verified[0].command.output), None)
         reason = barrier.waiting[0].reason
         if reason not in (PublicationState.ABSENT.value, PublicationState.ABORTED.value):
             return PublicationProgress(dependency.task.task_sha256, None, reason)
@@ -193,6 +214,7 @@ class SerialPublisher:
         receipt = publish(self._sink, entry.declaration.envelope, entry.results,
                           requirements=self._requirements, cancellation=token)
         declared = OutputManifest(entry.declaration.task, entry.declaration.envelope, receipt)
+        self._committed(declared)
         barrier = inspect_barrier((self._dependency(entry, declared),), limits=self._bounds(1, available),
                                   requirements=self._requirements, cancellation=token)
         if barrier.verified:

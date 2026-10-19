@@ -1,3 +1,9 @@
+# Supplied-input worker development — experimental0.1.0a14
+
+Explicit supplied intraday0.1.0a3 extra and core structure/top-K/continuous/prior-close callbacks are implemented under [EQ140](https://github.com/atulsrivas1/equity-features/issues/474). [API, identities, independent readiness and receipt limits](../../docs/api/SUPPLIED_INPUTS.md) and [synthetic example](../../examples/supplied_intraday.py). Source checks are distinct from unfinished final review/measurement/installed/release qualification. Root imports/default CLI remain compatible; no new live/state/stable-registry claim.
+
+## Prior accepted acquisition surface
+
 ## Installed acquisition planning — experimental workers0.1.0a13
 
 Explicit feature requirements select caller-registered source capabilities; exact source/sink/config/command plan identity and scoped execution consent precede factory/credential access. Default deny, selected factories only, existing worker calculations/publication/readback and source-independent pure libraries. No new mandatory dependencies. Optional owned CSV example: equity-feature-worker --acquisition-demo --approve-owned-fixture. This consent is for the generated synthetic fixture only, never provider downloads or charges. [API](https://github.com/atulsrivas1/equity-feature-workers/blob/codex/eq073-acquisition-planning/docs/api/ACQUISITION_PLANNING.md) and [current story/delivery evidence](https://github.com/atulsrivas1/equity-features/issues/82) record supported flows and limitations. Earlier candidate/delivery statements below are historical captures; they do not supersede the live issue/Project.

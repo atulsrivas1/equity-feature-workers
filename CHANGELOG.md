@@ -1,3 +1,7 @@
+## EQ140 development — unreleased workers0.1.0a14
+
+Supplied optional intraday and explicit structure/top-K/continuous/prior-close callbacks retain exact full producer results and causal identities. Discovery/history helpers use existing contracts, closed errors and actual missing/empty semantics. Optional intraday extra pins0.1.0a3; base imports/default acquisition do not gain an optional dependency. PublicationLimits optionally reserves escaped receipt bytes before queue/I/O and checks actual committed receipts on fresh/lookup/replay paths; resource failure retains pending lookup state without claiming rollback. [API and limits](docs/api/SUPPLIED_INPUTS.md). Source tests/typing are preparation for unfinished final review/benchmark/installed/bothOS/release acceptance; no new speed claim.
+
 ## EQ108 unreleased source candidate
 
 Prepared optional MCP owner evidence catalog/five additive tools and full quality/diagnostic projection. Input declarations remain unverified; every report/chunk reauthorizes through existing artifact_read. Both source findings resolved; qualification/tooling/source renewal and actual release gates remain.
