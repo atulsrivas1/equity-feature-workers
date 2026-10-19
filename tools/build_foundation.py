@@ -181,7 +181,11 @@ def qualify(dependencies, artifacts, form, packages, probe, core_benchmark):
         after = fingerprint(py, location)
         assert before == after, "Companion install/import changed canonical core"
         for name in packages:
-            run(py, "-I", "-m", "mypy", "--strict", "-p", name.replace("-", "_"), cwd=location)
+            # This historical form intentionally has no optional intraday
+            # distribution. Its separate combined installed form types that
+            # module against the actual extra; keep base modules strict here.
+            optional = ("--exclude", r"[/\\]intraday\.py$") if name == "equity-feature-workers" else ()
+            run(py, "-I", "-m", "mypy", "--strict", *optional, "-p", name.replace("-", "_"), cwd=location)
         fp = hashlib.sha256(json.dumps(before, sort_keys=True).encode()).hexdigest()
         backend_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;print(json.dumps({n:version(n) for n in ('duckdb','pyarrow','equity-feature-parquet','equity-feature-duckdb-sink')}))"], cwd=location, text=True, encoding="utf-8"))
@@ -209,7 +213,7 @@ def main():
         core_source = snapshot(core, CORE_COMMIT, stage / "core-source", ("packages/contracts", "packages/features"))
         component_commit = git(ROOT, "rev-parse", "HEAD")
         # Optional service has its own installed/dependency/archive qualification.
-        component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages/workers", "tests", "tools/benchmark_pipeline.py", "tools/supplied_native.py", "tools/supplied_archives.py"))
+        component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages/workers", "tests", "tools/benchmark_pipeline.py", "tools/supplied_native.py", "tools/supplied_archives.py", "tools/benchmark_supplied_inputs.py"))
         for folder in ("contracts", "features"):
             build(core_source / "packages" / folder, dependencies)
         dependency_commit = {"equity-features": CORE_COMMIT}

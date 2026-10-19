@@ -147,6 +147,75 @@ class SuppliedSession(unittest.TestCase):
         self.assertEqual([b.role for b in result.metadata.inputs], ['prior_close'])
         self.assertTrue(all(q.status == c.Status.MISSING_INPUT for q in result.quality))
 
+    def test_unknown_and_future_prior_only_gate_prior_outputs(self):
+        template = self.items[0]
+        for known, reason in ((None, c.Reason.UNKNOWN_AVAILABILITY), (31, c.Reason.FUTURE_KNOWLEDGE)):
+            prior = replace(template.batches[1], columns=tuple(
+                c.Column(col.name, (known,)) if col.name == 'known_at_ns' else col for col in template.batches[1].columns))
+            item = work('bars_prior_close', template.task.config, template.batches[0], prior)
+            actual = compute_supplied_session_inputs(item.task, item.batches)[0]
+            direct = original.compute_bars(item.batches[0], item.task.config, entity=c.EntityKey('A', 'S'), prior_close=prior)
+            self.assertEqual(encode_result(actual), encode_result(direct))
+            for column, quality, baseline in zip(actual.values, actual.quality, self.expected[0].values):
+                if column.feature_id.rsplit('.', 1)[1] in ('overnight_gap', 'close_close_return'):
+                    self.assertEqual(column.values, (None,)); self.assertEqual(quality.status, c.Status.MISSING_INPUT)
+                    self.assertEqual(quality.reasons, (reason,))
+                else:
+                    self.assertEqual(column, baseline); self.assertEqual(quality.status, c.Status.AVAILABLE)
+            self.assertEqual([b.role for b in actual.metadata.inputs], ['bars', 'prior_close'])
+
+    def test_missing_notional_does_not_gate_other_bar_outputs(self):
+        template = self.items[0]
+        bars = replace(template.batches[0], columns=tuple(col for col in template.batches[0].columns if col.name != 'actual_notional'))
+        item = work('bars_prior_close', template.task.config, bars, template.batches[1])
+        actual = compute_supplied_session_inputs(item.task, item.batches)[0]
+        for column, quality, baseline in zip(actual.values, actual.quality, self.expected[0].values):
+            if column.feature_id.endswith('.notional'):
+                self.assertEqual(column.values, (None,)); self.assertEqual(quality.reasons, (c.Reason.ABSENT_INPUT,))
+            else:
+                self.assertEqual(column, baseline); self.assertEqual(quality.status, c.Status.AVAILABLE)
+
+    def test_unavailable_seed_and_open_update_preserve_temporal_evidence(self):
+        template = self.items[5]
+        for known, reason in ((None, c.Reason.UNKNOWN_AVAILABILITY), (101, c.Reason.FUTURE_KNOWLEDGE)):
+            seed = replace(template.batches[1], columns=tuple(
+                c.Column(col.name, (known,)) if col.name == 'known_at_ns' else col for col in template.batches[1].columns))
+            for at_open in (False, True):
+                quotes = template.batches[0]
+                if at_open:
+                    quotes = replace(quotes, columns=tuple(c.Column(col.name, (0, 50))
+                        if col.name in ('event_ns', 'known_at_ns') else col for col in quotes.columns))
+                item = work('continuous_quotes', template.task.config, quotes, seed)
+                actual = compute_supplied_session_inputs(item.task, item.batches)[0]
+                direct = original.compute_time_weighted(quotes, item.task.config, entity=c.EntityKey('A', 'S'), seed=seed)
+                self.assertEqual(encode_result(actual), encode_result(direct))
+                value = actual.values[0].values[0]; quality = actual.quality[0]
+                self.assertEqual(value.durations.total, 100)
+                self.assertEqual(value.durations.unknown, 0 if at_open else 10)
+                self.assertEqual(quality.status, c.Status.AVAILABLE if at_open else c.Status.INCOMPLETE_COVERAGE)
+                self.assertEqual(quality.reasons, () if at_open else tuple(dict.fromkeys((c.Reason.UNKNOWN_AVAILABILITY, reason))))
+                self.assertEqual((actual.evidence[0].use, actual.evidence[0].exclusion_reason), ('excluded', reason))
+                self.assertEqual((value.mean_spread, value.mean_bps), (2., 10000/51) if at_open else (None, None))
+
+    def test_locked_zero_and_no_valid_duration_remain_distinct(self):
+        template = self.items[7]
+        for side, status, reasons in ((102, c.Status.AVAILABLE, ()),
+                (None, c.Status.NOT_APPLICABLE, (c.Reason.ZERO_DENOMINATOR,))):
+            quotes = replace(template.batches[0], columns=tuple(c.Column(col.name, (side, side))
+                if col.name in ('bid', 'ask') else col for col in template.batches[0].columns))
+            item = work('continuous_quotes', template.task.config, quotes)
+            actual = compute_supplied_session_inputs(item.task, item.batches)[0]
+            self.assertEqual(actual.quality[0].status, status); self.assertEqual(actual.quality[0].reasons, reasons)
+            value = actual.values[0].values[0]
+            self.assertEqual(value.durations.total, 100)
+            self.assertEqual((value.mean_spread, value.mean_bps), (0., 0.) if side is not None else (None, None))
+
+    def test_sampled_quotes_are_not_relabelled_continuous(self):
+        template = self.items[7]
+        quotes = replace(template.batches[0], metadata=replace(template.batches[0].metadata, sampling='trade_snapshot'))
+        item = work('continuous_quotes', template.task.config, quotes)
+        self.reject(CommandErrorCode.CONFIG, item.task, item.batches)
+
     def test_all_missing_and_explicit_empty_delivery(self):
         item = self.items[1]
         missing = work('bars_prior_close', item.task.config, None)

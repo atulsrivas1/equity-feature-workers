@@ -251,6 +251,10 @@ def main():
                 run(py, '-I', '-B', verification/'tools/supplied_test_runner.py', verification/'tests', test_report, str(int(combined)), cwd=directory)
                 tests = json.loads(test_report.read_bytes())
                 typed = typing(py, verification, directory, combined)
+                if combined:
+                    run(py, '-I', '-B', '-m', 'mypy', '--strict', '--no-incremental',
+                        '-m', 'equity_feature_workers._supplied', '-m', 'equity_feature_workers.intraday',
+                        '-m', 'equity_feature_workers.supplied_session', '-m', 'equity_feature_workers.publication', cwd=directory)
                 if combined: run(py, '-I', '-B', verification/'examples/supplied_intraday.py', cwd=directory)
                 assert installed(names) == after
                 verify()
