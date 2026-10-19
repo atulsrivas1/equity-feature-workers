@@ -111,6 +111,17 @@ class SuppliedSession(unittest.TestCase):
             if item.task.family == 'continuous_quotes':
                 self.assertEqual(roles['quotes'].sampling, 'continuous')
 
+    def test_structure_does_not_discover_or_consume_actual_notional(self):
+        item = self.items[2]
+        requirements = required_supplied_inputs(item.task.config, 'structure')
+        self.assertNotIn('actual_notional', next(r for r in requirements if r.role == 'bars').fields)
+        self.assertIn('actual_notional', required_supplied_inputs(item.task.config, 'bars_prior_close')[0].fields)
+        original_batch = item.batches[0]
+        projected = replace(original_batch, columns=tuple(col for col in original_batch.columns if col.name != 'actual_notional'))
+        projected_work = work('structure', item.task.config, projected)
+        self.assertEqual(compute_supplied_session_inputs(projected_work.task, projected_work.batches),
+                         compute_supplied_session_inputs(item.task, item.batches))
+
     def test_exact_bijection_unmatched_missing_duplicate_reordered(self):
         item = self.items[0]
         self.reject(CommandErrorCode.RESULT, item.task, item.batches[:1])

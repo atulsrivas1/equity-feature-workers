@@ -81,7 +81,8 @@ def required_supplied_inputs(config: ConfigSpec, family: str) -> tuple[InputRequ
         requirements: list[InputRequirement] = []
         for role in roles:
             if role in ('bars', 'prior_close'):
-                fields = identity + ('start_ns', 'end_ns') + (('close',) if role == 'prior_close' else ('open', 'high', 'low', 'close', 'volume', 'actual_notional'))
+                fields = identity + ('start_ns', 'end_ns') + (('close',) if role == 'prior_close' else
+                    ('open', 'high', 'low', 'close', 'volume') + (('actual_notional',) if family == 'bars_prior_close' else ()))
                 rule = ('one actual immediately preceding governed DAILY row; only overnight/close-close need it; absent reference preserves independent bars' if role == 'prior_close' else
                     'actual BAR intervals/coverage; independent fields and interval-local OHLCV vs whole-session share denominator; optional values may be null/absent')
                 requirements.append(InputRequirement(role, 'canonical:1', fields, DataKind.DAILY if role == 'prior_close' else DataKind.BAR, rule=rule))

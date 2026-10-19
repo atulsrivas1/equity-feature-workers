@@ -209,7 +209,7 @@ def main():
         core_source = snapshot(core, CORE_COMMIT, stage / "core-source", ("packages/contracts", "packages/features"))
         component_commit = git(ROOT, "rev-parse", "HEAD")
         # Optional service has its own installed/dependency/archive qualification.
-        component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages/workers", "tests", "tools/benchmark_pipeline.py"))
+        component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages/workers", "tests", "tools/benchmark_pipeline.py", "tools/supplied_native.py", "tools/supplied_archives.py"))
         for folder in ("contracts", "features"):
             build(core_source / "packages" / folder, dependencies)
         dependency_commit = {"equity-features": CORE_COMMIT}
