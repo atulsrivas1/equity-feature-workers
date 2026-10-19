@@ -927,5 +927,72 @@
     "descriptor_binding": "Bind exact approved source module/qualname/definition line and actual function descriptor/code identity for new shutdown/manual observers, with class aliases before/after. Manual observers use captured unbound original functions after hook/profile restoration. This is cooperative inspected-source qualification, not hostile-code or whole-interpreter attestation.",
     "review": "Conditional prospective design review1c43ba15311cbcbf61ac11125061985ddf0c224b67620aed9aefaaf79ed0b559 passed42staticcontrols. Its provisional40-to41 counter note is prospectively corrected to40-to42 because original delegate adds one selected code. No runtime tests or source implementation acceptance claimed.",
     "contract_reconciliation": "Explicitly reconcile already implemented development delegate-admission3witness fields and fragment-reference nullable witness field with their existing separate integration specification. This changes no runtime math/threshold or accepted root codec; complete root admission is still outstanding."
+  },
+  "native_observed_closure": {
+    "stage": "Prospective bounded native-local closure; no complete root/sample/installed/CI/study acceptance.",
+    "receipt_schema": "eq142-development-native-receipt:2; earlier receipts retain original source scope",
+    "closure_fields": {
+      "schema": "eq142-native-local-closure:1",
+      "observer": "closed observer record",
+      "runner": "nullable closed runner record, required for successful closure",
+      "boundaries": "closed nullable local boundary record",
+      "scope": "native_local_not_selected_complete_e2e",
+      "job_empty_accounting": "null until fresh post-runner-exit query observes active0; then closed original native_accounting, separately followed by final accounting query"
+    },
+    "observer_fields": {
+      "pid": "actual positive uint32 current PID, GetProcessId agrees with os.getpid",
+      "creation_filetime_100ns_since_1601_utc": "positive canonical uint64 decimal string from current pseudo-handle",
+      "is_member": "false from successful IsProcessInJob against this exact owned Job",
+      "clock": "existing closed clock with direct positive QPF; nominal resolution only; no cross-process raw tick alignment"
+    },
+    "runner_fields": {
+      "pid": "actual positive uint32 from original CreateProcess handle",
+      "creation_filetime_100ns_since_1601_utc": "positive canonical uint64 creation captured while suspended after assignment",
+      "is_member": "true from direct successful specific Job membership query before resume",
+      "terminal_wait": "null until actual WAIT_OBJECT_0 then integer0, never bool",
+      "terminal_creation_filetime_100ns_since_1601_utc": "null until same retained original signaled handle queried; must equal startup creation for success"
+    },
+    "boundary_fields": [
+      "observer_start_ns",
+      "runner_created_ns",
+      "runner_assigned_ns",
+      "runner_resume_before_ns",
+      "runner_resume_after_ns",
+      "runner_exit_observed_ns",
+      "job_empty_observed_ns",
+      "final_accounting_end_ns",
+      "native_measurement_end_ns"
+    ],
+    "boundary_wire": "Canonical nonnegative int64 decimal strings; null means unobserved and rejects successful closure. Ordered in this external observer timeline only. No FILETIME subtraction, cross-process raw alignment or invented zero.",
+    "start": "Existing native started point: after Kernel/uniqueJob/evidencebuffer setup, before containment configuration and CreateProcess. Subsequent direct observer clock/identity, containment/launch/admission, sampling and final aggregation included.",
+    "end": "After final native accounting and aggregation, before own handle cleanup/return, caller receipt persistence/validation and outer reports/source closure. Native wall_ns equals end-start only. Outer controller must include those remaining costs before selecting complete e2e; no native-local complete-e2e claim.",
+    "empty_boundary": "Fresh explicit Job accounting query AFTER positive runner wait and actual exit-code read; timestamp actual query result. If not empty keep sampling. Never relabel earlier sample active0. Final independent accounting active0/terminated_by_limit0 remains required.",
+    "wait_policy": "Only WAIT_OBJECT_0 establishes runner exit; WAIT_TIMEOUT continues; failed/unknown rejects immediately. Retain actual DWORD exit code, including observed259 after signaled wait. Separate successful qualification requires actual exit0.",
+    "join": "Initial suspended/signaled CreateProcess launcher and logical calculation parent are separate identities. Bind calculation parent via actual retained run-report nonce plus positive direct writer-bound witness of this exact owned Job; never infer OS ancestry from membership. Emit initial_runner, calculation_parent and parent_is_initial_runner. SamePID/differentcreation rejects this qualification. Validate actual unique initial/traced/sampled lifetime union <= final total_processes. Sampled pairs join sampler-only inventory; startup never inserted into sampler inventory. Observer PID is distinct from all owned lifetimes. Untraced owned descendants get no invented trace nonce and unsampled witnesses no invented resource rows.",
+    "sample_validation": "Closed exact row fields/types; bounded unique PIDs per sample, unique sampler lifetimes, actual row RSS/thread arithmetic, exact sampled peaks, elapsed offsets in native-local bounds, final whole Job counters and no probe errors. Sample accounting/PID/RSS/thread snapshots are non-atomic; do not require active_processes==len(rows). observed_terminated thread proof permits0 with positive signaled wait, not a default for missing/error.",
+    "limits": "Unchanged256 lifetimes/PIDs,60001 samples,1024 probeerrors,15MiB rows/16MiB receipt; whole Job sampled RSS1GiB; no physical/instantaneous peak guarantee. Existing root/summary/store/study caps unchanged.",
+    "errors": "Retain raw partial fields/probe failures and owned cleanup evidence. Validation emits only native-local closure evidence; never replaces original runner/report errors, fabricates success/rollback, retries a full control, or enables full_sample_accepted.",
+    "sources": [
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes",
+      "https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency",
+      "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodeprocess",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocess",
+      "https://docs.python.org/3.12/library/venv.html",
+      "https://github.com/python/cpython/blob/v3.12.10/PC/launcher.c"
+    ],
+    "review": "Conditional prospective0c1316af9f18c49d5bfc813b06bb86d645aff188996190faf44d591194f39208 with explicit timing/empty-query/population refinements tracked before code; actual implementation review still required.",
+    "superseded_launcher_assumption": "Initial proposal and conditional review0c1316 incorrectly required calculation parent witness equal CreateProcess launcher. First8 had6PASS/2actualWindowsERROR; exact source/logs retained. Fresh diagnostic and47-control correction reviewdb155ffab143a48d321a16c477bbf416a23a59ffc2ce23a1f0fc4c964dae0b47 supersede only that equality, before source correction.",
+    "descendant_fixture": "Only native outliving fixture uses actual base executable and stdlib exclusive bounded witness writer. Parent exits after child witness; child waits at most5s for owned external release file. Original native probes must observe child PID live after positive initial-runner wait before test releases child. Require retained actual live child row strictly after runner_exit_observed in same external clock. This does not change official/baseline venv executable or workload.",
+    "correction_requirements": {
+      "NATIVEFINAL01": "Each native sample elapsed offset lies between actual runner_resume_after-start and fresh job_empty_observed-start, not merely within native wall. Maintain local nondecreasing offsets. Correct synthetic positive fixture to actual declared interval; no cross-process arithmetic.",
+      "NATIVEFINAL02": "Original native Accounting times are nonnegative signedint64, while page_faults/total_processes/active_processes/terminated_by_limit are uint32. Sample active/total and PROCESSENTRY32 cntThreads/snapshot count use uint32 bounds; sampled cumulative total never decreases from suspended total and is <=fresh/final total. Non-atomic active versus row count remains distinct.",
+      "NATIVEFINAL03": "Native wall_clock_nominal_resolution_s and observer.clock.reported_resolution_seconds share the same perf_counter source, so numeric Decimal(str(float)) equality is mandatory. process_time nominal resolution is distinct; do not equate QPF inverse with empirical/nominal resolution.",
+      "NATIVEFINAL04": "Cleanup must independently attempt query, owned termination/reap and every owned handle close even if earlier cleanup stage fails. Persistent accounting failure cannot mask primary typed error or skip closes. Unknown accounting triggers conservative termination of this unique assigned owned Job only; it is never successful zero. Keep primary object/code/real cause and separate bounded cleanup_failures with stages/type/code and cleanup_failed. Detect midrun CloseHandle false before discarding original thread/process handles; keep them for cleanup. A cleanup-only failure rejects successful return. Existing cleanup deadlines and owned containment remain; no PID-based/global action, retries of complete controls or default/threshold change."
+    },
+    "cleanup_failure_fields": "Failed receipts only: cleanup_failures array<=16 of closed {stage,error_type,code}, cleanup_failed=true; primary_failure_identity closed {error_type,code}; retain actual primary diagnostic payload separately when present. Successful return requires no cleanup failure. All errors and existing partial observations remain within unchanged16MiB native receipt bound.",
+    "probe_handle_cleanup": "Extend the same independent-close rule to owned RSS/thread-member/snapshot handles. At most257 probe close observations, bounded by existing256 member handles+1snapshot, retained in failed NativeFailure primary_failure_detail only. Primary probe error object/code/cause wins; standalone close failure rejects. Propagate a probe close failure instead of losing its details in an aggregate error row. All probes/caller raw receipts remain within existing15MiB row/16MiB total bound; no new accepted root codec or cap.",
+    "early_unique_job_refusal": "Before any containment change/runner creation/assignment, failed unique creation (null or ERROR_ALREADY_EXISTS) retains CREATE_UNIQUE_JOB as primary. A nonnull colliding Job handle is only the newly opened caller reference: close it with checked outcome and separate bounded cleanup failures; never assign work, modify or terminate the existing Job. Null handle has no close attempt. Close exception/False must not mask primary. This closes additional04 coverage only; ordinary native paths unchanged."
   }
 }

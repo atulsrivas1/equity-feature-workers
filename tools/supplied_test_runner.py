@@ -36,7 +36,8 @@ def main():
             'test_eq142_executor.ExecutorObservations.'))) or (
             os.name != 'nt' and identity.startswith(('test_supplied_native.','test_eq142_native.',
                 'test_eq142_sample.NativeOwnedDevelopmentSample.',
-                'test_eq142_identity.WindowsOwnedWitness.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.'))), ('unexpected skip', item)
+                'test_eq142_identity.WindowsOwnedWitness.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.',
+                'test_eq142_native_closure.WindowsNativeClosure.'))), ('unexpected skip', item)
         allowed.append(identity)
     assert any(name.startswith('test_supplied_intraday.') for name in allowed) == (not combined)
     assert any(name.startswith('test_supplied_native.') for name in allowed) == (os.name != 'nt')

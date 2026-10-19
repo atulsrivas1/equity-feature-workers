@@ -7,6 +7,7 @@ Sources: Microsoft PROCESSENTRY32W/CreateToolhelp32Snapshot/Process32FirstW docs
 from __future__ import annotations
 import ctypes as ct
 from ctypes import wintypes as w
+from decimal import Decimal
 import json
 import math
 import os
@@ -16,10 +17,13 @@ import time
 import uuid
 from supplied_native import (Kernel as BaseKernel, NativeFailure, ExtendedLimits,
     Startup, Process, Pids, Memory)
-from eq142_identity import decimal_integer
+from eq142_identity import decimal_integer,clock_valid
 
 NATIVE_RECEIPT_MAX_BYTES=16777216
 NATIVE_ROWS_MAX_BYTES=15728640
+BOUNDARIES=('observer_start_ns','runner_created_ns','runner_assigned_ns',
+    'runner_resume_before_ns','runner_resume_after_ns','runner_exit_observed_ns',
+    'job_empty_observed_ns','final_accounting_end_ns','native_measurement_end_ns')
 
 
 class NativeEvidenceBuffer:
@@ -64,6 +68,63 @@ class ProcessEntry(ct.Structure):
         ('szExeFile',w.WCHAR*260)]
 
 
+def cleanup_owned(kernel,process,job,*,assigned,evidence):
+    """Attempt each owned cleanup stage; never replace the primary exception."""
+    failures=[];cleanup_stop=time.monotonic()+5
+    def failed(stage,error):
+        failures.append({'stage':stage,'error_type':type(error).__module__+'.'+type(error).__qualname__,
+            'code':error.code if isinstance(error,NativeFailure) else None})
+    def attempt(stage,operation,*,truth=False):
+        try:
+            value=operation()
+            if truth and not value:raise NativeFailure('CLEANUP_API_FALSE')
+            return value
+        except BaseException as error:
+            failed(stage,error);return None
+    def query(stage):
+        value=attempt(stage,lambda:kernel.accounting(job))
+        if value is None:return None
+        if (type(value) is not dict or type(value.get('active_processes')) is not int
+                or not 0<=value['active_processes']<=4294967295):
+            failed(stage,NativeFailure('CLEANUP_ACCOUNTING_INVALID'));return None
+        return value
+    def reap(stage,handle):
+        remaining_ms=max(0,min(5000,int((cleanup_stop-time.monotonic())*1000)))
+        return attempt(stage,lambda:kernel.WaitForSingleObject(handle,remaining_ms))
+    if process.process and not assigned:
+        evidence['cleanup_runner_termination_issued']=bool(attempt('terminate_unassigned_runner',
+            lambda:kernel.TerminateProcess(process.process,1),truth=True))
+        state=reap('reap_unassigned_runner',process.process)
+        evidence['cleanup_runner_reaped']=state==0
+        if state!=0:failed('reap_unassigned_runner',NativeFailure('CLEANUP_RUNNER_NOT_REAPED'))
+    if assigned:
+        remaining=query('query_owned_job')
+        if remaining is None or remaining['active_processes']:
+            evidence['cleanup_job_termination_issued']=bool(attempt('terminate_owned_job',
+                lambda:kernel.TerminateJobObject(job,1),truth=True))
+            while True:
+                remaining=query('reap_owned_job')
+                if remaining is None or remaining['active_processes']==0:break
+                if time.monotonic()>=cleanup_stop:
+                    failed('reap_owned_job',NativeFailure('CLEANUP_JOB_NOT_REAPED'));break
+                time.sleep(0.01)
+            evidence['cleanup_accounting']=remaining
+            if process.process:
+                state=reap('reap_owned_runner',process.process)
+                evidence['cleanup_runner_reaped']=state==0
+                if state!=0:failed('reap_owned_runner',NativeFailure('CLEANUP_RUNNER_NOT_REAPED'))
+    # Each close is independent of preceding queries/termination/other closes.
+    for attribute,stage in (('thread','close_runner_thread'),('process','close_runner_process')):
+        handle=getattr(process,attribute)
+        if handle:
+            closed=attempt(stage,lambda h=handle:kernel.CloseHandle(h),truth=True)
+            if closed:setattr(process,attribute,None)
+    if job:attempt('close_owned_job',lambda:kernel.CloseHandle(job),truth=True)
+    if failures:
+        evidence['cleanup_failed']=True;evidence['cleanup_failures']=failures
+    return failures
+
+
 class Kernel(BaseKernel):
     def __init__(self):
         super().__init__()
@@ -74,6 +135,41 @@ class Kernel(BaseKernel):
             ('GetProcessTimes',[w.HANDLE]+[ct.POINTER(w.FILETIME)]*4,w.BOOL)]:
             function=getattr(self.library,name);function.argtypes=args;function.restype=result
             setattr(self,name,function)
+        for name,args,result in (
+            ('GetCurrentProcess',[],w.HANDLE),('GetProcessId',[w.HANDLE],w.DWORD),
+            ('QueryPerformanceFrequency',[ct.POINTER(ct.c_longlong)],w.BOOL)):
+            function=getattr(self.library,name);function.argtypes=args;function.restype=result
+            setattr(self,name,function)
+
+    def observer_identity(self,job):
+        current=self.GetCurrentProcess();pid=int(self.GetProcessId(current))
+        if not pid or pid!=os.getpid():raise NativeFailure('OBSERVER_PROCESS_ID')
+        member=w.BOOL()
+        if not self.IsProcessInJob(current,job,ct.byref(member)):raise NativeFailure('OBSERVER_MEMBERSHIP_API')
+        if member.value:raise NativeFailure('OBSERVER_IN_OWNED_JOB')
+        frequency=ct.c_longlong()
+        if not self.QueryPerformanceFrequency(ct.byref(frequency)):raise NativeFailure('OBSERVER_QPF_API')
+        info=time.get_clock_info('perf_counter')
+        clock={'name':'perf_counter','implementation':info.implementation,'monotonic':info.monotonic,
+            'adjustable':info.adjustable,'reported_resolution_seconds':format(Decimal(str(info.resolution)),'f'),
+            'qpc_frequency_hz':int(frequency.value),'cross_process_raw_ticks_qualified':False}
+        try:clock_valid(clock,require_frequency=True)
+        except ValueError:raise NativeFailure('OBSERVER_CLOCK') from None
+        return {'pid':pid,'creation_filetime_100ns_since_1601_utc':self.creation_identity(current),
+            'is_member':False,'clock':clock}
+
+    def runner_identity(self,handle,job,pid):
+        if int(self.GetProcessId(handle))!=pid:raise NativeFailure('RUNNER_PROCESS_ID')
+        member=w.BOOL()
+        if not self.IsProcessInJob(handle,job,ct.byref(member)) or not member.value:
+            raise NativeFailure('RUNNER_MEMBERSHIP')
+        return {'pid':pid,'creation_filetime_100ns_since_1601_utc':self.creation_identity(handle),
+            'is_member':True,'terminal_wait':None,'terminal_creation_filetime_100ns_since_1601_utc':None}
+
+    def runner_wait(self,handle):
+        state=self.WaitForSingleObject(handle,0)
+        if state not in (0,258):raise NativeFailure('RUNNER_WAIT')
+        return state
 
     def creation_identity(self,handle):
         created=w.FILETIME();exited=w.FILETIME();system=w.FILETIME();user=w.FILETIME()
@@ -82,6 +178,23 @@ class Kernel(BaseKernel):
         value=(int(created.dwHighDateTime)<<32)|int(created.dwLowDateTime)
         if value<=0:raise NativeFailure('PROCESS_CREATION_UNKNOWN')
         return str(value)
+
+    def close_probe_handles(self,handles,primary=None):
+        """Close all actual probe handles; retain primary errors and close faults."""
+        failures=[]
+        for ordinal,(kind,handle) in enumerate(handles):
+            try:
+                if not self.CloseHandle(handle):raise NativeFailure('PROBE_CLOSE_API_FALSE')
+            except BaseException as error:
+                failures.append({'ordinal':ordinal,'kind':kind,
+                    'error_type':type(error).__module__+'.'+type(error).__qualname__,
+                    'code':error.code if isinstance(error,NativeFailure) else None})
+        if failures:
+            if primary is not None:
+                if isinstance(primary,NativeFailure):
+                    primary.evidence={**(primary.evidence or {}),'probe_handle_close_failures':failures}
+                primary.add_note('Independent owned probe handle close failures retained')
+            else:raise NativeFailure('PROBE_HANDLE_CLEANUP',{'probe_handle_close_failures':failures})
 
     def threads_for_members(self,job,pids,expected_lifetimes=None):
         if type(pids) is not list or len(pids)>256 or any(type(pid) is not int or not 1<=pid<=4294967295 for pid in pids) or len(set(pids))!=len(pids):
@@ -94,7 +207,7 @@ class Kernel(BaseKernel):
             except ValueError:raise NativeFailure('THREAD_PROBE') from None
         self.last_thread_dispositions={}
         if not pids:return {}
-        handles=[];snapshot=None;creations={}
+        handles=[];snapshot=None;creations={};primary=None
         try:
             for pid in pids:
                 handle=self.OpenProcess(0x100410,False,pid)
@@ -136,9 +249,11 @@ class Kernel(BaseKernel):
                         'snapshot_threads':counts[pid],'creation_filetime_100ns_since_1601_utc':creations[pid]}
                 else:raise NativeFailure('THREAD_PROBE')
             return counts
+        except BaseException as error:
+            primary=error;raise
         finally:
-            if snapshot:self.CloseHandle(snapshot)
-            for handle in handles:self.CloseHandle(handle)
+            self.close_probe_handles(([('snapshot',snapshot)] if snapshot else [])+
+                [('member',handle) for handle in handles],primary)
 
 
 def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assignment=False, reject_resume=False):
@@ -154,9 +269,27 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
     ct.set_last_error(0)
     job = kernel.CreateJobObjectW(None, name)
     if not job or ct.get_last_error() == 183:
-        if job: kernel.CloseHandle(job)
-        raise NativeFailure('CREATE_UNIQUE_JOB')
-    process = Process(); assigned = False; exited = False; exit_code = None; seen = set()
+        # The returned reference may name an existing Job. Only close this
+        # caller's reference; never configure, assign to or terminate that Job.
+        evidence={'failure':'CREATE_UNIQUE_JOB','stage':'unique_job_refusal',
+            'primary_failure_identity':{'error_type':NativeFailure.__module__+'.'+NativeFailure.__qualname__,
+                'code':'CREATE_UNIQUE_JOB'},'reference_opened':bool(job),
+            'reference_close_attempted':bool(job),'reference_close_succeeded':None}
+        primary=NativeFailure('CREATE_UNIQUE_JOB',evidence)
+        if job:
+            try:
+                if not kernel.CloseHandle(job):
+                    evidence['reference_close_succeeded']=False
+                    raise NativeFailure('CLOSE_COLLIDING_JOB_REFERENCE')
+                evidence['reference_close_succeeded']=True
+            except BaseException as error:
+                evidence['cleanup_failed']=True
+                evidence['cleanup_failures']=[{'stage':'close_colliding_job_reference',
+                    'error_type':type(error).__module__+'.'+type(error).__qualname__,
+                    'code':error.code if isinstance(error,NativeFailure) else None}]
+                primary.add_note('Independent colliding Job reference close failure retained')
+        raise primary
+    process = Process(); assigned = False; exited = False; exit_code = None; seen = set();primary=None
     evidence = {'job_name': name, 'samples': [], 'probe_errors': [], 'sample_interval_s': interval_s,
         'observer_clock_nominal_resolution_s': time.get_clock_info('process_time').resolution,
         'wall_clock_nominal_resolution_s': time.get_clock_info('perf_counter').resolution,
@@ -164,8 +297,15 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
         'rss_limits': 'sampled simultaneous working sets; transient peaks/short-lived members may be missed',
         'cpu_limits': 'whole Job user/kernel100ns counters including terminated descendants; observed accounting is quantized, including possible zero observer/short-phase CPU; nominal units are not empirical resolution'}
     buffer=NativeEvidenceBuffer(evidence)
+    evidence['schema']='eq142-development-native-receipt:2'
+    closure={'schema':'eq142-native-local-closure:1','observer':None,'runner':None,
+        'boundaries':dict.fromkeys(BOUNDARIES),'job_empty_accounting':None,
+        'scope':'native_local_not_selected_complete_e2e'}
+    evidence['native_closure']=closure;boundaries=closure['boundaries']
     outer_cpu = time.process_time_ns(); started = time.perf_counter_ns(); deadline = time.monotonic() + timeout_s
+    boundaries['observer_start_ns']=str(started)
     try:
+        closure['observer']=kernel.observer_identity(job)
         limits = ExtendedLimits(); limits.basic.flags = 0x2000
         if not kernel.SetInformationJobObject(job, 9, ct.byref(limits), ct.sizeof(limits)):
             raise NativeFailure('SET_OWNED_CONTAINMENT')
@@ -178,16 +318,22 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
                                      str(cwd), ct.byref(startup), ct.byref(process)):
             raise NativeFailure('CREATE_SUSPENDED_RUNNER')
         evidence['runner_pid'] = int(process.pid)
+        boundaries['runner_created_ns']=str(time.perf_counter_ns())
         if reject_assignment or not kernel.AssignProcessToJobObject(job, process.process):
             raise NativeFailure('ASSIGN_SUSPENDED_RUNNER')
         assigned = True
+        closure['runner']=kernel.runner_identity(process.process,job,int(process.pid))
+        boundaries['runner_assigned_ns']=str(time.perf_counter_ns())
         before = kernel.accounting(job)
         if before['total_processes'] != 1 or before['active_processes'] != 1:
             raise NativeFailure('SUSPENDED_MEMBERSHIP')
         evidence['suspended_accounting'] = before
+        boundaries['runner_resume_before_ns']=str(time.perf_counter_ns())
         if reject_resume or kernel.ResumeThread(process.thread) != 1:
             raise NativeFailure('RESUME_ADMITTED_RUNNER')
-        kernel.CloseHandle(process.thread); process.thread = None
+        boundaries['runner_resume_after_ns']=str(time.perf_counter_ns())
+        if not kernel.CloseHandle(process.thread):raise NativeFailure('CLOSE_RUNNER_THREAD')
+        process.thread = None
         while True:
             accounting = kernel.accounting(job)
             pids = kernel.query(job, 3, Pids())
@@ -202,6 +348,7 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
                 if not handle:
                     buffer.append('probe_errors',{'pid': pid, 'code': 'OPEN_PROCESS', 'winerror': ct.get_last_error()})
                     continue
+                probe_primary=None
                 try:
                     membership = w.BOOL()
                     if not kernel.IsProcessInJob(handle, job, ct.byref(membership)) or not membership.value:
@@ -216,13 +363,16 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
                     buffer.observe_lifetime(pid,creation)
                     rows.append({'pid': pid, 'rss_bytes': int(memory.working_set),
                         'creation_filetime_100ns_since_1601_utc':creation})
+                except BaseException as error:
+                    probe_primary=error;raise
                 finally:
-                    kernel.CloseHandle(handle)
+                    kernel.close_probe_handles([('rss_member',handle)],probe_primary)
             thread_counts = {}
             try:
                 thread_counts = kernel.threads_for_members(job, [row['pid'] for row in rows],
                     {row['pid']:row['creation_filetime_100ns_since_1601_utc'] for row in rows})
             except NativeFailure as issue:
+                if issue.evidence is not None and 'probe_handle_close_failures' in issue.evidence:raise
                 buffer.append('probe_errors',{'code': issue.code, 'winerror': ct.get_last_error()})
             for row in rows:
                 row['native_threads'] = thread_counts.get(row['pid'])
@@ -231,20 +381,34 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
                 'elapsed_ns': time.perf_counter_ns() - started,
                 'active_processes': accounting['active_processes'], 'total_processes': accounting['total_processes'],
                 'rss_bytes': sum(row['rss_bytes'] for row in rows), 'processes': rows})
-            if process.process and kernel.WaitForSingleObject(process.process, 0) == 0:
+            if process.process and kernel.runner_wait(process.process) == 0:
+                boundaries['runner_exit_observed_ns']=str(time.perf_counter_ns())
+                closure['runner']['terminal_wait']=0
+                created=kernel.creation_identity(process.process)
+                closure['runner']['terminal_creation_filetime_100ns_since_1601_utc']=created
+                if created!=closure['runner']['creation_filetime_100ns_since_1601_utc']:
+                    raise NativeFailure('RUNNER_LIFETIME_RACE')
                 value = w.DWORD()
                 if not kernel.GetExitCodeProcess(process.process, ct.byref(value)):
                     raise NativeFailure('RUNNER_EXIT_CODE')
                 exit_code = int(value.value); exited = True
-                kernel.CloseHandle(process.process); process.process = None
-            if exited and accounting['active_processes'] == 0:
-                break
+                if not kernel.CloseHandle(process.process):raise NativeFailure('CLOSE_RUNNER_PROCESS')
+                process.process = None
+            if exited:
+                # A fresh query follows the actual positive runner wait. Earlier
+                # sampled active0 is never re-timestamped as a later observation.
+                after_runner=kernel.accounting(job)
+                if after_runner['active_processes']==0:
+                    closure['job_empty_accounting']=after_runner
+                    boundaries['job_empty_observed_ns']=str(time.perf_counter_ns())
+                    break
             if time.monotonic() >= deadline:
                 raise NativeFailure('OWNED_DEADLINE')
             time.sleep(interval_s)
         final = kernel.accounting(job)
         extended = kernel.query(job, 9, ExtendedLimits())
-        evidence.update(exit_code=exit_code, wall_ns=time.perf_counter_ns() - started,
+        boundaries['final_accounting_end_ns']=str(time.perf_counter_ns())
+        evidence.update(exit_code=exit_code,
             cpu_user_100ns=final['user'], cpu_kernel_100ns=final['kernel'],
             cpu_seconds=(final['user'] + final['kernel']) / 10000000,
             final_accounting=final, pids_observed=sorted(seen),
@@ -255,30 +419,26 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
             external_observer_cpu_ns=time.process_time_ns() - outer_cpu)
         if final['active_processes'] or final['terminated_by_limit']:
             raise NativeFailure('FINAL_MEMBERSHIP')
+        finished=time.perf_counter_ns()
+        boundaries['native_measurement_end_ns']=str(finished)
+        evidence['wall_ns']=finished-started
         return evidence
-    except NativeFailure as error:
-        evidence['failure'] = error.code
+    except BaseException as error:
+        primary=error
+        evidence['failure']=error.code if isinstance(error,NativeFailure) else 'UNEXPECTED_NATIVE_CONTROL'
+        evidence['primary_failure_identity']={'error_type':type(error).__module__+'.'+type(error).__qualname__,
+            'code':error.code if isinstance(error,NativeFailure) else None}
         evidence['runner_exited_before_failure'] = exited
         evidence['runner_exit_code_before_failure'] = exit_code
         evidence['assigned_to_owned_job'] = assigned
-        raise NativeFailure(error.code, evidence) from None
+        if isinstance(error,NativeFailure):
+            if error.evidence is not None and error.evidence is not evidence:evidence['primary_failure_detail']=error.evidence
+            error.evidence=evidence
+        raise
     finally:
-        # Only this created runner/job is ever terminated. No PID-based deletion.
-        if process.process and not assigned:
-            evidence['cleanup_runner_termination_issued'] = bool(kernel.TerminateProcess(process.process, 1))
-            evidence['cleanup_runner_reaped'] = kernel.WaitForSingleObject(process.process, 5000) == 0
-            if not evidence['cleanup_runner_reaped']:
-                evidence['cleanup_failed'] = True
-        if assigned:
-            remaining = kernel.accounting(job)
-            if remaining['active_processes']:
-                evidence['cleanup_job_termination_issued'] = bool(kernel.TerminateJobObject(job, 1))
-                stop = time.monotonic() + 5
-                while kernel.accounting(job)['active_processes'] and time.monotonic() < stop:
-                    time.sleep(0.01)
-                evidence['cleanup_accounting'] = kernel.accounting(job)
-                if evidence['cleanup_accounting']['active_processes']:
-                    evidence['cleanup_failed'] = True
-        if process.thread: kernel.CloseHandle(process.thread)
-        if process.process: kernel.CloseHandle(process.process)
-        kernel.CloseHandle(job)
+        failures=cleanup_owned(kernel,process,job,assigned=assigned,evidence=evidence)
+        if failures:
+            if primary is not None:primary.add_note('Independent owned cleanup failures are retained in native evidence')
+            else:
+                evidence['failure']='OWNED_CLEANUP_FAILED'
+                raise NativeFailure('OWNED_CLEANUP_FAILED',evidence)

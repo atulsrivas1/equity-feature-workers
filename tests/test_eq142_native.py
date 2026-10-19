@@ -70,7 +70,8 @@ class NativeThreadControls(unittest.TestCase):
         def next(handle,pointer):
             ct.set_last_error(5 if fault=='next' else 18);return False
         kernel.Process32NextW=next
-        kernel.CloseHandle=lambda handle:closed.append(handle)
+        def close(handle):closed.append(handle);return True
+        kernel.CloseHandle=close
         return kernel,closed
 
     def test_snapshot_errors_membership_races_and_handle_cleanup(self):
