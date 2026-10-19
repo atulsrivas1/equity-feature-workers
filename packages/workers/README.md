@@ -1,6 +1,6 @@
 # Supplied-input worker development — experimental0.1.0a14
 
-Explicit supplied intraday0.1.0a3 extra and core structure/top-K/continuous/prior-close callbacks are implemented under [EQ140](https://github.com/atulsrivas1/equity-features/issues/474). [API, identities, independent readiness and receipt limits](../../docs/api/SUPPLIED_INPUTS.md) and [synthetic example](../../examples/supplied_intraday.py). Source checks are distinct from unfinished final review/measurement/installed/release qualification. Root imports/default CLI remain compatible; no new live/state/stable-registry claim.
+Explicit supplied intraday0.1.0a3 extra and core structure/top-K/continuous/prior-close callbacks are implemented under [EQ140](https://github.com/atulsrivas1/equity-features/issues/474). [API, identities, independent readiness and receipt limits](../../docs/api/SUPPLIED_INPUTS.md) and [synthetic example](../../examples/supplied_intraday.py). Follow the canonical issue for current source, measurement, installed and release qualification; each receipt binds its own source and channel. Root imports/default CLI remain compatible; no new live/state/stable-registry claim.
 
 ## Prior accepted acquisition surface
 

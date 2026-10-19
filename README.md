@@ -1,3 +1,7 @@
+## EQ140 supplied-input qualification
+
+Experimental workers0.1.0a14 supplies the eight intraday outputs and explicit structure/top-K/continuous/prior-close callbacks. [API](docs/api/SUPPLIED_INPUTS.md), [example](examples/supplied_intraday.py) and [current acceptance](https://github.com/atulsrivas1/equity-features/issues/474) describe the source-independent boundary and supported inputs. The completed [486-Job study](docs/benchmarks/eq140/EQ140_RESULTS.md) has48 nonwinning alternatives under its frozen wall/resource/tail gates; sequential remains default/fallback. Final source/package/main delivery acceptance is pending. Earlier snapshots below keep their historical scopes.
+
 ## Experimental local agent research evidence
 
 R11 combines immutable declared event evidence, a caller-owned SQLite ledger, owner-prepared evidence tools on the existing local MCP server, and synthetic external research with explicit supported replay. [Supported surface, evidence and limits](https://github.com/atulsrivas1/equity-features/blob/main/docs/R11_ACCEPTANCE.md); [aggregate delivery authority](https://github.com/atulsrivas1/equity-features/issues/210). Child-story acceptance and current release status are linked there. No model framework, trading execution, authenticated source history, hosted deployment or compliance certification is implied.

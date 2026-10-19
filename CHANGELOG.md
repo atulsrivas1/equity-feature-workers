@@ -1,5 +1,7 @@
 ## EQ140 development — unreleased workers0.1.0a14
 
+Completed frozen be4 supplied-worker study and separate audit:486Jobs,6A/48B,108warmups/378retained, full expected digest/parity/resource checks. All48 alternatives fail frozen adoption gates; sequential remains default/fallback. [Full comparison, raw proof and limitations](docs/benchmarks/eq140/EQ140_RESULTS.md). Current ff32CI and bothOS four-form58-method hosted reports passed their scope; final successor/source/artifact/publication acceptance remains pending. Packaged README now uses durable evidence routing instead of a time-sensitive pending-measurement claim; renewed metadata/archive/installed review is required.
+
 Supplied optional intraday and explicit structure/top-K/continuous/prior-close callbacks retain exact full producer results and causal identities. Discovery/history helpers use existing contracts, closed errors and actual missing/empty semantics. Optional intraday extra pins0.1.0a3; base imports/default acquisition do not gain an optional dependency. PublicationLimits optionally reserves escaped receipt bytes before queue/I/O and checks actual committed receipts on fresh/lookup/replay paths; resource failure retains pending lookup state without claiming rollback. [API and limits](docs/api/SUPPLIED_INPUTS.md). Source tests/typing are preparation for unfinished final review/benchmark/installed/bothOS/release acceptance; no new speed claim.
 
 ## EQ108 unreleased source candidate

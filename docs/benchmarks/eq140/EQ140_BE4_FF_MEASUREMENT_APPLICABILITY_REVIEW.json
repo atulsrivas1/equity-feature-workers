@@ -1,0 +1,52 @@
+{
+  "reviewer": "Authorized separate local automated reviewer /root/r17_review",
+  "utc": "2026-10-19T17:40:56.791088+00:00",
+  "result": "MEASURED_COMPONENT_APPLICABILITY_PASS",
+  "measured_head": "be4d6667e9b46981cf430c86888b52c7812b0424",
+  "delivery_head": "ff23276eceb22a34069c9fc1699fcc492649c975",
+  "measurement_receipt_sha256": "dd6a5e66b2d81642f8bc35dbae81a1b8891c78f8845c68b4f9a5ad3d99ee38e4",
+  "independent_extra_budget_row_checks": {
+    "samples": 486,
+    "frozen_profile_tasks": 33,
+    "rows_ledger_exact": true,
+    "resident_input_total_result_caps": true,
+    "per_task_sdk_output_receipt_caps": true,
+    "diagnostic_status_reason_exact": true
+  },
+  "complete_git_leaf_comparison": {
+    "leaves": 477,
+    "exact_unchanged_leaves": 473,
+    "changed": {
+      "docs/PROJECT_KNOWLEDGE.md": {
+        "before": "100644 blob cdbe5ae7f0b306b0770b4921a6aacaa2bf5b24bf",
+        "after": "100644 blob 62a1c2ac7080eb08cef90d500de368a33a714632"
+      },
+      "docs/SESSION_HANDOFF.md": {
+        "before": "100644 blob 416eb4d33418cfcdf43d9594ab22ad37a40f19b8",
+        "after": "100644 blob 77c01bf5493e12794655e580e77093ab9c9d3595"
+      },
+      "tests/acquisition_probe.py": {
+        "before": "100644 blob cf3eef1da8d191daf7056e0d686d795d0e7f3a7b",
+        "after": "100644 blob 7cbe28cf3ab25fbb823ccadb229fc07a04769ad3"
+      },
+      "tests/probe_foundation.py": {
+        "before": "100644 blob b00e2c5b26af566f181abddee0df2baa7f18cf45",
+        "after": "100644 blob 02969c0d7722f32387191c37da549d50a7cbc622"
+      }
+    }
+  },
+  "measured_execution_source_hashes": {
+    "tools/benchmark_supplied_inputs.py": "8afbb0fd8696d296f72f5e7616cac6fb76c623cf3e6ee84fb63b3e2aaeee143e",
+    "tools/supplied_native.py": "b7efa025f670a7b73be72a5a9d297a620cb886f4c8bec1f3d0dc9fe90ad40fcb",
+    "tools/build_supplied_inputs.py": "48ebd6d72334216d6a556858af7b36adf1b9ae240cbcd4e1a8f1d6778b019994",
+    "tests/test_supplied_native.py": "3ec7a853c2ca2a513679346c17b01c7b8b7ef09791b732dcb5456c44bd8a0daa",
+    "tests/supplied_native_child.py": "ca95cd43d65539b307f63422a73d5b25809499efbd5982674e33ad95407229b8",
+    "tests/supplied_memory.py": "9c9b62426cfeefd79e8b95e95c299e122c18b8ff9587fe10196f183ee22ab876",
+    "tests/supplied_memory_delegate.py": "9e31bcae77801b70d919ec8913ca89b38f6d8879967ff5b8d4fb28db7b99c3bc"
+  },
+  "interpretation": "All production packages, native accounting, measured benchmark harness, executed fixture/delegate/nativecontrol bytes unchanged be4toff. Only two installed qualification probes and two continuitydocs changed. Measurement evidence applies to exact unchanged execution components, not a fabricated ff wholehead timing rerun.",
+  "limitations": [
+    "StaticGitblob applicability and retained-data budgetchecks only; no new workerbenchmark execution or installed/currentCI/artifact/release acceptance.",
+    "Runtime remains bound to actualbe4admission before/after maps; no broader host or codeobjectattestation."
+  ]
+}
