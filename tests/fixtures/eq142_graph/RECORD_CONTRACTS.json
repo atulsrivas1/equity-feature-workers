@@ -850,5 +850,31 @@
     "failure": "Proof-store/codec/parity/trace/source failure leaves the bounded actual supervisor summary if already written. Never claim full product retention when codec proofs are absent. Pre-return original exceptions remain exceptions; no successful outcome is invented. Spill is outside the study and rejects qualification after its reference metadata is retained.",
     "wire": "Development-only supervisor.json <=65536 bytes via existing exclusive bounded writer. Codec eq142_supervisor_outcome is not accepted by the closed root wire_reference enum; future root embedding needs explicit schema validation and joins.",
     "math_and_defaults": "No equation, input readiness, package, default, cancellation/publication or resource-budget behavior changes. This is external evidence tooling only."
+  },
+  "native_process_witness": {
+    "purpose": "Development-only positive current-process membership in the exact owned named Windows Job, joined to OS process creation identity and the actual trace startup nonce. Standalone qualification first; no complete resource/sample or all-descendant proof.",
+    "sources": [
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency"
+    ],
+    "fields": {
+      "schema": "constant eq142-owned-process-witness:1",
+      "job_name": "exact Local\\equity-feature-supplied- followed by32 lowercase hex; must equal external owned Job receipt name",
+      "pid": "positive actual GetProcessId(GetCurrentProcess()) integer, matches actual trace PID",
+      "process_startup_nonce": "actual existing trace process nonce32 lowercase hex",
+      "creation_filetime_100ns_since_1601_utc": "positive canonical unsigned64 decimal string from actual GetProcessTimes creation FILETIME; not a monotonic timestamp or execution duration",
+      "is_member": "constant true from successful IsProcessInJob(current_process, exact_named_job)",
+      "capture_start_ns": "local monotonic int64 decimal string before API capture",
+      "capture_end_ns": "local monotonic int64 decimal string >=start",
+      "clock": "existing actual local perf_counter clock fields, direct positive QueryPerformanceFrequency Hz <=2^53-1; cross_process_raw_ticks_qualified remains false"
+    },
+    "capture": "Windows only. Bind typed HANDLE/BOOL/DWORD/FILETIME/int64 ABI; query named Job with JOB_OBJECT_QUERY, positive current-process membership, actual creation FILETIME and QPC frequency. Close owned opened Job handle on every exit; never close pseudo current-process handle. API error, nonmembership, unknown/zero creation/frequency or unsupported platform rejects; never fabricate successful zero fields.",
+    "join": "At most17 invocation/parent witnesses. Validate exact job, nonce/PID/clock match to every actual traced process; duplicates for the same nonce must agree on OS creation/clock identity. Reject one OS PID+creation pair mapped to different startup nonces; permit reused PID only with different creation and nonce. Do not infer sampled RSS/thread membership, observed creation in sampler, all OS descendant coverage or accepted whole-job closure from this alone.",
+    "bounds": "Each standalone witness <=4096 encoded bytes via existing bounded writer; prospective17*4096=69632 bytes per sample fits existing1GiB other-input/metadata study allowance (<=90243072 bytes for1296 jobs). It does not enlarge64MiB trace,1MiB runner or16MiB native caps or claim physical enforcement. Future actual plan/spec proof-field bytes must be included in logical B admission before integration.",
+    "timing": "FILETIME creation is OS lifetime identity only. QPC frequency is clock metadata, not CPU speed or empirical resolution. Local capture bounds are never subtracted from another process or FILETIME; no global critical-path/alignment claim. Future B capture/integration/serialization cost stays in selected phase; no official timing enabled here.",
+    "wire": "Development-only schema/codec eq142_owned_process_witness; no addition to accepted closed root wire_reference enum before explicit complete root integration/validation.",
+    "clock_join": "All existing trace clock fields must match exactly except qpc_frequency_hz: original null is permitted as not queried, independently positive witness QPF enriches it; a non-null trace value must equal the direct witness value. Never derive QPF from reported resolution or claim raw tick alignment. Reject drift in either direction nonce->(PID,creation,clock) or (PID,creation)->nonce; duplicate captures may differ only in their local capture interval.",
+    "review": "Prospective separate review fa8ecbd9c408df146fec9b90880354a3e0277b750b00a1bc7903c8a5a89cff83; explicit nullable-QPF compatibility and bidirectional lifetime identity selected before implementation. Not code/platform/root acceptance."
   }
 }
