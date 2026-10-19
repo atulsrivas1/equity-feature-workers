@@ -115,6 +115,12 @@ def rebuild_inputs(directory, files, prefix, module):
     expected = dict(files); manifest = prefix+'src/'+module+'.egg-info/SOURCES.txt'
     names = set(files[manifest].decode().splitlines()) | {'setup.cfg'}
     expected[manifest] = '\n'.join(sorted(names, key=lambda n: (str(PurePosixPath(n).parent), PurePosixPath(n).name))).encode()
+    # Wheel construction copies the selected package into build/lib. Close that
+    # generated namespace against exact selected bytes instead of treating the
+    # legitimate copies as changed source or ignoring arbitrary generated files.
+    expected.update({prefix+'build/lib/'+n.removeprefix(prefix+'src/'): body
+        for n, body in files.items() if n.startswith(prefix+'src/'+module+'/')})
+    assert not any(p.is_symlink() for p in directory.rglob('*'))
     actual = {prefix+p.relative_to(directory).as_posix(): p.read_bytes() for p in directory.rglob('*') if p.is_file()}
     assert actual == expected, 'selected SDist input drift'
     return {n: {'sha256': sha(b), 'bytes': len(b)} for n, b in expected.items()}
