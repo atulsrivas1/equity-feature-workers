@@ -1,3 +1,19 @@
+## EQ142 bounded evidence retention increment
+
+The separate bounded a170/18c review passed25 development methods,8 additional multi-task thread/spawn controls and27 official CPython source checks with no actionable finding; receipt `90e96484a3141fbc162a99602e39c85fee635c87dc5dbfc768e4c6398a3f3769`. That receipt excludes the successor evidence/native changes below.
+
+Current32 development methods pass:9 graph,7 trace,7 Windows native,1 actual three-mode delegate,2 independent workload and6 evidence methods. New development proof storage retains exact original task/result/output/receipt codec bodies, raw diagnostics and the original seven-field stable projection. Real serialized-sink commit/lookup/readback checks cover unavailable ATR alongside available independent families. Post-outcome lookup/read/encoding/shape failures preserve the original committed receipt/reason and report verification failure; absent output after failure stays commit-unknown. Proof-store I/O or capacity errors remain evidence failures. No inferred rollback or original exception-class reconstruction.
+
+Separate working-source review identified reader bounds applied after allocation/aggregate admission, and malformed readback encoding escaping verification handling. Corrections use hard limit+1 reads, incremental object/byte reopen admission, whole reservation-sum admission before any sidecar read, incremental counter bounds and verification-only error handling. Regressions include corrupt bodies, oversubscribed reservations without reads, malformed readback and storage failure. Exact successor separate review remains required; findings are not closed by author tests alone.
+
+The prospective retention contract now reserves72GiB study capacity plus8GiB host headroom before any timing, replacing the earlier48GiB trace/summary-only estimate. Worst-case raw traces40.5GiB, native receipts20.25GiB, summaries plus diagnostics2.53125GiB, shared full-body product proofs256MiB and other frozen inputs/metadata1GiB leave7.46875GiB study headroom. Native sample/error rows have a15MiB encoded cap inside16MiB receipts,60001 samples,1024 errors and256 lifetime observed PIDs. Actual forced-bound failure preserves rejection evidence and reaps its owned runner. These are encoded evidence/capacity bounds, not physical heap or RSS enforcement. No benchmark, noise, CPU/RSS or performance threshold changed.
+
+Retained-fragment/native-reference representations avoid duplicating raw arrays into the1MiB sample summary. Complete referenced bodies/counts/IDs/bytes must be validated, with actual source/product/native/causal/resource joins in the still-unfinished full harness. Workload tolerance explicitly records the unchanged original preflight rel2e-15/abs1e-12; tiny fixtures retain their distinct rel2e-15/abs0/null/zero rules. Original calculation packages, package versions/default dispatcher and supplied_native helper are unchanged.
+
+Next: implement and qualify the full owned sample envelope/harness, bind actual applicable contract/tool/runtime sources and B planning/serialization cost, observed causal/barrier/ownership joins and actual preflight; renew installed four-form/bothOS/artifact/currentCI and exact source review before any A/A timing. EQ142 remains In progress; EQ143–146 Backlog. No official timing, performance adoption, final R18 acceptance or release.
+
+## Earlier checkpoints retained as history
+
 ## EQ142 delegate/workload/platform-qualification increment
 
 Separate TRACE01 correction review passed7 focused methods and14 independent parser controls at worker86664a0/canonicald9aea71, receipt `cfa3ba587047759888661d295601b7fa39e78438a7f775f92708bcfdee519785`. It closes TRACE01 only; original component/Ready evidence retains its exact source and scope.

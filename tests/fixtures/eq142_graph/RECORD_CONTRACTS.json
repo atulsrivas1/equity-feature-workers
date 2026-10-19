@@ -27,7 +27,15 @@
     "trace_files_including_temporaries": 64,
     "future_and_task_maps": 16,
     "sample_summary_bytes": 1048576,
-    "error_type_characters": 128
+    "error_type_characters": 128,
+    "native_receipt_bytes": 16777216,
+    "native_rows_bytes": 15728640,
+    "native_samples": 60001,
+    "native_probe_errors": 1024,
+    "native_lifetime_processes": 256,
+    "product_store_bytes": 268435456,
+    "product_store_objects": 512,
+    "product_body_bytes": 1048576
   },
   "graph": {
     "schema_value": "eq142-output-graph:1",
@@ -265,7 +273,7 @@
       "clocks": "array<clock>, actual processes only",
       "timelines": "array<timeline>, unique stable process/thread identity",
       "reservations": "array<reservation>, preallocated parent/delegate invocation identities",
-      "spans": "array<span>, bounded and sample-unique IDs",
+      "spans": "retained_fragment_set; validate every referenced exact body and recompute all local/global ID/count/byte joins; do not duplicate up to64MiB into1MiB summary",
       "counters": "array<counter>, sorted operation/scope",
       "parent_relations": "array<causal_relation>, actual dispatch/wait/result/join only",
       "actual_job_boundaries": "job record; if retained separately use wire_reference codec eq142_job and validate referenced body",
@@ -556,18 +564,19 @@
       "allowed_cpu_domain": "exact OS affinity/group domain identifier, not physical core identity",
       "free_memory_bytes": "bounded_count",
       "free_storage_bytes": "bounded_count",
-      "study_storage_reserve_bytes": "constant integer 51539607552",
+      "study_storage_reserve_bytes": "constant integer 77309411328",
       "additional_storage_reserve_bytes": "constant integer 8589934592",
       "raw_evidence": "wire_reference"
     }
   },
   "wire_reference": {
     "fields": {
-      "codec": "encode_task | encode_result | encode_output | encode_receipt | diagnostic_snapshot | spill_reference | native_receipt | capacity_receipt | eq142_job | eq142_product_projection",
+      "codec": "encode_task | encode_result | encode_output | encode_receipt | diagnostic_snapshot | spill_reference | native_receipt | capacity_receipt | eq142_job | eq142_product_projection | eq142_local_fragment",
       "sha256": "sha256 of exact retained original encoded bytes",
       "bytes": "bounded_count",
-      "retained_name": "sample-local ASCII basename matching [a-zA-Z0-9_.-]{1,128}; no paths"
-    }
+      "retained_name": "ASCII basename matching [a-zA-Z0-9_.-]{1,128}; no paths. Product codecs resolve only in the fixed study-owned product-object directory; other codecs resolve only in the fixed sample directory. Codec determines scope; no caller-selected root or path. Product names are exactly sha256.json."
+    },
+    "validation": "Retain and validate exact complete codec body, byte length and SHA, not just a producer hash. Content-addressed proof deduplication is not runtime calculation reuse or a physical-copy/IPC measurement. Existing body mutation, unexpected members, symlinks and bound overflow reject; never overwrite."
   },
   "diagnostic_projection": {
     "fields": {
@@ -667,7 +676,7 @@
       "selected_user_ticks_100ns": "canonical nonnegative decimal string; whole final Job for e2e or after-before for admitted control",
       "selected_kernel_ticks_100ns": "canonical nonnegative decimal string; same scope as selected_user_ticks",
       "selected_wall_ns": "nanoseconds from declared protocol class boundaries",
-      "samples": "bounded array<native_sample>, maximum 60001 at 10ms over600s plus endpoints",
+      "samples": "native_samples_reference; original exact native receipt retains bounded array, summary never duplicates receipt samples",
       "aggregate_sampled_peak_rss_bytes": "bounded_count; maximum simultaneous aggregate samples, not sum of per-process maxima",
       "aggregate_sampled_peak_native_threads": "nullable bounded_count; maximum sampled total, not physical cores",
       "probe_errors": "bounded array<probe_error>, maximum1024; any error rejects qualification",
@@ -741,5 +750,36 @@
       "native_thread_id": "positive actual native thread ID, never bool"
     },
     "join": "Every local span references exactly one retained binding; ordinals/nonces stay stable across reused invocations; full sample preserves identity and validates owned-process witnesses. Native thread IDs can recycle; nonce+actual lifetime remains distinct."
+  },
+  "retained_fragment_set": {
+    "fields": {
+      "representation": "constant retained_fragments",
+      "fragments": "array<fragment_reference>, maximum17; actual parent plus planned delegate invocations, never fabricated missing outcomes",
+      "total_span_count": "bounded_count <=131072; exact sum and sample-unique event IDs",
+      "processes": "map keyed by actual32hex startup nonce; values closed {pid,clock}, exact local fragment bindings",
+      "timelines": "map keyed by actual timeline ID; values closed {process_startup_nonce,id,thread_ordinal,thread_startup_nonce,native_thread_id}",
+      "counters": "array<counter>, maximum2048; exact sum of independently validated local counters",
+      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping",
+      "global_numeric_critical_path_ns": "constant null",
+      "native_ipc_encoded_bytes": "constant null"
+    },
+    "validation": "No duplicate invocation/file/span IDs; exact expected reservation list, actual file byte/hash/body validation, same process nonce/PID/clock identity and stable timeline joins. This retained representation does not establish complete sample, observed barriers, native ownership or product acceptance."
+  },
+  "fragment_reference": {
+    "fields": {
+      "reservation_id": "existing preallocated unique invocation ID",
+      "codec": "constant eq142_local_fragment",
+      "sha256": "sha256 of retained exact sidecar bytes",
+      "bytes": "bounded_count <=reservation.max_bytes",
+      "retained_name": "sample-local basename; no paths",
+      "span_count": "bounded_count <=reservation.max_spans; exact referenced body length"
+    }
+  },
+  "native_samples_reference": {
+    "fields": {
+      "representation": "constant retained_native_receipt",
+      "sample_count": "bounded_count <=60001; exact native_receipt.samples length"
+    },
+    "validation": "Resolve enclosing resource_evidence.native_receipt, validate its full body <=16MiB and recompute sampled aggregates. Its sample+probe-error rows reserve<=15MiB actual compact ASCII JSON bytes including array delimiters/separators; <=1024 probe errors and <=256 distinct lifetime observed PIDs. Bound failure retains accepted rows/rejected-row size and owned cleanup evidence, rejects qualification. Native records remain external-observer data; no physical heap guarantee."
   }
 }

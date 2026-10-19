@@ -18,7 +18,8 @@ def main():
     for item in skipped:
         identity = item['test']
         assert (not combined and identity.startswith(('test_supplied_intraday.',
-            'test_eq142_graph.','test_eq142_trace.','test_eq142_delegate.','test_eq142_workloads.'))) or (
+            'test_eq142_graph.','test_eq142_trace.','test_eq142_delegate.','test_eq142_workloads.',
+            'test_eq142_evidence.OriginalProductWitnesses.'))) or (
             os.name != 'nt' and identity.startswith(('test_supplied_native.','test_eq142_native.'))), ('unexpected skip', item)
         allowed.append(identity)
     assert any(name.startswith('test_supplied_intraday.') for name in allowed) == (not combined)

@@ -7,6 +7,8 @@ Sources: Microsoft PROCESSENTRY32W/CreateToolhelp32Snapshot/Process32FirstW docs
 from __future__ import annotations
 import ctypes as ct
 from ctypes import wintypes as w
+import json
+import math
 import os
 from pathlib import Path
 import subprocess
@@ -14,6 +16,31 @@ import time
 import uuid
 from supplied_native import (Kernel as BaseKernel, NativeFailure, ExtendedLimits,
     Startup, Process, Pids, Memory)
+
+NATIVE_RECEIPT_MAX_BYTES=16777216
+NATIVE_ROWS_MAX_BYTES=15728640
+
+
+class NativeEvidenceBuffer:
+    """Bound encoded retained rows, not physical Python heap or sample peaks.
+
+    The external observer has a separate host reserve. A rejected row makes the
+    receipt incomplete; it never silently replaces or drops an accepted row.
+    """
+    def __init__(self,evidence):
+        self.evidence=evidence;self.encoded_bytes=4
+        evidence['evidence_bounds']={'receipt_max_bytes':NATIVE_RECEIPT_MAX_BYTES,
+            'rows_max_bytes':NATIVE_ROWS_MAX_BYTES,'max_samples':60001,'max_probe_errors':1024,
+            'physical_memory_enforced':False}
+
+    def append(self,kind,row):
+        maximum={'samples':60001,'probe_errors':1024}[kind]
+        size=len(json.dumps(row,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode())+1
+        if len(self.evidence[kind])>=maximum or self.encoded_bytes+size>NATIVE_ROWS_MAX_BYTES:
+            self.evidence['rejected_evidence']={'kind':kind,'row_bytes':size,
+                'retained_rows_encoded_bytes':self.encoded_bytes,'retained_count':len(self.evidence[kind])}
+            raise NativeFailure('NATIVE_EVIDENCE_LIMIT')
+        self.evidence[kind].append(row);self.encoded_bytes+=size
 
 
 class ProcessEntry(ct.Structure):
@@ -87,7 +114,8 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
     Fault switches are qualification controls only. Child report paths belong to
     the caller. Returned evidence contains no argv/full local source paths.
     """
-    if type(timeout_s) not in (int, float) or not 0 < timeout_s <= 600 or not 0 < interval_s <= 0.1:
+    if (type(timeout_s) not in (int, float) or not math.isfinite(timeout_s) or not 0 < timeout_s <= 600
+            or type(interval_s) not in (int,float) or not math.isfinite(interval_s) or not 0 < interval_s <= 0.1):
         raise NativeFailure('INVALID_LIMITS')
     kernel = Kernel(); name = 'Local\\equity-feature-supplied-' + uuid.uuid4().hex
     ct.set_last_error(0)
@@ -102,6 +130,7 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
         'containment': 'owned job; kill on close; no breakaway', 'hard_memory_limit': False,
         'rss_limits': 'sampled simultaneous working sets; transient peaks/short-lived members may be missed',
         'cpu_limits': 'whole Job user/kernel100ns counters including terminated descendants; observed accounting is quantized, including possible zero observer/short-phase CPU; nominal units are not empirical resolution'}
+    buffer=NativeEvidenceBuffer(evidence)
     outer_cpu = time.process_time_ns(); started = time.perf_counter_ns(); deadline = time.monotonic() + timeout_s
     try:
         limits = ExtendedLimits(); limits.basic.flags = 0x2000
@@ -133,19 +162,21 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
                 raise NativeFailure('PROCESS_INVENTORY_LIMIT')
             rows = []
             for raw in pids.pids[:pids.count]:
-                pid = int(raw); seen.add(pid)
+                pid = int(raw)
+                if pid not in seen and len(seen)>=256:raise NativeFailure('PROCESS_INVENTORY_LIMIT')
+                seen.add(pid)
                 handle = kernel.OpenProcess(0x0410, False, pid)
                 if not handle:
-                    evidence['probe_errors'].append({'pid': pid, 'code': 'OPEN_PROCESS', 'winerror': ct.get_last_error()})
+                    buffer.append('probe_errors',{'pid': pid, 'code': 'OPEN_PROCESS', 'winerror': ct.get_last_error()})
                     continue
                 try:
                     membership = w.BOOL()
                     if not kernel.IsProcessInJob(handle, job, ct.byref(membership)) or not membership.value:
-                        evidence['probe_errors'].append({'pid': pid, 'code': 'MEMBERSHIP_RACE'})
+                        buffer.append('probe_errors',{'pid': pid, 'code': 'MEMBERSHIP_RACE'})
                         continue
                     memory = Memory(); memory.cb = ct.sizeof(memory)
                     if not kernel.memory(handle, ct.byref(memory), memory.cb):
-                        evidence['probe_errors'].append({'pid': pid, 'code': 'RSS_PROBE', 'winerror': ct.get_last_error()})
+                        buffer.append('probe_errors',{'pid': pid, 'code': 'RSS_PROBE', 'winerror': ct.get_last_error()})
                         continue
                     rows.append({'pid': pid, 'rss_bytes': int(memory.working_set)})
                 finally:
@@ -154,11 +185,11 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
             try:
                 thread_counts = kernel.threads_for_members(job, [row['pid'] for row in rows])
             except NativeFailure as issue:
-                evidence['probe_errors'].append({'code': issue.code, 'winerror': ct.get_last_error()})
+                buffer.append('probe_errors',{'code': issue.code, 'winerror': ct.get_last_error()})
             for row in rows:
                 row['native_threads'] = thread_counts.get(row['pid'])
                 row['thread_disposition'] = kernel.last_thread_dispositions.get(row['pid'])
-            evidence['samples'].append({'native_thread_count': sum(thread_counts.values()) if len(thread_counts) == len(rows) else None,
+            buffer.append('samples',{'native_thread_count': sum(thread_counts.values()) if len(thread_counts) == len(rows) else None,
                 'elapsed_ns': time.perf_counter_ns() - started,
                 'active_processes': accounting['active_processes'], 'total_processes': accounting['total_processes'],
                 'rss_bytes': sum(row['rss_bytes'] for row in rows), 'processes': rows})

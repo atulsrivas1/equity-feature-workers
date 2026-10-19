@@ -265,7 +265,7 @@
     "logical_max_resident_bytes_both_controls": 1006632960,
     "trace_reserved_bytes_both_controls": 67108864,
     "required_additional_free_host_memory_bytes": 2147483648,
-    "declared_study_storage_reservation_bytes": 51539607552,
+    "declared_study_storage_reservation_bytes": 77309411328,
     "required_additional_free_storage_bytes": 8589934592,
     "max_tasks": 16,
     "max_in_flight": "degree",
@@ -316,7 +316,8 @@
       "same scheduler twice",
       "full SDK hash alone",
       "trace generated call counts used as the only expected trace counts"
-    ]
+    ],
+    "workload_tolerance": "Independent original expanded-weight/centered Decimal350 workload values use math.isclose(rel_tol=2e-15,abs_tol=1e-12), as actual original preflight; exact null/status/count/reason/header/evidence and A/B codec-byte parity. Portable tiny canonical fixtures retain rel2e-15/abs0 and exactzero/null separately."
   },
   "precode_vs_measured_bytes": "Current42-task/72-cohort pre-code preflight binds its actual generated specimens and source-derived resource arithmetic. It is not a portable pickle-from-value-JSON promise or72 supervisor/native executions. The implemented exact source/harness must renew actual input/task/result/receipt/transport and source/native admission before timing and freeze the resulting expected identities; retain all source/identity failures without relabeling them as fresh measurements.",
   "pre_timing_gates": [
@@ -340,5 +341,18 @@
     "physical durability",
     "R18 release acceptance"
   ],
-  "pre_timing_native_correction": "Initial development21-method run failed1 with actual MISSING_OWNED_PID/WinError18 during process retirement. Console/source hashes retained; temporary full native report was not retained and is not reconstructed. Positive signaled-handle terminal proof now distinguishes retired zero from unknown/live missing measurements. Successor21 development methods pass, not frozen study/pre-timing final acceptance. No timing/control retries or performance/noise/CPU/RSS threshold changes."
+  "pre_timing_native_correction": "Initial development21-method run failed1 with actual MISSING_OWNED_PID/WinError18 during process retirement. Console/source hashes retained; temporary full native report was not retained and is not reconstructed. Positive signaled-handle terminal proof now distinguishes retired zero from unknown/live missing measurements. Successor21 development methods pass, not frozen study/pre-timing final acceptance. No timing/control retries or performance/noise/CPU/RSS threshold changes.",
+  "retention_budget": {
+    "prospective_before_any_timing": true,
+    "study_bytes": 77309411328,
+    "additional_host_bytes": 8589934592,
+    "trace_bytes_max": 43486543872,
+    "native_receipt_bytes_max": 21743271936,
+    "summary_bytes_max": 1358954496,
+    "raw_diagnostics_bytes_max": 1358954496,
+    "shared_product_object_bytes_max": 268435456,
+    "other_frozen_inputs_and_metadata_bytes_max": 1073741824,
+    "remaining_study_headroom_bytes": 8019509248,
+    "rule": "Declare72GiB study plus8GiB host capacity before timing; refresh actual remaining worst-case capacity each cohort and enforce owned-directory encoded byte/member bounds. No preallocation/physical guarantee, automatic retries or deletion of failed raw evidence. Retained fragment/native references avoid duplicating raw arrays in summaries. Stop and retain failure on overflow; final compressed-channel fit remains a release gate."
+  }
 }
