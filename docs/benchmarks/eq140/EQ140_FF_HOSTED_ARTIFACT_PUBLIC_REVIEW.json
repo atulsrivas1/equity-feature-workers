@@ -1,0 +1,258 @@
+{
+  "schema": "eq140-public-review-derivative:1",
+  "reviewer": "Separate authorized local automated Codex reviewer r17_review; not independent human or hosted review",
+  "document_kind": "Reviewer-authored public derivative of private exact receipt; not byte-identical and not a new validation execution",
+  "created_at_utc": "2026-10-19T17:45:10.284265+00:00",
+  "original_receipt": {
+    "name": "EQ140_FF_HOSTED_ARTIFACT_REVIEW.json",
+    "sha256": "e678455b9cb29b2c3d181a80cd6ed8c5a9c1bf91a9a04641440509114faa0bf6",
+    "privacy": "Original receipt retained privately; this public derivative intentionally omits absolute local paths."
+  },
+  "result": "HOSTED_COMPONENT_ARTIFACT_PASS",
+  "reviewed_source": {
+    "worker": {
+      "commit": "ff23276eceb22a34069c9fc1699fcc492649c975",
+      "url": "https://github.com/atulsrivas1/equity-feature-workers/commit/ff23276eceb22a34069c9fc1699fcc492649c975"
+    },
+    "core": {
+      "commit": "b1f5445eb9799b73753e413669b94166997fc468",
+      "url": "https://github.com/atulsrivas1/equity-features/commit/b1f5445eb9799b73753e413669b94166997fc468"
+    },
+    "io": {
+      "commit": "18d86761aa3eebb7414e51e8fa2aba089717b5eb",
+      "url": "https://github.com/atulsrivas1/equity-feature-io/commit/18d86761aa3eebb7414e51e8fa2aba089717b5eb"
+    }
+  },
+  "run": {
+    "id": 39284477972,
+    "event": "push",
+    "conclusion": "success",
+    "url": "https://github.com/atulsrivas1/equity-feature-workers/actions/runs/39284477972",
+    "jobs": [
+      {
+        "id": 118166420776,
+        "name": "supplied-inputs (ubuntu-24.04)",
+        "conclusion": "success",
+        "started_at": "2026-10-19T16:19:02Z",
+        "completed_at": "2026-10-19T16:21:25Z"
+      },
+      {
+        "id": 118166421028,
+        "name": "supplied-inputs (windows-latest)",
+        "conclusion": "success",
+        "started_at": "2026-10-19T16:19:02Z",
+        "completed_at": "2026-10-19T16:22:38Z"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": 12203550804,
+      "name": "supplied-inputs-ff23276eceb22a34069c9fc1699fcc492649c975-windows-latest",
+      "zip_sha256": "62de36ac55b94ab651278615ecec482e6aed4d1a6efe5987af9f108a621cc785",
+      "server_digest": "sha256:62de36ac55b94ab651278615ecec482e6aed4d1a6efe5987af9f108a621cc785",
+      "expires_at": "2026-11-18T16:22:26Z",
+      "unexpired_and_downloadable_at_original_review": true,
+      "qualification_json_sha256": "bfcc51296eb0e3ffca6d928cb09e5056c9c8b2cacb08a7ed13d7a1851063d020",
+      "source_counts": {
+        "worker": {
+          "whole": 477,
+          "selected": 419
+        },
+        "core": {
+          "whole": 1284,
+          "selected": 64
+        },
+        "io": {
+          "whole": 227,
+          "selected": 17
+        }
+      },
+      "archive_sha256": {
+        "equity_features-0.0.4a4-py3-none-any.whl": "ce4f020e6b3f994714656e28d4d33bd617a5fb28bd5084ad74066e714c32de2d",
+        "equity_features-0.0.4a4.tar.gz": "08b7c1002099c877e25584a5ea6f6bdabcee81286dbc06a3fba9db53d7297ad7",
+        "equity_features_intraday-0.1.0a3-py3-none-any.whl": "d8f3ba2a4c64b9653312f1f7c828b0fd5aa6b639b18cbf2c598db46b01a53ece",
+        "equity_features_intraday-0.1.0a3.tar.gz": "5dcb76bb779b35cef4d7aa1af4fe032f11e019f6a0b51b5c33d2c097df06e94d",
+        "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "11b29b397f1225449fff8b074593a0b5e76a5f4eebf76434d195937fcd3e1151",
+        "equity_feature_contracts-0.0.4a4.tar.gz": "18e93f66044a760a97188ec7ba1f486cab6cbe960dfafe027c4db8bb3e53dcc7",
+        "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "d0027f97200149bcb05f7e8cf8a969a12e66cda6cc23ee5425fdaa175fdc7549",
+        "equity_feature_io_contracts-0.1.0a2.tar.gz": "30e7211c710300da24b1765c1f5ddc6e3eaf3694b1d16dfcab138e712f317312",
+        "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "ffe8e8ab4b1aa7cb94c11e9d7a11f1f4a8a87762aa5f5b49ad0f7f47aa65eebb",
+        "equity_feature_io_sdk-0.1.0a2.tar.gz": "5ca8b028ecd26cc39663dade61b32271738248f7428958ab39431394e483c29a",
+        "equity_feature_workers-0.1.0a14-py3-none-any.whl": "9c479cd290e843362f2dffeb7cebb7b00aba37909fcf7fb807058fc5fec5c392",
+        "equity_feature_workers-0.1.0a14.tar.gz": "fb1aade9575149a96de5c5b1402fde29ca94871031f4ec7d53eb0c5429cb419d"
+      },
+      "forms": [
+        {
+          "form": "light-wheel",
+          "methods": 58,
+          "skips": 12,
+          "installed_modules": 5,
+          "typed": [
+            "base"
+          ]
+        },
+        {
+          "form": "light-sdist",
+          "methods": 58,
+          "skips": 12,
+          "installed_modules": 5,
+          "typed": [
+            "base"
+          ]
+        },
+        {
+          "form": "combined-wheel",
+          "methods": 58,
+          "skips": 0,
+          "installed_modules": 6,
+          "typed": [
+            "base",
+            "intraday"
+          ]
+        },
+        {
+          "form": "combined-sdist",
+          "methods": 58,
+          "skips": 0,
+          "installed_modules": 6,
+          "typed": [
+            "base",
+            "intraday"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12201538638,
+      "name": "supplied-inputs-ff23276eceb22a34069c9fc1699fcc492649c975-ubuntu-24.04",
+      "zip_sha256": "b1d62ad77366008ac364b67115e4a884cf0cea518af0b26b7a78f323b5cd38ef",
+      "server_digest": "sha256:b1d62ad77366008ac364b67115e4a884cf0cea518af0b26b7a78f323b5cd38ef",
+      "expires_at": "2026-11-18T16:21:20Z",
+      "unexpired_and_downloadable_at_original_review": true,
+      "qualification_json_sha256": "df607db4e534343ed8ad7ab6d212b895890137d7ff5d652ab433f23be84c07d9",
+      "source_counts": {
+        "worker": {
+          "whole": 477,
+          "selected": 419
+        },
+        "core": {
+          "whole": 1284,
+          "selected": 64
+        },
+        "io": {
+          "whole": 227,
+          "selected": 17
+        }
+      },
+      "archive_sha256": {
+        "equity_feature_contracts-0.0.4a4-py3-none-any.whl": "acaa84fc0340c4640ced2b7cdbef04d5ba7cfaec20cd0525b866b415147635cc",
+        "equity_feature_io_contracts-0.1.0a2-py3-none-any.whl": "ef4deb9adc03b0e77075a36236fc20fe30d9373218386a60dc769d0145c09c99",
+        "equity_feature_contracts-0.0.4a4.tar.gz": "f32a66f31759b10c9ac251f4dffb2388a3e2ce50d2e5e15c69ac7038828f97a9",
+        "equity_feature_io_contracts-0.1.0a2.tar.gz": "a42833344c94b9cf2a08111987d5c60b324845a87ffb0a2c6e9214a144ff8250",
+        "equity_feature_io_sdk-0.1.0a2-py3-none-any.whl": "71c2316ab93d3382b24701ce6f4990b1355f90b8f66e562c8b1d34e539d60783",
+        "equity_feature_io_sdk-0.1.0a2.tar.gz": "967cad53e482786bdb7331af86da004c6c8a7cf44f85ada392efa4e61f665605",
+        "equity_feature_workers-0.1.0a14-py3-none-any.whl": "ecdb22c1f2c223ab59e3de37ddb43b8a33668539fadd9cbd7ce43bfcfa311d04",
+        "equity_feature_workers-0.1.0a14.tar.gz": "866051348f3a02106c8159ae4dbf38ee659c8271587e78c1e827e29291c978f8",
+        "equity_features-0.0.4a4-py3-none-any.whl": "cf8965e1600a3d8ef10dbefcfdea21f2d48ad8c8f80e0268abe12c365b1cd26e",
+        "equity_features_intraday-0.1.0a3-py3-none-any.whl": "06909ff0411240d07f4dff8e8dd4800657b7ed7778e65b96797af32ba9dd22ae",
+        "equity_features-0.0.4a4.tar.gz": "14e7b8b0ec1b245747d53081a73c9ef060c0f637d205ae97b5e14304b4d95c8f",
+        "equity_features_intraday-0.1.0a3.tar.gz": "1f0af8f1d10dea8b571d4d04053d3606eff6641d59536c36ededcd5b66b98e5a"
+      },
+      "forms": [
+        {
+          "form": "light-wheel",
+          "methods": 58,
+          "skips": 16,
+          "installed_modules": 5,
+          "typed": [
+            "base"
+          ]
+        },
+        {
+          "form": "light-sdist",
+          "methods": 58,
+          "skips": 16,
+          "installed_modules": 5,
+          "typed": [
+            "base"
+          ]
+        },
+        {
+          "form": "combined-wheel",
+          "methods": 58,
+          "skips": 4,
+          "installed_modules": 6,
+          "typed": [
+            "base",
+            "intraday"
+          ]
+        },
+        {
+          "form": "combined-sdist",
+          "methods": 58,
+          "skips": 4,
+          "installed_modules": 6,
+          "typed": [
+            "base",
+            "intraday"
+          ]
+        }
+      ]
+    }
+  ],
+  "verified_counts": {
+    "current_hosted_artifacts": 2,
+    "complete_package_forms": 8,
+    "raw_closed_archives": 24,
+    "selected_sdist_rebuild_records": 12,
+    "whole_git_leaf_records_per_os": 1988,
+    "selected_git_inputs_per_os": 500,
+    "raw_outer_members_per_os": 13,
+    "methods_per_form": 58
+  },
+  "exact_discovered_test_methods": 58,
+  "optional_intraday_skip_ids": [
+    "test_supplied_intraday.SuppliedIntraday.test_absent_empty_tuple_and_actual_empty_binding",
+    "test_supplied_intraday.SuppliedIntraday.test_actual_selected_warmup_and_reset_carry",
+    "test_supplied_intraday.SuppliedIntraday.test_all_nonempty_subsets_full_direct_parity",
+    "test_supplied_intraday.SuppliedIntraday.test_close_only_independent_from_atr",
+    "test_supplied_intraday.SuppliedIntraday.test_closed_metadata_headers_context_and_missing_roles",
+    "test_supplied_intraday.SuppliedIntraday.test_constant_position_only_not_applicable",
+    "test_supplied_intraday.SuppliedIntraday.test_discovery_actual_fields_and_selection",
+    "test_supplied_intraday.SuppliedIntraday.test_independent_symbols_sequential_thread_spawn",
+    "test_supplied_intraday.SuppliedIntraday.test_multiple_chunks_and_original_order",
+    "test_supplied_intraday.SuppliedIntraday.test_old_gap_unknown_future_only_consuming_closure",
+    "test_supplied_intraday.SuppliedIntraday.test_original_independent_eight_scalar_oracle",
+    "test_supplied_intraday.SuppliedIntraday.test_target_close_absence_does_not_block_atr"
+  ],
+  "linux_native_skip_ids": [
+    "test_supplied_native.SuppliedNative.test_assignment_and_resume_rejection_never_execute_runner",
+    "test_supplied_native.SuppliedNative.test_no_child_and_short_lived_children_full_job_cpu",
+    "test_supplied_native.SuppliedNative.test_nonzero_runner_exit_is_retained_not_silently_successful",
+    "test_supplied_native.SuppliedNative.test_orphan_after_runner_exit_is_owned_and_reaped"
+  ],
+  "verification_claims": [
+    "Reviewer independently downloaded actual current PUSH artifacts and matched fresh server metadata, raw ZIP digest, source/run identity, access and expiry.",
+    "Each ZIP closes exactly13raw members under one safe qualification directory: qualification.json and12closed package archives.",
+    "All24raw wheel/SDist archives independently decoded against exact Git blobs: safe namespaces/types/modes, package source, licenses, metadata/dependencies/PEP561, console entrypoint and wheelRECORD.",
+    "Both reports match full1988Git leaf records and500selected inputs perOS;12selectedSDist rebuild receipts match exact original/generated input maps and retained wheelpayload maps.",
+    "All8hosted forms report58discovered methods; exactWindowsbase12/combined0 andLinuxbase16/combined4 skip ledgers checked against source.",
+    "Source-bound installed collector and closed receipt joins establish package payload/version/origin/optional absence/core invariance/typed consumers and expected generated launcher/file closure.",
+    "LinuxLF andWindowsCRLF generator distinctions explicitly checked; no crossplatform normalization weakening."
+  ],
+  "audit_attempt_disposition": {
+    "attempt1": "Retained failed audit: reviewer incorrectly assumed flat outer ZIP paths. Actual artifact contains13safe two-component paths under one qualification directory.",
+    "attempt2": "Corrected schema inspection enforces one qualification root, exact13closed basenames and unchanged type/mode/name checks; passed. This was a reviewer assumption correction, not a source defect or weakened package policy."
+  },
+  "findings": [],
+  "limitations": [
+    "ActualcurrentffPUSH hostedpackage artifacts, not mainchannel or finalstory acceptance. No hostedenv recreated or fresh reviewer installed/native rerun.",
+    "Raw12archives perOS were independently decoded against exactGit source/closedmetadata/RECORD. InstalledRECORD/directURL/launcher rawbytes are notretained: sourcebound executedcollector checks and closedreceipt joins are reviewed, not independent decoding of unavailablebytes.",
+    "Repeatarchive and SDistrebuild execution facts bind actual completed sourcebound reports; reviewer verifies retained initialpayloads plus exact recorded rebuilthashmaps, not a newbuild.",
+    "Linux LF/Windows CRLF generator rules explicitly checked; no crossplatform newline weakening.",
+    "No performance/speed/adoption inference: be4measured48alternatives remainednonwins; staticbe4toffexecutioncomponent applicability is separate.",
+    "CurrentcandidateCI/mainpublication/readback/release/EQ140Done/R17 acceptance requireseparate finalgates."
+  ],
+  "successor_applicability": "This receipt qualifies actualff package artifacts only. A later packagedREADME/METADATA change needs exact successor source and fresh current bothOS artifact review; no final successor/main/release acceptance is inferred."
+}

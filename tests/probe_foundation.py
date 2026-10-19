@@ -7,7 +7,7 @@ import sys
 
 class Deny(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
-        if fullname.startswith(('equity_feature_io', 'equity_feature_workers', 'equity_feature_duckdb', 'equity_feature_parquet', 'equity_feature_example_extensions', 'equity_feature_factory_fixture')) or fullname.split('.')[0] in {'duckdb','pyarrow','numpy','pandas','requests','httpx'}:
+        if fullname.startswith(('equity_feature_io', 'equity_feature_workers', 'equity_features_intraday', 'equity_feature_duckdb', 'equity_feature_parquet', 'equity_feature_example_extensions', 'equity_feature_factory_fixture')) or fullname.split('.')[0] in {'duckdb','pyarrow','numpy','pandas','requests','httpx'}:
             raise AssertionError('Core imported forbidden dependency: ' + fullname)
 
 def core_check():
@@ -31,11 +31,11 @@ def core_check():
     finally: sys.meta_path.remove(deny)
 
 core_check()
-expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a2'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a2','equity-features==0.0.4a4']}
+expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a2'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a2','equity-features==0.0.4a4','equity-features-intraday==0.1.0a3; extra == "intraday"']}
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == ('0.1.0a13' if name=='equity-feature-workers' else '0.1.0a2')
+    assert module.__version__ == ('0.1.0a14' if name=='equity-feature-workers' else '0.1.0a2')
     if name=='equity-feature-workers':
         assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task', 'SessionCommandSpec', 'run_session', 'run_registered', 'RequiredCommandSpec', 'RequiredOutcome', 'run_required', 'run_required_registered', 'BarrierLimits', 'Dependency', 'TaskNode', 'evaluate_readiness', 'inspect_barrier', 'run_assembly', 'UniverseShard', 'BreadthCommandSpec', 'run_breadth', 'PublicationLimits', 'PublicationProgress', 'SerialPublisher', 'GenerationSpec', 'GenerationOutcome', 'GenerationStore'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)
@@ -53,4 +53,5 @@ for name in sys.argv[1:]:
         assert [(e.group,e.name,e.value) for e in entries] == [('console_scripts','equity-feature-worker','equity_feature_workers.cli:main')]
     else: assert not entries
 assert not any(name.split('.')[0] in {'duckdb','pyarrow','numpy'} for name in sys.modules)
+assert 'equity_features_intraday' not in sys.modules
 print('Installed versions/PEP561 metadata/explicit-command/core isolation/independent500/51200/102.6 goldens PASS')

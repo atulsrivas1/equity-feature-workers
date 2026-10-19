@@ -1,0 +1,12 @@
+{
+  "mypy_version": "1.15.0",
+  "base": [
+    {"line": 4, "code": "arg-type", "contains": "incompatible type"},
+    {"line": 5, "code": "arg-type", "contains": "incompatible type"},
+    {"line": 6, "code": "arg-type", "contains": "incompatible type"}
+  ],
+  "intraday": [
+    {"line": 3, "code": "arg-type", "contains": "incompatible type"},
+    {"line": 4, "code": "arg-type", "contains": "incompatible type"}
+  ]
+}

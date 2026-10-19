@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-workers"
-version = "0.1.0a13"
+version = "0.1.0a14"
 description = "Bounded equity worker commands, dependency and universe barriers"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
@@ -12,6 +12,9 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{name = "Equity Features contributors"}]
 dependencies = ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a4"]
+
+[project.optional-dependencies]
+intraday = ["equity-features-intraday==0.1.0a3"]
 
 [project.scripts]
 equity-feature-worker = "equity_feature_workers.cli:main"

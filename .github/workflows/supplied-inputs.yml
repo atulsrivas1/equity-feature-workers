@@ -1,0 +1,41 @@
+name: Supplied input package checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  supplied-inputs:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: component
+      - uses: actions/checkout@v4
+        with:
+          repository: atulsrivas1/equity-features
+          ref: b1f5445eb9799b73753e413669b94166997fc468
+          path: core
+      - uses: actions/checkout@v4
+        with:
+          repository: atulsrivas1/equity-feature-io
+          ref: 18d86761aa3eebb7414e51e8fa2aba089717b5eb
+          path: io
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-dev.txt
+        working-directory: component
+      - run: python tools/build_supplied_inputs.py --core-root ../core --io-root ../io
+        working-directory: component
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: supplied-inputs-${{ github.sha }}-${{ matrix.os }}
+          path: component/dist/supplied-inputs/
+          retention-days: 30
+          if-no-files-found: error

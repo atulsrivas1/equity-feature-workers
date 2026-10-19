@@ -1,0 +1,703 @@
+{
+  "reviewer": "Separate local automated /root/r17_review",
+  "utc": "2026-10-19T17:39:55.805086+00:00",
+  "result": "PASS",
+  "head": "be4d6667e9b46981cf430c86888b52c7812b0424",
+  "raw_sha256": "dfc7724ef7425cb1d6600d2eeb9b969c1af174a636745a506b5a5c455c631bf4",
+  "baseline_sha256": "059061ac6eb97d76a9c2ae6c9031fc2b25320cccbba09030827ecd96c833eb18",
+  "expected_sha256": "1c94affe3be5c9337e581476a5f26465a8345c7868b218fb65bba70cd29240e0",
+  "cohort_count": 54,
+  "baseline_cohorts": 6,
+  "candidate_cohorts": 48,
+  "unique_jobs": 486,
+  "counts": {
+    "warmup_jobs": 108,
+    "retained_jobs": 378,
+    "tasks_checked": 5346,
+    "rss_probes": 647963,
+    "invalid_resource_cohorts": 0
+  },
+  "decisions": [
+    {
+      "profile": "compute-balanced-process-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.15894871518916842,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-balanced-process-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.025189846202429145,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-balanced-process-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.062098074372058165,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-balanced-process-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.07567001060849632,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-balanced-thread-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.008904319921854587,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-balanced-thread-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.02035673702147167,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-balanced-thread-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.022730458212034454,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-balanced-thread-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.044384936211952386,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-process-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.31967929221584424,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-process-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.18499628466874585,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-process-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.1403423286920058,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-process-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.13203056242114264,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-thread-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.001372135687756737,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-thread-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.03498170847128046,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-thread-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.035407963319804114,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-skewed-thread-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.04530001923255789,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-process-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -4.088729633303848,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-process-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -3.9285988526432343,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-process-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -4.193933214327387,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-process-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -3.9594818157654315,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-thread-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.003141698899461254,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-thread-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.007736354864307682,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-thread-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.0242572658746818,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "compute-small-thread-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.02123854301474326,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-process-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.10147418649217421,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-process-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.06232460271736384,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-process-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.030239930262850656,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-process-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.021321833218733932,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-thread-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.015069982277217786,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-thread-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.008984862087900058,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-thread-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.023169032156935554,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-balanced-thread-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.02963602358377604,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-process-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.05566208554881791,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-process-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.048547718221317426,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-process-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.02466633981366262,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-process-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.016007137046095243,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-thread-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.009217031443346846,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-thread-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.024581943945893858,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-thread-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.010180060417400938,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-skewed-thread-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.024266843036033436,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-process-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.4178250892883373,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-process-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.43393350274684916,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-process-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.404213706546692,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-process-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": false,
+        "memory": false,
+        "small_p95": false,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": -0.4046731060590163,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-thread-1",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.01050963600575816,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-thread-2",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.021209599912705213,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-thread-4",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.020974627842852533,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    },
+    {
+      "profile": "e2e-small-thread-8",
+      "adopted": false,
+      "checks": {
+        "wall": false,
+        "cpu": true,
+        "memory": true,
+        "small_p95": true,
+        "complete_resource_evidence": true
+      },
+      "median_wall_improvement": 0.015166846432453585,
+      "fallback": "sequential",
+      "default_mode_changed": false
+    }
+  ],
+  "failed_sidecars": [],
+  "limits": [
+    "Retained evidence audit only; no workload rerun.",
+    "No raw SDK result/output bodies retained by study: checks bind expected hashes, not independent redecoding of nonexistent bodies.",
+    "Parent baseline sidecar/source launch control and publiccheckpoint474#6271370314 support declared ordering; no independently signed execution chronology is invented.",
+    "Sampled RSS can miss short-lived peaks; no physical enforcement or durability/live/fastest claim.",
+    "Before/after runtime maps are trusted-environment file evidence, not wholehost/codeobject attestation.",
+    "Audit script preparation is not its execution. PASS exists only after successful explicit postcompletion run."
+  ]
+}
