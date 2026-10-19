@@ -12,7 +12,7 @@ from io import BytesIO
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tests'))
 from eq142_fixture import HAVE_INTRADAY
-from eq142_evidence import ProductStore,bounded_read,combine_fragments,original_reason,record_products,stable_products
+from eq142_evidence import ProductStore,bounded_read,persist_record,combine_fragments,original_reason,record_products,stable_products
 from eq142_trace import Collector,TraceSpecificationError
 from equity_feature_workers import BoundedSupervisor,ProgressRecorder,encode_task,encode_output
 from equity_feature_io_sdk import encode_result,encode_receipt
@@ -22,6 +22,19 @@ if HAVE_INTRADAY:
 
 
 class RetainedBodies(unittest.TestCase):
+    def test_exclusive_bounded_record_writer_retains_failed_partial(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'native.json'
+            reference=persist_record(path,{'samples':[]},max_bytes=64)
+            self.assertEqual(reference['bytes'],len(path.read_bytes()))
+            self.assertEqual(path.read_bytes(),b'{"samples":[]}\n')
+            with self.assertRaises(ValueError):persist_record(path,{},max_bytes=64)
+            failed=Path(directory)/'failed.json'
+            with self.assertRaises(ValueError):persist_record(failed,{'samples':[1]*100},max_bytes=16)
+            self.assertFalse(failed.exists())
+            self.assertLessEqual((Path(directory)/'failed.json.partial').stat().st_size,16)
+            with self.assertRaises(ValueError):persist_record(failed,{},max_bytes=64)
+
     def test_bounded_reader_and_incremental_reopen_admission(self):
         # The file may grow after a successful stat. Read only limit+1 bytes.
         with tempfile.TemporaryDirectory() as directory:

@@ -257,7 +257,7 @@
     "refresh_before_study_and_each_cohort": true,
     "allowed_cpu_source": "actual current OS affinity/restrictions, not os.cpu_count alone",
     "declared_coordinator_and_host_cpu_slots": 2,
-    "required_cpu": "degree+2 <= actual allowed slots; ResourceBudget max_cpu_slots=allowed_slots-2",
+    "required_cpu": "degree*compute_threads(1)+backend_threads(1) <= ResourceBudget.max_cpu_slots=actual_allowed_slots-2; hence degree+3<=actual allowed slots, retaining two additional host/coordinator slots",
     "maximum_selected_degree": 8,
     "actual_worker_api_maximum_unchanged": 32,
     "native_thread_totals": "record actual, do not infer physical cores from Python threads or configured workers",
@@ -284,7 +284,8 @@
     "backend_owners": 1,
     "resident_checks": "initial supervisor reservation plus separately accumulated actual encoded committed OutputManifest metadata; committing first does not promise rollback if later accounting rejects",
     "measurement_limits": "owned-Job CPU accounts for terminated children; sampled concurrent aggregate RSS may miss peaks; logical admission/reserves are not physical enforcement or guaranteed idle resources",
-    "native_thread_method": "tools/eq142_native.py development-only Toolhelp32 snapshot cntThreads, joined to verified owned-Job members, with explicit probe errors; qualify before timing; outside-owned observer reserve and sampled-peak limits apply; explicit observed_terminated zero only from retained owned process handle signaled proof, with terminal_wait/snapshot count retained; unknown/live missing/race remains a rejecting probe error. Actual RSS/thread sampling is non-atomic and can miss transient peaks."
+    "native_thread_method": "tools/eq142_native.py development-only Toolhelp32 snapshot cntThreads, joined to verified owned-Job members, with explicit probe errors; qualify before timing; outside-owned observer reserve and sampled-peak limits apply; explicit observed_terminated zero only from retained owned process handle signaled proof, with terminal_wait/snapshot count retained; unknown/live missing/race remains a rejecting probe error. Actual RSS/thread sampling is non-atomic and can miss transient peaks.",
+    "delegate_spec_admission": "Before instrumented dispatch, measure actual plan and original/proposed callable+args Python pickle representations; reserve2*plan+3*sum(nonnegative per-invocation extras), plus original logical initial resident and expected committed output metadata, within same960MiB cap. No native IPC/physical-copy inference. Count all construction/admission in selected B phase; actual original outcome must confirm original resident/input totals."
   },
   "statistics": {
     "samples_used": "seven retained samples only; raw warmups retained separately; all nine require source/product/resource/trace completeness and absolute admission bounds",
@@ -354,5 +355,6 @@
     "other_frozen_inputs_and_metadata_bytes_max": 1073741824,
     "remaining_study_headroom_bytes": 8019509248,
     "rule": "Declare72GiB study plus8GiB host capacity before timing; refresh actual remaining worst-case capacity each cohort and enforce owned-directory encoded byte/member bounds. No preallocation/physical guarantee, automatic retries or deletion of failed raw evidence. Retained fragment/native references avoid duplicating raw arrays in summaries. Stop and retain failure on overflow; final compressed-channel fit remains a release gate."
-  }
+  },
+  "pre_timing_cpu_correction": "Initial development admission2-method run had6 subtest INVALID_CONFIG errors with4 allowed slots and degree2: prior degree+2 guard contradicted original backend1 and max_cpu_slots=allowed-2. Corrected prospective guard degree+3 before constructing budget; original ResourceBudget, host reserve2, performance thresholds and actual selected degrees remain unchanged. Corrected2 methods pass including6 actual mode/publication admission joins. No official timing has run."
 }

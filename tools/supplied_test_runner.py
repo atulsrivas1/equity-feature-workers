@@ -19,8 +19,10 @@ def main():
         identity = item['test']
         assert (not combined and identity.startswith(('test_supplied_intraday.',
             'test_eq142_graph.','test_eq142_trace.','test_eq142_delegate.','test_eq142_workloads.',
-            'test_eq142_evidence.OriginalProductWitnesses.'))) or (
-            os.name != 'nt' and identity.startswith(('test_supplied_native.','test_eq142_native.'))), ('unexpected skip', item)
+            'test_eq142_evidence.OriginalProductWitnesses.','test_eq142_admission.','test_eq142_causal.',
+            'test_eq142_sample.'))) or (
+            os.name != 'nt' and identity.startswith(('test_supplied_native.','test_eq142_native.',
+                'test_eq142_sample.NativeOwnedDevelopmentSample.'))), ('unexpected skip', item)
         allowed.append(identity)
     assert any(name.startswith('test_supplied_intraday.') for name in allowed) == (not combined)
     assert any(name.startswith('test_supplied_native.') for name in allowed) == (os.name != 'nt')

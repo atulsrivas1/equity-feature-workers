@@ -457,7 +457,8 @@
       "parent_start_ns": "nanoseconds",
       "parent_end_ns": "nanoseconds >=start",
       "child_timeline_ids": "actual related local timelines",
-      "cross_process_interval_subtraction": "constant false"
+      "cross_process_interval_subtraction": "constant false",
+      "status": "returned | rejected; actual parent operation outcome, never inferred child success"
     }
   },
   "job_scope": {
@@ -781,5 +782,19 @@
       "sample_count": "bounded_count <=60001; exact native_receipt.samples length"
     },
     "validation": "Resolve enclosing resource_evidence.native_receipt, validate its full body <=16MiB and recompute sampled aggregates. Its sample+probe-error rows reserve<=15MiB actual compact ASCII JSON bytes including array delimiters/separators; <=1024 probe errors and <=256 distinct lifetime observed PIDs. Bound failure retains accepted rows/rejected-row size and owned cleanup evidence, rejects qualification. Native records remain external-observer data; no physical heap guarantee."
+  },
+  "delegate_resource_admission": {
+    "fields": {
+      "plan_pickle_bytes": "bounded_count <=1048576; observed Python plan representation only",
+      "per_invocation_spec_extra_pickle_bytes": "ordered bounded array<=16; max(0,actual proposed partial/function+arguments pickle size minus original function+arguments pickle size), prospective submitted_ns int64 maximum and telemetry enabled; per proposed representation<=16MiB",
+      "logical_spec_resident_reservation_bytes": "2*plan_pickle_bytes+3*sum(per_invocation_spec_extra_pickle_bytes); conservative logical representations, not physical memory",
+      "expected_committed_output_metadata_bytes": "bounded_count from preflight exact full original output bodies; zero for nonpublishing class; actual output totals renewed independently",
+      "combined_logical_resident_bytes": "original initial logical resident +logical spec allowance+expected committed output metadata; <=unchanged960MiB logical cap before dispatch",
+      "trace_reserved_bytes": "constant67108864",
+      "whole_job_sampled_rss_cap_bytes": "constant1073741824",
+      "native_ipc_encoded_bytes": "constant null",
+      "physical_enforcement": "constant false"
+    },
+    "timing": "All instrumented plan/hash/source-binding/label/spec serialization/admission and copies belong within selected B phase. Source-derived original preflight does not admit or replace original supervisor validation/errors; actual outcome resident/input totals must match independently. Do not describe encoded logical reservations as actual physical copies, native IPC or pure cost."
   }
 }

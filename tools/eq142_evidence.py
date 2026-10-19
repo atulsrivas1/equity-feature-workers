@@ -6,6 +6,7 @@ cache, input certificate, physical-copy count or native IPC measurement.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import re
 
@@ -24,6 +25,25 @@ def bounded_read(path,maximum):
     with path.open('rb') as source:body=source.read(maximum+1)
     if len(body)>maximum:raise ValueError('proof body bound')
     return body
+
+
+def persist_record(path,value,*,max_bytes):
+    """Exclusive bounded JSON publication; retain partial bytes on rejection."""
+    path=Path(path)
+    if type(max_bytes) is not int or not 1<=max_bytes<=16777216:raise ValueError('record bound')
+    temporary=path.with_name(path.name+'.partial')
+    if path.exists() or temporary.exists():raise ValueError('duplicate proof record')
+    encoder=json.JSONEncoder(sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False)
+    count=0
+    with temporary.open('xb') as output:
+        for chunk in encoder.iterencode(value):
+            body=chunk.encode('ascii')
+            if count+len(body)+1>max_bytes:raise ValueError('record bound')
+            output.write(body);count+=len(body)
+        output.write(b'\n');count+=1
+    os.link(temporary,path);temporary.unlink()
+    body=bounded_read(path,max_bytes)
+    return {'sha256':digest(body),'bytes':count,'retained_name':path.name}
 
 
 class ProductStore:
