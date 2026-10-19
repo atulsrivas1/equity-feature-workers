@@ -284,7 +284,7 @@
     "backend_owners": 1,
     "resident_checks": "initial supervisor reservation plus separately accumulated actual encoded committed OutputManifest metadata; committing first does not promise rollback if later accounting rejects",
     "measurement_limits": "owned-Job CPU accounts for terminated children; sampled concurrent aggregate RSS may miss peaks; logical admission/reserves are not physical enforcement or guaranteed idle resources",
-    "native_thread_method": "tools/eq142_native.py development-only Toolhelp32 snapshot cntThreads, joined to verified owned-Job members, with explicit probe errors; qualify before timing; outside-owned observer reserve and sampled-peak limits apply"
+    "native_thread_method": "tools/eq142_native.py development-only Toolhelp32 snapshot cntThreads, joined to verified owned-Job members, with explicit probe errors; qualify before timing; outside-owned observer reserve and sampled-peak limits apply; explicit observed_terminated zero only from retained owned process handle signaled proof, with terminal_wait/snapshot count retained; unknown/live missing/race remains a rejecting probe error. Actual RSS/thread sampling is non-atomic and can miss transient peaks."
   },
   "statistics": {
     "samples_used": "seven retained samples only; raw warmups retained separately; all nine require source/product/resource/trace completeness and absolute admission bounds",
@@ -339,5 +339,6 @@
     "physical memory enforcement",
     "physical durability",
     "R18 release acceptance"
-  ]
+  ],
+  "pre_timing_native_correction": "Initial development21-method run failed1 with actual MISSING_OWNED_PID/WinError18 during process retirement. Console/source hashes retained; temporary full native report was not retained and is not reconstructed. Positive signaled-handle terminal proof now distinguishes retired zero from unknown/live missing measurements. Successor21 development methods pass, not frozen study/pre-timing final acceptance. No timing/control retries or performance/noise/CPU/RSS threshold changes."
 }

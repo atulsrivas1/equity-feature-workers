@@ -17,7 +17,7 @@ def qualification():
     from eq142_graph import bind_source, digest
     hooks = load('HOOK_INVENTORY.json')
     protocol = load('BENCHMARK_PROTOCOL.json')
-    source = {'canonical_docs_head':'3da74c8d560dfb53e316c1a213d26a0212acc977',
+    source = {'canonical_docs_head':'a54f9196cada1fc9b3bea334711b4e4db9ac1d81',
         'package_build_sources':{'core':protocol['sources']['baseline_core_package_build'],
             'worker':protocol['sources']['baseline_worker_main'],'io':protocol['sources']['baseline_io_main']},
         'distributions':{'equity-feature-contracts':'0.0.4a4','equity-features':'0.0.4a4',

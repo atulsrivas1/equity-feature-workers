@@ -247,7 +247,8 @@
       "backend_contract_only",
       "logical_not_physical_resource_enforcement"
     ],
-    "joins": "Every task belongs to exactly one job_scope/component/partition; each component belongs to one partition; all references must exist, memberships agree, barrier graph acyclic. execution_scope_id=sha256(b\"eq142-job1\\0\" + canonical JSON of mode/configured_workers/tasks/resource budget). Job records distinguish source-required barriers from observed outcomes; no fabricated executed success."
+    "joins": "Every task belongs to exactly one job_scope/component/partition; each component belongs to one partition; all references must exist, memberships agree, barrier graph acyclic. execution_scope_id=sha256(b\"eq142-job1\\0\" + canonical JSON of mode/configured_workers/tasks/resource budget). Job records distinguish source-required barriers from observed outcomes; no fabricated executed success.",
+    "barrier_policy": "Pool shutdown and global_worker_shutdown_barrier apply only when mode is thread/process. Sequential has no executor/pool and omits those requirements. Resource, component order, all selected outcomes, full task result and serialized publication ownership remain. This source-correct clarification resolves initial implementation review EQ142GRAPH02; no scheduler or numerical behavior changed."
   },
   "trace": {
     "schema_value": "eq142-execution-trace:1",
@@ -454,14 +455,14 @@
       "job_id": "exact original TaskManifest.job_id string",
       "generation_id": "exact original TaskManifest.generation_id string",
       "destination_scope": "exact original TaskManifest.destination_scope string",
-      "task_hashes": "nonempty ordered unique original task hashes; each task appears in exactly one job_scope"
+      "task_hashes": "nonempty list of unique known original task hashes; every task belongs to exactly one scope"
     }
   },
   "component": {
     "fields": {
       "id": "id",
       "population": "sorted unique instrument IDs; exact transitive union of member populations",
-      "ordered_task_hashes": "nonempty task hashes in original partition_tasks component ordering",
+      "ordered_task_hashes": "nonempty list of unique known task hashes in original partition_tasks component ordering",
       "partition_id": "existing partition ID"
     }
   },
@@ -470,7 +471,7 @@
       "id": "id",
       "ordinal": "integer 0..7, contiguous unique original ordinals",
       "component_ids": "ordered existing component IDs, each component belongs to exactly one partition",
-      "ordered_task_hashes": "exact original Partition.items task hashes, each task belongs to exactly one partition"
+      "ordered_task_hashes": "nonempty list of unique known original Partition.items task hashes"
     }
   },
   "barrier": {
@@ -507,7 +508,7 @@
     "fields": {
       "id": "id",
       "destination_scopes": "sorted unique original destination_scope strings",
-      "job_scope_ids": "ordered existing job_scope IDs",
+      "job_scope_ids": "unique ordered existing job_scope IDs, exactly matching job_scopes record order",
       "writer_mode": "constant serialized_writer",
       "backend_owners": "constant integer 1",
       "durability": "constant backend_contract_only"
@@ -671,11 +672,13 @@
     },
     "native_thread_method": {
       "selected": "New development sampler extension in tools/eq142_native.py; Windows CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS), Process32FirstW/Process32NextW, PROCESSENTRY32W.cntThreads joined only to verified owned-Job member PIDs. No command lines, executable paths or unrelated process details persisted.",
-      "qualification": "Before timing, test successful process/thread observations, invalid snapshot/enumeration, missing-member race, membership, descendants and cleanup. Original supplied_native.py does not already provide thread counts. Missing/racing measurement is an explicit probe error, never zero or configured degree.",
+      "qualification": "Before timing, test successful process/thread observations, invalid snapshot/enumeration, missing-member race, membership, descendants and cleanup. Original supplied_native.py does not already provide thread counts. Missing/racing measurement is an explicit probe error, never zero or configured degree. A positive signaled retained owned process handle (WaitForSingleObject WAIT_OBJECT_0) may prove termination and zero current execution threads; retain observed_terminated/terminal_wait/snapshot_threads explicitly. This is a terminal proof, never a missing/live/racing measurement default. Unknown/live absent member, open, membership, snapshot, enumeration or wait errors still reject qualification. Snapshot and final handle observations are not atomic and may miss transient peaks.",
       "sources": [
         "https://learn.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-viewing-processes",
         "https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/ns-tlhelp32-processentry32w",
-        "https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-createtoolhelp32snapshot"
+        "https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-createtoolhelp32snapshot",
+        "https://learn.microsoft.com/en-us/windows/win32/procthread/terminating-a-process",
+        "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject"
       ],
       "limitations": "Sampled counts can miss transient thread/process peaks. Membership and snapshot are not atomic. Observer CPU/RSS is excluded from owned-Job accounting; whole-run wall includes observation/report completion. No physically enforced memory/CPU or globally idle-host claim."
     }
@@ -691,5 +694,18 @@
       "observation": "not_instrumented | composite_interval | unqualified_alignment | outside_trace",
       "numeric_exclusive_cost_ns": "constant null"
     }
+  },
+  "local_trace_fragment": {
+    "schema_value": "eq142-local-trace-fragment:1",
+    "fields": {
+      "schema": "constant schema_value",
+      "reservation_id": "existing preallocated reservation ID",
+      "complete": "bool; false forbids attributed-cost acceptance",
+      "failure_reason": "null or trace.failure_codes member",
+      "spans": "bounded array<span> within this invocation/collector reservation",
+      "counters": "bounded array<counter>, at most1024 keys; exact operation/scope/byte-observation joins"
+    },
+    "limits": "Each fragment independently closes local event IDs, same-timeline parent relations, acyclic depth<=64, interval union/exclusive identity and counter/byte joins. It is not the complete source/product/native sample envelope. Encoded sidecar bytes are bounded separately from Python heap; actual whole-Job RSS remains mandatory. Partial raw evidence is retained on rejection. Shared actual timeline identities remain stable across reused invocations.",
+    "publication": "Exclusive temporary creation and exclusive hard-link final publication; never replace an existing final file. Both temporary/final names count toward the file bound; no physical durability claim."
   }
 }

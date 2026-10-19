@@ -96,6 +96,12 @@ class OutputGraphs(unittest.TestCase):
             with self.assertRaises(GraphSpecificationError) as error:self.graph(task,batches)
             self.assertEqual(error.exception.code,'source_mismatch')
         finally:supervisor._size=old_size
+        old_class=module.ConfigSpec
+        try:
+            module.ConfigSpec=object
+            with self.assertRaises(GraphSpecificationError) as error:self.graph(task,batches)
+            self.assertEqual(error.exception.code,'source_mismatch')
+        finally:module.ConfigSpec=old_class
         self.bound.check()
 
     def test_cycles_duplicates_unknown_endpoints_and_shapes(self):
@@ -156,6 +162,22 @@ class OutputGraphs(unittest.TestCase):
             self.assertEqual(len(job['components']),1);self.assertEqual(len(job['partitions']),1)
             self.assertEqual(job['components'][0]['population'],['A'])
             self.assertEqual(len(job['components'][0]['ordered_task_hashes']),3)
+
+    def test_sequential_has_no_executor_shutdown_barrier_and_job_scalars_are_closed(self):
+        from equity_feature_workers import WorkItem,ResourceBudget
+        _,task,batches=next(canonical_cases())
+        job=describe_job((WorkItem(task,batches,never_called),),mode='sequential',budget=ResourceBudget(),qualification=self.bound)
+        self.assertNotIn('pool_shutdown_before_coordinator_validation',[b['kind'] for b in job['barriers']])
+        self.assertNotIn('global_worker_shutdown_barrier',job['limitations'])
+        for mutate in [lambda j:j.update(limitations=['invented_claim']),lambda j:j.update(limitations={'invented':True}),
+            lambda j:j['partitions'][0].update(ordinal=False),
+            lambda j:j['publication_owner']['job_scope_ids'].append(j['job_scopes'][0]['id'])]:
+            bad=deepcopy(job);mutate(bad)
+            with self.assertRaises(GraphSpecificationError):validate_job(bad)
+        bad=deepcopy(job)
+        extra=dict(bad['job_scopes'][0],id='job:empty',job_id='empty',task_hashes=[])
+        bad['job_scopes'].append(extra);bad['publication_owner']['job_scope_ids'].append(extra['id'])
+        with self.assertRaises(GraphSpecificationError):validate_job(bad)
 
 
 if __name__=='__main__':unittest.main()

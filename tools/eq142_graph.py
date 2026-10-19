@@ -61,6 +61,7 @@ class BoundSource:
     callback: object
     callback_code: object
     anchors: tuple
+    hook_inventory_sha256: str
 
     def check(self):
         try:
@@ -129,6 +130,7 @@ def bind_source(expected_inventory):
             alias_owner, alias_name = resolve(alias)
             if inspect.getattr_static(alias_owner, alias_name) is not owner:
                 fail('source_mismatch')
+            sites[(id(alias_owner),alias_name)]=(alias_owner,alias_name,owner,None)
         category = record['source_category']
         repo = 'python_runtime' if category == 'python_runtime' else 'io' if record['source_module'].startswith('equity_feature_io') else 'worker' if record['source_module'].startswith('equity_feature_workers') or category != 'installed_package' else 'core'
         commit = sys.version.split()[0] if repo == 'python_runtime' else source['package_build_sources'][repo]
@@ -156,7 +158,7 @@ def bind_source(expected_inventory):
     owner = sys.modules['equity_feature_workers.intraday']
     sites[(id(owner), 'compute_intraday_inputs')] = (owner, 'compute_intraday_inputs', compute_intraday_inputs, compute_intraday_inputs.__code__)
     bound = BoundSource(wire(source), tuple(sites.values()), tuple(files.items()),
-                        compute_intraday_inputs, compute_intraday_inputs.__code__, tuple(anchors.items()))
+                        compute_intraday_inputs, compute_intraday_inputs.__code__, tuple(anchors.items()),digest(wire(hooks)))
     bound.check()
     return bound
 
@@ -331,6 +333,8 @@ def describe_item(item, *, qualification):
 BARRIER_KINDS = ['resource_before_dispatch','population_component_order',
     'all_dispatched_worker_outcomes_terminal','pool_shutdown_before_coordinator_validation',
     'complete_task_result_before_publication','serialized_backend_owner']
+JOB_LIMITATIONS = ['descriptive_only','source_required_not_observed','global_worker_shutdown_barrier',
+    'terminal_not_successful','backend_contract_only','logical_not_physical_resource_enforcement']
 
 
 def describe_job(items, *, mode, budget, qualification):
@@ -373,12 +377,13 @@ def describe_job(items, *, mode, budget, qualification):
     job_scopes=[{'id':'job:%03d'%n,'job_id':key[0],'generation_id':key[1],
         'destination_scope':key[2],'task_hashes':members} for n,(key,members) in enumerate(scopes.items())]
     barriers=[]
-    for n,kind in enumerate(BARRIER_KINDS):
+    kinds=[kind for kind in BARRIER_KINDS if mode!='sequential' or kind!='pool_shutdown_before_coordinator_validation']
+    for n,kind in enumerate(kinds):
         barriers.append({'id':'barrier:%03d'%n,'kind':kind,'task_hashes':tasks[:],
             'partition_ids':[p['id'] for p in partition_records],
             'predecessor_ids':[] if n==0 else ['barrier:%03d'%(n-1)],
             'owner_id':'publication:owner' if kind=='serialized_backend_owner' else 'coordinator',
-            'evidence':'source_required','source_anchor':qualification.anchor('publisher.inner_drain' if n==5 else 'supervisor.validate_results' if n==4 else 'supervisor.partition' if n in (1,2,3) else 'supervisor.inputs')})
+            'evidence':'source_required','source_anchor':qualification.anchor('publisher.inner_drain' if kind=='serialized_backend_owner' else 'supervisor.validate_results' if kind=='complete_task_result_before_publication' else 'supervisor.inputs' if kind=='resource_before_dispatch' else 'supervisor.partition')})
     budget_record=asdict(budget)
     execution_scope_id=digest(b'eq142-job1\0'+wire({'mode':mode,'configured_workers':budget.workers,'tasks':tasks,'budget':budget_record}))
     record={'schema':'eq142-job-boundaries:1','source':qualification.source,'execution_scope_id':execution_scope_id,
@@ -393,9 +398,7 @@ def describe_job(items, *, mode, budget, qualification):
             'destination_scopes':sorted({i.task.destination_scope for i in items}),
             'job_scope_ids':[j['id'] for j in job_scopes],'writer_mode':'serialized_writer',
             'backend_owners':1,'durability':'backend_contract_only'},
-        'cancelled_or_undispatched':[],'limitations':sorted(['descriptive_only',
-            'source_required_not_observed','global_worker_shutdown_barrier','terminal_not_successful',
-            'backend_contract_only','logical_not_physical_resource_enforcement'])}
+        'cancelled_or_undispatched':[],'limitations':sorted(v for v in JOB_LIMITATIONS if mode!='sequential' or v!='global_worker_shutdown_barrier')}
     validate_job(record)
     return record
 
@@ -411,6 +414,8 @@ def validate_job(record):
         for h in tasks:hexhash(h)
         if record['mode'] not in ('sequential','thread','process') or type(record['configured_workers']) is not int or record['configured_workers'] not in (1,2,4,8):fail()
         if record['mode']=='sequential' and record['configured_workers']!=1:fail()
+        if type(record['limitations']) is not list or any(type(v) is not str for v in record['limitations']) or record['limitations']!=sorted(set(record['limitations'])) or not set(record['limitations'])<=set(JOB_LIMITATIONS):fail()
+        if record['mode']=='sequential' and 'global_worker_shutdown_barrier' in record['limitations']:fail()
         def ids(records):
             if type(records) is not list or not records or len(records)>16:fail()
             names=[r['id'] for r in records]
@@ -418,6 +423,9 @@ def validate_job(record):
             if len(set(names))!=len(names):fail('duplicate')
             return set(names)
         def membership(records,field):
+            for record in records:
+                values=record[field]
+                if type(values) is not list or not values or len(values)>16 or any(type(h) is not str or h not in tasks for h in values) or len(set(values))!=len(values):fail()
             flattened=[h for r in records for h in r[field]]
             if sorted(flattened)!=sorted(tasks):fail()
         scope_ids=ids(record['job_scopes']);component_ids=ids(record['components']);partition_ids=ids(record['partitions'])
@@ -434,7 +442,7 @@ def validate_job(record):
             population=set(c['population'])
             if any(population.intersection(other) for other in populations):fail()
             populations.append(population)
-        if [p['ordinal'] for p in record['partitions']]!=list(range(len(partition_ids))) or len(partition_ids)>min(8,record['configured_workers']):fail()
+        if any(type(p['ordinal']) is not int for p in record['partitions']) or [p['ordinal'] for p in record['partitions']]!=list(range(len(partition_ids))) or len(partition_ids)>min(8,record['configured_workers']):fail()
         members=[]
         for p in record['partitions']:
             closed(p,'id ordinal component_ids ordered_task_hashes')
@@ -444,9 +452,10 @@ def validate_job(record):
         if sorted(members)!=sorted(component_ids):fail()
         owner=record['publication_owner'];closed(owner,'id destination_scopes job_scope_ids writer_mode backend_owners durability')
         if owner['writer_mode']!='serialized_writer' or type(owner['backend_owners']) is not int or owner['backend_owners']!=1 or owner['durability']!='backend_contract_only':fail()
-        if owner['destination_scopes']!=sorted({s['destination_scope'] for s in record['job_scopes']}) or set(owner['job_scope_ids'])!=scope_ids:fail()
+        if owner['destination_scopes']!=sorted({s['destination_scope'] for s in record['job_scopes']}) or owner['job_scope_ids']!=[s['id'] for s in record['job_scopes']]:fail()
         barriers=record['barriers'];ids(barriers)
-        if [b['kind'] for b in barriers]!=BARRIER_KINDS:fail()
+        expected_kinds=[kind for kind in BARRIER_KINDS if record['mode']!='sequential' or kind!='pool_shutdown_before_coordinator_validation']
+        if [b['kind'] for b in barriers]!=expected_kinds:fail()
         before=set()
         for b in barriers:
             closed(b,'id kind task_hashes partition_ids predecessor_ids owner_id evidence source_anchor')
