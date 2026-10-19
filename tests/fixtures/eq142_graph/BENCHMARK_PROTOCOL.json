@@ -1,0 +1,343 @@
+{
+  "schema": "eq142-benchmark-protocol:1",
+  "stage": "PRECODE_PROPOSAL_NOT_READY_OR_TIMING_ACCEPTANCE",
+  "purpose": "Current execution/cost evidence and instrumentation A/A qualification; no optimization adoption or production resource-default change",
+  "sources": {
+    "baseline_core_package_build": "b1f5445eb9799b73753e413669b94166997fc468",
+    "baseline_worker_main": "231349aaf2bf1b9ec21f45807382ca9c6522520c",
+    "baseline_io_main": "18d86761aa3eebb7414e51e8fa2aba089717b5eb",
+    "canonical_handoff_main": "fbb3d30efbe37d9f0c56728787209764dde68ba8",
+    "original_profile_generator": "worker tools/benchmark_supplied_inputs.py at exact baseline worker tree",
+    "before_timing_freeze": [
+      "reviewed clean actual worker tool/harness head",
+      "actual six-distribution build/runtime/import payload identities",
+      "actual tool/protocol/fixture/oracle hashes",
+      "actual capacity/reserves and exact supported cohort list",
+      "independent harness/source review and executed qualification receipts"
+    ],
+    "rule": "Actual artifact/build source and measured tool head are separate recorded identities. Never relabel old package builds or R17 measurements as a new docs/tool head. Changed execution renews applicable candidate/source/installed/both-platform qualification."
+  },
+  "profiles": [
+    {
+      "id": "small",
+      "layout": "one combined all-eight task per instrument",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0
+    },
+    {
+      "id": "balanced",
+      "layout": "one combined all-eight task per instrument",
+      "instrument_slot_counts": [
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0
+    },
+    {
+      "id": "skewed",
+      "layout": "one combined all-eight task per instrument",
+      "instrument_slot_counts": [
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        1024
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0
+    },
+    {
+      "id": "family_complete",
+      "layout": "three same-symbol family tasks sharing original supplied tuple",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0,
+      "variant": "complete original prices/H/L"
+    },
+    {
+      "id": "family_missing_hl",
+      "layout": "three same-symbol family tasks sharing original supplied tuple",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0,
+      "variant": "high/low columns absent; EMA+RSI and bands ready, ATR missing_input/expected256/observed1/absent_input"
+    },
+    {
+      "id": "family_old_close_gap",
+      "layout": "three same-symbol family tasks sharing original supplied tuple",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0,
+      "variant": "slot0 row absent with explicit missing slot coverage; anchored EMA/RSI/ATR incomplete_coverage/expected256/observed255/governed_gap; bands last20 scheduled slots ready"
+    }
+  ],
+  "family_selections": [
+    [
+      "intraday.ema",
+      "intraday.rsi"
+    ],
+    [
+      "intraday.atr"
+    ],
+    [
+      "intraday.band_lower",
+      "intraday.band_middle",
+      "intraday.band_position",
+      "intraday.band_upper",
+      "intraday.band_width_ratio"
+    ]
+  ],
+  "all_eight": [
+    "intraday.atr",
+    "intraday.band_lower",
+    "intraday.band_middle",
+    "intraday.band_position",
+    "intraday.band_upper",
+    "intraday.band_width_ratio",
+    "intraday.ema",
+    "intraday.rsi"
+  ],
+  "matrix": {
+    "original_profiles": {
+      "modes_degrees": [
+        [
+          "sequential",
+          1
+        ],
+        [
+          "thread",
+          1
+        ],
+        [
+          "thread",
+          2
+        ],
+        [
+          "thread",
+          4
+        ],
+        [
+          "thread",
+          8
+        ],
+        [
+          "process",
+          1
+        ],
+        [
+          "process",
+          2
+        ],
+        [
+          "process",
+          4
+        ],
+        [
+          "process",
+          8
+        ]
+      ],
+      "cohorts_two_classes": 54
+    },
+    "focused_profiles": {
+      "modes_degrees": [
+        [
+          "sequential",
+          1
+        ],
+        [
+          "thread",
+          2
+        ],
+        [
+          "process",
+          2
+        ]
+      ],
+      "cohorts_two_classes": 18
+    },
+    "total_planned_cohorts_per_control": 72,
+    "warmups_per_cohort": 2,
+    "retained_per_cohort": 7,
+    "planned_owned_samples_per_control": 648,
+    "planned_owned_samples_both_controls": 1296,
+    "order": "all uninstrumented A cohorts before any instrumented B; profile order above, then modes/degrees listed, then admitted_control followed by owned_runner_e2e; warmups then retained within each cohort",
+    "unsupported": "record detected unsupported degree/capacity before A with explicit omission; never substitute a degree or invent samples; actual accepted scope lists only executed supported cohorts",
+    "capacity_change_after_freeze": "retain failure and stop affected series; no silent resizing or automatic retry",
+    "automatic_complete_control_retries": 0,
+    "concurrent_local_builds_tests_or_other_benchmarks_during_timing": false
+  },
+  "classes": {
+    "eq142_owned_runner_e2e": {
+      "start": "before launch of fresh owned runner",
+      "end": "final descendant exit plus completed bounded collector/report output",
+      "publisher": true,
+      "includes": [
+        "imports",
+        "expected/runtime/source proof before and after",
+        "source construction/admission",
+        "trace install/source_construct labels and later task binding",
+        "supervisor and child pools",
+        "complete SDK publication/committed lookup/readback",
+        "hook restoration and sidecar/report writes",
+        "owned child CPU including terminated children"
+      ],
+      "claim": "whole owned-runner synthetic cost; not pure product latency or a live/persistent worker"
+    },
+    "eq142_admitted_control": {
+      "start": "after actual fixture/source admission, before trace label binding and hook installation",
+      "end": "after supervisor/full result SDK and diagnostics checks, hook restoration and bounded trace persistence",
+      "publisher": false,
+      "includes": [
+        "timed instrumentation label/install/restore bookkeeping",
+        "actual supervisor/pool execution and shutdown",
+        "complete result/parity/diagnostic checks",
+        "bounded trace persistence"
+      ],
+      "claim": "new named admitted control; does not include sink commit/readback and is not the older EQ140 compute class"
+    }
+  },
+  "clock": {
+    "mode": "local_monotonic_durations_and_parent_causal_bounds",
+    "qualified": [
+      "actual per-process monotonic/nonadjustable counter metadata",
+      "same-timeline interval/nesting invariants",
+      "actual parent dispatch/wait/result elapsed and causal bounds"
+    ],
+    "cross_process_raw_tick_subtraction": false,
+    "global_numeric_critical_path_ns": null,
+    "not_inferred": [
+      "exclusive bottleneck contribution from causal order alone",
+      "numeric global critical path from sums of child durations",
+      "pool native IPC cost from composite parent waits"
+    ]
+  },
+  "resource_policy": {
+    "refresh_before_study_and_each_cohort": true,
+    "allowed_cpu_source": "actual current OS affinity/restrictions, not os.cpu_count alone",
+    "declared_coordinator_and_host_cpu_slots": 2,
+    "required_cpu": "degree+2 <= actual allowed slots; ResourceBudget max_cpu_slots=allowed_slots-2",
+    "maximum_selected_degree": 8,
+    "actual_worker_api_maximum_unchanged": 32,
+    "native_thread_totals": "record actual, do not infer physical cores from Python threads or configured workers",
+    "whole_job_sampled_RSS_cap_bytes": 1073741824,
+    "logical_max_resident_bytes_both_controls": 1006632960,
+    "trace_reserved_bytes_both_controls": 67108864,
+    "required_additional_free_host_memory_bytes": 2147483648,
+    "declared_study_storage_reservation_bytes": 51539607552,
+    "required_additional_free_storage_bytes": 8589934592,
+    "max_tasks": 16,
+    "max_in_flight": "degree",
+    "max_input_bytes": 16777216,
+    "max_task_result_bytes": 262144,
+    "max_task_transport_bytes": 1048576,
+    "max_total_result_bytes": 16777216,
+    "publisher_max_pending_tasks": 16,
+    "publisher_max_pending_bytes": 8388608,
+    "max_receipt_wire_bytes": 400000,
+    "sink_max_results": 1,
+    "sink_max_chunk_bytes": 1048576,
+    "sink_max_total_bytes": 1048576,
+    "sink_max_result_cells": 100,
+    "sink_max_evidence_rows": 1,
+    "backend_owners": 1,
+    "resident_checks": "initial supervisor reservation plus separately accumulated actual encoded committed OutputManifest metadata; committing first does not promise rollback if later accounting rejects",
+    "measurement_limits": "owned-Job CPU accounts for terminated children; sampled concurrent aggregate RSS may miss peaks; logical admission/reserves are not physical enforcement or guaranteed idle resources",
+    "native_thread_method": "tools/eq142_native.py development-only Toolhelp32 snapshot cntThreads, joined to verified owned-Job members, with explicit probe errors; qualify before timing; outside-owned observer reserve and sampled-peak limits apply"
+  },
+  "statistics": {
+    "samples_used": "seven retained samples only; raw warmups retained separately; all nine require source/product/resource/trace completeness and absolute admission bounds",
+    "CPU_measurement": "owned-Job whole-run native CPU for owned_runner_e2e; native owned-Job counter delta around the admitted_control phase for that class, including terminated children",
+    "memory_comparison": "maximum observed sampled concurrent aggregate RSS across seven retained samples for each cohort; each warmup and retained sample must also fit absolute1GiB cap; no sum of per-process maxima",
+    "median": "statistics.median",
+    "inclusive_IQR": "statistics.quantiles(samples,n=4,method='inclusive')[2] minus [0]",
+    "p95": "nearest rank sorted_samples[ceil(0.95*n)-1]",
+    "AA_required_per_executed_cohort": {
+      "both_noise_three_IQR_over_positive_median_max": 0.1,
+      "B_median_wall_over_A_max": 1.05,
+      "B_median_owned_CPU_over_A_max": 1.25,
+      "B_observed_RSS_over_A_max": 1.25,
+      "absolute_observed_RSS_max": 1073741824,
+      "small_original_and_focused_p95_B_over_A_max": 1.1,
+      "complete_product_outcome_parity": true,
+      "independent_B_call_byte_trace_expectations": true,
+      "complete_resource_source_clock_trace_evidence": true
+    },
+    "failure": "retain original raw warmups/samples/failures; reject attributed-cost acceptance; redesign only under a prospectively reviewed new protocol; do not subtract a scalar overhead or retune after B",
+    "optimization_adoption": "not attempted by EQ142; later comparisons retain wall reduction strictly > max(5%,3*inclusiveIQR(A)/median(A)), CPU<=1.25A, RSS<=absolute and1.25A, smallp95<=1.10A, full correctness/resource parity"
+  },
+  "independent_expectations": {
+    "tiny_canonical_cases": "independently hand-specified exact Fraction/centered moments/explicit full Decimal240 context; accepted API quality and explicit operand/nonedge expectations",
+    "workload_values": "original expanded-weight/centered Decimal350 oracle under complete explicit Context; unavailable/readiness/count/reason cases specified independently",
+    "quality_count_semantics": "field-ready required input slots, not successfully formed true-range pairs; missing anchor can still make the entire ATR unavailable",
+    "not_oracles": [
+      "instrumented graph generated expectations",
+      "same scheduler twice",
+      "full SDK hash alone",
+      "trace generated call counts used as the only expected trace counts"
+    ]
+  },
+  "precode_vs_measured_bytes": "Current42-task/72-cohort pre-code preflight binds its actual generated specimens and source-derived resource arithmetic. It is not a portable pickle-from-value-JSON promise or72 supervisor/native executions. The implemented exact source/harness must renew actual input/task/result/receipt/transport and source/native admission before timing and freeze the resulting expected identities; retain all source/identity failures without relabeling them as fresh measurements.",
+  "pre_timing_gates": [
+    "actual EQ142 Ready/assignment and implemented reviewed final source",
+    "exact closed hook aliases/descriptors and restoration/reentrancy tests",
+    "known call/byte counts and success/original-exception controls",
+    "all selected supervisor/mode/SDK/native preflight with actual returned task/partition transport bounds",
+    "independent graph/cycle/alias/readiness/ownership fixtures",
+    "source/runtime/expected before-after binding and finite current installed/artifact channel",
+    "bounded trace/sidecar/clock tests and actual reservations",
+    "no active local build/test/other benchmark",
+    "freeze A raw source/protocol before B"
+  ],
+  "retention": "Keep raw warmups, samples, original errors/partial commits, original/proposed source identities and declared omissions. Final actual compressed proof size/channel/access/expiry is a delivery gate; no silent raw-proof deletion to fit a channel.",
+  "nonclaims": [
+    "fastest library",
+    "parallel speedup from configured workers",
+    "live SLA",
+    "persistent pools",
+    "physical memory enforcement",
+    "physical durability",
+    "R18 release acceptance"
+  ]
+}

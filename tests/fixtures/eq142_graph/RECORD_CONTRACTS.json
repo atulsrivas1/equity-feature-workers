@@ -1,0 +1,695 @@
+{
+  "schema": "eq142-record-contracts:1",
+  "stage": "PRECODE_PROPOSAL_NOT_READY_OR_IMPLEMENTED",
+  "unknown_fields": "reject within each closed record; accepted external task/header codecs retain their existing contracts",
+  "wire": {
+    "encoding": "UTF8 JSON; sorted object keys; compact comma/colon separators; ensure_ascii=true; allow_nan=false; exactly one trailing LF",
+    "sha256": "64 lowercase hex characters",
+    "git_commit": "40 lowercase hex characters",
+    "id": "ASCII [a-z][a-z0-9_.:-]{0,127}",
+    "nanoseconds": "canonical decimal string in [0,9223372036854775807], no plus sign or leading zeros except zero",
+    "bounded_count": "JSON integer >=0 within the declared record bounds, never bool",
+    "unknown": "null plus an explicit closed disposition/reason, never a fabricated zero"
+  },
+  "limits": {
+    "graph_nodes_per_task": 512,
+    "graph_edges_per_task": 4096,
+    "graph_wire_bytes": 1048576,
+    "job_tasks": 16,
+    "job_partitions": 8,
+    "spans_per_owned_sample": 131072,
+    "spans_per_thread_collector": 32768,
+    "nesting_depth": 64,
+    "parent_reserved_spans": 16384,
+    "parent_reserved_trace_bytes": 8388608,
+    "trace_bytes_per_owned_sample": 67108864,
+    "trace_bytes_per_sidecar": 16777216,
+    "trace_files_including_temporaries": 64,
+    "future_and_task_maps": 16,
+    "sample_summary_bytes": 1048576,
+    "error_type_characters": 128
+  },
+  "graph": {
+    "schema_value": "eq142-output-graph:1",
+    "fields": {
+      "schema": "constant schema_value",
+      "source": "source_binding record",
+      "task_sha256": "sha256 from original TaskManifest canonical domain",
+      "reuse_sha256": "sha256 from original reuse domain; not a new content/lifetime certificate",
+      "selected_headers": "exact ordered accepted FeatureHeader records from original TaskManifest",
+      "input_identity_disposition": "input_identity record",
+      "scope": "task_scope record",
+      "disposition": "qualified_intraday_description | conservative_unresolved",
+      "disposition_reason": "qualified_builtin | not_selected_family | unqualified_callback",
+      "nodes": "array<node>, unique IDs sorted lexicographically",
+      "edges": "array<edge>, unique (from,to,reason,contract) sorted lexicographically",
+      "limitations": "array<closed limitation IDs>, unique sorted"
+    },
+    "node_fields": {
+      "id": "id",
+      "kind": "supplied_input | configuration_gate | structural_admission | operand | ordered_state | output | result_join | resource_admission | publication_owner",
+      "scope_id": "sha256 binding task/reuse/context/config/input descriptor identity; not a reusable execution authority",
+      "outputs": "sorted unique selected feature IDs; empty for non-output owners when appropriate",
+      "predicate": "closed predicate ID",
+      "owner": "caller_supplied | pure_preparation | pure_calculation | task_result | coordinator | serialized_sink",
+      "capabilities": "sorted subset of [batch,full_history_replay]; empty for non-feature boundary nodes",
+      "source_anchor": "source_anchor record",
+      "ordering": "null or state_order record"
+    },
+    "edge_fields": {
+      "from": "existing node id",
+      "to": "existing node id",
+      "reason": "configuration | structural_admission | operand_readiness | ordered_recurrence | compatible_witness | result_join | resource_admission | publication_owner",
+      "contract": "closed accepted source/specification reference ID"
+    },
+    "node_ids": {
+      "common": [
+        "input:supplied",
+        "gate:configuration",
+        "gate:structural",
+        "gate:resource",
+        "join:result",
+        "owner:publication"
+      ],
+      "operand": "operand:anchored_closes | operand:true_ranges | operand:price_moments, present only when selected",
+      "state": "state:<feature_id> for selected EMA/RSI/ATR; internal chronological recurrence is not a self-edge in the coarse DAG",
+      "output": "output:<feature_id> for every selected feature"
+    },
+    "predicates": [
+      "supplied_bar_descriptor_only",
+      "valid_intraday_configuration",
+      "common_valid_structure",
+      "anchored_closes_from_anchor_through_target",
+      "predecessor_closes_successor_high_low_anchor_exception",
+      "last_n_scheduled_closes_from_epoch",
+      "ema_seed_then_ordered_full_epoch",
+      "rsi_n_plus_one_seed_then_ordered_full_epoch",
+      "atr_anchor_close_n_plus_one_seed_then_ordered_full_epoch",
+      "selected_band_from_unrounded_moments",
+      "position_requires_nonzero_variance",
+      "complete_selected_result_including_unavailable_cells_global_evidence_and_original_whole_call_error_policy",
+      "original_logical_resource_admission",
+      "original_serialized_publication_owner",
+      "unqualified_callback_boundary_only"
+    ],
+    "edge_template": {
+      "input_to_structure": [
+        "input:supplied",
+        "gate:structural",
+        "structural_admission"
+      ],
+      "each_selected_operand": "gate:configuration -> operand (configuration); gate:structural -> operand (structural_admission)",
+      "ema_rsi_atr": "operand -> selected state (operand_readiness); selected state -> selected output (ordered_recurrence)",
+      "bands": "operand:price_moments -> each selected band output (compatible_witness); never public upper/lower -> width/position",
+      "each_selected_output": "selected output -> join:result (result_join); unavailable cells still join as full typed cells",
+      "resource": "gate:resource -> join:result (resource_admission); actual pre-dispatch resource ordering is explicit in job record",
+      "publication": "join:result -> owner:publication (publication_owner)"
+    },
+    "conservative_boundary_record": "Only six common boundary nodes; input:supplied->gate:structural, gate:configuration->join:result, gate:structural->join:result, gate:resource->join:result, join:result->owner:publication. Non-resource/result/publication predicates are unqualified_callback_boundary_only. No state/operand/numerical-output nodes, no caller source inspection or purity/readiness/execution admission claim.",
+    "qualification": {
+      "binding": "Fresh owned process binds inspected installed baseline exports/code/module aliases/source bytes before instrumentation. Cooperative trusted-source qualification, not malicious tamper attestation or purity inferred from FunctionType.",
+      "qualified": "actual captured builtin callback object and current inspected module export/code/alias/source identity all unchanged",
+      "same_actual_object_caller_alias": "qualified",
+      "unknown_copied_wrapped_callback_with_unchanged_bound_baseline": "conservative_unresolved; no numerical refinement; preserve original WorkItem/pickling admission behavior",
+      "baseline_module_export_code_alias_or_file_changed_after_binding": "GraphSpecificationError source_mismatch",
+      "phase": "describe uninstrumented baseline before opt-in tracing modifies call aliases; trace provenance separately binds delegation/hooks",
+      "execution_authority": false
+    },
+    "errors": [
+      "invalid_schema",
+      "duplicate",
+      "unknown_endpoint",
+      "cycle",
+      "source_mismatch",
+      "unqualified_callback"
+    ],
+    "limitation_ids": [
+      "descriptive_only",
+      "caller_tuple_ownership_not_deep_sealing",
+      "declared_acquisition_not_fresh_body_attestation",
+      "batch_full_history_only",
+      "whole_call_errors_preserved",
+      "unknown_callback_no_refinement",
+      "task_graph_not_job_scheduler",
+      "no_update_restore_merge"
+    ]
+  },
+  "source_binding": {
+    "fields": {
+      "canonical_docs_head": "git_commit",
+      "package_build_sources": "closed object core/worker/io -> git_commit; do not relabel package builds as a new docs head",
+      "distributions": "exact closed six name/version pairs from accepted inputs",
+      "installed_module_sha256": "sorted module-name -> sha256; qualification scope explicitly listed",
+      "tool_sha256": "sorted relevant tool file names -> sha256",
+      "protocol_sha256": "sha256",
+      "expected_fixture_sha256": "sha256"
+    }
+  },
+  "input_identity": {
+    "fields": {
+      "declared_input_manifests": "exact original InputManifest records with original acquisition/revision/binding domains",
+      "body_verification": "generated_current_pickle_observation | canonical_typed_value_fixture_only | unverified_current_body",
+      "canonical_value_body_sha256": "nullable sha256; fixture-integrity identity only",
+      "observed_original_pickle_sha256": "nullable sha256; object-alias-sensitive observation, not guaranteed JSON reconstruction bytes",
+      "ownership": "caller_owned_original_tuple_reference",
+      "new_reuse_certificate": "constant false"
+    }
+  },
+  "task_scope": {
+    "fields": {
+      "population": "original ordered unique instrument IDs",
+      "context_json": "nullable exact IntradayContext.to_json string",
+      "context_sha256": "nullable original context.digest",
+      "config_sha256": "original ConfigSpec.digest",
+      "full_task_wire_sha256": "sha256 of original encode_task bytes",
+      "scope_id": "sha256(b'eq142-scope1\\0' + original encode_task bytes), descriptive task-bound identity only"
+    }
+  },
+  "source_anchor": {
+    "fields": {
+      "repository": "core | worker | io | python_runtime",
+      "commit_or_runtime": "git_commit or exact runtime version",
+      "file": "public repository-relative path or stdlib module name",
+      "symbol": "qualified symbol",
+      "file_sha256": "sha256"
+    }
+  },
+  "state_order": {
+    "fields": {
+      "policy": "chronological_full_epoch",
+      "anchor_index": "nonnegative integer",
+      "target_index": "integer >=anchor",
+      "minimum_seed_slots": "N for EMA; N+1 for RSI/ATR",
+      "incremental_capability": "constant false"
+    }
+  },
+  "job": {
+    "schema_value": "eq142-job-boundaries:1",
+    "fields": {
+      "schema": "constant schema_value",
+      "source": "source_binding",
+      "execution_scope_id": "descriptive hash of exact admitted task set/mode/budget",
+      "job_scopes": "array<job_scope>, maximum16",
+      "mode": "sequential | thread | process",
+      "configured_workers": "1|2|4|8 for selected measurement matrix",
+      "tasks": "ordered unique original task hashes",
+      "components": "array<component>, maximum16",
+      "partitions": "array<partition>, maximum8",
+      "resource_admission": "resource_admission record",
+      "barriers": "array<barrier>, maximum128",
+      "publication_owner": "publication_owner record",
+      "cancelled_or_undispatched": "array<task_disposition>, maximum16; task hashes unique",
+      "limitations": "sorted subset of job.limitation_ids"
+    },
+    "barrier_kinds": [
+      "resource_before_dispatch",
+      "population_component_order",
+      "all_dispatched_worker_outcomes_terminal",
+      "pool_shutdown_before_coordinator_validation",
+      "complete_task_result_before_publication",
+      "serialized_backend_owner"
+    ],
+    "expected_generic_population_fixture": {
+      "populations": [
+        [
+          "A"
+        ],
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "D"
+        ]
+      ],
+      "components": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "actual_partitions_at_workers4": 2,
+      "single_symbol_intraday_qualification": false
+    },
+    "limitation_ids": [
+      "descriptive_only",
+      "source_required_not_observed",
+      "global_worker_shutdown_barrier",
+      "terminal_not_successful",
+      "backend_contract_only",
+      "logical_not_physical_resource_enforcement"
+    ],
+    "joins": "Every task belongs to exactly one job_scope/component/partition; each component belongs to one partition; all references must exist, memberships agree, barrier graph acyclic. execution_scope_id=sha256(b\"eq142-job1\\0\" + canonical JSON of mode/configured_workers/tasks/resource budget). Job records distinguish source-required barriers from observed outcomes; no fabricated executed success."
+  },
+  "trace": {
+    "schema_value": "eq142-execution-trace:1",
+    "fields": {
+      "schema": "constant schema_value",
+      "sample_id": "id",
+      "source": "source_binding",
+      "control": "uninstrumented_A | instrumented_B",
+      "series": "eq142_admitted_control | eq142_owned_runner_e2e",
+      "profile": "one of exact six protocol profile IDs",
+      "mode": "sequential | thread | process",
+      "degree": "1|2|4|8",
+      "clock_disposition": "constant local_monotonic_durations_and_parent_causal_bounds",
+      "clocks": "array<clock>, actual processes only",
+      "timelines": "array<timeline>, unique stable process/thread identity",
+      "reservations": "array<reservation>, preallocated parent/delegate invocation identities",
+      "spans": "array<span>, bounded and sample-unique IDs",
+      "counters": "array<counter>, sorted operation/scope",
+      "parent_relations": "array<causal_relation>, actual dispatch/wait/result/join only",
+      "actual_job_boundaries": "job record; if retained separately use wire_reference codec eq142_job and validate referenced body",
+      "product_outcomes": "ordered array<product_outcome>, maximum16",
+      "resource_evidence": "resource_evidence record",
+      "unknown_intervals": "array<unknown_interval>, maximum4096",
+      "global_numeric_critical_path_ns": "constant null",
+      "native_ipc_encoded_bytes": "constant null unless separately qualified direct capture is prospectively selected",
+      "complete": "bool; false rejects attributed-cost acceptance",
+      "failure_reason": "null or closed trace failure code",
+      "sidecar_bytes": "actual bounded encoded bytes",
+      "limitations": "sorted subset of trace.limitation_ids"
+    },
+    "failure_codes": [
+      "source_mismatch",
+      "hook_alias_mismatch",
+      "unknown_invocation",
+      "missing_sidecar",
+      "duplicate_sidecar",
+      "unknown_timeline",
+      "invalid_nesting",
+      "invalid_clock",
+      "unterminated_span",
+      "event_limit",
+      "byte_limit",
+      "file_limit",
+      "map_limit",
+      "recursive_bookkeeping",
+      "count_mismatch",
+      "restoration_failure",
+      "collector_error"
+    ],
+    "unknown_reasons": [
+      "not_selected_hook",
+      "source_constructor_task_label_unavailable",
+      "native_ipc_not_captured",
+      "allocator_copy_not_captured",
+      "cross_process_alignment_unqualified",
+      "collector_final_write_outside_trace",
+      "composite_parent_wait"
+    ],
+    "operations": [
+      "supervisor.inputs",
+      "supervisor.pickle_size",
+      "supervisor.partition",
+      "supervisor.validate_results",
+      "supervisor.admit_entities",
+      "manifest.task_digest",
+      "manifest.reuse_digest",
+      "manifest.canonical",
+      "manifest.encode_task",
+      "manifest.encode_output",
+      "supplied.admit",
+      "supplied.result_identity",
+      "worker.intraday_context",
+      "intraday.validate_config",
+      "intraday.admit_facts",
+      "intraday.prepare",
+      "intraday.prepare_operand",
+      "intraday.compute",
+      "intraday.indicator",
+      "intraday.band_values",
+      "config.to_json",
+      "config.digest",
+      "context.to_json",
+      "context.digest",
+      "sdk.prepare_publication",
+      "sdk.encode_result",
+      "sdk.decode_result",
+      "sdk.encode_receipt",
+      "sdk.publish",
+      "publisher.submit",
+      "publisher.inner_submit",
+      "publisher.drain",
+      "publisher.inner_drain",
+      "sink.lookup",
+      "sink.read",
+      "pool.thread_submit",
+      "pool.process_submit",
+      "future.result",
+      "parent.wait",
+      "delegate.original_partition",
+      "trace.bind_labels",
+      "trace.install",
+      "trace.restore",
+      "trace.bookkeeping"
+    ],
+    "count_policy": "attempts=returned+rejected for complete traces; nested operations remain separate counts, never summed as unique allocations or physical copies",
+    "exclusive_policy": "inclusive minus union of contained child intervals on exactly the same actual process/thread timeline; reject inconsistent or negative closure; no worker-to-wall summation",
+    "parity_policy": "A/B complete product outcome parity plus independent B trace/call/byte expectations; no literal untraced/traced timing or event equality",
+    "limitation_ids": [
+      "local_clock_only",
+      "no_global_numeric_critical_path",
+      "native_ipc_not_captured",
+      "physical_allocations_not_captured",
+      "sampled_resource_peaks_not_enforced",
+      "observer_outside_owned_job",
+      "backend_contract_only",
+      "bookkeeping_not_product_purity",
+      "source_construction_labels_may_be_unavailable",
+      "composite_wait_not_exclusive_ipc"
+    ]
+  },
+  "clock": {
+    "fields": {
+      "process_ordinal": "bounded local ordinal",
+      "name": "perf_counter",
+      "implementation": "actual get_clock_info string",
+      "monotonic": "true required",
+      "adjustable": "false required",
+      "reported_resolution_seconds": "canonical decimal string",
+      "qpc_frequency_hz": "nullable positive integer",
+      "cross_process_raw_ticks_qualified": "constant false"
+    }
+  },
+  "timeline": {
+    "fields": {
+      "id": "id",
+      "process_ordinal": "bounded local ordinal",
+      "thread_ordinal": "bounded process-local ordinal",
+      "process_startup_nonce": "sample-local primitive ID",
+      "thread_startup_nonce": "sample-local primitive ID",
+      "clock_process_ordinal": "existing clock process ordinal"
+    }
+  },
+  "reservation": {
+    "fields": {
+      "id": "sample-unique id",
+      "kind": "parent | delegate_invocation",
+      "planned_task_hashes": "ordered task hashes",
+      "max_spans": "preallocated bounded count",
+      "max_bytes": "preallocated bounded count",
+      "final_file": "sample-local basename",
+      "temporary_file": "sample-local basename",
+      "consumed_spans": "bounded count <=max_spans",
+      "consumed_bytes": "bounded count <=max_bytes"
+    },
+    "allocation": "parent16384 spans/8MiB; remaining114688 spans/56MiB divided by actual planned invocation count with integer floor; per-thread32768 and per-file16MiB caps; no implicit allowance transfer; max16 sequential task invocations or8 original thread/process partitions"
+  },
+  "span": {
+    "fields": {
+      "id": "sample-unique id",
+      "parent_id": "nullable existing span ID",
+      "reservation_id": "existing reservation ID",
+      "timeline_id": "existing stable actual timeline ID",
+      "operation": "closed operation",
+      "scope_id": "primitive prebound stage/partition/task scope ID",
+      "task_sha256": "nullable prebound task hash; never calculate from a hooked getter to label itself",
+      "start_ns": "nanoseconds",
+      "end_ns": "nanoseconds >=start on same timeline",
+      "inclusive_ns": "nanoseconds exactly end-start",
+      "exclusive_ns": "nanoseconds from validated same-timeline child interval union",
+      "status": "returned | rejected",
+      "error_type": "nullable qualified type name <=128characters; no arbitrary message/traceback",
+      "byte_observation": "returned_encoded_bytes | observed_pickle_size_check | source_guaranteed_ascii_json_length | unavailable",
+      "observed_bytes": "nullable bounded count consistent with observation"
+    }
+  },
+  "counter": {
+    "fields": {
+      "operation": "closed operation",
+      "scope_id": "prebound scope ID or explicit unknown stage ID",
+      "attempts": "bounded count",
+      "returned": "bounded count",
+      "rejected": "bounded count",
+      "byte_observation": "same closed observations as span",
+      "returned_observed_bytes": "nullable bounded count; never infer task bytes from 64-character digest length",
+      "unique_physical_allocation_bytes": "constant null"
+    }
+  },
+  "causal_relation": {
+    "fields": {
+      "id": "id",
+      "kind": "dispatch | parent_wait | result_join | job_barrier | publication_join",
+      "parent_timeline_id": "existing parent timeline",
+      "invocation_id": "nullable actual reservation ID",
+      "task_hashes": "actual related tasks",
+      "parent_start_ns": "nanoseconds",
+      "parent_end_ns": "nanoseconds >=start",
+      "child_timeline_ids": "actual related local timelines",
+      "cross_process_interval_subtraction": "constant false"
+    }
+  },
+  "job_scope": {
+    "fields": {
+      "id": "id",
+      "job_id": "exact original TaskManifest.job_id string",
+      "generation_id": "exact original TaskManifest.generation_id string",
+      "destination_scope": "exact original TaskManifest.destination_scope string",
+      "task_hashes": "nonempty ordered unique original task hashes; each task appears in exactly one job_scope"
+    }
+  },
+  "component": {
+    "fields": {
+      "id": "id",
+      "population": "sorted unique instrument IDs; exact transitive union of member populations",
+      "ordered_task_hashes": "nonempty task hashes in original partition_tasks component ordering",
+      "partition_id": "existing partition ID"
+    }
+  },
+  "partition": {
+    "fields": {
+      "id": "id",
+      "ordinal": "integer 0..7, contiguous unique original ordinals",
+      "component_ids": "ordered existing component IDs, each component belongs to exactly one partition",
+      "ordered_task_hashes": "exact original Partition.items task hashes, each task belongs to exactly one partition"
+    }
+  },
+  "barrier": {
+    "fields": {
+      "id": "id",
+      "kind": "one of job.barrier_kinds",
+      "task_hashes": "ordered subset of existing job tasks",
+      "partition_ids": "ordered subset of existing partition IDs",
+      "predecessor_ids": "ordered existing barrier IDs; no cycles",
+      "owner_id": "coordinator | existing publication_owner ID | existing component ID",
+      "evidence": "source_required | observed_satisfied | observed_failed | not_reached",
+      "source_anchor": "source_anchor record"
+    }
+  },
+  "task_disposition": {
+    "fields": {
+      "task_sha256": "existing job task hash",
+      "state": "computed | failed | cancelled | undispatched",
+      "reason": "null or original_reason record",
+      "result_wire": "ordered array<wire_reference>; empty for no returned results",
+      "spill_wire": "nullable wire_reference from original SpillReference canonical encoding",
+      "output_wire": "nullable wire_reference from original encode_output",
+      "commit_state": "not_attempted | committed | committed_then_accounting_rejected | unknown",
+      "evidence": "source_required | observed"
+    }
+  },
+  "original_reason": {
+    "fields": {
+      "domain": "sink | command | supervisor",
+      "value": "exact existing SinkErrorCode.value or CommandErrorCode.value at source binding; supervisor permits only CALCULATION_FAILED or CANCELLED; do not translate case or invent a successful disposition"
+    }
+  },
+  "publication_owner": {
+    "fields": {
+      "id": "id",
+      "destination_scopes": "sorted unique original destination_scope strings",
+      "job_scope_ids": "ordered existing job_scope IDs",
+      "writer_mode": "constant serialized_writer",
+      "backend_owners": "constant integer 1",
+      "durability": "constant backend_contract_only"
+    }
+  },
+  "resource_budget": {
+    "fields": {
+      "max_tasks": "positive integer with unchanged accepted ResourceBudget validation",
+      "workers": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_cpu_slots": "positive integer with unchanged accepted ResourceBudget validation",
+      "compute_threads": "positive integer with unchanged accepted ResourceBudget validation",
+      "backend_threads": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_in_flight": "positive integer with unchanged accepted ResourceBudget validation",
+      "io_slots": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_input_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_resident_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_task_result_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_task_transport_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_total_result_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_result_cells": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_evidence_rows": "positive integer with unchanged accepted ResourceBudget validation"
+    }
+  },
+  "resource_admission": {
+    "fields": {
+      "budget": "resource_budget",
+      "evidence": "source_derived_preflight | actual_supervisor_admitted | actual_supervisor_rejected | not_executed",
+      "initial_reserved_resident_bytes": "nullable bounded_count",
+      "cumulative_committed_output_metadata_bytes": "nullable bounded_count; separately tested after each actual commit",
+      "trace_reserved_bytes": "constant integer 67108864 in frozen measurement protocol",
+      "whole_job_sampled_rss_cap_bytes": "constant integer 1073741824",
+      "additional_host_memory_reserve_bytes": "constant integer 2147483648",
+      "cpu_host_reserve_slots": "constant integer 2",
+      "capacity": "nullable capacity record",
+      "original_reason": "nullable original_reason",
+      "physical_enforcement": "constant false"
+    }
+  },
+  "capacity": {
+    "fields": {
+      "allowed_cpu_ids": "sorted unique nonnegative OS processor ordinals in observed affinity domain",
+      "allowed_cpu_domain": "exact OS affinity/group domain identifier, not physical core identity",
+      "free_memory_bytes": "bounded_count",
+      "free_storage_bytes": "bounded_count",
+      "study_storage_reserve_bytes": "constant integer 51539607552",
+      "additional_storage_reserve_bytes": "constant integer 8589934592",
+      "raw_evidence": "wire_reference"
+    }
+  },
+  "wire_reference": {
+    "fields": {
+      "codec": "encode_task | encode_result | encode_output | encode_receipt | diagnostic_snapshot | spill_reference | native_receipt | capacity_receipt | eq142_job | eq142_product_projection",
+      "sha256": "sha256 of exact retained original encoded bytes",
+      "bytes": "bounded_count",
+      "retained_name": "sample-local ASCII basename matching [a-zA-Z0-9_.-]{1,128}; no paths"
+    }
+  },
+  "diagnostic_projection": {
+    "fields": {
+      "task_sha256": "nullable original hash",
+      "intent_sha256": "original hash",
+      "family": "original accepted TaskDiagnostic.family",
+      "family_sha256": "original hash",
+      "partition_sha256": "original hash",
+      "status": "original DiagnosticStatus.value at source binding",
+      "reason": "original TaskDiagnostic.reason string or null; validated by unchanged accepted diagnostics codec"
+    }
+  },
+  "product_outcome": {
+    "fields": {
+      "task_sha256": "existing task hash",
+      "disposition": "task_disposition",
+      "task_wire": "wire_reference with encode_task codec",
+      "results": "ordered array<wire_reference> with encode_result codec; full cells, quality, evidence, headers, config/revision/metadata retained",
+      "output": "nullable wire_reference with encode_output codec",
+      "receipt": "nullable wire_reference with encode_receipt codec",
+      "committed_lookup": "not_applicable | committed_matching_receipt | absent | original_failure",
+      "readback_results": "ordered array<wire_reference> with encode_result codec; must exactly match committed results on success",
+      "diagnostics": "ordered array<diagnostic_projection>",
+      "raw_diagnostics": "wire_reference with diagnostic_snapshot codec"
+    },
+    "parity": {
+      "compare": "Exact ordered stable product projection: all fields above except raw_diagnostics reference; complete task/result/output/receipt bytes, original disposition/reason/commit outcome and stable diagnostics required. Retain raw diagnostics separately.",
+      "diagnostic_projection_fields": [
+        "task_sha256",
+        "intent_sha256",
+        "family",
+        "family_sha256",
+        "partition_sha256",
+        "status",
+        "reason"
+      ],
+      "diagnostic_volatile_exclusions": [
+        "attempt",
+        "timings",
+        "elapsed_ns"
+      ],
+      "trace_and_native_exclusions": [
+        "sample IDs",
+        "process/thread identities",
+        "trace spans/counters",
+        "native measurements"
+      ],
+      "never_exclude": [
+        "values",
+        "nulls",
+        "status",
+        "quality counts/reasons",
+        "evidence",
+        "headers",
+        "config/context/revision identity",
+        "task/result/output/receipt identity",
+        "committed lookup/readback",
+        "original typed failure or cancellation"
+      ],
+      "raw_byte_policy": "No raw diagnostic timing parity claim. Original wire references retain actual bytes; projection is not a new cache/reuse certificate."
+    }
+  },
+  "native_accounting": {
+    "fields": {
+      "user": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "kernel": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "period_user": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "period_kernel": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "page_faults": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "total_processes": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "active_processes": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "terminated_by_limit": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts"
+    }
+  },
+  "native_sample": {
+    "fields": {
+      "observer_elapsed_ns": "nanoseconds; observer local timeline only",
+      "owned_process_count": "bounded_count",
+      "concurrent_aggregate_rss_bytes": "bounded_count",
+      "concurrent_native_thread_count": "nullable bounded_count; null requires probe_error",
+      "disposition": "complete | probe_error"
+    }
+  },
+  "probe_error": {
+    "fields": {
+      "code": "SNAPSHOT | PROCESS_ENUMERATION | MISSING_OWNED_PID | OPEN_PROCESS | MEMBERSHIP_RACE | RSS_PROBE | THREAD_PROBE | JOB_QUERY | NONZERO_DESCENDANTS | COUNTER_REVERSED",
+      "winerror": "nullable nonnegative integer",
+      "process_ordinal": "nullable bounded_count; raw PID only in retained native receipt"
+    }
+  },
+  "resource_evidence": {
+    "fields": {
+      "native_receipt": "wire_reference",
+      "before_phase": "nullable native_accounting",
+      "after_phase": "nullable native_accounting",
+      "final_accounting": "native_accounting; active_processes must be zero for acceptance",
+      "selected_user_ticks_100ns": "canonical nonnegative decimal string; whole final Job for e2e or after-before for admitted control",
+      "selected_kernel_ticks_100ns": "canonical nonnegative decimal string; same scope as selected_user_ticks",
+      "selected_wall_ns": "nanoseconds from declared protocol class boundaries",
+      "samples": "bounded array<native_sample>, maximum 60001 at 10ms over600s plus endpoints",
+      "aggregate_sampled_peak_rss_bytes": "bounded_count; maximum simultaneous aggregate samples, not sum of per-process maxima",
+      "aggregate_sampled_peak_native_threads": "nullable bounded_count; maximum sampled total, not physical cores",
+      "probe_errors": "bounded array<probe_error>, maximum1024; any error rejects qualification",
+      "observer_scope": "constant outside_owned_job_in_declared_host_reserve"
+    },
+    "native_thread_method": {
+      "selected": "New development sampler extension in tools/eq142_native.py; Windows CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS), Process32FirstW/Process32NextW, PROCESSENTRY32W.cntThreads joined only to verified owned-Job member PIDs. No command lines, executable paths or unrelated process details persisted.",
+      "qualification": "Before timing, test successful process/thread observations, invalid snapshot/enumeration, missing-member race, membership, descendants and cleanup. Original supplied_native.py does not already provide thread counts. Missing/racing measurement is an explicit probe error, never zero or configured degree.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-viewing-processes",
+        "https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/ns-tlhelp32-processentry32w",
+        "https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-createtoolhelp32snapshot"
+      ],
+      "limitations": "Sampled counts can miss transient thread/process peaks. Membership and snapshot are not atomic. Observer CPU/RSS is excluded from owned-Job accounting; whole-run wall includes observation/report completion. No physically enforced memory/CPU or globally idle-host claim."
+    }
+  },
+  "unknown_interval": {
+    "fields": {
+      "reason": "one of trace.unknown_reasons",
+      "timeline_id": "nullable existing timeline ID",
+      "scope_id": "prebound scope ID",
+      "operation": "nullable trace.operations member",
+      "start_ns": "nullable nanoseconds",
+      "end_ns": "nullable nanoseconds; paired bounds both null or same-timeline end>=start",
+      "observation": "not_instrumented | composite_interval | unqualified_alignment | outside_trace",
+      "numeric_exclusive_cost_ns": "constant null"
+    }
+  }
+}

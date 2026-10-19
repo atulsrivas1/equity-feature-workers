@@ -1,3 +1,11 @@
+## EQ142 active R18 execution after independent Ready
+
+[Canonical EQ142](https://github.com/atulsrivas1/equity-features/issues/476) is actually assigned to Atul/In progress after separate129-check Ready review of canonical3da74 and [actual Ready/start readback](https://github.com/atulsrivas1/equity-features/issues/476#issuecomment-6277126653). Existing owner authorization covers separate local automated review throughout R18 and necessary companions; [recorded grant](https://github.com/atulsrivas1/equity-features/issues/564#issuecomment-6275820553). This supersedes historical stop-before-R18 notes for this bounded execution only. All numerical, final-source/currentCI/bothOS installed/artifact/native/benchmark/publication/lifecycle gates remain; no R19+/live/provider/registry/admin/recurring scope follows. Preserve frozen R17 sources/environment and unrelated work. Canonical Project owns status.
+
+Current first increment implements development-only descriptive task/job graph tooling outside calculation packages. Eight graph tests pass against original canonical topology/reachability, source/object mutation, cycle/closed-record and generic population/job ownership controls. No hooks/tracer/native sampler/harness or timing exists yet, and no final source/installed/platform/release acceptance is claimed. [Execution notes](EQ142_EXECUTION_BASELINE.md) record next work. Pure mathematics, package versions, default dispatch and worker production source remain unchanged. Sequential fallback and all48 original R17 worker nonwins remain.
+
+## Earlier checkpoints retained as history
+
 ## EQ140 completed frozen study and current qualification
 
 Measured be4d6667e9b46981cf430c86888b52c7812b0424 completed486ownedJobs/108warmups/378retained across6A/48B. Separate automated /root/r17_review audit dd6a5e66b2d81642f8bc35dbae81a1b8891c78f8845c68b4f9a5ad3d99ee38e4 passed full retained evidence/resource/gate recalculation: zero adoptions,48nonwins; sequential remains default/fallback. See [all results](benchmarks/eq140/EQ140_RESULTS.md), [audit](benchmarks/eq140/EQ140_BE4_MEASUREMENT_REVIEW.md) and [raw archive index](benchmarks/eq140/EQ140_STUDY_ARCHIVE.json). Actual sampled RSS is not physical enforcement; expected SDK hashes are not nonexistent raw-body redecoding; no signed execution timeline or fastest/live/persistent-pool claim.

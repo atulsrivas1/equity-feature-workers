@@ -1,0 +1,808 @@
+{
+  "schema": "eq142-closed-hook-inventory:1",
+  "stage": "PRECODE_READ_ONLY_PROPOSAL_NOT_TRACE_COVERAGE",
+  "runtime": "CPython 3.12.10",
+  "records": [
+    {
+      "operation": "config.digest",
+      "definition": "equity_feature_contracts.specs.ConfigSpec.digest",
+      "source_module": "equity_feature_contracts.specs",
+      "source_category": "installed_package",
+      "source_file": "specs.py",
+      "source_sha256": "9db84cf4c4b8006da6e2e5fbac4646eb77927729bc6143b68b84bea447b979f3",
+      "definition_line": 178,
+      "kind": "property_descriptor",
+      "patch_sites": [
+        "equity_feature_contracts.specs.ConfigSpec.digest"
+      ],
+      "class_aliases": [
+        "equity_feature_contracts.ConfigSpec",
+        "equity_feature_contracts.breadth.ConfigSpec",
+        "equity_feature_contracts.buckets.ConfigSpec",
+        "equity_feature_contracts.composition.ConfigSpec",
+        "equity_feature_contracts.relative.ConfigSpec",
+        "equity_feature_contracts.specs.ConfigSpec",
+        "equity_feature_contracts.volume.ConfigSpec",
+        "equity_feature_workers.breadth_commands.ConfigSpec",
+        "equity_feature_workers.commands.ConfigSpec",
+        "equity_feature_workers.intraday.ConfigSpec",
+        "equity_feature_workers.required_inputs.ConfigSpec",
+        "equity_features.breadth.ConfigSpec",
+        "equity_features.buckets.ConfigSpec",
+        "equity_features.history.ConfigSpec",
+        "equity_features.relative.ConfigSpec",
+        "equity_features.session._reductions.ConfigSpec",
+        "equity_features.session.bars.ConfigSpec",
+        "equity_features.session.continuous.ConfigSpec",
+        "equity_features.session.quotes.ConfigSpec",
+        "equity_features.session.top_k.ConfigSpec",
+        "equity_features.session.trades.ConfigSpec",
+        "equity_features.volume.ConfigSpec",
+        "equity_features_intraday._admission.ConfigSpec",
+        "equity_features_intraday._context.ConfigSpec",
+        "equity_features_intraday._dispatch.ConfigSpec",
+        "equity_features_intraday._prepare.ConfigSpec"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "config.to_json",
+      "definition": "equity_feature_contracts.specs.ConfigSpec.to_json",
+      "source_module": "equity_feature_contracts.specs",
+      "source_category": "installed_package",
+      "source_file": "specs.py",
+      "source_sha256": "9db84cf4c4b8006da6e2e5fbac4646eb77927729bc6143b68b84bea447b979f3",
+      "definition_line": 173,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "equity_feature_contracts.specs.ConfigSpec.to_json"
+      ],
+      "class_aliases": [
+        "equity_feature_contracts.ConfigSpec",
+        "equity_feature_contracts.breadth.ConfigSpec",
+        "equity_feature_contracts.buckets.ConfigSpec",
+        "equity_feature_contracts.composition.ConfigSpec",
+        "equity_feature_contracts.relative.ConfigSpec",
+        "equity_feature_contracts.specs.ConfigSpec",
+        "equity_feature_contracts.volume.ConfigSpec",
+        "equity_feature_workers.breadth_commands.ConfigSpec",
+        "equity_feature_workers.commands.ConfigSpec",
+        "equity_feature_workers.intraday.ConfigSpec",
+        "equity_feature_workers.required_inputs.ConfigSpec",
+        "equity_features.breadth.ConfigSpec",
+        "equity_features.buckets.ConfigSpec",
+        "equity_features.history.ConfigSpec",
+        "equity_features.relative.ConfigSpec",
+        "equity_features.session._reductions.ConfigSpec",
+        "equity_features.session.bars.ConfigSpec",
+        "equity_features.session.continuous.ConfigSpec",
+        "equity_features.session.quotes.ConfigSpec",
+        "equity_features.session.top_k.ConfigSpec",
+        "equity_features.session.trades.ConfigSpec",
+        "equity_features.volume.ConfigSpec",
+        "equity_features_intraday._admission.ConfigSpec",
+        "equity_features_intraday._context.ConfigSpec",
+        "equity_features_intraday._dispatch.ConfigSpec",
+        "equity_features_intraday._prepare.ConfigSpec"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "context.digest",
+      "definition": "equity_features_intraday._context.IntradayContext.digest",
+      "source_module": "equity_features_intraday._context",
+      "source_category": "installed_package",
+      "source_file": "_context.py",
+      "source_sha256": "90232f34c9832e64977b437b11028e42f78df6c07e1a19060cbb38ebc63237c9",
+      "definition_line": 137,
+      "kind": "property_descriptor",
+      "patch_sites": [
+        "equity_features_intraday._context.IntradayContext.digest"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.intraday.IntradayContext",
+        "equity_features_intraday.IntradayContext",
+        "equity_features_intraday._admission.IntradayContext",
+        "equity_features_intraday._context.IntradayContext",
+        "equity_features_intraday._dispatch.IntradayContext",
+        "equity_features_intraday._prepare.IntradayContext"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "context.to_json",
+      "definition": "equity_features_intraday._context.IntradayContext.to_json",
+      "source_module": "equity_features_intraday._context",
+      "source_category": "installed_package",
+      "source_file": "_context.py",
+      "source_sha256": "90232f34c9832e64977b437b11028e42f78df6c07e1a19060cbb38ebc63237c9",
+      "definition_line": 133,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "equity_features_intraday._context.IntradayContext.to_json"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.intraday.IntradayContext",
+        "equity_features_intraday.IntradayContext",
+        "equity_features_intraday._admission.IntradayContext",
+        "equity_features_intraday._context.IntradayContext",
+        "equity_features_intraday._dispatch.IntradayContext",
+        "equity_features_intraday._prepare.IntradayContext"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "future.result",
+      "definition": "concurrent.futures._base.Future.result",
+      "source_module": "concurrent.futures._base",
+      "source_category": "python_runtime",
+      "source_file": "_base.py",
+      "source_sha256": "a5a450b5ccf2bc5abf458be32c7b2eb4e26c02c3d504eef0e0682b5cfcfc6f52",
+      "definition_line": 428,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "concurrent.futures._base.Future.result"
+      ],
+      "class_aliases": [
+        "concurrent.futures.Future",
+        "concurrent.futures._base.Future",
+        "equity_feature_workers.supervisor.Future"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "intraday.admit_facts",
+      "definition": "equity_features_intraday._admission.admit",
+      "source_module": "equity_features_intraday._admission",
+      "source_category": "installed_package",
+      "source_file": "_admission.py",
+      "source_sha256": "86e16e7bd1ffb645baead36665ef61babffb92c0511ef755e2120a0537f7e742",
+      "definition_line": 85,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_features_intraday._admission.admit",
+        "equity_features_intraday._prepare.admit"
+      ]
+    },
+    {
+      "operation": "intraday.band_values",
+      "definition": "equity_features_intraday._bands.band_values",
+      "source_module": "equity_features_intraday._bands",
+      "source_category": "installed_package",
+      "source_file": "_bands.py",
+      "source_sha256": "476caea16d35d8d8e0f292adc180e3a2c82b7758ed550bb99c1f3a4142f4d7f1",
+      "definition_line": 25,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_features_intraday._bands.band_values",
+        "equity_features_intraday._dispatch.band_values"
+      ]
+    },
+    {
+      "operation": "intraday.compute",
+      "definition": "equity_features_intraday._dispatch.compute_intraday",
+      "source_module": "equity_features_intraday._dispatch",
+      "source_category": "installed_package",
+      "source_file": "_dispatch.py",
+      "source_sha256": "d5c148d544f321ea1dc519e31f3e1f63e8e5530a9a9299bb00997512170f1ec7",
+      "definition_line": 13,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.intraday.compute_intraday",
+        "equity_features_intraday._dispatch.compute_intraday",
+        "equity_features_intraday.compute_intraday"
+      ]
+    },
+    {
+      "operation": "intraday.indicator",
+      "definition": "equity_features_intraday._indicators.indicator",
+      "source_module": "equity_features_intraday._indicators",
+      "source_category": "installed_package",
+      "source_file": "_indicators.py",
+      "source_sha256": "07658c8dcfb183318e6489df68491aa412c4f9a753fa39c003e5e6b28e12c594",
+      "definition_line": 17,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_features_intraday._dispatch.indicator",
+        "equity_features_intraday._indicators.indicator"
+      ]
+    },
+    {
+      "operation": "intraday.prepare",
+      "definition": "equity_features_intraday._prepare.prepare_intraday",
+      "source_module": "equity_features_intraday._prepare",
+      "source_category": "installed_package",
+      "source_file": "_prepare.py",
+      "source_sha256": "b8fc859fa0b274b6bd65e4c939383f18f8401985d9f5f1250c35287daf16799c",
+      "definition_line": 179,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.intraday.prepare_intraday",
+        "equity_features_intraday._dispatch.prepare_intraday",
+        "equity_features_intraday._prepare.prepare_intraday",
+        "equity_features_intraday.prepare_intraday"
+      ]
+    },
+    {
+      "operation": "intraday.prepare_operand",
+      "definition": "equity_features_intraday._prepare.prepare_view",
+      "source_module": "equity_features_intraday._prepare",
+      "source_category": "installed_package",
+      "source_file": "_prepare.py",
+      "source_sha256": "b8fc859fa0b274b6bd65e4c939383f18f8401985d9f5f1250c35287daf16799c",
+      "definition_line": 126,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_features_intraday._prepare.prepare_view"
+      ]
+    },
+    {
+      "operation": "intraday.validate_config",
+      "definition": "equity_features_intraday._context.validate_config",
+      "source_module": "equity_features_intraday._context",
+      "source_category": "installed_package",
+      "source_file": "_context.py",
+      "source_sha256": "90232f34c9832e64977b437b11028e42f78df6c07e1a19060cbb38ebc63237c9",
+      "definition_line": 255,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_features_intraday._context.validate_config",
+        "equity_features_intraday._dispatch.validate_config",
+        "equity_features_intraday._prepare.validate_config"
+      ]
+    },
+    {
+      "operation": "manifest.canonical",
+      "definition": "equity_feature_workers.manifests._canonical",
+      "source_module": "equity_feature_workers.manifests",
+      "source_category": "installed_package",
+      "source_file": "manifests.py",
+      "source_sha256": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+      "definition_line": 316,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.manifests._canonical"
+      ]
+    },
+    {
+      "operation": "manifest.encode_output",
+      "definition": "equity_feature_workers.manifests.encode_output",
+      "source_module": "equity_feature_workers.manifests",
+      "source_category": "installed_package",
+      "source_file": "manifests.py",
+      "source_sha256": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+      "definition_line": 379,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.barriers.encode_output",
+        "equity_feature_workers.catalog.encode_output",
+        "equity_feature_workers.claims.encode_output",
+        "equity_feature_workers.encode_output",
+        "equity_feature_workers.generations.encode_output",
+        "equity_feature_workers.manifests.encode_output",
+        "equity_feature_workers.publication.encode_output",
+        "equity_feature_workers.supervisor.encode_output"
+      ]
+    },
+    {
+      "operation": "manifest.encode_task",
+      "definition": "equity_feature_workers.manifests.encode_task",
+      "source_module": "equity_feature_workers.manifests",
+      "source_category": "installed_package",
+      "source_file": "manifests.py",
+      "source_sha256": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+      "definition_line": 359,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.barriers.encode_task",
+        "equity_feature_workers.claims.encode_task",
+        "equity_feature_workers.encode_task",
+        "equity_feature_workers.manifests.encode_task",
+        "equity_feature_workers.supervisor.encode_task"
+      ]
+    },
+    {
+      "operation": "manifest.reuse_digest",
+      "definition": "equity_feature_workers.manifests.TaskManifest.reuse_sha256",
+      "source_module": "equity_feature_workers.manifests",
+      "source_category": "installed_package",
+      "source_file": "manifests.py",
+      "source_sha256": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+      "definition_line": 223,
+      "kind": "property_descriptor",
+      "patch_sites": [
+        "equity_feature_workers.manifests.TaskManifest.reuse_sha256"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.TaskManifest",
+        "equity_feature_workers._supplied.TaskManifest",
+        "equity_feature_workers.barriers.TaskManifest",
+        "equity_feature_workers.breadth_commands.TaskManifest",
+        "equity_feature_workers.claims.TaskManifest",
+        "equity_feature_workers.commands.TaskManifest",
+        "equity_feature_workers.diagnostics.TaskManifest",
+        "equity_feature_workers.generations.TaskManifest",
+        "equity_feature_workers.intraday.TaskManifest",
+        "equity_feature_workers.manifests.TaskManifest",
+        "equity_feature_workers.publication.TaskManifest",
+        "equity_feature_workers.required_inputs.TaskManifest",
+        "equity_feature_workers.supervisor.TaskManifest"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "manifest.task_digest",
+      "definition": "equity_feature_workers.manifests.TaskManifest.task_sha256",
+      "source_module": "equity_feature_workers.manifests",
+      "source_category": "installed_package",
+      "source_file": "manifests.py",
+      "source_sha256": "915071757d40d46c6d192f4687ca874935fe1100fdc3398675d00ed7a937b537",
+      "definition_line": 219,
+      "kind": "property_descriptor",
+      "patch_sites": [
+        "equity_feature_workers.manifests.TaskManifest.task_sha256"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.TaskManifest",
+        "equity_feature_workers._supplied.TaskManifest",
+        "equity_feature_workers.barriers.TaskManifest",
+        "equity_feature_workers.breadth_commands.TaskManifest",
+        "equity_feature_workers.claims.TaskManifest",
+        "equity_feature_workers.commands.TaskManifest",
+        "equity_feature_workers.diagnostics.TaskManifest",
+        "equity_feature_workers.generations.TaskManifest",
+        "equity_feature_workers.intraday.TaskManifest",
+        "equity_feature_workers.manifests.TaskManifest",
+        "equity_feature_workers.publication.TaskManifest",
+        "equity_feature_workers.required_inputs.TaskManifest",
+        "equity_feature_workers.supervisor.TaskManifest"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "parent.wait",
+      "definition": "concurrent.futures._base.wait",
+      "source_module": "concurrent.futures._base",
+      "source_category": "python_runtime",
+      "source_file": "_base.py",
+      "source_sha256": "a5a450b5ccf2bc5abf458be32c7b2eb4e26c02c3d504eef0e0682b5cfcfc6f52",
+      "definition_line": 263,
+      "kind": "module_function",
+      "patch_sites": [
+        "concurrent.futures._base.wait",
+        "concurrent.futures.wait",
+        "equity_feature_workers.supervisor.wait"
+      ]
+    },
+    {
+      "operation": "pool.process_submit",
+      "definition": "concurrent.futures.process.ProcessPoolExecutor.submit",
+      "source_module": "concurrent.futures.process",
+      "source_category": "python_runtime",
+      "source_file": "process.py",
+      "source_sha256": "86740b978bb5b56c9da50a23e38872154688ef57dcf30214eeeb4064cc79118a",
+      "definition_line": 802,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "concurrent.futures.process.ProcessPoolExecutor.submit"
+      ],
+      "class_aliases": [
+        "concurrent.futures.ProcessPoolExecutor",
+        "concurrent.futures.process.ProcessPoolExecutor",
+        "equity_feature_workers.supervisor.ProcessPoolExecutor"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "pool.thread_submit",
+      "definition": "concurrent.futures.thread.ThreadPoolExecutor.submit",
+      "source_module": "concurrent.futures.thread",
+      "source_category": "python_runtime",
+      "source_file": "thread.py",
+      "source_sha256": "9630b4be940801bfc0c62e389dac4d4f527d7cf1d44fcc88ffcd7048a608fee3",
+      "definition_line": 165,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "concurrent.futures.thread.ThreadPoolExecutor.submit"
+      ],
+      "class_aliases": [
+        "concurrent.futures.ThreadPoolExecutor",
+        "concurrent.futures.thread.ThreadPoolExecutor",
+        "equity_feature_workers.supervisor.ThreadPoolExecutor"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "publisher.drain",
+      "definition": "equity_feature_workers.publication.SerialPublisher.drain",
+      "source_module": "equity_feature_workers.publication",
+      "source_category": "installed_package",
+      "source_file": "publication.py",
+      "source_sha256": "eb1785d38ac51c133cdd31d6e72f25e0400e38daa9fd3d0d66dc525cc30665af",
+      "definition_line": 224,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "equity_feature_workers.publication.SerialPublisher.drain"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.SerialPublisher",
+        "equity_feature_workers.publication.SerialPublisher",
+        "equity_feature_workers.supervisor.SerialPublisher"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "publisher.inner_drain",
+      "definition": "equity_feature_workers.publication.SerialPublisher._drain",
+      "source_module": "equity_feature_workers.publication",
+      "source_category": "installed_package",
+      "source_file": "publication.py",
+      "source_sha256": "eb1785d38ac51c133cdd31d6e72f25e0400e38daa9fd3d0d66dc525cc30665af",
+      "definition_line": 253,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "equity_feature_workers.publication.SerialPublisher._drain"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.SerialPublisher",
+        "equity_feature_workers.publication.SerialPublisher",
+        "equity_feature_workers.supervisor.SerialPublisher"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "publisher.inner_submit",
+      "definition": "equity_feature_workers.publication.SerialPublisher._submit",
+      "source_module": "equity_feature_workers.publication",
+      "source_category": "installed_package",
+      "source_file": "publication.py",
+      "source_sha256": "eb1785d38ac51c133cdd31d6e72f25e0400e38daa9fd3d0d66dc525cc30665af",
+      "definition_line": 148,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "equity_feature_workers.publication.SerialPublisher._submit"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.SerialPublisher",
+        "equity_feature_workers.publication.SerialPublisher",
+        "equity_feature_workers.supervisor.SerialPublisher"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "publisher.submit",
+      "definition": "equity_feature_workers.publication.SerialPublisher.submit",
+      "source_module": "equity_feature_workers.publication",
+      "source_category": "installed_package",
+      "source_file": "publication.py",
+      "source_sha256": "eb1785d38ac51c133cdd31d6e72f25e0400e38daa9fd3d0d66dc525cc30665af",
+      "definition_line": 124,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "equity_feature_workers.publication.SerialPublisher.submit"
+      ],
+      "class_aliases": [
+        "equity_feature_workers.SerialPublisher",
+        "equity_feature_workers.publication.SerialPublisher",
+        "equity_feature_workers.supervisor.SerialPublisher"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "sdk.decode_result",
+      "definition": "equity_feature_io_sdk.codec.decode_result",
+      "source_module": "equity_feature_io_sdk.codec",
+      "source_category": "installed_package",
+      "source_file": "codec.py",
+      "source_sha256": "2dbd595418cb7c5ea5231b2c32863304399453a6a7ad46dcca0be55dbdcd2dfc",
+      "definition_line": 149,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_io_sdk.codec.decode_result",
+        "equity_feature_io_sdk.decode_result",
+        "equity_feature_workers.supervisor.decode_result",
+        "supplied_memory_delegate.decode_result"
+      ]
+    },
+    {
+      "operation": "sdk.encode_receipt",
+      "definition": "equity_feature_io_sdk.codec.encode_receipt",
+      "source_module": "equity_feature_io_sdk.codec",
+      "source_category": "installed_package",
+      "source_file": "codec.py",
+      "source_sha256": "2dbd595418cb7c5ea5231b2c32863304399453a6a7ad46dcca0be55dbdcd2dfc",
+      "definition_line": 229,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_io_sdk.codec.encode_receipt",
+        "equity_feature_io_sdk.encode_receipt",
+        "equity_feature_workers.manifests.encode_receipt",
+        "equity_feature_workers.publication.encode_receipt"
+      ]
+    },
+    {
+      "operation": "sdk.encode_result",
+      "definition": "equity_feature_io_sdk.codec.encode_result",
+      "source_module": "equity_feature_io_sdk.codec",
+      "source_category": "installed_package",
+      "source_file": "codec.py",
+      "source_sha256": "2dbd595418cb7c5ea5231b2c32863304399453a6a7ad46dcca0be55dbdcd2dfc",
+      "definition_line": 135,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_io_sdk.codec.encode_result",
+        "equity_feature_io_sdk.conformance.encode_result",
+        "equity_feature_io_sdk.encode_result",
+        "equity_feature_io_sdk.publication.encode_result",
+        "equity_feature_workers.barriers.encode_result",
+        "equity_feature_workers.breadth_commands.encode_result",
+        "equity_feature_workers.commands.encode_result",
+        "equity_feature_workers.supervisor.encode_result",
+        "supplied_memory_delegate.encode_result"
+      ]
+    },
+    {
+      "operation": "sdk.prepare_publication",
+      "definition": "equity_feature_io_sdk.publication.prepare_publication",
+      "source_module": "equity_feature_io_sdk.publication",
+      "source_category": "installed_package",
+      "source_file": "publication.py",
+      "source_sha256": "bcac45f3fea1b1e9a28e352df4641840cb2cc078d5ab7efc63d6e539ce60ac88",
+      "definition_line": 60,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_io_sdk.conformance.prepare_publication",
+        "equity_feature_io_sdk.prepare_publication",
+        "equity_feature_io_sdk.publication.prepare_publication",
+        "equity_feature_workers.claims.prepare_publication",
+        "equity_feature_workers.commands.prepare_publication",
+        "equity_feature_workers.publication.prepare_publication",
+        "equity_feature_workers.supervisor.prepare_publication"
+      ]
+    },
+    {
+      "operation": "sdk.publish",
+      "definition": "equity_feature_io_sdk.publication.publish",
+      "source_module": "equity_feature_io_sdk.publication",
+      "source_category": "installed_package",
+      "source_file": "publication.py",
+      "source_sha256": "bcac45f3fea1b1e9a28e352df4641840cb2cc078d5ab7efc63d6e539ce60ac88",
+      "definition_line": 167,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_io_sdk.conformance.publish",
+        "equity_feature_io_sdk.publication.publish",
+        "equity_feature_io_sdk.publish",
+        "equity_feature_workers.commands.publish",
+        "equity_feature_workers.publication.publish"
+      ]
+    },
+    {
+      "operation": "sink.lookup",
+      "definition": "supplied_memory.SerializedMemorySink.lookup",
+      "source_module": "supplied_memory",
+      "source_category": "accepted_worker_fixture",
+      "source_file": "supplied_memory.py",
+      "source_sha256": "9c9b62426cfeefd79e8b95e95c299e122c18b8ff9587fe10196f183ee22ab876",
+      "definition_line": 44,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "supplied_memory.SerializedMemorySink.lookup"
+      ],
+      "class_aliases": [
+        "supplied_memory.SerializedMemorySink"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "sink.read",
+      "definition": "supplied_memory.SerializedMemorySink.read",
+      "source_module": "supplied_memory",
+      "source_category": "accepted_worker_fixture",
+      "source_file": "supplied_memory.py",
+      "source_sha256": "9c9b62426cfeefd79e8b95e95c299e122c18b8ff9587fe10196f183ee22ab876",
+      "definition_line": 47,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "supplied_memory.SerializedMemorySink.read"
+      ],
+      "class_aliases": [
+        "supplied_memory.SerializedMemorySink"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "supervisor.admit_entities",
+      "definition": "equity_feature_workers.barriers._admit_entities",
+      "source_module": "equity_feature_workers.barriers",
+      "source_category": "installed_package",
+      "source_file": "barriers.py",
+      "source_sha256": "41d2be6c29475c0f0fa1a1c550a3dfa4200c9e105a88d6cc1d393640b2427cd9",
+      "definition_line": 117,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.barriers._admit_entities",
+        "equity_feature_workers.claims._admit_entities",
+        "equity_feature_workers.publication._admit_entities",
+        "equity_feature_workers.supervisor._admit_entities"
+      ]
+    },
+    {
+      "operation": "supervisor.inputs",
+      "definition": "equity_feature_workers.supervisor._inputs",
+      "source_module": "equity_feature_workers.supervisor",
+      "source_category": "installed_package",
+      "source_file": "supervisor.py",
+      "source_sha256": "59b24de70e3873ab2d3c8a5f5d9be155d7ee1984605ac07318fb561858dbdbfe",
+      "definition_line": 41,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.supervisor._inputs"
+      ]
+    },
+    {
+      "operation": "supervisor.partition",
+      "definition": "equity_feature_workers.supervisor.partition_tasks",
+      "source_module": "equity_feature_workers.supervisor",
+      "source_category": "installed_package",
+      "source_file": "supervisor.py",
+      "source_sha256": "59b24de70e3873ab2d3c8a5f5d9be155d7ee1984605ac07318fb561858dbdbfe",
+      "definition_line": 152,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.partition_tasks",
+        "equity_feature_workers.supervisor.partition_tasks"
+      ]
+    },
+    {
+      "operation": "supervisor.pickle_size",
+      "definition": "equity_feature_workers.supervisor._size",
+      "source_module": "equity_feature_workers.supervisor",
+      "source_category": "installed_package",
+      "source_file": "supervisor.py",
+      "source_sha256": "59b24de70e3873ab2d3c8a5f5d9be155d7ee1984605ac07318fb561858dbdbfe",
+      "definition_line": 34,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.supervisor._size"
+      ]
+    },
+    {
+      "operation": "supervisor.validate_results",
+      "definition": "equity_feature_workers.supervisor._validate_results",
+      "source_module": "equity_feature_workers.supervisor",
+      "source_category": "installed_package",
+      "source_file": "supervisor.py",
+      "source_sha256": "59b24de70e3873ab2d3c8a5f5d9be155d7ee1984605ac07318fb561858dbdbfe",
+      "definition_line": 193,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.supervisor._validate_results"
+      ]
+    },
+    {
+      "operation": "supplied.admit",
+      "definition": "equity_feature_workers._supplied.admit",
+      "source_module": "equity_feature_workers._supplied",
+      "source_category": "installed_package",
+      "source_file": "_supplied.py",
+      "source_sha256": "14c2808ccf9d21ea5739d4507a09cb570abefadcd18cf4f7801c43d38771c56a",
+      "definition_line": 49,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers._supplied.admit",
+        "equity_feature_workers.intraday.admit"
+      ]
+    },
+    {
+      "operation": "supplied.result_identity",
+      "definition": "equity_feature_workers._supplied.result_identity",
+      "source_module": "equity_feature_workers._supplied",
+      "source_category": "installed_package",
+      "source_file": "_supplied.py",
+      "source_sha256": "14c2808ccf9d21ea5739d4507a09cb570abefadcd18cf4f7801c43d38771c56a",
+      "definition_line": 73,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers._supplied.result_identity",
+        "equity_feature_workers.intraday.result_identity"
+      ]
+    },
+    {
+      "operation": "worker.intraday_context",
+      "definition": "equity_feature_workers.intraday._context",
+      "source_module": "equity_feature_workers.intraday",
+      "source_category": "installed_package",
+      "source_file": "intraday.py",
+      "source_sha256": "4f9cc1a088c685ad0c29e60d964088cbc4e86bd0bf4977b761518b99b0116079",
+      "definition_line": 25,
+      "kind": "module_function",
+      "patch_sites": [
+        "equity_feature_workers.intraday._context"
+      ]
+    }
+  ],
+  "inspected_modules": [
+    "concurrent.futures",
+    "concurrent.futures._base",
+    "concurrent.futures.process",
+    "concurrent.futures.thread",
+    "equity_feature_contracts",
+    "equity_feature_contracts._catalog",
+    "equity_feature_contracts._implemented",
+    "equity_feature_contracts.adapters",
+    "equity_feature_contracts.breadth",
+    "equity_feature_contracts.buckets",
+    "equity_feature_contracts.composition",
+    "equity_feature_contracts.errors",
+    "equity_feature_contracts.history",
+    "equity_feature_contracts.inputs",
+    "equity_feature_contracts.normalization",
+    "equity_feature_contracts.policies",
+    "equity_feature_contracts.registry",
+    "equity_feature_contracts.relative",
+    "equity_feature_contracts.results",
+    "equity_feature_contracts.specs",
+    "equity_feature_contracts.streaming",
+    "equity_feature_contracts.validation",
+    "equity_feature_contracts.volume",
+    "equity_feature_io_contracts",
+    "equity_feature_io_contracts.factories",
+    "equity_feature_io_contracts.publication",
+    "equity_feature_io_sdk",
+    "equity_feature_io_sdk.codec",
+    "equity_feature_io_sdk.conformance",
+    "equity_feature_io_sdk.factories",
+    "equity_feature_io_sdk.publication",
+    "equity_feature_workers",
+    "equity_feature_workers._supplied",
+    "equity_feature_workers.acquisition",
+    "equity_feature_workers.barriers",
+    "equity_feature_workers.breadth_commands",
+    "equity_feature_workers.catalog",
+    "equity_feature_workers.claims",
+    "equity_feature_workers.commands",
+    "equity_feature_workers.diagnostics",
+    "equity_feature_workers.generations",
+    "equity_feature_workers.intraday",
+    "equity_feature_workers.manifests",
+    "equity_feature_workers.publication",
+    "equity_feature_workers.required_inputs",
+    "equity_feature_workers.supervisor",
+    "equity_features",
+    "equity_features._recursive",
+    "equity_features._volatility",
+    "equity_features.breadth",
+    "equity_features.buckets",
+    "equity_features.composition",
+    "equity_features.history",
+    "equity_features.relative",
+    "equity_features.session",
+    "equity_features.session._reductions",
+    "equity_features.session.bars",
+    "equity_features.session.continuous",
+    "equity_features.session.quotes",
+    "equity_features.session.top_k",
+    "equity_features.session.trades",
+    "equity_features.volume",
+    "equity_features_intraday",
+    "equity_features_intraday._admission",
+    "equity_features_intraday._bands",
+    "equity_features_intraday._context",
+    "equity_features_intraday._dispatch",
+    "equity_features_intraday._indicators",
+    "equity_features_intraday._prepare",
+    "equity_features_intraday._registry",
+    "supplied_memory",
+    "supplied_memory_delegate"
+  ],
+  "not_definition_patches": [
+    "delegate.original_partition uses importable development delegate, preserving actual WorkItem callback",
+    "trace label/install/restore/bookkeeping records belong to the external collector itself"
+  ],
+  "limits": [
+    "Exact-object loaded module/class alias inventory only; arbitrary caller-held locals/closures/dynamic imports remain outside claimed coverage.",
+    "No hooks installed, classes replaced, callbacks executed, new graph/tracer implemented or workload timing.",
+    "Package/fixture/std-library source identities differ in domain; stdlib source is exact current runtime-scoped, not a three-repository Git commit."
+  ]
+}

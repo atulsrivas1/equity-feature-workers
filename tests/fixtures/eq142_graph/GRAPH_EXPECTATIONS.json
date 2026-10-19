@@ -1,0 +1,128 @@
+{
+  "schema":"eq142-independent-graph-expectations:1",
+  "stage":"PRECODE_HAND_AUTHORED_EXPECTATIONS_NOT_IMPLEMENTED_GRAPH",
+  "authority":"Accepted original formulas/readiness/result ownership and inspected current worker boundaries; no graph builder was used to generate these edge sets.",
+  "edge_shape":["from","to","reason"],
+  "reason_contracts":{
+    "structural_admission":"input_binding_admission",
+    "configuration":"intraday_configuration",
+    "operand_readiness":"intraday_operand_readiness",
+    "ordered_recurrence":"intraday_indicator_order",
+    "compatible_witness":"intraday_unrounded_bands",
+    "result_join":"full_result_identity_and_evidence",
+    "resource_admission":"worker_resource_admission",
+    "publication_owner":"serialized_publication_ownership"
+  },
+  "cases":[
+    {
+      "id":"ema_only_has_no_high_low_or_other_output_edge",
+      "exact_node_ids":["input:supplied","gate:configuration","gate:structural","gate:resource","operand:anchored_closes","state:intraday.ema","output:intraday.ema","join:result","owner:publication"],
+      "exact_edges":[
+        ["input:supplied","gate:structural","structural_admission"],
+        ["gate:configuration","operand:anchored_closes","configuration"],
+        ["gate:structural","operand:anchored_closes","structural_admission"],
+        ["operand:anchored_closes","state:intraday.ema","operand_readiness"],
+        ["state:intraday.ema","output:intraday.ema","ordered_recurrence"],
+        ["output:intraday.ema","join:result","result_join"],
+        ["gate:resource","join:result","resource_admission"],
+        ["join:result","owner:publication","publication_owner"]
+      ],
+      "explicit_absences":["operand:true_ranges","operand:price_moments","state:intraday.atr","state:intraday.rsi"],
+      "required_close_slots":[0,1,2],"required_high_low_slots":[]
+    },
+    {
+      "id":"missing_high_low_affects_atr_not_ema",
+      "exact_node_ids":["input:supplied","gate:configuration","gate:structural","gate:resource","operand:anchored_closes","operand:true_ranges","state:intraday.ema","state:intraday.atr","output:intraday.ema","output:intraday.atr","join:result","owner:publication"],
+      "exact_edges":[
+        ["input:supplied","gate:structural","structural_admission"],
+        ["gate:configuration","operand:anchored_closes","configuration"],
+        ["gate:configuration","operand:true_ranges","configuration"],
+        ["gate:structural","operand:anchored_closes","structural_admission"],
+        ["gate:structural","operand:true_ranges","structural_admission"],
+        ["operand:anchored_closes","state:intraday.ema","operand_readiness"],
+        ["operand:true_ranges","state:intraday.atr","operand_readiness"],
+        ["state:intraday.ema","output:intraday.ema","ordered_recurrence"],
+        ["state:intraday.atr","output:intraday.atr","ordered_recurrence"],
+        ["output:intraday.ema","join:result","result_join"],
+        ["output:intraday.atr","join:result","result_join"],
+        ["gate:resource","join:result","resource_admission"],
+        ["join:result","owner:publication","publication_owner"]
+      ],
+      "forbidden_reachability":[["operand:true_ranges","output:intraday.ema"],["output:intraday.ema","output:intraday.atr"],["output:intraday.atr","output:intraday.ema"]],
+      "expected_cells":"EMA available; ATR missing_input; full result join includes both cells without requiring both available"
+    },
+    {
+      "id":"zero_variance_position_guard_is_not_global_band_failure",
+      "exact_node_ids":["input:supplied","gate:configuration","gate:structural","gate:resource","operand:price_moments","output:intraday.band_lower","output:intraday.band_middle","output:intraday.band_upper","output:intraday.band_width_ratio","output:intraday.band_position","join:result","owner:publication"],
+      "exact_edges":[
+        ["input:supplied","gate:structural","structural_admission"],
+        ["gate:configuration","operand:price_moments","configuration"],
+        ["gate:structural","operand:price_moments","structural_admission"],
+        ["operand:price_moments","output:intraday.band_lower","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_middle","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_upper","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_width_ratio","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_position","compatible_witness"],
+        ["output:intraday.band_lower","join:result","result_join"],
+        ["output:intraday.band_middle","join:result","result_join"],
+        ["output:intraday.band_upper","join:result","result_join"],
+        ["output:intraday.band_width_ratio","join:result","result_join"],
+        ["output:intraday.band_position","join:result","result_join"],
+        ["gate:resource","join:result","resource_admission"],
+        ["join:result","owner:publication","publication_owner"]
+      ],
+      "position_output_predicate":"position_requires_nonzero_variance",
+      "other_band_output_predicate":"selected_band_from_unrounded_moments",
+      "forbidden_reachability":[["output:intraday.band_upper","output:intraday.band_width_ratio"],["output:intraday.band_lower","output:intraday.band_position"],["output:intraday.band_position","output:intraday.band_middle"]],
+      "result_join_rule":"All five cells including unavailable position, not only available cells"
+    },
+    {
+      "id":"combined_task_global_evidence_and_publication_join",
+      "exact_node_ids":["input:supplied","gate:configuration","gate:structural","gate:resource","operand:anchored_closes","operand:true_ranges","operand:price_moments","state:intraday.ema","state:intraday.rsi","state:intraday.atr","output:intraday.ema","output:intraday.rsi","output:intraday.atr","output:intraday.band_lower","output:intraday.band_middle","output:intraday.band_upper","output:intraday.band_width_ratio","output:intraday.band_position","join:result","owner:publication"],
+      "exact_edges":[
+        ["input:supplied","gate:structural","structural_admission"],
+        ["gate:configuration","operand:anchored_closes","configuration"],
+        ["gate:configuration","operand:true_ranges","configuration"],
+        ["gate:configuration","operand:price_moments","configuration"],
+        ["gate:structural","operand:anchored_closes","structural_admission"],
+        ["gate:structural","operand:true_ranges","structural_admission"],
+        ["gate:structural","operand:price_moments","structural_admission"],
+        ["operand:anchored_closes","state:intraday.ema","operand_readiness"],
+        ["operand:anchored_closes","state:intraday.rsi","operand_readiness"],
+        ["operand:true_ranges","state:intraday.atr","operand_readiness"],
+        ["state:intraday.ema","output:intraday.ema","ordered_recurrence"],
+        ["state:intraday.rsi","output:intraday.rsi","ordered_recurrence"],
+        ["state:intraday.atr","output:intraday.atr","ordered_recurrence"],
+        ["operand:price_moments","output:intraday.band_lower","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_middle","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_upper","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_width_ratio","compatible_witness"],
+        ["operand:price_moments","output:intraday.band_position","compatible_witness"],
+        ["output:intraday.ema","join:result","result_join"],
+        ["output:intraday.rsi","join:result","result_join"],
+        ["output:intraday.atr","join:result","result_join"],
+        ["output:intraday.band_lower","join:result","result_join"],
+        ["output:intraday.band_middle","join:result","result_join"],
+        ["output:intraday.band_upper","join:result","result_join"],
+        ["output:intraday.band_width_ratio","join:result","result_join"],
+        ["output:intraday.band_position","join:result","result_join"],
+        ["gate:resource","join:result","resource_admission"],
+        ["join:result","owner:publication","publication_owner"]
+      ],
+      "once_global_evidence_cap":2,
+      "expected_evidence":[["intraday.atr","slot:0"],["intraday.atr","slot:1"]],
+      "forbidden_rule":"No numerical output->output edge; internal recurrence order stays inside its own state node"
+    }
+  ],
+  "independent_negative_validations":[
+    {"mutation":"append join:result -> gate:resource with resource_admission to a valid case","expected_error":"cycle"},
+    {"mutation":"duplicate a node ID","expected_error":"duplicate"},
+    {"mutation":"duplicate an identical edge","expected_error":"duplicate"},
+    {"mutation":"edge endpoint absent from nodes","expected_error":"unknown_endpoint"},
+    {"mutation":"invent a reason or kind","expected_error":"invalid_schema"},
+    {"mutation":"claim a copied/wrapped callback is qualified","expected_error":"unqualified_callback"},
+    {"mutation":"change inspected baseline export/code/alias/source after binding","expected_error":"source_mismatch"}
+  ],
+  "all_other_canonical_cases":"Use independently enumerated operand-output pairs, exact required slots, cell expectations and forbidden branches in the16-case canonical packet; do not generate expected dependencies from the builder under test.",
+  "job_expectations":{"generic_populations":[["A"],["A","B"],["B","C"],["D"]],"components":[[0,1,2],[3]],"actual_partition_count_at_degree4":2,"family_profiles_actual_component_count":1,"preserved_barriers":["resource_before_dispatch","population_component_order","all_dispatched_worker_outcomes_terminal","pool_shutdown_before_coordinator_validation","complete_task_result_before_publication","serialized_backend_owner"]}
+}
