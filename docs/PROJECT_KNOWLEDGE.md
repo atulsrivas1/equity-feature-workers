@@ -1,3 +1,9 @@
+## EQ140 companion preparation under canonical R17 ownership
+
+[EQ140 #474](https://github.com/atulsrivas1/equity-features/issues/474)/[canonical draftPR562](https://github.com/atulsrivas1/equity-features/pull/562) prepares supplied intraday0.1.0a3 and original structure/top-K/continuous/prior-close worker bindings. [Companion plan](EQ140_PLAN.md) records exact source pins, prospective workers0.1.0a14/optional extra, receipt headroom and independent qualification. This checkout contains planning only; no implementation or Ready claim. Canonical live Project owns execution, and current R17 review grant covers necessary companions. Historical R11 notes below retain their original dates; consult canonical current acceptance rather than treating old top notes as current authority.
+
+Next: complete exact pre-code review, actual Ready and assigned In progress before worker source changes; then independent numerical/identity/quality/E2E/mode/resource/installed/optional-absence/main gates. Preserve unrelated workerPR42/I/O PR15/16, accepted releases, paused automation and original dirty/frozen checkouts. EQ139 is accepted Done; EQ140/EQ141/R17 incomplete, R18 follows verified R17.
+
 ## EQ110 corrective qualification rework — actual main failure
 
 EQ110 is In progress after [actual Test rework](https://github.com/atulsrivas1/equity-features/issues/210#issuecomment-6213262387) and [published corrective plan PR413](https://github.com/atulsrivas1/equity-features/pull/413). Main Windows foundation run38885161593/job116921017735 failed260 tests/errors1 at the initial retained-entry deadline guard; raw SHA256 e881fb9d4bd3d81369f3344ff21f790eba0f3cb9f0d958696fad9dd5f4c9a344 is preserved. The old run provides no completed retained-entry cleanup witness; exact timing cause/entry final state remain unknown. Passing research artifacts do not override that failed gate.
