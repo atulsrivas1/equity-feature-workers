@@ -24,6 +24,7 @@ from eq142_evidence import (ProductStore,bounded_read,persist_record,record_prod
     stable_products,combine_fragments)
 from eq142_trace import Collector
 from eq142_workloads import items_for,independent_expectations,verify_result,PROFILES
+from eq142_outcome import snapshot_original,verify_original
 from eq142_fixture import qualification,bound_inventory,load
 from benchmark_supplied_inputs import publisher
 from equity_feature_workers import BoundedSupervisor,ProgressRecorder
@@ -157,7 +158,8 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
     report={'schema':'eq142-development-runner:1','stage':'qualification_only_not_study_acceptance',
         'profile':profile,'mode':mode,'degree':degree,'control':control,'series':series,
         'reference_sha256':reference_sha256,'source':bound.source,'descriptive_job':job,
-        'original_admission':original,'status':'started','native_job_supplied':job_name is not None}
+        'original_admission':original,'status':'started','native_job_supplied':job_name is not None,
+        'full_sample_accepted':False}
     plan=None;collector=None;ledger=None;outcome=None;count_observer=None;profile_dir=None
     cpu_before=None;cpu_after=None
     if job_name is not None:
@@ -201,10 +203,16 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
                     frame=collector.begin('trace.restore',())
                     try:session.restore()
                     finally:collector.finish(frame)
-        # Persist actual full original outcomes before parity/source/trace gates.
-        products=record_products(outcome,progress.snapshot(),ProductStore(reference_path.parent/'objects'),directory,sink=sink)
+        # Retain actual metadata first, then full codec proofs before gates.
+        actual=snapshot_original(outcome)
+        report['actual_supervisor_outcome']={'codec':'eq142_supervisor_outcome',
+            **persist_record(directory/'supervisor.json',actual,max_bytes=65536)}
+        store=ProductStore(reference_path.parent/'objects')
+        products=record_products(outcome,progress.snapshot(),store,directory,sink=sink)
         report['product_proof']={'codec':'eq142_product_projection',**persist_record(directory/'products.json',products,max_bytes=65536)}
         report['product_outcomes']=products
+        report['actual_admission_verification']=verify_original(actual,items,products,original,store,expected_mode=mode)
+        if actual['cancelled']:raise ValueError('unexpected original study cancellation')
         if collector is not None:
             collector.persist(trace_dir/'parent.json')
             reservations=[{'id':'parent','file':'parent.json','max_spans':16384,'max_bytes':8388608},*plan['reservations']]

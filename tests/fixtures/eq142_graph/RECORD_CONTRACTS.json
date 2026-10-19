@@ -822,5 +822,33 @@
     "limits": "<=4096 active selected frames, <=128 ancestry search depth, <=131072 total selected call entries, <=64KiB encoded record per observer, no frame objects retained, owned qualification-only profile file namespace<=64 including partials. Observer failures preserve original product return/exception and reject qualification; do not replace existing profiler hooks.",
     "caveats": "Python profile return event also occurs on exception and may carry None, indistinguishable from legitimate None return. Do not invent returned/rejected classification from it. Original typed exception identity and hook error states require separate controls. This observer checks aggregate operation counts/actual typed return byte observations, not per-task labels or source-independent mathematics; those retain separate fixtures/joins. Scheduling-dependent waits and telemetry-encoded sizes must not be frozen from a different execution as exact constants.",
     "study_gate": "Qualification uses this extra observer only in explicit development controls; it is not part of frozen A/A timings. Prospective source invariants and dynamic scheduling/telemetry byte expectations remain necessary for official sample acceptance. No profiler-generated numbers alone grant performance acceptance."
+  },
+  "development_supervisor_outcome": {
+    "purpose": "Retain actual original SupervisorOutcome scalar, row and task/timing ledgers immediately after return and before product-proof/parity/trace checks. This summary does not replace full original codec bodies or grant root/full-sample acceptance.",
+    "fields": {
+      "schema": "constant eq142-supervisor-outcome:1",
+      "evidence": "constant actual_original_supervisor_return",
+      "mode": "sequential | thread | process",
+      "cancelled": "actual bool; never inferred from task reason",
+      "row_ledger": "original ordered array<=16 of [task_sha256, nonnegative row count]; do not sort or repair before retention",
+      "distinct_reuse_rows": "actual nonnegative original scalar",
+      "admitted_input_bytes": "actual nonnegative original scalar; compare separate source-derived reservation",
+      "reserved_resident_bytes": "actual original initial logical resident scalar; not physical memory or committed-output total",
+      "result_bytes": "actual original validated result content byte scalar; compare complete retained encode_result body lengths",
+      "tasks": "original ordered array<=16 of task summary records; no result data replaced by hashes"
+    },
+    "task_fields": {
+      "task_sha256": "actual original hash",
+      "reason": "original string or null, retained before closed-vocabulary verification",
+      "result_count": "null for original results=None; integer0 for actual empty tuple; otherwise exact tuple length <=64",
+      "output_present": "actual bool",
+      "spill": "null or full original SpillReference run_id/task_sha256/files metadata; no spill-body qualification",
+      "timings": "ordered array<=3 of actual stage/elapsed_ns/probes; elapsed_ns canonical int64 decimal string or null; zero remains zero"
+    },
+    "verification": "After retention, reject unknown fields/types/IDs/counts; compare exact input-derived sorted row/task memberships, existing reuse identity groups, original admission values, result proof counts/byte totals, output/spill/reason joins. Result arithmetic/readiness remains separately verified by original independent fixtures.",
+    "publication": "Accepted output metadata byte sum can be calculated from retained encode_output bodies and checked against the logical cap. It is not all backend commits, proof of each commit-time admission, absent commit or rollback. Unknown/partial commit retains its original disposition.",
+    "failure": "Proof-store/codec/parity/trace/source failure leaves the bounded actual supervisor summary if already written. Never claim full product retention when codec proofs are absent. Pre-return original exceptions remain exceptions; no successful outcome is invented. Spill is outside the study and rejects qualification after its reference metadata is retained.",
+    "wire": "Development-only supervisor.json <=65536 bytes via existing exclusive bounded writer. Codec eq142_supervisor_outcome is not accepted by the closed root wire_reference enum; future root embedding needs explicit schema validation and joins.",
+    "math_and_defaults": "No equation, input readiness, package, default, cancellation/publication or resource-budget behavior changes. This is external evidence tooling only."
   }
 }

@@ -20,6 +20,7 @@ def main():
         if (item['reason'].startswith('EQ142 development CPU capacity requires ') and
                 identity.startswith(('test_eq142_admission.ActualAdmission.',
                     'test_eq142_sample.DevelopmentSample.','test_eq142_sample.NativeOwnedDevelopmentSample.',
+                    'test_eq142_outcome.ActualOutcomeLedger.','test_eq142_outcome.ActualOutcomeFailureRetention.',
                     'test_eq142_code_counts.ActualOriginalCountParity.test_actual_harness_thread_and_spawn_profile_counts'))):
             # Capacity skips remain explicit ledger evidence, never full mode
             # qualification. Optional absence uses the separate checks below.
@@ -27,7 +28,8 @@ def main():
         assert (not combined and identity.startswith(('test_supplied_intraday.',
             'test_eq142_graph.','test_eq142_trace.','test_eq142_delegate.','test_eq142_workloads.',
             'test_eq142_evidence.OriginalProductWitnesses.','test_eq142_admission.','test_eq142_causal.',
-            'test_eq142_sample.','test_eq142_code_counts.ActualOriginalCountParity.'))) or (
+            'test_eq142_sample.','test_eq142_code_counts.ActualOriginalCountParity.',
+            'test_eq142_outcome.ActualOutcomeLedger.','test_eq142_outcome.ActualOutcomeFailureRetention.'))) or (
             os.name != 'nt' and identity.startswith(('test_supplied_native.','test_eq142_native.',
                 'test_eq142_sample.NativeOwnedDevelopmentSample.'))), ('unexpected skip', item)
         allowed.append(identity)
