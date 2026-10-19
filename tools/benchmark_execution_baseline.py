@@ -25,11 +25,18 @@ from eq142_evidence import (ProductStore,bounded_read,persist_record,record_prod
 from eq142_trace import Collector
 from eq142_workloads import items_for,independent_expectations,verify_result,PROFILES
 from eq142_outcome import snapshot_original,verify_original
+from eq142_identity import retain_owned_witness,read_owned_witnesses
 from eq142_fixture import qualification,bound_inventory,load
 from benchmark_supplied_inputs import publisher
 from equity_feature_workers import BoundedSupervisor,ProgressRecorder
 
 SERIES=('eq142_admitted_control','eq142_owned_runner_e2e')
+
+
+def failure_identity(error,stage):
+    from supplied_native import NativeFailure
+    return {'stage':stage,'error_type':type(error).__module__+'.'+type(error).__qualname__,
+        'native_code':error.code if isinstance(error,NativeFailure) else None}
 
 
 def installed_snapshot():
@@ -159,14 +166,24 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         'profile':profile,'mode':mode,'degree':degree,'control':control,'series':series,
         'reference_sha256':reference_sha256,'source':bound.source,'descriptive_job':job,
         'original_admission':original,'status':'started','native_job_supplied':job_name is not None,
+        'native_control_scope':{'parent_ownership_metadata_in_selected_phase':job_name is not None,
+            'original_supervisor_without_trace_hooks':control=='uninstrumented_A',
+            'common_metadata_may_dilute_ratios':job_name is not None,'observer_cost_subtraction':False},
         'full_sample_accepted':False}
     plan=None;collector=None;ledger=None;outcome=None;count_observer=None;profile_dir=None
     cpu_before=None;cpu_after=None
+    witness_directory=directory/'owned-processes';witness_setting=None;witness_failure=None;parent_witness=None
+    phase_operation='prepare_instrumentation'
     if job_name is not None:
         from supplied_native import counters
         cpu_before=counters(job_name)
     phase_start=time.perf_counter_ns()
     try:
+        if job_name is not None:
+            try:
+                witness_directory.mkdir()
+                witness_setting={'job_name':job_name,'output_dir':str(witness_directory)}
+            except BaseException as error:witness_failure=error
         if control=='instrumented_B':
             # All construction, hashes, copied plan and representation admission
             # occur after selected-phase start, not in excluded pre-admission.
@@ -176,14 +193,25 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
                 count_observer=for_original_run(bound,reference['source_inventory']['hooks'])
             plan,_=make_plan(items,mode=mode,budget=budget,expected_inventory=reference['source_inventory'],
                 output_dir=trace_dir,operations=load('RECORD_CONTRACTS.json')['trace']['operations'],
-                qualification_profile_dir=profile_dir)
+                qualification_profile_dir=profile_dir,owned_process_witness=witness_setting)
             collector=Collector('parent',max_spans=16384,max_bytes=8388608,operations=plan['operations'])
             label_frame=collector.begin('trace.bind_labels',())
             try:collector.bind_labels(tuple(item.task for item in items))
             finally:collector.finish(label_frame)
             ledger=CausalLedger(plan,items,collector)
         report['delegate_admission']=delegate_reservation(plan,items,budget,original=original,
-            expected_output_bytes=expected_output)
+            expected_output_bytes=expected_output,owned_witness_count=(
+                1+len(plan['reservations']) if plan is not None and witness_setting is not None else
+                1 if job_name is not None else 0))
+        phase_operation='capture_parent_witness'
+        if job_name is not None and witness_failure is None:
+            try:parent_witness=retain_owned_witness(witness_directory,'parent.json',job_name)
+            except BaseException as error:witness_failure=error
+        if collector is not None:
+            collector.owned_process_witness=parent_witness
+            if witness_failure is not None:collector.failure('collector_error')
+        report['parent_owned_process_witness']=parent_witness
+        phase_operation='original_supervisor'
         session=None
         with collector.phase('stage:supervisor') if collector is not None else nullcontext():
             try:
@@ -204,16 +232,23 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
                     try:session.restore()
                     finally:collector.finish(frame)
         # Retain actual metadata first, then full codec proofs before gates.
+        phase_operation='retain_supervisor_metadata'
         actual=snapshot_original(outcome)
         report['actual_supervisor_outcome']={'codec':'eq142_supervisor_outcome',
             **persist_record(directory/'supervisor.json',actual,max_bytes=65536)}
         store=ProductStore(reference_path.parent/'objects')
+        phase_operation='retain_products'
         products=record_products(outcome,progress.snapshot(),store,directory,sink=sink)
         report['product_proof']={'codec':'eq142_product_projection',**persist_record(directory/'products.json',products,max_bytes=65536)}
         report['product_outcomes']=products
+        if witness_failure is not None:
+            phase_operation='deferred_parent_witness_failure'
+            raise witness_failure
+        phase_operation='verify_products'
         report['actual_admission_verification']=verify_original(actual,items,products,original,store,expected_mode=mode)
         if actual['cancelled']:raise ValueError('unexpected original study cancellation')
         if collector is not None:
+            phase_operation='trace_and_witness_joins'
             collector.persist(trace_dir/'parent.json')
             reservations=[{'id':'parent','file':'parent.json','max_spans':16384,'max_bytes':8388608},*plan['reservations']]
             report['retained_spans']=combine_fragments(trace_dir,reservations)
@@ -241,6 +276,26 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
                     'manual_source_expectations':manual_expected,'timing_authority':False}
         else:
             report['retained_spans']=None;report['parent_relations']=[]
+        report['owned_process_witnesses']=None
+        if job_name is not None:
+            phase_operation='join_owned_witnesses'
+            references=[parent_witness]
+            processes=None
+            if collector is not None:
+                processes=report['retained_spans']['processes']
+                for fragment in report['retained_spans']['fragments']:
+                    witness=fragment['owned_process_witness']
+                    if fragment['reservation_id']=='parent':
+                        if witness!=parent_witness:raise ValueError('parent witness reference differs')
+                    else:
+                        if witness is None or witness['retained_name']!=fragment['retained_name']:
+                            raise ValueError('delegate witness reference differs')
+                        references.append(witness)
+                if {ref['retained_name'] for ref in references}!={'parent.json',*(r['file'] for r in plan['reservations'])}:
+                    raise ValueError('owned invocation proof population differs')
+            report['owned_process_witnesses']=read_owned_witnesses(witness_directory,references,
+                job_name=job_name,processes=processes)
+        phase_operation='parity_and_math'
         confirm_original(outcome,original)
         if stable_products(products)!=expected['products'][series]:raise ValueError('full original product parity failed')
         for execution in outcome.tasks:
@@ -256,6 +311,7 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
             selected_phase_scope='qualification_profiled_no_timing_authority' if qualify_code_counts else
                 'admitted_control' if series=='eq142_admitted_control' else 'external_owned_runner_final_exit_required',
             before_phase=cpu_before,after_phase=cpu_after)
+        phase_operation='source_closure'
         bound.check()
         if source_state()!=reference['state']:raise ValueError('source/runtime changed after phase')
         report['status']='development_product_and_local_trace_checks_passed'
@@ -263,6 +319,11 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
     except BaseException as error:
         report['status']='failed_development_control';report['failure_type']=type(error).__module__+'.'+type(error).__qualname__
         report['original_outcome_returned']=outcome is not None
+        report['failure_identity']=failure_identity(error,phase_operation)
+        if witness_failure is not None:
+            report['owned_witness_failure_identity']=failure_identity(witness_failure,'parent_owned_witness_capture_or_write')
+            if error is not witness_failure:
+                error.add_note('An earlier independent owned witness capture/write also failed; both typed identities are retained in runner.json')
         if collector is not None:report['local_trace_failure']=collector.failure_reason
         persist_record(directory/'runner.json',report,max_bytes=1048576)
         raise

@@ -9,6 +9,9 @@ from decimal import Decimal
 import os
 import re
 import time
+import hashlib
+import json
+from pathlib import Path
 
 from supplied_native import Kernel as BaseKernel,NativeFailure
 
@@ -17,6 +20,59 @@ CLOCK_FIELDS=frozenset(('name','implementation','monotonic','adjustable','report
     'qpc_frequency_hz','cross_process_raw_ticks_qualified'))
 FIELDS=frozenset(('schema','job_name','pid','process_startup_nonce','creation_filetime_100ns_since_1601_utc',
     'is_member','capture_start_ns','capture_end_ns','clock'))
+PROOF_NAME=r'(?:parent|delegate-(?:00[0-9]|01[0-5]))[.]json'
+
+
+def validate_reference(reference):
+    if (type(reference) is not dict or set(reference)!={'codec','sha256','bytes','retained_name'}
+            or reference['codec']!='eq142_owned_process_witness'
+            or type(reference['sha256']) is not str or re.fullmatch('[0-9a-f]{64}',reference['sha256']) is None
+            or type(reference['bytes']) is not int or not 1<=reference['bytes']<=4096
+            or type(reference['retained_name']) is not str or re.fullmatch(PROOF_NAME,reference['retained_name']) is None):
+        raise ValueError('invalid writer-bound owned witness reference')
+
+
+def retain_owned_witness(directory,name,job_name):
+    from eq142_evidence import persist_record
+    if type(name) is not str or re.fullmatch(PROOF_NAME,name) is None:raise ValueError('invalid owned witness filename')
+    directory=Path(directory)
+    if directory.is_symlink() or not directory.is_dir():raise ValueError('invalid owned witness directory')
+    record=capture_owned_process(job_name)
+    reference={'codec':'eq142_owned_process_witness',**persist_record(directory/name,record,max_bytes=4096)}
+    validate_reference(reference)
+    return reference
+
+
+def read_owned_witnesses(directory,references,*,job_name,processes=None):
+    """Verify original writer references, not newly calculated self-references."""
+    from eq142_evidence import bounded_read
+    if type(references) is not list or not 1<=len(references)<=17:raise ValueError('invalid witness references')
+    names=[]
+    for reference in references:validate_reference(reference);names.append(reference['retained_name'])
+    if len(set(names))!=len(names) or 'parent.json' not in names:raise ValueError('invalid witness reference population')
+    directory=Path(directory)
+    if directory.is_symlink() or not directory.is_dir():raise ValueError('invalid owned witness directory')
+    actual=[]
+    for path in directory.iterdir():
+        if path.is_symlink() or not path.is_file():raise ValueError('invalid owned witness member')
+        actual.append(path.name)
+        if len(actual)>17:raise ValueError('owned witness population bound')
+    if set(actual)!=set(names):raise ValueError('owned witness files differ')
+    witnesses=[]
+    for reference in references:
+        body=bounded_read(directory/reference['retained_name'],reference['bytes'])
+        if len(body)!=reference['bytes'] or hashlib.sha256(body).hexdigest()!=reference['sha256']:
+            raise ValueError('owned witness changed after write')
+        witnesses.append(json.loads(body))
+    if processes is None:
+        if names!=['parent.json']:raise ValueError('untraced ownership is parent only')
+        record=witnesses[0];validate_witness(record,expected_job=job_name)
+        processes={record['process_startup_nonce']:{'pid':record['pid'],'clock':record['clock']}}
+        scope='runner_process_only'
+    else:scope='actual_validated_trace_processes_only'
+    return {'references':[dict(ref) for ref in references],
+        'processes':join_owned_processes(witnesses,processes,job_name=job_name),'scope':scope,
+        'cross_process_raw_ticks_qualified':False,'full_sample_accepted':False}
 
 
 class WitnessKernel(BaseKernel):

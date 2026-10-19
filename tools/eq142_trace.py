@@ -113,6 +113,7 @@ class Collector:
         self.frames=[];self.encoded_bytes=0;self.attempts=0;self.thread_attempts={};self.counters={}
         self.failure_reason=None;self.labels={};self.label_owners=();self.active=0
         self.default_scope='stage:unbound'
+        self.owned_process_witness=None
 
     def failure(self,code):
         with self.lock:
@@ -228,10 +229,10 @@ class Collector:
                 'unique_physical_allocation_bytes':None} for (op,scope,obs),v in sorted(self.counters.items())]
             if self.failure_reason is None and (len(spans)!=self.attempts or sum(c['attempts'] for c in counters)!=self.attempts):self.failure('count_mismatch')
             process,clock,timelines=fragment_clock_and_timelines({s['timeline_id'] for s in spans})
-            return {'schema':'eq142-local-trace-fragment:1','reservation_id':self.reservation_id,'complete':self.failure_reason is None,
+            return {'schema':'eq142-local-trace-fragment:2','reservation_id':self.reservation_id,'complete':self.failure_reason is None,
                 'failure_reason':self.failure_reason,'spans':spans,'counters':counters,
                 'exclusive_cost_disposition':EXCLUSIVE_DISPOSITION,'process_binding':process,
-                'clock':clock,'timeline_bindings':timelines}
+                'clock':clock,'timeline_bindings':timelines,'owned_process_witness':self.owned_process_witness}
 
     def persist(self,path):
         """Bounded incremental exclusive creation; never overwrite prior evidence."""
@@ -338,8 +339,11 @@ def validate_fragment(fragment):
     """
     from eq142_graph import closed
     try:
-        closed(fragment,'schema reservation_id complete failure_reason spans counters exclusive_cost_disposition process_binding clock timeline_bindings')
-        if fragment['schema']!='eq142-local-trace-fragment:1' or fragment['complete'] is not True or fragment['failure_reason'] is not None:raise TraceSpecificationError('collector_error')
+        closed(fragment,'schema reservation_id complete failure_reason spans counters exclusive_cost_disposition process_binding clock timeline_bindings owned_process_witness')
+        if fragment['schema']!='eq142-local-trace-fragment:2' or fragment['complete'] is not True or fragment['failure_reason'] is not None:raise TraceSpecificationError('collector_error')
+        if fragment['owned_process_witness'] is not None:
+            from eq142_identity import validate_reference
+            validate_reference(fragment['owned_process_witness'])
         if type(fragment['reservation_id']) is not str or re.fullmatch('[a-z][a-z0-9_.:-]{0,63}',fragment['reservation_id']) is None:raise TraceSpecificationError('unknown_invocation')
         if fragment['exclusive_cost_disposition']!=EXCLUSIVE_DISPOSITION:raise TraceSpecificationError('collector_error')
         if type(fragment['counters']) is not list or len(fragment['counters'])>1024:raise TraceSpecificationError('map_limit')

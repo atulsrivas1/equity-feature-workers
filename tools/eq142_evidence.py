@@ -233,7 +233,8 @@ def combine_fragments(directory,reservations):
             for field in ['attempts','returned','rejected']:prior[field]+=counter[field]
             if prior['returned_observed_bytes'] is not None:prior['returned_observed_bytes']+=counter['returned_observed_bytes']
         refs.append({'reservation_id':reservation['id'],'codec':'eq142_local_fragment','sha256':digest(body),
-            'bytes':len(body),'retained_name':path.name,'span_count':len(fragment['spans'])})
+            'bytes':len(body),'retained_name':path.name,'span_count':len(fragment['spans']),
+            'owned_process_witness':fragment['owned_process_witness']})
     if len(event_ids)>131072 or sum(r['bytes'] for r in refs)>67108864 or len(counters)>2048:
         raise TraceSpecificationError('event_limit')
     return {'representation':'retained_fragments','fragments':refs,'total_span_count':len(event_ids),

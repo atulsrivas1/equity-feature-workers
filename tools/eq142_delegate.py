@@ -12,6 +12,7 @@ import inspect
 import json
 from pathlib import Path
 import pickle
+import re
 import threading
 
 from equity_feature_workers import TaskManifest
@@ -49,7 +50,8 @@ def invocation_key(hashes):
     return digest(b'eq142-invocation1\0'+wire(list(hashes)))
 
 
-def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations,qualification_profile_dir=None):
+def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations,qualification_profile_dir=None,
+        owned_process_witness=None):
     """Prepare explicit labels/reservations before installing hooks.
 
     Returned pickle length describes this Python object only, never pool-native
@@ -64,6 +66,19 @@ def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations,quali
         profile_root=Path(qualification_profile_dir).resolve()
         if profile_root==root or profile_root.parent!=root.parent or not profile_root.is_dir() or any(profile_root.iterdir()):
             raise TraceSpecificationError('duplicate_sidecar')
+    witness_setting=None
+    if owned_process_witness is not None:
+        from eq142_identity import JOB_PATTERN
+        setting=owned_process_witness
+        if (type(setting) is not dict or set(setting)!={'job_name','output_dir'}
+                or type(setting['job_name']) is not str or re.fullmatch(JOB_PATTERN,setting['job_name']) is None
+                or type(setting['output_dir']) is not str or not 1<=len(setting['output_dir'])<=1024):
+            raise TraceSpecificationError('collector_error')
+        raw_path=Path(setting['output_dir']);witness_root=raw_path.resolve()
+        if (raw_path.is_symlink() or witness_root in (root,profile_root) or witness_root.parent!=root.parent
+                or not witness_root.is_dir() or any(witness_root.iterdir())):
+            raise TraceSpecificationError('duplicate_sidecar')
+        witness_setting={'job_name':setting['job_name'],'output_dir':str(witness_root)}
     bind_source(expected_inventory).check()
     partitions=supervisor.partition_tasks(items,budget.workers)
     if mode=='sequential':groups=[(item,) for item in partitions[0].items]
@@ -79,7 +94,8 @@ def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations,quali
     if len({r['key'] for r in reservations})!=count:raise TraceSpecificationError('unknown_invocation')
     plan={'schema':'eq142-delegate-plan:1','mode':mode,'expected_inventory':json.loads(wire(expected_inventory)),
         'output_dir':str(root),'operations':list(operations),'reservations':reservations,
-        'qualification_profile_dir':None if profile_root is None else str(profile_root)}
+        'qualification_profile_dir':None if profile_root is None else str(profile_root),
+        'owned_process_witness':witness_setting}
     # This is observed metadata serialization only. The final harness admission
     # must close its multiplication/copy and overall trace/resident reservations.
     observed=len(pickle.dumps(plan,protocol=5))
@@ -120,6 +136,12 @@ def partition_entry(partition,budget,process_transport=False,telemetry=False,sub
     fresh_process=plan['mode']=='process'
     session=None;profile=None
     with route(collector),collector.phase('stage:delegate'):
+        if plan.get('owned_process_witness') is not None:
+            try:
+                from eq142_identity import retain_owned_witness
+                setting=plan['owned_process_witness']
+                collector.owned_process_witness=retain_owned_witness(setting['output_dir'],reservation['file'],setting['job_name'])
+            except BaseException:collector.failure('collector_error')
         label_frame=collector.begin('trace.bind_labels',())
         try:collector.bind_labels(tuple(i.task for i in partition.items),_ORIGINAL_TASK_HASH)
         finally:collector.finish(label_frame)
