@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tests'))
-from eq142_fixture import HAVE_INTRADAY
+from eq142_fixture import HAVE_INTRADAY,require_cpu_slots
 if HAVE_INTRADAY:
     from benchmark_execution_baseline import prepare_reference,run_control,source_state,verify_result,SERIES
 
@@ -19,11 +19,12 @@ if HAVE_INTRADAY:
 class DevelopmentSample(unittest.TestCase):
     def test_original_controls_actual_modes_and_incomplete_full_sample_label(self):
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory);ref=prepare_reference(root/'reference',cpu_slots=8,profiles=('family_missing_hl',))
+            root=Path(directory);ref=prepare_reference(root/'reference',cpu_slots=require_cpu_slots(self,4),profiles=('family_missing_hl',))
             reference=root/'reference/reference.json'
             for mode,degree in (('sequential',1),('thread',2),('process',2)):
                 for control in ('uninstrumented_A','instrumented_B'):
                     with self.subTest(mode=mode,control=control):
+                        require_cpu_slots(self,degree+3)
                         local=root/(mode+'-'+control)
                         verified=[]
                         def observed_verify(*args):
@@ -49,7 +50,7 @@ class DevelopmentSample(unittest.TestCase):
 
     def test_source_reference_rejection_is_retained_without_overwriting(self):
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory);ref=prepare_reference(root/'reference',cpu_slots=8,profiles=('family_missing_hl',))
+            root=Path(directory);ref=prepare_reference(root/'reference',cpu_slots=require_cpu_slots(self,4),profiles=('family_missing_hl',))
             reference=root/'reference/reference.json';local=root/'rejected'
             options=dict(directory=local,profile='family_missing_hl',mode='sequential',degree=1,
                 control='uninstrumented_A',series=SERIES[0])
@@ -74,9 +75,8 @@ class NativeOwnedDevelopmentSample(unittest.TestCase):
     def test_actual_owned_spawn_counter_and_bounded_native_receipt(self):
         from eq142_native import run_owned
         from eq142_evidence import persist_record
-        from benchmark_supplied_inputs import machine
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory);slots=machine()['allowed_cpu_slots']
+            root=Path(directory);slots=require_cpu_slots(self,5)
             ref=prepare_reference(root/'reference',cpu_slots=slots,profiles=('family_missing_hl',))
             local=root/'owned-runner'
             native=run_owned([sys.executable,str(ROOT/'tools/benchmark_execution_baseline.py'),

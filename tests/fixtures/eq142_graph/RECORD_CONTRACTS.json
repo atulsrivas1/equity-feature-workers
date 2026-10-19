@@ -796,5 +796,31 @@
       "physical_enforcement": "constant false"
     },
     "timing": "All instrumented plan/hash/source-binding/label/spec serialization/admission and copies belong within selected B phase. Source-derived original preflight does not admit or replace original supervisor validation/errors; actual outcome resident/input totals must match independently. Do not describe encoded logical reservations as actual physical copies, native IPC or pure cost."
+  },
+  "qualification_code_counts": {
+    "purpose": "Independent development-only comparison of actual Python code call/return events against alias-hook aggregate call and returned-byte observations. Not enabled in official timing; no latency, exception-class, physical-copy/native IPC or global critical-path authority.",
+    "sources": [
+      "https://docs.python.org/3.12/library/sys.html#sys.setprofile",
+      "https://docs.python.org/3.12/library/threading.html#threading.setprofile"
+    ],
+    "mechanism": "Bind approved original code objects before hooks; use sys.setprofile for this thread, threading.setprofile only for future owned pool threads and explicit child-local setup for spawn. Restrict events to original supervisor/partition roots; cross known wrapper frames but exclude tool bookkeeping frames. Capture operation call entries and typed return lengths directly from code events without reading hook spans/counters. No thread timing/context-switch attribution.",
+    "fields": {
+      "schema": "constant eq142-code-count-qualification:1",
+      "complete": "bool; false rejects count qualification",
+      "failure_reason": "null | observer_error | entry_limit | frame_limit | profiler_interference | unbalanced_events",
+      "counters": "sorted array<code_count>, <=40 approved code identities",
+      "completion_classification": "constant return_events_do_not_classify_exception",
+      "elapsed_cost_disposition": "constant qualification_only_no_timing_authority"
+    },
+    "code_count_fields": {
+      "operation": "prebound inspected operation or delegate.original_partition",
+      "call_entries": "bounded_count <=131072 total across operations",
+      "return_events": "bounded_count; matching entered Python frames only",
+      "typed_byte_returns": "bounded_count; actual declared bytes/int/ASCII return types only",
+      "typed_returned_bytes": "bounded_count <=9007199254740991; lengths/sizes, not allocation/native IPC"
+    },
+    "limits": "<=4096 active selected frames, <=128 ancestry search depth, <=131072 total selected call entries, <=64KiB encoded record per observer, no frame objects retained, owned qualification-only profile file namespace<=64 including partials. Observer failures preserve original product return/exception and reject qualification; do not replace existing profiler hooks.",
+    "caveats": "Python profile return event also occurs on exception and may carry None, indistinguishable from legitimate None return. Do not invent returned/rejected classification from it. Original typed exception identity and hook error states require separate controls. This observer checks aggregate operation counts/actual typed return byte observations, not per-task labels or source-independent mathematics; those retain separate fixtures/joins. Scheduling-dependent waits and telemetry-encoded sizes must not be frozen from a different execution as exact constants.",
+    "study_gate": "Qualification uses this extra observer only in explicit development controls; it is not part of frozen A/A timings. Prospective source invariants and dynamic scheduling/telemetry byte expectations remain necessary for official sample acceptance. No profiler-generated numbers alone grant performance acceptance."
   }
 }

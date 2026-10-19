@@ -132,7 +132,7 @@ def read_reference(path,expected_sha256):
     return reference
 
 
-def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree,control,series,job_name=None):
+def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree,control,series,job_name=None,qualify_code_counts=False):
     """Assemble a real original-run control, preserving products before checks.
 
     This is a development record, not the accepted full execution-trace schema.
@@ -141,6 +141,8 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
     """
     if control not in ('uninstrumented_A','instrumented_B') or series not in SERIES:
         raise ValueError('unsupported control/class')
+    if type(qualify_code_counts) is not bool or qualify_code_counts and control!='instrumented_B':
+        raise ValueError('count observer requires explicit instrumented qualification')
     reference_path=Path(reference_path);directory=Path(directory)
     reference=read_reference(reference_path,reference_sha256)
     expected=reference['profiles'][profile]
@@ -156,7 +158,7 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         'profile':profile,'mode':mode,'degree':degree,'control':control,'series':series,
         'reference_sha256':reference_sha256,'source':bound.source,'descriptive_job':job,
         'original_admission':original,'status':'started','native_job_supplied':job_name is not None}
-    plan=None;collector=None;ledger=None;outcome=None
+    plan=None;collector=None;ledger=None;outcome=None;count_observer=None;profile_dir=None
     cpu_before=None;cpu_after=None
     if job_name is not None:
         from supplied_native import counters
@@ -166,8 +168,13 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         if control=='instrumented_B':
             # All construction, hashes, copied plan and representation admission
             # occur after selected-phase start, not in excluded pre-admission.
+            if qualify_code_counts:
+                from eq142_code_counts import for_original_run
+                profile_dir=directory/'code-counts';profile_dir.mkdir()
+                count_observer=for_original_run(bound,reference['source_inventory']['hooks'])
             plan,_=make_plan(items,mode=mode,budget=budget,expected_inventory=reference['source_inventory'],
-                output_dir=trace_dir,operations=load('RECORD_CONTRACTS.json')['trace']['operations'])
+                output_dir=trace_dir,operations=load('RECORD_CONTRACTS.json')['trace']['operations'],
+                qualification_profile_dir=profile_dir)
             collector=Collector('parent',max_spans=16384,max_bytes=8388608,operations=plan['operations'])
             label_frame=collector.begin('trace.bind_labels',())
             try:collector.bind_labels(tuple(item.task for item in items))
@@ -183,7 +190,11 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
                     frame=collector.begin('trace.install',())
                     try:session.install()
                     finally:collector.finish(frame)
-                with patched_delegate(plan,collector) if collector is not None else nullcontext():
+                count_context=nullcontext()
+                if count_observer is not None:
+                    from eq142_code_counts import guarded_activation
+                    count_context=guarded_activation(count_observer,lambda:collector.failure('collector_error'))
+                with (patched_delegate(plan,collector) if collector is not None else nullcontext(),count_context):
                     outcome=BoundedSupervisor(mode=mode,budget=budget).run(items,publisher=pub,progress=progress)
             finally:
                 if session is not None:
@@ -199,6 +210,27 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
             reservations=[{'id':'parent','file':'parent.json','max_spans':16384,'max_bytes':8388608},*plan['reservations']]
             report['retained_spans']=combine_fragments(trace_dir,reservations)
             report['parent_relations']=ledger.snapshot((trace_dir,report['retained_spans']))
+            if count_observer is not None:
+                from eq142_code_counts import compare_aggregate,validate_profile
+                persist_record(profile_dir/'parent.json',count_observer.snapshot(),max_bytes=65536)
+                expected_files=['parent.json']+([r['file'] for r in plan['reservations']] if mode=='process' else [])
+                if {p.name for p in profile_dir.iterdir()}!=set(expected_files):raise ValueError('incomplete profile files')
+                profiles=[];references=[]
+                for name in expected_files:
+                    body=bounded_read(profile_dir/name,65536);value=json.loads(body);validate_profile(value);profiles.append(value)
+                    references.append({'codec':'eq142_code_counts','sha256':digest(body),'bytes':len(body),'retained_name':name})
+                comparison=compare_aggregate(profiles,report['retained_spans']['counters'],
+                    manual_operations=('trace.bind_labels','trace.install','trace.restore'))
+                manual_expected={'trace.bind_labels':1+len(plan['reservations']),
+                    'trace.install':1+(len(plan['reservations']) if mode=='process' else 0),
+                    'trace.restore':1+(len(plan['reservations']) if mode=='process' else 0)}
+                for operation,count in manual_expected.items():
+                    rows=[r for r in report['retained_spans']['counters'] if r['operation']==operation]
+                    if (sum(r['attempts'] for r in rows)!=count or sum(r['returned'] for r in rows)!=count
+                            or any(r['rejected'] or r['byte_observation']!='unavailable' for r in rows)):
+                        raise ValueError('manual trace source expectation differs')
+                report['qualification_code_counts']={'profiles':references,'comparison':comparison,
+                    'manual_source_expectations':manual_expected,'timing_authority':False}
         else:
             report['retained_spans']=None;report['parent_relations']=[]
         confirm_original(outcome,original)
@@ -212,8 +244,9 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         if job_name is not None:cpu_after=counters(job_name)
         report.update(runner_control_phase_start_ns=str(phase_start),runner_control_phase_end_ns=str(phase_finish),
             runner_control_phase_wall_ns=str(phase_finish-phase_start),
-            selected_phase_wall_ns=str(phase_finish-phase_start) if series=='eq142_admitted_control' else None,
-            selected_phase_scope='admitted_control' if series=='eq142_admitted_control' else 'external_owned_runner_final_exit_required',
+            selected_phase_wall_ns=str(phase_finish-phase_start) if series=='eq142_admitted_control' and not qualify_code_counts else None,
+            selected_phase_scope='qualification_profiled_no_timing_authority' if qualify_code_counts else
+                'admitted_control' if series=='eq142_admitted_control' else 'external_owned_runner_final_exit_required',
             before_phase=cpu_before,after_phase=cpu_after)
         bound.check()
         if source_state()!=reference['state']:raise ValueError('source/runtime changed after phase')
@@ -250,6 +283,7 @@ def main():
     parser.add_argument('--degree',type=int,default=1)
     parser.add_argument('--control',choices=('uninstrumented_A','instrumented_B'),default='uninstrumented_A')
     parser.add_argument('--series',choices=SERIES,default=SERIES[0]);parser.add_argument('--job')
+    parser.add_argument('--qualify-code-counts',action='store_true')
     args=parser.parse_args()
     if args.command=='prepare-qualification':
         if args.cpu_slots is None:parser.error('--cpu-slots required for explicit qualification configuration')
@@ -259,7 +293,8 @@ def main():
         if args.reference is None or args.reference_sha256 is None or args.profile is None:
             parser.error('--reference/--reference-sha256/--profile required')
         result=run_control(args.reference,args.reference_sha256,directory=args.directory,profile=args.profile,
-            mode=args.mode,degree=args.degree,control=args.control,series=args.series,job_name=args.job)
+            mode=args.mode,degree=args.degree,control=args.control,series=args.series,job_name=args.job,
+            qualify_code_counts=args.qualify_code_counts)
     print(json.dumps(result,sort_keys=True))
 
 

@@ -49,7 +49,7 @@ def invocation_key(hashes):
     return digest(b'eq142-invocation1\0'+wire(list(hashes)))
 
 
-def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations):
+def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations,qualification_profile_dir=None):
     """Prepare explicit labels/reservations before installing hooks.
 
     Returned pickle length describes this Python object only, never pool-native
@@ -59,6 +59,11 @@ def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations):
         raise TraceSpecificationError('unknown_invocation')
     root=Path(output_dir).resolve()
     if not root.is_dir() or any(root.iterdir()):raise TraceSpecificationError('duplicate_sidecar')
+    profile_root=None
+    if qualification_profile_dir is not None:
+        profile_root=Path(qualification_profile_dir).resolve()
+        if profile_root==root or profile_root.parent!=root.parent or not profile_root.is_dir() or any(profile_root.iterdir()):
+            raise TraceSpecificationError('duplicate_sidecar')
     bind_source(expected_inventory).check()
     partitions=supervisor.partition_tasks(items,budget.workers)
     if mode=='sequential':groups=[(item,) for item in partitions[0].items]
@@ -73,7 +78,8 @@ def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations):
             'file':'delegate-%03d.json'%ordinal})
     if len({r['key'] for r in reservations})!=count:raise TraceSpecificationError('unknown_invocation')
     plan={'schema':'eq142-delegate-plan:1','mode':mode,'expected_inventory':json.loads(wire(expected_inventory)),
-        'output_dir':str(root),'operations':list(operations),'reservations':reservations}
+        'output_dir':str(root),'operations':list(operations),'reservations':reservations,
+        'qualification_profile_dir':None if profile_root is None else str(profile_root)}
     # This is observed metadata serialization only. The final harness admission
     # must close its multiplication/copy and overall trace/resident reservations.
     observed=len(pickle.dumps(plan,protocol=5))
@@ -112,7 +118,7 @@ def partition_entry(partition,budget,process_transport=False,telemetry=False,sub
     collector=Collector(reservation['id'],max_spans=reservation['max_spans'],
         max_bytes=reservation['max_bytes'],operations=plan['operations'])
     fresh_process=plan['mode']=='process'
-    session=None
+    session=None;profile=None
     with route(collector),collector.phase('stage:delegate'):
         label_frame=collector.begin('trace.bind_labels',())
         try:collector.bind_labels(tuple(i.task for i in partition.items),_ORIGINAL_TASK_HASH)
@@ -120,6 +126,11 @@ def partition_entry(partition,budget,process_transport=False,telemetry=False,sub
         if fresh_process:
             bound=bind_source(plan['expected_inventory'])
             session=RoutingHookSession(bound,plan['expected_inventory']['hooks'],collector)
+            if plan.get('qualification_profile_dir') is not None:
+                try:
+                    from eq142_code_counts import for_original_run
+                    profile=for_original_run(bound,plan['expected_inventory']['hooks'])
+                except BaseException:collector.failure('collector_error')
         error=None;result=None
         try:
             if session is not None:
@@ -128,7 +139,11 @@ def partition_entry(partition,budget,process_transport=False,telemetry=False,sub
                 finally:collector.finish(install_frame)
             frame=collector.begin('delegate.original_partition',())
             try:
-                result=_ORIGINAL_PARTITION(partition,budget,process_transport,telemetry,submitted_ns)
+                if profile is not None:
+                    from eq142_code_counts import guarded_activation
+                    with guarded_activation(profile,lambda:collector.failure('collector_error')):
+                        result=_ORIGINAL_PARTITION(partition,budget,process_transport,telemetry,submitted_ns)
+                else:result=_ORIGINAL_PARTITION(partition,budget,process_transport,telemetry,submitted_ns)
             except BaseException as issue:
                 error=issue;collector.finish(frame,error=issue)
             else:collector.finish(frame,result=result)
@@ -137,6 +152,11 @@ def partition_entry(partition,budget,process_transport=False,telemetry=False,sub
                 restore_frame=collector.begin('trace.restore',())
                 try:session.restore()
                 finally:collector.finish(restore_frame)
+            if profile is not None:
+                try:
+                    from eq142_evidence import persist_record
+                    persist_record(Path(plan['qualification_profile_dir'])/reservation['file'],profile.snapshot(),max_bytes=65536)
+                except BaseException:collector.failure('collector_error')
             try:collector.persist(Path(plan['output_dir'])/reservation['file'])
             except BaseException:
                 # Original product result/error stays intact. Missing/partial or

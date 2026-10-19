@@ -7,7 +7,7 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tests'))
-from eq142_fixture import HAVE_INTRADAY,qualification,bound_inventory,load
+from eq142_fixture import HAVE_INTRADAY,qualification,bound_inventory,load,require_cpu_slots
 from eq142_admission import budget_for,original_reservation,delegate_reservation,confirm_original
 from equity_feature_workers import BoundedSupervisor,ProgressRecorder,encode_output
 if HAVE_INTRADAY:
@@ -23,7 +23,7 @@ class ActualAdmission(unittest.TestCase):
         for mode,degree in (('sequential',1),('thread',2),('process',2)):
             for publishing in (False,True):
                 with self.subTest(mode=mode,publishing=publishing):
-                    budget=budget_for(degree,8);progress=ProgressRecorder(max_tasks=16)
+                    budget=budget_for(degree,require_cpu_slots(self,degree+3));progress=ProgressRecorder(max_tasks=16)
                     sink,pub=publisher() if publishing else (None,None)
                     proposed=original_reservation(items,mode=mode,budget=budget,pending_bytes=8388608 if publishing else 0)
                     outcome=BoundedSupervisor(mode=mode,budget=budget).run(items,publisher=pub,progress=progress)
@@ -38,7 +38,7 @@ class ActualAdmission(unittest.TestCase):
         items=items_for('family_complete');bound=qualification();inventory=bound_inventory(bound)
         for mode,degree in (('sequential',1),('thread',2),('process',2)):
             with self.subTest(mode=mode),tempfile.TemporaryDirectory() as directory:
-                budget=budget_for(degree,8)
+                budget=budget_for(degree,require_cpu_slots(self,degree+3))
                 base=original_reservation(items,mode=mode,budget=budget)
                 plain=delegate_reservation(None,items,budget,original=base)
                 self.assertEqual(plain['logical_spec_resident_reservation_bytes'],0)

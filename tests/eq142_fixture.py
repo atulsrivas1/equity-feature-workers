@@ -4,12 +4,42 @@ from enum import Enum
 import importlib
 from importlib.util import find_spec
 import json
+import os
 from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / 'tests/fixtures/eq142_graph'
 HAVE_INTRADAY=find_spec('equity_features_intraday') is not None
+
+
+def available_cpu_slots():
+    """Actual host bound for development tests, never a synthetic study host."""
+    slots=os.cpu_count()
+    if type(slots) is not int or slots<1:raise ValueError('Unknown development CPU count')
+    if hasattr(os,'sched_getaffinity'):slots=min(slots,len(os.sched_getaffinity(0)))
+    if os.name=='nt' and slots>=2:
+        import ctypes
+        from ctypes import wintypes
+        kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+        kernel.GetCurrentProcess.restype=wintypes.HANDLE
+        kernel.GetProcessAffinityMask.argtypes=(wintypes.HANDLE,ctypes.POINTER(ctypes.c_size_t),ctypes.POINTER(ctypes.c_size_t))
+        kernel.GetProcessAffinityMask.restype=wintypes.BOOL
+        process=ctypes.c_size_t();system=ctypes.c_size_t()
+        if not kernel.GetProcessAffinityMask(kernel.GetCurrentProcess(),ctypes.byref(process),ctypes.byref(system)):
+            raise ctypes.WinError(ctypes.get_last_error())
+        allowed=process.value.bit_count()
+        if allowed<1:raise ValueError('Unknown Windows development CPU affinity')
+        slots=min(slots,allowed)
+    if slots<1:raise ValueError('Unknown development CPU affinity')
+    return min(slots,8)
+
+
+def require_cpu_slots(test,minimum):
+    slots=available_cpu_slots()
+    if slots<minimum:
+        test.skipTest(f'EQ142 development CPU capacity requires {minimum} allowed slots; observed {slots}')
+    return slots
 
 
 def load(name):
@@ -32,7 +62,7 @@ def qualification():
         record['definition_line']=approved['definitions'][record['definition']]
     hooks['runtime']='CPython '+runtime_version
     protocol = load('BENCHMARK_PROTOCOL.json')
-    source = {'canonical_docs_head':'21d76cf393a93952d7b866e52573be58979007a1',
+    source = {'canonical_docs_head':'f554b7648ffd992324dad39e52da7469e57296ac',
         'package_build_sources':{'core':protocol['sources']['baseline_core_package_build'],
             'worker':protocol['sources']['baseline_worker_main'],'io':protocol['sources']['baseline_io_main']},
         'distributions':{'equity-feature-contracts':'0.0.4a4','equity-features':'0.0.4a4',
