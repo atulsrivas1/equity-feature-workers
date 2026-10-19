@@ -361,7 +361,9 @@
       "trace.bind_labels",
       "trace.install",
       "trace.restore",
-      "trace.bookkeeping"
+      "trace.bookkeeping",
+      "pool.thread_shutdown",
+      "pool.process_shutdown"
     ],
     "count_policy": "attempts=returned+rejected for complete traces; nested operations remain separate counts, never summed as unique allocations or physical copies",
     "exclusive_policy": "inclusive minus union of contained child intervals on exactly the same actual process/thread timeline; reject inconsistent or negative closure; no worker-to-wall summation Parent residual contains unseparated child-hook labeling/locking/serialization/counter work outside selected child intervals. Global A/A overhead bounds do not make per-stage residual pure product cost. Do not claim pure calculation-exclusive cost or subtract a scalar overhead.",
@@ -774,7 +776,8 @@
       "sha256": "sha256 of retained exact sidecar bytes",
       "bytes": "bounded_count <=reservation.max_bytes",
       "retained_name": "sample-local basename; no paths",
-      "span_count": "bounded_count <=reservation.max_spans; exact referenced body length"
+      "span_count": "bounded_count <=reservation.max_spans; exact referenced body length",
+      "owned_process_witness": "null or development-only writer-bound owned_process_witness reference from exact schema2 body; closed codec/sha256/bytes/retained_name, <=4096 witness bytes"
     }
   },
   "native_samples_reference": {
@@ -790,11 +793,14 @@
       "per_invocation_spec_extra_pickle_bytes": "ordered bounded array<=16; max(0,actual proposed partial/function+arguments pickle size minus original function+arguments pickle size), prospective submitted_ns int64 maximum and telemetry enabled; per proposed representation<=16MiB",
       "logical_spec_resident_reservation_bytes": "2*plan_pickle_bytes+3*sum(per_invocation_spec_extra_pickle_bytes); conservative logical representations, not physical memory",
       "expected_committed_output_metadata_bytes": "bounded_count from preflight exact full original output bodies; zero for nonpublishing class; actual output totals renewed independently",
-      "combined_logical_resident_bytes": "original initial logical resident +logical spec allowance+expected committed output metadata; <=unchanged960MiB logical cap before dispatch",
+      "combined_logical_resident_bytes": "original initial logical resident+logical spec allowance+expected committed output metadata+owned witness logical allowance; <=unchanged960MiB logical cap before dispatch",
       "trace_reserved_bytes": "constant67108864",
       "whole_job_sampled_rss_cap_bytes": "constant1073741824",
       "native_ipc_encoded_bytes": "constant null",
-      "physical_enforcement": "constant false"
+      "physical_enforcement": "constant false",
+      "owned_witness_population": "bounded_count <=17; A native1/B native1+actual admitted reservation count;0 when disabled",
+      "owned_witness_encoded_max_bytes": "4096*owned_witness_population; encoded bound, not heap allocation",
+      "owned_witness_logical_reservation_bytes": "3*owned_witness_encoded_max_bytes; declared encoded representations only"
     },
     "timing": "All instrumented plan/hash/source-binding/label/spec serialization/admission and copies belong within selected B phase. Source-derived original preflight does not admit or replace original supervisor validation/errors; actual outcome resident/input totals must match independently. Do not describe encoded logical reservations as actual physical copies, native IPC or pure cost."
   },
@@ -809,7 +815,7 @@
       "schema": "constant eq142-code-count-qualification:1",
       "complete": "bool; false rejects count qualification",
       "failure_reason": "null | observer_error | entry_limit | frame_limit | profiler_interference | unbalanced_events",
-      "counters": "sorted array<code_count>, <=40 approved code identities",
+      "counters": "sorted array<code_count>, <=42 approved code identities (41 hooks+original delegate, excluding3 manual terminal observations)",
       "completion_classification": "constant return_events_do_not_classify_exception",
       "elapsed_cost_disposition": "constant qualification_only_no_timing_authority"
     },
@@ -904,5 +910,22 @@
     "common_scope": "A is ownership-qualified original Supervisor control, not pristine no-observer total cost. Common parent native metadata costs remain included in both phases; common overhead can dilute B/A ratios. Retain explicit scope and unchanged thresholds, with no scalar subtraction.",
     "multiple_failures": "A prior independent witness failure and later outcome/product proof-store failure both receive explicit typed/code/stage failure records in runner.json. Preserve primary raised error object and existing causal chain, adding an independent-failure note; never invent a causal relationship or replace an original calculation exception.",
     "review": "Conditional prospective review e46ed6d150fbe02106df558c60c9c3bd844ba4f146bdd3e06d36d924cc77fbe8; explicit reference-binding/schema2/common-scope refinements selected before code. Actual integration source review remains required."
+  },
+  "executor_terminal_observation": {
+    "stage": "Prospective development observation, defined before code. No scheduler/default/package changes or root/full sample/study acceptance.",
+    "source": "Hook inventory schema2 contains41 actual hook definitions plus3 separately source-bound terminal observers. New shutdown/terminal definition lines are extracted from retained exact official CPython3.12.10/15 primary snapshots, checked against existing approved whole-file SHA256 and Git blob. No expected-source regeneration from installed observation.",
+    "shutdown": "B observes actual ThreadPoolExecutor.shutdown or ProcessPoolExecutor.shutdown on the source-bound owner, with original args/kwargs, parent timeline/start/end, actual returned/rejected status and original error type. Exactly one executor owner per run, shared with actual submit owner; cancellation with no submissions may first bind that owner at shutdown. Preserve original return/exception even if ledger bookkeeping fails. Sequential has no executor/shutdown requirement or fabricated pool event.",
+    "shutdown_fields": "Closed {operation,executor_id,parent_timeline_id,parent_start_ns,parent_end_ns,wait,cancel_futures,status,error_type}. executor_id constant owned-executor:0 after actual object binding; wait/cancel_futures exact observed bools from bound original signature including defaults, never bool(unknown). parent times canonical int64 local ns, end>=start; status returned/rejected; error_type null on returned or exact existing typed name on rejected. Maximum1 normal shutdown record; excess makes qualification incomplete, not silent omission.",
+    "terminal": "After unchanged Supervisor returns and hooks/profile restore, source-bound captured Future.done/cancelled/running functions query only actual retained successful submit owners. Read exact descriptors/code/approved runtime bindings before/after. These manual metadata observations are not original-call counts; all overhead stays inside B selected phase. Maximum16 futures; no Future.result re-read, waiting or fabricated result.",
+    "terminal_fields": "Closed {invocation_id,task_hashes,parent_timeline_id,capture_start_ns,capture_end_ns,done,cancelled,running}. Exact booleans, local int64 ns; normal after wait=True shutdown requires done true/running false. cancelled true is observed cancelled-before-running per approved Future semantics, not computed child work.",
+    "dispositions": "Successful submit invocation map is distinct from potential reservations. Non-submitted or cancelled-before-running invocations have no invented child process/file. Retain actual source-required versus observed barriers and actual original task reasons; source abnormal/cancelled runs remain unaccepted until their explicit root qualification. Normal frozen study still requires successful original products/no cancellation, exact applicable fragments/witnesses and no missing submitted process proof.",
+    "scope": "Shutdown observation closes an executor wait barrier only after actual returned status with wait=True and cancel_futures=True, not from a configured worker count or Supervisor return alone. Native owned final exit/all-descendant CPU/resource/sample/source and per-commit/full root joins remain separate.",
+    "bounds": "At most1 shutdown row and16 terminal rows fit existing1MiB development runner cap. Added hook spans count toward existing131072/64MiB caps. Actual expanded inventory plan/spec pickle representations are already measured and reserved before dispatch. No cap/physical allocation/precision/noise/overhead-threshold/study-order changes.",
+    "qualification": "Independent official source-position/alias validation; real thread/spawn wait completion and seq absence; zero-submit cancellation and submitted cancellation/undispatched scopes; injected shutdown/observer failures preserve actual product/errors; source/descriptor interference rejects; independent code-count comparison includes new shutdown hooks but excludes manual observer calls; numeric outputs remain independent-fixture exact.",
+    "independent_counter_cardinality": "The original39 hooks plus the separately observed original delegate code made40 approved code identities. New41 hooks plus that original delegate make42, not41. Extend development CodeCounts constructor/profile-counter cardinality40 to42 consistently, exclude3 manual terminal functions, keep64KiB profile/131072 call entries/4096 active frames and all trace/native/runner/study/resource caps unchanged. Derived from actual for_original_run selection, before code, not from observed timing.",
+    "abnormal_states": "On rejected shutdown, direct Future queries are bounded non-atomic observations and may still be running/incomplete; never infer a terminal barrier or root closure. Successful waited shutdown plus stable terminal observations is a separate gate. Preserve original exception and original typed outcomes even when observation/source validation fails.",
+    "descriptor_binding": "Bind exact approved source module/qualname/definition line and actual function descriptor/code identity for new shutdown/manual observers, with class aliases before/after. Manual observers use captured unbound original functions after hook/profile restoration. This is cooperative inspected-source qualification, not hostile-code or whole-interpreter attestation.",
+    "review": "Conditional prospective design review1c43ba15311cbcbf61ac11125061985ddf0c224b67620aed9aefaaf79ed0b559 passed42staticcontrols. Its provisional40-to41 counter note is prospectively corrected to40-to42 because original delegate adds one selected code. No runtime tests or source implementation acceptance claimed.",
+    "contract_reconciliation": "Explicitly reconcile already implemented development delegate-admission3witness fields and fragment-reference nullable witness field with their existing separate integration specification. This changes no runtime math/threshold or accepted root codec; complete root admission is still outstanding."
   }
 }

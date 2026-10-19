@@ -22,6 +22,7 @@ def main():
                     'test_eq142_sample.DevelopmentSample.','test_eq142_sample.NativeOwnedDevelopmentSample.',
                     'test_eq142_outcome.ActualOutcomeLedger.','test_eq142_outcome.ActualOutcomeFailureRetention.',
                     'test_eq142_owned_witness.OwnedWitnessIntegration.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.',
+                    'test_eq142_executor.ExecutorObservations.',
                     'test_eq142_code_counts.ActualOriginalCountParity.test_actual_harness_thread_and_spawn_profile_counts'))):
             # Capacity skips remain explicit ledger evidence, never full mode
             # qualification. Optional absence uses the separate checks below.
@@ -31,7 +32,8 @@ def main():
             'test_eq142_evidence.OriginalProductWitnesses.','test_eq142_admission.','test_eq142_causal.',
             'test_eq142_sample.','test_eq142_code_counts.ActualOriginalCountParity.',
             'test_eq142_outcome.ActualOutcomeLedger.','test_eq142_outcome.ActualOutcomeFailureRetention.',
-            'test_eq142_owned_witness.OwnedWitnessIntegration.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.'))) or (
+            'test_eq142_owned_witness.OwnedWitnessIntegration.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.',
+            'test_eq142_executor.ExecutorObservations.'))) or (
             os.name != 'nt' and identity.startswith(('test_supplied_native.','test_eq142_native.',
                 'test_eq142_sample.NativeOwnedDevelopmentSample.',
                 'test_eq142_identity.WindowsOwnedWitness.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.'))), ('unexpected skip', item)

@@ -28,7 +28,8 @@ OPERATIONS=frozenset(('supervisor.inputs','supervisor.pickle_size','supervisor.p
     'config.to_json','config.digest','context.to_json','context.digest','sdk.prepare_publication',
     'sdk.encode_result','sdk.decode_result','sdk.encode_receipt','sdk.publish','publisher.submit',
     'publisher.inner_submit','publisher.drain','publisher.inner_drain','sink.lookup','sink.read',
-    'pool.thread_submit','pool.process_submit','future.result','parent.wait','delegate.original_partition',
+    'pool.thread_submit','pool.process_submit','pool.thread_shutdown','pool.process_shutdown',
+    'future.result','parent.wait','delegate.original_partition',
     'trace.bind_labels','trace.install','trace.restore','trace.bookkeeping'))
 OBSERVATIONS=frozenset(('returned_encoded_bytes','observed_pickle_size_check',
     'source_guaranteed_ascii_json_length','unavailable'))

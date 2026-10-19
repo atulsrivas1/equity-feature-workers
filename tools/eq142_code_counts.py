@@ -13,11 +13,12 @@ from types import CodeType
 BYTE_RETURNS=frozenset(('manifest.canonical','manifest.encode_task','manifest.encode_output',
     'sdk.encode_result','sdk.encode_receipt'))
 ASCII_RETURNS=frozenset(('config.to_json','context.to_json'))
+MAX_CODE_IDENTITIES=42 # 41 hook definitions plus the unchanged original delegate.
 
 
 class CodeCounts:
     def __init__(self,operations,*,root_codes,transparent_codes=(),max_entries=131072,max_frames=4096):
-        if (not operations or len(operations)>40 or any(type(code) is not CodeType or type(op) is not str for code,op in operations.items())
+        if (not operations or len(operations)>MAX_CODE_IDENTITIES or any(type(code) is not CodeType or type(op) is not str for code,op in operations.items())
                 or not root_codes or any(type(code) is not CodeType for code in root_codes)
                 or type(max_entries) is not int or not 1<=max_entries<=131072
                 or type(max_frames) is not int or not 1<=max_frames<=4096):
@@ -189,7 +190,7 @@ def validate_profile(record):
             or record['complete'] and record['failure_reason'] is not None
             or record['completion_classification']!='return_events_do_not_classify_exception'
             or record['elapsed_cost_disposition']!='qualification_only_no_timing_authority'
-            or type(record['counters']) is not list or len(record['counters'])>40):
+            or type(record['counters']) is not list or len(record['counters'])>MAX_CODE_IDENTITIES):
         raise ValueError('invalid code count record')
     operations=[];entries=0
     for row in record['counters']:

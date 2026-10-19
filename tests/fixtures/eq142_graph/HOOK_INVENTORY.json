@@ -1,5 +1,5 @@
 {
-  "schema": "eq142-closed-hook-inventory:1",
+  "schema": "eq142-closed-hook-inventory:2",
   "stage": "PRECODE_READ_ONLY_PROPOSAL_NOT_TRACE_COVERAGE",
   "runtime": "CPython 3.12.10",
   "records": [
@@ -720,6 +720,44 @@
       "patch_sites": [
         "equity_feature_workers.intraday._context"
       ]
+    },
+    {
+      "operation": "pool.thread_shutdown",
+      "definition": "concurrent.futures.thread.ThreadPoolExecutor.shutdown",
+      "source_module": "concurrent.futures.thread",
+      "source_category": "python_runtime",
+      "source_file": "thread.py",
+      "source_sha256": "9630b4be940801bfc0c62e389dac4d4f527d7cf1d44fcc88ffcd7048a608fee3",
+      "definition_line": 220,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "concurrent.futures.thread.ThreadPoolExecutor.shutdown"
+      ],
+      "class_aliases": [
+        "concurrent.futures.ThreadPoolExecutor",
+        "concurrent.futures.thread.ThreadPoolExecutor",
+        "equity_feature_workers.supervisor.ThreadPoolExecutor"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "pool.process_shutdown",
+      "definition": "concurrent.futures.process.ProcessPoolExecutor.shutdown",
+      "source_module": "concurrent.futures.process",
+      "source_category": "python_runtime",
+      "source_file": "process.py",
+      "source_sha256": "86740b978bb5b56c9da50a23e38872154688ef57dcf30214eeeb4064cc79118a",
+      "definition_line": 856,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "concurrent.futures.process.ProcessPoolExecutor.shutdown"
+      ],
+      "class_aliases": [
+        "concurrent.futures.ProcessPoolExecutor",
+        "concurrent.futures.process.ProcessPoolExecutor",
+        "equity_feature_workers.supervisor.ProcessPoolExecutor"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
     }
   ],
   "inspected_modules": [
@@ -798,11 +836,71 @@
   ],
   "not_definition_patches": [
     "delegate.original_partition uses importable development delegate, preserving actual WorkItem callback",
-    "trace label/install/restore/bookkeeping records belong to the external collector itself"
+    "trace label/install/restore/bookkeeping records belong to the external collector itself",
+    "future_terminal done/cancelled/running are separately source-bound manual observations, not installed hook definitions"
   ],
   "limits": [
     "Exact-object loaded module/class alias inventory only; arbitrary caller-held locals/closures/dynamic imports remain outside claimed coverage.",
     "No hooks installed, classes replaced, callbacks executed, new graph/tracer implemented or workload timing.",
     "Package/fixture/std-library source identities differ in domain; stdlib source is exact current runtime-scoped, not a three-repository Git commit."
+  ],
+  "terminal_observations": [
+    {
+      "operation": "future_terminal.done",
+      "definition": "concurrent.futures._base.Future.done",
+      "source_module": "concurrent.futures._base",
+      "source_category": "python_runtime",
+      "source_file": "_base.py",
+      "source_sha256": "a5a450b5ccf2bc5abf458be32c7b2eb4e26c02c3d504eef0e0682b5cfcfc6f52",
+      "definition_line": 393,
+      "kind": "class_method_function",
+      "class_aliases": [
+        "concurrent.futures.Future",
+        "concurrent.futures._base.Future",
+        "equity_feature_workers.supervisor.Future"
+      ],
+      "descriptor_policy": "Observe through captured unbound original functions after hooks restore. Bind exact descriptor/code and class aliases before/after; no definition patch and no original-call count claim for these manual queries.",
+      "binding_sites": [
+        "concurrent.futures._base.Future.done"
+      ]
+    },
+    {
+      "operation": "future_terminal.cancelled",
+      "definition": "concurrent.futures._base.Future.cancelled",
+      "source_module": "concurrent.futures._base",
+      "source_category": "python_runtime",
+      "source_file": "_base.py",
+      "source_sha256": "a5a450b5ccf2bc5abf458be32c7b2eb4e26c02c3d504eef0e0682b5cfcfc6f52",
+      "definition_line": 383,
+      "kind": "class_method_function",
+      "class_aliases": [
+        "concurrent.futures.Future",
+        "concurrent.futures._base.Future",
+        "equity_feature_workers.supervisor.Future"
+      ],
+      "descriptor_policy": "Observe through captured unbound original functions after hooks restore. Bind exact descriptor/code and class aliases before/after; no definition patch and no original-call count claim for these manual queries.",
+      "binding_sites": [
+        "concurrent.futures._base.Future.cancelled"
+      ]
+    },
+    {
+      "operation": "future_terminal.running",
+      "definition": "concurrent.futures._base.Future.running",
+      "source_module": "concurrent.futures._base",
+      "source_category": "python_runtime",
+      "source_file": "_base.py",
+      "source_sha256": "a5a450b5ccf2bc5abf458be32c7b2eb4e26c02c3d504eef0e0682b5cfcfc6f52",
+      "definition_line": 388,
+      "kind": "class_method_function",
+      "class_aliases": [
+        "concurrent.futures.Future",
+        "concurrent.futures._base.Future",
+        "equity_feature_workers.supervisor.Future"
+      ],
+      "descriptor_policy": "Observe through captured unbound original functions after hooks restore. Bind exact descriptor/code and class aliases before/after; no definition patch and no original-call count claim for these manual queries.",
+      "binding_sites": [
+        "concurrent.futures._base.Future.running"
+      ]
+    }
   ]
 }

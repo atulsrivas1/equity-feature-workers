@@ -99,15 +99,25 @@ def bind_source(expected_inventory):
         fail()
     hooks, source = expected_inventory['hooks'], expected_inventory['source']
     validate_source(source)
-    if hooks.get('schema') != 'eq142-closed-hook-inventory:1' or len(hooks.get('records', [])) != 39:
+    observations=hooks.get('terminal_observations')
+    if (hooks.get('schema') != 'eq142-closed-hook-inventory:2' or len(hooks.get('records', [])) != 41
+            or type(observations) is not list or len(observations)!=3):
         fail()
+    expected_observers={f'future_terminal.{name}':f'concurrent.futures._base.Future.{name}'
+        for name in ('done','cancelled','running')}
+    if {record.get('operation'):record.get('definition') for record in observations}!=expected_observers:
+        fail()
+    for record in observations:
+        if (record.get('binding_sites')!=[record['definition']] or 'patch_sites' in record
+                or record.get('source_category')!='python_runtime'
+                or record.get('source_module')!='concurrent.futures._base'):fail()
     for name, version in source['distributions'].items():
         if importlib.metadata.version(name) != version:
             fail('source_mismatch')
     for name in hooks['inspected_modules']:
         importlib.import_module(name)
     files, sites, anchors = {}, {}, {}
-    for record in hooks['records']:
+    for record in [*hooks['records'],*observations]:
         module = sys.modules[record['source_module']]
         path = Path(module.__file__).resolve()
         raw_hash = digest(path.read_bytes())
@@ -121,7 +131,11 @@ def bind_source(expected_inventory):
         function = function_of(original)
         if not inspect.isfunction(function):
             fail('source_mismatch')
-        for site in record['patch_sites']:
+        if record['operation'] in {*expected_observers,'pool.thread_shutdown','pool.process_shutdown'}:
+            if (function.__module__!=record['source_module']
+                    or function.__qualname__!=record['definition'][len(record['source_module'])+1:]
+                    or function.__code__.co_firstlineno!=record['definition_line']):fail('source_mismatch')
+        for site in record.get('binding_sites',record.get('patch_sites',[])):
             site_owner, site_name = resolve(site)
             if inspect.getattr_static(site_owner, site_name) is not original:
                 fail('source_mismatch')

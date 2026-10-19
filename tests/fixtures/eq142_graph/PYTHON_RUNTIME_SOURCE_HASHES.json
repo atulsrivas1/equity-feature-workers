@@ -19,7 +19,10 @@
           },
           "definitions": {
             "concurrent.futures._base.Future.result": 428,
-            "concurrent.futures._base.wait": 263
+            "concurrent.futures._base.wait": 263,
+            "concurrent.futures._base.Future.done": 393,
+            "concurrent.futures._base.Future.cancelled": 383,
+            "concurrent.futures._base.Future.running": 388
           },
           "url": "https://github.com/python/cpython/blob/0cc81280367df838c4b199f8f0378837165071c2/Lib/concurrent/futures/_base.py"
         },
@@ -32,7 +35,8 @@
             "CRLF": "86740b978bb5b56c9da50a23e38872154688ef57dcf30214eeeb4064cc79118a"
           },
           "definitions": {
-            "concurrent.futures.process.ProcessPoolExecutor.submit": 802
+            "concurrent.futures.process.ProcessPoolExecutor.submit": 802,
+            "concurrent.futures.process.ProcessPoolExecutor.shutdown": 856
           },
           "url": "https://github.com/python/cpython/blob/0cc81280367df838c4b199f8f0378837165071c2/Lib/concurrent/futures/process.py"
         },
@@ -45,7 +49,8 @@
             "CRLF": "9630b4be940801bfc0c62e389dac4d4f527d7cf1d44fcc88ffcd7048a608fee3"
           },
           "definitions": {
-            "concurrent.futures.thread.ThreadPoolExecutor.submit": 165
+            "concurrent.futures.thread.ThreadPoolExecutor.submit": 165,
+            "concurrent.futures.thread.ThreadPoolExecutor.shutdown": 220
           },
           "url": "https://github.com/python/cpython/blob/0cc81280367df838c4b199f8f0378837165071c2/Lib/concurrent/futures/thread.py"
         }
@@ -66,7 +71,10 @@
           },
           "definitions": {
             "concurrent.futures._base.Future.result": 428,
-            "concurrent.futures._base.wait": 263
+            "concurrent.futures._base.wait": 263,
+            "concurrent.futures._base.Future.done": 393,
+            "concurrent.futures._base.Future.cancelled": 383,
+            "concurrent.futures._base.Future.running": 388
           },
           "url": "https://github.com/python/cpython/blob/e848e4b09ca4bc67c0041c9ce7526dae471d4c36/Lib/concurrent/futures/_base.py"
         },
@@ -79,7 +87,8 @@
             "CRLF": "86740b978bb5b56c9da50a23e38872154688ef57dcf30214eeeb4064cc79118a"
           },
           "definitions": {
-            "concurrent.futures.process.ProcessPoolExecutor.submit": 802
+            "concurrent.futures.process.ProcessPoolExecutor.submit": 802,
+            "concurrent.futures.process.ProcessPoolExecutor.shutdown": 856
           },
           "url": "https://github.com/python/cpython/blob/e848e4b09ca4bc67c0041c9ce7526dae471d4c36/Lib/concurrent/futures/process.py"
         },
@@ -92,7 +101,8 @@
             "CRLF": "9630b4be940801bfc0c62e389dac4d4f527d7cf1d44fcc88ffcd7048a608fee3"
           },
           "definitions": {
-            "concurrent.futures.thread.ThreadPoolExecutor.submit": 165
+            "concurrent.futures.thread.ThreadPoolExecutor.submit": 165,
+            "concurrent.futures.thread.ThreadPoolExecutor.shutdown": 220
           },
           "url": "https://github.com/python/cpython/blob/e848e4b09ca4bc67c0041c9ce7526dae471d4c36/Lib/concurrent/futures/thread.py"
         }

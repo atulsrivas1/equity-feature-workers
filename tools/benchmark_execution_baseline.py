@@ -39,6 +39,17 @@ def failure_identity(error,stage):
         'native_code':error.code if isinstance(error,NativeFailure) else None}
 
 
+def retain_executor_observations(report,ledger,*,require_waited):
+    report['executor_observation_attempted']=True
+    report['executor_shutdowns']=ledger.shutdown_snapshot()
+    report['executor_terminal_observation_complete']=False
+    try:terminal=ledger.terminal_snapshot()
+    finally:
+        report['future_terminal_observations']=ledger.retained_terminal_rows()
+        report['executor_terminal_observation_complete']=ledger.terminal_complete
+    if require_waited:ledger.require_waited_shutdown(terminal)
+
+
 def installed_snapshot():
     """Actual installed origins/complete namespaces, including absent metadata.
 
@@ -169,6 +180,8 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         'native_control_scope':{'parent_ownership_metadata_in_selected_phase':job_name is not None,
             'original_supervisor_without_trace_hooks':control=='uninstrumented_A',
             'common_metadata_may_dilute_ratios':job_name is not None,'observer_cost_subtraction':False},
+        'executor_observation_attempted':False,'executor_shutdowns':None,'future_terminal_observations':None,
+        'executor_terminal_observation_complete':None,
         'full_sample_accepted':False}
     plan=None;collector=None;ledger=None;outcome=None;count_observer=None;profile_dir=None
     cpu_before=None;cpu_after=None
@@ -246,6 +259,9 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
             raise witness_failure
         phase_operation='verify_products'
         report['actual_admission_verification']=verify_original(actual,items,products,original,store,expected_mode=mode)
+        if ledger is not None:
+            phase_operation='executor_observations'
+            retain_executor_observations(report,ledger,require_waited=True)
         if actual['cancelled']:raise ValueError('unexpected original study cancellation')
         if collector is not None:
             phase_operation='trace_and_witness_joins'
@@ -319,6 +335,10 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
     except BaseException as error:
         report['status']='failed_development_control';report['failure_type']=type(error).__module__+'.'+type(error).__qualname__
         report['original_outcome_returned']=outcome is not None
+        if ledger is not None and not report['executor_observation_attempted']:
+            try:retain_executor_observations(report,ledger,require_waited=False)
+            except BaseException as observation_error:
+                report['executor_observation_failure_identity']=failure_identity(observation_error,'executor_observations_on_failed_control')
         report['failure_identity']=failure_identity(error,phase_operation)
         if witness_failure is not None:
             report['owned_witness_failure_identity']=failure_identity(witness_failure,'parent_owned_witness_capture_or_write')

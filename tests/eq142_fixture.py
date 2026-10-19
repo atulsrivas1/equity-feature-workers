@@ -53,7 +53,7 @@ def qualification():
     supported=load('PYTHON_RUNTIME_SOURCE_HASHES.json')['versions']
     if runtime_version not in supported:raise AssertionError('Unqualified Python runtime source version')
     from eq142_graph import digest
-    for record in hooks['records']:
+    for record in [*hooks['records'],*hooks['terminal_observations']]:
         if record['source_category']!='python_runtime':continue
         approved=supported[runtime_version]['modules'][record['source_module']]
         actual=digest(Path(importlib.import_module(record['source_module']).__file__).read_bytes())
@@ -62,7 +62,7 @@ def qualification():
         record['definition_line']=approved['definitions'][record['definition']]
     hooks['runtime']='CPython '+runtime_version
     protocol = load('BENCHMARK_PROTOCOL.json')
-    source = {'canonical_docs_head':'abd34d0074b9ec6e279b65c437e7a8ee14e159af',
+    source = {'canonical_docs_head':'4910bdc2bb9fd29f892d16ad9ae1fe5910416e5b',
         'package_build_sources':{'core':protocol['sources']['baseline_core_package_build'],
             'worker':protocol['sources']['baseline_worker_main'],'io':protocol['sources']['baseline_io_main']},
         'distributions':{'equity-feature-contracts':'0.0.4a4','equity-features':'0.0.4a4',
@@ -81,7 +81,7 @@ def bound_inventory(bound):
     hooks=load('HOOK_INVENTORY.json')
     version='.'.join(map(str,sys.version_info[:3]))
     supported=load('PYTHON_RUNTIME_SOURCE_HASHES.json')['versions'][version]
-    for record in hooks['records']:
+    for record in [*hooks['records'],*hooks['terminal_observations']]:
         if record['source_category']=='python_runtime':
             approved=supported['modules'][record['source_module']]
             actual=digest_file(Path(importlib.import_module(record['source_module']).__file__))
