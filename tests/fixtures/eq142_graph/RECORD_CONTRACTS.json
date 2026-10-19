@@ -277,7 +277,8 @@
       "complete": "bool; false rejects attributed-cost acceptance",
       "failure_reason": "null or closed trace failure code",
       "sidecar_bytes": "actual bounded encoded bytes",
-      "limitations": "sorted subset of trace.limitation_ids"
+      "limitations": "sorted subset of trace.limitation_ids",
+      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping"
     },
     "failure_codes": [
       "source_mismatch",
@@ -305,7 +306,8 @@
       "allocator_copy_not_captured",
       "cross_process_alignment_unqualified",
       "collector_final_write_outside_trace",
-      "composite_parent_wait"
+      "composite_parent_wait",
+      "collector_hook_bookkeeping_unseparated"
     ],
     "operations": [
       "supervisor.inputs",
@@ -354,7 +356,7 @@
       "trace.bookkeeping"
     ],
     "count_policy": "attempts=returned+rejected for complete traces; nested operations remain separate counts, never summed as unique allocations or physical copies",
-    "exclusive_policy": "inclusive minus union of contained child intervals on exactly the same actual process/thread timeline; reject inconsistent or negative closure; no worker-to-wall summation",
+    "exclusive_policy": "inclusive minus union of contained child intervals on exactly the same actual process/thread timeline; reject inconsistent or negative closure; no worker-to-wall summation Parent residual contains unseparated child-hook labeling/locking/serialization/counter work outside selected child intervals. Global A/A overhead bounds do not make per-stage residual pure product cost. Do not claim pure calculation-exclusive cost or subtract a scalar overhead.",
     "parity_policy": "A/B complete product outcome parity plus independent B trace/call/byte expectations; no literal untraced/traced timing or event equality",
     "limitation_ids": [
       "local_clock_only",
@@ -366,7 +368,8 @@
       "backend_contract_only",
       "bookkeeping_not_product_purity",
       "source_construction_labels_may_be_unavailable",
-      "composite_wait_not_exclusive_ipc"
+      "composite_wait_not_exclusive_ipc",
+      "selected_span_exclusive_includes_unseparated_hook_bookkeeping"
     ]
   },
   "clock": {
@@ -419,7 +422,7 @@
       "inclusive_ns": "nanoseconds exactly end-start",
       "exclusive_ns": "nanoseconds from validated same-timeline child interval union",
       "status": "returned | rejected",
-      "error_type": "nullable qualified type name <=128characters; no arbitrary message/traceback",
+      "error_type": "null on returned; rejected requires ASCII dotted qualified type identifier <=128characters, never a dictionary/message/traceback",
       "byte_observation": "returned_encoded_bytes | observed_pickle_size_check | source_guaranteed_ascii_json_length | unavailable",
       "observed_bytes": "nullable bounded count consistent with observation"
     }
@@ -699,11 +702,12 @@
     "schema_value": "eq142-local-trace-fragment:1",
     "fields": {
       "schema": "constant schema_value",
-      "reservation_id": "existing preallocated reservation ID",
+      "reservation_id": "primitive ASCII [a-z][a-z0-9_.:-]{0,63}, required even for an empty fragment",
       "complete": "bool; false forbids attributed-cost acceptance",
       "failure_reason": "null or trace.failure_codes member",
       "spans": "bounded array<span> within this invocation/collector reservation",
-      "counters": "bounded array<counter>, at most1024 keys; exact operation/scope/byte-observation joins"
+      "counters": "array<counter>, maximum1024 unique keys; list required even for zero spans; exact operation/scope/byte joins",
+      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping"
     },
     "limits": "Each fragment independently closes local event IDs, same-timeline parent relations, acyclic depth<=64, interval union/exclusive identity and counter/byte joins. It is not the complete source/product/native sample envelope. Encoded sidecar bytes are bounded separately from Python heap; actual whole-Job RSS remains mandatory. Partial raw evidence is retained on rejection. Shared actual timeline identities remain stable across reused invocations.",
     "publication": "Exclusive temporary creation and exclusive hard-link final publication; never replace an existing final file. Both temporary/final names count toward the file bound; no physical durability claim."

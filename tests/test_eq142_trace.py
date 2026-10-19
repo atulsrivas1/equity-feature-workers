@@ -113,5 +113,19 @@ class LocalTracing(unittest.TestCase):
         thread=threading.Thread(target=work);thread.start();thread.join()
         self.assertNotEqual(first.snapshot()['spans'][0]['timeline_id'],thread_collector.snapshot()['spans'][0]['timeline_id'])
 
+    def test_closed_empty_fragment_and_rejected_error_type(self):
+        empty=collector('empty').snapshot();validate_fragment(empty)
+        for field,value in [('reservation_id',{}),('reservation_id',''),('counters',{})]:
+            bad=deepcopy(empty);bad[field]=value
+            with self.assertRaises(TraceSpecificationError):validate_fragment(bad)
+        c=collector();session=HookSession(qualification(),load('HOOK_INVENTORY.json'),c)
+        def reject():raise ValueError('synthetic')
+        with self.assertRaises(ValueError):session.wrapper(reject,'trace.bookkeeping')()
+        valid=c.snapshot();validate_fragment(valid)
+        for value in ({'bad':True},'x'*1000):
+            bad=deepcopy(valid);bad['spans'][0]['error_type']=value
+            with self.assertRaises(TraceSpecificationError):validate_fragment(bad)
+        self.assertEqual(valid['exclusive_cost_disposition'],'exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping')
+
 
 if __name__=='__main__':unittest.main()

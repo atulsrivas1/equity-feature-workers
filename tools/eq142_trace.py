@@ -31,6 +31,8 @@ OPERATIONS=frozenset(('supervisor.inputs','supervisor.pickle_size','supervisor.p
     'trace.bind_labels','trace.install','trace.restore','trace.bookkeeping'))
 OBSERVATIONS=frozenset(('returned_encoded_bytes','observed_pickle_size_check',
     'source_guaranteed_ascii_json_length','unavailable'))
+EXCLUSIVE_DISPOSITION='exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping'
+ERROR_TYPE_PATTERN=r'[a-zA-Z_][a-zA-Z0-9_]*(?:\.[a-zA-Z_][a-zA-Z0-9_]*)+'
 
 
 class TraceSpecificationError(ValueError):
@@ -177,7 +179,7 @@ class Collector:
                 error_type=None
                 if error is not None:
                     cls=type(error);name=cls.__module__+'.'+cls.__qualname__
-                    error_type=name if re.fullmatch('[a-zA-Z0-9_.]{1,128}',name) else 'builtins.BaseException'
+                    error_type=name if len(name)<=128 and re.fullmatch(ERROR_TYPE_PATTERN,name) else 'builtins.BaseException'
                 event={'id':frame.id,'parent_id':frame.parent_id,'reservation_id':self.reservation_id,
                     'timeline_id':frame.timeline_id,'operation':frame.operation,'scope_id':frame.scope_id,
                     'task_sha256':frame.task_sha256,'start_ns':str(frame.started),'end_ns':str(ended),
@@ -207,7 +209,8 @@ class Collector:
                 'unique_physical_allocation_bytes':None} for (op,scope,obs),v in sorted(self.counters.items())]
             if self.failure_reason is None and (len(spans)!=self.attempts or sum(c['attempts'] for c in counters)!=self.attempts):self.failure('count_mismatch')
             return {'schema':'eq142-local-trace-fragment:1','reservation_id':self.reservation_id,'complete':self.failure_reason is None,
-                'failure_reason':self.failure_reason,'spans':spans,'counters':counters}
+                'failure_reason':self.failure_reason,'spans':spans,'counters':counters,
+                'exclusive_cost_disposition':EXCLUSIVE_DISPOSITION}
 
     def persist(self,path):
         """Bounded incremental exclusive creation; never overwrite prior evidence."""
@@ -314,8 +317,11 @@ def validate_fragment(fragment):
     """
     from eq142_graph import closed
     try:
-        closed(fragment,'schema reservation_id complete failure_reason spans counters')
+        closed(fragment,'schema reservation_id complete failure_reason spans counters exclusive_cost_disposition')
         if fragment['schema']!='eq142-local-trace-fragment:1' or fragment['complete'] is not True or fragment['failure_reason'] is not None:raise TraceSpecificationError('collector_error')
+        if type(fragment['reservation_id']) is not str or re.fullmatch('[a-z][a-z0-9_.:-]{0,63}',fragment['reservation_id']) is None:raise TraceSpecificationError('unknown_invocation')
+        if fragment['exclusive_cost_disposition']!=EXCLUSIVE_DISPOSITION:raise TraceSpecificationError('collector_error')
+        if type(fragment['counters']) is not list or len(fragment['counters'])>1024:raise TraceSpecificationError('map_limit')
         spans=fragment['spans']
         if type(spans) is not list or len(spans)>131072:raise TraceSpecificationError('event_limit')
         byid={s['id']:s for s in spans}
@@ -346,6 +352,8 @@ def validate_fragment(fragment):
                     if cursor in chain or len(chain)>64:raise TraceSpecificationError('invalid_nesting')
                     chain.add(cursor);cursor=byid[cursor]['parent_id']
             if s['status'] not in ('returned','rejected') or (s['status']=='returned')!=(s['error_type'] is None):raise TraceSpecificationError('count_mismatch')
+            if s['error_type'] is not None and (type(s['error_type']) is not str or len(s['error_type'])>128 or re.fullmatch(ERROR_TYPE_PATTERN,s['error_type']) is None):raise TraceSpecificationError('collector_error')
+            if s['status']=='rejected' and s['byte_observation']!='unavailable':raise TraceSpecificationError('count_mismatch')
             key=(s['operation'],s['scope_id'],s['byte_observation']);v=sums.setdefault(key,[0,0,0,0])
             v[0]+=1;v[1 if s['status']=='returned' else 2]+=1;v[3]+=s['observed_bytes'] or 0
         for sid,intervals in children.items():
