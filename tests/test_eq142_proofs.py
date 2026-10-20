@@ -33,6 +33,8 @@ class PortableProofs(unittest.TestCase):
         cases=(('runner','eq142_development_runner','runner.json',1048576),
             ('runner','eq142_supervisor_outcome','supervisor.json',65536),
             ('runner','diagnostic_snapshot','diagnostics.json',1048576),
+            ('reference_preparation','eq142_product_projection','products.json',65536),
+            ('reference_preparation','diagnostic_snapshot','diagnostics.json',1048576),
             ('sample','eq142_owned_runner_return','runner-reference.json',4096),
             ('sample','native_receipt','native.json',16777216),
             ('sample','capacity_receipt','capacity-before.json',16384),
@@ -54,6 +56,8 @@ class PortableProofs(unittest.TestCase):
         for scope,ref,name in (
                 ('sample',reference(codec='diagnostic_snapshot',name='diagnostics.json'),'diagnostics.json'),
                 ('runner',reference(codec='native_receipt',name='native.json'),'native.json'),
+                ('reference_preparation',reference(),'runner.json'),
+                ('reference_preparation',reference(codec='eq142_product_projection',name='products.json'),'diagnostics.json'),
                 ('sample',reference(codec='capacity_receipt',name='capacity-after.json'),'capacity-before.json'),
                 ('qualification',reference(codec='capacity_receipt',name='capacity-before.json'),'capacity-before.json'),
                 ('trace',reference(codec='eq142_local_fragment',name='delegate-016.json'),'delegate-016.json')):

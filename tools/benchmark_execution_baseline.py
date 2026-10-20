@@ -107,8 +107,10 @@ def source_state():
 def sample_budget(degree,cpu_slots):return budget_for(degree,cpu_slots)
 
 
-def prepare_reference(directory,*,cpu_slots,profiles=PROFILES):
+def prepare_reference(directory,*,cpu_slots,profiles=PROFILES,preparation_recorder=None):
     """Independent mathematical expectations plus full original SDK witnesses."""
+    if preparation_recorder is not None and not callable(preparation_recorder):
+        raise ValueError('reference preparation recorder must be callable')
     directory=Path(directory);directory.mkdir(exist_ok=False)
     if not profiles or len(set(profiles))!=len(profiles) or any(p not in PROFILES for p in profiles):
         raise ValueError('unsupported qualification profiles')
@@ -128,12 +130,18 @@ def prepare_reference(directory,*,cpu_slots,profiles=PROFILES):
             preflight=original_reservation(items,mode='sequential',budget=budget,pending_bytes=8388608 if pub else 0)
             outcome=BoundedSupervisor(mode='sequential',budget=budget).run(items,publisher=pub,progress=progress)
             records=record_products(outcome,progress.snapshot(),store,local,sink=sink)
-            persist_record(local/'products.json',records,max_bytes=65536)
+            products_return=persist_record(local/'products.json',records,max_bytes=65536)
             confirm_original(outcome,preflight)
             for execution in outcome.tasks:
                 if execution.reason is not None or execution.results is None or len(execution.results)!=1:
                     raise ValueError('original preflight rejected')
                 verify_result(execution.task,execution.results[0],mathematics[execution.task.task_sha256])
+            if preparation_recorder is not None:
+                # Both are actual original writer references, captured before
+                # leaving preparation. Copies cannot mutate source-owned refs.
+                preparation_recorder(profile,series,
+                    {'codec':'eq142_product_projection',**products_return},
+                    dict(records[0]['raw_diagnostics']))
             expected['products'][series]=stable_products(records)
         reference['profiles'][profile]=expected
     if source_state()!=before:raise ValueError('source/runtime changed during reference preparation')

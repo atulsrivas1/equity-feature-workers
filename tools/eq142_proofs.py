@@ -17,6 +17,9 @@ REGISTRY={
     'products':{name:(1048576,r'[0-9a-f]{64}[.]json')
         for name in ('encode_task','encode_result','encode_output','encode_receipt')},
     'reference':{'eq142_development_reference':(16777216,r'reference[.]json')},
+    'reference_preparation':{
+        'eq142_product_projection':(65536,r'products[.]json'),
+        'diagnostic_snapshot':(1048576,r'diagnostics[.]json')},
     'runner':{
         'eq142_development_runner':(1048576,r'runner[.]json'),
         'eq142_supervisor_outcome':(65536,r'supervisor[.]json'),
@@ -41,7 +44,7 @@ REGISTRY=MappingProxyType({scope:MappingProxyType(codecs) for scope,codecs in RE
 
 
 def validate_reference(reference,*,scope,name):
-    """Pure closed reference/name check against the published V7 registry."""
+    """Pure closed reference/name check against the published V8 registry."""
     if type(scope) is not str or scope not in REGISTRY or type(name) is not str:
         raise ValueError('proof fixed scope/name')
     if (type(reference) is not dict or any(type(key) is not str for key in reference)
