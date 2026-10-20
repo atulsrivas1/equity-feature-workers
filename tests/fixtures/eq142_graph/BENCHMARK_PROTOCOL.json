@@ -434,5 +434,126 @@
     },
     "status": "Prospective reviewed contract; no complete root/current qualification/official study acceptance"
   },
-  "capacity_device_width_correction": "CAP02 prospective: opaque os.stat.st_dev uses exact canonical unsigned64 decimal string, not safe-range count; same-device comparisons preserve values beyond2^53. No cap/order/timing threshold change. See CAPACITY_RUNTIME_SOURCE_HASHES.json for explicitly approved originalmachine/shutil variants; no installed-regenerated source expectations."
+  "capacity_device_width_correction": "CAP02 prospective: opaque os.stat.st_dev uses exact canonical unsigned64 decimal string, not safe-range count; same-device comparisons preserve values beyond2^53. No cap/order/timing threshold change. See CAPACITY_RUNTIME_SOURCE_HASHES.json for explicitly approved originalmachine/shutil variants; no installed-regenerated source expectations.",
+  "owned_runner_namespace_amendment": {
+    "writer_binding": {
+      "new_development_entrypoint": "tools/eq142_owned_runner.py, launched under existing unique owned Job using unchanged selected installed baseline executable. It calls development run_control once, receives its actual returned writer reference, and exclusively persists runner-reference.json <=4096bytes. Not a new calculation or original helper replacement.",
+      "reference_fields": "Exact closed owned_runner_return schema below supersedes V1 sketch: schema,sample_id,purpose,runner_reference,process_binding. Actual returned reference only, no reconstructed success on failure.",
+      "parent": "Read original runner_reference exact body from fixed owned sample/runner directory, length/hash/name checked. Read report.parent_owned_process_witness actual writer ref, require exact parent.json, resolve that original body and derive parent_nonce from it. Require wrapper process_binding equals that parent PID/nonce; actual trace parent fragment must match in B. Then call validate_native_closure with derived nonce, not caller-selected unbound value. Initial CreateProcess launcher may differ from this logical Python parent. Direct membership/lifetime does not imply ancestry.",
+      "failures": "Nonzero/unknown native exit, failed wrapper reference or failed original control cannot become accepted. Preserve available original failed reports/raw native/error evidence. If original run_control raises and has no returned reference, do not fabricate a writer-returned success reference from a caller rehash.",
+      "namespace": "Outer controller exclusively creates sample/cohort directory before capacity-before. Actual original run_control retains its own exclusive mkdir, targeting the fixed nonexistent child runner/ directory. Wrapper writes runner-reference.json in the existing outer sample root only after actual original return. No exist_ok bypass or rehash-derived returned success. This resolves directory lifecycle before wrapper implementation; stored retained_name values remain basenames, codec/context selects fixed runner prefix."
+    },
+    "reference_registry": {
+      "encode_task/encode_result/encode_output/encode_receipt": {
+        "scope": "fixed study/reference/objects/ shared store, from actual ProductStore(reference_path.parent / objects); product retained_name stays sha256.json",
+        "name": "sha256.json",
+        "max_bytes": 1048576,
+        "decoder": "original full canonical codec; store max256MiB/512objects"
+      },
+      "eq142_development_reference": {
+        "scope": "fixed study/reference/ directory; exact reference.json basename",
+        "name": "reference.json",
+        "max_bytes": 16777216,
+        "decoder": "existing development-reference:1 with complete source/expected math/products"
+      },
+      "diagnostic_snapshot": {
+        "scope": "fixed sample/cohort runner/ child directory; exact diagnostics.json basename",
+        "name": "diagnostics.json",
+        "max_bytes": 1048576,
+        "decoder": "unchanged full original diagnostic codec"
+      },
+      "native_receipt": {
+        "scope": "same sample/cohort",
+        "name": "native.json",
+        "max_bytes": 16777216,
+        "decoder": "reviewed native receipt2 plus validate_native_closure and actual parent binding"
+      },
+      "capacity_receipt": {
+        "scope": "same sample for before/after or fixed qualification root for qualification-capacity",
+        "name": "capacity-before.json|capacity-after.json|qualification-capacity.json selected by fixed operation, not arbitrary path",
+        "max_bytes": 16384,
+        "decoder": "closed capacity schema and actual probe/selector/remaining reserve semantics"
+      },
+      "eq142_owned_runner_return": {
+        "scope": "sample/cohort",
+        "name": "runner-reference.json",
+        "max_bytes": 4096,
+        "decoder": "closed actual-return envelope and parent nonce/PID"
+      },
+      "eq142_development_runner": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "runner.json",
+        "max_bytes": 1048576,
+        "decoder": "exact normal development-runner:2 conditional fields from frozen source; unknown/failure fields reject normalcandidate; failed reports retained diagnostic-only"
+      },
+      "eq142_supervisor_outcome": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "supervisor.json",
+        "max_bytes": 65536,
+        "decoder": "existing closed summary1 and original outcome/product/admission crosschecks"
+      },
+      "eq142_product_projection": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "products.json",
+        "max_bytes": 65536,
+        "decoder": "existing complete product_outcome arrays and actual original proofcodec/diagnostic/parity/math joins"
+      },
+      "eq142_publication_observation": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "publication.json",
+        "max_bytes": 65536,
+        "decoder": "existing complete publication-observation1 through extracted pure retained semantic verifier, no live-ledger identity requirement"
+      },
+      "eq142_count_qualification": {
+        "scope": "fixed study qualification",
+        "name": "count-qualification.json",
+        "max_bytes": 1048576,
+        "decoder": "closed count-index plus selected full count_entry proofs/source/matrix"
+      },
+      "eq142_code_counts": {
+        "scope": "fixed selected qualification cohort/runner/code-counts",
+        "name": "parent.json or exact expected invocation filename",
+        "max_bytes": 65536,
+        "decoder": "existing code-count qualification1 and independently recomputed aggregate"
+      },
+      "eq142_owned_process_witness": {
+        "scope": "fixed sample/cohort runner/owned-processes",
+        "name": "parent.json|delegate-000..015.json",
+        "max_bytes": 4096,
+        "decoder": "existing exact writer refs/direct native witness and nonce/lifetime/Job/clock joins"
+      },
+      "eq142_local_fragment": {
+        "scope": "fixed sample/cohort runner/trace",
+        "name": "parent.json|delegate-000..015.json",
+        "max_bytes": 16777216,
+        "decoder": "existing local-fragment2 plus complete retained set/reservations/globalcaps"
+      },
+      "eq142_complete_root": {
+        "scope": "same sample",
+        "name": "complete-root.json",
+        "max_bytes": 65536,
+        "decoder": "closed root2 full evidence graph; no arbitrary selectors"
+      },
+      "eq142_measurement_envelope": {
+        "scope": "same sample",
+        "name": "measurement.json",
+        "max_bytes": 65536,
+        "decoder": "closed envelope1 and actual same-observer local checkpoint arithmetic/selectedclass"
+      },
+      "eq142_complete_candidate": {
+        "scope": "same sample",
+        "name": "candidate.json",
+        "max_bytes": 4096,
+        "decoder": "closed candidate1 and all root/envelope/post-source evidence, development only"
+      }
+    },
+    "metadata_semantics": {
+      "job_version": "eq142-job-boundaries:2, since prior emitted descriptive v1 resource field is renamed; preserve historical v1 sources/records under their original source, do not relabel them.",
+      "runner_version": "eq142-development-runner:2, explicit metadata rename expected_committed_output_metadata_bytes -> expected_accepted_output_metadata_bytes. Existing report normal/failure schemas both version2; old records remain historical source-bound.",
+      "accepted_counter": "resource_admission.cumulative_accepted_output_metadata_bytes is accepted-only source-derived prefix/final value cross-checked with actual original outputs. No counter called committed-output metadata. Observed returned backend commits remain publication observation facts with full receipt refs.",
+      "scope": "No source-independent calculation/package/API/default version change. Existing OutputManifest/task/result/receipt codecs and publication-observation:1 remain unchanged.",
+      "identity_domain": "Preserve existing eq142-job1 hash domain for execution_scope_id: it identifies unchanged task-set/mode/budget, not the renamed descriptive wire fields. Version2 records differ and old records remain historical; no TaskManifest/result/product identity or formula changes."
+    },
+    "limits": "Prospective wrapper/metadata contract only. No official study, complete-root or performance acceptance."
+  }
 }

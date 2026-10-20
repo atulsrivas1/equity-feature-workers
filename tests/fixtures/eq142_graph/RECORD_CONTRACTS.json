@@ -192,7 +192,7 @@
     }
   },
   "job": {
-    "schema_value": "eq142-job-boundaries:1",
+    "schema_value": "eq142-job-boundaries:2",
     "fields": {
       "schema": "constant schema_value",
       "source": "source_binding",
@@ -552,14 +552,14 @@
       "budget": "resource_budget",
       "evidence": "source_derived_preflight | actual_supervisor_admitted | actual_supervisor_rejected | not_executed",
       "initial_reserved_resident_bytes": "nullable bounded_count",
-      "cumulative_committed_output_metadata_bytes": "nullable bounded_count; separately tested after each actual commit",
       "trace_reserved_bytes": "constant integer 67108864 in frozen measurement protocol",
       "whole_job_sampled_rss_cap_bytes": "constant integer 1073741824",
       "additional_host_memory_reserve_bytes": "constant integer 2147483648",
       "cpu_host_reserve_slots": "constant integer 2",
       "capacity": "nullable capacity record",
       "original_reason": "nullable original_reason",
-      "physical_enforcement": "constant false"
+      "physical_enforcement": "constant false",
+      "cumulative_accepted_output_metadata_bytes": "nullable bounded_count; source-derived accepted-only output metadata prefixes; actual returned backend commits are distinct publication facts"
     }
   },
   "capacity": {
@@ -793,7 +793,6 @@
       "plan_pickle_bytes": "bounded_count <=1048576; observed Python plan representation only",
       "per_invocation_spec_extra_pickle_bytes": "ordered bounded array<=16; max(0,actual proposed partial/function+arguments pickle size minus original function+arguments pickle size), prospective submitted_ns int64 maximum and telemetry enabled; per proposed representation<=16MiB",
       "logical_spec_resident_reservation_bytes": "2*plan_pickle_bytes+3*sum(per_invocation_spec_extra_pickle_bytes); conservative logical representations, not physical memory",
-      "expected_committed_output_metadata_bytes": "bounded_count from preflight exact full original output bodies; zero for nonpublishing class; actual output totals renewed independently",
       "combined_logical_resident_bytes": "original initial logical resident+logical spec allowance+expected committed output metadata+owned witness logical allowance; <=unchanged960MiB logical cap before dispatch",
       "trace_reserved_bytes": "constant67108864",
       "whole_job_sampled_rss_cap_bytes": "constant1073741824",
@@ -801,7 +800,8 @@
       "physical_enforcement": "constant false",
       "owned_witness_population": "bounded_count <=17; A native1/B native1+actual admitted reservation count;0 when disabled",
       "owned_witness_encoded_max_bytes": "4096*owned_witness_population; encoded bound, not heap allocation",
-      "owned_witness_logical_reservation_bytes": "3*owned_witness_encoded_max_bytes; declared encoded representations only"
+      "owned_witness_logical_reservation_bytes": "3*owned_witness_encoded_max_bytes; declared encoded representations only",
+      "expected_accepted_output_metadata_bytes": "bounded_count from exact original accepted output bodies; zero for nonpublishing class; actual totals renewed independently; backend commits distinct"
     },
     "timing": "All instrumented plan/hash/source-binding/label/spec serialization/admission and copies belong within selected B phase. Source-derived original preflight does not admit or replace original supervisor validation/errors; actual outcome resident/input totals must match independently. Do not describe encoded logical reservations as actual physical copies, native IPC or pure cost."
   },
@@ -1067,7 +1067,7 @@
     "allocation": "Do not add original task/output encodes for fact construction. Local fact containers only reference existing immutable objects. Bounded proof_bodies materialization holds at most one verified retained body per hash (<=16output+16receipt), within existing three-body observer allowance3*16*(1MiB+400000)+64*4096; capture bodies, retained-readback bodies and current decoded/codeced comparison body remain bounded. No physical allocator/copy-count guarantee; original960MiB logical and69,793,792 observer cap unchanged.",
     "required_types": "publishing and require_success exact bool; initial/maximum/combined/reserved and every count/index strict int, never bool; initial<=combined<=maximum<=1GiB. Editorial explicitness from final prospective review; no additional scope."
   },
-  "complete_root_precode": "COMPLETE_ROOT_PRECODE.json, prospective V5; CAP02exactuint64device and CAP03actualnt/shutilbinding; no complete-root acceptance",
+  "complete_root_precode": "COMPLETE_ROOT_PRECODE.json, prospective V7; fixed runner child/diagnostics and study/reference/objects routes, explicit job2/runner2 accepted-only metadata; no complete-root acceptance",
   "capacity_component_interface": {
     "schema": "eq142-capacity-component-interface:1",
     "stage": "PRECODE_NOT_IMPLEMENTED",
@@ -1083,5 +1083,25 @@
       "Actual Windows repeated typed queries/source-beforeafter/raw machine/shutil on fresh temp directory; actual path/device/source tamper and API false/zero/oversize reject. No complete root/benchmark claim."
     ],
     "unchanged": "Original supplied/native/build helpers, calculation/library/defaults unchanged; no officialstudycommand or fullsampletrue."
-  }
+  },
+  "owned_runner_component_interface": {
+    "schema": "eq142-owned-runner-component-interface:2",
+    "stage": "PRECODE_NOT_IMPLEMENTED",
+    "entrypoint": "tools/eq142_owned_runner.py; development evidence only, no official study command. Function run_owned_control calls actual development run_control exactly once, actual returned ref saved in outer runner-reference.json<=4096 using original exclusive writer. Uses fragment_clock_and_timelines(set())[0] for actual existing startup PID/nonce, no new GetProcessTimes/QPF query.",
+    "namespace": "Caller outer sample directory exists, canonicalized after input and canonical ancestor symlink/junction checks. Basename must equal validated sample_id. Before dispatch it contains only optional capacity-before.json (development component permits empty; full root mandates actual before proof). Reject existing runner/, runner-reference, partial or unrelated members before calculation. Original run_control creates fixed child runner/ exclusively; wrapper owns no arbitrary path or JSON pointer routing. Diagnostics follow runner/diagnostics.json. Shared product codecs resolve only under fixed study/reference/objects, with reference.json under fixed study/reference; no sample objects store. Basenames, byte caps and actual returned writer binding are unchanged.",
+    "options": "Closed function/CLI options sample_id lowerASCIIid<=128, purpose development_candidate|qualification_counts, reference path+trusted actual original writer SHA, profile from frozen existing six, mode sequential/thread/process with strict degree1/2/4/8 and sequential1, control existing A/B,series existing two, required actual unique Job name. qualification_counts requires B and passesqualify_code_counts=True; ordinary candidate passesFalse, no hidden profiling switch.",
+    "reference": "Exact closed eq142-owned-runner-return:1 schema/sample_id/purpose/runner_reference/process_binding, actual runner ref codec eq142_development_runner/basename runner.json/positive<=1MiB/hash. Parentbinding pid positiveDWORD,nonce32lowerhex. Decoder/validator pure and no live ledger; root must independently join actual parent witness/native. Wrapper reference has codec eq142_owned_runner_return/basename runner-reference.json/<=4096.",
+    "errors": "An original run_control failure propagates same object/code/cause and no success wrapper reference. Available original report/partial bytes remain; never caller-rehash a failed report into an original returned ref. Later wrapper binding/write failure retains original files but is not completed root success. No retry, overwrite, mode adoption or wrapper-generated calculation.",
+    "metadata": "Implement previously reviewed job2/runner2 schema/counter rename with same increment: cumulative_accepted_output_metadata_bytes and expected_accepted_output_metadata_bytes. Original accepted-only arithmetic and observed commit ledger unchanged. Existing execution_scope_id hash domain retained explicitly; old source/records preserved under Git, no retagging.",
+    "collection": "PortableWriter controls mandatory without optional/native skips. ActualOwnedRunner requires installed optional intraday+Windows+actualCPU capacity; add only exact class prefixes to optional,Windows,CPU tuples. Synthetic collector controls supplement actual installed qualification.",
+    "tests": [
+      "Pure closed wrapper/ref/type/namespace/selector validation, malformed bools/paths/hash/nonce/unknown fields/old schema reject; no I/O in pure record validation.",
+      "Actual Windows owned A/B sequential and process controls: original run createschildrunner, actual returned ref full-body and direct parent nonce/PID join, original full-result/readback parity, original call count once. Candidate/Bno profiler; qualification_counts/B profiler without timing authority.",
+      "Existing/partial/unrelated output refuses before original calls. Injected original failure preserves error object/code/cause and original failed report, no wrapper success or retry. Native initial launcher may differ from logical Python parent; never assert equality.",
+      "Graph metadata2/counter fields accepted, oldfields/schema rejected by new validator; hash domain/task/result identities unchanged; existing graph/admission/product/codecount/runner suites remain mandatory."
+    ],
+    "not_accepted": "This wrapper/metadata component is not complete root/namespace journal/countindex, current installed bothOS/CI,officialtiming/performance/release acceptance. All development reports remain full_sample_accepted:false.",
+    "prior_interface_sha256": "7d7b7bce3f6f89944215ef166ed6e80e2007534d5fe15cc6a4f7f092c1095876"
+  },
+  "metadata_identity_domain": "Preserve existing eq142-job1 hash domain for execution_scope_id: it identifies unchanged task-set/mode/budget, not the renamed descriptive wire fields. Version2 records differ and old records remain historical; no TaskManifest/result/product identity or formula changes."
 }
