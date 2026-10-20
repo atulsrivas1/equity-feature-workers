@@ -306,7 +306,8 @@
       "complete_resource_source_clock_trace_evidence": true
     },
     "failure": "retain original raw warmups/samples/failures; reject attributed-cost acceptance; redesign only under a prospectively reviewed new protocol; do not subtract a scalar overhead or retune after B",
-    "optimization_adoption": "not attempted by EQ142; later comparisons retain wall reduction strictly > max(5%,3*inclusiveIQR(A)/median(A)), CPU<=1.25A, RSS<=absolute and1.25A, smallp95<=1.10A, full correctness/resource parity"
+    "optimization_adoption": "not attempted by EQ142; later comparisons retain wall reduction strictly > max(5%,3*inclusiveIQR(A)/median(A)), CPU<=1.25A, RSS<=absolute and1.25A, smallp95<=1.10A, full correctness/resource parity",
+    "noise_domain_clarification": "Prospective V9, before official study: both A and B selected WALL three*inclusiveIQR/positive median <=0.10 for each class/cohort. CPU IQR is descriptive; median owned CPU bound remains B<=1.25A. No post-B choice of metric."
   },
   "independent_expectations": {
     "tiny_canonical_cases": "independently hand-specified exact Fraction/centered moments/explicit full Decimal240 context; accepted API quality and explicit operand/nonedge expectations",
@@ -409,10 +410,11 @@
         "runner_returns": 294912,
         "capacity": 2359296,
         "supervisor_products_publication": 14155776,
-        "shared_reference_and_index_metadata": 33554432
+        "shared_reference_and_index_metadata": 33554432,
+        "failure_and_temporary_names": 109051904
       },
-      "qualification_sum_bytes": 6326386688,
-      "qualification_headroom_bytes": 116064256,
+      "qualification_sum_bytes": 6435438592,
+      "qualification_headroom_bytes": 7012352,
       "decision": "Explicit prospective6GiB qualification allocation FROM existing7.46875GiB study headroom, not an increase to72GiB study or8GiB host reserve. Regular1296 data allocations unchanged. Qualification<=72 supported B controls, timing never adopted. Count-index/profiles and their full actual trace/native/writer proofs retained in fixed qualification directory. Product objects remain shared within existing256MiB/512 cap, not charged again. No automatic retries/deletion or post-A resizing; every actual category/aggregate checked.",
       "remaining_disk_rule": "free_storage >= max(0,72GiB-actual_owned_encoded_bytes_already_retained)+8GiB. Reconcile fixed owned namespace and actual writer lengths; do not repeatedly require another full72GiB after existing study files already consume part of its allowance."
     },
@@ -432,7 +434,106 @@
       "accepted_counter": "resource_admission.cumulative_accepted_output_metadata_bytes is accepted-only source-derived prefix/final value cross-checked with actual original outputs. No counter called committed-output metadata. Observed returned backend commits remain publication observation facts with full receipt refs.",
       "scope": "No source-independent calculation/package/API/default version change. Existing OutputManifest/task/result/receipt codecs and publication-observation:1 remain unchanged."
     },
-    "status": "Prospective reviewed contract; no complete root/current qualification/official study acceptance"
+    "status": "Prospective reviewed V9 contract, no complete controller/current qualification/official study acceptance",
+    "controller_qualification_policy": {
+      "workspace_purposes": [
+        "controller_qualification_only",
+        "official_instrumentation_study"
+      ],
+      "permanent_scope": "Select purpose once in the exclusive actual study-admission writer. Qualification-only workspaces can NEVER be reused, converted or enabled for official timing. Actual ordinary A/B sequential/thread/spawn controller fixtures may select individual supported normal controls in a qualification-only workspace; their durations have no performance authority. No official-study command currently exists or is enabled by this precode packet.",
+      "full_count_requirement": "Both purposes require the entire actual supported source/capacity matrix and full raw count qualification/index replay. No subset or synthetic index may satisfy an actual complete proof. All fixed V8 paths, codecs, source/native/math/product/clock/namespace/capacity checks and encoded caps remain mandatory. Development sample flags remain false.",
+      "official_freshness": "Official execution requires a fresh exclusive workspace, actual completed current committed harness/source/protocol review, local/archive/installed both-platform and current CI/artifact gates, original immutable baseline packages, actual capacity/source/count freeze and recorded real admission receipts. Qualification-only roots/samples are excluded forever. No concurrent local builds/tests/other benchmarks during official timing.",
+      "official_order": "Unchanged exact supported cohort order: every A cohort2warmups+7retained before any B. Evaluate all A selected-wall noise gates and required positive CPU/RSS baseline denominators before B; failure stops before B with a_noise_refusal summary. After B begins, no tuning/resizing/substitution or automatic complete-control retry. Complete the fixed B sequence when individual raw samples remain valid, then report all statistical gate failures honestly. Source/resource/clock/product/trace/sample execution failure stops immediately, retains partial root and failure, and emits no completed summary."
+    },
+    "failure_retention_clarification": {
+      "error_identity": "Derive actual exception type identity without consulting message/traceback. Native code is actual original NativeFailure.code or null, never invented child cause. Diagnostic capture/write error is secondary; poison acceptance and bare-reraise the original exception object/code/cause. Never chain the original from a later diagnostic error.",
+      "available_references": "Deterministic priority prefix <=64 of actual known references, no completeness or absence claim. Each closed {origin,context,reference}: origin actual_writer_return|caller_retained_unaccepted_diagnostic; context fixed V8 logical scope or one of12 prep:<profile>:<series> source-defined logical IDs (never a caller path); reference closed codec/sha256/bytes/retained_name. Actual-return entries retain original codec/name/positive length; unaccepted derived entries use codec eq142_unaccepted_diagnostic and actual fixed known filename or its .partial basename, bytes0..16777216, actual bounded-read hash. Opaque entries cannot satisfy a successful proof. Preserve all original raw files even when omitted from the diagnostic prefix. Source-derived wrapper readback is diagnostic origin, never observed writer return.",
+      "fixed_output": "Only failure.json in the actual fixed sample/cohort root; <=1048576 bytes, codec eq142_complete_root_failure. Workspace failures before any sample use fixed qualification/failure.json with related sample_id qualification. Preserve failed/partial files without retry, overwrite, undo or promotion to accepted candidate.",
+      "phases": [
+        "initial_source",
+        "create_workspace",
+        "capacity_freeze",
+        "reference_preparation",
+        "reference_readback",
+        "count_qualification",
+        "count_index_replay",
+        "study_admission",
+        "create_sample",
+        "sample_source_before",
+        "sample_capacity_before",
+        "native_owned_call",
+        "native_receipt",
+        "sample_evidence_readback",
+        "complete_root",
+        "sample_capacity_after",
+        "sample_source_after",
+        "measurement_envelope",
+        "final_source_check",
+        "candidate_finalization",
+        "study_A_baseline_check",
+        "study_history_replay",
+        "study_summary"
+      ],
+      "one_attempt": "At most one controller failure-diagnostic retention attempt in the entire workspace. Mark attempted BEFORE capture/write; nested handlers must not emit a second diagnostic or retry a failed one. Preserve the first original exception and all existing raw/partial files; poisoning is permanent.",
+      "secondary_failure": "A diagnostic failure may add only a constant non-sensitive note to the original exception; it must never replace or become cause of the original. Any note failure is also secondary. Do not attempt failure retention in an existing/unowned directory or before successful exclusive ownership."
+    },
+    "study_statistics_contract": {
+      "exact_arithmetic": "Use exact integers/rationals. For7sorted x: median=x[3], inclusiveIQR=(x[4]+x[5]-x[1]-x[2])/2 reduced, p95=x[6]. This is the specified inclusive method/nearest-rank, with no loss above2^53.",
+      "noise_scope": "Both A and B selected-WALL 3*inclusiveIQR/positiveMedian <=1/10. CPU IQR is descriptive; CPU overhead bound remains median B<=5/4A. Confirm this source interpretation prospectively in review; no criterion is selected after timing.",
+      "unchanged_gates": "B medianwall<=21/20A; median ownedCPU<=5/4A with positive A CPU median required (zero is explicit refusal, no invented ratio); retained sampledRSS<=both1GiB and5/4A with positive A RSS; small+all3focused p95<=11/10A. All9 samples/control obey original absolute limits and full proof/parity; only7 retained enter statistics. A/baseline must pass beforeB; no threshold relaxation.",
+      "operation_scope": "Reopen actual validated B fragments, count each original raw span once, use end-start only within its own process clock. Per-operation local-duration sums may overlap and are neither makespan, CPU, exclusive arithmetic nor numeric critical path. Original byte-policy null stays unavailable. Recompute values from raw references; do not trust cached summary or infer exact input seals/physical copies.",
+      "failure_reasons": [
+        "A_wall_noise",
+        "B_wall_noise",
+        "wall_overhead",
+        "CPU_overhead",
+        "RSS_overhead",
+        "small_focused_p95",
+        "A_median_CPU_zero",
+        "A_RSS_zero",
+        "product_parity",
+        "B_source_counts",
+        "source_capacity_clock_evidence"
+      ]
+    },
+    "study_metadata_allocation": {
+      "existing_metadata_component_bytes": 33554432,
+      "v8_reference_preparation_index_freeze_max_bytes": 31211520,
+      "new_study_admission_max_bytes": 16384,
+      "new_study_summary_max_bytes": 2097152,
+      "new_metadata_total_max_bytes": 33325056,
+      "remaining_metadata_component_bytes": 229376,
+      "summary_head_without_cohorts_max_bytes": 65536,
+      "each_cohort_max_bytes": 24576,
+      "summary_conservative_upper_bytes": 1835080,
+      "decision": "Both new fixed qualification metadata leaves charge the ALREADY allocated shared_reference_and_index_metadata32MiB inside6GiB. No original cap/headroom/cohort/threshold/source package changes. All actual fixed category and prefix totals still checked. Summary/admission cannot be hidden in uncounted external output."
+    },
+    "study_publication_boundary": {
+      "private": "Raw capacity device/volume IDs, absolute paths, process/nonces/creation ticks and full environment/input witness inventories remain private retained evidence. Never publish raw study or admission by default.",
+      "public": "Only an explicit separately reviewed allowlisted derivative: Git commits, versions/source/protocol/precode hashes, synthetic selectors/omissions, aggregate wall/CPU/RSS/count/returned-byte statistics, gate outcomes, raw-record opaque hashes and limitations. Exclude machine identifiers, raw clocks/PIDs/nonces, private paths and provider/private input code/data. Public progress/release docs distinguish raw-source qualification, performance refusal/nonwin, adoption and release."
+    },
+    "failure_retention_allocation": {
+      "reserve_bytes": 109051904,
+      "source_bound_conservative_components": {
+        "trace_partial_or_duplicate_names": 67108864,
+        "native_duplicate_name": 16777216,
+        "profile_duplicate_names": 1114112,
+        "runner_duplicate_name": 1048576,
+        "supervisor_products_publication_duplicate_names": 196608,
+        "root_measurement_candidate_duplicate_names": 135168,
+        "reference_duplicate_name": 16777216,
+        "summary_duplicate_name": 2097152,
+        "count_index_duplicate_name": 1048576,
+        "admission_and_freeze_duplicate_names": 32768,
+        "before_after_capacity_duplicate_names": 32768,
+        "owned_witness_duplicate_names": 69632,
+        "runner_return_duplicate_name": 4096,
+        "failure_partial_and_final_names": 2097152
+      },
+      "component_sum_bytes": 108539904,
+      "remaining_failure_reserve_bytes": 512000,
+      "decision": "Prospectively allocate104MiB FROM existing116064256byte qualification headroom, within unchanged6GiB qualification and72GiB study. Extra source-bounded partial/duplicate names, including a failed regular sample, are charged here exactly once; original final files remain in their original categories. No automatic retries or multiple failed controls per workspace. Actual source audit must confirm these bounds before acceptance. Successful fixed namespaces refuse stray partials; failures retain all bytes and poison further acceptance. This changes headroom allocation explicitly before timing, not a hard cap or threshold. Original persist source counts both temporary/final names; no physical disk or power-loss guarantee."
+    }
   },
   "capacity_device_width_correction": "CAP02 prospective: opaque os.stat.st_dev uses exact canonical unsigned64 decimal string, not safe-range count; same-device comparisons preserve values beyond2^53. No cap/order/timing threshold change. See CAPACITY_RUNTIME_SOURCE_HASHES.json for explicitly approved originalmachine/shutil variants; no installed-regenerated source expectations.",
   "owned_runner_namespace_amendment": {

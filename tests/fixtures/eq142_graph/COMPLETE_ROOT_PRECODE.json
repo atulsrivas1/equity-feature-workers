@@ -1,13 +1,12 @@
 {
-  "schema": "eq142-complete-root-proposal:8",
+  "schema": "eq142-complete-root-proposal:9",
   "stage": "CLOSED_SUCCESSOR_PRECODE_NOT_IMPLEMENTED_OR_RUNTIME_ACCEPTANCE",
   "bases": {
-    "canonical": "f211abd227421d185a723c0b2bb2a9bb23e58414",
-    "worker": "0b768cc7f169398fefd0f179fdc6fa31e891fabb",
-    "committed_review_sha256": "26e6cf694e1b7894915937b46f756bc71b7e8943c14f1c23a651c3b86e368e13",
-    "both_local_platform_go_qualification_review_sha256": "9f0f1c1a5b6f78161991a4614cf7162dc23305fccc6e289014cd75a93ddb8783",
-    "current_ci_artifact_component_review_sha256": "efb4d1e2fcb0f966783dc4849e77ab4501024f35bd7624e257111c5a5e939b62",
-    "prospective_resume_review_sha256": "003b12f73e5e9307f05968a1fa7f0efbdfaeda46b796ce73d3ed3065958e68c8"
+    "canonical": "5417f3977fa433aadf0174a0d0c386a26f8dccde",
+    "worker": "1cc78d848ce564f2dbae2c2a9c7e145367db0bd0",
+    "published_component_review_sha256": "04c82a0d0561f18411dd9fa2c1a6c243f679d9d19ea0e559499cce69c4ec4abc",
+    "prior_v8_precode_review_sha256": "e58dd6c4499b287b50fa3e1921fb1a6184f630083813c31f74cfc65edb3cb94d",
+    "controller_draft_static_review_sha256": "c38e5e7a2f9ac17cb6affc540312a2493b6b2ecc576648fa558bc2b4619ce812"
   },
   "purpose": "Close the existing EQ142 runner/native/source/product/barrier/resource/count evidence into one bounded independently validated candidate. Official study remains disabled until current source/platform/install/CI/storage/qualification gates. No new calculation, package, scheduler/default or performance threshold.",
   "top_priorities": [
@@ -229,8 +228,8 @@
     "failure_diagnostic": {
       "schema": "constant eq142-complete-root-failure:1",
       "sample_id": "sample_id equal actual frozen invocation/related proof records",
-      "stage": "closed phase name from fixed orchestration stages",
-      "error_type": "bounded qualified actual type identity with explicit truncation flag ifneeded; no messages/tracebacks",
+      "stage": "exact fixed failure_retention_clarification.phases enum",
+      "error_type": "closed object {qualified_name:JSON string1..256 Unicode codepoints,truncated:strictbool}; actual type.__module__ + dot + __qualname__, exactprefix truncation only; truncated implies256codepoints. Canonical wire uses ASCII escapes without changing actual Unicode identity; no message/traceback.",
       "native_code": "actual NativeFailure code or null, never invented child cause",
       "available_references": "<=64 actual known retained refs with origin actual_writer_return|caller_retained_unaccepted_diagnostic; unaccepted opaque diagnostics cannot satisfy a complete-root reference",
       "original_outcome_disposition": "not_executed|actual_returned|actual_failed_report_only|unknown",
@@ -243,6 +242,81 @@
       "adjustable": "constant false",
       "reported_resolution_seconds": "actual positive canonical decimal nominal metadata, not empirical precision or QPF inverse",
       "cross_process_raw_ticks_qualified": "constant false"
+    },
+    "study_admission": {
+      "schema": "constant eq142-study-admission:1",
+      "workspace_purpose": "closed controller_qualification_policy enum, immutable once written",
+      "canonical_contract_head": "lower40hex actual immutable paired contract source, equal bound original reference source canonical_docs_head",
+      "worker_head": "lower40hex actual committed reviewed harness, recorded before any official timing; current executable/file hashes must match completed receipts",
+      "source_state_sha256": "lower64hex canonical wire full reference.state",
+      "source_inventory_sha256": "lower64hex canonical wire full reference.source_inventory",
+      "protocol_sha256": "lower64hex actual frozen BENCHMARK_PROTOCOL.json bytes",
+      "precode_sha256": "lower64hex actual paired COMPLETE_ROOT_PRECODE.json bytes",
+      "matrix_sha256": "lower64hex canonical full72row supported/omitted matrix",
+      "expected_reference": "actual eq142_development_reference reference.json writer reference",
+      "capacity_freeze_reference": "actual capacity_receipt qualification-capacity.json writer reference",
+      "count_qualification_reference": "actual fully replayed count-qualification.json writer reference",
+      "pre_timing_receipt_sha256s": "closed object independent_source_review,windows_current_qualification,linux_current_qualification,current_ci_artifacts_review. Each actual completed source-matched receipt lower64hex in official mode; null or actual completed receipt allowed qualification-only. Never synthesize missing evidence or use these hashes/producer booleans as a substitute for actual reviewed receipts.",
+      "all_actual_gates_verified": "strictbool true only official after actual external receipt/source checks; false qualification-only",
+      "official_timing_authority": "strictbool true only official after real gates; false permanently qualification-only",
+      "full_sample_accepted": "constant false"
+    },
+    "study_summary": {
+      "schema": "constant eq142-study-summary:1",
+      "stage": "completed_official_instrumentation_study|a_baseline_refusal_before_B",
+      "workspace_purpose": "constant official_instrumentation_study; qualification fixtures never produce this summary",
+      "source_state_sha256": "exact admission/reference full state hash",
+      "source_inventory_sha256": "exact admission/reference inventory hash",
+      "protocol_sha256": "exact frozen admission protocol bytes hash",
+      "precode_sha256": "exact frozen admission paired precode bytes hash",
+      "canonical_contract_head": "exact actual admission immutable contract commit",
+      "worker_head": "exact actual admission committed reviewed executable source",
+      "expected_reference": "actual reference.json ref",
+      "capacity_freeze_reference": "actual qualification-capacity.json ref",
+      "count_qualification_reference": "actual fully replayed count-index ref",
+      "admission_reference": "actual eq142_study_admission fixed study-admission.json writer ref",
+      "matrix_sha256": "exact canonical full supported/omitted matrix hash",
+      "cohorts": "exact72ordered study_cohort_summary objects below, including explicit omissions",
+      "all_collected_raw_evidence_valid": "constant true after actual whole-history source/math/product/native/trace/profile/namespace/capacity/root/envelope/candidate replay; invalid/incomplete samples halt and retain failure rather than produce completed/refusal summary",
+      "attributed_cost_acceptance": "strictbool conjunction of every applicable cohort gate and complete A/B coverage; false in a_baseline_refusal_before_B. No scalar overhead subtraction or default adoption.",
+      "optimization_adoption_attempted": "constant false",
+      "full_sample_accepted": "constant false; individual development records unchanged",
+      "operation_duration_scope": "constant summed_local_inclusive_or_composite_spans_not_makespan_CPU_or_exclusive_numeric_cost",
+      "limitations": "exact existing six root limitations, sorted; no global numeric critical path or physical enforcement claim"
+    },
+    "study_cohort_summary": {
+      "cohort_id": "exact c000..c071",
+      "selector": "exact source matrix selector",
+      "supported": "strictbool exact matrix",
+      "omission_reason": "exact matrix null or cpu_primary_group_slots_insufficient",
+      "A": "closed control_summary or null only if unsupported",
+      "B": "closed control_summary for supported completed stage; null for unsupported or a_baseline_refusal_before_B",
+      "gates": "closed object A_wall_noise,B_wall_noise,median_wall,median_owned_CPU,observed_RSS,small_focused_p95,full_product_parity,B_source_counts,source_capacity_clock_evidence. strictbool for applicable observed gates; null only unsupported, B-dependent fields beforeB, or p95 for balanced/skewed. No producer-selected applicability.",
+      "failure_reasons": "sorted unique fixed gate reason codes, not messages; derived solely from recomputed gates",
+      "operations": "exact frozen47 trace operation IDs in RECORD_CONTRACTS order for observed B, each closed operation_summary below; empty beforeB/unsupported. These include bookkeeping/other composite definitions and are not all pure numerical kernels.",
+      "attributed_cost_accepted": "strictbool all applicable cohort gates and actual A/B complete; false unsupported/beforeB"
+    },
+    "control_summary": {
+      "warmups": "exact2ordered closed {sample_id,candidate_reference}, fixed prefix/control/cohort/w0,w1, actual codec eq142_complete_candidate/candidate.json <=4096",
+      "retained": "exact7ordered same closed references r0..r6; all9 fully verified, no replacement/reordering",
+      "wall_ns": "closed metric_summary using selected same-source measurement wall for this class; positive int63 canonical decimal strings",
+      "owned_CPU_ticks_100ns": "closed metric_summary using selected Job user+kernel counters, never external observer CPU; nonnegative canonical decimal <=2*(2^63-1), sum of two validated int63 counters without lossy float conversion",
+      "max_retained_sampled_aggregate_RSS_bytes": "strictint0..1073741824 maximum actual sampled concurrent aggregate over7 retained; never sum process peaks",
+      "all_nine_absolute_bounds_and_proofs_valid": "constant true after actual whole-history checks; warmups excluded only from statistics, not correctness/resource bounds"
+    },
+    "metric_summary": {
+      "median": "canonical integer decimal, median of exact7 retained values",
+      "inclusive_IQR": "closed {numerator:canonical nonnegative integer decimal <=2*parent metric upper bound,denominator:strictint1|2}; reduced exact rational equal inclusive Q3-Q1 for n7; no float rounding",
+      "p95": "canonical integer decimal nearest rank ceil(.95*7), hence largest of7; no interpolation"
+    },
+    "operation_summary": {
+      "operation": "exact fixed source trace operation ID",
+      "call_entries_min": "strictint0..131072, observed retained raw span count minimum",
+      "call_entries_max": "same maximum",
+      "median_sum_local_duration_ns": "canonical nonnegative integer decimal <=131072*(2^63-1); median of7 within-run sums of same-fragment local elapsed spans for this operation",
+      "p95_sum_local_duration_ns": "same bound, nearest-rank of7 sums; inclusive/composite overlaps remain, no global elapsed claim",
+      "median_observed_return_bytes": "canonical uint-safe decimal or null if original source byte-observation policy unobserved; not native IPC/copy/allocation bytes",
+      "p95_observed_return_bytes": "same disposition; no converting unavailable bytes to observed zero"
     }
   },
   "reference_registry": {
@@ -347,6 +421,24 @@
       "name": "candidate.json",
       "max_bytes": 4096,
       "decoder": "closed candidate1 and all root/envelope/post-source evidence, development only"
+    },
+    "eq142_complete_root_failure": {
+      "scope": "fixed failed sample/cohort or qualification root, diagnostic-only; cannot satisfy any successful root codec",
+      "name": "failure.json",
+      "max_bytes": 1048576,
+      "decoder": "closed original failure schema with bounded error_type object and authentic origin labels; no complete/sample/study authority"
+    },
+    "eq142_study_admission": {
+      "scope": "fixed study/qualification only",
+      "name": "study-admission.json",
+      "max_bytes": 16384,
+      "decoder": "closed purpose/source/matrix and actual completed pre-timing gate receipt record below, exclusive once; cannot replace real gates or change purpose"
+    },
+    "eq142_study_summary": {
+      "scope": "fixed study/qualification only",
+      "name": "study-summary.json",
+      "max_bytes": 2097152,
+      "decoder": "closed complete or all-A-noise-refusal aggregate below, reconstructed from actual fixed raw candidates/count/source/capacity; never self-references"
     }
   },
   "closed_runner_record": {
@@ -397,10 +489,11 @@
       "runner_returns": 294912,
       "capacity": 2359296,
       "supervisor_products_publication": 14155776,
-      "shared_reference_and_index_metadata": 33554432
+      "shared_reference_and_index_metadata": 33554432,
+      "failure_and_temporary_names": 109051904
     },
-    "qualification_sum_bytes": 6326386688,
-    "qualification_headroom_bytes": 116064256,
+    "qualification_sum_bytes": 6435438592,
+    "qualification_headroom_bytes": 7012352,
     "decision": "Explicit prospective6GiB qualification allocation FROM existing7.46875GiB study headroom, not an increase to72GiB study or8GiB host reserve. Regular1296 data allocations unchanged. Qualification<=72 supported B controls, timing never adopted. Count-index/profiles and their full actual trace/native/writer proofs retained in fixed qualification directory. Product objects remain shared within existing256MiB/512 cap, not charged again. No automatic retries/deletion or post-A resizing; every actual category/aggregate checked.",
     "remaining_disk_rule": "free_storage >= max(0,72GiB-actual_owned_encoded_bytes_already_retained)+8GiB. Reconcile fixed owned namespace and actual writer lengths; do not repeatedly require another full72GiB after existing study files already consume part of its allowance."
   },
@@ -431,7 +524,7 @@
     "https://raw.githubusercontent.com/python/cpython/v3.12.15/Include/internal/pycore_fileutils.h",
     "https://raw.githubusercontent.com/python/cpython/v3.12.10/Python/fileutils.c"
   ],
-  "prior_proposal_sha256": "633fb527d98e5a7b8a5c9dbd732fd51a3c2dba4f9697b7a407ae947127edf412",
+  "prior_proposal_sha256": "687f64a74873424587944673df587d5c25a2ba660dfafb2a14f71beea7bd0a9b",
   "reference_preparation": {
     "context": "reference_preparation",
     "routing": "Exactly study/reference/<profile>-<series>/ for six source-defined PROFILES in declared order, each of the two source-defined SERIES in declared order. Exact products.json and diagnostics.json only. No user-selected path. Original reference.json and objects/ routes unchanged.",
@@ -446,7 +539,8 @@
     },
     "upper_bound_sum_bytes": 31211520,
     "remaining_metadata_bytes": 2342912,
-    "accounting": "Use the already reserved shared_reference_and_index_metadata component within qualification6GiB. No new allocation, double charge, cap or headroom change. Shared objects remain once-only within256MiB/512objects. Enforce actual encoded category and prefix totals, not only individual maxima."
+    "accounting": "Use the already reserved shared_reference_and_index_metadata component within qualification6GiB. No new allocation, double charge, cap or headroom change. Shared objects remain once-only within256MiB/512objects. Enforce actual encoded category and prefix totals, not only individual maxima.",
+    "remaining_metadata_note": "The retained V8 remaining_metadata_bytes is the reference-only subtotal. V9 study_metadata_allocation adds fixed admission/summary within that balance and leaves229376bytes; no double charge."
   },
   "source_capacity_matrix": {
     "schema": "eq142-source-capacity-matrix:1",
@@ -480,5 +574,104 @@
     "regular": "regular/cNNN/<a-or-b>-cNNN-<w-or-r><index>/ with exact basename sample_id. Controls a/b denote A/B; w0,w1 then r0..r6. All A cohorts before any B; exact cohort order above. No arbitrary names or directories.",
     "capacity_prefix": "Capture encoded-byte stage prefix BEFORE persisting its own capacity receipt. Then register and charge the actual returned receipt length. Do not compare the earlier observation to a later journal total. Reconcile every fixed member/category and stage prefix; reject unowned, missing, indirection or extra members.",
     "failure": "Complete root is an earlier evidence stage, always full_sample_accepted:false. If capacity-after, source-after, envelope or finalization later fails, retain earlier root and failure evidence; never emit a final accepted candidate or retry/erase partial failure."
+  },
+  "controller_qualification_policy": {
+    "workspace_purposes": [
+      "controller_qualification_only",
+      "official_instrumentation_study"
+    ],
+    "permanent_scope": "Select purpose once in the exclusive actual study-admission writer. Qualification-only workspaces can NEVER be reused, converted or enabled for official timing. Actual ordinary A/B sequential/thread/spawn controller fixtures may select individual supported normal controls in a qualification-only workspace; their durations have no performance authority. No official-study command currently exists or is enabled by this precode packet.",
+    "full_count_requirement": "Both purposes require the entire actual supported source/capacity matrix and full raw count qualification/index replay. No subset or synthetic index may satisfy an actual complete proof. All fixed V8 paths, codecs, source/native/math/product/clock/namespace/capacity checks and encoded caps remain mandatory. Development sample flags remain false.",
+    "official_freshness": "Official execution requires a fresh exclusive workspace, actual completed current committed harness/source/protocol review, local/archive/installed both-platform and current CI/artifact gates, original immutable baseline packages, actual capacity/source/count freeze and recorded real admission receipts. Qualification-only roots/samples are excluded forever. No concurrent local builds/tests/other benchmarks during official timing.",
+    "official_order": "Unchanged exact supported cohort order: every A cohort2warmups+7retained before any B. Evaluate all A selected-wall noise gates and required positive CPU/RSS baseline denominators before B; failure stops before B with a_noise_refusal summary. After B begins, no tuning/resizing/substitution or automatic complete-control retry. Complete the fixed B sequence when individual raw samples remain valid, then report all statistical gate failures honestly. Source/resource/clock/product/trace/sample execution failure stops immediately, retains partial root and failure, and emits no completed summary."
+  },
+  "failure_retention_clarification": {
+    "error_identity": "Derive actual exception type identity without consulting message/traceback. Native code is actual original NativeFailure.code or null, never invented child cause. Diagnostic capture/write error is secondary; poison acceptance and bare-reraise the original exception object/code/cause. Never chain the original from a later diagnostic error.",
+    "available_references": "Deterministic priority prefix <=64 of actual known references, no completeness or absence claim. Each closed {origin,context,reference}: origin actual_writer_return|caller_retained_unaccepted_diagnostic; context fixed V8 logical scope or one of12 prep:<profile>:<series> source-defined logical IDs (never a caller path); reference closed codec/sha256/bytes/retained_name. Actual-return entries retain original codec/name/positive length; unaccepted derived entries use codec eq142_unaccepted_diagnostic and actual fixed known filename or its .partial basename, bytes0..16777216, actual bounded-read hash. Opaque entries cannot satisfy a successful proof. Preserve all original raw files even when omitted from the diagnostic prefix. Source-derived wrapper readback is diagnostic origin, never observed writer return.",
+    "fixed_output": "Only failure.json in the actual fixed sample/cohort root; <=1048576 bytes, codec eq142_complete_root_failure. Workspace failures before any sample use fixed qualification/failure.json with related sample_id qualification. Preserve failed/partial files without retry, overwrite, undo or promotion to accepted candidate.",
+    "phases": [
+      "initial_source",
+      "create_workspace",
+      "capacity_freeze",
+      "reference_preparation",
+      "reference_readback",
+      "count_qualification",
+      "count_index_replay",
+      "study_admission",
+      "create_sample",
+      "sample_source_before",
+      "sample_capacity_before",
+      "native_owned_call",
+      "native_receipt",
+      "sample_evidence_readback",
+      "complete_root",
+      "sample_capacity_after",
+      "sample_source_after",
+      "measurement_envelope",
+      "final_source_check",
+      "candidate_finalization",
+      "study_A_baseline_check",
+      "study_history_replay",
+      "study_summary"
+    ],
+    "one_attempt": "At most one controller failure-diagnostic retention attempt in the entire workspace. Mark attempted BEFORE capture/write; nested handlers must not emit a second diagnostic or retry a failed one. Preserve the first original exception and all existing raw/partial files; poisoning is permanent.",
+    "secondary_failure": "A diagnostic failure may add only a constant non-sensitive note to the original exception; it must never replace or become cause of the original. Any note failure is also secondary. Do not attempt failure retention in an existing/unowned directory or before successful exclusive ownership."
+  },
+  "study_statistics_contract": {
+    "exact_arithmetic": "Use exact integers/rationals. For7sorted x: median=x[3], inclusiveIQR=(x[4]+x[5]-x[1]-x[2])/2 reduced, p95=x[6]. This is the specified inclusive method/nearest-rank, with no loss above2^53.",
+    "noise_scope": "Both A and B selected-WALL 3*inclusiveIQR/positiveMedian <=1/10. CPU IQR is descriptive; CPU overhead bound remains median B<=5/4A. Confirm this source interpretation prospectively in review; no criterion is selected after timing.",
+    "unchanged_gates": "B medianwall<=21/20A; median ownedCPU<=5/4A with positive A CPU median required (zero is explicit refusal, no invented ratio); retained sampledRSS<=both1GiB and5/4A with positive A RSS; small+all3focused p95<=11/10A. All9 samples/control obey original absolute limits and full proof/parity; only7 retained enter statistics. A/baseline must pass beforeB; no threshold relaxation.",
+    "operation_scope": "Reopen actual validated B fragments, count each original raw span once, use end-start only within its own process clock. Per-operation local-duration sums may overlap and are neither makespan, CPU, exclusive arithmetic nor numeric critical path. Original byte-policy null stays unavailable. Recompute values from raw references; do not trust cached summary or infer exact input seals/physical copies.",
+    "failure_reasons": [
+      "A_wall_noise",
+      "B_wall_noise",
+      "wall_overhead",
+      "CPU_overhead",
+      "RSS_overhead",
+      "small_focused_p95",
+      "A_median_CPU_zero",
+      "A_RSS_zero",
+      "product_parity",
+      "B_source_counts",
+      "source_capacity_clock_evidence"
+    ]
+  },
+  "study_metadata_allocation": {
+    "existing_metadata_component_bytes": 33554432,
+    "v8_reference_preparation_index_freeze_max_bytes": 31211520,
+    "new_study_admission_max_bytes": 16384,
+    "new_study_summary_max_bytes": 2097152,
+    "new_metadata_total_max_bytes": 33325056,
+    "remaining_metadata_component_bytes": 229376,
+    "summary_head_without_cohorts_max_bytes": 65536,
+    "each_cohort_max_bytes": 24576,
+    "summary_conservative_upper_bytes": 1835080,
+    "decision": "Both new fixed qualification metadata leaves charge the ALREADY allocated shared_reference_and_index_metadata32MiB inside6GiB. No original cap/headroom/cohort/threshold/source package changes. All actual fixed category and prefix totals still checked. Summary/admission cannot be hidden in uncounted external output."
+  },
+  "study_publication_boundary": {
+    "private": "Raw capacity device/volume IDs, absolute paths, process/nonces/creation ticks and full environment/input witness inventories remain private retained evidence. Never publish raw study or admission by default.",
+    "public": "Only an explicit separately reviewed allowlisted derivative: Git commits, versions/source/protocol/precode hashes, synthetic selectors/omissions, aggregate wall/CPU/RSS/count/returned-byte statistics, gate outcomes, raw-record opaque hashes and limitations. Exclude machine identifiers, raw clocks/PIDs/nonces, private paths and provider/private input code/data. Public progress/release docs distinguish raw-source qualification, performance refusal/nonwin, adoption and release."
+  },
+  "failure_retention_allocation": {
+    "reserve_bytes": 109051904,
+    "source_bound_conservative_components": {
+      "trace_partial_or_duplicate_names": 67108864,
+      "native_duplicate_name": 16777216,
+      "profile_duplicate_names": 1114112,
+      "runner_duplicate_name": 1048576,
+      "supervisor_products_publication_duplicate_names": 196608,
+      "root_measurement_candidate_duplicate_names": 135168,
+      "reference_duplicate_name": 16777216,
+      "summary_duplicate_name": 2097152,
+      "count_index_duplicate_name": 1048576,
+      "admission_and_freeze_duplicate_names": 32768,
+      "before_after_capacity_duplicate_names": 32768,
+      "owned_witness_duplicate_names": 69632,
+      "runner_return_duplicate_name": 4096,
+      "failure_partial_and_final_names": 2097152
+    },
+    "component_sum_bytes": 108539904,
+    "remaining_failure_reserve_bytes": 512000,
+    "decision": "Prospectively allocate104MiB FROM existing116064256byte qualification headroom, within unchanged6GiB qualification and72GiB study. Extra source-bounded partial/duplicate names, including a failed regular sample, are charged here exactly once; original final files remain in their original categories. No automatic retries or multiple failed controls per workspace. Actual source audit must confirm these bounds before acceptance. Successful fixed namespaces refuse stray partials; failures retain all bytes and poison further acceptance. This changes headroom allocation explicitly before timing, not a hard cap or threshold. Original persist source counts both temporary/final names; no physical disk or power-loss guarantee."
   }
 }

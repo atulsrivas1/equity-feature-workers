@@ -1,3 +1,11 @@
+## EQ142 V9 prospective controller contract
+
+The owner delegates autonomous R18 completion with decisions logged. Prospective V9 closes permanent qualification-only versus fresh official workspaces, one-attempt bounded failure retention, fixed admission/final summary schemas and exact selected-WALL noise statistics. Existing numerical rules, thresholds, cohorts and hard caps remain unchanged. The 104MiB failure-name reserve comes from existing qualification headroom; shared metadata remains within32MiB. Separate local review passed74 static checks and332 exact statistics cases, private SHA2569b70fc4471395daeb805c01b952468399103adffb5830001b8aa45e46d375755; no workload or timing executed.
+
+Current component sources before this packet: canonical5417f3977fa433aadf0174a0d0c386a26f8dccde / worker1cc78d848ce564f2dbae2c2a9c7e145367db0bd0. Controller drafts remain unpromoted. CTRLPRE01/02 fixes require separate correction review; full controller, current installed/native/CI qualification, actual source/capacity/count freeze and official study remain outstanding. Prior30-method corrected preparation/component run is bounded historical evidence. No root/study/performance/release acceptance. EQ142 In progress; EQ143-146 Backlog. Next publish this paired contract before new schema implementation, then finish controller and gates. All failed diagnostics and excluded premature measurements remain retained.
+
+## Earlier checkpoints retained as history
+
 ## EQ142 autonomous controller implementation underway
 
 The owner requests autonomous R18 completion with decisions logged. Paired V8 is published at canonical df5e4b929de7a10aed8799f34d5fbb786aef30ce / worker c7aeecdb8552fbb4e0ee73a8ff61811ae86141cb. Final bounded publication review a4ebe021c3517327a4ffa7a254ead3ad9eac07b5768a0b7e0e298604ebf73776 verifies immutable source and current issue/PR metadata; current V8 CI is separate. The original issue checklist/history remains intact.
