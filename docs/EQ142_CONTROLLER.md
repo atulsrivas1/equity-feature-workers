@@ -1,5 +1,10 @@
 # EQ142 complete evidence controller
 
+## CPUMETA01 working correction; qualification remains pending
+
+The complete3cef native run failed its first normal fixture after count-index/admission closure because the CPU-clock producer used exponent notation while the schema requires fixed-point text. Emit the exact existing .17g decimal value in fixed notation; preserve the validator, nominal clock meaning, timing boundaries and all budgets/thresholds. No calculation/API/package/default change. Actual producer/validator and representative low-Decimal-context regressions are included. Working52 portable Windows methods pass; separate correction review, committed fresh full native/current platform/CI and official study remain pending. Failed raw evidence is retained and never promoted. See canonical [decision22](https://github.com/atulsrivas1/equity-features/blob/codex/eq142-output-dag/docs/stories/EQ-142_CONTROLLER_DECISIONS.md).
+
+
 Development tools for [EQ142 #476](https://github.com/atulsrivas1/equity-features/issues/476) close original calculation, publication, trace, process and resource evidence. They do not implement a new feature, cache, scheduler, acquisition path or optimization. Calculation packages, versions, original supplied benchmark/native/build helpers and sequential defaults remain unchanged. Current release status belongs to the issue and Project.
 
 The paired [V9 contract](../tests/fixtures/eq142_graph/COMPLETE_ROOT_PRECODE.json) is the schema authority. Canonical contract source is `43cf9ec3043e9291b773dae66ff8ca89f65378ff`. Later progress-only canonical documentation does not renew that pin. Current worker executable/source identity is bound separately.

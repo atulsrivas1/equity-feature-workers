@@ -5,6 +5,7 @@ actual completed separate review and current source/platform/installed/CI gates.
 Candidate flags remain false; no optimization or default adoption occurs here.
 """
 from copy import deepcopy
+from decimal import Decimal
 import os,re,sys
 import time
 from pathlib import Path
@@ -371,7 +372,7 @@ class DevelopmentWorkspace(QualificationWorkspace):
         clock=time.get_clock_info('process_time')
         return {'name':'process_time','implementation':clock.implementation,
                 'monotonic':clock.monotonic,'adjustable':clock.adjustable,
-                'reported_resolution_seconds':format(clock.resolution,'.17g'),
+                'reported_resolution_seconds':format(Decimal(format(clock.resolution,'.17g')),'f'),
                 'cross_process_raw_ticks_qualified':False}
 
     def _summary_limit(self,key,runner_reference,additional_name=None,additional_body=None):

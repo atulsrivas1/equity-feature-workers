@@ -70,6 +70,33 @@ print(json.dumps({'owned_module_resolution':True,'controller_dispatched':False})
    self.assertEqual(json.loads(result.stdout),{'owned_module_resolution':True,'controller_dispatched':False})
    self.assertEqual(list(Path(directory).iterdir()),[])
 
+class CPUClockMetadata(unittest.TestCase):
+ def test_actual_producer_clock_roundtrips_through_unchanged_validator(self):
+  import time
+  from eq142_envelope import validate_cpu_clock
+  original=time.get_clock_info('process_time')
+  clock=workspace.DevelopmentWorkspace._cpu_clock()
+  validate_cpu_clock(clock)
+  self.assertEqual(float(clock['reported_resolution_seconds']),original.resolution)
+  self.assertEqual(clock['implementation'],original.implementation)
+  self.assertNotIn('e',clock['reported_resolution_seconds'].lower())
+ def test_exponent_resolution_preserves_exact_decimal_and_other_fields_under_hostile_context(self):
+  from decimal import localcontext,ROUND_DOWN
+  from types import SimpleNamespace
+  from eq142_envelope import validate_cpu_clock
+  for resolution,expected in [(1e-7,'0.000000099999999999999995'),
+                               (1e-9,'0.0000000010000000000000001'),(0.125,'0.125')]:
+   original=SimpleNamespace(implementation='SyntheticSourceClock()',monotonic=True,adjustable=False,resolution=resolution)
+   with localcontext() as context:
+    context.prec=1;context.rounding=ROUND_DOWN;context.Emax=2;context.Emin=-2
+    with patch.object(workspace.time,'get_clock_info',return_value=original) as observed:
+     clock=workspace.DevelopmentWorkspace._cpu_clock()
+    observed.assert_called_once_with('process_time')
+    validate_cpu_clock(clock)
+   self.assertEqual(clock,{'name':'process_time','implementation':'SyntheticSourceClock()',
+    'monotonic':True,'adjustable':False,'reported_resolution_seconds':expected,
+    'cross_process_raw_ticks_qualified':False})
+
 class ExactStudyStatistics(unittest.TestCase):
  def test_seven_value_independent_goldens_and_integer_precision(self):
   self.assertEqual(s.metric(list(range(1,8)),s.INT63),{'median':'4','inclusive_IQR':{'numerator':'3','denominator':1},'p95':'7'})

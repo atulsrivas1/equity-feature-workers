@@ -1,3 +1,7 @@
+## Unreleased EQ142 CPU-clock metadata correction
+
+- Preserve the nominal CPU clock's exact17-significant-digit reported decimal value in the existing fixed-point field. Add real producer-to-validator and representative exact-notation/hostile-Decimal-context regressions. The failed native/Windows runs remain retained; working52-method Windows checks do not establish new native/platform/study acceptance. Calculations, packages, clocks/units/boundaries, grammar, budgets and thresholds are unchanged.
+
 ## Unreleased EQ142 count qualification correction
 
 - Use the existing native600-second ceiling only for independent code-event count qualification. Ordinary/official samples retain120 seconds; all resource and encoded evidence caps remain. The original failed full qualification is retained; a fresh complete matrix and native fixture gate remain pending.

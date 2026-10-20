@@ -1,3 +1,13 @@
+## EQ142 CPU-clock metadata correction — working source
+
+At worker3cef3489296aae7c809254aaedbea47863e670e3, the standalone complete-controller test wrote all72 count entries and passed admission replay, then failed its first normal fixture at measurement-envelope CPU-clock validation: one method7945.024s, one error, zero skips, source/installed state unchanged. Fresh Windows four-form qualification also failed with the same metadata error; its two light forms passed, but the combined-wheel failure prevents whole qualification. Failed sources, raw roots and partial evidence are preserved. Before this correction,102 CI jobs and Linux four-form qualification passed within their exact source/skip/log-capture scopes; these do not qualify the changed successor.
+
+CPUMETA01 is a producer/validator notation mismatch. Preserve the exact17-significant-digit nominal decimal value while emitting fixed notation through Decimal and f formatting. Keep the existing positive finite64-character grammar, actual clock source and units, CPU/wall boundaries,600 count-only/120 normal allowances, encoded/resource caps, full matrix, no-retry policy and adoption thresholds. No calculation package, formula, API, default or immutable43cf contract-pin change.
+
+Working Windows52 portable methods pass with zero failures/errors/skips and source/installed state unchanged, including actual producer-to-validator and exact representative notation under hostile Decimal context. Separate failure/design review52ec9a5f427709a2f505cd62403e3d9000a43b468141641bdff9fa260edf17bc supports the prospective producer-only correction; current correction-source review is still pending. Next review and commit the exact patch, renew affected current CI/platform/archive/installed gates and qualify a new exclusive full72-cohort matrix plus six normal A/B fixtures. Never retry or promote failed roots. No official performance study or release acceptance exists. EQ142 remains In progress; EQ143–146 Backlog.
+
+## Earlier checkpoints retained as history
+
 ## EQ142 complete evidence controller source
 
 Development controller tools now assemble fixed source/product/trace/native/resource evidence under the paired V9 contract. [Commands, authority, statistics, resources and privacy](EQ142_CONTROLLER.md) describe permanent qualification-only versus separately gated fresh official workspaces. Exact source passed separate69-check review and55 portable methods on each platform. Actual full supported-matrix/native qualification, current archives/installed/CI artifacts and official timing remain pending. Packages, mathematics, defaults, cohorts, thresholds and hard caps are unchanged. Every individual development sample flag stays false; no speedup, adoption or release acceptance is claimed.
