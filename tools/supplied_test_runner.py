@@ -24,6 +24,7 @@ def main():
                     'test_eq142_owned_witness.OwnedWitnessIntegration.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.',
                     'test_eq142_executor.ExecutorObservations.','test_eq142_publication.ActualPublicationObservation.',
                     'test_eq142_capacity.WindowsCapacity.',
+                    'test_eq142_owned_runner.ActualOwnedRunner.',
                     'test_eq142_code_counts.ActualOriginalCountParity.test_actual_harness_thread_and_spawn_profile_counts'))):
             # Capacity skips remain explicit ledger evidence, never full mode
             # qualification. Optional absence uses the separate checks below.
@@ -34,11 +35,13 @@ def main():
             'test_eq142_sample.','test_eq142_code_counts.ActualOriginalCountParity.',
             'test_eq142_outcome.ActualOutcomeLedger.','test_eq142_outcome.ActualOutcomeFailureRetention.',
             'test_eq142_owned_witness.OwnedWitnessIntegration.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.',
-            'test_eq142_executor.ExecutorObservations.','test_eq142_publication.ActualPublicationObservation.'))) or (
+            'test_eq142_executor.ExecutorObservations.','test_eq142_publication.ActualPublicationObservation.',
+            'test_eq142_owned_runner.ActualOwnedRunner.'))) or (
             os.name != 'nt' and identity.startswith(('test_supplied_native.','test_eq142_native.',
                 'test_eq142_sample.NativeOwnedDevelopmentSample.',
                 'test_eq142_identity.WindowsOwnedWitness.','test_eq142_owned_witness.NativeOwnedWitnessIntegration.',
-                'test_eq142_native_closure.WindowsNativeClosure.','test_eq142_capacity.WindowsCapacity.'))), ('unexpected skip', item)
+                'test_eq142_native_closure.WindowsNativeClosure.','test_eq142_capacity.WindowsCapacity.',
+                'test_eq142_owned_runner.ActualOwnedRunner.'))), ('unexpected skip', item)
         allowed.append(identity)
     assert any(name.startswith('test_supplied_intraday.') for name in allowed) == (not combined)
     assert any(name.startswith('test_supplied_native.') for name in allowed) == (os.name != 'nt')

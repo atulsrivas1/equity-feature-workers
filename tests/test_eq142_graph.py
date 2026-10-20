@@ -26,6 +26,25 @@ class OutputGraphs(unittest.TestCase):
     def graph(self, task, batches):
         return describe_task(task,self.bound.callback,batches,qualification=self.bound)
 
+    def test_job2_accepted_metadata_preserves_original_task_budget_identity(self):
+        from dataclasses import asdict
+        import hashlib
+        from eq142_graph import wire
+        from equity_feature_workers import WorkItem,ResourceBudget
+        _,task,batches=next(canonical_cases());budget=ResourceBudget()
+        job=describe_job((WorkItem(task,batches,never_called),),mode='sequential',budget=budget,qualification=self.bound)
+        expected=hashlib.sha256(b'eq142-job1\0'+wire({'mode':'sequential','configured_workers':budget.workers,
+            'tasks':[task.task_sha256],'budget':asdict(budget)})).hexdigest()
+        self.assertEqual(job['execution_scope_id'],expected)
+        self.assertEqual(job['schema'],'eq142-job-boundaries:2')
+        self.assertIsNone(job['resource_admission']['cumulative_accepted_output_metadata_bytes'])
+        self.assertNotIn('cumulative_committed_output_metadata_bytes',job['resource_admission'])
+        bad=deepcopy(job);bad['schema']='eq142-job-boundaries:1'
+        with self.assertRaises(GraphSpecificationError):validate_job(bad)
+        bad=deepcopy(job);bad['resource_admission']['cumulative_committed_output_metadata_bytes']=None
+        del bad['resource_admission']['cumulative_accepted_output_metadata_bytes']
+        with self.assertRaises(GraphSpecificationError):validate_job(bad)
+
     def test_four_independent_exact_graph_sets(self):
         cases={case['id']:(task,batches) for case,task,batches in canonical_cases()}
         for expected in load('GRAPH_EXPECTATIONS.json')['cases']:

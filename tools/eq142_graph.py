@@ -400,11 +400,11 @@ def describe_job(items, *, mode, budget, qualification):
             'evidence':'source_required','source_anchor':qualification.anchor('publisher.inner_drain' if kind=='serialized_backend_owner' else 'supervisor.validate_results' if kind=='complete_task_result_before_publication' else 'supervisor.inputs' if kind=='resource_before_dispatch' else 'supervisor.partition')})
     budget_record=asdict(budget)
     execution_scope_id=digest(b'eq142-job1\0'+wire({'mode':mode,'configured_workers':budget.workers,'tasks':tasks,'budget':budget_record}))
-    record={'schema':'eq142-job-boundaries:1','source':qualification.source,'execution_scope_id':execution_scope_id,
+    record={'schema':'eq142-job-boundaries:2','source':qualification.source,'execution_scope_id':execution_scope_id,
         'job_scopes':job_scopes,'mode':mode,'configured_workers':budget.workers,'tasks':tasks,
         'components':component_records,'partitions':partition_records,
         'resource_admission':{'budget':budget_record,'evidence':'not_executed',
-            'initial_reserved_resident_bytes':None,'cumulative_committed_output_metadata_bytes':None,
+            'initial_reserved_resident_bytes':None,'cumulative_accepted_output_metadata_bytes':None,
             'trace_reserved_bytes':67108864,'whole_job_sampled_rss_cap_bytes':1073741824,
             'additional_host_memory_reserve_bytes':2147483648,'cpu_host_reserve_slots':2,
             'capacity':None,'original_reason':None,'physical_enforcement':False},
@@ -421,7 +421,7 @@ def validate_job(record):
     """Validate descriptive not-executed job records and all membership joins."""
     try:
         closed(record,'schema source execution_scope_id job_scopes mode configured_workers tasks components partitions resource_admission barriers publication_owner cancelled_or_undispatched limitations')
-        if record['schema']!='eq142-job-boundaries:1' or len(wire(record))>1048576:fail()
+        if record['schema']!='eq142-job-boundaries:2' or len(wire(record))>1048576:fail()
         validate_source(record['source']);hexhash(record['execution_scope_id'])
         tasks=record['tasks']
         if type(tasks) is not list or not 1<=len(tasks)<=16 or len(set(tasks))!=len(tasks):fail()
@@ -476,11 +476,11 @@ def validate_job(record):
             if b['task_hashes']!=tasks or set(b['partition_ids'])!=partition_ids or not set(b['predecessor_ids'])<=before:fail()
             if b['evidence']!='source_required' or b['owner_id'] not in ('coordinator',owner['id']):fail()
             before.add(b['id']);validate_anchor(b['source_anchor'])
-        resource=record['resource_admission'];closed(resource,'budget evidence initial_reserved_resident_bytes cumulative_committed_output_metadata_bytes trace_reserved_bytes whole_job_sampled_rss_cap_bytes additional_host_memory_reserve_bytes cpu_host_reserve_slots capacity original_reason physical_enforcement')
+        resource=record['resource_admission'];closed(resource,'budget evidence initial_reserved_resident_bytes cumulative_accepted_output_metadata_bytes trace_reserved_bytes whole_job_sampled_rss_cap_bytes additional_host_memory_reserve_bytes cpu_host_reserve_slots capacity original_reason physical_enforcement')
         from equity_feature_workers import ResourceBudget
         parsed=ResourceBudget(**resource['budget'])
         if asdict(parsed)!=resource['budget'] or parsed.workers!=record['configured_workers']:fail()
-        if resource['evidence']!='not_executed' or any(resource[k] is not None for k in ['initial_reserved_resident_bytes','cumulative_committed_output_metadata_bytes','capacity','original_reason']):fail()
+        if resource['evidence']!='not_executed' or any(resource[k] is not None for k in ['initial_reserved_resident_bytes','cumulative_accepted_output_metadata_bytes','capacity','original_reason']):fail()
         for name,value in [('trace_reserved_bytes',67108864),('whole_job_sampled_rss_cap_bytes',1073741824),('additional_host_memory_reserve_bytes',2147483648),('cpu_host_reserve_slots',2)]:
             if type(resource[name]) is not int or resource[name]!=value:fail()
         if resource['physical_enforcement'] is not False or record['cancelled_or_undispatched']!=[]:fail()

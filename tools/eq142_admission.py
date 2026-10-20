@@ -110,7 +110,7 @@ def delegate_reservation(plan,items,budget,*,original,expected_output_bytes=0,ow
     return {'plan_pickle_bytes':plan_bytes,'per_invocation_spec_extra_pickle_bytes':extra,
         'owned_witness_population':owned_witness_count,'owned_witness_encoded_max_bytes':4096*owned_witness_count,
         'owned_witness_logical_reservation_bytes':witness_reservation,
-        'logical_spec_resident_reservation_bytes':reservation,'expected_committed_output_metadata_bytes':expected_output_bytes,
+        'logical_spec_resident_reservation_bytes':reservation,'expected_accepted_output_metadata_bytes':expected_output_bytes,
         'publication_observer_logical_reservation_bytes':observer_reservation,
         'combined_logical_resident_bytes':combined,'trace_reserved_bytes':TRACE_RESERVATION,
         'whole_job_sampled_rss_cap_bytes':JOB_RSS_CAP,'native_ipc_encoded_bytes':None,

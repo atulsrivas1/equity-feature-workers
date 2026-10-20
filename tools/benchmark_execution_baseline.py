@@ -174,7 +174,7 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
     original=original_reservation(items,mode=mode,budget=budget,pending_bytes=8388608 if pub else 0)
     expected_output=sum(p['output']['bytes'] for p in expected['products'][series] if p['output'] is not None)
     trace_dir=directory/'trace';trace_dir.mkdir()
-    report={'schema':'eq142-development-runner:1','stage':'qualification_only_not_study_acceptance',
+    report={'schema':'eq142-development-runner:2','stage':'qualification_only_not_study_acceptance',
         'profile':profile,'mode':mode,'degree':degree,'control':control,'series':series,
         'reference_sha256':reference_sha256,'source':bound.source,'descriptive_job':job,
         'original_admission':original,'status':'started','native_job_supplied':job_name is not None,
@@ -375,7 +375,7 @@ def run_control(reference_path,reference_sha256,*,directory,**options):
     try:return _run_control(reference_path,reference_sha256,directory=directory,**options)
     except BaseException as error:
         if not (directory/'runner.json').exists() and not (directory/'runner.json.partial').exists():
-            persist_record(directory/'runner.json',{'schema':'eq142-development-runner:1',
+            persist_record(directory/'runner.json',{'schema':'eq142-development-runner:2',
                 'stage':'qualification_only_not_study_acceptance','status':'failed_before_phase',
                 'failure_type':type(error).__module__+'.'+type(error).__qualname__,
                 'full_sample_accepted':False},max_bytes=1048576)
