@@ -121,12 +121,82 @@ class NativeThreadControls(unittest.TestCase):
         with self.assertRaises(NativeFailure):kernel.threads_for_members(1,[1],{True:original})
         self.assertEqual(closed,[])
 
+    def test_borrowed_same_process_object_is_not_reopened_or_closed(self):
+        creation=str((456<<32)|123)
+        for fault in (None,'exited','foreign','wait','snapshot','first','next','missing'):
+            with self.subTest(fault=fault):
+                kernel,closed=self.fake(fault=fault)
+                kernel.OpenProcess=lambda *a: self.fail('borrowed process must not be reopened')
+                kernel.GetProcessId=lambda handle:123
+                if fault in (None,'exited'):
+                    counts=kernel.threads_for_members(1,[123],{123:creation},verified_member_handles={123:101})
+                    self.assertEqual(counts,{123:0 if fault=='exited' else 4})
+                else:
+                    with self.assertRaises(NativeFailure):
+                        kernel.threads_for_members(1,[123],{123:creation},verified_member_handles={123:101})
+                self.assertNotIn(101,closed)
+                self.assertLessEqual(closed.count(202),1)
+
+    def test_borrowed_handle_identity_and_closed_population_refuse(self):
+        creation=str((456<<32)|123)
+        for proposed in ({},{True:101},{123:False},{123:0},{123:101,456:102}):
+            kernel,closed=self.fake();kernel.GetProcessId=lambda handle:123
+            with self.assertRaises(NativeFailure):
+                kernel.threads_for_members(1,[123],{123:creation},verified_member_handles=proposed)
+            self.assertEqual(closed,[])
+        kernel,closed=self.fake();kernel.GetProcessId=lambda handle:999
+        with self.assertRaises(NativeFailure) as caught:
+            kernel.threads_for_members(1,[123],{123:creation},verified_member_handles={123:101})
+        self.assertEqual(caught.exception.code,'PROCESS_LIFETIME_RACE');self.assertEqual(closed,[])
+        with self.assertRaises(NativeFailure):
+            kernel.threads_for_members(1,[123],verified_member_handles={123:101})
+
+    def test_failed_open_error_survives_cleanup_and_cleanup_failure(self):
+        for close_fails in (False,True):
+            kernel,closed=self.fake()
+            def opened(rights,inherit,pid):
+                if pid==456:ct.set_last_error(5);return None
+                return 101
+            def close(handle):
+                closed.append(handle);ct.set_last_error(87);return not close_fails
+            kernel.OpenProcess=opened;kernel.CloseHandle=close
+            with self.assertRaises(NativeFailure) as caught:kernel.threads_for_members(1,[123,456])
+            self.assertEqual(caught.exception.code,'OPEN_PROCESS')
+            self.assertEqual(caught.exception.evidence['winerror'],5);self.assertEqual(closed,[101])
+            self.assertEqual('probe_handle_close_failures' in caught.exception.evidence,close_fails)
+
+    def test_api_failures_capture_error_and_logical_races_do_not_invent_it(self):
+        creation=str((456<<32)|123)
+        for fault in ('pid_api','pid_mismatch','member_before','member_after','foreign','wait_api','wait_unknown'):
+            with self.subTest(fault=fault):
+                kernel,closed=self.fake();calls=[]
+                def process_id(handle):
+                    ct.set_last_error(5);return 0 if fault=='pid_api' else 999 if fault=='pid_mismatch' else 123
+                kernel.GetProcessId=process_id
+                def member(handle,job,pointer):
+                    calls.append(handle);pointer._obj.value=fault!='foreign'
+                    failed=(fault=='member_before' and len(calls)==1) or (fault=='member_after' and len(calls)==2)
+                    ct.set_last_error(5);return not failed
+                kernel.IsProcessInJob=member
+                def waited(*args):
+                    ct.set_last_error(5);return 0xFFFFFFFF if fault=='wait_api' else 42 if fault=='wait_unknown' else 258
+                kernel.WaitForSingleObject=waited
+                def closed_handle(handle):closed.append(handle);ct.set_last_error(87);return True
+                kernel.CloseHandle=closed_handle
+                with self.assertRaises(NativeFailure) as caught:
+                    kernel.threads_for_members(1,[123],{123:creation},verified_member_handles={123:101})
+                api=fault in ('pid_api','member_before','member_after','wait_api')
+                self.assertEqual((caught.exception.evidence or {}).get('winerror'),5 if api else None)
+                self.assertNotIn(101,closed)
+
     def test_actual_held_child_witness_matches_same_handle_rss_and_thread_lifetime(self):
         original=Kernel.threads_for_members;matches=[]
         with tempfile.TemporaryDirectory() as directory:
             output=Path(directory)/'witness.json';release=Path(directory)/'release'
-            def observed(kernel,job,pids,expected_lifetimes=None):
-                counts=original(kernel,job,pids,expected_lifetimes)
+            def observed(kernel,job,pids,expected_lifetimes=None,*,verified_member_handles=None):
+                self.assertIsNotNone(verified_member_handles)
+                self.assertEqual(set(verified_member_handles),set(pids))
+                counts=original(kernel,job,pids,expected_lifetimes,verified_member_handles=verified_member_handles)
                 if output.exists() and not release.exists():
                     record=json.loads(output.read_bytes());pid=record['pid']
                     if pid in pids:

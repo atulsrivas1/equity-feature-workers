@@ -196,7 +196,7 @@ class Kernel(BaseKernel):
                 primary.add_note('Independent owned probe handle close failures retained')
             else:raise NativeFailure('PROBE_HANDLE_CLEANUP',{'probe_handle_close_failures':failures})
 
-    def threads_for_members(self,job,pids,expected_lifetimes=None):
+    def threads_for_members(self,job,pids,expected_lifetimes=None,*,verified_member_handles=None):
         if type(pids) is not list or len(pids)>256 or any(type(pid) is not int or not 1<=pid<=4294967295 for pid in pids) or len(set(pids))!=len(pids):
             raise NativeFailure('THREAD_PROBE')
         if expected_lifetimes is not None:
@@ -205,38 +205,55 @@ class Kernel(BaseKernel):
             try:
                 for creation in expected_lifetimes.values():decimal_integer(creation,18446744073709551615,positive=True)
             except ValueError:raise NativeFailure('THREAD_PROBE') from None
+        if verified_member_handles is not None:
+            if (expected_lifetimes is None or type(verified_member_handles) is not dict
+                    or any(type(pid) is not int for pid in verified_member_handles)
+                    or set(verified_member_handles)!=set(pids)
+                    or any(type(h) is not int or h<=0 for h in verified_member_handles.values())
+                    or len(set(verified_member_handles.values()))!=len(pids)):
+                raise NativeFailure('THREAD_PROBE')
         self.last_thread_dispositions={}
         if not pids:return {}
-        handles=[];snapshot=None;creations={};primary=None
+        handles=[];owned_handles=[];snapshot=None;creations={};primary=None
         try:
             for pid in pids:
-                handle=self.OpenProcess(0x100410,False,pid)
-                if not handle:raise NativeFailure('OPEN_PROCESS')
+                if verified_member_handles is None:
+                    handle=self.OpenProcess(0x100410,False,pid)
+                    if not handle:raise NativeFailure('OPEN_PROCESS',{'winerror':ct.get_last_error()})
+                    owned_handles.append(handle)
+                else:
+                    handle=verified_member_handles[pid]
+                    actual_pid=int(self.GetProcessId(handle))
+                    if not actual_pid:raise NativeFailure('PROCESS_LIFETIME_RACE',{'winerror':ct.get_last_error()})
+                    if actual_pid!=pid:raise NativeFailure('PROCESS_LIFETIME_RACE')
                 handles.append(handle)
                 member=w.BOOL()
-                if not self.IsProcessInJob(handle,job,ct.byref(member)) or not member.value:
-                    raise NativeFailure('MEMBERSHIP_RACE')
+                if not self.IsProcessInJob(handle,job,ct.byref(member)):
+                    raise NativeFailure('MEMBERSHIP_RACE',{'winerror':ct.get_last_error()})
+                if not member.value:raise NativeFailure('MEMBERSHIP_RACE')
                 creation=self.creation_identity(handle);creations[pid]=creation
                 if expected_lifetimes is not None and creation!=expected_lifetimes[pid]:
                     raise NativeFailure('PROCESS_LIFETIME_RACE')
             snapshot=self.CreateToolhelp32Snapshot(0x00000002,0)
             if not snapshot or snapshot==ct.c_void_p(-1).value:
-                snapshot=None;raise NativeFailure('SNAPSHOT')
+                error=ct.get_last_error();snapshot=None;raise NativeFailure('SNAPSHOT',{'winerror':error})
             entry=ProcessEntry();entry.dwSize=ct.sizeof(entry)
             ct.set_last_error(0)
-            if not self.Process32FirstW(snapshot,ct.byref(entry)):raise NativeFailure('PROCESS_ENUMERATION')
+            if not self.Process32FirstW(snapshot,ct.byref(entry)):raise NativeFailure('PROCESS_ENUMERATION',{'winerror':ct.get_last_error()})
             counts={};wanted=set(pids)
             while True:
                 if int(entry.th32ProcessID) in wanted:
                     counts[int(entry.th32ProcessID)]=int(entry.cntThreads)
                 ct.set_last_error(0)
                 if not self.Process32NextW(snapshot,ct.byref(entry)):
-                    if ct.get_last_error()!=18:raise NativeFailure('PROCESS_ENUMERATION')
+                    error=ct.get_last_error()
+                    if error!=18:raise NativeFailure('PROCESS_ENUMERATION',{'winerror':error})
                     break
             for pid,handle in zip(pids,handles):
                 member=w.BOOL()
-                if not self.IsProcessInJob(handle,job,ct.byref(member)) or not member.value:
-                    raise NativeFailure('MEMBERSHIP_RACE')
+                if not self.IsProcessInJob(handle,job,ct.byref(member)):
+                    raise NativeFailure('MEMBERSHIP_RACE',{'winerror':ct.get_last_error()})
+                if not member.value:raise NativeFailure('MEMBERSHIP_RACE')
                 if self.creation_identity(handle)!=creations[pid]:raise NativeFailure('PROCESS_LIFETIME_RACE')
                 state=self.WaitForSingleObject(handle,0)
                 if state==0:
@@ -247,13 +264,14 @@ class Kernel(BaseKernel):
                     if pid not in counts or counts[pid]<=0:raise NativeFailure('MISSING_OWNED_PID')
                     self.last_thread_dispositions[pid]={'state':'observed_live','terminal_wait':258,
                         'snapshot_threads':counts[pid],'creation_filetime_100ns_since_1601_utc':creations[pid]}
+                elif state==0xFFFFFFFF:raise NativeFailure('THREAD_PROBE',{'winerror':ct.get_last_error()})
                 else:raise NativeFailure('THREAD_PROBE')
             return counts
         except BaseException as error:
             primary=error;raise
         finally:
             self.close_probe_handles(([('snapshot',snapshot)] if snapshot else [])+
-                [('member',handle) for handle in handles],primary)
+                [('member',handle) for handle in owned_handles],primary)
 
 
 def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assignment=False, reject_resume=False):
@@ -339,48 +357,57 @@ def run_owned(command, *, cwd: Path, timeout_s=120, interval_s=0.01, reject_assi
             pids = kernel.query(job, 3, Pids())
             if pids.count > 256 or pids.assigned > 256:
                 raise NativeFailure('PROCESS_INVENTORY_LIMIT')
-            rows = []
-            for raw in pids.pids[:pids.count]:
-                pid = int(raw)
-                if pid not in seen and len(seen)>=256:raise NativeFailure('PROCESS_INVENTORY_LIMIT')
-                seen.add(pid)
-                handle = kernel.OpenProcess(0x0410, False, pid)
-                if not handle:
-                    buffer.append('probe_errors',{'pid': pid, 'code': 'OPEN_PROCESS', 'winerror': ct.get_last_error()})
-                    continue
-                probe_primary=None
-                try:
+            rows = [];member_handles={};iteration_handles=[];probe_primary=None
+            try:
+                for raw in pids.pids[:pids.count]:
+                    pid = int(raw)
+                    if pid not in seen and len(seen)>=256:raise NativeFailure('PROCESS_INVENTORY_LIMIT')
+                    seen.add(pid)
+                    # Keep the exact verified object alive through the thread snapshot.
+                    handle = kernel.OpenProcess(0x100410, False, pid)
+                    if not handle:
+                        error=ct.get_last_error()
+                        buffer.append('probe_errors',{'pid':pid,'code':'OPEN_PROCESS','winerror':error})
+                        continue
+                    iteration_handles.append(('rss_member',handle))
                     membership = w.BOOL()
-                    if not kernel.IsProcessInJob(handle, job, ct.byref(membership)) or not membership.value:
-                        buffer.append('probe_errors',{'pid': pid, 'code': 'MEMBERSHIP_RACE'})
+                    if not kernel.IsProcessInJob(handle, job, ct.byref(membership)):
+                        error=ct.get_last_error()
+                        buffer.append('probe_errors',{'pid':pid,'code':'MEMBERSHIP_RACE','winerror':error})
+                        continue
+                    if not membership.value:
+                        buffer.append('probe_errors',{'pid':pid,'code':'MEMBERSHIP_RACE'})
                         continue
                     creation=kernel.creation_identity(handle)
                     memory = Memory(); memory.cb = ct.sizeof(memory)
                     if not kernel.memory(handle, ct.byref(memory), memory.cb):
-                        buffer.append('probe_errors',{'pid': pid, 'code': 'RSS_PROBE', 'winerror': ct.get_last_error()})
+                        error=ct.get_last_error()
+                        buffer.append('probe_errors',{'pid':pid,'code':'RSS_PROBE','winerror':error})
                         continue
                     if kernel.creation_identity(handle)!=creation:raise NativeFailure('PROCESS_LIFETIME_RACE')
-                    buffer.observe_lifetime(pid,creation)
-                    rows.append({'pid': pid, 'rss_bytes': int(memory.working_set),
+                    buffer.observe_lifetime(pid,creation);member_handles[pid]=handle
+                    rows.append({'pid':pid,'rss_bytes':int(memory.working_set),
                         'creation_filetime_100ns_since_1601_utc':creation})
-                except BaseException as error:
-                    probe_primary=error;raise
-                finally:
-                    kernel.close_probe_handles([('rss_member',handle)],probe_primary)
-            thread_counts = {}
-            try:
-                thread_counts = kernel.threads_for_members(job, [row['pid'] for row in rows],
-                    {row['pid']:row['creation_filetime_100ns_since_1601_utc'] for row in rows})
-            except NativeFailure as issue:
-                if issue.evidence is not None and 'probe_handle_close_failures' in issue.evidence:raise
-                buffer.append('probe_errors',{'code': issue.code, 'winerror': ct.get_last_error()})
-            for row in rows:
-                row['native_threads'] = thread_counts.get(row['pid'])
-                row['thread_disposition'] = kernel.last_thread_dispositions.get(row['pid'])
-            buffer.append('samples',{'native_thread_count': sum(thread_counts.values()) if len(thread_counts) == len(rows) else None,
-                'elapsed_ns': time.perf_counter_ns() - started,
-                'active_processes': accounting['active_processes'], 'total_processes': accounting['total_processes'],
-                'rss_bytes': sum(row['rss_bytes'] for row in rows), 'processes': rows})
+                thread_counts = {}
+                try:
+                    thread_counts = kernel.threads_for_members(job,[row['pid'] for row in rows],
+                        {row['pid']:row['creation_filetime_100ns_since_1601_utc'] for row in rows},
+                        verified_member_handles=member_handles)
+                except NativeFailure as issue:
+                    if issue.evidence is not None and 'probe_handle_close_failures' in issue.evidence:raise
+                    buffer.append('probe_errors',{'code':issue.code,
+                        'winerror':issue.evidence.get('winerror') if issue.evidence is not None else None})
+                for row in rows:
+                    row['native_threads'] = thread_counts.get(row['pid'])
+                    row['thread_disposition'] = kernel.last_thread_dispositions.get(row['pid'])
+                buffer.append('samples',{'native_thread_count':sum(thread_counts.values()) if len(thread_counts)==len(rows) else None,
+                    'elapsed_ns':time.perf_counter_ns()-started,
+                    'active_processes':accounting['active_processes'],'total_processes':accounting['total_processes'],
+                    'rss_bytes':sum(row['rss_bytes'] for row in rows),'processes':rows})
+            except BaseException as error:
+                probe_primary=error;raise
+            finally:
+                kernel.close_probe_handles(iteration_handles,probe_primary)
             if process.process and kernel.runner_wait(process.process) == 0:
                 boundaries['runner_exit_observed_ns']=str(time.perf_counter_ns())
                 closure['runner']['terminal_wait']=0

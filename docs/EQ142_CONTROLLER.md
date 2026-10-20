@@ -1,3 +1,17 @@
+## EQ142 observer handle correction in preparation — October20,2026
+
+### NATIVEERROR02 follow-up correction
+
+The first local correction passed nine focused author and nine separate reviewer methods, but exact working reviewfca4007edfc26a5247a6325434b792ce4af62f0af26c3bdfa600e979ebf39249 requested changes: GetProcessId-zero, membership API-false and WAIT_FAILED still rejected while losing their immediate API errors. The successor distinguishes those API failures from successful PID/nonmember mismatches and unknown wait statuses, preserving captured errors only for actual API failures. An additional deterministic regression covers before/after membership, PID and wait failures with cleanup error clobbering and logical-race controls. Prior nine-method results remain scoped to the earlier correction; focused successor validation and renewed independent exact-packet review remain required. No original package/runtime/default or acceptance threshold changed.
+
+The current published71e/177 source passed candidate CI (18runs/102jobs/96artifacts), independent local Linux qualification and the complete native controller correctness method (one method9898.769s, zero failures/errors/skips; source/runtime unchanged). Final independent native review4984c8da4dc3c90bd2b0035bdbfcda09647ab6564c8f7dfc67fed58bdeb726dc is scoped to that source and original count/admission/six-fixture/final-replay evidence; it is not an official study.
+
+The Windows combined-wheel suite then ended with one failure among280 collected methods: process/uninstrumented-A owned-witness observation retained an aggregate OPEN_PROCESS diagnostic with reported error87 despite child exit0. The full Windows qualification failed; combined-sdist did not complete. [Actual failure checkpoint](https://github.com/atulsrivas1/equity-features/issues/476#issuecomment-6296848746). Preserve all failed logs/report/source and prior scoped passes.
+
+NATIVEHANDLE01: independent design review52d3dbabe0609af78ec9eb8c9be88a4ed1cd3199f98e380a499177d79e2d5ba0 identifies the close/reopen gap and an error-provenance defect. Cleanup can overwrite the API error before the aggregate reads it; the actual short-lived process cause and original error are not established by the retained row. The narrow local successor retains the same verified RSS member handle through thread observation, preserves PID/creation/Job/wait checks and single-owner cleanup, and captures meaningful API errors immediately. It does not suppress errors or relax tests. Initial-open/identity/membership/unknown/cleanup failures remain rejecting.
+
+Correction validation and exact successor source review/publication are pending. Renew affected full-native/platform/currentCI evidence before an independently approved exact four-role manifest and fresh official study. Original packages, formulas, public calculation APIs, source independence, resource/capacity bounds, cohort matrix, sampling/deadlines and adoption thresholds are unchanged. EQ142 stays In progress; EQ143–146 remain Backlog. No measured speedup, optimization adoption, release or completion is claimed. The checkpoints below retain their historical source/time scope.
+
 # EQ142 complete evidence controller
 
 ## CPUMETA01 working correction; qualification remains pending
