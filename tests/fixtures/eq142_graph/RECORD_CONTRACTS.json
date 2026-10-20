@@ -1067,7 +1067,7 @@
     "allocation": "Do not add original task/output encodes for fact construction. Local fact containers only reference existing immutable objects. Bounded proof_bodies materialization holds at most one verified retained body per hash (<=16output+16receipt), within existing three-body observer allowance3*16*(1MiB+400000)+64*4096; capture bodies, retained-readback bodies and current decoded/codeced comparison body remain bounded. No physical allocator/copy-count guarantee; original960MiB logical and69,793,792 observer cap unchanged.",
     "required_types": "publishing and require_success exact bool; initial/maximum/combined/reserved and every count/index strict int, never bool; initial<=combined<=maximum<=1GiB. Editorial explicitness from final prospective review; no additional scope."
   },
-  "complete_root_precode": "COMPLETE_ROOT_PRECODE.json, prospective V4; storage_device exact unsigned64 decimal string, no implemented capacity or complete root acceptance",
+  "complete_root_precode": "COMPLETE_ROOT_PRECODE.json, prospective V5; CAP02exactuint64device and CAP03actualnt/shutilbinding; no complete-root acceptance",
   "capacity_component_interface": {
     "schema": "eq142-capacity-component-interface:1",
     "stage": "PRECODE_NOT_IMPLEMENTED",
