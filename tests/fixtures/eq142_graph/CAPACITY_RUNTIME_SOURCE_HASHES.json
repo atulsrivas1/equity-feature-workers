@@ -1,0 +1,43 @@
+{
+  "schema": "eq142-capacity-runtime-source-variants:1",
+  "stage": "PRECODE_SOURCE_VARIANTS_NOT_RUNTIME_ACCEPTANCE",
+  "scope": "Capacity-specific additional source only; prior three concurrent runtime module variants and package/runtime/OS qualification keep their separate scopes. Source expectations come from exact approved Git source/official CPython tags, never observed installed regeneration.",
+  "original_machine": {
+    "worker_build_pin": "231349aaf2bf1b9ec21f45807382ca9c6522520c",
+    "module": "benchmark_supplied_inputs",
+    "definition": "machine",
+    "definition_line": 325,
+    "raw_sha256_variants": {
+      "LF": "8afbb0fd8696d296f72f5e7616cac6fb76c623cf3e6ee84fb63b3e2aaeee143e",
+      "CRLF": "1aa422f34645537e9981554543871a0f1423c896c20ea2a735ed665ce258b712"
+    }
+  },
+  "versions": {
+    "3.12.10": {
+      "url": "https://raw.githubusercontent.com/python/cpython/v3.12.10/Lib/shutil.py",
+      "module": "shutil",
+      "definition": "shutil.disk_usage",
+      "windows_definition_line": 1379,
+      "sha256": "f9f0102a9ed087271f914d74b07866464d3e716afe9ee10760a5eb90f7db0f33",
+      "git_blob": "2d2856912893bd153f4a9bb7f117a445e69ab4e1",
+      "raw_sha256_variants": {
+        "LF": "f9f0102a9ed087271f914d74b07866464d3e716afe9ee10760a5eb90f7db0f33",
+        "CRLF": "de2f5819114464949b55229b137ac9deed85ce16955ead2dc725e45805ba098c"
+      },
+      "scope": "Official exact tag snapshot/Windows definition position. No execution of downloaded code or qualification of installed observation. Capacity-specific additional stdlib source, not whole-interpreter equivalence."
+    },
+    "3.12.15": {
+      "url": "https://raw.githubusercontent.com/python/cpython/v3.12.15/Lib/shutil.py",
+      "module": "shutil",
+      "definition": "shutil.disk_usage",
+      "windows_definition_line": 1361,
+      "sha256": "53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8",
+      "git_blob": "90f6c024afe332d22a2e9a527c325f48855ff2ad",
+      "raw_sha256_variants": {
+        "LF": "53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8",
+        "CRLF": "92c0c10798afa8f7274fe4405abf711b55aa5b98bea32f1bcdd376bf9a187ce1"
+      },
+      "scope": "Official exact tag snapshot/Windows definition position. No execution of downloaded code or qualification of installed observation. Capacity-specific additional stdlib source, not whole-interpreter equivalence."
+    }
+  }
+}

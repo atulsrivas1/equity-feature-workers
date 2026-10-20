@@ -1,0 +1,660 @@
+{
+  "schema": "eq142-benchmark-protocol:1",
+  "stage": "PRECODE_PROPOSAL_NOT_READY_OR_TIMING_ACCEPTANCE",
+  "purpose": "Current execution/cost evidence and instrumentation A/A qualification; no optimization adoption or production resource-default change",
+  "sources": {
+    "baseline_core_package_build": "b1f5445eb9799b73753e413669b94166997fc468",
+    "baseline_worker_main": "231349aaf2bf1b9ec21f45807382ca9c6522520c",
+    "baseline_io_main": "18d86761aa3eebb7414e51e8fa2aba089717b5eb",
+    "canonical_handoff_main": "fbb3d30efbe37d9f0c56728787209764dde68ba8",
+    "original_profile_generator": "worker tools/benchmark_supplied_inputs.py at exact baseline worker tree",
+    "before_timing_freeze": [
+      "reviewed clean actual worker tool/harness head",
+      "actual six-distribution build/runtime/import payload identities",
+      "actual tool/protocol/fixture/oracle hashes",
+      "actual capacity/reserves and exact supported cohort list",
+      "independent harness/source review and executed qualification receipts"
+    ],
+    "rule": "Actual artifact/build source and measured tool head are separate recorded identities. Never relabel old package builds or R17 measurements as a new docs/tool head. Changed execution renews applicable candidate/source/installed/both-platform qualification."
+  },
+  "profiles": [
+    {
+      "id": "small",
+      "layout": "one combined all-eight task per instrument",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0
+    },
+    {
+      "id": "balanced",
+      "layout": "one combined all-eight task per instrument",
+      "instrument_slot_counts": [
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024,
+        1024
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0
+    },
+    {
+      "id": "skewed",
+      "layout": "one combined all-eight task per instrument",
+      "instrument_slot_counts": [
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        1024
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0
+    },
+    {
+      "id": "family_complete",
+      "layout": "three same-symbol family tasks sharing original supplied tuple",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0,
+      "variant": "complete original prices/H/L"
+    },
+    {
+      "id": "family_missing_hl",
+      "layout": "three same-symbol family tasks sharing original supplied tuple",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0,
+      "variant": "high/low columns absent; EMA+RSI and bands ready, ATR missing_input/expected256/observed1/absent_input"
+    },
+    {
+      "id": "family_old_close_gap",
+      "layout": "three same-symbol family tasks sharing original supplied tuple",
+      "instrument_slot_counts": [
+        256
+      ],
+      "period": 20,
+      "band_k": "2/1",
+      "evidence_limit": 0,
+      "variant": "slot0 row absent with explicit missing slot coverage; anchored EMA/RSI/ATR incomplete_coverage/expected256/observed255/governed_gap; bands last20 scheduled slots ready"
+    }
+  ],
+  "family_selections": [
+    [
+      "intraday.ema",
+      "intraday.rsi"
+    ],
+    [
+      "intraday.atr"
+    ],
+    [
+      "intraday.band_lower",
+      "intraday.band_middle",
+      "intraday.band_position",
+      "intraday.band_upper",
+      "intraday.band_width_ratio"
+    ]
+  ],
+  "all_eight": [
+    "intraday.atr",
+    "intraday.band_lower",
+    "intraday.band_middle",
+    "intraday.band_position",
+    "intraday.band_upper",
+    "intraday.band_width_ratio",
+    "intraday.ema",
+    "intraday.rsi"
+  ],
+  "matrix": {
+    "original_profiles": {
+      "modes_degrees": [
+        [
+          "sequential",
+          1
+        ],
+        [
+          "thread",
+          1
+        ],
+        [
+          "thread",
+          2
+        ],
+        [
+          "thread",
+          4
+        ],
+        [
+          "thread",
+          8
+        ],
+        [
+          "process",
+          1
+        ],
+        [
+          "process",
+          2
+        ],
+        [
+          "process",
+          4
+        ],
+        [
+          "process",
+          8
+        ]
+      ],
+      "cohorts_two_classes": 54
+    },
+    "focused_profiles": {
+      "modes_degrees": [
+        [
+          "sequential",
+          1
+        ],
+        [
+          "thread",
+          2
+        ],
+        [
+          "process",
+          2
+        ]
+      ],
+      "cohorts_two_classes": 18
+    },
+    "total_planned_cohorts_per_control": 72,
+    "warmups_per_cohort": 2,
+    "retained_per_cohort": 7,
+    "planned_owned_samples_per_control": 648,
+    "planned_owned_samples_both_controls": 1296,
+    "order": "all uninstrumented A cohorts before any instrumented B; profile order above, then modes/degrees listed, then admitted_control followed by owned_runner_e2e; warmups then retained within each cohort",
+    "unsupported": "record detected unsupported degree/capacity before A with explicit omission; never substitute a degree or invent samples; actual accepted scope lists only executed supported cohorts",
+    "capacity_change_after_freeze": "retain failure and stop affected series; no silent resizing or automatic retry",
+    "automatic_complete_control_retries": 0,
+    "concurrent_local_builds_tests_or_other_benchmarks_during_timing": false
+  },
+  "classes": {
+    "eq142_owned_runner_e2e": {
+      "start": "before launch of fresh owned runner",
+      "end": "outer wall end after final descendants/owned cleanup, native and runner/full-evidence/root persistence/readback, capacity-after and required outer source-after; final self-timing measurement envelope/candidate finalization explicitly excluded",
+      "publisher": true,
+      "includes": [
+        "imports",
+        "expected/runtime/source proof before and after",
+        "source construction/admission",
+        "trace install/source_construct labels and later task binding",
+        "supervisor and child pools",
+        "complete SDK publication/committed lookup/readback",
+        "hook restoration and sidecar/report writes",
+        "owned child CPU including terminated children"
+      ],
+      "claim": "Synthetic outer owned-runner cost through required source/root closure; excludes final measurement envelope/candidate write/validation and named final-controller post-envelope source check. No self-inclusive write or scalar observer subtraction; not live/persistent product latency."
+    },
+    "eq142_admitted_control": {
+      "start": "after actual fixture/source admission, before trace label binding and hook installation",
+      "end": "after supervisor/full result SDK and diagnostics checks, hook restoration and bounded trace persistence",
+      "publisher": false,
+      "includes": [
+        "timed instrumentation label/install/restore bookkeeping",
+        "actual supervisor/pool execution and shutdown",
+        "complete result/parity/diagnostic checks",
+        "bounded trace persistence"
+      ],
+      "claim": "new named admitted control; does not include sink commit/readback and is not the older EQ140 compute class"
+    }
+  },
+  "clock": {
+    "mode": "local_monotonic_durations_and_parent_causal_bounds",
+    "qualified": [
+      "actual per-process monotonic/nonadjustable counter metadata",
+      "same-timeline interval/nesting invariants",
+      "actual parent dispatch/wait/result elapsed and causal bounds"
+    ],
+    "cross_process_raw_tick_subtraction": false,
+    "global_numeric_critical_path_ns": null,
+    "not_inferred": [
+      "exclusive bottleneck contribution from causal order alone",
+      "numeric global critical path from sums of child durations",
+      "pool native IPC cost from composite parent waits"
+    ]
+  },
+  "resource_policy": {
+    "refresh_before_study_and_each_cohort": true,
+    "allowed_cpu_source": "actual current OS affinity/restrictions, not os.cpu_count alone",
+    "declared_coordinator_and_host_cpu_slots": 2,
+    "required_cpu": "degree*compute_threads(1)+backend_threads(1) <= ResourceBudget.max_cpu_slots=actual_allowed_slots-2; hence degree+3<=actual allowed slots, retaining two additional host/coordinator slots",
+    "maximum_selected_degree": 8,
+    "actual_worker_api_maximum_unchanged": 32,
+    "native_thread_totals": "record actual, do not infer physical cores from Python threads or configured workers",
+    "whole_job_sampled_RSS_cap_bytes": 1073741824,
+    "logical_max_resident_bytes_both_controls": 1006632960,
+    "trace_reserved_bytes_both_controls": 67108864,
+    "required_additional_free_host_memory_bytes": 2147483648,
+    "declared_study_storage_reservation_bytes": 77309411328,
+    "required_additional_free_storage_bytes": 8589934592,
+    "max_tasks": 16,
+    "max_in_flight": "degree",
+    "max_input_bytes": 16777216,
+    "max_task_result_bytes": 262144,
+    "max_task_transport_bytes": 1048576,
+    "max_total_result_bytes": 16777216,
+    "publisher_max_pending_tasks": 16,
+    "publisher_max_pending_bytes": 8388608,
+    "max_receipt_wire_bytes": 400000,
+    "sink_max_results": 1,
+    "sink_max_chunk_bytes": 1048576,
+    "sink_max_total_bytes": 1048576,
+    "sink_max_result_cells": 100,
+    "sink_max_evidence_rows": 1,
+    "backend_owners": 1,
+    "resident_checks": "initial supervisor reservation plus separately accumulated actual encoded committed OutputManifest metadata; committing first does not promise rollback if later accounting rejects",
+    "measurement_limits": "owned-Job CPU accounts for terminated children; sampled concurrent aggregate RSS may miss peaks; logical admission/reserves are not physical enforcement or guaranteed idle resources",
+    "native_thread_method": "tools/eq142_native.py development-only Toolhelp32 snapshot cntThreads, joined to verified owned-Job members, with explicit probe errors; qualify before timing; outside-owned observer reserve and sampled-peak limits apply; explicit observed_terminated zero only from retained owned process handle signaled proof, with terminal_wait/snapshot count retained; unknown/live missing/race remains a rejecting probe error. Actual RSS/thread sampling is non-atomic and can miss transient peaks.",
+    "delegate_spec_admission": "Before instrumented dispatch, measure actual plan and original/proposed callable+args Python pickle representations; reserve2*plan+3*sum(nonnegative per-invocation extras), plus original logical initial resident and expected committed output metadata, within same960MiB cap. No native IPC/physical-copy inference. Count all construction/admission in selected B phase; actual original outcome must confirm original resident/input totals."
+  },
+  "statistics": {
+    "samples_used": "seven retained samples only; raw warmups retained separately; all nine require source/product/resource/trace completeness and absolute admission bounds",
+    "CPU_measurement": "owned-Job whole-run native CPU for owned_runner_e2e; native owned-Job counter delta around the admitted_control phase for that class, including terminated children",
+    "memory_comparison": "maximum observed sampled concurrent aggregate RSS across seven retained samples for each cohort; each warmup and retained sample must also fit absolute1GiB cap; no sum of per-process maxima",
+    "median": "statistics.median",
+    "inclusive_IQR": "statistics.quantiles(samples,n=4,method='inclusive')[2] minus [0]",
+    "p95": "nearest rank sorted_samples[ceil(0.95*n)-1]",
+    "AA_required_per_executed_cohort": {
+      "both_noise_three_IQR_over_positive_median_max": 0.1,
+      "B_median_wall_over_A_max": 1.05,
+      "B_median_owned_CPU_over_A_max": 1.25,
+      "B_observed_RSS_over_A_max": 1.25,
+      "absolute_observed_RSS_max": 1073741824,
+      "small_original_and_focused_p95_B_over_A_max": 1.1,
+      "complete_product_outcome_parity": true,
+      "independent_B_call_byte_trace_expectations": true,
+      "complete_resource_source_clock_trace_evidence": true
+    },
+    "failure": "retain original raw warmups/samples/failures; reject attributed-cost acceptance; redesign only under a prospectively reviewed new protocol; do not subtract a scalar overhead or retune after B",
+    "optimization_adoption": "not attempted by EQ142; later comparisons retain wall reduction strictly > max(5%,3*inclusiveIQR(A)/median(A)), CPU<=1.25A, RSS<=absolute and1.25A, smallp95<=1.10A, full correctness/resource parity",
+    "noise_domain_clarification": "Prospective V9, before official study: both A and B selected WALL three*inclusiveIQR/positive median <=0.10 for each class/cohort. CPU IQR is descriptive; median owned CPU bound remains B<=1.25A. No post-B choice of metric."
+  },
+  "independent_expectations": {
+    "tiny_canonical_cases": "independently hand-specified exact Fraction/centered moments/explicit full Decimal240 context; accepted API quality and explicit operand/nonedge expectations",
+    "workload_values": "original expanded-weight/centered Decimal350 oracle under complete explicit Context; unavailable/readiness/count/reason cases specified independently",
+    "quality_count_semantics": "field-ready required input slots, not successfully formed true-range pairs; missing anchor can still make the entire ATR unavailable",
+    "not_oracles": [
+      "instrumented graph generated expectations",
+      "same scheduler twice",
+      "full SDK hash alone",
+      "trace generated call counts used as the only expected trace counts"
+    ],
+    "workload_tolerance": "Independent original expanded-weight/centered Decimal350 workload values use math.isclose(rel_tol=2e-15,abs_tol=1e-12), as actual original preflight; exact null/status/count/reason/header/evidence and A/B codec-byte parity. Portable tiny canonical fixtures retain rel2e-15/abs0 and exactzero/null separately."
+  },
+  "precode_vs_measured_bytes": "Current42-task/72-cohort pre-code preflight binds its actual generated specimens and source-derived resource arithmetic. It is not a portable pickle-from-value-JSON promise or72 supervisor/native executions. The implemented exact source/harness must renew actual input/task/result/receipt/transport and source/native admission before timing and freeze the resulting expected identities; retain all source/identity failures without relabeling them as fresh measurements.",
+  "pre_timing_gates": [
+    "actual EQ142 Ready/assignment and implemented reviewed final source",
+    "exact closed hook aliases/descriptors and restoration/reentrancy tests",
+    "known call/byte counts and success/original-exception controls",
+    "all selected supervisor/mode/SDK/native preflight with actual returned task/partition transport bounds",
+    "independent graph/cycle/alias/readiness/ownership fixtures",
+    "source/runtime/expected before-after binding and finite current installed/artifact channel",
+    "bounded trace/sidecar/clock tests and actual reservations",
+    "no active local build/test/other benchmark",
+    "freeze A raw source/protocol before B"
+  ],
+  "retention": "Keep raw warmups, samples, original errors/partial commits, original/proposed source identities and declared omissions. Final actual compressed proof size/channel/access/expiry is a delivery gate; no silent raw-proof deletion to fit a channel.",
+  "nonclaims": [
+    "fastest library",
+    "parallel speedup from configured workers",
+    "live SLA",
+    "persistent pools",
+    "physical memory enforcement",
+    "physical durability",
+    "R18 release acceptance"
+  ],
+  "pre_timing_native_correction": "Initial development21-method run failed1 with actual MISSING_OWNED_PID/WinError18 during process retirement. Console/source hashes retained; temporary full native report was not retained and is not reconstructed. Positive signaled-handle terminal proof now distinguishes retired zero from unknown/live missing measurements. Successor21 development methods pass, not frozen study/pre-timing final acceptance. No timing/control retries or performance/noise/CPU/RSS threshold changes.",
+  "retention_budget": {
+    "prospective_before_any_timing": true,
+    "study_bytes": 77309411328,
+    "additional_host_bytes": 8589934592,
+    "trace_bytes_max": 43486543872,
+    "native_receipt_bytes_max": 21743271936,
+    "summary_bytes_max": 1358954496,
+    "raw_diagnostics_bytes_max": 1358954496,
+    "shared_product_object_bytes_max": 268435456,
+    "other_frozen_inputs_and_metadata_bytes_max": 1073741824,
+    "remaining_study_headroom_bytes": 8019509248,
+    "rule": "Declare72GiB study plus8GiB host capacity before timing; refresh actual remaining worst-case capacity each cohort and enforce owned-directory encoded byte/member bounds. No preallocation/physical guarantee, automatic retries or deletion of failed raw evidence. Retained fragment/native references avoid duplicating raw arrays in summaries. Stop and retain failure on overflow; final compressed-channel fit remains a release gate."
+  },
+  "pre_timing_cpu_correction": "Initial development admission2-method run had6 subtest INVALID_CONFIG errors with4 allowed slots and degree2: prior degree+2 guard contradicted original backend1 and max_cpu_slots=allowed-2. Corrected prospective guard degree+3 before constructing budget; original ResourceBudget, host reserve2, performance thresholds and actual selected degrees remain unchanged. Corrected2 methods pass including6 actual mode/publication admission joins. No official timing has run.",
+  "owned_witness_metadata_scope": "Prospective before official timing: both native owned controls retain one parent direct membership/lifetime/clock witness inside selected phase; A still uses unchanged Supervisor without tracing/delegate replacement. B additionally captures/writes each actual invocation witness inside selected phase. Actual plan/spec pickle sizes include explicit Job/path fields; reserve3*4096*actual witness population as logical encoded representations within unchanged960MiB cap. This is common ownership metadata plus measured B instrumentation, not physical allocation or all-descendant/sampled peak guarantee. Requires source review before implementation/timing; no threshold/order/retry changes.",
+  "owned_witness_common_scope_limit": "Ownership-qualified original Supervisor A includes common parent native metadata cost, as does B. It is not pristine no-observer total cost; common overhead can dilute ratios. No scalar subtraction or threshold change. Explicit source/phase scopes remain part of every comparison.",
+  "executor_observation_scope": "Prospective B-only actual source-bound shutdown hook and separately source-bound manual terminal metadata after hook restoration. Include all construction/observation/validation costs inside selected phase and existing plan/spec/runner/trace caps. Sequential has no executor. Source/static required barriers stay distinct from observed returned wait=True/cancel_futures=True shutdown and observed actual Future states. No cross-process tick subtraction, count contamination, threshold/order change or root acceptance.",
+  "native_local_closure_scope": "Native-local receipt schema2 retains actual suspended/terminal runner lifetime, external observer clock/membership and ordered local boundaries. Fresh Job empty query follows positive runner wait. Native start excludes Kernel/uniqueJob/buffer setup; native end precedes own handle cleanup/caller persistence/validation/outer source/report closure. This native-local wall cannot be selected complete e2e. Sample accounting/rows are non-atomic; direct startup/witness and sampler populations remain distinct. No cap/order/threshold/default change.",
+  "native_launcher_identity_scope": "Initial CreateProcess launcher and direct logical calculation parent may have distinct lifetimes (actual Windows venv redirector). Preserve both and exact same Job direct ownership; no OS ancestry inferred from membership. Original baseline venv control remains unchanged. Outliving native test alone uses base interpreter plus bounded owned release handshake and actual post-initial-exit live-child row, not a timestamp gap.",
+  "publication_admission_scope": "Prospective B-only actual commit/drain/coordinator-encode observation,42 hooked definitions/43 original code identities. Reserve69793792 logical observer bytes before dispatch within existing product cap; replay per-candidate cumulative metadata as source-derived and cross-check actual final outcomes. Actual commit and accepted metadata are separate. A unchanged except declared ownership witness; no A observed commit-order claim, no thresholds/order/cap/default change or complete root acceptance.",
+  "complete_root_precode_amendment": {
+    "proposal": "COMPLETE_ROOT_PRECODE.json",
+    "timing": {
+      "decision": "Explicit prospective amendment to classes.eq142_owned_runner_e2e before code or timing. Required runner and outer source-before/after/root checks remain inside; a separate final self-timing envelope and candidate finalization are explicitly excluded. Admitted phase boundaries unchanged.",
+      "inside_order": [
+        "outer_wall_start",
+        "outer_cpu_start_captured",
+        "exclusive_sample_directory_created",
+        "outer_source_before_verified",
+        "capacity_before_persisted",
+        "native_owned_call_entered_before_Kernel_setup",
+        "native_owned_call_returned_after_descendants_exit_and_owned_cleanup",
+        "native_receipt_persisted",
+        "actual_runner_return_and_all_full_evidence_verified",
+        "complete_root_validated_persisted_and_read_back",
+        "capacity_after_persisted",
+        "outer_source_after_verified",
+        "outer_cpu_end_captured",
+        "outer_wall_end"
+      ],
+      "runner_includes": "Runner existing source_state/bound.check after admitted phase and before runner.json return remains inside e2e, as do runner report/write/ref epilogue and final descendants. Never exclude required runner after-source proof by calling it post-phase closure.",
+      "outside_order": [
+        "measurement_envelope_constructed_exclusively_persisted_read_back_and_validated",
+        "final_controller_post_envelope_source_check",
+        "candidate_reference_record_exclusively_persisted"
+      ],
+      "claim": "E2E includes runner/native/root producer reports and required source checks through actual outer_wall_end. It explicitly excludes final measurement envelope/candidate finalization and the separately named final controller post-envelope source check. No self-inclusive write claim or scalar overhead subtraction.",
+      "selection": "E2E wall=end-start on same external observer clock; CPU=final owned Job user/kernel. Admitted wall=runner same-process phase difference; CPU=after_phase-before_phase whole Job ticks; outer wall/CPU retained separately. Profile qualification has no selected timing authority.",
+      "compatibility": "No automatic study command or full_sample_accepted:true introduced by development implementation. Update frozen protocol text/limitations prospectively and obtain review before code.",
+      "CPU_domains": "Wall checkpoint names outer_cpu_start_captured/outer_cpu_end_captured are actual perf_counter_ns checkpoints after separate process_time_ns queries, not CPU counter values. Actual process CPU start/end live only in separate cpu_observation. Never order or subtract process_time absolute values against wall counter values."
+    },
+    "storage_allocation": {
+      "hard_study_bytes": 77309411328,
+      "host_additional_bytes": 8589934592,
+      "regular_study_allocated_bytes": 69289902080,
+      "new_prerequisite_count_qualification_bytes": 6442450944,
+      "new_remaining_headroom_bytes": 1577058304,
+      "qualification_upper_components": {
+        "trace": 4831838208,
+        "native": 1207959552,
+        "runner_root_envelope_candidate_and_diagnostics": 150994944,
+        "profiles": 80216064,
+        "witnesses": 5013504,
+        "runner_returns": 294912,
+        "capacity": 2359296,
+        "supervisor_products_publication": 14155776,
+        "shared_reference_and_index_metadata": 33554432,
+        "failure_and_temporary_names": 109051904
+      },
+      "qualification_sum_bytes": 6435438592,
+      "qualification_headroom_bytes": 7012352,
+      "decision": "Explicit prospective6GiB qualification allocation FROM existing7.46875GiB study headroom, not an increase to72GiB study or8GiB host reserve. Regular1296 data allocations unchanged. Qualification<=72 supported B controls, timing never adopted. Count-index/profiles and their full actual trace/native/writer proofs retained in fixed qualification directory. Product objects remain shared within existing256MiB/512 cap, not charged again. No automatic retries/deletion or post-A resizing; every actual category/aggregate checked.",
+      "remaining_disk_rule": "free_storage >= max(0,72GiB-actual_owned_encoded_bytes_already_retained)+8GiB. Reconcile fixed owned namespace and actual writer lengths; do not repeatedly require another full72GiB after existing study files already consume part of its allowance."
+    },
+    "capacity": {
+      "source_notes": "Earlier primary notes plus Microsoft GetThreadGroupAffinity and Processor Groups pages; exact external readonly diagnostic and V2 review retained. Group numbering0..activecount-1 closes CAP01 even on multigroup hosts.",
+      "ABI": "64bit Windows only; BOOL/DWORD4,WORD/USHORT2,pointer8. GetActiveProcessorGroupCount()->WORD positive<=64. GetProcessGroupAffinity(HANDLE,PUSHORT,PUSHORT)->BOOL uses actual activecount-sized output buffer with inputcount=activecount; success count1..activecount, unique valid IDs sorted for record. GetThreadGroupAffinity(HANDLE,PGROUP_AFFINITY)->BOOL; structure maskuint64 offset0,groupuint16 offset8,reservedWORD[3] offset10,size16; reservedzero required. GetCurrentProcess/GetCurrentThread pseudo handles never closed. GetProcessAffinityMask explicit pointer-width masks. All APIs typed beforecall. Failed/zero/oversize/changed/invalid native results reject, no guessed fallback.",
+      "raw_reuse": "Use unchanged source-bound original machine() actual affinity mask/slotcount/freephysical. Verify source/descriptors before/after; discard its old slots-1 degree policy and memory_cap as admission rules. Preserve raw return as observation with original field validators.",
+      "storage": "shutil.disk_usage on resolved actual study-owned directory, os.stat.st_dev as opaque device id. Reject symlink/unowned/unexpected namespace/changeddevice/probe failure; preserve total/used/free bytes, not private paths. Track actual own file bytes/member refs per writer and reconcile namespaces; initial/full and remaining worst-case budgets checked, no physical allocation guarantee. Encode st_dev as exact unsigned64 decimal string, never float/safe-count conversion. Reject noncanonical/negative/overflow and changed IDs. CPython3.12.10/15 Windows _Py_stat_struct uses uint64_t st_dev; actual author read-only diagnosis exceeded2^53-1, raw value stays private. This is prospective CAP02 correction before any capacity implementation/record.",
+      "before_memory": "Require observed freephysical >=1073741824+2147483648=3221225472 before launch; original1GiB owned allowance and additional2GiB host reserve unchanged. After Job cleanup freephysical>=2147483648. Probe limitations/snapshots explicit; review this concrete additional-reserve arithmetic before code.",
+      "stdlib_source_binding": "Before implementation, retain official CPython v3.12.10/v3.12.15 Lib/shutil.py snapshots, exact LF/CRLF raw hashes/Git blobs and Windows disk_usage definition position. Bind actual unbound function/module/qualname/firstline/code and actual shutil.nt module identity and nt._getdiskusage export identity (plus os.stat is nt.stat) before/after. New capacity source scope is explicit; earlier three concurrent modules do not imply whole interpreter or shutil qualification. No installed-observation expected-hash regeneration.",
+      "primary_group": "On the same calling thread, capture activecount/processgroups/thread primarygroup+mask and direct process/system masks before unchanged machine(), then repeat all after. Require equal counts/sets/primarygroup/threadmask/processmask/systemmask; rawmachine mask agrees and popcount agrees; group<activecount and in processgroups. Process mask must be a subset of system AND thread masks; reject incompatible observations instead of silently widening. Compute allowedslots from that exact primary process mask only; degree+3<=slots. Record both active groups and process set even when counting one primary domain. No total-machine eligibility count, additionalgroup budget, pinning, workerplacement, physicalcore or actualreservedCPU claim. OS may use othergroups; this tooling does not measure placement.",
+      "decision_basis": "V2 exactly-one-active-group restriction is prospectively superseded before implementation after actual readonly diagnostic observed2activegroups48+48/processgroups[0,1]/primarymask48. Diagnostic is not benchmark qualification. Conservative primary-group policy matches current-process GetProcessAffinityMask and GetThreadGroupAffinity documented primary-group semantics. Fixed degree<=8 remains unchanged; no study data or policy tuning afterA."
+    },
+    "metadata": {
+      "job_version": "eq142-job-boundaries:2, since prior emitted descriptive v1 resource field is renamed; preserve historical v1 sources/records under their original source, do not relabel them.",
+      "runner_version": "eq142-development-runner:2, explicit metadata rename expected_committed_output_metadata_bytes -> expected_accepted_output_metadata_bytes. Existing report normal/failure schemas both version2; old records remain historical source-bound.",
+      "accepted_counter": "resource_admission.cumulative_accepted_output_metadata_bytes is accepted-only source-derived prefix/final value cross-checked with actual original outputs. No counter called committed-output metadata. Observed returned backend commits remain publication observation facts with full receipt refs.",
+      "scope": "No source-independent calculation/package/API/default version change. Existing OutputManifest/task/result/receipt codecs and publication-observation:1 remain unchanged."
+    },
+    "status": "Prospective reviewed V9 contract, no complete controller/current qualification/official study acceptance",
+    "controller_qualification_policy": {
+      "workspace_purposes": [
+        "controller_qualification_only",
+        "official_instrumentation_study"
+      ],
+      "permanent_scope": "Select purpose once in the exclusive actual study-admission writer. Qualification-only workspaces can NEVER be reused, converted or enabled for official timing. Actual ordinary A/B sequential/thread/spawn controller fixtures may select individual supported normal controls in a qualification-only workspace; their durations have no performance authority. No official-study command currently exists or is enabled by this precode packet.",
+      "full_count_requirement": "Both purposes require the entire actual supported source/capacity matrix and full raw count qualification/index replay. No subset or synthetic index may satisfy an actual complete proof. All fixed V8 paths, codecs, source/native/math/product/clock/namespace/capacity checks and encoded caps remain mandatory. Development sample flags remain false.",
+      "official_freshness": "Official execution requires a fresh exclusive workspace, actual completed current committed harness/source/protocol review, local/archive/installed both-platform and current CI/artifact gates, original immutable baseline packages, actual capacity/source/count freeze and recorded real admission receipts. Qualification-only roots/samples are excluded forever. No concurrent local builds/tests/other benchmarks during official timing.",
+      "official_order": "Unchanged exact supported cohort order: every A cohort2warmups+7retained before any B. Evaluate all A selected-wall noise gates and required positive CPU/RSS baseline denominators before B; failure stops before B with a_noise_refusal summary. After B begins, no tuning/resizing/substitution or automatic complete-control retry. Complete the fixed B sequence when individual raw samples remain valid, then report all statistical gate failures honestly. Source/resource/clock/product/trace/sample execution failure stops immediately, retains partial root and failure, and emits no completed summary."
+    },
+    "failure_retention_clarification": {
+      "error_identity": "Derive actual exception type identity without consulting message/traceback. Native code is actual original NativeFailure.code or null, never invented child cause. Diagnostic capture/write error is secondary; poison acceptance and bare-reraise the original exception object/code/cause. Never chain the original from a later diagnostic error.",
+      "available_references": "Deterministic priority prefix <=64 of actual known references, no completeness or absence claim. Each closed {origin,context,reference}: origin actual_writer_return|caller_retained_unaccepted_diagnostic; context fixed V8 logical scope or one of12 prep:<profile>:<series> source-defined logical IDs (never a caller path); reference closed codec/sha256/bytes/retained_name. Actual-return entries retain original codec/name/positive length; unaccepted derived entries use codec eq142_unaccepted_diagnostic and actual fixed known filename or its .partial basename, bytes0..16777216, actual bounded-read hash. Opaque entries cannot satisfy a successful proof. Preserve all original raw files even when omitted from the diagnostic prefix. Source-derived wrapper readback is diagnostic origin, never observed writer return.",
+      "fixed_output": "Only failure.json in the actual fixed sample/cohort root; <=1048576 bytes, codec eq142_complete_root_failure. Workspace failures before any sample use fixed qualification/failure.json with related sample_id qualification. Preserve failed/partial files without retry, overwrite, undo or promotion to accepted candidate.",
+      "phases": [
+        "initial_source",
+        "create_workspace",
+        "capacity_freeze",
+        "reference_preparation",
+        "reference_readback",
+        "count_qualification",
+        "count_index_replay",
+        "study_admission",
+        "create_sample",
+        "sample_source_before",
+        "sample_capacity_before",
+        "native_owned_call",
+        "native_receipt",
+        "sample_evidence_readback",
+        "complete_root",
+        "sample_capacity_after",
+        "sample_source_after",
+        "measurement_envelope",
+        "final_source_check",
+        "candidate_finalization",
+        "study_A_baseline_check",
+        "study_history_replay",
+        "study_summary"
+      ],
+      "one_attempt": "At most one controller failure-diagnostic retention attempt in the entire workspace. Mark attempted BEFORE capture/write; nested handlers must not emit a second diagnostic or retry a failed one. Preserve the first original exception and all existing raw/partial files; poisoning is permanent.",
+      "secondary_failure": "A diagnostic failure may add only a constant non-sensitive note to the original exception; it must never replace or become cause of the original. Any note failure is also secondary. Do not attempt failure retention in an existing/unowned directory or before successful exclusive ownership."
+    },
+    "study_statistics_contract": {
+      "exact_arithmetic": "Use exact integers/rationals. For7sorted x: median=x[3], inclusiveIQR=(x[4]+x[5]-x[1]-x[2])/2 reduced, p95=x[6]. This is the specified inclusive method/nearest-rank, with no loss above2^53.",
+      "noise_scope": "Both A and B selected-WALL 3*inclusiveIQR/positiveMedian <=1/10. CPU IQR is descriptive; CPU overhead bound remains median B<=5/4A. Confirm this source interpretation prospectively in review; no criterion is selected after timing.",
+      "unchanged_gates": "B medianwall<=21/20A; median ownedCPU<=5/4A with positive A CPU median required (zero is explicit refusal, no invented ratio); retained sampledRSS<=both1GiB and5/4A with positive A RSS; small+all3focused p95<=11/10A. All9 samples/control obey original absolute limits and full proof/parity; only7 retained enter statistics. A/baseline must pass beforeB; no threshold relaxation.",
+      "operation_scope": "Reopen actual validated B fragments, count each original raw span once, use end-start only within its own process clock. Per-operation local-duration sums may overlap and are neither makespan, CPU, exclusive arithmetic nor numeric critical path. Original byte-policy null stays unavailable. Recompute values from raw references; do not trust cached summary or infer exact input seals/physical copies.",
+      "failure_reasons": [
+        "A_wall_noise",
+        "B_wall_noise",
+        "wall_overhead",
+        "CPU_overhead",
+        "RSS_overhead",
+        "small_focused_p95",
+        "A_median_CPU_zero",
+        "A_RSS_zero",
+        "product_parity",
+        "B_source_counts",
+        "source_capacity_clock_evidence"
+      ]
+    },
+    "study_metadata_allocation": {
+      "existing_metadata_component_bytes": 33554432,
+      "v8_reference_preparation_index_freeze_max_bytes": 31211520,
+      "new_study_admission_max_bytes": 16384,
+      "new_study_summary_max_bytes": 2097152,
+      "new_metadata_total_max_bytes": 33325056,
+      "remaining_metadata_component_bytes": 229376,
+      "summary_head_without_cohorts_max_bytes": 65536,
+      "each_cohort_max_bytes": 24576,
+      "summary_conservative_upper_bytes": 1835080,
+      "decision": "Both new fixed qualification metadata leaves charge the ALREADY allocated shared_reference_and_index_metadata32MiB inside6GiB. No original cap/headroom/cohort/threshold/source package changes. All actual fixed category and prefix totals still checked. Summary/admission cannot be hidden in uncounted external output."
+    },
+    "study_publication_boundary": {
+      "private": "Raw capacity device/volume IDs, absolute paths, process/nonces/creation ticks and full environment/input witness inventories remain private retained evidence. Never publish raw study or admission by default.",
+      "public": "Only an explicit separately reviewed allowlisted derivative: Git commits, versions/source/protocol/precode hashes, synthetic selectors/omissions, aggregate wall/CPU/RSS/count/returned-byte statistics, gate outcomes, raw-record opaque hashes and limitations. Exclude machine identifiers, raw clocks/PIDs/nonces, private paths and provider/private input code/data. Public progress/release docs distinguish raw-source qualification, performance refusal/nonwin, adoption and release."
+    },
+    "failure_retention_allocation": {
+      "reserve_bytes": 109051904,
+      "source_bound_conservative_components": {
+        "trace_partial_or_duplicate_names": 67108864,
+        "native_duplicate_name": 16777216,
+        "profile_duplicate_names": 1114112,
+        "runner_duplicate_name": 1048576,
+        "supervisor_products_publication_duplicate_names": 196608,
+        "root_measurement_candidate_duplicate_names": 135168,
+        "reference_duplicate_name": 16777216,
+        "summary_duplicate_name": 2097152,
+        "count_index_duplicate_name": 1048576,
+        "admission_and_freeze_duplicate_names": 32768,
+        "before_after_capacity_duplicate_names": 32768,
+        "owned_witness_duplicate_names": 69632,
+        "runner_return_duplicate_name": 4096,
+        "failure_partial_and_final_names": 2097152
+      },
+      "component_sum_bytes": 108539904,
+      "remaining_failure_reserve_bytes": 512000,
+      "decision": "Prospectively allocate104MiB FROM existing116064256byte qualification headroom, within unchanged6GiB qualification and72GiB study. Extra source-bounded partial/duplicate names, including a failed regular sample, are charged here exactly once; original final files remain in their original categories. No automatic retries or multiple failed controls per workspace. Actual source audit must confirm these bounds before acceptance. Successful fixed namespaces refuse stray partials; failures retain all bytes and poison further acceptance. This changes headroom allocation explicitly before timing, not a hard cap or threshold. Original persist source counts both temporary/final names; no physical disk or power-loss guarantee."
+    }
+  },
+  "capacity_device_width_correction": "CAP02 prospective: opaque os.stat.st_dev uses exact canonical unsigned64 decimal string, not safe-range count; same-device comparisons preserve values beyond2^53. No cap/order/timing threshold change. See CAPACITY_RUNTIME_SOURCE_HASHES.json for explicitly approved originalmachine/shutil variants; no installed-regenerated source expectations.",
+  "owned_runner_namespace_amendment": {
+    "writer_binding": {
+      "new_development_entrypoint": "tools/eq142_owned_runner.py, launched under existing unique owned Job using unchanged selected installed baseline executable. It calls development run_control once, receives its actual returned writer reference, and exclusively persists runner-reference.json <=4096bytes. Not a new calculation or original helper replacement.",
+      "reference_fields": "Exact closed owned_runner_return schema below supersedes V1 sketch: schema,sample_id,purpose,runner_reference,process_binding. Actual returned reference only, no reconstructed success on failure.",
+      "parent": "Read original runner_reference exact body from fixed owned sample/runner directory, length/hash/name checked. Read report.parent_owned_process_witness actual writer ref, require exact parent.json, resolve that original body and derive parent_nonce from it. Require wrapper process_binding equals that parent PID/nonce; actual trace parent fragment must match in B. Then call validate_native_closure with derived nonce, not caller-selected unbound value. Initial CreateProcess launcher may differ from this logical Python parent. Direct membership/lifetime does not imply ancestry.",
+      "failures": "Nonzero/unknown native exit, failed wrapper reference or failed original control cannot become accepted. Preserve available original failed reports/raw native/error evidence. If original run_control raises and has no returned reference, do not fabricate a writer-returned success reference from a caller rehash.",
+      "namespace": "Outer controller exclusively creates sample/cohort directory before capacity-before. Actual original run_control retains its own exclusive mkdir, targeting the fixed nonexistent child runner/ directory. Wrapper writes runner-reference.json in the existing outer sample root only after actual original return. No exist_ok bypass or rehash-derived returned success. This resolves directory lifecycle before wrapper implementation; stored retained_name values remain basenames, codec/context selects fixed runner prefix."
+    },
+    "reference_registry": {
+      "encode_task/encode_result/encode_output/encode_receipt": {
+        "scope": "fixed study/reference/objects/ shared store, from actual ProductStore(reference_path.parent / objects); product retained_name stays sha256.json",
+        "name": "sha256.json",
+        "max_bytes": 1048576,
+        "decoder": "original full canonical codec; store max256MiB/512objects"
+      },
+      "eq142_development_reference": {
+        "scope": "fixed study/reference/ directory; exact reference.json basename",
+        "name": "reference.json",
+        "max_bytes": 16777216,
+        "decoder": "existing development-reference:1 with complete source/expected math/products"
+      },
+      "diagnostic_snapshot": {
+        "scope": "fixed sample/cohort runner/ child directory; exact diagnostics.json basename",
+        "name": "diagnostics.json",
+        "max_bytes": 1048576,
+        "decoder": "unchanged full original diagnostic codec"
+      },
+      "native_receipt": {
+        "scope": "same sample/cohort",
+        "name": "native.json",
+        "max_bytes": 16777216,
+        "decoder": "reviewed native receipt2 plus validate_native_closure and actual parent binding"
+      },
+      "capacity_receipt": {
+        "scope": "same sample for before/after or fixed qualification root for qualification-capacity",
+        "name": "capacity-before.json|capacity-after.json|qualification-capacity.json selected by fixed operation, not arbitrary path",
+        "max_bytes": 16384,
+        "decoder": "closed capacity schema and actual probe/selector/remaining reserve semantics"
+      },
+      "eq142_owned_runner_return": {
+        "scope": "sample/cohort",
+        "name": "runner-reference.json",
+        "max_bytes": 4096,
+        "decoder": "closed actual-return envelope and parent nonce/PID"
+      },
+      "eq142_development_runner": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "runner.json",
+        "max_bytes": 1048576,
+        "decoder": "exact normal development-runner:2 conditional fields from frozen source; unknown/failure fields reject normalcandidate; failed reports retained diagnostic-only"
+      },
+      "eq142_supervisor_outcome": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "supervisor.json",
+        "max_bytes": 65536,
+        "decoder": "existing closed summary1 and original outcome/product/admission crosschecks"
+      },
+      "eq142_product_projection": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "products.json",
+        "max_bytes": 65536,
+        "decoder": "existing complete product_outcome arrays and actual original proofcodec/diagnostic/parity/math joins"
+      },
+      "eq142_publication_observation": {
+        "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+        "name": "publication.json",
+        "max_bytes": 65536,
+        "decoder": "existing complete publication-observation1 through extracted pure retained semantic verifier, no live-ledger identity requirement"
+      },
+      "eq142_count_qualification": {
+        "scope": "fixed study qualification",
+        "name": "count-qualification.json",
+        "max_bytes": 1048576,
+        "decoder": "closed count-index plus selected full count_entry proofs/source/matrix"
+      },
+      "eq142_code_counts": {
+        "scope": "fixed selected qualification cohort/runner/code-counts",
+        "name": "parent.json or exact expected invocation filename",
+        "max_bytes": 65536,
+        "decoder": "existing code-count qualification1 and independently recomputed aggregate"
+      },
+      "eq142_owned_process_witness": {
+        "scope": "fixed sample/cohort runner/owned-processes",
+        "name": "parent.json|delegate-000..015.json",
+        "max_bytes": 4096,
+        "decoder": "existing exact writer refs/direct native witness and nonce/lifetime/Job/clock joins"
+      },
+      "eq142_local_fragment": {
+        "scope": "fixed sample/cohort runner/trace",
+        "name": "parent.json|delegate-000..015.json",
+        "max_bytes": 16777216,
+        "decoder": "existing local-fragment2 plus complete retained set/reservations/globalcaps"
+      },
+      "eq142_complete_root": {
+        "scope": "same sample",
+        "name": "complete-root.json",
+        "max_bytes": 65536,
+        "decoder": "closed root2 full evidence graph; no arbitrary selectors"
+      },
+      "eq142_measurement_envelope": {
+        "scope": "same sample",
+        "name": "measurement.json",
+        "max_bytes": 65536,
+        "decoder": "closed envelope1 and actual same-observer local checkpoint arithmetic/selectedclass"
+      },
+      "eq142_complete_candidate": {
+        "scope": "same sample",
+        "name": "candidate.json",
+        "max_bytes": 4096,
+        "decoder": "closed candidate1 and all root/envelope/post-source evidence, development only"
+      }
+    },
+    "metadata_semantics": {
+      "job_version": "eq142-job-boundaries:2, since prior emitted descriptive v1 resource field is renamed; preserve historical v1 sources/records under their original source, do not relabel them.",
+      "runner_version": "eq142-development-runner:2, explicit metadata rename expected_committed_output_metadata_bytes -> expected_accepted_output_metadata_bytes. Existing report normal/failure schemas both version2; old records remain historical source-bound.",
+      "accepted_counter": "resource_admission.cumulative_accepted_output_metadata_bytes is accepted-only source-derived prefix/final value cross-checked with actual original outputs. No counter called committed-output metadata. Observed returned backend commits remain publication observation facts with full receipt refs.",
+      "scope": "No source-independent calculation/package/API/default version change. Existing OutputManifest/task/result/receipt codecs and publication-observation:1 remain unchanged.",
+      "identity_domain": "Preserve existing eq142-job1 hash domain for execution_scope_id: it identifies unchanged task-set/mode/budget, not the renamed descriptive wire fields. Version2 records differ and old records remain historical; no TaskManifest/result/product identity or formula changes."
+    },
+    "limits": "Prospective wrapper/metadata contract only. No official study, complete-root or performance acceptance."
+  }
+}

@@ -1,3 +1,9 @@
+## EQ142 dependency and execution evidence
+
+The opt-in development controller closes original supplied-input evidence before later R18 reuse, scheduling and resource decisions. [Usage and limits](docs/EQ142_CONTROLLER.md); [canonical story/status](https://github.com/atulsrivas1/equity-features/issues/476). Corrected source has separate portable review; full current native/platform/install/CI qualification and official timing remain pending. No calculation package, sequential default or measured optimization changes. Raw study records remain private by default.
+
+## Earlier delivery snapshots
+
 ## EQ140 supplied-input qualification
 
 Experimental workers0.1.0a14 supplies the eight intraday outputs and explicit structure/top-K/continuous/prior-close callbacks. [API](docs/api/SUPPLIED_INPUTS.md), [example](examples/supplied_intraday.py) and [current acceptance](https://github.com/atulsrivas1/equity-features/issues/474) describe the source-independent boundary and supported inputs. The completed [486-Job study](docs/benchmarks/eq140/EQ140_RESULTS.md) has48 nonwinning alternatives under its frozen wall/resource/tail gates; sequential remains default/fallback. Final source/package/main delivery acceptance is pending. Earlier snapshots below keep their historical scopes.

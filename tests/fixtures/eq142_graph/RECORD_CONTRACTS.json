@@ -1,0 +1,1107 @@
+{
+  "schema": "eq142-record-contracts:1",
+  "stage": "PRECODE_PROPOSAL_NOT_READY_OR_IMPLEMENTED",
+  "unknown_fields": "reject within each closed record; accepted external task/header codecs retain their existing contracts",
+  "wire": {
+    "encoding": "UTF8 JSON; sorted object keys; compact comma/colon separators; ensure_ascii=true; allow_nan=false; exactly one trailing LF",
+    "sha256": "64 lowercase hex characters",
+    "git_commit": "40 lowercase hex characters",
+    "id": "ASCII [a-z][a-z0-9_.:-]{0,127}",
+    "nanoseconds": "canonical decimal string in [0,9223372036854775807], no plus sign or leading zeros except zero",
+    "bounded_count": "JSON integer >=0 within the declared record bounds, never bool",
+    "unknown": "null plus an explicit closed disposition/reason, never a fabricated zero"
+  },
+  "limits": {
+    "graph_nodes_per_task": 512,
+    "graph_edges_per_task": 4096,
+    "graph_wire_bytes": 1048576,
+    "job_tasks": 16,
+    "job_partitions": 8,
+    "spans_per_owned_sample": 131072,
+    "spans_per_thread_collector": 32768,
+    "nesting_depth": 64,
+    "parent_reserved_spans": 16384,
+    "parent_reserved_trace_bytes": 8388608,
+    "trace_bytes_per_owned_sample": 67108864,
+    "trace_bytes_per_sidecar": 16777216,
+    "trace_files_including_temporaries": 64,
+    "future_and_task_maps": 16,
+    "sample_summary_bytes": 1048576,
+    "error_type_characters": 128,
+    "native_receipt_bytes": 16777216,
+    "native_rows_bytes": 15728640,
+    "native_samples": 60001,
+    "native_probe_errors": 1024,
+    "native_lifetime_processes": 256,
+    "product_store_bytes": 268435456,
+    "product_store_objects": 512,
+    "product_body_bytes": 1048576
+  },
+  "graph": {
+    "schema_value": "eq142-output-graph:1",
+    "fields": {
+      "schema": "constant schema_value",
+      "source": "source_binding record",
+      "task_sha256": "sha256 from original TaskManifest canonical domain",
+      "reuse_sha256": "sha256 from original reuse domain; not a new content/lifetime certificate",
+      "selected_headers": "exact ordered accepted FeatureHeader records from original TaskManifest",
+      "input_identity_disposition": "input_identity record",
+      "scope": "task_scope record",
+      "disposition": "qualified_intraday_description | conservative_unresolved",
+      "disposition_reason": "qualified_builtin | not_selected_family | unqualified_callback",
+      "nodes": "array<node>, unique IDs sorted lexicographically",
+      "edges": "array<edge>, unique (from,to,reason,contract) sorted lexicographically",
+      "limitations": "array<closed limitation IDs>, unique sorted"
+    },
+    "node_fields": {
+      "id": "id",
+      "kind": "supplied_input | configuration_gate | structural_admission | operand | ordered_state | output | result_join | resource_admission | publication_owner",
+      "scope_id": "sha256 binding task/reuse/context/config/input descriptor identity; not a reusable execution authority",
+      "outputs": "sorted unique selected feature IDs; empty for non-output owners when appropriate",
+      "predicate": "closed predicate ID",
+      "owner": "caller_supplied | pure_preparation | pure_calculation | task_result | coordinator | serialized_sink",
+      "capabilities": "sorted subset of [batch,full_history_replay]; empty for non-feature boundary nodes",
+      "source_anchor": "source_anchor record",
+      "ordering": "null or state_order record"
+    },
+    "edge_fields": {
+      "from": "existing node id",
+      "to": "existing node id",
+      "reason": "configuration | structural_admission | operand_readiness | ordered_recurrence | compatible_witness | result_join | resource_admission | publication_owner",
+      "contract": "closed accepted source/specification reference ID"
+    },
+    "node_ids": {
+      "common": [
+        "input:supplied",
+        "gate:configuration",
+        "gate:structural",
+        "gate:resource",
+        "join:result",
+        "owner:publication"
+      ],
+      "operand": "operand:anchored_closes | operand:true_ranges | operand:price_moments, present only when selected",
+      "state": "state:<feature_id> for selected EMA/RSI/ATR; internal chronological recurrence is not a self-edge in the coarse DAG",
+      "output": "output:<feature_id> for every selected feature"
+    },
+    "predicates": [
+      "supplied_bar_descriptor_only",
+      "valid_intraday_configuration",
+      "common_valid_structure",
+      "anchored_closes_from_anchor_through_target",
+      "predecessor_closes_successor_high_low_anchor_exception",
+      "last_n_scheduled_closes_from_epoch",
+      "ema_seed_then_ordered_full_epoch",
+      "rsi_n_plus_one_seed_then_ordered_full_epoch",
+      "atr_anchor_close_n_plus_one_seed_then_ordered_full_epoch",
+      "selected_band_from_unrounded_moments",
+      "position_requires_nonzero_variance",
+      "complete_selected_result_including_unavailable_cells_global_evidence_and_original_whole_call_error_policy",
+      "original_logical_resource_admission",
+      "original_serialized_publication_owner",
+      "unqualified_callback_boundary_only"
+    ],
+    "edge_template": {
+      "input_to_structure": [
+        "input:supplied",
+        "gate:structural",
+        "structural_admission"
+      ],
+      "each_selected_operand": "gate:configuration -> operand (configuration); gate:structural -> operand (structural_admission)",
+      "ema_rsi_atr": "operand -> selected state (operand_readiness); selected state -> selected output (ordered_recurrence)",
+      "bands": "operand:price_moments -> each selected band output (compatible_witness); never public upper/lower -> width/position",
+      "each_selected_output": "selected output -> join:result (result_join); unavailable cells still join as full typed cells",
+      "resource": "gate:resource -> join:result (resource_admission); actual pre-dispatch resource ordering is explicit in job record",
+      "publication": "join:result -> owner:publication (publication_owner)"
+    },
+    "conservative_boundary_record": "Only six common boundary nodes; input:supplied->gate:structural, gate:configuration->join:result, gate:structural->join:result, gate:resource->join:result, join:result->owner:publication. Non-resource/result/publication predicates are unqualified_callback_boundary_only. No state/operand/numerical-output nodes, no caller source inspection or purity/readiness/execution admission claim.",
+    "qualification": {
+      "binding": "Fresh owned process binds inspected installed baseline exports/code/module aliases/source bytes before instrumentation. Cooperative trusted-source qualification, not malicious tamper attestation or purity inferred from FunctionType.",
+      "qualified": "actual captured builtin callback object and current inspected module export/code/alias/source identity all unchanged",
+      "same_actual_object_caller_alias": "qualified",
+      "unknown_copied_wrapped_callback_with_unchanged_bound_baseline": "conservative_unresolved; no numerical refinement; preserve original WorkItem/pickling admission behavior",
+      "baseline_module_export_code_alias_or_file_changed_after_binding": "GraphSpecificationError source_mismatch",
+      "phase": "describe uninstrumented baseline before opt-in tracing modifies call aliases; trace provenance separately binds delegation/hooks",
+      "execution_authority": false
+    },
+    "errors": [
+      "invalid_schema",
+      "duplicate",
+      "unknown_endpoint",
+      "cycle",
+      "source_mismatch",
+      "unqualified_callback"
+    ],
+    "limitation_ids": [
+      "descriptive_only",
+      "caller_tuple_ownership_not_deep_sealing",
+      "declared_acquisition_not_fresh_body_attestation",
+      "batch_full_history_only",
+      "whole_call_errors_preserved",
+      "unknown_callback_no_refinement",
+      "task_graph_not_job_scheduler",
+      "no_update_restore_merge"
+    ]
+  },
+  "source_binding": {
+    "fields": {
+      "canonical_docs_head": "git_commit",
+      "package_build_sources": "closed object core/worker/io -> git_commit; do not relabel package builds as a new docs head",
+      "distributions": "exact closed six name/version pairs from accepted inputs",
+      "installed_module_sha256": "sorted module-name -> sha256; qualification scope explicitly listed",
+      "tool_sha256": "sorted relevant tool file names -> sha256",
+      "protocol_sha256": "sha256",
+      "expected_fixture_sha256": "sha256"
+    }
+  },
+  "input_identity": {
+    "fields": {
+      "declared_input_manifests": "exact original InputManifest records with original acquisition/revision/binding domains",
+      "body_verification": "generated_current_pickle_observation | canonical_typed_value_fixture_only | unverified_current_body",
+      "canonical_value_body_sha256": "nullable sha256; fixture-integrity identity only",
+      "observed_original_pickle_sha256": "nullable sha256; object-alias-sensitive observation, not guaranteed JSON reconstruction bytes",
+      "ownership": "caller_owned_original_tuple_reference",
+      "new_reuse_certificate": "constant false"
+    }
+  },
+  "task_scope": {
+    "fields": {
+      "population": "original ordered unique instrument IDs",
+      "context_json": "nullable exact IntradayContext.to_json string",
+      "context_sha256": "nullable original context.digest",
+      "config_sha256": "original ConfigSpec.digest",
+      "full_task_wire_sha256": "sha256 of original encode_task bytes",
+      "scope_id": "sha256(b'eq142-scope1\\0' + original encode_task bytes), descriptive task-bound identity only"
+    }
+  },
+  "source_anchor": {
+    "fields": {
+      "repository": "core | worker | io | python_runtime",
+      "commit_or_runtime": "git_commit or exact runtime version",
+      "file": "public repository-relative path or stdlib module name",
+      "symbol": "qualified symbol",
+      "file_sha256": "sha256"
+    }
+  },
+  "state_order": {
+    "fields": {
+      "policy": "chronological_full_epoch",
+      "anchor_index": "nonnegative integer",
+      "target_index": "integer >=anchor",
+      "minimum_seed_slots": "N for EMA; N+1 for RSI/ATR",
+      "incremental_capability": "constant false"
+    }
+  },
+  "job": {
+    "schema_value": "eq142-job-boundaries:2",
+    "fields": {
+      "schema": "constant schema_value",
+      "source": "source_binding",
+      "execution_scope_id": "descriptive hash of exact admitted task set/mode/budget",
+      "job_scopes": "array<job_scope>, maximum16",
+      "mode": "sequential | thread | process",
+      "configured_workers": "1|2|4|8 for selected measurement matrix",
+      "tasks": "ordered unique original task hashes",
+      "components": "array<component>, maximum16",
+      "partitions": "array<partition>, maximum8",
+      "resource_admission": "resource_admission record",
+      "barriers": "array<barrier>, maximum128",
+      "publication_owner": "publication_owner record",
+      "cancelled_or_undispatched": "array<task_disposition>, maximum16; task hashes unique",
+      "limitations": "sorted subset of job.limitation_ids"
+    },
+    "barrier_kinds": [
+      "resource_before_dispatch",
+      "population_component_order",
+      "all_dispatched_worker_outcomes_terminal",
+      "pool_shutdown_before_coordinator_validation",
+      "complete_task_result_before_publication",
+      "serialized_backend_owner"
+    ],
+    "expected_generic_population_fixture": {
+      "populations": [
+        [
+          "A"
+        ],
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "D"
+        ]
+      ],
+      "components": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "actual_partitions_at_workers4": 2,
+      "single_symbol_intraday_qualification": false
+    },
+    "limitation_ids": [
+      "descriptive_only",
+      "source_required_not_observed",
+      "global_worker_shutdown_barrier",
+      "terminal_not_successful",
+      "backend_contract_only",
+      "logical_not_physical_resource_enforcement"
+    ],
+    "joins": "Every task belongs to exactly one job_scope/component/partition; each component belongs to one partition; all references must exist, memberships agree, barrier graph acyclic. execution_scope_id=sha256(b\"eq142-job1\\0\" + canonical JSON of mode/configured_workers/tasks/resource budget). Job records distinguish source-required barriers from observed outcomes; no fabricated executed success.",
+    "barrier_policy": "Pool shutdown and global_worker_shutdown_barrier apply only when mode is thread/process. Sequential has no executor/pool and omits those requirements. Resource, component order, all selected outcomes, full task result and serialized publication ownership remain. This source-correct clarification resolves initial implementation review EQ142GRAPH02; no scheduler or numerical behavior changed."
+  },
+  "trace": {
+    "schema_value": "eq142-execution-trace:1",
+    "fields": {
+      "schema": "constant schema_value",
+      "sample_id": "id",
+      "source": "source_binding",
+      "control": "uninstrumented_A | instrumented_B",
+      "series": "eq142_admitted_control | eq142_owned_runner_e2e",
+      "profile": "one of exact six protocol profile IDs",
+      "mode": "sequential | thread | process",
+      "degree": "1|2|4|8",
+      "clock_disposition": "constant local_monotonic_durations_and_parent_causal_bounds",
+      "clocks": "array<clock>, actual processes only",
+      "timelines": "array<timeline>, unique stable process/thread identity",
+      "reservations": "array<reservation>, preallocated parent/delegate invocation identities",
+      "spans": "retained_fragment_set; validate every referenced exact body and recompute all local/global ID/count/byte joins; do not duplicate up to64MiB into1MiB summary",
+      "counters": "array<counter>, sorted operation/scope",
+      "parent_relations": "array<causal_relation>, actual dispatch/wait/result/join only",
+      "actual_job_boundaries": "job record; if retained separately use wire_reference codec eq142_job and validate referenced body",
+      "product_outcomes": "ordered array<product_outcome>, maximum16",
+      "resource_evidence": "resource_evidence record",
+      "unknown_intervals": "array<unknown_interval>, maximum4096",
+      "global_numeric_critical_path_ns": "constant null",
+      "native_ipc_encoded_bytes": "constant null unless separately qualified direct capture is prospectively selected",
+      "complete": "bool; false rejects attributed-cost acceptance",
+      "failure_reason": "null or closed trace failure code",
+      "sidecar_bytes": "actual bounded encoded bytes",
+      "limitations": "sorted subset of trace.limitation_ids",
+      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping"
+    },
+    "failure_codes": [
+      "source_mismatch",
+      "hook_alias_mismatch",
+      "unknown_invocation",
+      "missing_sidecar",
+      "duplicate_sidecar",
+      "unknown_timeline",
+      "invalid_nesting",
+      "invalid_clock",
+      "unterminated_span",
+      "event_limit",
+      "byte_limit",
+      "file_limit",
+      "map_limit",
+      "recursive_bookkeeping",
+      "count_mismatch",
+      "restoration_failure",
+      "collector_error"
+    ],
+    "unknown_reasons": [
+      "not_selected_hook",
+      "source_constructor_task_label_unavailable",
+      "native_ipc_not_captured",
+      "allocator_copy_not_captured",
+      "cross_process_alignment_unqualified",
+      "collector_final_write_outside_trace",
+      "composite_parent_wait",
+      "collector_hook_bookkeeping_unseparated"
+    ],
+    "operations": [
+      "supervisor.inputs",
+      "supervisor.pickle_size",
+      "supervisor.partition",
+      "supervisor.validate_results",
+      "supervisor.admit_entities",
+      "manifest.task_digest",
+      "manifest.reuse_digest",
+      "manifest.canonical",
+      "manifest.encode_task",
+      "manifest.encode_output",
+      "supplied.admit",
+      "supplied.result_identity",
+      "worker.intraday_context",
+      "intraday.validate_config",
+      "intraday.admit_facts",
+      "intraday.prepare",
+      "intraday.prepare_operand",
+      "intraday.compute",
+      "intraday.indicator",
+      "intraday.band_values",
+      "config.to_json",
+      "config.digest",
+      "context.to_json",
+      "context.digest",
+      "sdk.prepare_publication",
+      "sdk.encode_result",
+      "sdk.decode_result",
+      "sdk.encode_receipt",
+      "sdk.publish",
+      "publisher.submit",
+      "publisher.inner_submit",
+      "publisher.drain",
+      "publisher.inner_drain",
+      "sink.lookup",
+      "sink.read",
+      "pool.thread_submit",
+      "pool.process_submit",
+      "future.result",
+      "parent.wait",
+      "delegate.original_partition",
+      "trace.bind_labels",
+      "trace.install",
+      "trace.restore",
+      "trace.bookkeeping",
+      "pool.thread_shutdown",
+      "pool.process_shutdown",
+      "sink.commit"
+    ],
+    "count_policy": "attempts=returned+rejected for complete traces; nested operations remain separate counts, never summed as unique allocations or physical copies",
+    "exclusive_policy": "inclusive minus union of contained child intervals on exactly the same actual process/thread timeline; reject inconsistent or negative closure; no worker-to-wall summation Parent residual contains unseparated child-hook labeling/locking/serialization/counter work outside selected child intervals. Global A/A overhead bounds do not make per-stage residual pure product cost. Do not claim pure calculation-exclusive cost or subtract a scalar overhead.",
+    "parity_policy": "A/B complete product outcome parity plus independent B trace/call/byte expectations; no literal untraced/traced timing or event equality",
+    "limitation_ids": [
+      "local_clock_only",
+      "no_global_numeric_critical_path",
+      "native_ipc_not_captured",
+      "physical_allocations_not_captured",
+      "sampled_resource_peaks_not_enforced",
+      "observer_outside_owned_job",
+      "backend_contract_only",
+      "bookkeeping_not_product_purity",
+      "source_construction_labels_may_be_unavailable",
+      "composite_wait_not_exclusive_ipc",
+      "selected_span_exclusive_includes_unseparated_hook_bookkeeping"
+    ]
+  },
+  "clock": {
+    "fields": {
+      "process_ordinal": "bounded local ordinal",
+      "name": "perf_counter",
+      "implementation": "actual get_clock_info string",
+      "monotonic": "true required",
+      "adjustable": "false required",
+      "reported_resolution_seconds": "canonical decimal string",
+      "qpc_frequency_hz": "nullable positive integer",
+      "cross_process_raw_ticks_qualified": "constant false"
+    }
+  },
+  "timeline": {
+    "fields": {
+      "id": "id",
+      "process_ordinal": "bounded local ordinal",
+      "thread_ordinal": "bounded process-local ordinal",
+      "process_startup_nonce": "sample-local primitive ID",
+      "thread_startup_nonce": "sample-local primitive ID",
+      "clock_process_ordinal": "existing clock process ordinal"
+    }
+  },
+  "reservation": {
+    "fields": {
+      "id": "sample-unique id",
+      "kind": "parent | delegate_invocation",
+      "planned_task_hashes": "ordered task hashes",
+      "max_spans": "preallocated bounded count",
+      "max_bytes": "preallocated bounded count",
+      "final_file": "sample-local basename",
+      "temporary_file": "sample-local basename",
+      "consumed_spans": "bounded count <=max_spans",
+      "consumed_bytes": "bounded count <=max_bytes"
+    },
+    "allocation": "parent16384 spans/8MiB; remaining114688 spans/56MiB divided by actual planned invocation count with integer floor; per-thread32768 and per-file16MiB caps; no implicit allowance transfer; max16 sequential task invocations or8 original thread/process partitions"
+  },
+  "span": {
+    "fields": {
+      "id": "sample-unique id",
+      "parent_id": "nullable existing span ID",
+      "reservation_id": "existing reservation ID",
+      "timeline_id": "existing stable actual timeline ID",
+      "operation": "closed operation",
+      "scope_id": "primitive prebound stage/partition/task scope ID",
+      "task_sha256": "nullable prebound task hash; never calculate from a hooked getter to label itself",
+      "start_ns": "nanoseconds",
+      "end_ns": "nanoseconds >=start on same timeline",
+      "inclusive_ns": "nanoseconds exactly end-start",
+      "exclusive_ns": "nanoseconds from validated same-timeline child interval union",
+      "status": "returned | rejected",
+      "error_type": "null on returned; rejected requires ASCII dotted qualified type identifier <=128characters, never a dictionary/message/traceback",
+      "byte_observation": "returned_encoded_bytes | observed_pickle_size_check | source_guaranteed_ascii_json_length | unavailable",
+      "observed_bytes": "nullable bounded count consistent with observation"
+    }
+  },
+  "counter": {
+    "fields": {
+      "operation": "closed operation",
+      "scope_id": "prebound scope ID or explicit unknown stage ID",
+      "attempts": "bounded count",
+      "returned": "bounded count",
+      "rejected": "bounded count",
+      "byte_observation": "same closed observations as span",
+      "returned_observed_bytes": "nullable bounded count; never infer task bytes from 64-character digest length",
+      "unique_physical_allocation_bytes": "constant null"
+    }
+  },
+  "causal_relation": {
+    "fields": {
+      "id": "id",
+      "kind": "dispatch | parent_wait | result_join | job_barrier | publication_join",
+      "parent_timeline_id": "existing parent timeline",
+      "invocation_id": "nullable actual reservation ID",
+      "task_hashes": "actual related tasks",
+      "parent_start_ns": "nanoseconds",
+      "parent_end_ns": "nanoseconds >=start",
+      "child_timeline_ids": "actual related local timelines",
+      "cross_process_interval_subtraction": "constant false",
+      "status": "returned | rejected; actual parent operation outcome, never inferred child success"
+    }
+  },
+  "job_scope": {
+    "fields": {
+      "id": "id",
+      "job_id": "exact original TaskManifest.job_id string",
+      "generation_id": "exact original TaskManifest.generation_id string",
+      "destination_scope": "exact original TaskManifest.destination_scope string",
+      "task_hashes": "nonempty list of unique known original task hashes; every task belongs to exactly one scope"
+    }
+  },
+  "component": {
+    "fields": {
+      "id": "id",
+      "population": "sorted unique instrument IDs; exact transitive union of member populations",
+      "ordered_task_hashes": "nonempty list of unique known task hashes in original partition_tasks component ordering",
+      "partition_id": "existing partition ID"
+    }
+  },
+  "partition": {
+    "fields": {
+      "id": "id",
+      "ordinal": "integer 0..7, contiguous unique original ordinals",
+      "component_ids": "ordered existing component IDs, each component belongs to exactly one partition",
+      "ordered_task_hashes": "nonempty list of unique known original Partition.items task hashes"
+    }
+  },
+  "barrier": {
+    "fields": {
+      "id": "id",
+      "kind": "one of job.barrier_kinds",
+      "task_hashes": "ordered subset of existing job tasks",
+      "partition_ids": "ordered subset of existing partition IDs",
+      "predecessor_ids": "ordered existing barrier IDs; no cycles",
+      "owner_id": "coordinator | existing publication_owner ID | existing component ID",
+      "evidence": "source_required | observed_satisfied | observed_failed | not_reached",
+      "source_anchor": "source_anchor record"
+    }
+  },
+  "task_disposition": {
+    "fields": {
+      "task_sha256": "existing job task hash",
+      "state": "computed | failed | cancelled | undispatched",
+      "reason": "null or original_reason record",
+      "result_wire": "ordered array<wire_reference>; empty for no returned results",
+      "spill_wire": "nullable wire_reference from original SpillReference canonical encoding",
+      "output_wire": "nullable wire_reference from original encode_output",
+      "commit_state": "not_attempted | committed | committed_then_accounting_rejected | unknown",
+      "evidence": "source_required | observed"
+    }
+  },
+  "original_reason": {
+    "fields": {
+      "domain": "sink | command | supervisor",
+      "value": "exact existing SinkErrorCode.value or CommandErrorCode.value at source binding; supervisor permits only CALCULATION_FAILED or CANCELLED; do not translate case or invent a successful disposition"
+    }
+  },
+  "publication_owner": {
+    "fields": {
+      "id": "id",
+      "destination_scopes": "sorted unique original destination_scope strings",
+      "job_scope_ids": "unique ordered existing job_scope IDs, exactly matching job_scopes record order",
+      "writer_mode": "constant serialized_writer",
+      "backend_owners": "constant integer 1",
+      "durability": "constant backend_contract_only"
+    }
+  },
+  "resource_budget": {
+    "fields": {
+      "max_tasks": "positive integer with unchanged accepted ResourceBudget validation",
+      "workers": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_cpu_slots": "positive integer with unchanged accepted ResourceBudget validation",
+      "compute_threads": "positive integer with unchanged accepted ResourceBudget validation",
+      "backend_threads": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_in_flight": "positive integer with unchanged accepted ResourceBudget validation",
+      "io_slots": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_input_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_resident_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_task_result_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_task_transport_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_total_result_bytes": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_result_cells": "positive integer with unchanged accepted ResourceBudget validation",
+      "max_evidence_rows": "positive integer with unchanged accepted ResourceBudget validation"
+    }
+  },
+  "resource_admission": {
+    "fields": {
+      "budget": "resource_budget",
+      "evidence": "source_derived_preflight | actual_supervisor_admitted | actual_supervisor_rejected | not_executed",
+      "initial_reserved_resident_bytes": "nullable bounded_count",
+      "trace_reserved_bytes": "constant integer 67108864 in frozen measurement protocol",
+      "whole_job_sampled_rss_cap_bytes": "constant integer 1073741824",
+      "additional_host_memory_reserve_bytes": "constant integer 2147483648",
+      "cpu_host_reserve_slots": "constant integer 2",
+      "capacity": "nullable capacity record",
+      "original_reason": "nullable original_reason",
+      "physical_enforcement": "constant false",
+      "cumulative_accepted_output_metadata_bytes": "nullable bounded_count; source-derived accepted-only output metadata prefixes; actual returned backend commits are distinct publication facts"
+    }
+  },
+  "capacity": {
+    "fields": {
+      "allowed_cpu_ids": "sorted unique nonnegative OS processor ordinals in observed affinity domain",
+      "allowed_cpu_domain": "exact OS affinity/group domain identifier, not physical core identity",
+      "free_memory_bytes": "bounded_count",
+      "free_storage_bytes": "bounded_count",
+      "study_storage_reserve_bytes": "constant integer 77309411328",
+      "additional_storage_reserve_bytes": "constant integer 8589934592",
+      "raw_evidence": "wire_reference"
+    }
+  },
+  "wire_reference": {
+    "fields": {
+      "codec": "encode_task | encode_result | encode_output | encode_receipt | diagnostic_snapshot | spill_reference | native_receipt | capacity_receipt | eq142_job | eq142_product_projection | eq142_local_fragment",
+      "sha256": "sha256 of exact retained original encoded bytes",
+      "bytes": "bounded_count",
+      "retained_name": "ASCII basename matching [a-zA-Z0-9_.-]{1,128}; no paths. Product codecs resolve only in the fixed study-owned product-object directory; other codecs resolve only in the fixed sample directory. Codec determines scope; no caller-selected root or path. Product names are exactly sha256.json."
+    },
+    "validation": "Retain and validate exact complete codec body, byte length and SHA, not just a producer hash. Content-addressed proof deduplication is not runtime calculation reuse or a physical-copy/IPC measurement. Existing body mutation, unexpected members, symlinks and bound overflow reject; never overwrite."
+  },
+  "diagnostic_projection": {
+    "fields": {
+      "task_sha256": "nullable original hash",
+      "intent_sha256": "original hash",
+      "family": "original accepted TaskDiagnostic.family",
+      "family_sha256": "original hash",
+      "partition_sha256": "original hash",
+      "status": "original DiagnosticStatus.value at source binding",
+      "reason": "original TaskDiagnostic.reason string or null; validated by unchanged accepted diagnostics codec"
+    }
+  },
+  "product_outcome": {
+    "fields": {
+      "task_sha256": "existing task hash",
+      "disposition": "task_disposition",
+      "task_wire": "wire_reference with encode_task codec",
+      "results": "ordered array<wire_reference> with encode_result codec; full cells, quality, evidence, headers, config/revision/metadata retained",
+      "output": "nullable wire_reference with encode_output codec",
+      "receipt": "nullable wire_reference with encode_receipt codec",
+      "committed_lookup": "not_applicable | committed_matching_receipt | absent | original_failure",
+      "readback_results": "ordered array<wire_reference> with encode_result codec; must exactly match committed results on success",
+      "diagnostics": "ordered array<diagnostic_projection>",
+      "raw_diagnostics": "wire_reference with diagnostic_snapshot codec"
+    },
+    "parity": {
+      "compare": "Exact ordered stable product projection: all fields above except raw_diagnostics reference; complete task/result/output/receipt bytes, original disposition/reason/commit outcome and stable diagnostics required. Retain raw diagnostics separately.",
+      "diagnostic_projection_fields": [
+        "task_sha256",
+        "intent_sha256",
+        "family",
+        "family_sha256",
+        "partition_sha256",
+        "status",
+        "reason"
+      ],
+      "diagnostic_volatile_exclusions": [
+        "attempt",
+        "timings",
+        "elapsed_ns"
+      ],
+      "trace_and_native_exclusions": [
+        "sample IDs",
+        "process/thread identities",
+        "trace spans/counters",
+        "native measurements"
+      ],
+      "never_exclude": [
+        "values",
+        "nulls",
+        "status",
+        "quality counts/reasons",
+        "evidence",
+        "headers",
+        "config/context/revision identity",
+        "task/result/output/receipt identity",
+        "committed lookup/readback",
+        "original typed failure or cancellation"
+      ],
+      "raw_byte_policy": "No raw diagnostic timing parity claim. Original wire references retain actual bytes; projection is not a new cache/reuse certificate."
+    }
+  },
+  "native_accounting": {
+    "fields": {
+      "user": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "kernel": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "period_user": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "period_kernel": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "page_faults": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "total_processes": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "active_processes": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts",
+      "terminated_by_limit": "nonnegative integer native Job accounting value; user/kernel/period times are 100ns ticks, other fields counts"
+    }
+  },
+  "native_sample": {
+    "fields": {
+      "observer_elapsed_ns": "nanoseconds; observer local timeline only",
+      "owned_process_count": "bounded_count",
+      "concurrent_aggregate_rss_bytes": "bounded_count",
+      "concurrent_native_thread_count": "nullable bounded_count; null requires probe_error",
+      "disposition": "complete | probe_error"
+    }
+  },
+  "probe_error": {
+    "fields": {
+      "code": "SNAPSHOT | PROCESS_ENUMERATION | MISSING_OWNED_PID | OPEN_PROCESS | MEMBERSHIP_RACE | RSS_PROBE | THREAD_PROBE | JOB_QUERY | NONZERO_DESCENDANTS | COUNTER_REVERSED",
+      "winerror": "nullable nonnegative integer",
+      "process_ordinal": "nullable bounded_count; raw PID only in retained native receipt"
+    }
+  },
+  "resource_evidence": {
+    "fields": {
+      "native_receipt": "wire_reference",
+      "before_phase": "nullable native_accounting",
+      "after_phase": "nullable native_accounting",
+      "final_accounting": "native_accounting; active_processes must be zero for acceptance",
+      "selected_user_ticks_100ns": "canonical nonnegative decimal string; whole final Job for e2e or after-before for admitted control",
+      "selected_kernel_ticks_100ns": "canonical nonnegative decimal string; same scope as selected_user_ticks",
+      "selected_wall_ns": "nanoseconds from declared protocol class boundaries",
+      "samples": "native_samples_reference; original exact native receipt retains bounded array, summary never duplicates receipt samples",
+      "aggregate_sampled_peak_rss_bytes": "bounded_count; maximum simultaneous aggregate samples, not sum of per-process maxima",
+      "aggregate_sampled_peak_native_threads": "nullable bounded_count; maximum sampled total, not physical cores",
+      "probe_errors": "bounded array<probe_error>, maximum1024; any error rejects qualification",
+      "observer_scope": "constant outside_owned_job_in_declared_host_reserve"
+    },
+    "native_thread_method": {
+      "selected": "New development sampler extension in tools/eq142_native.py; Windows CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS), Process32FirstW/Process32NextW, PROCESSENTRY32W.cntThreads joined only to verified owned-Job member PIDs. No command lines, executable paths or unrelated process details persisted.",
+      "qualification": "Before timing, test successful process/thread observations, invalid snapshot/enumeration, missing-member race, membership, descendants and cleanup. Original supplied_native.py does not already provide thread counts. Missing/racing measurement is an explicit probe error, never zero or configured degree. A positive signaled retained owned process handle (WaitForSingleObject WAIT_OBJECT_0) may prove termination and zero current execution threads; retain observed_terminated/terminal_wait/snapshot_threads explicitly. This is a terminal proof, never a missing/live/racing measurement default. Unknown/live absent member, open, membership, snapshot, enumeration or wait errors still reject qualification. Snapshot and final handle observations are not atomic and may miss transient peaks.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-viewing-processes",
+        "https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/ns-tlhelp32-processentry32w",
+        "https://learn.microsoft.com/en-us/windows/win32/api/tlhelp32/nf-tlhelp32-createtoolhelp32snapshot",
+        "https://learn.microsoft.com/en-us/windows/win32/procthread/terminating-a-process",
+        "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject"
+      ],
+      "limitations": "Sampled counts can miss transient thread/process peaks. Membership and snapshot are not atomic. Observer CPU/RSS is excluded from owned-Job accounting; whole-run wall includes observation/report completion. No physically enforced memory/CPU or globally idle-host claim."
+    }
+  },
+  "unknown_interval": {
+    "fields": {
+      "reason": "one of trace.unknown_reasons",
+      "timeline_id": "nullable existing timeline ID",
+      "scope_id": "prebound scope ID",
+      "operation": "nullable trace.operations member",
+      "start_ns": "nullable nanoseconds",
+      "end_ns": "nullable nanoseconds; paired bounds both null or same-timeline end>=start",
+      "observation": "not_instrumented | composite_interval | unqualified_alignment | outside_trace",
+      "numeric_exclusive_cost_ns": "constant null"
+    }
+  },
+  "local_trace_fragment": {
+    "schema_value": "eq142-local-trace-fragment:2",
+    "fields": {
+      "schema": "constant schema_value",
+      "reservation_id": "primitive ASCII [a-z][a-z0-9_.:-]{0,63}, required even for an empty fragment",
+      "complete": "bool; false forbids attributed-cost acceptance",
+      "failure_reason": "null or trace.failure_codes member",
+      "spans": "bounded array<span> within this invocation/collector reservation",
+      "counters": "array<counter>, maximum1024 unique keys; list required even for zero spans; exact operation/scope/byte joins",
+      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping",
+      "process_binding": "fragment_process_binding",
+      "clock": "fragment_clock",
+      "timeline_bindings": "array<fragment_timeline_binding>, maximum64, exact referenced local timeline IDs",
+      "owned_process_witness": "null or closed development-only writer reference {codec=eq142_owned_process_witness,sha256=64lowerhex,bytes=1..4096,retained_name=exact parent/delegate filename}; no root codec expansion"
+    },
+    "limits": "Each fragment independently closes local event IDs, same-timeline parent relations, acyclic depth<=64, interval union/exclusive identity and counter/byte joins. It is not the complete source/product/native sample envelope. Encoded sidecar bytes are bounded separately from Python heap; actual whole-Job RSS remains mandatory. Partial raw evidence is retained on rejection. Shared actual timeline identities remain stable across reused invocations.",
+    "publication": "Exclusive temporary creation and exclusive hard-link final publication; never replace an existing final file. Both temporary/final names count toward the file bound; no physical durability claim."
+  },
+  "fragment_process_binding": {
+    "fields": {
+      "pid": "positive actual OS process ID, never bool",
+      "process_startup_nonce": "32 lowercase hex process startup nonce; not PID alone"
+    }
+  },
+  "fragment_clock": {
+    "fields": {
+      "name": "constant perf_counter",
+      "implementation": "actual get_clock_info implementation string,1..256characters",
+      "monotonic": "constant true",
+      "adjustable": "constant false",
+      "reported_resolution_seconds": "positive canonical decimal string from actual nominal metadata; not empirical resolution",
+      "qpc_frequency_hz": "nullable positive integer; null means not separately observed",
+      "cross_process_raw_ticks_qualified": "constant false"
+    },
+    "join": "Full sample assigns global process ordinals from actual retained process bindings; local fragments do not invent a shared epoch or numeric global critical path."
+  },
+  "fragment_timeline_binding": {
+    "fields": {
+      "id": "stable process/thread nonce ID matching the process binding and local ordinal",
+      "thread_ordinal": "integer0..63, never bool",
+      "thread_startup_nonce": "32 lowercase hex",
+      "native_thread_id": "positive actual native thread ID, never bool"
+    },
+    "join": "Every local span references exactly one retained binding; ordinals/nonces stay stable across reused invocations; full sample preserves identity and validates owned-process witnesses. Native thread IDs can recycle; nonce+actual lifetime remains distinct."
+  },
+  "retained_fragment_set": {
+    "fields": {
+      "representation": "constant retained_fragments",
+      "fragments": "array<fragment_reference>, maximum17; actual parent plus planned delegate invocations, never fabricated missing outcomes",
+      "total_span_count": "bounded_count <=131072; exact sum and sample-unique event IDs",
+      "processes": "map keyed by actual32hex startup nonce; values closed {pid,clock}, exact local fragment bindings",
+      "timelines": "map keyed by actual timeline ID; values closed {process_startup_nonce,id,thread_ordinal,thread_startup_nonce,native_thread_id}",
+      "counters": "array<counter>, maximum2048; exact sum of independently validated local counters",
+      "exclusive_cost_disposition": "constant exclusive_of_observed_spans_includes_unseparated_hook_bookkeeping",
+      "global_numeric_critical_path_ns": "constant null",
+      "native_ipc_encoded_bytes": "constant null"
+    },
+    "validation": "No duplicate invocation/file/span IDs; exact expected reservation list, actual file byte/hash/body validation, same process nonce/PID/clock identity and stable timeline joins. This retained representation does not establish complete sample, observed barriers, native ownership or product acceptance."
+  },
+  "fragment_reference": {
+    "fields": {
+      "reservation_id": "existing preallocated unique invocation ID",
+      "codec": "constant eq142_local_fragment",
+      "sha256": "sha256 of retained exact sidecar bytes",
+      "bytes": "bounded_count <=reservation.max_bytes",
+      "retained_name": "sample-local basename; no paths",
+      "span_count": "bounded_count <=reservation.max_spans; exact referenced body length",
+      "owned_process_witness": "null or development-only writer-bound owned_process_witness reference from exact schema2 body; closed codec/sha256/bytes/retained_name, <=4096 witness bytes"
+    }
+  },
+  "native_samples_reference": {
+    "fields": {
+      "representation": "constant retained_native_receipt",
+      "sample_count": "bounded_count <=60001; exact native_receipt.samples length"
+    },
+    "validation": "Resolve enclosing resource_evidence.native_receipt, validate its full body <=16MiB and recompute sampled aggregates. Its sample+probe-error rows reserve<=15MiB actual compact ASCII JSON bytes including array delimiters/separators; <=1024 probe errors and <=256 distinct lifetime observed PIDs. Bound failure retains accepted rows/rejected-row size and owned cleanup evidence, rejects qualification. Native records remain external-observer data; no physical heap guarantee."
+  },
+  "delegate_resource_admission": {
+    "fields": {
+      "plan_pickle_bytes": "bounded_count <=1048576; observed Python plan representation only",
+      "per_invocation_spec_extra_pickle_bytes": "ordered bounded array<=16; max(0,actual proposed partial/function+arguments pickle size minus original function+arguments pickle size), prospective submitted_ns int64 maximum and telemetry enabled; per proposed representation<=16MiB",
+      "logical_spec_resident_reservation_bytes": "2*plan_pickle_bytes+3*sum(per_invocation_spec_extra_pickle_bytes); conservative logical representations, not physical memory",
+      "combined_logical_resident_bytes": "original initial logical resident+logical spec allowance+expected committed output metadata+owned witness logical allowance; <=unchanged960MiB logical cap before dispatch",
+      "trace_reserved_bytes": "constant67108864",
+      "whole_job_sampled_rss_cap_bytes": "constant1073741824",
+      "native_ipc_encoded_bytes": "constant null",
+      "physical_enforcement": "constant false",
+      "owned_witness_population": "bounded_count <=17; A native1/B native1+actual admitted reservation count;0 when disabled",
+      "owned_witness_encoded_max_bytes": "4096*owned_witness_population; encoded bound, not heap allocation",
+      "owned_witness_logical_reservation_bytes": "3*owned_witness_encoded_max_bytes; declared encoded representations only",
+      "expected_accepted_output_metadata_bytes": "bounded_count from exact original accepted output bodies; zero for nonpublishing class; actual totals renewed independently; backend commits distinct"
+    },
+    "timing": "All instrumented plan/hash/source-binding/label/spec serialization/admission and copies belong within selected B phase. Source-derived original preflight does not admit or replace original supervisor validation/errors; actual outcome resident/input totals must match independently. Do not describe encoded logical reservations as actual physical copies, native IPC or pure cost."
+  },
+  "qualification_code_counts": {
+    "purpose": "Independent development-only comparison of actual Python code call/return events against alias-hook aggregate call and returned-byte observations. Not enabled in official timing; no latency, exception-class, physical-copy/native IPC or global critical-path authority.",
+    "sources": [
+      "https://docs.python.org/3.12/library/sys.html#sys.setprofile",
+      "https://docs.python.org/3.12/library/threading.html#threading.setprofile"
+    ],
+    "mechanism": "Bind approved original code objects before hooks; use sys.setprofile for this thread, threading.setprofile only for future owned pool threads and explicit child-local setup for spawn. Restrict events to original supervisor/partition roots; cross known wrapper frames but exclude tool bookkeeping frames. Capture operation call entries and typed return lengths directly from code events without reading hook spans/counters. No thread timing/context-switch attribution.",
+    "fields": {
+      "schema": "constant eq142-code-count-qualification:1",
+      "complete": "bool; false rejects count qualification",
+      "failure_reason": "null | observer_error | entry_limit | frame_limit | profiler_interference | unbalanced_events",
+      "counters": "sorted array<code_count>, <=43 approved code identities (42 hooks+original delegate, excluding3 manual terminal observations)",
+      "completion_classification": "constant return_events_do_not_classify_exception",
+      "elapsed_cost_disposition": "constant qualification_only_no_timing_authority"
+    },
+    "code_count_fields": {
+      "operation": "prebound inspected operation or delegate.original_partition",
+      "call_entries": "bounded_count <=131072 total across operations",
+      "return_events": "bounded_count; matching entered Python frames only",
+      "typed_byte_returns": "bounded_count; actual declared bytes/int/ASCII return types only",
+      "typed_returned_bytes": "bounded_count <=9007199254740991; lengths/sizes, not allocation/native IPC"
+    },
+    "limits": "<=4096 active selected frames, <=128 ancestry search depth, <=131072 total selected call entries, <=64KiB encoded record per observer, no frame objects retained, owned qualification-only profile file namespace<=64 including partials. Observer failures preserve original product return/exception and reject qualification; do not replace existing profiler hooks.",
+    "caveats": "Python profile return event also occurs on exception and may carry None, indistinguishable from legitimate None return. Do not invent returned/rejected classification from it. Original typed exception identity and hook error states require separate controls. This observer checks aggregate operation counts/actual typed return byte observations, not per-task labels or source-independent mathematics; those retain separate fixtures/joins. Scheduling-dependent waits and telemetry-encoded sizes must not be frozen from a different execution as exact constants.",
+    "study_gate": "Qualification uses this extra observer only in explicit development controls; it is not part of frozen A/A timings. Prospective source invariants and dynamic scheduling/telemetry byte expectations remain necessary for official sample acceptance. No profiler-generated numbers alone grant performance acceptance."
+  },
+  "development_supervisor_outcome": {
+    "purpose": "Retain actual original SupervisorOutcome scalar, row and task/timing ledgers immediately after return and before product-proof/parity/trace checks. This summary does not replace full original codec bodies or grant root/full-sample acceptance.",
+    "fields": {
+      "schema": "constant eq142-supervisor-outcome:1",
+      "evidence": "constant actual_original_supervisor_return",
+      "mode": "sequential | thread | process",
+      "cancelled": "actual bool; never inferred from task reason",
+      "row_ledger": "original ordered array<=16 of [task_sha256, nonnegative row count]; do not sort or repair before retention",
+      "distinct_reuse_rows": "actual nonnegative original scalar",
+      "admitted_input_bytes": "actual nonnegative original scalar; compare separate source-derived reservation",
+      "reserved_resident_bytes": "actual original initial logical resident scalar; not physical memory or committed-output total",
+      "result_bytes": "actual original validated result content byte scalar; compare complete retained encode_result body lengths",
+      "tasks": "original ordered array<=16 of task summary records; no result data replaced by hashes"
+    },
+    "task_fields": {
+      "task_sha256": "actual original hash",
+      "reason": "original string or null, retained before closed-vocabulary verification",
+      "result_count": "null for original results=None; integer0 for actual empty tuple; otherwise exact tuple length <=64",
+      "output_present": "actual bool",
+      "spill": "null or full original SpillReference run_id/task_sha256/files metadata; no spill-body qualification",
+      "timings": "ordered array<=3 of actual stage/elapsed_ns/probes; elapsed_ns canonical int64 decimal string or null; zero remains zero"
+    },
+    "verification": "After retention, reject unknown fields/types/IDs/counts; compare exact input-derived sorted row/task memberships, existing reuse identity groups, original admission values, result proof counts/byte totals, output/spill/reason joins. Result arithmetic/readiness remains separately verified by original independent fixtures.",
+    "publication": "Accepted output metadata byte sum can be calculated from retained encode_output bodies and checked against the logical cap. It is not all backend commits, proof of each commit-time admission, absent commit or rollback. Unknown/partial commit retains its original disposition.",
+    "failure": "Proof-store/codec/parity/trace/source failure leaves the bounded actual supervisor summary if already written. Never claim full product retention when codec proofs are absent. Pre-return original exceptions remain exceptions; no successful outcome is invented. Spill is outside the study and rejects qualification after its reference metadata is retained.",
+    "wire": "Development-only supervisor.json <=65536 bytes via existing exclusive bounded writer. Codec eq142_supervisor_outcome is not accepted by the closed root wire_reference enum; future root embedding needs explicit schema validation and joins.",
+    "math_and_defaults": "No equation, input readiness, package, default, cancellation/publication or resource-budget behavior changes. This is external evidence tooling only."
+  },
+  "native_process_witness": {
+    "purpose": "Development-only positive current-process membership in the exact owned named Windows Job, joined to OS process creation identity and the actual trace startup nonce. Standalone qualification first; no complete resource/sample or all-descendant proof.",
+    "sources": [
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency"
+    ],
+    "fields": {
+      "schema": "constant eq142-owned-process-witness:1",
+      "job_name": "exact Local\\equity-feature-supplied- followed by32 lowercase hex; must equal external owned Job receipt name",
+      "pid": "positive actual GetProcessId(GetCurrentProcess()) integer, matches actual trace PID",
+      "process_startup_nonce": "actual existing trace process nonce32 lowercase hex",
+      "creation_filetime_100ns_since_1601_utc": "positive canonical unsigned64 decimal string from actual GetProcessTimes creation FILETIME; not a monotonic timestamp or execution duration",
+      "is_member": "constant true from successful IsProcessInJob(current_process, exact_named_job)",
+      "capture_start_ns": "local monotonic int64 decimal string before API capture",
+      "capture_end_ns": "local monotonic int64 decimal string >=start",
+      "clock": "existing actual local perf_counter clock fields, direct positive QueryPerformanceFrequency Hz <=2^53-1; cross_process_raw_ticks_qualified remains false"
+    },
+    "capture": "Windows only. Bind typed HANDLE/BOOL/DWORD/FILETIME/int64 ABI; query named Job with JOB_OBJECT_QUERY, positive current-process membership, actual creation FILETIME and QPC frequency. Close owned opened Job handle on every exit; never close pseudo current-process handle. API error, nonmembership, unknown/zero creation/frequency or unsupported platform rejects; never fabricate successful zero fields.",
+    "join": "At most17 invocation/parent witnesses. Validate exact job, nonce/PID/clock match to every actual traced process; duplicates for the same nonce must agree on OS creation/clock identity. Reject one OS PID+creation pair mapped to different startup nonces; permit reused PID only with different creation and nonce. Do not infer sampled RSS/thread membership, observed creation in sampler, all OS descendant coverage or accepted whole-job closure from this alone.",
+    "bounds": "Each standalone witness <=4096 encoded bytes via existing bounded writer; prospective17*4096=69632 bytes per sample fits existing1GiB other-input/metadata study allowance (<=90243072 bytes for1296 jobs). It does not enlarge64MiB trace,1MiB runner or16MiB native caps or claim physical enforcement. Future actual plan/spec proof-field bytes must be included in logical B admission before integration.",
+    "timing": "FILETIME creation is OS lifetime identity only. QPC frequency is clock metadata, not CPU speed or empirical resolution. Local capture bounds are never subtracted from another process or FILETIME; no global critical-path/alignment claim. Future B capture/integration/serialization cost stays in selected phase; no official timing enabled here.",
+    "wire": "Development-only schema/codec eq142_owned_process_witness; no addition to accepted closed root wire_reference enum before explicit complete root integration/validation.",
+    "clock_join": "All existing trace clock fields must match exactly except qpc_frequency_hz: original null is permitted as not queried, independently positive witness QPF enriches it; a non-null trace value must equal the direct witness value. Never derive QPF from reported resolution or claim raw tick alignment. Reject drift in either direction nonce->(PID,creation,clock) or (PID,creation)->nonce; duplicate captures may differ only in their local capture interval.",
+    "review": "Prospective separate review fa8ecbd9c408df146fec9b90880354a3e0277b750b00a1bc7903c8a5a89cff83; explicit nullable-QPF compatibility and bidirectional lifetime identity selected before implementation. Not code/platform/root acceptance."
+  },
+  "native_sampler_lifetime": {
+    "purpose": "Development sampler identity join only. Bind sampled RSS and separately observed thread counts to the same positive OS PID+creation lifetime; no all-descendant or transient peak guarantee.",
+    "source": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes",
+    "creation": "Positive canonical unsigned64 decimal string creation_filetime_100ns_since_1601_utc from GetProcessTimes on the actual retained verified process HANDLE. FILETIME is lifetime identity only, never elapsed time.",
+    "rss": "Verify exact owned Job membership on opened process HANDLE, capture creation before and after successful GetProcessMemoryInfo and require equality. Each accepted RSS row retains PID+creation. Unknown/zero/API failure/lifetime drift rejects the observation with explicit error; never fabricate zero successful identity.",
+    "threads": "For each PID retain verified owned process HANDLE, read positive creation, compare exact expected RSS lifetime when supplied, enumerate Toolhelp snapshot, then recheck membership/creation and retained-handle wait state before returning. Creation mismatch rejects rather than attaching counts to reused PID. Dispositions retain exact creation. Positive terminal wait0 remains observed_terminated with zero live native threads; it does not relabel a prior positive RSS observation as terminal zero memory.",
+    "errors": "Rare paths tested with synthetic kernels, never called real OS API failures. New creation failures are explicit NativeFailure codes. Partial thread observations and existing native errors remain incomplete; full qualification still rejects probe errors. Preserve original owned-runner containment/cleanup and do not modify supplied_native.py.",
+    "population": "Retain legacy pids_observed and add observed_lifetimes sorted unique closed {pid,creation_filetime_100ns_since_1601_utc} rows, maximum256 distinct observed pairs. A reused PID with distinct creation consumes another lifetime slot. Missing unsampled lifetimes are not fabricated or inferred from successful Job CPU closure.",
+    "bounds": "Existing native16MiB receipt/15MiB retained rows/60001 samples/1024 errors/256 PID caps unchanged; additional observed lifetime metadata maximum256 pairs remains within existing receipt headroom, actual final bounded writer still mandatory. No physical allocation or sampled peak guarantee.",
+    "qualification": "Actual owned held child emits direct witness before release; sampler lifetime must match native witness before observer releases that child. Independent API/zero/creation-drift/expected-RSS-lifetime/cap controls, positive retained-terminal behavior, existing containment/error/cleanup controls and separate final source review required.",
+    "wire": "Development native receipt fields only; no complete root wire/sample acceptance, official timing command or package/default/resource/study budget change."
+  },
+  "owned_witness_integration": {
+    "stage": "Prospective development integration only; no accepted root codec, official timing or full_sample_accepted=true.",
+    "parent": "When an owned Job name is supplied, both controls capture and retain one direct parent process witness after selected-phase start, before the unchanged original Supervisor.run. This common native metadata cost is included in both controls. Uninstrumented A still has no trace hooks or delegate replacement; it records parent-only ownership, not traced-child coverage.",
+    "delegates": "Instrumented B carries an explicit optional closed {job_name,output_dir} witness setting in the copied plan. Parent file parent.json plus one delegate-NNN.json per actual invocation reservation, maximum17 files; duplicate process captures may share the same valid native lifetime but file/invocation identities remain unique. Capture and bounded write occur inside selected B work; no inherited process-global Job setting.",
+    "writer": "Existing bounded exclusive persist_record, each <=4096 bytes, exact names parent.json or delegate-000.json through delegate-015.json, own sibling directory separate from trace/count files; no overwrite/retry/delete of partial evidence.",
+    "join": "After retaining original outcome metadata and complete original codec proofs, bounded-read exact expected filenames, reject unknown/missing/partial/symlink/nonfile/oversize/malformed records and byte/hash mismatch. B joins every actual validated trace process with join_owned_processes; A accepts exactly parent.json and builds only that parent binding. Preserve separate fragment references and native lifetime identities; no global tick alignment or all-descendant/resource closure inference.",
+    "admission": "Actual witness Job/path fields are part of measured plan and callable+args pickle representations and existing2*plan+3*sum(spec-extra) reservation. Add separate declared logical encoded witness allowance3*4096*population (A1/B1+actual invocation count, maximum208896 bytes) plus original initial resident/output metadata within unchanged960MiB cap. This is encoded representation accounting, not Python heap/physical allocation. The existing per-study other-input/metadata allowance covers <=17*4096*1296=90243072 raw witness bytes; full aggregate/capacity enforcement remains a final gate.",
+    "failure": "Witness capture/write failure must not change the original partition callback result or exception. B delegate records collector incompleteness and still invokes original exactly once. Parent retains the witness failure, runs the original control and saves actual outcome/full codec proofs first, then raises the original witness error for failed qualification. An original calculation exception takes precedence. Missing/incomplete proofs never qualify; no rollback or successful replacement product.",
+    "resource_limits": "Direct positive Job membership witnesses cover traced processes that may exit between RSS samples, but do not invent sampled RSS/thread rows. Joining strong sampled/native/trace identities after final owned exit and complete root closure are separate subsequent gates.",
+    "defaults": "No package, version, calculation, worker scheduling, cancellation/publication, default, resource threshold, official study ordering or precision change.",
+    "reference_binding": "Parent retains the bounded writer-returned reference directly in runner metadata. Delegate retains writer-returned reference in its independently persisted local fragment. Increment local fragment schema1 to2 with required nullable owned_process_witness closed {codec=eq142_owned_process_witness,sha256=64lowerhex,bytes=integer1..4096,retained_name=exactparent/delegatefilename}. Existing fragment cap includes metadata; root wire_reference codec enum unchanged. Reader checks exact writer-bound bytes/hash, not a newly self-invented body hash. Legacy schema1 remains earlier-source evidence, not relabeled.",
+    "common_scope": "A is ownership-qualified original Supervisor control, not pristine no-observer total cost. Common parent native metadata costs remain included in both phases; common overhead can dilute B/A ratios. Retain explicit scope and unchanged thresholds, with no scalar subtraction.",
+    "multiple_failures": "A prior independent witness failure and later outcome/product proof-store failure both receive explicit typed/code/stage failure records in runner.json. Preserve primary raised error object and existing causal chain, adding an independent-failure note; never invent a causal relationship or replace an original calculation exception.",
+    "review": "Conditional prospective review e46ed6d150fbe02106df558c60c9c3bd844ba4f146bdd3e06d36d924cc77fbe8; explicit reference-binding/schema2/common-scope refinements selected before code. Actual integration source review remains required."
+  },
+  "executor_terminal_observation": {
+    "stage": "Prospective development observation, defined before code. No scheduler/default/package changes or root/full sample/study acceptance.",
+    "source": "Hook inventory schema2 contains41 actual hook definitions plus3 separately source-bound terminal observers. New shutdown/terminal definition lines are extracted from retained exact official CPython3.12.10/15 primary snapshots, checked against existing approved whole-file SHA256 and Git blob. No expected-source regeneration from installed observation.",
+    "shutdown": "B observes actual ThreadPoolExecutor.shutdown or ProcessPoolExecutor.shutdown on the source-bound owner, with original args/kwargs, parent timeline/start/end, actual returned/rejected status and original error type. Exactly one executor owner per run, shared with actual submit owner; cancellation with no submissions may first bind that owner at shutdown. Preserve original return/exception even if ledger bookkeeping fails. Sequential has no executor/shutdown requirement or fabricated pool event.",
+    "shutdown_fields": "Closed {operation,executor_id,parent_timeline_id,parent_start_ns,parent_end_ns,wait,cancel_futures,status,error_type}. executor_id constant owned-executor:0 after actual object binding; wait/cancel_futures exact observed bools from bound original signature including defaults, never bool(unknown). parent times canonical int64 local ns, end>=start; status returned/rejected; error_type null on returned or exact existing typed name on rejected. Maximum1 normal shutdown record; excess makes qualification incomplete, not silent omission.",
+    "terminal": "After unchanged Supervisor returns and hooks/profile restore, source-bound captured Future.done/cancelled/running functions query only actual retained successful submit owners. Read exact descriptors/code/approved runtime bindings before/after. These manual metadata observations are not original-call counts; all overhead stays inside B selected phase. Maximum16 futures; no Future.result re-read, waiting or fabricated result.",
+    "terminal_fields": "Closed {invocation_id,task_hashes,parent_timeline_id,capture_start_ns,capture_end_ns,done,cancelled,running}. Exact booleans, local int64 ns; normal after wait=True shutdown requires done true/running false. cancelled true is observed cancelled-before-running per approved Future semantics, not computed child work.",
+    "dispositions": "Successful submit invocation map is distinct from potential reservations. Non-submitted or cancelled-before-running invocations have no invented child process/file. Retain actual source-required versus observed barriers and actual original task reasons; source abnormal/cancelled runs remain unaccepted until their explicit root qualification. Normal frozen study still requires successful original products/no cancellation, exact applicable fragments/witnesses and no missing submitted process proof.",
+    "scope": "Shutdown observation closes an executor wait barrier only after actual returned status with wait=True and cancel_futures=True, not from a configured worker count or Supervisor return alone. Native owned final exit/all-descendant CPU/resource/sample/source and per-commit/full root joins remain separate.",
+    "bounds": "At most1 shutdown row and16 terminal rows fit existing1MiB development runner cap. Added hook spans count toward existing131072/64MiB caps. Actual expanded inventory plan/spec pickle representations are already measured and reserved before dispatch. No cap/physical allocation/precision/noise/overhead-threshold/study-order changes.",
+    "qualification": "Independent official source-position/alias validation; real thread/spawn wait completion and seq absence; zero-submit cancellation and submitted cancellation/undispatched scopes; injected shutdown/observer failures preserve actual product/errors; source/descriptor interference rejects; independent code-count comparison includes new shutdown hooks but excludes manual observer calls; numeric outputs remain independent-fixture exact.",
+    "independent_counter_cardinality": "The original39 hooks plus the separately observed original delegate code made40 approved code identities. New41 hooks plus that original delegate make42, not41. Extend development CodeCounts constructor/profile-counter cardinality40 to42 consistently, exclude3 manual terminal functions, keep64KiB profile/131072 call entries/4096 active frames and all trace/native/runner/study/resource caps unchanged. Derived from actual for_original_run selection, before code, not from observed timing.",
+    "abnormal_states": "On rejected shutdown, direct Future queries are bounded non-atomic observations and may still be running/incomplete; never infer a terminal barrier or root closure. Successful waited shutdown plus stable terminal observations is a separate gate. Preserve original exception and original typed outcomes even when observation/source validation fails.",
+    "descriptor_binding": "Bind exact approved source module/qualname/definition line and actual function descriptor/code identity for new shutdown/manual observers, with class aliases before/after. Manual observers use captured unbound original functions after hook/profile restoration. This is cooperative inspected-source qualification, not hostile-code or whole-interpreter attestation.",
+    "review": "Conditional prospective design review1c43ba15311cbcbf61ac11125061985ddf0c224b67620aed9aefaaf79ed0b559 passed42staticcontrols. Its provisional40-to41 counter note is prospectively corrected to40-to42 because original delegate adds one selected code. No runtime tests or source implementation acceptance claimed.",
+    "contract_reconciliation": "Explicitly reconcile already implemented development delegate-admission3witness fields and fragment-reference nullable witness field with their existing separate integration specification. This changes no runtime math/threshold or accepted root codec; complete root admission is still outstanding."
+  },
+  "native_observed_closure": {
+    "stage": "Prospective bounded native-local closure; no complete root/sample/installed/CI/study acceptance.",
+    "receipt_schema": "eq142-development-native-receipt:2; earlier receipts retain original source scope",
+    "closure_fields": {
+      "schema": "eq142-native-local-closure:1",
+      "observer": "closed observer record",
+      "runner": "nullable closed runner record, required for successful closure",
+      "boundaries": "closed nullable local boundary record",
+      "scope": "native_local_not_selected_complete_e2e",
+      "job_empty_accounting": "null until fresh post-runner-exit query observes active0; then closed original native_accounting, separately followed by final accounting query"
+    },
+    "observer_fields": {
+      "pid": "actual positive uint32 current PID, GetProcessId agrees with os.getpid",
+      "creation_filetime_100ns_since_1601_utc": "positive canonical uint64 decimal string from current pseudo-handle",
+      "is_member": "false from successful IsProcessInJob against this exact owned Job",
+      "clock": "existing closed clock with direct positive QPF; nominal resolution only; no cross-process raw tick alignment"
+    },
+    "runner_fields": {
+      "pid": "actual positive uint32 from original CreateProcess handle",
+      "creation_filetime_100ns_since_1601_utc": "positive canonical uint64 creation captured while suspended after assignment",
+      "is_member": "true from direct successful specific Job membership query before resume",
+      "terminal_wait": "null until actual WAIT_OBJECT_0 then integer0, never bool",
+      "terminal_creation_filetime_100ns_since_1601_utc": "null until same retained original signaled handle queried; must equal startup creation for success"
+    },
+    "boundary_fields": [
+      "observer_start_ns",
+      "runner_created_ns",
+      "runner_assigned_ns",
+      "runner_resume_before_ns",
+      "runner_resume_after_ns",
+      "runner_exit_observed_ns",
+      "job_empty_observed_ns",
+      "final_accounting_end_ns",
+      "native_measurement_end_ns"
+    ],
+    "boundary_wire": "Canonical nonnegative int64 decimal strings; null means unobserved and rejects successful closure. Ordered in this external observer timeline only. No FILETIME subtraction, cross-process raw alignment or invented zero.",
+    "start": "Existing native started point: after Kernel/uniqueJob/evidencebuffer setup, before containment configuration and CreateProcess. Subsequent direct observer clock/identity, containment/launch/admission, sampling and final aggregation included.",
+    "end": "After final native accounting and aggregation, before own handle cleanup/return, caller receipt persistence/validation and outer reports/source closure. Native wall_ns equals end-start only. Outer controller must include those remaining costs before selecting complete e2e; no native-local complete-e2e claim.",
+    "empty_boundary": "Fresh explicit Job accounting query AFTER positive runner wait and actual exit-code read; timestamp actual query result. If not empty keep sampling. Never relabel earlier sample active0. Final independent accounting active0/terminated_by_limit0 remains required.",
+    "wait_policy": "Only WAIT_OBJECT_0 establishes runner exit; WAIT_TIMEOUT continues; failed/unknown rejects immediately. Retain actual DWORD exit code, including observed259 after signaled wait. Separate successful qualification requires actual exit0.",
+    "join": "Initial suspended/signaled CreateProcess launcher and logical calculation parent are separate identities. Bind calculation parent via actual retained run-report nonce plus positive direct writer-bound witness of this exact owned Job; never infer OS ancestry from membership. Emit initial_runner, calculation_parent and parent_is_initial_runner. SamePID/differentcreation rejects this qualification. Validate actual unique initial/traced/sampled lifetime union <= final total_processes. Sampled pairs join sampler-only inventory; startup never inserted into sampler inventory. Observer PID is distinct from all owned lifetimes. Untraced owned descendants get no invented trace nonce and unsampled witnesses no invented resource rows.",
+    "sample_validation": "Closed exact row fields/types; bounded unique PIDs per sample, unique sampler lifetimes, actual row RSS/thread arithmetic, exact sampled peaks, elapsed offsets in native-local bounds, final whole Job counters and no probe errors. Sample accounting/PID/RSS/thread snapshots are non-atomic; do not require active_processes==len(rows). observed_terminated thread proof permits0 with positive signaled wait, not a default for missing/error.",
+    "limits": "Unchanged256 lifetimes/PIDs,60001 samples,1024 probeerrors,15MiB rows/16MiB receipt; whole Job sampled RSS1GiB; no physical/instantaneous peak guarantee. Existing root/summary/store/study caps unchanged.",
+    "errors": "Retain raw partial fields/probe failures and owned cleanup evidence. Validation emits only native-local closure evidence; never replaces original runner/report errors, fabricates success/rollback, retries a full control, or enables full_sample_accepted.",
+    "sources": [
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes",
+      "https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency",
+      "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodeprocess",
+      "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocess",
+      "https://docs.python.org/3.12/library/venv.html",
+      "https://github.com/python/cpython/blob/v3.12.10/PC/launcher.c"
+    ],
+    "review": "Conditional prospective0c1316af9f18c49d5bfc813b06bb86d645aff188996190faf44d591194f39208 with explicit timing/empty-query/population refinements tracked before code; actual implementation review still required.",
+    "superseded_launcher_assumption": "Initial proposal and conditional review0c1316 incorrectly required calculation parent witness equal CreateProcess launcher. First8 had6PASS/2actualWindowsERROR; exact source/logs retained. Fresh diagnostic and47-control correction reviewdb155ffab143a48d321a16c477bbf416a23a59ffc2ce23a1f0fc4c964dae0b47 supersede only that equality, before source correction.",
+    "descendant_fixture": "Only native outliving fixture uses actual base executable and stdlib exclusive bounded witness writer. Parent exits after child witness; child waits at most5s for owned external release file. Original native probes must observe child PID live after positive initial-runner wait before test releases child. Require retained actual live child row strictly after runner_exit_observed in same external clock. This does not change official/baseline venv executable or workload.",
+    "correction_requirements": {
+      "NATIVEFINAL01": "Each native sample elapsed offset lies between actual runner_resume_after-start and fresh job_empty_observed-start, not merely within native wall. Maintain local nondecreasing offsets. Correct synthetic positive fixture to actual declared interval; no cross-process arithmetic.",
+      "NATIVEFINAL02": "Original native Accounting times are nonnegative signedint64, while page_faults/total_processes/active_processes/terminated_by_limit are uint32. Sample active/total and PROCESSENTRY32 cntThreads/snapshot count use uint32 bounds; sampled cumulative total never decreases from suspended total and is <=fresh/final total. Non-atomic active versus row count remains distinct.",
+      "NATIVEFINAL03": "Native wall_clock_nominal_resolution_s and observer.clock.reported_resolution_seconds share the same perf_counter source, so numeric Decimal(str(float)) equality is mandatory. process_time nominal resolution is distinct; do not equate QPF inverse with empirical/nominal resolution.",
+      "NATIVEFINAL04": "Cleanup must independently attempt query, owned termination/reap and every owned handle close even if earlier cleanup stage fails. Persistent accounting failure cannot mask primary typed error or skip closes. Unknown accounting triggers conservative termination of this unique assigned owned Job only; it is never successful zero. Keep primary object/code/real cause and separate bounded cleanup_failures with stages/type/code and cleanup_failed. Detect midrun CloseHandle false before discarding original thread/process handles; keep them for cleanup. A cleanup-only failure rejects successful return. Existing cleanup deadlines and owned containment remain; no PID-based/global action, retries of complete controls or default/threshold change."
+    },
+    "cleanup_failure_fields": "Failed receipts only: cleanup_failures array<=16 of closed {stage,error_type,code}, cleanup_failed=true; primary_failure_identity closed {error_type,code}; retain actual primary diagnostic payload separately when present. Successful return requires no cleanup failure. All errors and existing partial observations remain within unchanged16MiB native receipt bound.",
+    "probe_handle_cleanup": "Extend the same independent-close rule to owned RSS/thread-member/snapshot handles. At most257 probe close observations, bounded by existing256 member handles+1snapshot, retained in failed NativeFailure primary_failure_detail only. Primary probe error object/code/cause wins; standalone close failure rejects. Propagate a probe close failure instead of losing its details in an aggregate error row. All probes/caller raw receipts remain within existing15MiB row/16MiB total bound; no new accepted root codec or cap.",
+    "early_unique_job_refusal": "Before any containment change/runner creation/assignment, failed unique creation (null or ERROR_ALREADY_EXISTS) retains CREATE_UNIQUE_JOB as primary. A nonnull colliding Job handle is only the newly opened caller reference: close it with checked outcome and separate bounded cleanup failures; never assign work, modify or terminate the existing Job. Null handle has no close attempt. Close exception/False must not mask primary. This closes additional04 coverage only; ordinary native paths unchanged."
+  },
+  "publication_admission_observation": {
+    "schema": "eq142-publication-admission-proposal:1",
+    "stage": "PRECODE_PROPOSAL_NOT_IMPLEMENTATION_OR_SAMPLE_ACCEPTANCE",
+    "basis": "Actual worker231 original Supervisor publication loop, SerialPublisher._drain and unchanged SerializedMemorySink. Commit may precede metadata RESOURCE_LIMIT. Existing41 hooks do not include sink.commit; supersede any preparation assumption that they do.",
+    "scope": "Development B-only bounded publication observations and independently replayed per-candidate logical output admission. A remains original Supervisor plus already declared common ownership witness. No library/default/calculation/version change; no study command.",
+    "inventory": "Add one exact source-bound accepted fixture method sink.commit:42 actual hooks plus3 unchanged manual terminal observations. Independent original code identities become43 including original partition delegate, not manual terminal queries. No event/frame/profile/trace cap increases.",
+    "actual_observations": "Inside existing hook mechanism, retain original sink.commit returned receipt or error identity, actual publisher.inner_drain returned frozen progress tuple or error, and only manifest.encode_output calls directly from the exact bound original BoundedSupervisor._run code. Bind actual publisher/sink owner identities and coordinator thread before hooks. Capture actual encode bytes/output owners without extra encodes/hash properties/getters inside hooks. Do not inspect live frame locals; direct caller code identity only. Capture intervals in one parent timeline; completion order does not become cross-process order.",
+    "caps": {
+      "events": 64,
+      "commit_attempts": 16,
+      "drain_attempts": 16,
+      "coordinator_output_encodes": 16,
+      "total_progress_rows": 16,
+      "output_body_bytes": 1048576,
+      "receipt_body_bytes": 400000,
+      "logical_observer_reservation_bytes": 69793792,
+      "formula": "3*16*(1048576+400000)+64*4096",
+      "summary_bytes": 65536
+    },
+    "admission": "Reserve full declared observer allowance before dispatch within existing960MiB product allowance, alongside original initial resident, copied plan/spec/witness and expected accepted output metadata. Captured bytes/counters remain bounded; a violated observer bound poisons qualification while original calls still execute exactly once. No assertion about physical copies or allocator enforcement. All construction/capture/postrestore encoding/validation/storage remains in selected B phase.",
+    "proof": "After hooks/profile restore, retain full actual commit receipts using original encode_receipt and actual captured original coordinator output bytes using existing ProductStore; bound receipt bytes400000/output1MiB. Preserve all observed receipts including unjoined postcommit failures. Join returned drain candidate by actual output object identity to coordinator encode, then full task/output/receipt codecs after restoration. Match commit receipt by full codec body, not presumed object identity after barrier decode. Unmatched receipt stays observed commit with unknown task linkage; root/study success requires exact successful one-to-one joins, never inferred rollback.",
+    "replay": "Replay in actual coordinator encode completion order: counter0=0; for candidate wire size n, accept iff original_initial_resident+counter+n<=original_max_resident; if accepted increment counter by n, otherwise leave unchanged. Each row reports candidate bytes, before/after, derived decision, actual outcome output/reason cross-check. Clearly label cumulative counter and branch decision source-derived, not directly observed private locals. Separately check new instrumented combined logical allowance plus cumulative accepted output metadata after each candidate. A may use ordered original accepted output codecs for source-derived successful-path counter only, never observed commit-order claims.",
+    "failure": "Observer exception/cap/type/source/identity failures are retained separately and never replace original return or original exception/cause. Failed original commits mean unknown persistence, not no-commit. Retain available products/actual observations before qualification rejects. Preserve actual postcommit metadata rejection and actual publication pending/cancellation; no fabrication of absent result or rollback. Fault qualification is not normal study acceptance.",
+    "independent_checks": [
+      "Real seq/thread/spawn original results and publication parity; actual hook/code-count agreement including new sink.commit.",
+      "Exact equality-at-limit acceptance and one-byte-over rejection with independent expected arithmetic; actual successful commit followed by original metadata rejection; retain orphan actual receipt.",
+      "Actual failed commit and observer failures preserve original return/error object/cause; original calls exactly once; source/owner/thread mismatch and all declared bounds fail closed.",
+      "Multiple tasks and reordered/tampered/missing/duplicate candidate/receipt joins rejected; A source-derived disposition distinct; nonpublication observes zero commits/drains/candidates.",
+      "Review exact source/docs/fixtures; fresh final source tests/installed bothOS/current CI/root/native/source/storage gates remain separate."
+    ],
+    "not_accepted": "No complete trace root, official A/A study, overhead/noise/performance/adoption/release acceptance. Native-local wall still excludes own cleanup/caller/outer closure.",
+    "coordinator_source_binding": {
+      "definition": "equity_feature_workers.supervisor.BoundedSupervisor._run",
+      "definition_line": 434,
+      "encode_call_line": 586,
+      "source_file_sha256": "from already accepted source inventory equity_feature_workers.supervisor, never regenerated from observer",
+      "descriptor": "Capture exact unbound _run function/code before hooks; require original module, qualname, first line434, whole-module accepted source and same top-level/defining BoundedSupervisor class aliases. Recheck descriptor identity/code and source after hooks. This is an unpatched caller filter distinct from public run. Never inspect frame locals. Tests include actual _run coordinator calls and exclude publisher/barrier/other encode calls."
+    },
+    "review_corrections": {
+      "receipt_sha256": "6f3a16eb68d73c4fb6a2ad18887362a7730ee9f3855b6de7cdd375a5f9129ff8",
+      "EQ142PUBPRE01": "Supersedes incorrect public run direct-caller assumption before code; actual owner is _run.",
+      "EQ142PUBPRE02": "Current qualification counter field becomes43; old executor41hooks+delegate42 retained as historical scope."
+    },
+    "working_review_corrections": {
+      "review_sha256": "6e983b8ee1ce7adafae528967162f3a58614723ab40b1355518beac4764988b4",
+      "EQ142PUB01": "Snapshot once into bounded incomplete record when source/codec/store/candidate-join observation fails; keep available actual events, commit receipts, captured output wires and progress facts. Nullable unknown join fields plus typed retention failures max64/truncated flag; no invented task association or rollback, no retry on repeated snapshot. Source check failure cannot authorize changed codecs. Verify rejects incomplete record before nullable joins; preserve original run result/error and runner retention after original proof failure.",
+      "EQ142PUB02": "Exactly43 synthetic code identities and profile counters admit,44 rejects, matching already prospectively approved42hook+delegate cardinality. No cap/threshold/default change.",
+      "record_fields": "schema,evidence,events,commits,drains,candidates,complete,failure_reason,declared_logical_observer_allowance_bytes,retention_failures,retention_failures_truncated,physical_enforcement,full_sample_accepted. Event original metadata retained. Complete normal rows unchanged; incomplete candidates may have null task/drain joins, actual captured output refs remain. Receipt null on thrown commit means no returned receipt; on proof retention failure, typed failure explains unknown proof.",
+      "retention_failure_fields": "event:nullable actual event index; stage:source_check|commit_proof|drain_copy|candidate_proof|candidate_join; error_type:bounded original exception type only, no private message. Maximum64; extra failures set retention_failures_truncated true and complete false. Source-check failure retains safe original metadata/captured bytes, avoids invoking unqualified receipt codec. error_type_truncated:boolean explicitly marks bounded prefix when original type identity exceeds128characters."
+    }
+  },
+  "retained_publication_interface": {
+    "schema": "eq142-retained-publication-interface:2",
+    "stage": "PRECODE_INTERFACE_NOT_IMPLEMENTATION",
+    "function": "verify_publication(record, facts, proof_bodies, *, initial, maximum, combined, publishing, require_success=True)",
+    "facts": "Closed dict reserved_resident_bytes,tasks. Strict nonbool nonnegative resident equals initial. tasks list<=16 closed task,output,reason; task exact original immutable TaskManifest; output exact original immutable OutputManifest or null; reason original strict closed string taxonomy or null. Unique task identities, output.task exactly task, output and reason consistent. Live adapter forwards actual original outcome object references without new encode_task/encode_output calls. Retained root adapter uses exact immutable objects decoded from independently validated complete original canonical task/output/product proofs and actual supervisor metadata; root must establish provenance before this function. Pure verifier does not certify input provenance on its own.",
+    "proof_bodies": "Exact dict sha256->bytes, <=32 unique referenced receipt/candidate bodies only, each1..1MiB. Validate lowercasehash, actual hash/length and closed referencecodec/name; receipt<=400000/output<=1MiB. Missing/extra/changed body rejects. Original full canonical decode_receipt/decode_output proofs remain required. Pure verifier takes no callback, store, path or mutable live Ledger/SupervisorOutcome/source object; explicit immutable TaskManifest/OutputManifest fact objects are allowed; no filesystem/probe/publication/calculation operations.",
+    "adapter": "PublicationLedger.verify keeps source/check and record is self.retained identity checks, collects all actual store.verify returned bodies for referenced successful commits and candidates, forwards exact original immutable task/output facts, then delegates. Source check after adapter to guard closure. Existing hook/retention logic unchanged. Retained root adapter supplies independently validated proof facts, not a live ledger or fabricated SupervisorOutcome.",
+    "strict_indices": "Every event index including every commit_events element strict int, never bool, before equality/set arithmetic. Existing event sequence, drain row and all count fields retain strict types. PUB04 actual false/0 alias reproduced in original c253 module hash4de3ab1395fba5b15477388f86f36fbc2329b7d6b8d4b7d4c87875f1fb132abc before code.",
+    "unchanged": "Same source-derived replay result fields and branch arithmetic; no original calculation/publication/package/default changes. Pure verification is post-restoration work inside selected phase in live adapter, inside required root validation for retainedreadback.",
+    "checks": [
+      "Portable fabricated empty record/facts succeeds without optional intraday or I/O; bool/float/malformed counts/proofs reject.",
+      "Actual seq/thread/spawn live vs independently reconstructed retained pure verification yields exact replay equality; no live record identity dependency in pure path.",
+      "Actual publication tamper commit_events bool/float/negative/out-of-range/duplicate/unsorted; invalid facts/task/output/receipt/body hash/name/codec and missing/extra proofs reject.",
+      "Fault controls retain actual outcomes/partial refs; existing metadata acceptance/rejection boundary and original error/cause identity still pass."
+    ],
+    "scope": "No complete root/native/capacity/runtime-study acceptance from this component alone.",
+    "supersedes_sha256": "7566087fefd85e4b0a88c6fbb4e68dd53b91d16776e35aef59e96c258647ec10",
+    "allocation": "Do not add original task/output encodes for fact construction. Local fact containers only reference existing immutable objects. Bounded proof_bodies materialization holds at most one verified retained body per hash (<=16output+16receipt), within existing three-body observer allowance3*16*(1MiB+400000)+64*4096; capture bodies, retained-readback bodies and current decoded/codeced comparison body remain bounded. No physical allocator/copy-count guarantee; original960MiB logical and69,793,792 observer cap unchanged.",
+    "required_types": "publishing and require_success exact bool; initial/maximum/combined/reserved and every count/index strict int, never bool; initial<=combined<=maximum<=1GiB. Editorial explicitness from final prospective review; no additional scope."
+  },
+  "complete_root_precode": "COMPLETE_ROOT_PRECODE.json, prospective V9; retains V8 provenance and matrix contracts, adds permanent qualification-only workspace purpose, bounded one-attempt failure retention, exact admission/statistics schemas and fixed existing-cap allocation; implementation/review/current qualification remain mandatory",
+  "capacity_component_interface": {
+    "schema": "eq142-capacity-component-interface:1",
+    "stage": "PRECODE_NOT_IMPLEMENTED",
+    "pure": "validate_capacity(record, expected_probe_sources) validates closed V4 raw record/types/arithmetic/topology/provenance fields. admit_capacity(record, expected_probe_sources, *, degree, expected_device, expected_retained_bytes) additionally checks exact context and CPU/memory/storage admission. Both no I/O/native/callback/calculation/publication; success alone does not certify producer provenance.",
+    "producer": "CapacityProbe(study_directory, approved_sources).capture(position, encoded_bytes_already_retained=...). Windows64 only; exact typed native API, same current thread, stable primary-group before/after original source-bound machine(), source/descriptor/code/file checks before/after including direct nt._getdiskusage and nt.stat export identity, approved shutil definition/hash. Source module imports no optional intraday at import. Pseudo handles never closed. Failed/unknown/changed API/source/path/device observation rejects; snapshots are non-atomic.",
+    "namespace_boundary": "The caller must supply actual reconciled study-owned encoded bytes at the precise capture stage. This component checks numeric range/subtraction and actual same-owned-directory device/free bytes but is not an independent whole-namespace ledger certificate. Complete-root/controller must verify fixed owned namespace/full writer references and stage-prefix byte accounting before passing these facts. Raw capture can retain structurally valid low-capacity observations; admission is separate and mandatory before native launch/root acceptance.",
+    "bounds": "Capacity JSON<=16384, activegroups1..64/processgroup array<=64, masks nonzero64bit; count safe-range strictint, device canonical uint64 string, capture ns canonical signed63 string. Global72GiB+host8GiB, beforeRAM3GiB/after2GiB, CPUdegree+3<=primaryallowedslots; degree1/2/4/8. No physical guarantee or worker pinning.",
+    "collection": "PortableCapacity pure tests mandatory/nooptional/noWindows skip. WindowsCapacity source/native observations no optional intraday dependency; exact class prefix added only Windows skip and CPU-capacity tuples (require_cpu_slots2 for original machine). Mocked classifier controls supplement, not installed qualification. Native failure controls reject and preserve pseudo-handle ownership, never fabricated capacity.",
+    "tests": [
+      "Synthetic masks/groupIDs/counts/stability/sourcefields/raw-original-derived-values and everycrossfield join; impossiblegroup7 withcount1 rejects.",
+      "Synthetic exactCPUdegree+3 edge/oneunder; RAMbefore3/after2GiB exact/oneunder; remainingdisk72-already+8 exact/oneunder; count bool/float/negative/overflow rejects.",
+      "Synthetic deviceIDs2^53,2^53+1,uint64max roundtrip distinct; unknown/float/bool/noncanonical/negative/overflow devices reject and same-device mismatch rejects.",
+      "Actual Windows repeated typed queries/source-beforeafter/raw machine/shutil on fresh temp directory; actual path/device/source tamper and API false/zero/oversize reject. No complete root/benchmark claim."
+    ],
+    "unchanged": "Original supplied/native/build helpers, calculation/library/defaults unchanged; no officialstudycommand or fullsampletrue."
+  },
+  "owned_runner_component_interface": {
+    "schema": "eq142-owned-runner-component-interface:2",
+    "stage": "PRECODE_NOT_IMPLEMENTED",
+    "entrypoint": "tools/eq142_owned_runner.py; development evidence only, no official study command. Function run_owned_control calls actual development run_control exactly once, actual returned ref saved in outer runner-reference.json<=4096 using original exclusive writer. Uses fragment_clock_and_timelines(set())[0] for actual existing startup PID/nonce, no new GetProcessTimes/QPF query.",
+    "namespace": "Caller outer sample directory exists, canonicalized after input and canonical ancestor symlink/junction checks. Basename must equal validated sample_id. Before dispatch it contains only optional capacity-before.json (development component permits empty; full root mandates actual before proof). Reject existing runner/, runner-reference, partial or unrelated members before calculation. Original run_control creates fixed child runner/ exclusively; wrapper owns no arbitrary path or JSON pointer routing. Diagnostics follow runner/diagnostics.json. Shared product codecs resolve only under fixed study/reference/objects, with reference.json under fixed study/reference; no sample objects store. Basenames, byte caps and actual returned writer binding are unchanged.",
+    "options": "Closed function/CLI options sample_id lowerASCIIid<=128, purpose development_candidate|qualification_counts, reference path+trusted actual original writer SHA, profile from frozen existing six, mode sequential/thread/process with strict degree1/2/4/8 and sequential1, control existing A/B,series existing two, required actual unique Job name. qualification_counts requires B and passesqualify_code_counts=True; ordinary candidate passesFalse, no hidden profiling switch.",
+    "reference": "Exact closed eq142-owned-runner-return:1 schema/sample_id/purpose/runner_reference/process_binding, actual runner ref codec eq142_development_runner/basename runner.json/positive<=1MiB/hash. Parentbinding pid positiveDWORD,nonce32lowerhex. Decoder/validator pure and no live ledger; root must independently join actual parent witness/native. Wrapper reference has codec eq142_owned_runner_return/basename runner-reference.json/<=4096.",
+    "errors": "An original run_control failure propagates same object/code/cause and no success wrapper reference. Available original report/partial bytes remain; never caller-rehash a failed report into an original returned ref. Later wrapper binding/write failure retains original files but is not completed root success. No retry, overwrite, mode adoption or wrapper-generated calculation.",
+    "metadata": "Implement previously reviewed job2/runner2 schema/counter rename with same increment: cumulative_accepted_output_metadata_bytes and expected_accepted_output_metadata_bytes. Original accepted-only arithmetic and observed commit ledger unchanged. Existing execution_scope_id hash domain retained explicitly; old source/records preserved under Git, no retagging.",
+    "collection": "PortableWriter controls mandatory without optional/native skips. ActualOwnedRunner requires installed optional intraday+Windows+actualCPU capacity; add only exact class prefixes to optional,Windows,CPU tuples. Synthetic collector controls supplement actual installed qualification.",
+    "tests": [
+      "Pure closed wrapper/ref/type/namespace/selector validation, malformed bools/paths/hash/nonce/unknown fields/old schema reject; no I/O in pure record validation.",
+      "Actual Windows owned A/B sequential and process controls: original run createschildrunner, actual returned ref full-body and direct parent nonce/PID join, original full-result/readback parity, original call count once. Candidate/Bno profiler; qualification_counts/B profiler without timing authority.",
+      "Existing/partial/unrelated output refuses before original calls. Injected original failure preserves error object/code/cause and original failed report, no wrapper success or retry. Native initial launcher may differ from logical Python parent; never assert equality.",
+      "Graph metadata2/counter fields accepted, oldfields/schema rejected by new validator; hash domain/task/result identities unchanged; existing graph/admission/product/codecount/runner suites remain mandatory."
+    ],
+    "not_accepted": "This wrapper/metadata component is not complete root/namespace journal/countindex, current installed bothOS/CI,officialtiming/performance/release acceptance. All development reports remain full_sample_accepted:false.",
+    "prior_interface_sha256": "7d7b7bce3f6f89944215ef166ed6e80e2007534d5fe15cc6a4f7f092c1095876"
+  },
+  "metadata_identity_domain": "Preserve existing eq142-job1 hash domain for execution_scope_id: it identifies unchanged task-set/mode/budget, not the renamed descriptive wire fields. Version2 records differ and old records remain historical; no TaskManifest/result/product identity or formula changes."
+}
