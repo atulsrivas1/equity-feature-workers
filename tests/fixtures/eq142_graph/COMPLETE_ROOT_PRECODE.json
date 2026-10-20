@@ -1,14 +1,17 @@
 {
-  "schema": "eq142-complete-root-proposal:7",
+  "schema": "eq142-complete-root-proposal:8",
   "stage": "CLOSED_SUCCESSOR_PRECODE_NOT_IMPLEMENTED_OR_RUNTIME_ACCEPTANCE",
   "bases": {
-    "canonical": "e550510fcda94fbb2aa70d296b1515486392ec50",
-    "worker": "c253abad2b448de4e2332526b47af74bb7bcd244",
-    "committed_review_sha256": "808e5aa7f219ad42e790106d97742729e96c7d6c0765cdb411d5320781497351"
+    "canonical": "f211abd227421d185a723c0b2bb2a9bb23e58414",
+    "worker": "0b768cc7f169398fefd0f179fdc6fa31e891fabb",
+    "committed_review_sha256": "26e6cf694e1b7894915937b46f756bc71b7e8943c14f1c23a651c3b86e368e13",
+    "both_local_platform_go_qualification_review_sha256": "9f0f1c1a5b6f78161991a4614cf7162dc23305fccc6e289014cd75a93ddb8783",
+    "current_ci_artifact_component_review_sha256": "efb4d1e2fcb0f966783dc4849e77ab4501024f35bd7624e257111c5a5e939b62",
+    "prospective_resume_review_sha256": "003b12f73e5e9307f05968a1fa7f0efbdfaeda46b796ce73d3ed3065958e68c8"
   },
   "purpose": "Close the existing EQ142 runner/native/source/product/barrier/resource/count evidence into one bounded independently validated candidate. Official study remains disabled until current source/platform/install/CI/storage/qualification gates. No new calculation, package, scheduler/default or performance threshold.",
   "top_priorities": [
-    "Bind actual writer-returned runner reference and direct parent ownership to native receipt, avoiding false launcher-parent equality.",
+    "Distinguish source-derived outer wrapper readback from nested actual original runner return; bind both to fixed ownership, actual normal native outcome and source.",
     "Validate closed complete evidence and source-derived versus actually observed dispositions, with explicit A untraced scope and independent B count qualification.",
     "Define an honest outer timing envelope and aggregate storage admission before current-source qualification and official all-A-before-B measurement."
   ],
@@ -17,7 +20,8 @@
     "reference_fields": "Exact closed owned_runner_return schema below supersedes V1 sketch: schema,sample_id,purpose,runner_reference,process_binding. Actual returned reference only, no reconstructed success on failure.",
     "parent": "Read original runner_reference exact body from fixed owned sample/runner directory, length/hash/name checked. Read report.parent_owned_process_witness actual writer ref, require exact parent.json, resolve that original body and derive parent_nonce from it. Require wrapper process_binding equals that parent PID/nonce; actual trace parent fragment must match in B. Then call validate_native_closure with derived nonce, not caller-selected unbound value. Initial CreateProcess launcher may differ from this logical Python parent. Direct membership/lifetime does not imply ancestry.",
     "failures": "Nonzero/unknown native exit, failed wrapper reference or failed original control cannot become accepted. Preserve available original failed reports/raw native/error evidence. If original run_control raises and has no returned reference, do not fabricate a writer-returned success reference from a caller rehash.",
-    "namespace": "Outer controller exclusively creates sample/cohort directory before capacity-before. Actual original run_control retains its own exclusive mkdir, targeting the fixed nonexistent child runner/ directory. Wrapper writes runner-reference.json in the existing outer sample root only after actual original return. No exist_ok bypass or rehash-derived returned success. This resolves directory lifecycle before wrapper implementation; stored retained_name values remain basenames, codec/context selects fixed runner prefix."
+    "namespace": "Outer controller exclusively creates sample/cohort directory before capacity-before. Actual original run_control retains its own exclusive mkdir, targeting the fixed nonexistent child runner/ directory. Wrapper writes runner-reference.json in the existing outer sample root only after actual original return. No exist_ok bypass or rehash-derived returned success. This resolves directory lifecycle before wrapper implementation; stored retained_name values remain basenames, codec/context selects fixed runner prefix.",
+    "outer_wrapper_provenance": "run_owned does not capture the wrapper stdout writer reference. The outer wrapper file reference is source-derived readback ONLY from the fixed newly exclusive namespace after actual qualified normal native exit0 and source/parent binding. It is not an observed writer-return. The runner_reference inside the actual closed wrapper body is the actual original run_control return. Arbitrary-directory or failed-run rehashes cannot establish either provenance; never rehash runner.json to fabricate its returned reference."
   },
   "root_representation": {
     "version": "Prospective root schema eq142-execution-trace:2: original v1 was a precode shape and never emitted/accepted as a complete sample. Explicit version2 avoids silently changing unimplemented closed record semantics.",
@@ -255,7 +259,7 @@
       "decoder": "existing development-reference:1 with complete source/expected math/products"
     },
     "diagnostic_snapshot": {
-      "scope": "fixed sample/cohort runner/ child directory; exact diagnostics.json basename",
+      "scope": "fixed sample/cohort runner/ child directory; exact diagnostics.json basename; additionally fixed reference_preparation context only, with exact source profile/series mapping described in reference_preparation",
       "name": "diagnostics.json",
       "max_bytes": 1048576,
       "decoder": "unchanged full original diagnostic codec"
@@ -291,7 +295,7 @@
       "decoder": "existing closed summary1 and original outcome/product/admission crosschecks"
     },
     "eq142_product_projection": {
-      "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged",
+      "scope": "fixed sample/cohort runner/ child directory; basename registry unchanged; additionally fixed reference_preparation context only, with exact source profile/series mapping described in reference_preparation",
       "name": "products.json",
       "max_bytes": 65536,
       "decoder": "existing complete product_outcome arrays and actual original proofcodec/diagnostic/parity/math joins"
@@ -427,5 +431,54 @@
     "https://raw.githubusercontent.com/python/cpython/v3.12.15/Include/internal/pycore_fileutils.h",
     "https://raw.githubusercontent.com/python/cpython/v3.12.10/Python/fileutils.c"
   ],
-  "prior_proposal_sha256": "42bbc742195b17258a088147f55e7a0fed80812cbe1ed4a6b4fc0294bd51cd02"
+  "prior_proposal_sha256": "633fb527d98e5a7b8a5c9dbd732fd51a3c2dba4f9697b7a407ae947127edf412",
+  "reference_preparation": {
+    "context": "reference_preparation",
+    "routing": "Exactly study/reference/<profile>-<series>/ for six source-defined PROFILES in declared order, each of the two source-defined SERIES in declared order. Exact products.json and diagnostics.json only. No user-selected path. Original reference.json and objects/ routes unchanged.",
+    "recorder": "Add optional harness-owned preparation_recorder to prepare_reference. After original successful preflight and independent mathematics validation, deliver copied actual persist_record products return and actual original diagnostics writer reference in the fixed profile/series order. Preserve original reference schema and function return. Controller binds callbacks to exact expected profile/series; unknown, duplicate, missing or out-of-order callbacks reject. Failure retains partial evidence and never manufactures a returned reference.",
+    "provenance": "Original final reference writer return remains actual. Do not invent preparation writer provenance from later rehashes. Reopen all full bodies and original mathematical/source/product evidence independently.",
+    "metadata_allocation_bytes": 33554432,
+    "upper_bound_components": {
+      "preparation_pairs": 13369344,
+      "reference": 16777216,
+      "count_index": 1048576,
+      "capacity_freeze": 16384
+    },
+    "upper_bound_sum_bytes": 31211520,
+    "remaining_metadata_bytes": 2342912,
+    "accounting": "Use the already reserved shared_reference_and_index_metadata component within qualification6GiB. No new allocation, double charge, cap or headroom change. Shared objects remain once-only within256MiB/512objects. Enforce actual encoded category and prefix totals, not only individual maxima."
+  },
+  "source_capacity_matrix": {
+    "schema": "eq142-source-capacity-matrix:1",
+    "closed_fields": [
+      "schema",
+      "source_state_sha256",
+      "source_inventory_sha256",
+      "capacity_freeze_reference",
+      "cohorts"
+    ],
+    "row_closed_fields": [
+      "cohort_id",
+      "selector",
+      "supported",
+      "omission_reason"
+    ],
+    "selector_closed_fields": [
+      "profile",
+      "mode",
+      "degree",
+      "series"
+    ],
+    "domain": "Hash existing canonical wire(matrix) bytes with SHA256. Both source hashes equal exact reference.state and reference.source_inventory canonical-wire hashes, including complete runtime/installed metadata. capacity_freeze_reference is the actual qualification-capacity.json writer reference validated against actual CapacityProbe observations and fixed source. Seven abbreviated source fields alone are insufficient.",
+    "order": "Exactly72 rows: small,balanced,skewed each sequential1,thread1,thread2,thread4,thread8,process1,process2,process4,process8; then family_complete,family_missing_hl,family_old_close_gap each sequential1,thread2,process2. For each mode/degree, eq142_admitted_control then eq142_owned_runner_e2e. IDs c000 through c071 in this order.",
+    "omissions": "supported is strict bool, exactly degree+3<=actual frozen conservative primary-group allowed slots. Supported omission_reason is null; unsupported reason is fixed cpu_primary_group_slots_insufficient. Retain all72 rows including omissions before A. Memory/disk/native/source failure stops; it is never a new omission, substitute degree, resize or automatic retry.",
+    "storage": "Reconstruct deterministically from reviewed protocol, actual source and qualified capacity freeze. Do not add an unregistered matrix.json. Freeze canonical hash before A, bind it to count index and every candidate, reconstruct at final review. Count qualification must cover every supported selector with actual same-run raw trace/profile/native/source/math evidence, no prior parent.wait literal and no timing authority.",
+    "strict_types": "Canonical closed JSON and existing wire integer rules; degree is strict int, no bool or float. No duplicate, missing, extra or reordered rows/selectors. Source hashes are lowercase64hex; freeze ref uses existing fixed capacity codec/name/length/hash bounds."
+  },
+  "controller_namespace": {
+    "count": "qualification/cNNN/ with sample_id cNNN, fixed runner/ child and native/wrapper/before/after capacity receipts; actual count index qualification/count-qualification.json and freeze qualification/qualification-capacity.json. All supported controls retained and charged to existing qualification6GiB.",
+    "regular": "regular/cNNN/<a-or-b>-cNNN-<w-or-r><index>/ with exact basename sample_id. Controls a/b denote A/B; w0,w1 then r0..r6. All A cohorts before any B; exact cohort order above. No arbitrary names or directories.",
+    "capacity_prefix": "Capture encoded-byte stage prefix BEFORE persisting its own capacity receipt. Then register and charge the actual returned receipt length. Do not compare the earlier observation to a later journal total. Reconcile every fixed member/category and stage prefix; reject unowned, missing, indirection or extra members.",
+    "failure": "Complete root is an earlier evidence stage, always full_sample_accepted:false. If capacity-after, source-after, envelope or finalization later fails, retain earlier root and failure evidence; never emit a final accepted candidate or retry/erase partial failure."
+  }
 }

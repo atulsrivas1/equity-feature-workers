@@ -1,3 +1,9 @@
+## EQ142 paired complete-root V8 precode clarification
+
+The paired fixture COMPLETE_ROOT_PRECODE.json prospectively defines distinct outer wrapper readback/nested actual original runner-return provenance, fixed reference_preparation routes and recorder callbacks, complete source/runtime/capacity72-row matrix and actual encoded category/prefix accounting. The existing32MiB metadata component covers31,211,520 bytes without changing any cap, cohort, threshold, formula, package or default. Existing registry/code remains component scope until implementation and review. No full controller/root/study acceptance. Canonical GO companion f211abd passed both local platform original qualification and scoped hosted artifact review; worker hosted optional/platform/CPU skips remain explicit. EQ142 In progress, EQ143–146 Backlog. Next publish paired clarification, then implement/test/review/qualify controller before any official timing.
+
+## Earlier checkpoints retained as history
+
 ## EQ142 semantic evidence increment reviewed; full root remains
 
 Full working Windows EQ142 development suite passed143 methods in948.563s, skipped0, with the selected source map unchanged. Receipt `f55c9fbd91d4258da8cf225e0399f922feaf9d655b089d8dbb3ba98ea47cb037` and log `bc8765d13bd7facc881038a571d728c468b9a9ff70f5b5606e2ff6d45b8b9dfe` bind this run. This precedes any later canonical-docs pin renewal; exact committed review/CI follows. Test durations are correctness evidence only. [Public component review summary](https://github.com/atulsrivas1/equity-features/blob/codex/eq142-output-dag/docs/reviews/EQ142_SEMANTIC_COMPONENT_REVIEW.json) records exact source hashes and each reviewer scope.
