@@ -211,7 +211,7 @@
   "classes": {
     "eq142_owned_runner_e2e": {
       "start": "before launch of fresh owned runner",
-      "end": "final descendant exit plus completed bounded collector/report output",
+      "end": "outer wall end after final descendants/owned cleanup, native and runner/full-evidence/root persistence/readback, capacity-after and required outer source-after; final self-timing measurement envelope/candidate finalization explicitly excluded",
       "publisher": true,
       "includes": [
         "imports",
@@ -223,7 +223,7 @@
         "hook restoration and sidecar/report writes",
         "owned child CPU including terminated children"
       ],
-      "claim": "whole owned-runner synthetic cost; not pure product latency or a live/persistent worker"
+      "claim": "Synthetic outer owned-runner cost through required source/root closure; excludes final measurement envelope/candidate write/validation and named final-controller post-envelope source check. No self-inclusive write or scalar observer subtraction; not live/persistent product latency."
     },
     "eq142_admitted_control": {
       "start": "after actual fixture/source admission, before trace label binding and hook installation",
@@ -362,5 +362,76 @@
   "executor_observation_scope": "Prospective B-only actual source-bound shutdown hook and separately source-bound manual terminal metadata after hook restoration. Include all construction/observation/validation costs inside selected phase and existing plan/spec/runner/trace caps. Sequential has no executor. Source/static required barriers stay distinct from observed returned wait=True/cancel_futures=True shutdown and observed actual Future states. No cross-process tick subtraction, count contamination, threshold/order change or root acceptance.",
   "native_local_closure_scope": "Native-local receipt schema2 retains actual suspended/terminal runner lifetime, external observer clock/membership and ordered local boundaries. Fresh Job empty query follows positive runner wait. Native start excludes Kernel/uniqueJob/buffer setup; native end precedes own handle cleanup/caller persistence/validation/outer source/report closure. This native-local wall cannot be selected complete e2e. Sample accounting/rows are non-atomic; direct startup/witness and sampler populations remain distinct. No cap/order/threshold/default change.",
   "native_launcher_identity_scope": "Initial CreateProcess launcher and direct logical calculation parent may have distinct lifetimes (actual Windows venv redirector). Preserve both and exact same Job direct ownership; no OS ancestry inferred from membership. Original baseline venv control remains unchanged. Outliving native test alone uses base interpreter plus bounded owned release handshake and actual post-initial-exit live-child row, not a timestamp gap.",
-  "publication_admission_scope": "Prospective B-only actual commit/drain/coordinator-encode observation,42 hooked definitions/43 original code identities. Reserve69793792 logical observer bytes before dispatch within existing product cap; replay per-candidate cumulative metadata as source-derived and cross-check actual final outcomes. Actual commit and accepted metadata are separate. A unchanged except declared ownership witness; no A observed commit-order claim, no thresholds/order/cap/default change or complete root acceptance."
+  "publication_admission_scope": "Prospective B-only actual commit/drain/coordinator-encode observation,42 hooked definitions/43 original code identities. Reserve69793792 logical observer bytes before dispatch within existing product cap; replay per-candidate cumulative metadata as source-derived and cross-check actual final outcomes. Actual commit and accepted metadata are separate. A unchanged except declared ownership witness; no A observed commit-order claim, no thresholds/order/cap/default change or complete root acceptance.",
+  "complete_root_precode_amendment": {
+    "proposal": "COMPLETE_ROOT_PRECODE.json",
+    "timing": {
+      "decision": "Explicit prospective amendment to classes.eq142_owned_runner_e2e before code or timing. Required runner and outer source-before/after/root checks remain inside; a separate final self-timing envelope and candidate finalization are explicitly excluded. Admitted phase boundaries unchanged.",
+      "inside_order": [
+        "outer_wall_start",
+        "outer_cpu_start_captured",
+        "exclusive_sample_directory_created",
+        "outer_source_before_verified",
+        "capacity_before_persisted",
+        "native_owned_call_entered_before_Kernel_setup",
+        "native_owned_call_returned_after_descendants_exit_and_owned_cleanup",
+        "native_receipt_persisted",
+        "actual_runner_return_and_all_full_evidence_verified",
+        "complete_root_validated_persisted_and_read_back",
+        "capacity_after_persisted",
+        "outer_source_after_verified",
+        "outer_cpu_end_captured",
+        "outer_wall_end"
+      ],
+      "runner_includes": "Runner existing source_state/bound.check after admitted phase and before runner.json return remains inside e2e, as do runner report/write/ref epilogue and final descendants. Never exclude required runner after-source proof by calling it post-phase closure.",
+      "outside_order": [
+        "measurement_envelope_constructed_exclusively_persisted_read_back_and_validated",
+        "final_controller_post_envelope_source_check",
+        "candidate_reference_record_exclusively_persisted"
+      ],
+      "claim": "E2E includes runner/native/root producer reports and required source checks through actual outer_wall_end. It explicitly excludes final measurement envelope/candidate finalization and the separately named final controller post-envelope source check. No self-inclusive write claim or scalar overhead subtraction.",
+      "selection": "E2E wall=end-start on same external observer clock; CPU=final owned Job user/kernel. Admitted wall=runner same-process phase difference; CPU=after_phase-before_phase whole Job ticks; outer wall/CPU retained separately. Profile qualification has no selected timing authority.",
+      "compatibility": "No automatic study command or full_sample_accepted:true introduced by development implementation. Update frozen protocol text/limitations prospectively and obtain review before code.",
+      "CPU_domains": "Wall checkpoint names outer_cpu_start_captured/outer_cpu_end_captured are actual perf_counter_ns checkpoints after separate process_time_ns queries, not CPU counter values. Actual process CPU start/end live only in separate cpu_observation. Never order or subtract process_time absolute values against wall counter values."
+    },
+    "storage_allocation": {
+      "hard_study_bytes": 77309411328,
+      "host_additional_bytes": 8589934592,
+      "regular_study_allocated_bytes": 69289902080,
+      "new_prerequisite_count_qualification_bytes": 6442450944,
+      "new_remaining_headroom_bytes": 1577058304,
+      "qualification_upper_components": {
+        "trace": 4831838208,
+        "native": 1207959552,
+        "runner_root_envelope_candidate_and_diagnostics": 150994944,
+        "profiles": 80216064,
+        "witnesses": 5013504,
+        "runner_returns": 294912,
+        "capacity": 2359296,
+        "supervisor_products_publication": 14155776,
+        "shared_reference_and_index_metadata": 33554432
+      },
+      "qualification_sum_bytes": 6326386688,
+      "qualification_headroom_bytes": 116064256,
+      "decision": "Explicit prospective6GiB qualification allocation FROM existing7.46875GiB study headroom, not an increase to72GiB study or8GiB host reserve. Regular1296 data allocations unchanged. Qualification<=72 supported B controls, timing never adopted. Count-index/profiles and their full actual trace/native/writer proofs retained in fixed qualification directory. Product objects remain shared within existing256MiB/512 cap, not charged again. No automatic retries/deletion or post-A resizing; every actual category/aggregate checked.",
+      "remaining_disk_rule": "free_storage >= max(0,72GiB-actual_owned_encoded_bytes_already_retained)+8GiB. Reconcile fixed owned namespace and actual writer lengths; do not repeatedly require another full72GiB after existing study files already consume part of its allowance."
+    },
+    "capacity": {
+      "source_notes": "Earlier primary notes plus Microsoft GetThreadGroupAffinity and Processor Groups pages; exact external readonly diagnostic and V2 review retained. Group numbering0..activecount-1 closes CAP01 even on multigroup hosts.",
+      "ABI": "64bit Windows only; BOOL/DWORD4,WORD/USHORT2,pointer8. GetActiveProcessorGroupCount()->WORD positive<=64. GetProcessGroupAffinity(HANDLE,PUSHORT,PUSHORT)->BOOL uses actual activecount-sized output buffer with inputcount=activecount; success count1..activecount, unique valid IDs sorted for record. GetThreadGroupAffinity(HANDLE,PGROUP_AFFINITY)->BOOL; structure maskuint64 offset0,groupuint16 offset8,reservedWORD[3] offset10,size16; reservedzero required. GetCurrentProcess/GetCurrentThread pseudo handles never closed. GetProcessAffinityMask explicit pointer-width masks. All APIs typed beforecall. Failed/zero/oversize/changed/invalid native results reject, no guessed fallback.",
+      "raw_reuse": "Use unchanged source-bound original machine() actual affinity mask/slotcount/freephysical. Verify source/descriptors before/after; discard its old slots-1 degree policy and memory_cap as admission rules. Preserve raw return as observation with original field validators.",
+      "storage": "shutil.disk_usage on resolved actual study-owned directory, os.stat.st_dev as opaque device id. Reject symlink/unowned/unexpected namespace/changeddevice/probe failure; preserve total/used/free bytes, not private paths. Track actual own file bytes/member refs per writer and reconcile namespaces; initial/full and remaining worst-case budgets checked, no physical allocation guarantee.",
+      "before_memory": "Require observed freephysical >=1073741824+2147483648=3221225472 before launch; original1GiB owned allowance and additional2GiB host reserve unchanged. After Job cleanup freephysical>=2147483648. Probe limitations/snapshots explicit; review this concrete additional-reserve arithmetic before code.",
+      "stdlib_source_binding": "Before implementation, retain official CPython v3.12.10/v3.12.15 Lib/shutil.py snapshots, exact LF/CRLF raw hashes/Git blobs and Windows disk_usage definition position. Bind actual unbound function/module/qualname/firstline/code and direct os._getdiskusage export identity before/after. New capacity source scope is explicit; earlier three concurrent modules do not imply whole interpreter or shutil qualification. No installed-observation expected-hash regeneration.",
+      "primary_group": "On the same calling thread, capture activecount/processgroups/thread primarygroup+mask and direct process/system masks before unchanged machine(), then repeat all after. Require equal counts/sets/primarygroup/threadmask/processmask/systemmask; rawmachine mask agrees and popcount agrees; group<activecount and in processgroups. Process mask must be a subset of system AND thread masks; reject incompatible observations instead of silently widening. Compute allowedslots from that exact primary process mask only; degree+3<=slots. Record both active groups and process set even when counting one primary domain. No total-machine eligibility count, additionalgroup budget, pinning, workerplacement, physicalcore or actualreservedCPU claim. OS may use othergroups; this tooling does not measure placement.",
+      "decision_basis": "V2 exactly-one-active-group restriction is prospectively superseded before implementation after actual readonly diagnostic observed2activegroups48+48/processgroups[0,1]/primarymask48. Diagnostic is not benchmark qualification. Conservative primary-group policy matches current-process GetProcessAffinityMask and GetThreadGroupAffinity documented primary-group semantics. Fixed degree<=8 remains unchanged; no study data or policy tuning afterA."
+    },
+    "metadata": {
+      "job_version": "eq142-job-boundaries:2, since prior emitted descriptive v1 resource field is renamed; preserve historical v1 sources/records under their original source, do not relabel them.",
+      "runner_version": "eq142-development-runner:2, explicit metadata rename expected_committed_output_metadata_bytes -> expected_accepted_output_metadata_bytes. Existing report normal/failure schemas both version2; old records remain historical source-bound.",
+      "accepted_counter": "resource_admission.cumulative_accepted_output_metadata_bytes is accepted-only source-derived prefix/final value cross-checked with actual original outputs. No counter called committed-output metadata. Observed returned backend commits remain publication observation facts with full receipt refs.",
+      "scope": "No source-independent calculation/package/API/default version change. Existing OutputManifest/task/result/receipt codecs and publication-observation:1 remain unchanged."
+    },
+    "status": "Prospective reviewed contract; no complete root/current qualification/official study acceptance"
+  }
 }
