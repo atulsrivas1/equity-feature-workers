@@ -35,16 +35,20 @@ REGISTRY={
         'capacity_receipt':(16384,r'capacity-(?:before|after)[.]json'),
         'eq142_complete_root':(65536,r'complete-root[.]json'),
         'eq142_measurement_envelope':(65536,r'measurement[.]json'),
-        'eq142_complete_candidate':(4096,r'candidate[.]json')},
+        'eq142_complete_candidate':(4096,r'candidate[.]json'),
+        'eq142_complete_root_failure':(1048576,r'failure[.]json')},
     'qualification':{
         'eq142_count_qualification':(1048576,r'count-qualification[.]json'),
-        'capacity_receipt':(16384,r'qualification-capacity[.]json')},
+        'capacity_receipt':(16384,r'qualification-capacity[.]json'),
+        'eq142_complete_root_failure':(1048576,r'failure[.]json'),
+        'eq142_study_admission':(16384,r'study-admission[.]json'),
+        'eq142_study_summary':(2097152,r'study-summary[.]json')},
 }
 REGISTRY=MappingProxyType({scope:MappingProxyType(codecs) for scope,codecs in REGISTRY.items()})
 
 
 def validate_reference(reference,*,scope,name):
-    """Pure closed reference/name check against the published V8 registry."""
+    """Pure closed reference/name check against the published V9 registry."""
     if type(scope) is not str or scope not in REGISTRY or type(name) is not str:
         raise ValueError('proof fixed scope/name')
     if (type(reference) is not dict or any(type(key) is not str for key in reference)

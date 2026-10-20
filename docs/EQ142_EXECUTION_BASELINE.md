@@ -1,3 +1,9 @@
+## EQ142 complete evidence controller source
+
+Development controller tools now assemble fixed source/product/trace/native/resource evidence under the paired V9 contract. [Commands, authority, statistics, resources and privacy](EQ142_CONTROLLER.md) describe permanent qualification-only versus separately gated fresh official workspaces. Exact source passed separate69-check review and55 portable methods on each platform. Actual full supported-matrix/native qualification, current archives/installed/CI artifacts and official timing remain pending. Packages, mathematics, defaults, cohorts, thresholds and hard caps are unchanged. Every individual development sample flag stays false; no speedup, adoption or release acceptance is claimed.
+
+## Earlier checkpoints retained as history
+
 ## EQ142 paired complete-root V8 precode clarification
 
 The paired fixture COMPLETE_ROOT_PRECODE.json prospectively defines distinct outer wrapper readback/nested actual original runner-return provenance, fixed reference_preparation routes and recorder callbacks, complete source/runtime/capacity72-row matrix and actual encoded category/prefix accounting. The existing32MiB metadata component covers31,211,520 bytes without changing any cap, cohort, threshold, formula, package or default. Existing registry/code remains component scope until implementation and review. No full controller/root/study acceptance. Canonical GO companion f211abd passed both local platform original qualification and scoped hosted artifact review; worker hosted optional/platform/CPU skips remain explicit. EQ142 In progress, EQ143–146 Backlog. Next publish paired clarification, then implement/test/review/qualify controller before any official timing.

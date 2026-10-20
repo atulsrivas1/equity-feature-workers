@@ -1,3 +1,7 @@
+## EQ142 development controller source; qualification pending
+
+Add fixed complete-evidence controller, permanent qualification/official purpose, full supported source/capacity/count matrix, bounded failure retention, exact admission/summary statistics and explicit pre-timing gate checks. The source review is bounded; actual full native/current platform/install/CI qualification and official study remain pending. Calculation/package versions and payloads, original supplied helpers, formulas, numerical tolerances, defaults, cohorts, resource caps and performance thresholds are unchanged. [Developer API and limits](docs/EQ142_CONTROLLER.md).
+
 ## EQ140 development — unreleased workers0.1.0a14
 
 Completed frozen be4 supplied-worker study and separate audit:486Jobs,6A/48B,108warmups/378retained, full expected digest/parity/resource checks. All48 alternatives fail frozen adoption gates; sequential remains default/fallback. [Full comparison, raw proof and limitations](docs/benchmarks/eq140/EQ140_RESULTS.md). Current ff32CI and bothOS four-form58-method hosted reports passed their scope; final successor/source/artifact/publication acceptance remains pending. Packaged README now uses durable evidence routing instead of a time-sensitive pending-measurement claim; renewed metadata/archive/installed review is required.
