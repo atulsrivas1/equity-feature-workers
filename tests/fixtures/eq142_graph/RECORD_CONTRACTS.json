@@ -1067,5 +1067,21 @@
     "allocation": "Do not add original task/output encodes for fact construction. Local fact containers only reference existing immutable objects. Bounded proof_bodies materialization holds at most one verified retained body per hash (<=16output+16receipt), within existing three-body observer allowance3*16*(1MiB+400000)+64*4096; capture bodies, retained-readback bodies and current decoded/codeced comparison body remain bounded. No physical allocator/copy-count guarantee; original960MiB logical and69,793,792 observer cap unchanged.",
     "required_types": "publishing and require_success exact bool; initial/maximum/combined/reserved and every count/index strict int, never bool; initial<=combined<=maximum<=1GiB. Editorial explicitness from final prospective review; no additional scope."
   },
-  "complete_root_precode": "COMPLETE_ROOT_PRECODE.json; prospective closed source-bound schema2 and actual writer-return wrapper; not yet implemented or qualified"
+  "complete_root_precode": "COMPLETE_ROOT_PRECODE.json, prospective V4; storage_device exact unsigned64 decimal string, no implemented capacity or complete root acceptance",
+  "capacity_component_interface": {
+    "schema": "eq142-capacity-component-interface:1",
+    "stage": "PRECODE_NOT_IMPLEMENTED",
+    "pure": "validate_capacity(record, expected_probe_sources) validates closed V4 raw record/types/arithmetic/topology/provenance fields. admit_capacity(record, expected_probe_sources, *, degree, expected_device, expected_retained_bytes) additionally checks exact context and CPU/memory/storage admission. Both no I/O/native/callback/calculation/publication; success alone does not certify producer provenance.",
+    "producer": "CapacityProbe(study_directory, approved_sources).capture(position, encoded_bytes_already_retained=...). Windows64 only; exact typed native API, same current thread, stable primary-group before/after original source-bound machine(), source/descriptor/code/file checks before/after including direct nt._getdiskusage and nt.stat export identity, approved shutil definition/hash. Source module imports no optional intraday at import. Pseudo handles never closed. Failed/unknown/changed API/source/path/device observation rejects; snapshots are non-atomic.",
+    "namespace_boundary": "The caller must supply actual reconciled study-owned encoded bytes at the precise capture stage. This component checks numeric range/subtraction and actual same-owned-directory device/free bytes but is not an independent whole-namespace ledger certificate. Complete-root/controller must verify fixed owned namespace/full writer references and stage-prefix byte accounting before passing these facts. Raw capture can retain structurally valid low-capacity observations; admission is separate and mandatory before native launch/root acceptance.",
+    "bounds": "Capacity JSON<=16384, activegroups1..64/processgroup array<=64, masks nonzero64bit; count safe-range strictint, device canonical uint64 string, capture ns canonical signed63 string. Global72GiB+host8GiB, beforeRAM3GiB/after2GiB, CPUdegree+3<=primaryallowedslots; degree1/2/4/8. No physical guarantee or worker pinning.",
+    "collection": "PortableCapacity pure tests mandatory/nooptional/noWindows skip. WindowsCapacity source/native observations no optional intraday dependency; exact class prefix added only Windows skip and CPU-capacity tuples (require_cpu_slots2 for original machine). Mocked classifier controls supplement, not installed qualification. Native failure controls reject and preserve pseudo-handle ownership, never fabricated capacity.",
+    "tests": [
+      "Synthetic masks/groupIDs/counts/stability/sourcefields/raw-original-derived-values and everycrossfield join; impossiblegroup7 withcount1 rejects.",
+      "Synthetic exactCPUdegree+3 edge/oneunder; RAMbefore3/after2GiB exact/oneunder; remainingdisk72-already+8 exact/oneunder; count bool/float/negative/overflow rejects.",
+      "Synthetic deviceIDs2^53,2^53+1,uint64max roundtrip distinct; unknown/float/bool/noncanonical/negative/overflow devices reject and same-device mismatch rejects.",
+      "Actual Windows repeated typed queries/source-beforeafter/raw machine/shutil on fresh temp directory; actual path/device/source tamper and API false/zero/oversize reject. No complete root/benchmark claim."
+    ],
+    "unchanged": "Original supplied/native/build helpers, calculation/library/defaults unchanged; no officialstudycommand or fullsampletrue."
+  }
 }

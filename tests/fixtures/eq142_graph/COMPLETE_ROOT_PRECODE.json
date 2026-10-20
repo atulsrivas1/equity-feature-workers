@@ -1,5 +1,5 @@
 {
-  "schema": "eq142-complete-root-proposal:3",
+  "schema": "eq142-complete-root-proposal:4",
   "stage": "CLOSED_SUCCESSOR_PRECODE_NOT_IMPLEMENTED_OR_RUNTIME_ACCEPTANCE",
   "bases": {
     "canonical": "e550510fcda94fbb2aa70d296b1515486392ec50",
@@ -175,7 +175,7 @@
       "allowed_cpu_domain": "exact windows_primary_processor_group:<primary_thread_group_before>",
       "allowed_cpu_slots": "integer equals len ids",
       "free_memory_bytes": "count from original raw available physical bytes",
-      "storage_device": "count actual os.stat(study_dir).st_dev, opaque local domain; no path persisted",
+      "storage_device": "canonical unsigned64 decimal string0..18446744073709551615 from actual os.stat(study_dir).st_dev; opaque local volume identifier, not a safe-range JSON count or cross-host/physical-device identity; no private path persisted",
       "storage_total_bytes": "count from disk_usage actual study_dir",
       "storage_used_bytes": "count",
       "free_storage_bytes": "count, exact disk_usage result; used+free=total",
@@ -370,7 +370,7 @@
     "source_notes": "Earlier primary notes plus Microsoft GetThreadGroupAffinity and Processor Groups pages; exact external readonly diagnostic and V2 review retained. Group numbering0..activecount-1 closes CAP01 even on multigroup hosts.",
     "ABI": "64bit Windows only; BOOL/DWORD4,WORD/USHORT2,pointer8. GetActiveProcessorGroupCount()->WORD positive<=64. GetProcessGroupAffinity(HANDLE,PUSHORT,PUSHORT)->BOOL uses actual activecount-sized output buffer with inputcount=activecount; success count1..activecount, unique valid IDs sorted for record. GetThreadGroupAffinity(HANDLE,PGROUP_AFFINITY)->BOOL; structure maskuint64 offset0,groupuint16 offset8,reservedWORD[3] offset10,size16; reservedzero required. GetCurrentProcess/GetCurrentThread pseudo handles never closed. GetProcessAffinityMask explicit pointer-width masks. All APIs typed beforecall. Failed/zero/oversize/changed/invalid native results reject, no guessed fallback.",
     "raw_reuse": "Use unchanged source-bound original machine() actual affinity mask/slotcount/freephysical. Verify source/descriptors before/after; discard its old slots-1 degree policy and memory_cap as admission rules. Preserve raw return as observation with original field validators.",
-    "storage": "shutil.disk_usage on resolved actual study-owned directory, os.stat.st_dev as opaque device id. Reject symlink/unowned/unexpected namespace/changeddevice/probe failure; preserve total/used/free bytes, not private paths. Track actual own file bytes/member refs per writer and reconcile namespaces; initial/full and remaining worst-case budgets checked, no physical allocation guarantee.",
+    "storage": "shutil.disk_usage on resolved actual study-owned directory, os.stat.st_dev as opaque device id. Reject symlink/unowned/unexpected namespace/changeddevice/probe failure; preserve total/used/free bytes, not private paths. Track actual own file bytes/member refs per writer and reconcile namespaces; initial/full and remaining worst-case budgets checked, no physical allocation guarantee. Encode st_dev as exact unsigned64 decimal string, never float/safe-count conversion. Reject noncanonical/negative/overflow and changed IDs. CPython3.12.10/15 Windows _Py_stat_struct uses uint64_t st_dev; actual author read-only diagnosis exceeded2^53-1, raw value stays private. This is prospective CAP02 correction before any capacity implementation/record.",
     "before_memory": "Require observed freephysical >=1073741824+2147483648=3221225472 before launch; original1GiB owned allowance and additional2GiB host reserve unchanged. After Job cleanup freephysical>=2147483648. Probe limitations/snapshots explicit; review this concrete additional-reserve arithmetic before code.",
     "stdlib_source_binding": "Before implementation, retain official CPython v3.12.10/v3.12.15 Lib/shutil.py snapshots, exact LF/CRLF raw hashes/Git blobs and Windows disk_usage definition position. Bind actual unbound function/module/qualname/firstline/code and direct os._getdiskusage export identity before/after. New capacity source scope is explicit; earlier three concurrent modules do not imply whole interpreter or shutil qualification. No installed-observation expected-hash regeneration.",
     "primary_group": "On the same calling thread, capture activecount/processgroups/thread primarygroup+mask and direct process/system masks before unchanged machine(), then repeat all after. Require equal counts/sets/primarygroup/threadmask/processmask/systemmask; rawmachine mask agrees and popcount agrees; group<activecount and in processgroups. Process mask must be a subset of system AND thread masks; reject incompatible observations instead of silently widening. Compute allowedslots from that exact primary process mask only; degree+3<=slots. Record both active groups and process set even when counting one primary domain. No total-machine eligibility count, additionalgroup budget, pinning, workerplacement, physicalcore or actualreservedCPU claim. OS may use othergroups; this tooling does not measure placement.",
@@ -408,12 +408,18 @@
     "ROOTPRE02": "Closed record/ref/scope/name/nullability/protocol types and conditional normalrunner shape, actualwriter wrapperref, nativecapacity ABI/rawpolicy, explicit6GiBwithin72 allocation and1MiBaggregate summary beforecode. Source/count qualification specificmatrix/exactsource; unknowncaps failclosed.",
     "ROOTPRE03": "Rename accepted-output metadata fields; explicit job2/runner2 metadata schemas, backendcommit facts retained separately in unchanged publication1.",
     "CAP01": "Every process/primary group must satisfy0<=id<actual activecount and primarygroup membership/domain/mask joins. Original1group7 malformed proof remains rejected. Primary-group conservative policy prospectively replaces unsupported-single-system-group requirement with explicit full topology observation, not global eligibility inference.",
-    "PUB04": "Actual component diagnostic EQ142_PUBLICATION_INDEX_TYPE_DIAGNOSTIC.json: baseline valid; false replacing commit index0 incorrectly accepted. Require strict nonbool event refs before equality/set arithmetic in extracted pure verifier and live adapter; no original calculation/publication change."
+    "PUB04": "Actual component diagnostic EQ142_PUBLICATION_INDEX_TYPE_DIAGNOSTIC.json: baseline valid; false replacing commit index0 incorrectly accepted. Require strict nonbool event refs before equality/set arithmetic in extracted pure verifier and live adapter; no original calculation/publication change.",
+    "CAP02": "Storage device ID is an opaque unsigned64 identifier, not primitive count. Use canonical decimal string preserving values beyond2^53; synthetic distinct IDs9007199254740992/9007199254740993 and uint64 maximum must remain distinct, malformed/overflow rejected. No resource cap, timing threshold or actual scope increase."
   },
   "compatibility_detail": "Raw proof reader uses duplicate-key rejecting bounded JSON and exact canonical body equality. Root2 fixed codec-context routing replaces V1 shape only prospectively; graph job2/runner2 changes explicitly version metadata. Normal root requires purpose development_candidate and no profile observer; count-index builder uses qualification_counts raw proof validator without depending cyclically on its own not-yet-complete index. Existing original worker/kernel/library versions/defaults unchanged.",
   "primary_sources": [
     "https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprocessaffinitymask",
     "https://learn.microsoft.com/en-us/windows/win32/api/processtopologyapi/nf-processtopologyapi-getthreadgroupaffinity",
-    "https://learn.microsoft.com/en-us/windows/win32/procthread/processor-groups"
-  ]
+    "https://learn.microsoft.com/en-us/windows/win32/procthread/processor-groups",
+    "https://docs.python.org/3.12/library/os.html#os.stat_result.st_dev",
+    "https://raw.githubusercontent.com/python/cpython/v3.12.10/Include/internal/pycore_fileutils.h",
+    "https://raw.githubusercontent.com/python/cpython/v3.12.15/Include/internal/pycore_fileutils.h",
+    "https://raw.githubusercontent.com/python/cpython/v3.12.10/Python/fileutils.c"
+  ],
+  "prior_proposal_sha256": "e786f27438ef0ee86e14dcc9e3150501f2f4c51574593e3132e87268435d1992"
 }

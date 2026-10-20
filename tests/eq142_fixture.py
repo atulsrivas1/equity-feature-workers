@@ -62,7 +62,7 @@ def qualification():
         record['definition_line']=approved['definitions'][record['definition']]
     hooks['runtime']='CPython '+runtime_version
     protocol = load('BENCHMARK_PROTOCOL.json')
-    source = {'canonical_docs_head':'42491d23421b7a50943659b47ec37bda074b6984',
+    source = {'canonical_docs_head':'870575d56a511962b646993cdb0f1dfc5be61428',
         'package_build_sources':{'core':protocol['sources']['baseline_core_package_build'],
             'worker':protocol['sources']['baseline_worker_main'],'io':protocol['sources']['baseline_io_main']},
         'distributions':{'equity-feature-contracts':'0.0.4a4','equity-features':'0.0.4a4',
