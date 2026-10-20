@@ -53,3 +53,5 @@ Every individual development record keeps `full_sample_accepted:false`, includin
 Raw capacity IDs, paths, process identities, nonces, creation ticks and full environment inventories stay private. Public results require an explicit separately reviewed allowlisted derivative containing synthetic selectors, aggregate statistics, source hashes, gate outcomes and limitations. Do not publish raw study/admission records by default.
 
 The entry point explicitly adds its owned tools and tests directories under isolated Python. The portable isolated-subprocess regression checks their exact module origins without dispatch; the actual native qualification remains a separate gate.
+
+Independent count qualification uses a600-second owned-process allowance within the existing native API ceiling, because its separate code-event profiler has no timing authority. Ordinary qualification fixtures and official A/B candidates retain120 seconds. Native15MiB row/16MiB receipt and60001-sample bounds remain mandatory and may refuse before that allowance. A changed source needs a fresh complete matrix; failed roots and partial prefixes never become a count index.

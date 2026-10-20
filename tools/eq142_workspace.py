@@ -239,7 +239,9 @@ class QualificationWorkspace:
                 '--profile',selector['profile'],'--mode',selector['mode'],'--degree',str(selector['degree']),
                 '--control','instrumented_B','--series',selector['series'],'--job','{job_name}']
             self._phase='native_owned_call';self._outcome='unknown'
-            native=run_owned(command,cwd=ROOT,timeout_s=120)
+            # Independent code-event counts have no timing authority. Use the
+            # existing native ceiling only here; measured candidates stay120.
+            native=run_owned(command,cwd=ROOT,timeout_s=600)
             self._phase='native_receipt'
             native_ref=write_ref(local,'native.json','native_receipt',native,16777216)
             self._remember('sample',native_ref)

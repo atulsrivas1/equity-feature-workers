@@ -597,16 +597,39 @@ class ControllerFailureCorrections(unittest.TestCase):
    self.assertFalse((previous/'failure.json').exists())
    failure=json.loads((root/'qualification/failure.json').read_bytes())
    self.assertEqual(failure['sample_id'],'qualification');self.assertEqual(failure['stage'],'count_qualification')
+ def test_count_only_allowance_keeps_failure_and_cannot_retry(self):
+  with tempfile.TemporaryDirectory() as temporary:
+   root=Path(temporary);owner=self.fault_owner(root);owner.index_ref=None;owner.checked_entries=[]
+   owner._source_check=Mock();owner._capacity=Mock();owner._directory=Mock(return_value='qualification/c000')
+   primary=NativeFailure('SYNTHETIC_COUNT_STOP',{'synthetic_count_failure':True})
+   with patch.object(eq142_native,'run_owned',side_effect=primary) as native:
+    try:owner.qualify_counts()
+    except NativeFailure as caught:self.assertIs(caught,primary)
+    else:self.fail('count failure was swallowed')
+    self.assertEqual(native.call_count,1)
+    self.assertEqual(native.call_args.kwargs['timeout_s'],600)
+    command=native.call_args.args[0]
+    self.assertEqual(command[command.index('--purpose')+1],'qualification_counts')
+    self.assertEqual(command[command.index('--control')+1],'instrumented_B')
+    with self.assertRaises(ValueError):owner.qualify_counts()
+    self.assertEqual(native.call_count,1)
+   self.assertIsNone(owner.index_ref);self.assertEqual(owner.checked_entries,[])
+   failure=json.loads((root/'qualification/c000/failure.json').read_bytes())
+   self.assertEqual(failure['native_code'],'SYNTHETIC_COUNT_STOP')
+   self.assertFalse(failure['full_sample_accepted']);self.assertTrue(owner._failed)
  def test_actual_exception_native_payload_is_retained_unaccepted_with_primary_cause(self):
   with tempfile.TemporaryDirectory() as temporary:
    root=Path(temporary);owner=self.fault_owner(root)
    payload={'synthetic_native_failure_evidence':'ACTUAL_EXCEPTION_PAYLOAD','full_sample_accepted':False}
    primary=NativeFailure('SYNTHETIC_NATIVE_REFUSAL',payload);cause=OSError('original private cause');primary.__cause__=cause
    owner._source_check=Mock();owner._capacity=Mock(return_value=({},{}));owner._directory=Mock(return_value='regular/c000/a-c000-w0')
-   with patch.object(eq142_native,'run_owned',side_effect=primary):
+   with patch.object(eq142_native,'run_owned',side_effect=primary) as native_call:
     try:owner.run_qualification_fixture('c000','uninstrumented_A')
     except NativeFailure as caught:self.assertIs(caught,primary);self.assertIs(caught.__cause__,cause)
     else:self.fail('primary native failure was lost')
+   self.assertEqual(native_call.call_args.kwargs['timeout_s'],120)
+   command=native_call.call_args.args[0]
+   self.assertEqual(command[command.index('--purpose')+1],'development_candidate')
    local=root/'regular/c000/a-c000-w0'
    self.assertEqual(json.loads((local/'native.json').read_bytes()),payload);self.assertIs(primary.evidence,payload)
    failure=json.loads((local/'failure.json').read_bytes())

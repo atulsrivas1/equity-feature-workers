@@ -1,3 +1,7 @@
+## Unreleased EQ142 count qualification correction
+
+- Use the existing native600-second ceiling only for independent code-event count qualification. Ordinary/official samples retain120 seconds; all resource and encoded evidence caps remain. The original failed full qualification is retained; a fresh complete matrix and native fixture gate remain pending.
+
 ## EQ142 development controller source; qualification pending
 
 Add fixed complete-evidence controller, permanent qualification/official purpose, full supported source/capacity/count matrix, bounded failure retention, exact admission/summary statistics and explicit pre-timing gate checks. The source review is bounded; actual full native/current platform/install/CI qualification and official study remain pending. Calculation/package versions and payloads, original supplied helpers, formulas, numerical tolerances, defaults, cohorts, resource caps and performance thresholds are unchanged. [Developer API and limits](docs/EQ142_CONTROLLER.md).
