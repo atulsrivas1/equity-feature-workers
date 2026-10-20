@@ -18,7 +18,7 @@ import threading
 from equity_feature_workers import TaskManifest
 import equity_feature_workers.supervisor as supervisor
 from eq142_graph import bind_source, digest, wire
-from eq142_trace import Collector, HookSession, TraceSpecificationError
+from eq142_trace import Collector, HookSession, TraceSpecificationError, OPERATIONS
 
 _ORIGINAL_PARTITION=supervisor._compute_partition
 _ORIGINAL_PARTITION_CODE=_ORIGINAL_PARTITION.__code__
@@ -80,6 +80,45 @@ def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations,quali
             raise TraceSpecificationError('duplicate_sidecar')
         witness_setting={'job_name':setting['job_name'],'output_dir':str(witness_root)}
     bind_source(expected_inventory).check()
+    return describe_plan(items,mode=mode,budget=budget,expected_inventory=expected_inventory,
+        output_dir=str(root),operations=operations,
+        qualification_profile_dir=None if profile_root is None else str(profile_root),
+        owned_process_witness=witness_setting)
+
+
+def describe_plan(items,*,mode,budget,expected_inventory,output_dir,operations,
+        qualification_profile_dir=None,owned_process_witness=None):
+    """Pure expected metadata shape and pickle length, not dispatch authority.
+
+    Caller binds source and canonical fixed directory strings independently.
+    No path lookup, source probe or calculation callback is performed here.
+    Shared construction lets a root recompute declared plan/spec reservation
+    costs from its trusted namespace context, without persisting private paths.
+    """
+    if (type(mode) is not str or mode not in ('sequential','thread','process') or type(items) is not tuple or not 1<=len(items)<=16
+            or type(budget) is not supervisor.ResourceBudget or type(expected_inventory) is not dict
+            or mode=='sequential' and budget.workers!=1):
+        raise TraceSpecificationError('unknown_invocation')
+    if (type(operations) not in (tuple,list) or len(operations)>len(OPERATIONS)
+            or any(type(operation) is not str or operation not in OPERATIONS for operation in operations)
+            or len(set(operations))!=len(operations)):
+        raise TraceSpecificationError('collector_error')
+    for value in (output_dir,qualification_profile_dir):
+        if value is not None and (type(value) is not str or not 1<=len(value)<=32767 or '\0' in value):
+            raise TraceSpecificationError('collector_error')
+    if output_dir is None:raise TraceSpecificationError('collector_error')
+    if owned_process_witness is not None:
+        from eq142_identity import JOB_PATTERN
+        if (type(owned_process_witness) is not dict or set(owned_process_witness)!={'job_name','output_dir'}
+                or type(owned_process_witness['job_name']) is not str
+                or re.fullmatch(JOB_PATTERN,owned_process_witness['job_name']) is None
+                or type(owned_process_witness['output_dir']) is not str
+                or not 1<=len(owned_process_witness['output_dir'])<=1024 or '\0' in owned_process_witness['output_dir']):
+            raise TraceSpecificationError('collector_error')
+    # Preserve original literal key identities/order as well as equal values.
+    # JSON-decoded keys otherwise add a distinct output_dir key to pickle memo.
+    witness_setting=None if owned_process_witness is None else {
+        'job_name':owned_process_witness['job_name'],'output_dir':owned_process_witness['output_dir']}
     partitions=supervisor.partition_tasks(items,budget.workers)
     if mode=='sequential':groups=[(item,) for item in partitions[0].items]
     else:groups=[partition.items for partition in partitions]
@@ -93,8 +132,8 @@ def make_plan(items,*,mode,budget,expected_inventory,output_dir,operations,quali
             'file':'delegate-%03d.json'%ordinal})
     if len({r['key'] for r in reservations})!=count:raise TraceSpecificationError('unknown_invocation')
     plan={'schema':'eq142-delegate-plan:1','mode':mode,'expected_inventory':json.loads(wire(expected_inventory)),
-        'output_dir':str(root),'operations':list(operations),'reservations':reservations,
-        'qualification_profile_dir':None if profile_root is None else str(profile_root),
+        'output_dir':output_dir,'operations':list(operations),'reservations':reservations,
+        'qualification_profile_dir':qualification_profile_dir,
         'owned_process_witness':witness_setting}
     # This is observed metadata serialization only. The final harness admission
     # must close its multiplication/copy and overall trace/resident reservations.

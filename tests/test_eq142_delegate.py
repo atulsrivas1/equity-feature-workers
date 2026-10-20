@@ -12,7 +12,7 @@ sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tests'))
 from equity_feature_workers import BoundedSupervisor,ResourceBudget
 from equity_feature_io_sdk import encode_result
 import equity_feature_workers.supervisor as supervisor
-from eq142_delegate import RoutingHookSession,make_plan,patched_delegate
+from eq142_delegate import RoutingHookSession,make_plan,describe_plan,patched_delegate
 from eq142_trace import Collector,validate_fragment
 from eq142_fixture import qualification,load,HAVE_INTRADAY,bound_inventory
 if HAVE_INTRADAY:
@@ -27,6 +27,29 @@ class PartitionDelegation(unittest.TestCase):
             context,config,batch=facts(name)
             result.append(work(context,config,(batch,),name='delegate-'+name))
         return tuple(result)
+
+    def test_source_bound_live_and_pure_plan_reconstruction_match_exact_admission(self):
+        from eq142_admission import original_reservation,delegate_reservation
+        items=self.items();bound=qualification();inventory=bound_inventory(bound)
+        operations=load('RECORD_CONTRACTS.json')['trace']['operations']
+        for mode,degree in (('sequential',1),('thread',2),('process',2)):
+            with self.subTest(mode=mode),tempfile.TemporaryDirectory() as directory:
+                root=Path(directory);trace=root/'trace';trace.mkdir();counts=root/'code-counts';counts.mkdir()
+                witness=root/'owned-processes';witness.mkdir()
+                setting={'job_name':'Local\\equity-feature-supplied-'+'a'*32,'output_dir':str(witness.resolve())}
+                budget=ResourceBudget(workers=degree,max_cpu_slots=4,max_in_flight=degree,max_resident_bytes=134217728)
+                actual,actual_bytes=make_plan(items,mode=mode,budget=budget,expected_inventory=inventory,
+                    output_dir=trace,operations=operations,qualification_profile_dir=counts,owned_process_witness=setting)
+                # Pure reconstruction must not require the post-run paths empty.
+                (trace/'synthetic-existing.json').write_bytes(b'{}\n')
+                expected,expected_bytes=describe_plan(items,mode=mode,budget=budget,expected_inventory=inventory,
+                    output_dir=str(trace.resolve()),operations=operations,
+                    qualification_profile_dir=str(counts.resolve()),owned_process_witness=setting)
+                self.assertEqual(actual,expected);self.assertEqual(actual_bytes,expected_bytes)
+                original=original_reservation(items,mode=mode,budget=budget)
+                self.assertEqual(delegate_reservation(actual,items,budget,original=original),
+                    delegate_reservation(expected,items,budget,original=original))
+                bound.check()
 
     def test_actual_modes_original_callback_and_full_sdk_parity(self):
         items=self.items()
