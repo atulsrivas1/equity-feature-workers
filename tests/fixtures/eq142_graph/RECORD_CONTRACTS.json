@@ -363,7 +363,8 @@
       "trace.restore",
       "trace.bookkeeping",
       "pool.thread_shutdown",
-      "pool.process_shutdown"
+      "pool.process_shutdown",
+      "sink.commit"
     ],
     "count_policy": "attempts=returned+rejected for complete traces; nested operations remain separate counts, never summed as unique allocations or physical copies",
     "exclusive_policy": "inclusive minus union of contained child intervals on exactly the same actual process/thread timeline; reject inconsistent or negative closure; no worker-to-wall summation Parent residual contains unseparated child-hook labeling/locking/serialization/counter work outside selected child intervals. Global A/A overhead bounds do not make per-stage residual pure product cost. Do not claim pure calculation-exclusive cost or subtract a scalar overhead.",
@@ -815,7 +816,7 @@
       "schema": "constant eq142-code-count-qualification:1",
       "complete": "bool; false rejects count qualification",
       "failure_reason": "null | observer_error | entry_limit | frame_limit | profiler_interference | unbalanced_events",
-      "counters": "sorted array<code_count>, <=42 approved code identities (41 hooks+original delegate, excluding3 manual terminal observations)",
+      "counters": "sorted array<code_count>, <=43 approved code identities (42 hooks+original delegate, excluding3 manual terminal observations)",
       "completion_classification": "constant return_events_do_not_classify_exception",
       "elapsed_cost_disposition": "constant qualification_only_no_timing_authority"
     },
@@ -994,5 +995,56 @@
     "cleanup_failure_fields": "Failed receipts only: cleanup_failures array<=16 of closed {stage,error_type,code}, cleanup_failed=true; primary_failure_identity closed {error_type,code}; retain actual primary diagnostic payload separately when present. Successful return requires no cleanup failure. All errors and existing partial observations remain within unchanged16MiB native receipt bound.",
     "probe_handle_cleanup": "Extend the same independent-close rule to owned RSS/thread-member/snapshot handles. At most257 probe close observations, bounded by existing256 member handles+1snapshot, retained in failed NativeFailure primary_failure_detail only. Primary probe error object/code/cause wins; standalone close failure rejects. Propagate a probe close failure instead of losing its details in an aggregate error row. All probes/caller raw receipts remain within existing15MiB row/16MiB total bound; no new accepted root codec or cap.",
     "early_unique_job_refusal": "Before any containment change/runner creation/assignment, failed unique creation (null or ERROR_ALREADY_EXISTS) retains CREATE_UNIQUE_JOB as primary. A nonnull colliding Job handle is only the newly opened caller reference: close it with checked outcome and separate bounded cleanup failures; never assign work, modify or terminate the existing Job. Null handle has no close attempt. Close exception/False must not mask primary. This closes additional04 coverage only; ordinary native paths unchanged."
+  },
+  "publication_admission_observation": {
+    "schema": "eq142-publication-admission-proposal:1",
+    "stage": "PRECODE_PROPOSAL_NOT_IMPLEMENTATION_OR_SAMPLE_ACCEPTANCE",
+    "basis": "Actual worker231 original Supervisor publication loop, SerialPublisher._drain and unchanged SerializedMemorySink. Commit may precede metadata RESOURCE_LIMIT. Existing41 hooks do not include sink.commit; supersede any preparation assumption that they do.",
+    "scope": "Development B-only bounded publication observations and independently replayed per-candidate logical output admission. A remains original Supervisor plus already declared common ownership witness. No library/default/calculation/version change; no study command.",
+    "inventory": "Add one exact source-bound accepted fixture method sink.commit:42 actual hooks plus3 unchanged manual terminal observations. Independent original code identities become43 including original partition delegate, not manual terminal queries. No event/frame/profile/trace cap increases.",
+    "actual_observations": "Inside existing hook mechanism, retain original sink.commit returned receipt or error identity, actual publisher.inner_drain returned frozen progress tuple or error, and only manifest.encode_output calls directly from the exact bound original BoundedSupervisor._run code. Bind actual publisher/sink owner identities and coordinator thread before hooks. Capture actual encode bytes/output owners without extra encodes/hash properties/getters inside hooks. Do not inspect live frame locals; direct caller code identity only. Capture intervals in one parent timeline; completion order does not become cross-process order.",
+    "caps": {
+      "events": 64,
+      "commit_attempts": 16,
+      "drain_attempts": 16,
+      "coordinator_output_encodes": 16,
+      "total_progress_rows": 16,
+      "output_body_bytes": 1048576,
+      "receipt_body_bytes": 400000,
+      "logical_observer_reservation_bytes": 69793792,
+      "formula": "3*16*(1048576+400000)+64*4096",
+      "summary_bytes": 65536
+    },
+    "admission": "Reserve full declared observer allowance before dispatch within existing960MiB product allowance, alongside original initial resident, copied plan/spec/witness and expected accepted output metadata. Captured bytes/counters remain bounded; a violated observer bound poisons qualification while original calls still execute exactly once. No assertion about physical copies or allocator enforcement. All construction/capture/postrestore encoding/validation/storage remains in selected B phase.",
+    "proof": "After hooks/profile restore, retain full actual commit receipts using original encode_receipt and actual captured original coordinator output bytes using existing ProductStore; bound receipt bytes400000/output1MiB. Preserve all observed receipts including unjoined postcommit failures. Join returned drain candidate by actual output object identity to coordinator encode, then full task/output/receipt codecs after restoration. Match commit receipt by full codec body, not presumed object identity after barrier decode. Unmatched receipt stays observed commit with unknown task linkage; root/study success requires exact successful one-to-one joins, never inferred rollback.",
+    "replay": "Replay in actual coordinator encode completion order: counter0=0; for candidate wire size n, accept iff original_initial_resident+counter+n<=original_max_resident; if accepted increment counter by n, otherwise leave unchanged. Each row reports candidate bytes, before/after, derived decision, actual outcome output/reason cross-check. Clearly label cumulative counter and branch decision source-derived, not directly observed private locals. Separately check new instrumented combined logical allowance plus cumulative accepted output metadata after each candidate. A may use ordered original accepted output codecs for source-derived successful-path counter only, never observed commit-order claims.",
+    "failure": "Observer exception/cap/type/source/identity failures are retained separately and never replace original return or original exception/cause. Failed original commits mean unknown persistence, not no-commit. Retain available products/actual observations before qualification rejects. Preserve actual postcommit metadata rejection and actual publication pending/cancellation; no fabrication of absent result or rollback. Fault qualification is not normal study acceptance.",
+    "independent_checks": [
+      "Real seq/thread/spawn original results and publication parity; actual hook/code-count agreement including new sink.commit.",
+      "Exact equality-at-limit acceptance and one-byte-over rejection with independent expected arithmetic; actual successful commit followed by original metadata rejection; retain orphan actual receipt.",
+      "Actual failed commit and observer failures preserve original return/error object/cause; original calls exactly once; source/owner/thread mismatch and all declared bounds fail closed.",
+      "Multiple tasks and reordered/tampered/missing/duplicate candidate/receipt joins rejected; A source-derived disposition distinct; nonpublication observes zero commits/drains/candidates.",
+      "Review exact source/docs/fixtures; fresh final source tests/installed bothOS/current CI/root/native/source/storage gates remain separate."
+    ],
+    "not_accepted": "No complete trace root, official A/A study, overhead/noise/performance/adoption/release acceptance. Native-local wall still excludes own cleanup/caller/outer closure.",
+    "coordinator_source_binding": {
+      "definition": "equity_feature_workers.supervisor.BoundedSupervisor._run",
+      "definition_line": 434,
+      "encode_call_line": 586,
+      "source_file_sha256": "from already accepted source inventory equity_feature_workers.supervisor, never regenerated from observer",
+      "descriptor": "Capture exact unbound _run function/code before hooks; require original module, qualname, first line434, whole-module accepted source and same top-level/defining BoundedSupervisor class aliases. Recheck descriptor identity/code and source after hooks. This is an unpatched caller filter distinct from public run. Never inspect frame locals. Tests include actual _run coordinator calls and exclude publisher/barrier/other encode calls."
+    },
+    "review_corrections": {
+      "receipt_sha256": "6f3a16eb68d73c4fb6a2ad18887362a7730ee9f3855b6de7cdd375a5f9129ff8",
+      "EQ142PUBPRE01": "Supersedes incorrect public run direct-caller assumption before code; actual owner is _run.",
+      "EQ142PUBPRE02": "Current qualification counter field becomes43; old executor41hooks+delegate42 retained as historical scope."
+    },
+    "working_review_corrections": {
+      "review_sha256": "6e983b8ee1ce7adafae528967162f3a58614723ab40b1355518beac4764988b4",
+      "EQ142PUB01": "Snapshot once into bounded incomplete record when source/codec/store/candidate-join observation fails; keep available actual events, commit receipts, captured output wires and progress facts. Nullable unknown join fields plus typed retention failures max64/truncated flag; no invented task association or rollback, no retry on repeated snapshot. Source check failure cannot authorize changed codecs. Verify rejects incomplete record before nullable joins; preserve original run result/error and runner retention after original proof failure.",
+      "EQ142PUB02": "Exactly43 synthetic code identities and profile counters admit,44 rejects, matching already prospectively approved42hook+delegate cardinality. No cap/threshold/default change.",
+      "record_fields": "schema,evidence,events,commits,drains,candidates,complete,failure_reason,declared_logical_observer_allowance_bytes,retention_failures,retention_failures_truncated,physical_enforcement,full_sample_accepted. Event original metadata retained. Complete normal rows unchanged; incomplete candidates may have null task/drain joins, actual captured output refs remain. Receipt null on thrown commit means no returned receipt; on proof retention failure, typed failure explains unknown proof.",
+      "retention_failure_fields": "event:nullable actual event index; stage:source_check|commit_proof|drain_copy|candidate_proof|candidate_join; error_type:bounded original exception type only, no private message. Maximum64; extra failures set retention_failures_truncated true and complete false. Source-check failure retains safe original metadata/captured bytes, avoids invoking unqualified receipt codec. error_type_truncated:boolean explicitly marks bounded prefix when original type identity exceeds128characters."
+    }
   }
 }

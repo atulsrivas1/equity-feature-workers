@@ -13,7 +13,7 @@ from types import CodeType
 BYTE_RETURNS=frozenset(('manifest.canonical','manifest.encode_task','manifest.encode_output',
     'sdk.encode_result','sdk.encode_receipt'))
 ASCII_RETURNS=frozenset(('config.to_json','context.to_json'))
-MAX_CODE_IDENTITIES=42 # 41 hook definitions plus the unchanged original delegate.
+MAX_CODE_IDENTITIES=43 # 42 hook definitions plus the unchanged original delegate.
 
 
 class CodeCounts:
@@ -119,6 +119,7 @@ def for_original_run(bound,inventory):
     from eq142_graph import resolve,function_of,digest,wire
     from eq142_trace import HookSession
     from eq142_causal import CausalHookSession
+    from eq142_publication import PublicationHookSession
     from eq142_delegate import _ORIGINAL_PARTITION,_ORIGINAL_PARTITION_CODE
     from equity_feature_workers import BoundedSupervisor
     bound.check()
@@ -130,8 +131,8 @@ def for_original_run(bound,inventory):
         operations[function.__code__]=record['operation']
     if _ORIGINAL_PARTITION.__code__ is not _ORIGINAL_PARTITION_CODE:raise ValueError('changed original partition')
     operations[_ORIGINAL_PARTITION_CODE]='delegate.original_partition'
-    transparent=[code for function in (HookSession.wrapper,CausalHookSession.wrapper) for code in function.__code__.co_consts
-        if type(code) is CodeType and code.co_name in ('traced','observed')]
+    transparent=[code for function in (HookSession.wrapper,CausalHookSession.wrapper,PublicationHookSession.wrapper) for code in function.__code__.co_consts
+        if type(code) is CodeType and code.co_name in ('traced','observed','publication_observed')]
     return CodeCounts(operations,root_codes=(BoundedSupervisor.run.__code__,_ORIGINAL_PARTITION_CODE),
         transparent_codes=transparent)
 

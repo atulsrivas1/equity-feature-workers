@@ -27,7 +27,7 @@ OPERATIONS=frozenset(('supervisor.inputs','supervisor.pickle_size','supervisor.p
     'intraday.prepare_operand','intraday.compute','intraday.indicator','intraday.band_values',
     'config.to_json','config.digest','context.to_json','context.digest','sdk.prepare_publication',
     'sdk.encode_result','sdk.decode_result','sdk.encode_receipt','sdk.publish','publisher.submit',
-    'publisher.inner_submit','publisher.drain','publisher.inner_drain','sink.lookup','sink.read',
+    'publisher.inner_submit','publisher.drain','publisher.inner_drain','sink.lookup','sink.read','sink.commit',
     'pool.thread_submit','pool.process_submit','pool.thread_shutdown','pool.process_shutdown',
     'future.result','parent.wait','delegate.original_partition',
     'trace.bind_labels','trace.install','trace.restore','trace.bookkeeping'))

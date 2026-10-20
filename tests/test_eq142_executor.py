@@ -22,15 +22,15 @@ if HAVE_INTRADAY:from supplied_intraday_fixture import facts,work
 
 
 class CodeIdentityCardinality(unittest.TestCase):
-    def test_42_hook_and_delegate_identities_admit_43_reject(self):
-        codes=[compile(f'def selected_{i}(): return {i}',f'<synthetic-code-{i}>','exec').co_consts[0] for i in range(43)]
-        operations={code:f'operation:{i:03d}' for i,code in enumerate(codes[:42])}
+    def test_43_hook_and_delegate_identities_admit_44_reject(self):
+        codes=[compile(f'def selected_{i}(): return {i}',f'<synthetic-code-{i}>','exec').co_consts[0] for i in range(44)]
+        operations={code:f'operation:{i:03d}' for i,code in enumerate(codes[:43])}
         observer=CodeCounts(operations,root_codes=(codes[0],));record=observer.snapshot()
         record['counters']=[{'operation':name,'call_entries':0,'return_events':0,'typed_byte_returns':0,
             'typed_returned_bytes':0} for name in sorted(operations.values())]
         validate_profile(record)
-        with self.assertRaises(ValueError):CodeCounts({**operations,codes[42]:'operation:042'},root_codes=(codes[0],))
-        changed=deepcopy(record);changed['counters'].append({**record['counters'][0],'operation':'operation:042'})
+        with self.assertRaises(ValueError):CodeCounts({**operations,codes[43]:'operation:043'},root_codes=(codes[0],))
+        changed=deepcopy(record);changed['counters'].append({**record['counters'][0],'operation':'operation:043'})
         with self.assertRaises(ValueError):validate_profile(changed)
 
 
@@ -57,7 +57,7 @@ class ExecutorObservations(unittest.TestCase):
             with self.subTest(mode=mode),tempfile.TemporaryDirectory() as directory:
                 items,budget,bound,inventory,plan,collector,ledger=self.setup_run(Path(directory),mode,degree)
                 profile=for_original_run(bound,inventory['hooks'])
-                self.assertEqual(len(profile.operations),42)
+                self.assertEqual(len(profile.operations),43)
                 self.assertFalse(any(op.startswith('future_terminal.') for op in profile.operations.values()))
                 expected={i.task.task_sha256:tuple(encode_result(r) for r in i.calculate(i.task,i.batches)) for i in items}
                 with CausalHookSession(bound,inventory['hooks'],collector,ledger=ledger),patched_delegate(plan,collector):

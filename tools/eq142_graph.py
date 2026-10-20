@@ -100,7 +100,7 @@ def bind_source(expected_inventory):
     hooks, source = expected_inventory['hooks'], expected_inventory['source']
     validate_source(source)
     observations=hooks.get('terminal_observations')
-    if (hooks.get('schema') != 'eq142-closed-hook-inventory:2' or len(hooks.get('records', [])) != 41
+    if (hooks.get('schema') != 'eq142-closed-hook-inventory:2' or len(hooks.get('records', [])) != 42
             or type(observations) is not list or len(observations)!=3):
         fail()
     expected_observers={f'future_terminal.{name}':f'concurrent.futures._base.Future.{name}'
@@ -131,7 +131,7 @@ def bind_source(expected_inventory):
         function = function_of(original)
         if not inspect.isfunction(function):
             fail('source_mismatch')
-        if record['operation'] in {*expected_observers,'pool.thread_shutdown','pool.process_shutdown'}:
+        if record['operation'] in {*expected_observers,'pool.thread_shutdown','pool.process_shutdown','sink.commit'}:
             if (function.__module__!=record['source_module']
                     or function.__qualname__!=record['definition'][len(record['source_module'])+1:]
                     or function.__code__.co_firstlineno!=record['definition_line']):fail('source_mismatch')

@@ -70,7 +70,8 @@ def original_reservation(items,*,mode,budget,pending_bytes=0,diagnostics=True):
         'native_ipc_encoded_bytes':None,'physical_enforcement':False}
 
 
-def delegate_reservation(plan,items,budget,*,original,expected_output_bytes=0,owned_witness_count=None):
+def delegate_reservation(plan,items,budget,*,original,expected_output_bytes=0,owned_witness_count=None,
+        publication_observation=False):
     """Reserve actual new plan/spec serialization without calling it native IPC.
 
     Two plan representations and three per-invocation spec populations are a
@@ -78,6 +79,9 @@ def delegate_reservation(plan,items,budget,*,original,expected_output_bytes=0,ow
     these measurements belong inside the instrumented selected phase.
     """
     if type(expected_output_bytes) is not int or expected_output_bytes<0:raise ValueError('output bound')
+    if type(publication_observation) is not bool:raise ValueError('publication observer admission')
+    from eq142_publication import OBSERVER_RESERVATION
+    observer_reservation=OBSERVER_RESERVATION if publication_observation else 0
     planned_witnesses=1+len(plan['reservations']) if plan is not None and plan.get('owned_process_witness') is not None else 0
     if owned_witness_count is None:owned_witness_count=planned_witnesses
     if (type(owned_witness_count) is not int or not 0<=owned_witness_count<=17
@@ -101,12 +105,13 @@ def delegate_reservation(plan,items,budget,*,original,expected_output_bytes=0,ow
             extra.append(max(0,proposed-raw))
     reservation=2*plan_bytes+3*sum(extra)
     witness_reservation=3*4096*owned_witness_count
-    combined=original['initial_reserved_resident_bytes']+reservation+expected_output_bytes+witness_reservation
+    combined=original['initial_reserved_resident_bytes']+reservation+expected_output_bytes+witness_reservation+observer_reservation
     if combined>budget.max_resident_bytes:raise ValueError('instrumented logical resident bound')
     return {'plan_pickle_bytes':plan_bytes,'per_invocation_spec_extra_pickle_bytes':extra,
         'owned_witness_population':owned_witness_count,'owned_witness_encoded_max_bytes':4096*owned_witness_count,
         'owned_witness_logical_reservation_bytes':witness_reservation,
         'logical_spec_resident_reservation_bytes':reservation,'expected_committed_output_metadata_bytes':expected_output_bytes,
+        'publication_observer_logical_reservation_bytes':observer_reservation,
         'combined_logical_resident_bytes':combined,'trace_reserved_bytes':TRACE_RESERVATION,
         'whole_job_sampled_rss_cap_bytes':JOB_RSS_CAP,'native_ipc_encoded_bytes':None,
         'physical_enforcement':False}

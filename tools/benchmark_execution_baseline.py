@@ -19,6 +19,7 @@ sys.path.insert(0,str(ROOT/'tests'))
 from eq142_graph import bind_source,digest,wire,describe_job
 from eq142_admission import budget_for,original_reservation,delegate_reservation,confirm_original
 from eq142_causal import CausalLedger,CausalHookSession
+from eq142_publication import PublicationLedger,PublicationHookSession
 from eq142_delegate import make_plan,patched_delegate
 from eq142_evidence import (ProductStore,bounded_read,persist_record,record_products,
     stable_products,combine_fragments)
@@ -183,7 +184,7 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         'executor_observation_attempted':False,'executor_shutdowns':None,'future_terminal_observations':None,
         'executor_terminal_observation_complete':None,
         'full_sample_accepted':False}
-    plan=None;collector=None;ledger=None;outcome=None;count_observer=None;profile_dir=None
+    plan=None;collector=None;ledger=None;outcome=None;count_observer=None;profile_dir=None;publication=None
     cpu_before=None;cpu_after=None
     witness_directory=directory/'owned-processes';witness_setting=None;witness_failure=None;parent_witness=None
     phase_operation='prepare_instrumentation'
@@ -213,9 +214,13 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
             finally:collector.finish(label_frame)
             ledger=CausalLedger(plan,items,collector)
         report['delegate_admission']=delegate_reservation(plan,items,budget,original=original,
-            expected_output_bytes=expected_output,owned_witness_count=(
+            expected_output_bytes=expected_output,publication_observation=collector is not None,owned_witness_count=(
                 1+len(plan['reservations']) if plan is not None and witness_setting is not None else
                 1 if job_name is not None else 0))
+        if collector is not None:
+            publication=PublicationLedger(bound,publisher=pub,sink=sink,
+                initial=original['initial_reserved_resident_bytes'],maximum=budget.max_resident_bytes,
+                combined=report['delegate_admission']['combined_logical_resident_bytes']-expected_output)
         phase_operation='capture_parent_witness'
         if job_name is not None and witness_failure is None:
             try:parent_witness=retain_owned_witness(witness_directory,'parent.json',job_name)
@@ -229,7 +234,8 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         with collector.phase('stage:supervisor') if collector is not None else nullcontext():
             try:
                 if collector is not None:
-                    session=CausalHookSession(bound,reference['source_inventory']['hooks'],collector,ledger=ledger)
+                    session=PublicationHookSession(bound,reference['source_inventory']['hooks'],collector,
+                        ledger=ledger,publication=publication)
                     frame=collector.begin('trace.install',())
                     try:session.install()
                     finally:collector.finish(frame)
@@ -254,6 +260,13 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
         products=record_products(outcome,progress.snapshot(),store,directory,sink=sink)
         report['product_proof']={'codec':'eq142_product_projection',**persist_record(directory/'products.json',products,max_bytes=65536)}
         report['product_outcomes']=products
+        report['publication_observation']=None
+        if publication is not None:
+            phase_operation='publication_observation'
+            observed=publication.snapshot(store)
+            report['publication_observation']={'codec':'eq142_publication_observation',
+                **persist_record(directory/'publication.json',observed,max_bytes=65536)}
+            report['publication_admission_replay']=publication.verify(observed,outcome,store)
         if witness_failure is not None:
             phase_operation='deferred_parent_witness_failure'
             raise witness_failure
@@ -335,6 +348,13 @@ def _run_control(reference_path,reference_sha256,*,directory,profile,mode,degree
     except BaseException as error:
         report['status']='failed_development_control';report['failure_type']=type(error).__module__+'.'+type(error).__qualname__
         report['original_outcome_returned']=outcome is not None
+        if publication is not None and report.get('publication_observation') is None:
+            try:
+                available=publication.snapshot(ProductStore(reference_path.parent/'objects'))
+                report['publication_observation']={'codec':'eq142_publication_observation',
+                    **persist_record(directory/'publication.json',available,max_bytes=65536)}
+            except BaseException as observation_error:
+                report['publication_observation_failure_identity']=failure_identity(observation_error,'retain_publication_on_failed_control')
         if ledger is not None and not report['executor_observation_attempted']:
             try:retain_executor_observations(report,ledger,require_waited=False)
             except BaseException as observation_error:

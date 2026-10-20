@@ -758,6 +758,23 @@
         "equity_feature_workers.supervisor.ProcessPoolExecutor"
       ],
       "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
+    },
+    {
+      "operation": "sink.commit",
+      "definition": "supplied_memory.SerializedMemorySink.commit",
+      "source_module": "supplied_memory",
+      "source_category": "accepted_worker_fixture",
+      "source_file": "supplied_memory.py",
+      "source_sha256": "9c9b62426cfeefd79e8b95e95c299e122c18b8ff9587fe10196f183ee22ab876",
+      "definition_line": 38,
+      "kind": "class_method_function",
+      "patch_sites": [
+        "supplied_memory.SerializedMemorySink.commit"
+      ],
+      "class_aliases": [
+        "supplied_memory.SerializedMemorySink"
+      ],
+      "descriptor_policy": "Mutate defining class attribute once; class aliases refer to same class, not independent patch sites. Preserve type and original descriptors."
     }
   ],
   "inspected_modules": [
