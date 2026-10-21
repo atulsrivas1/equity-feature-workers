@@ -2,7 +2,7 @@
 
 Runs only when explicitly invoked in an admitted execution environment. Tests are
 mandatory, with no skipped EF1 tests accepted as qualification. This checks the
-anchor and supplied-clock slices, not the full EF1 release or its inventory/performance gates.
+anchor, supplied-clock and current-state status slices, not the full EF1 release or its inventory/performance gates.
 """
 from __future__ import annotations
 
@@ -66,7 +66,7 @@ def main() -> None:
     archives = sorted(artifacts.iterdir())
     if len(archives) != 2*len(projects):
         raise RuntimeError('Incomplete wheel/sdist inventory')
-    receipt = {'scope':'EF1 anchor/clock installed artifacts and legacy numerical regression only; not full EF1 acceptance',
+    receipt = {'scope':'EF1 anchor/clock/current-state status installed artifacts and legacy numerical regression only; not full EF1 acceptance',
         'sources':sources,'python':platform.python_version(),'system':platform.system(),
         'archives':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in archives},'forms':[]}
     # Both physical forms of every package, plus two mixed boundaries. Each form
@@ -95,9 +95,9 @@ for name, version in expected.items():
     assert md.version(name)==version, (name,md.version(name),version)
 import equity_features, equity_feature_workers, equity_feature_duckdb
 from equity_features import ef1
-from equity_feature_workers import equity_sessions, equity_clock
+from equity_feature_workers import equity_sessions, equity_clock, equity_status
 from equity_feature_duckdb import ef1 as ef1_inputs
-for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,ef1_inputs):
+for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,ef1_inputs):
     assert pathlib.Path(module.__file__).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())
 ''',encoding='utf-8')
             run([str(python),'-I','-B',str(probe)],cwd=root,env=environment)
@@ -119,8 +119,10 @@ if __name__=="__main__":
 ''',encoding='utf-8')
             suites = [(core/'tests/unit','test_ef1_anchor.py',21),
                 (core/'tests/unit','test_ef1_clock.py',13),
+                (core/'tests/unit','test_ef1_status.py',26),
                 (io/'tests/ef1','test_anchor*.py',16), (worker/'tests','test_ef1_anchors.py',10),
                 (io/'tests/ef1','test_clock*.py',12), (worker/'tests','test_ef1_clock.py',8),
+                (io/'tests/ef1','test_status*.py',18), (worker/'tests','test_ef1_status.py',19),
                 (worker/'tests','test_supplied_session.py',13)]
             for directory,pattern,expected in suites:
                 run([str(python),'-I','-B',str(runner),str(directory),pattern,str(expected)],cwd=root,env=environment)
@@ -137,6 +139,11 @@ if __name__=="__main__":
                     '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
                     '--run-id','synthetic-'+name,'--cutoff',str(cutoff),'--proof',proof],
                     cwd=root,env=environment)
+            for case in ('S01','S02','S03'):
+                name = 'status-'+case
+                run([str(python),'-I','-B',str(worker/'examples/ef1_status.py'),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name,'--case',case],cwd=root,env=environment)
             receipt['forms'].append({'form':form,'status':'passed','skipped':0,
                 'suites':{pattern:expected for _,pattern,expected in suites},
                 'packages':{name:version for _,name,version in projects}})
