@@ -1,3 +1,7 @@
+## EF1 supplied current-state status — source candidate, unexecuted
+
+Explicit `equity_feature_workers.equity_status` APIs bind exactly four supplied status roles and return the pure library's complete selected-dimension result unchanged. The closed `run_ef1_statuses` wrapper reuses bounded serialized publication/full readback. Independent S01-S03 fixtures/tests and an actual synthetic-I/O DuckDB/closed-HTML example are authored only. [API, semantics, budgets and remaining review/qualification gates](docs/EF1_STATUS_IMPLEMENTATION.md). Transition-history/open diagnostics and full EF1 acceptance remain pending; earlier snapshots below retain their scopes.
+
 ## EQ140 supplied-input qualification
 
 Experimental workers0.1.0a14 supplies the eight intraday outputs and explicit structure/top-K/continuous/prior-close callbacks. [API](docs/api/SUPPLIED_INPUTS.md), [example](examples/supplied_intraday.py) and [current acceptance](https://github.com/atulsrivas1/equity-features/issues/474) describe the source-independent boundary and supported inputs. The completed [486-Job study](docs/benchmarks/eq140/EQ140_RESULTS.md) has48 nonwinning alternatives under its frozen wall/resource/tail gates; sequential remains default/fallback. Final source/package/main delivery acceptance is pending. Earlier snapshots below keep their historical scopes.

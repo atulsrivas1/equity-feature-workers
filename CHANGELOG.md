@@ -1,3 +1,7 @@
+## EQ165/EQ213 supplied current-state status — source authoring, unexecuted
+
+Additive status headers/discovery/callback/builder preserve exact four supplied roles, present-only wire inputs, explicit missing local slots and unchanged complete pure-library result identity. Closed status runner reuses existing bounded publication/full canonical readback. Independent S01-S03 literal goldens, missing/empty/proof/knowledge/witness/budget/replay controls and actual synthetic-I/O DuckDB/HTML example are authored, not executed. [Scope and mandatory remaining gates](docs/EF1_STATUS_IMPLEMENTATION.md). No scheduler/codec/general-budget/version change, runtime evidence or release claim. Earlier clock snapshot's unimplemented-status statement is superseded only for this source-authored subset.
+
 ## EQ165/EQ213 supplied clock — source authoring, unexecuted
 
 Additive fixed-five-header clock callback/work builder invokes the public pure EF1 library with one actual calendar-provenance binding; it performs no clock math. Clock-only and unchanged anchor-only wrappers reuse one private bounded publication/readback path. Eight independent mandatory clock methods and fixed-synthetic-I/O DuckDB/HTML demo are authored, not executed. [Scope, failed prior fixture lesson and remaining gates](docs/EF1_CLOCK_IMPLEMENTATION.md). Candidate package versions, general scheduler, codecs and budgets remain unchanged; current source pins select the reviewed clock candidates. Status remains unimplemented.

@@ -13,6 +13,7 @@ from .commands import CommandErrorCode, NeverCancelled
 from ._supplied import fail, translated
 from .equity_sessions import _admit_anchor, compute_ef1_inputs
 from .equity_clock import _admit_clock, compute_clock_inputs
+from .equity_status import _admit_status, compute_status_inputs
 from .manifests import OutputManifest, TaskManifest
 from .publication import PublicationLimits, SerialPublisher
 from .supervisor import BoundedSupervisor, Calculation, ResourceBudget, SupervisorOutcome, WorkItem
@@ -123,4 +124,14 @@ def run_ef1_clocks(items: tuple[WorkItem, ...], sink: ResultSink, *,
         calculate=compute_clock_inputs, admit_inputs=_admit_clock)
 
 
-__all__ = ['EF1Readback', 'EF1RunOutcome', 'run_ef1_anchors', 'run_ef1_clocks']
+def run_ef1_statuses(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Status-only API; unchanged bounded serialized publication and readback."""
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_status_inputs, admit_inputs=_admit_status)
+
+
+__all__ = ['EF1Readback', 'EF1RunOutcome', 'run_ef1_anchors', 'run_ef1_clocks', 'run_ef1_statuses']
