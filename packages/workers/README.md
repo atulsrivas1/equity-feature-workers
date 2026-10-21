@@ -1,3 +1,6 @@
+## EF1 sampled paths — source candidate, unexecuted
+
+Explicit `equity_path_gap`/`equity_path_drive` APIs admit the exact present-only role/kind subsequence, retain the original preceding DAILY binding and return one full unchanged four-gap/three-drive pure-library result. Closed runner wrappers reuse existing bounded publication/full SDK readback. Two synthetic DuckDB/HTML CLIs and 23 independent test methods are authored, not executed. [API, semantics, validation limits and remaining gates](../../docs/EF1_PATH_IMPLEMENTATION.md). No version/codec/scheduler/budget change, private parity claim or release acceptance; protected EQ142 runtime hold remains.
 # EF1 anchor execution — workers0.1.0a15 source candidate, unexecuted
 
 Additive [supplied current-state status source candidate](../../docs/EF1_STATUS_IMPLEMENTATION.md): explicit four-slot orchestration for one trading/quoting/SSR selection, unchanged full library results, closed bounded status runner and actual synthetic-I/O DuckDB/readback/HTML demo. Independent S01-S03 and boundary tests are authored and unexecuted. Original anchor/clock APIs and candidate versions remain unchanged. History/open diagnostics and release acceptance remain pending.

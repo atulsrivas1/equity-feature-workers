@@ -1277,3 +1277,7 @@ Earlier snapshots below remain historical; live canonical Project is execution a
 Buildable workers skeleton only; no commands, scheduler, claims or historical generation. [EQ-121](https://github.com/atulsrivas1/equity-features/issues/278) is the current canonical story; see its issue/Project for live stage. GOV014/GOV015 accepted preparation precedes implementation. Core contracts/features0.0.4a4 remain pure and source-independent. New I/O dependencies point inward, never from core to companions. R4.1 bounded ownership ends after EQ130 acceptance; R5 requires later direction.
 
 Read AGENTS.md, PUBLIC_DEVELOPMENT.md, SESSION_HANDOFF.md and the canonical issue before work. Historical R4 receipts remain in equity-features. No private paths/source material belongs here.
+
+## EF1 path authoring lesson — October20,2026
+
+Closed sampled-path routes retain original prior DAILY session/source/scope bindings rather than applying a target-only market admission. Shared worker admission already checks actual binding, namespace and instrument without overwriting session; the pure library owns explicit preceding-calendar-slot semantics. Missing roles remain manifest absence plus omitted actual pure inputs. Source-authored evidence in docs/EF1_PATH_IMPLEMENTATION.md and tests/test_ef1_paths.py; all assertions remain unexecuted under the protected study reservation. Do not equate authoring/test census with numerical or release validation.

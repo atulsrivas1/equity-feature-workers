@@ -135,3 +135,28 @@ def run_ef1_statuses(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ = ['EF1Readback', 'EF1RunOutcome', 'run_ef1_anchors', 'run_ef1_clocks', 'run_ef1_statuses']
+
+
+def run_ef1_path_gaps(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Gap-only API; unchanged bounded serialized publication and readback."""
+    from .equity_path_gap import _admit_path_gap, compute_path_gap_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_path_gap_inputs, admit_inputs=_admit_path_gap)
+
+
+def run_ef1_path_drives(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Drive-only API; unchanged bounded serialized publication and readback."""
+    from .equity_path_drive import _admit_path_drive, compute_path_drive_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_path_drive_inputs, admit_inputs=_admit_path_drive)
+
+
+__all__ += ['run_ef1_path_gaps', 'run_ef1_path_drives']
