@@ -145,7 +145,12 @@ if __name__=="__main__":
                     '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
                     '--run-id','synthetic-'+name,'--case',case],cwd=root,env=environment)
             receipt['forms'].append({'form':form,'status':'passed','skipped':0,
-                'suites':{pattern:expected for _,pattern,expected in suites},
+                'suites':[
+                    {'layer':layer, 'directory':directory.relative_to(source).as_posix(),
+                     'pattern':pattern, 'expected':expected}
+                    for directory,pattern,expected in suites
+                    for layer,source in (('core',core),('io',io),('workers',worker))
+                    if directory.is_relative_to(source)],
                 'packages':{name:version for _,name,version in projects}})
             (output/'qualification.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
     receipt['status']='passed'

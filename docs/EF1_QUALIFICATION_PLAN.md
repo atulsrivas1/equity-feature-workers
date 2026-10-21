@@ -65,3 +65,7 @@ Coordinator extends the existing four-form helper with exact26 library/18 I/O/19
 ## Supplied status bootstrap qualification
 
 Current foundation, supplied-input and EF1 lanes select reviewed status core b7dd36b2d523dcf5139900decaa7c62e6353dcbe and I/O22de254d6cd0ad79bbe746e9484ba4f64dc616a1. Historical companion constants remain unchanged. The core standalone lane subsequently pins this worker candidate and qualifies its actual current core checkout, preserving a finite immutable dependency graph. This selects source only; installed status numerical qualification remains pending.
+
+## Unambiguous suite receipts
+
+Downloaded clock532 receipts used test filename alone as a JSON mapping key, so core and worker clock suites collided in the summary even though logs show both actually executed. Status would have the same collision. Qualification receipts now preserve every suite as a layer/directory/pattern/expected record. Exact execution counts and zero-skip guards are unchanged. Earlier receipts remain historical with this reporting limitation; do not infer an absent execution from their overwritten summary key.
