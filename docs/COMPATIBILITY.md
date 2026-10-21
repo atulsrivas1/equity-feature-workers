@@ -1,3 +1,7 @@
+## EF1 cumulative workers source checkpoint - October 21, 2026
+
+Current source, completed earlier-cohort validation and pending final qualification are recorded in [EF1 cumulative workers source checkpoint - October 21, 2026](EF1_CUMULATIVE_QUALIFICATION.md). Earlier source-authoring, uncommitted, pending-pins, unexecuted and resource-hold entries below are historical snapshots; they do not override the current checkpoint. Final installed/platform/browser and full original-audit release gates remain open.
+
 ## EQ109 external examples and compatibility
 
 [Agent research](AGENT_RESEARCH.md) adds examples, not package/public protocol/schema/algorithm changes. Fixed optional dependencies remain frozen in its profile. MCP explanations stay reference-only (`content_verified=False`); outer supplied-batch consistency is separate. Existing content/receipt/event/ledger identities, native authority and no automatic replay semantics remain. No migration is required for accepted package users. [Executed source qualification](stories/EQ-109_EXECUTION.json) records fresh author/current-CI cohorts and scoped audits; current delivery/acceptance is authoritative on [story209](https://github.com/atulsrivas1/equity-features/issues/209). A source-qualified example is not a source-authenticity, production-hosting or trading certification. Earlier dated candidate entries below retain historical scope.

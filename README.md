@@ -1,3 +1,7 @@
+## EF1 cumulative workers source checkpoint - October 21, 2026
+
+Current source, completed earlier-cohort validation and pending final qualification are recorded in [EF1 cumulative workers source checkpoint - October 21, 2026](docs/EF1_CUMULATIVE_QUALIFICATION.md). Earlier source-authoring, uncommitted, pending-pins, unexecuted and resource-hold entries below are historical snapshots; they do not override the current checkpoint. Final installed/platform/browser and full original-audit release gates remain open.
+
 ## EF1 sampled paths — source candidate, unexecuted
 
 Explicit `equity_path_gap`/`equity_path_drive` APIs admit the exact present-only role/kind subsequence, retain the original preceding DAILY binding and return one full unchanged four-gap/three-drive pure-library result. Closed runner wrappers reuse existing bounded publication/full SDK readback. Two synthetic DuckDB/HTML CLIs and 23 independent test methods are authored, not executed. [API, semantics, validation limits and remaining gates](docs/EF1_PATH_IMPLEMENTATION.md). No version/codec/scheduler/budget change, private parity claim or release acceptance; protected EQ142 runtime hold remains.
