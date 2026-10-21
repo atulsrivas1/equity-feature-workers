@@ -1288,3 +1288,32 @@ Closed sampled-path routes retain original prior DAILY session/source/scope bind
 ## EF1 observable source subset
 
 Closed opening_trade, separately selected opening_trade_seconds and physical status_history orchestration, exact nullable role manifests, independent packets, bounded publication/readback and synthetic demo entry points are described in [observable implementation and current limits](EF1_OBSERVABLE_IMPLEMENTATION.md). Source authoring and actual source validation are distinct from installed/platform/release acceptance. Full original scope remains open.
+## Daily observation nullable-role lesson — October21,2026
+
+Independent review P2 WORKER-DAILY-01 established that bounding actual evidence
+rows does not bind the declared ResultMetadata.evidence_limit or math policy.
+The daily route now requires exact28/v1 before returning; valid canonical
+substitutions27/29/unknownmath test both direct refusal and runner failed result
+before publication. Preserve generic admission and report outcome failures as
+outcomes, without claiming a thrown runner exception. Earlier golden success
+does not substitute for adversarial identity validation. Final14methods pass
+17.222s against correctedcore67c805ff/17f3e6d; strict36 passes and four fresh CLI
+golden/close-reopen readbacks pass. Independent correction recheck remains pending;
+earlier source evidence is preserved rather than relabeled current qualification.
+
+The daily route reconstructs six nullable pure slots only after the existing
+present-only batch bijection and metadata admission. Keep missing and present
+empty distinct and preserve all original object identities. A pure packet's
+declared semantic refusal stage is not guaranteed to be the first refusal in an
+outer worker: X212 has duplicate rows and inconsistent observed delivery count,
+so unchanged generic admission first returns RESULT while actual direct pure
+execution must return DUPLICATE. Test and report both paths separately; never
+weaken an outer guard to manufacture identical stage coverage. See
+[implementation and actual development evidence](EF1_DAILY_OBSERVATIONS_IMPLEMENTATION.md).
+After coordinator-reviewed V3A1 corrected only the raw-missing quality proof
+fence to3/3, actual13Windows daily methods pass91fullgoldens/28real purecodes and
+outer refusals; strict36sourcefiles and124legacy checks pass. Four synthetic
+examples verify full golden and physical close/reopen SDK/receipt readbacks,
+including252/366. Final independent review, committed/native installed/browser
+and release gates remain. The original fixture and failed evidence are preserved;
+layer authors did not amend the oracle or weaken generic guards.

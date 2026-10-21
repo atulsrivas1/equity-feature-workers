@@ -1,3 +1,18 @@
+## EF1 daily observations — source candidate
+
+Add a closed six-role daily observation worker and shared-runner wrapper with
+target-only task history, actual pickle5 input bounds and full result identity.
+Include immutable public synthetic packets, stage-aware refusal checks, transport,
+spawn, replay/cancellation/readback tests and a four-case separate DuckDB/HTML
+example. Independent review found missing declared metadata closure; now require
+exact resultmathv1/evidence_limit28 and taskmathv1 while retaining generic guards.
+Actual14daily methods pass91fullgoldens/28real purecodes and outer refusals plus
+valid-result substitutions; strict36sourcefiles pass. Earlier248 selected
+regression checks retain their original source/scope. Four fresh CLI physical
+examples verify full golden and close/reopen SDK/receipt readback. The reviewed
+V3A1 fixture clarification preserves the original failed-run evidence. No release.
+See [actual evidence and limits](docs/EF1_DAILY_OBSERVATIONS_IMPLEMENTATION.md).
+
 ## EF1 sampled paths — source candidate, unexecuted
 
 Explicit `equity_path_gap`/`equity_path_drive` APIs admit the exact present-only role/kind subsequence, retain the original preceding DAILY binding and return one full unchanged four-gap/three-drive pure-library result. Closed runner wrappers reuse existing bounded publication/full SDK readback. Two synthetic DuckDB/HTML CLIs and 23 independent test methods are authored, not executed. [API, semantics, validation limits and remaining gates](docs/EF1_PATH_IMPLEMENTATION.md). No version/codec/scheduler/budget change, private parity claim or release acceptance; protected EQ142 runtime hold remains.

@@ -1,6 +1,77 @@
+## Daily cohort qualification preparation — October 21, 2026
+
+Daily source review findings are resolved; library final independent review 4fe8139a, worker metadata closure584a7212 and I/O final documentation3e8a6162 are retained by the coordinator. Accepted main documentation was integrated under separate independent review3237c588. The installed qualifier adds only the four daily suites and four daily demos, preserving all earlier checks: actual loader census26suites/700methods,29demos per form. Bounded independent qualifier reviewd6ae653f passed; actual installed execution remains pending. The EF1 workflow now selects reviewed bootstrap coreccd7a46af968a4ef62764cf103bd324d814ebf27 and I/Oa729d84f8f154fa8bfbd426765da88c2828be3f8. The I/O manifest now hashes canonical committed LF bytes418ac415 under independent correction reviewc8572fab. Historical validation entries below retain their recorded source epochs. No current Windows/Linux package, browser, full-audit or release pass is claimed.
+
 ## EF1 cumulative workers source checkpoint - October 21, 2026
 
 [Current qualification and limits](EF1_CUMULATIVE_QUALIFICATION.md) records the exact frozen runtime cohort: all four installed forms passed on Windows and Linux, with 665 methods per form, zero skips and 200 verified-readback demos across both platforms. Coordinator artifact audit and fresh independent final review passed. Later documentation integration commits are not executed runtime source identities. Actual browser inspection, full original audit/source-version/consumer bindings, suitable N-drive input qualification and EF1 release gates remain open. Earlier source-authoring, pending and resource-hold entries below retain their original historical scope; no whole-story completion or package publication is claimed.
+
+Current observable subset source checkpoint: read [observable implementation](EF1_OBSERVABLE_IMPLEMENTATION.md). Three closed workers preserve exact4/5 nullable roles. Reviewed publication fixture646e402e retains observable-v2 algorithms/context2/map2/backendef1a5 and globalv1 task/results; generic manifests bytes restored exactly, SDK/sink/codec unchanged. Actual Windows3.12.10 source24 observable methods PASS,35 strict files PASS, original manifest11 PASS. All58 full results/31 refusal stages/actualspawn and full real DuckDB readback, including truthful H11 missing capability, passed. Four synthetic public adapter->worker->newDuckDB/HTML demos exited0 verified. Earlier run1/2 failures plus run3 absent-provenance setup failure remain retained. Qualifier retains19old/512methods/21demos and adds111core+18IO+24worker=22suites/665methods/25demos per four forms. Source remains uncommitted awaiting coordinator review, final actual dependency pins and fresh independent full PR review. Resume with those reviews, exact-commit four-form/platform integration, actual browser and original audit/release gates. No installed/Linux/release/benchmark/N-drive claim.
+
+Current October21,2026 period/extended subset author checkpoint supersedes earlier no-runtime statements only for this admitted work. See [period/phase implementation](EF1_PERIOD_PHASE_IMPLEMENTATION.md): bounded original EQ166#506/support571, frozen17headers/62packets, exact period3role and extended3role original present-subsequence APIs, existing bounded runner/full SDK readback. Actual Windows3.12.10 source-selected17worker methods PASS, strict31sourcefiles PASS, two synthetic adapter->worker->newDuckDB HTML demos exited0 verified readback. Earlier17methodrun had2test-setup errors retained/corrected; imported library variable annotation collision fixed by library author. No benchmark or installed/otherplatform claim. Source remains uncommitted pending coordinator review; final dependency selections, fresh independent PR review and exact-head four-form qualifier still pending. All16older suite counts and19older demos retained; new qualifier addsworker17/core75/IO17 and2newdemos. Full original scope/audit/browser/release gates remain open. No private dataset/N-drive/sourceparity acceptance, merge, release or package publication. Resume with actual diff review, finalize coordinator real source pins, independently review, commit/push when instructed, then immutable installed composition and public lifecycle evidence.
+
+Current new-checkout source work: [EF1 supplied current-state status](EF1_STATUS_IMPLEMENTATION.md), coordinator-authorized EQ165#505 subset supporting EQ213#571. Branch codex/ef1-status-workers starts b302f34d2b3190d917a73d00f62ebbc284bf82e3. Authored additive equity_status headers/discovery/callback/builder, closed run_ef1_statuses over unchanged private runner, original independent S01-S03 rows/goldens and mandatory boundary/readback/replay tests, actual I/O synthetic DuckDB/closed HTML example and docs. No local runtime/import/syntax/test/build/DB/benchmark/N-drive access, commit or push. Pending coordinator actual source review, fresh independent final-head review, exact sibling pins/qualification census, remote CI, numerical/installed/bothOS/legacy/full pipeline/browser acceptance. Resume with source diff review and coordinator-owned integration; do not run locally during EQ142 reservation. History/open diagnostics/full EQ164 audit/EQ165 and EF1 release acceptance remain pending. Present-only input tuples reconstruct exact four local slots only after admission; preserve lexical complete result bindings and original witnesses. Earlier clock handoff below is superseded only by this status source subset.
+
+Prior clock source checkpoint: [EF1 supplied session clock](EF1_CLOCK_IMPLEMENTATION.md), coordinator-authorized EQ165#505 supporting EQ213#571. Branch codex/ef1-session-workers starts839e7fb; prior anchor checkout/CI remains frozen. Authored additive equity_clock callback/builder, private shared-runner factoring and eight mandatory independent tests/demo. Source qualification and actual release gates remain distinct. Explicit completed_eod windows remain required; the coordinator's prior anchor fixture-default failure is not relabelled as a pass.
+
+Earlier anchor source preparation: [EF1 EQ213 implementation and exact resume gates](EF1_IMPLEMENTATION.md). Scoped packaging correction new workera15/featuresa5, unchanged contractswirea4/SDKa2/intradaya3, exact supplied-session backenda5 remains the candidate boundary. Shared historical CORE_COMMIT/IO_COMMIT imports remain20c08/19aa for old companion cohorts; coordinator owns current cross-repository refs. Earlier checkpoints below retain their original chronological context; they are not current execution authority.
+Current source-authoring work: [EF1 EQ213 implementation and exact resume gates](EF1_IMPLEMENTATION.md). Scoped independently approved packaging correction W1 is authored: new workera15/featuresa5, unchanged contractswirea4/SDKa2/intradaya3, exact supplied-session backenda5. Mandatory EF1 tests now fail missing/wrong candidate rather than skip. Current source probes updated. Current foundation/supplied builders and workflows now use reviewed-commit placeholders, exact featurea5/workera15/adaptera9 expectations and unchanged gates; coordinator must substitute matching actual SHAs before push. Shared historical CORE_COMMIT/IO_COMMIT imports remain20c08/19aa for old companion cohorts; only foundation CLI PINS_CORE/PINS_IO change. See [CI migration and qualification plan](EF1_QUALIFICATION_PLAN.md). Independent corrected-byte recheck, final source pins/CI and all runtime checks remain pending; no tests/builds/DB/benchmark execution, commit or push. The earlier checkpoint appended below retains its superseded packaging-blocker state for chronology. Historical R17/EQ140 records that follow retain their original context.
+
+## Daily observations independent-review rework — October21,2026
+
+Fresh automated worker review identified P2 WORKER-DAILY-01: valid declared
+evidence limits27/29 could reach publication and unknown math policy escaped
+the direct route. Added exact returned mathv1/evidence_limit28 checks plus an
+explicit taskmathv1 route assertion; actual evidence-row guard and all generic
+guards retained. TaskManifest already rejects ordinary non-v1 construction.
+One new valid-DTO substitution method checks direct RESULT and runner failed
+execution/noresults/nooutput/no publication; actual focused PASS0.174s. Final
+full14methods PASS17.222s against corrected core hashes67c805ff/17f3e6d, including
+all91goldens/28realcodes and outer stages; strict36sourcefiles PASS. Four fresh
+actual CLI examples exited0 against new separate DBs with full golden/SDK/receipt
+close-reopen readbacks. Fixture47994803 unchanged. Earlier13-method/numerical/demos
+and248 selected regression methods retain their exact older source/scope.
+
+Updated exact source/log report is ready; initial reviewed snapshoteed0afe6 is
+preserved byte-exact separately. Coordinator must request independent correction
+recheck before commit/push. No commit/push or
+qualifier/pin/census change. See [review and correction](EF1_DAILY_OBSERVATIONS_IMPLEMENTATION.md).
+
+## Daily observations source checkpoint — October21,2026
+
+New isolated daily route and shared-runner wrapper are authored under original
+EQ166#506/support571, branch codex/ef1-daily-workers baseline3599689. See
+[API, real checks, failed-run accounting and remaining gates](EF1_DAILY_OBSERVATIONS_IMPLEMENTATION.md).
+Six exact declarations reconstruct six nullable pure arguments after unchanged
+present-batch admission; target-only governed task, input1MiB, result4cells and
+evidence28. Frozen public synthetic119packets remain byte-exact.
+
+Actual Windows3.12.10 first full13-method run had2failures/2setup errors; V318
+raw-None quality-fence discrepancy was resolved by coordinator-reviewed V3A1:
+four quality rows3/3, dependency slots[0,1,2], no selected rows; all119input/config
+packets and118whole packets otherwise unchanged. Exact public derivative47994803
+replaced only the new daily fixture; coordinator preserves the original6d95adc.
+X212 pure DUPLICATE and earlier actual generic RESULT are now separately asserted;
+generic row-count guard was preserved. Two author setup errors corrected. Nine
+focused worker methods PASS3.637s; strict2changedsourcefiles PASS. Eight unchanged
+legacy suites PASS124methods76.128s after correcting a private driver missing
+Parquet source (initial66pass/twoimporterrors retained). After actual stable core
+notification, full13daily methods PASS16.972s:91complete goldens,28real purecodes
+and actual outer refusals. Fullworker strict36sourcefiles PASS. Four actual
+synthetic converter->worker->newDuckDB close/reopen/fullgoldenSDK/receipt HTML
+examples exited0, including252/366; four subsequent real CLI child invocations
+also exited0 with new separate DBs and complete readbacks. Seven older EF1 suites
+plus provenance PASS124methods41.472s. Browser and installed qualification pending.
+
+Resume: coordinator reviews actual source report and full diff before commit/push.
+Fresh independent
+review and exact committed install/native four-form/browser/fullEF1 gates remain.
+No dependency pins, qualifier census, generic protocol, publication or lifecycle
+status changed. Private driver/logs stay local; older source roots remain protected.
+
+## EF1 cumulative workers source checkpoint - October 21, 2026
+
+Current source, completed earlier-cohort validation and pending final qualification are recorded in [EF1 cumulative workers source checkpoint - October 21, 2026](EF1_CUMULATIVE_QUALIFICATION.md). Earlier source-authoring, uncommitted, pending-pins, unexecuted and resource-hold entries below are historical snapshots; they do not override the current checkpoint. Final installed/platform/browser and full original-audit release gates remain open.
 
 Current observable subset source checkpoint: read [observable implementation](EF1_OBSERVABLE_IMPLEMENTATION.md). Three closed workers preserve exact4/5 nullable roles. Reviewed publication fixture646e402e retains observable-v2 algorithms/context2/map2/backendef1a5 and globalv1 task/results; generic manifests bytes restored exactly, SDK/sink/codec unchanged. Actual Windows3.12.10 source24 observable methods PASS,35 strict files PASS, original manifest11 PASS. All58 full results/31 refusal stages/actualspawn and full real DuckDB readback, including truthful H11 missing capability, passed. Four synthetic public adapter->worker->newDuckDB/HTML demos exited0 verified. Earlier run1/2 failures plus run3 absent-provenance setup failure remain retained. Qualifier retains19old/512methods/21demos and adds111core+18IO+24worker=22suites/665methods/25demos per four forms. Source remains uncommitted awaiting coordinator review, final actual dependency pins and fresh independent full PR review. Resume with those reviews, exact-commit four-form/platform integration, actual browser and original audit/release gates. No installed/Linux/release/benchmark/N-drive claim.
 
