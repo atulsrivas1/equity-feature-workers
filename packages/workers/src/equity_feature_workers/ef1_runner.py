@@ -266,3 +266,17 @@ def run_ef1_daily_observations(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_daily_observations']
+
+
+def run_ef1_gap_endpoints(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Endpoint-only opt-in through unchanged serialized publication/readback."""
+    from .equity_gap_endpoint import _admit_gap_endpoint, compute_gap_endpoint_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_gap_endpoint_inputs, admit_inputs=_admit_gap_endpoint)
+
+
+__all__ += ['run_ef1_gap_endpoints']

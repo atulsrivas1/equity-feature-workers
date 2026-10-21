@@ -1,3 +1,5 @@
+EF1 supplied gap endpoint source preparation: closed four-role nullable mapping, exact two-field result closure, existing serialized publication/readback and synthetic separate-DuckDB examples. [API, actual evidence, known fixture correction and limits](../../docs/EF1_GAP_ENDPOINT_IMPLEMENTATION.md). No release claim.
+
 ## EF1 sampled paths — source candidate, unexecuted
 
 Explicit `equity_path_gap`/`equity_path_drive` APIs admit the exact present-only role/kind subsequence, retain the original preceding DAILY binding and return one full unchanged four-gap/three-drive pure-library result. Closed runner wrappers reuse existing bounded publication/full SDK readback. Two synthetic DuckDB/HTML CLIs and 23 independent test methods are authored, not executed. [API, semantics, validation limits and remaining gates](../../docs/EF1_PATH_IMPLEMENTATION.md). No version/codec/scheduler/budget change, private parity claim or release acceptance; protected EQ142 runtime hold remains.
