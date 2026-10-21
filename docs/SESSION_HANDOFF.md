@@ -1,3 +1,7 @@
+## First-trade source/main bridge prepared - October21,2026
+
+[Source/qualification scope](EF1_FIRST_TRADE_MAIN_BRIDGE.md) records exact first-trade `d1109d15ab859cff2e97d97773fdfaf2246f7260` and actual main `8d00d3339d0fd3e07fac7a5702aa1a96a4c324f2`. The incoming main is exact reviewed BAR tree; all package/test/tool/version/oracle Git and original physical bytes remain frozen. Original overlapping merge/physical-check failures are preserved locally. Separately launched installed qualification remains RUNNING at this checkpoint, not accepted; coordinator/distinct actual-head review and actual completed evidence remain before delivery. Full EF1/browser/source/release gates remain open. Earlier checkpoints below remain historical.
+
 ## First-trade installed qualifier prepared and statically reviewed - October21,2026
 
 [Additive qualification preparation](EF1_FIRST_TRADE_INSTALLED_QUALIFICATION.md) preserves the original BAR tool and adds38suites/777methods/35demos per physical form (316native commands across four forms). New984retained first-trade DB/lock pairs are planned, not executed. Exact tool35f050df passed independent static review2ec75c94 including inherited Windows path limits. All63package source files remain unchanged; fresh actual-head recheck, clean three-source freeze, resource grant and execution admission precede any runtime. Existing source tests and124retained authorDBs are not installed evidence; fullEF1/browser/source admission/release/publication gates remain open.
