@@ -311,3 +311,5 @@ Validated immutable manifests, deterministic worker task/reuse identity, closed 
 ## 0.1.0a0 — EQ121, unreleased foundations
 
 Typed independently buildable foundation packages, inward metadata dependencies, canonical issue authority and repeat-build/fresh-form checks. Version markers only; no formulas, acquisition, sink publication, factory registration or worker commands. Actual delivery acceptance is linked from canonical EQ121 after publication.
+
+EF1 reviewed-subset source: opt-in supplied period/extended workers, frozen full-packet conformance and synthetic new-DuckDB/readback exports. Source checks passed; independent final-head and installed/release gates remain pending. See docs/EF1_PERIOD_PHASE_IMPLEMENTATION.md.

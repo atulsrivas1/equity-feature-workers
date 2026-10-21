@@ -1,0 +1,32 @@
+# EF1 supplied period and extended-phase workers
+
+October21,2026, bounded [EQ166 #506](https://github.com/atulsrivas1/equity-features/issues/506), supporting [EQ213 #571](https://github.com/atulsrivas1/equity-features/issues/571), EF1 epic569/milestone34. The coordinator admitted this reviewed subset while the original full EQ164 inventory audit remains a release gate. Frozen contract MD SHA256 `15fbaab3e840bf78ef3f209a31cd86714ad4602281ea0d7ba24208cdcfb2104e`, JSON `b4c78f03b3c1ec5100740803d4b853920f9aa28cb58d73446dea6b3f403db09c`; public design freeze core73406b2b476d75ef80440ab1ddacf0cd1d85bb97 / PR588. Contract bytes and original semantics are unchanged.
+
+## Closed APIs and boundaries
+
+Opt-in module `equity_feature_workers.equity_period` exports `period_headers`, `required_period_inputs`, `compute_period_inputs` and `make_ef1_period_work`; `equity_extended` supplies corresponding extended names. Period inputs are exactly calendar_provenance/daily_history/bars; extended inputs exactly calendar_provenance/bars/prior_close. Every manifest role is declared, missing means an absent binding, and only original present batches are passed to pure `compute_ef1` in that role subsequence. No nullable pseudo-batches, derived calendars, price conversion, coverage repair, timestamp rewriting or target-session replacement of prior DAILY occurs.
+
+Shared admission retains the original canonical context decoder/rebuilder, full config/digest comparison, complete library headers (nine period/eight extended), actual source metadata/entity/namespace/row counts, exact governed calendar intervals, manifest codec/task SHA and result identity/backend guards. New routes enforce three declared input slots and at most1MiB actual input bytes. Warmup/history initialization and mixed callbacks refuse. Canonical feature versions remain contracts0.0.4a4/features0.0.4a5 and workers0.1.0a15; root exports/dependencies/versions are unchanged.
+
+Library mathematics owns civil periods, cutoff prefix selection, completed sessions, zero-volume/missing operands, explicit phase windows, previous regular close denominator, proof readiness, causal evidence and field-specific quality. Both extended phases retain predecessor plus target calendar/window even when prior-close data is unused. Workers never infer this from rows. Full original observed-count, fixed-observation, regular-open, alternate denominator and large-calendar variants remain open; this17-header subset does not establish legacy numerical parity or full story completion.
+
+`ef1_runner.run_ef1_periods` and `run_ef1_extended` reuse unchanged bounded sequential supervision, serial publication and complete SDK stored-result readback joined by task SHA. Caller owns adapter/sink lifetime and pending recovery; a later readback failure preserves an actual committed receipt. Main and spawned module-level calculations preserve complete bytes. No source discovery, N-drive read, scheduler service or production write is introduced.
+
+## Synthetic examples
+
+`examples/ef1_period.py` and `ef1_extended.py` consume no-argument public synthetic adapter context/config/fixture helpers for exactly PERIOD_BASE/EXTENDED_BASE. Require absolute distinct output paths, a new HTML export and bounded ASCII run identity:
+
+```text
+python -I -B examples/ef1_period.py --output-db <absolute-new-output.duckdb> --html <absolute-new-export.html> --run-id period1
+python -I -B examples/ef1_extended.py --output-db <absolute-new-output.duckdb> --html <absolute-new-export.html> --run-id phase1
+```
+
+Each wrapper uses stdlib runpy only for its exact trusted sibling helper, with no package path injection. The renderer displays complete actual canonical output after sink readback, task/content SHA, provenance, quality and remaining scope. No JavaScript, remote assets or private dataset is used. Source-selected author execution used `-B` and explicit source roots; the shown isolated `-I` commands remain installed-artifact qualification targets.
+
+## Actual validation and remaining gates
+
+Author `/root/ef1_period_worker_implementation` ran source-selected CPython3.12.10 Windows checks using the coordinator's dedicated runtime and explicit period core/I/O/worker source paths, bounded BLAS/OpenMP threads1. `python -B -m unittest discover -s tests -p test_ef1_period.py -v`:17methods PASS,10.387s. The first run's two test-setup failures are retained: impossible Coverage rejects during canonical construction before worker translation; a malformed test result must retain evidence binding to exercise worker identity. Both were corrected without changing the independent oracle. An imported library typing variable collision was corrected by the library author; subsequent `python -I -B -m mypy --strict packages/workers/src` PASS31files with explicit source MYPYPATH.
+
+The17methods compare all42 successful full literal packets and20 intentional errors from the unchanged62-packet freeze; one impossible Coverage is explicitly tested at construction. They also cover main/actual spawn SDK parity, complete task-wire SHA/source binding identity, original present object subsequences, wrong kinds/roles/headers/history/budgets/source substitution/callback/result identity, per-job/generation config ownership, cancellation, memory replay/full readback and retained commit on readback failure. Both public synthetic adapter bases passed actual new DuckDB sink/full SDK canonical readback. Both source-selected HTML demos then exited0 with verified_readback=true. Logs and exact source-file hashes are held in the coordinator's private handoff; these runs are on uncommitted author patches, not exact-commit installed acceptance.
+
+The four-form qualifier preserves all16 prior suites/counts and all19 prior demo scenarios. It adds worker17/core75/I-O17 methods, installed origins for both new worker modules, and both new synthetic DuckDB/readback/HTML demos in each form. Final coordinator dependency pins await reviewed actual source commits; inherited reference selections do not yet qualify period APIs. Fresh independent review, coordinator review, exact-commit local build/install/four-form validation, applicable platform checks, integrated browser demo, full original audit and release gates remain mandatory. Hosted Actions completion is optional evidence under owner policy. No merge/release/package publication or EF1 completion is claimed.

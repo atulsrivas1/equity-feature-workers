@@ -185,3 +185,28 @@ def run_ef1_reference_actions(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_reference_classifications', 'run_ef1_reference_actions']
+
+
+def run_ef1_periods(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Period-only opt-in using unchanged bounded publication and readback."""
+    from .equity_period import _admit_period, compute_period_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_period_inputs, admit_inputs=_admit_period)
+
+
+def run_ef1_extended(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Extended-phase-only opt-in; no phase or denominator mathematics."""
+    from .equity_extended import _admit_extended, compute_extended_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_extended_inputs, admit_inputs=_admit_extended)
+
+
+__all__ += ['run_ef1_periods', 'run_ef1_extended']

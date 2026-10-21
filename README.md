@@ -393,3 +393,6 @@ CPython3.12 x64 Windows/Linux only. Experimental workers version0.1.0a1 pins SDK
 ## EF1 supplied reference source authoring
 
 Closed classification/action routes, exact nullable3/6-slot reconstruction, source-independent admission results and synthetic output/readback examples are described in [reference implementation and limits](docs/EF1_REFERENCE_IMPLEMENTATION.md).22 authored worker methods and55 frozen canonical packets remain unexecuted under the protected resource reservation. Coordinator owns final pins/qualification; full original reference/audit/release gates remain open.
+## EF1 supplied period and extended source subset
+
+Closed period/extended orchestration, exact original present-role forwarding, full task identity and sink readback,17-method independent suite and two public synthetic demos: [implementation, actual source checks and remaining gates](docs/EF1_PERIOD_PHASE_IMPLEMENTATION.md). Original EQ166/audit/release obligations remain open; final dependency pins and exact-commit installed qualification are pending.
