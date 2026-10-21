@@ -10,7 +10,7 @@ from ef1_reference_fixture import batch
 ORIGINAL_ORACLE_BYTES = Path(__file__).with_name('ef1_gap_endpoint_oracle.json').read_bytes()
 assert hashlib.sha256(ORIGINAL_ORACLE_BYTES).hexdigest() == '751cd98fd7951aa7c2d4394d9a5fee87e184d9d484d9f43d4de4983b7333f40f'
 ORACLE_BYTES = Path(__file__).with_name('ef1_gap_endpoint_oracle_causal_v4.json').read_bytes()
-assert hashlib.sha256(ORACLE_BYTES).hexdigest() == 'a6c44880da0dbb7141130e6228068d0748ea04fbc4e8ff75b62f2812414a53ad'
+assert hashlib.sha256(ORACLE_BYTES).hexdigest() == '698994acf9d324d3c94334b02f307b2997ce320eb397d7f7cb5f8ea359d4f239'
 ORACLE = json.loads(ORACLE_BYTES)
 CASES = {packet['id']: packet for packet in ORACLE['packets']}
 SUCCESS = {name: packet for name, packet in CASES.items() if packet['expected_result'] is not None}

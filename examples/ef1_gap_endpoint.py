@@ -52,7 +52,7 @@ def main(argv: list[str] | None = None) -> int:
     limits = SinkRequirements(max_results=1, max_chunk_bytes=262144, max_total_bytes=262144,
         max_result_cells=2, max_evidence_rows=5)
     raw_oracle = (Path(__file__).resolve().parents[1] / 'tests/ef1_gap_endpoint_oracle_causal_v4.json').read_bytes()
-    if hashlib.sha256(raw_oracle).hexdigest() != 'a6c44880da0dbb7141130e6228068d0748ea04fbc4e8ff75b62f2812414a53ad':
+    if hashlib.sha256(raw_oracle).hexdigest() != '698994acf9d324d3c94334b02f307b2997ce320eb397d7f7cb5f8ea359d4f239':
         raise AssertionError('Independent frozen oracle differs')
     expected = next(row['expected_result'] for row in json.loads(raw_oracle)['packets'] if row['id'] == args.case)
     output = separate_output_path(args.output_db, ())

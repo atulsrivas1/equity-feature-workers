@@ -2,11 +2,12 @@
 
 Runs only when explicitly invoked in an admitted execution environment. Tests are
 mandatory, with no skipped EF1 tests accepted as qualification. This checks the
-anchor, supplied-clock, current-state status, sampled path supplied reference, period, extended, observable and daily-observation slices, not the full EF1 release or its inventory/performance gates.
+anchor, supplied-clock, current-state status, sampled path supplied reference, period, extended, observable daily-observation and gap-endpoint slices, not the full EF1 release or its inventory/performance gates.
 """
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import importlib.metadata
 import json
@@ -20,22 +21,51 @@ import tomllib
 import venv
 
 
+_LOG_ROOT: Path | None = None
+_COMMAND_INDEX = 0
+
+
 def run(args: list[str], *, cwd: Path, env: dict[str, str]) -> None:
-    subprocess.run(args, cwd=cwd, env=env, check=True)
+    """Persist native child output and actual exit before any later hash audit."""
+    global _COMMAND_INDEX
+    assert _LOG_ROOT is not None
+    _COMMAND_INDEX += 1
+    command_dir = _LOG_ROOT / f"{_COMMAND_INDEX:04d}"
+    command_dir.mkdir(exist_ok=False)
+    child_env = dict(env, EF1_SUITE_RECEIPT=str(command_dir / "suite-result.json"))
+    started = datetime.now(timezone.utc).isoformat()
+    running = {"argv": args, "cwd": str(cwd), "started_utc": started}
+    (command_dir / "RUNNING.json").write_text(json.dumps(running, indent=2)+"\n", encoding="utf-8")
+    with (command_dir / "native-output.log").open("xb") as log:
+        result = subprocess.run(args, cwd=cwd, env=child_env, stdout=log, stderr=subprocess.STDOUT)
+    actual = dict(running, actual_exit_code=result.returncode,
+                  ended_utc=datetime.now(timezone.utc).isoformat())
+    (command_dir / "ACTUAL_EXIT.json").write_text(json.dumps(actual, indent=2)+"\n", encoding="utf-8")
+    actual["native_output_sha256"] = hashlib.sha256((command_dir / "native-output.log").read_bytes()).hexdigest()
+    (command_dir / "FINAL_COMMAND_RECEIPT.json").write_text(json.dumps(actual, indent=2)+"\n", encoding="utf-8")
+    print(json.dumps({"command": _COMMAND_INDEX, "actual_exit": result.returncode,
+                      "native_log": str(command_dir / "native-output.log")}), flush=True)
+    if result.returncode:
+        raise subprocess.CalledProcessError(result.returncode, args)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--worker-root', type=Path)
     parser.add_argument('--core-root', type=Path, required=True)
     parser.add_argument('--io-root', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    worker = Path(__file__).resolve().parents[1]
+    worker = args.worker_root.resolve() if args.worker_root else Path(__file__).resolve().parents[1]
     core, io = args.core_root.resolve(), args.io_root.resolve()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=False)
+    global _LOG_ROOT
+    _LOG_ROOT = output / 'commands'
+    _LOG_ROOT.mkdir(exist_ok=False)
     environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1',
-                       PYTHONHASHSEED='0', SOURCE_DATE_EPOCH='1700000000')
+                       PYTHONHASHSEED='0', SOURCE_DATE_EPOCH='1700000000',
+                       OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1', NUMEXPR_NUM_THREADS='1')
     for key in ('PYTHONPATH', 'PYTHONHOME', 'PYTHONUSERBASE', 'MYPYPATH'):
         environment.pop(key, None)
     projects = [
@@ -66,7 +96,7 @@ def main() -> None:
     archives = sorted(artifacts.iterdir())
     if len(archives) != 2*len(projects):
         raise RuntimeError('Incomplete wheel/sdist inventory')
-    receipt = {'scope':'EF1 anchor/clock/current-state status/sampled path/reference/period/extended/observable/daily-observations installed artifacts and legacy numerical regression only; not full EF1 acceptance',
+    receipt = {'scope':'EF1 anchor/clock/current-state status/sampled path/reference/period/extended/observable/daily-observations/gap-endpoint installed artifacts and legacy numerical regression only; not full EF1 acceptance',
         'sources':sources,'python':platform.python_version(),'system':platform.system(),
         'archives':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in archives},'forms':[]}
     # Both physical forms of every package, plus two mixed boundaries. Each form
@@ -95,24 +125,34 @@ for name, version in expected.items():
     assert md.version(name)==version, (name,md.version(name),version)
 import equity_features, equity_feature_workers, equity_feature_duckdb
 from equity_features import ef1
-from equity_feature_workers import equity_sessions, equity_clock, equity_status, equity_path_gap, equity_path_drive, equity_reference_classification, equity_reference_action, equity_period, equity_extended, equity_opening_trade, equity_opening_trade_seconds, equity_status_history, equity_daily_observations
+from equity_feature_workers import equity_sessions, equity_clock, equity_status, equity_path_gap, equity_path_drive, equity_reference_classification, equity_reference_action, equity_period, equity_extended, equity_opening_trade, equity_opening_trade_seconds, equity_status_history, equity_daily_observations, equity_gap_endpoint
 from equity_feature_duckdb import ef1 as ef1_inputs
-for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,equity_path_gap,equity_path_drive,equity_reference_classification,equity_reference_action,equity_period,equity_extended,equity_opening_trade,equity_opening_trade_seconds,equity_status_history,equity_daily_observations,ef1_inputs):
+for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,equity_path_gap,equity_path_drive,equity_reference_classification,equity_reference_action,equity_period,equity_extended,equity_opening_trade,equity_opening_trade_seconds,equity_status_history,equity_daily_observations,equity_gap_endpoint,ef1_inputs):
     assert pathlib.Path(module.__file__).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())
 ''',encoding='utf-8')
             run([str(python),'-I','-B',str(probe)],cwd=root,env=environment)
             # A custom runner refuses all skipped/empty suites. Test source is
             # explicitly selected, but candidate package imports remain installed.
             runner=root/'run_tests.py'
-            runner.write_text('''import multiprocessing, sys, unittest
+            runner.write_text('''import json, multiprocessing, os, pathlib, sys, unittest
 def main():
     start, pattern, expected_text = sys.argv[1:]
     expected = int(expected_text)
     sys.path.insert(0,start)
     suite=unittest.defaultTestLoader.discover(start,pattern=pattern)
     assert expected>0 and suite.countTestCases()==expected, "Required suite census changed"
+    def ids(value):
+        if isinstance(value, unittest.TestSuite):
+            return [item for child in value for item in ids(child)]
+        return [value.id()]
+    case_ids = ids(suite)
     result=unittest.TextTestRunner(verbosity=2).run(suite)
-    assert result.testsRun==expected and not result.skipped and result.wasSuccessful(), "Required suite failed/skipped"
+    report = {"pattern": pattern, "expected": expected, "case_ids": case_ids,
+        "tests_run": result.testsRun, "skipped": len(result.skipped),
+        "expected_failures": len(result.expectedFailures), "unexpected_successes": len(result.unexpectedSuccesses),
+        "errors": len(result.errors), "failures": len(result.failures), "successful": result.wasSuccessful()}
+    pathlib.Path(os.environ["EF1_SUITE_RECEIPT"]).write_text(json.dumps(report, indent=2)+"\\n", encoding="utf-8")
+    assert result.testsRun==expected and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses and result.wasSuccessful(), "Required suite failed/skipped/quarantined"
 if __name__=="__main__":
     multiprocessing.freeze_support()
     main()
@@ -138,7 +178,12 @@ if __name__=="__main__":
                 (core/'tests/unit','test_ef1_daily_observations.py',10),
                 (io/'tests/ef1','test_daily_observations_inputs.py',9),
                 (io/'tests/ef1','test_daily_observations_composition.py',2),
-                (worker/'tests','test_ef1_daily_observations.py',14)]
+                (worker/'tests','test_ef1_daily_observations.py',14),
+                (core/'tests/unit','test_ef1_gap_endpoint.py',6),
+                (io/'tests/ef1','test_gap_endpoint_inputs.py',7),
+                (io/'tests/ef1','test_gap_endpoint_composition.py',3),
+                (worker/'tests','test_ef1_gap_endpoint.py',8)]
+            assert len(suites) == 30 and sum(row[2] for row in suites) == 724
             for directory,pattern,expected in suites:
                 run([str(python),'-I','-B',str(runner),str(directory),pattern,str(expected)],cwd=root,env=environment)
             demo=output/('demo-'+form)
@@ -189,6 +234,12 @@ if __name__=="__main__":
                     '--case',case,'--output-db',str(demo/(name+'.duckdb')),
                     '--html',str(demo/(name+'.html')),'--run-id','synthetic-'+name],
                     cwd=root,env=environment)
+            for case in ('E01_up_reversal', 'E26_bar_close_at_cutoff'):
+                name = 'endpoint-' + case
+                run([str(python),'-I','-B',str(worker/'examples/ef1_gap_endpoint.py'),
+                    '--case',case,'--output-db',str(demo/(name+'.duckdb')),
+                    '--html',str(demo/(name+'.html')),'--run-id','synthetic-'+name],
+                    cwd=root,env=environment)
             receipt['forms'].append({'form':form,'status':'passed','skipped':0,
                 'suites':[
                     {'layer':layer, 'directory':directory.relative_to(source).as_posix(),
@@ -198,6 +249,13 @@ if __name__=="__main__":
                     if directory.is_relative_to(source)],
                 'packages':{name:version for _,name,version in projects}})
             (output/'qualification.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
+    for name, source in (('core', core), ('io', io), ('workers', worker)):
+        assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip() == sources[name]
+        assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=source,text=True).strip()
+    receipt['native_commands'] = _COMMAND_INDEX
+    receipt['required_suites_per_form'] = 30
+    receipt['required_methods_per_form'] = 724
+    receipt['required_demos_per_form'] = 31
     receipt['status']='passed'
     (output/'qualification.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
 

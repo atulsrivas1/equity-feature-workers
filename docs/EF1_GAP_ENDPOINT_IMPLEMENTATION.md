@@ -1,3 +1,7 @@
+## Portable source-byte amendment — October 21, 2026
+
+Current conformance uses the canonical Git LF oracle SHA256 `698994acf9d324d3c94334b02f307b2997ce320eb397d7f7cb5f8ea359d4f239`. Earlier `a6c44880` identifies the semantically identical Windows CRLF copy, preserved in historical receipts. Root's independently reviewed canonical-byte amendment records both identities and preserves every request/result JSON value. Active digest consumers are corrected; fresh canonical-source validation is required before portable qualification. Earlier successful mutable-source runs below retain their exact scope.
+
 # EF1 supplied gap endpoint worker : EQ213 #571
 
 This additive opt-in route supports [EQ167 #507](https://github.com/atulsrivas1/equity-features/issues/507) through [EQ213 #571](https://github.com/atulsrivas1/equity-features/issues/571). The coordinator froze the complete V4 contract and independent114-packet oracle before source authoring. This is source preparation, not whole-story or EF1 release acceptance.
