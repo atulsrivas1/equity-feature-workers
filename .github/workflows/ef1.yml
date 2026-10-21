@@ -1,0 +1,41 @@
+name: EF1 installed composition
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  anchors:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: component
+      - uses: actions/checkout@v4
+        with:
+          repository: atulsrivas1/equity-features
+          ref: 1fa5601b74cbafdf79af4d740c0f813eebec0f4c
+          path: core
+      - uses: actions/checkout@v4
+        with:
+          repository: atulsrivas1/equity-feature-io
+          ref: eddd0d35e9715b73c859fc68f5a00de56793dbf7
+          path: io
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-dev.txt
+        working-directory: component
+      - run: python tools/qualify_ef1.py --core-root ../core --io-root ../io --output dist/ef1
+        working-directory: component
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ef1-${{ github.sha }}-${{ matrix.os }}
+          path: component/dist/ef1/
+          retention-days: 30
+          if-no-files-found: error

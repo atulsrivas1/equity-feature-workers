@@ -8,12 +8,12 @@ import tempfile
 
 import equity_feature_workers as worker
 
-assert worker.__version__=='0.1.0a14'
+assert worker.__version__=='0.1.0a15'
 assert 'site-packages' in Path(worker.__file__).resolve().parts
 assert not any(n.startswith(('equity_feature_files','equity_feature_acquisition','equity_features_intraday')) for n in sys.modules)
 assert {'SourceOffer','AcquisitionPlan','ExecutionApproval','plan_acquisition','execute_plan'} <= set(worker.__all__)
 assert sorted(importlib.metadata.requires('equity-feature-workers')) == sorted([
-    'equity-feature-io-sdk==0.1.0a2', 'equity-features==0.0.4a4',
+    'equity-feature-io-sdk==0.1.0a2', 'equity-features==0.0.4a5',
     'equity-features-intraday==0.1.0a3; extra == "intraday"',
 ])
 def cli(*args):return subprocess.run([sys.executable,'-I','-m','equity_feature_workers.cli',*args],capture_output=True,text=True,encoding='utf-8')

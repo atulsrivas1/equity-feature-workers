@@ -140,7 +140,7 @@ def compute_supplied_session_inputs(task: TaskManifest, batches: tuple[Canonical
                         or governed.end_ns > task.config.session.open_ns):
                     fail(CommandErrorCode.RESULT)
             result = compute_bars(by_role['bars'], task.config, entity=entity, prior_close=prior)
-        result_identity(task, result, 'python-exact-compensated' if family == 'continuous_quotes' else 'python-exact', '0.0.4a4')
+        result_identity(task, result, 'python-exact-compensated' if family == 'continuous_quotes' else 'python-exact', '0.0.4a5')
         return (result,)
 
 

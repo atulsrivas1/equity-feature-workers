@@ -19,11 +19,16 @@ ROOT = Path(__file__).resolve().parents[1]
 EPOCH = 1700000000
 CORE_COMMIT = "20c08c7370581d03c8a0404579667f68d67ac88b"
 IO_COMMIT = "19aa266b9debb92a6c5eb707baafeb9ae7a82942"
+# Historical companion builders import the two constants above. Preserve their
+# frozen worker/core cohorts; only this current foundation CLI uses these pins.
+# Coordinator replaces both placeholders with exact reviewed SHAs before push.
+PINS_CORE = "1fa5601b74cbafdf79af4d740c0f813eebec0f4c"
+PINS_IO = "eddd0d35e9715b73c859fc68f5a00de56793dbf7"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
 EXPECTED = {
     "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],
     "equity-feature-io-sdk": ["equity-feature-io-contracts==0.1.0a2"],
-    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a4", 'equity-features-intraday==0.1.0a3; extra == "intraday"'],
+    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a5", 'equity-features-intraday==0.1.0a3; extra == "intraday"'],
 }
 
 
@@ -192,7 +197,7 @@ def qualify(dependencies, artifacts, form, packages, probe, core_benchmark):
         assert backend_versions == {"duckdb": "1.5.6", "pyarrow": "20.0.0", "equity-feature-parquet": "0.1.0a1", "equity-feature-duckdb-sink": "0.1.0a0"}
         source_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;import equity_feature_duckdb as source;from pathlib import Path;assert 'site-packages' in Path(source.__file__).resolve().parts;print(json.dumps({n:version(n) for n in ('equity-feature-duckdb','numpy')}))"], cwd=location, text=True, encoding="utf-8"))
-        assert source_versions == {"equity-feature-duckdb":"0.1.0a8", "numpy":"2.2.6"}
+        assert source_versions == {"equity-feature-duckdb":"0.1.0a9", "numpy":"2.2.6"}
         return {"eq088_installed_scaling_smoke_passed": True, "eq088_scaling_report_sha256": scaling_identity, "eq085_installed_profile_smoke_passed": True, "eq085_profile_report_sha256": profile_identity, "acquisition_light": light, "acquisition_full": acquisition, "acquisition_tests_sha256": sha(probe.parent / "test_acquisition.py"), "acquisition_oracle_sha256": sha(probe.parent / "acquisition_oracle.json"), "form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
 
 
@@ -202,7 +207,9 @@ def main():
     parser.add_argument("--io-root", required=True, type=Path)
     args = parser.parse_args()
     core = args.core_root.resolve()
-    assert git(core, "rev-parse", CORE_COMMIT) == CORE_COMMIT
+    assert all(len(pin) == 40 and all(c in '0123456789abcdef' for c in pin)
+               for pin in (PINS_CORE, PINS_IO)), "Replace current EF1 source pins with reviewed exact commits"
+    assert git(core, "rev-parse", PINS_CORE) == PINS_CORE
     assert not git(ROOT, "status", "--porcelain", "--", *SCOPED), "Freeze source before qualification"
     tracked = {p: sha(ROOT / p) for p in git(ROOT, "ls-files", *SCOPED).splitlines()}
     output = ROOT / "dist"
@@ -210,18 +217,18 @@ def main():
     with tempfile.TemporaryDirectory(prefix="build-", dir=ROOT / "work") as temp:
         stage = Path(temp)
         dependencies = stage / "dependencies"
-        core_source = snapshot(core, CORE_COMMIT, stage / "core-source", ("packages/contracts", "packages/features"))
+        core_source = snapshot(core, PINS_CORE, stage / "core-source", ("packages/contracts", "packages/features"))
         component_commit = git(ROOT, "rev-parse", "HEAD")
         # Optional service has its own installed/dependency/archive qualification.
         component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages/workers", "tests", "tools/benchmark_pipeline.py", "tools/supplied_native.py", "tools/supplied_archives.py", "tools/benchmark_supplied_inputs.py"))
         for folder in ("contracts", "features"):
             build(core_source / "packages" / folder, dependencies)
-        dependency_commit = {"equity-features": CORE_COMMIT}
+        dependency_commit = {"equity-features": PINS_CORE}
         if args.io_root:
             io_root = args.io_root.resolve()
             assert not git(io_root, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt")
-            assert git(io_root, "rev-parse", "HEAD") == IO_COMMIT, "Use fixed accepted I/O source"
-            dependency_commit["equity-feature-io"] = IO_COMMIT
+            assert git(io_root, "rev-parse", "HEAD") == PINS_IO, "Use fixed reviewed EF1 I/O source"
+            dependency_commit["equity-feature-io"] = PINS_IO
             io_source = snapshot(io_root, dependency_commit["equity-feature-io"], stage / "io-source", ("packages", "examples/third_party"))
             for folder in ("io-contracts", "io-sdk", "duckdb", "parquet", "duckdb-sink", "acquisition", "files"):
                 build(io_source / "packages" / folder, dependencies)
@@ -245,7 +252,7 @@ def main():
         assert git(ROOT, "rev-parse", "HEAD") == component_commit
         assert not git(ROOT, "status", "--porcelain", "--", *SCOPED)
         assert all(sha(ROOT / p) == digest for p, digest in tracked.items())
-        assert git(io_root, "rev-parse", "HEAD") == IO_COMMIT
+        assert git(io_root, "rev-parse", "HEAD") == PINS_IO
         assert not git(io_root, "status", "--porcelain", "--", "packages", "tools", "tests", "requirements-dev.txt")
         import shutil
         assert not list(output.glob("*.whl")) and not list(output.glob("*.tar.gz")), "Use a fresh dist directory"

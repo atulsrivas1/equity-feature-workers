@@ -18,16 +18,17 @@ import tempfile
 from supplied_archives import inspect, safe_name
 
 ROOT = Path(__file__).resolve().parents[1]
-CORE = 'b1f5445eb9799b73753e413669b94166997fc468'
-IO = '18d86761aa3eebb7414e51e8fa2aba089717b5eb'
+# Current candidate pins; coordinator substitutes exact reviewed SHAs before push.
+CORE = '1fa5601b74cbafdf79af4d740c0f813eebec0f4c'
+IO = 'eddd0d35e9715b73c859fc68f5a00de56793dbf7'
 EPOCH = '1700000000'
 PACKAGES = {
     'contracts': ('core', 'packages/contracts', 'equity_feature_contracts', '0.0.4a4'),
-    'features': ('core', 'packages/features', 'equity_features', '0.0.4a4'),
+    'features': ('core', 'packages/features', 'equity_features', '0.0.4a5'),
     'intraday': ('core', 'packages/intraday', 'equity_features_intraday', '0.1.0a3'),
     'io-contracts': ('io', 'packages/io-contracts', 'equity_feature_io_contracts', '0.1.0a2'),
     'io-sdk': ('io', 'packages/io-sdk', 'equity_feature_io_sdk', '0.1.0a2'),
-    'workers': ('worker', 'packages/workers', 'equity_feature_workers', '0.1.0a14'),
+    'workers': ('worker', 'packages/workers', 'equity_feature_workers', '0.1.0a15'),
 }
 
 
@@ -157,6 +158,8 @@ def main():
     parser.add_argument('--io-root', required=True, type=Path)
     args = parser.parse_args()
     assert sys.version_info[:2] == (3, 12)
+    assert all(re.fullmatch(r'[0-9a-f]{40}', pin) for pin in (CORE, IO)), \
+        'Replace current EF1 source pins with reviewed exact commits'
     out_root = ROOT/'dist/supplied-inputs'; out_root.mkdir(parents=True, exist_ok=True)
     out = Path(tempfile.mkdtemp(prefix='qualification-', dir=out_root))
     head = output('git', 'rev-parse', 'HEAD').decode().strip()

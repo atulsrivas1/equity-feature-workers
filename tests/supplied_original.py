@@ -41,7 +41,7 @@ def record(name, result, cfg, inputs):
     check(name + ': SDK exact full-result roundtrip', decode_result(encode_result(result)) == result)
     check(name + ': exact config/availability', (result.metadata.config_digest, result.metadata.availability) == (cfg.digest, cfg.availability))
     check(name + ': exact actual bindings', result.metadata.inputs == tuple(sorted(inputs, key=lambda b: b.role)))
-    check(name + ': actual core backend/version', (result.metadata.backend_id, result.metadata.backend_version) == ('python-exact-compensated' if name.startswith('continuous_') else 'python-exact', '0.0.4a4'))
+    check(name + ': actual core backend/version', (result.metadata.backend_id, result.metadata.backend_version) == ('python-exact-compensated' if name.startswith('continuous_') else 'python-exact', '0.0.4a5'))
     RESULTS.append({'case': name, 'result_sha256': hashlib.sha256(encode_result(result)).hexdigest(),
         'quality': [asdict(q) for q in result.quality], 'evidence': [asdict(e) for e in result.evidence]})
 

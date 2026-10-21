@@ -1,3 +1,7 @@
+# EF1 anchor execution — workers0.1.0a15 source candidate, unexecuted
+
+Explicit supplied anchor-trades/actual-notional-bar routes, a bounded local runner and a synthetic DuckDB/readback/HTML example are authored for [EQ213](https://github.com/atulsrivas1/equity-features/issues/571). New workera15 exactly requires features0.0.4a5/SDKa2; canonical contracts/wirea4 and intradaya3 remain unchanged. Its supplied-session backend expectation isa5, preserving other checks; published prior workera14 is unchanged. [API, reviewed packaging correction, unexecuted validation and remaining gates](../../docs/EF1_IMPLEMENTATION.md). This is not a released or install-qualified EF1 package.
+
 # Supplied-input worker development — experimental0.1.0a14
 
 Explicit supplied intraday0.1.0a3 extra and core structure/top-K/continuous/prior-close callbacks are implemented under [EQ140](https://github.com/atulsrivas1/equity-features/issues/474). [API, identities, independent readiness and receipt limits](../../docs/api/SUPPLIED_INPUTS.md) and [synthetic example](../../examples/supplied_intraday.py). Follow the canonical issue for current source, measurement, installed and release qualification; each receipt binds its own source and channel. Root imports/default CLI remain compatible; no new live/state/stable-registry claim.
