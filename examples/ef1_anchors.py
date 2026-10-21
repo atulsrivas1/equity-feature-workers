@@ -49,7 +49,7 @@ def main(argv: list[str] | None = None) -> int:
     context = dict(version='ef1-context1', producer='anchor', calendar=None,
         selection=dict(mode=args.mode, definition=definition))
     config = build_ef1_config(context, session=SessionSpec('SYN', 'S', 0, 30, 'supplied'),
-        window=WindowSpec(1, 'S', ('S',)), availability=AvailabilitySpec(20, 20, 20),
+        window=WindowSpec(1, 'S', ('S',), 'completed_eod'), availability=AvailabilitySpec(20, 20, 20),
         price_unit=PriceUnit(2, 'USD'), adjustment=AdjustmentSpec())
     declarations = []
     for role, batch in zip(fixture.roles, (fixture.market, fixture.anchor_provenance)):

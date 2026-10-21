@@ -16,7 +16,7 @@ def fixture(mode='trades', *, empty=False, notional=True, proof_known=10):
     context = dict(version='ef1-context1', producer='anchor', calendar=None,
         selection=dict(mode=mode, definition=DEFINITION.copy()))
     config = build_ef1_config(context, session=c.SessionSpec('SYN', 'S', 0, 30, 'supplied'),
-        window=c.WindowSpec(1, 'S', ('S',)), availability=c.AvailabilitySpec(20, 20, 20),
+        window=c.WindowSpec(1, 'S', ('S',), 'completed_eod'), availability=c.AvailabilitySpec(20, 20, 20),
         price_unit=c.PriceUnit(2, 'USD'), adjustment=c.AdjustmentSpec())
     if mode == 'trades':
         # 10.00*2 + 13.00*1 = 33.00; V=3; exact VWAP11.00.

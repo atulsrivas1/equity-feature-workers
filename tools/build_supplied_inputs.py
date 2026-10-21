@@ -19,8 +19,8 @@ from supplied_archives import inspect, safe_name
 
 ROOT = Path(__file__).resolve().parents[1]
 # Current candidate pins; coordinator substitutes exact reviewed SHAs before push.
-CORE = '8fd697367f495c32df180107577d538e946707e2'
-IO = 'f20abd5acd74a4917fdaf087e9c92757746e7ea4'
+CORE = 'eb062201826fb9b5296c980fa9d86e0663a0e127'
+IO = '8b84ddd88a6185db8da503102f89dfe00fc67c12'
 EPOCH = '1700000000'
 PACKAGES = {
     'contracts': ('core', 'packages/contracts', 'equity_feature_contracts', '0.0.4a4'),

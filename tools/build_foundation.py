@@ -21,9 +21,9 @@ CORE_COMMIT = "20c08c7370581d03c8a0404579667f68d67ac88b"
 IO_COMMIT = "19aa266b9debb92a6c5eb707baafeb9ae7a82942"
 # Historical companion builders import the two constants above. Preserve their
 # frozen worker/core cohorts; only this current foundation CLI uses these pins.
-# Coordinator replaces both placeholders with exact reviewed SHAs before push.
-PINS_CORE = "8fd697367f495c32df180107577d538e946707e2"
-PINS_IO = "f20abd5acd74a4917fdaf087e9c92757746e7ea4"
+# Exact reviewed clock source candidates; historical companion pins stay above.
+PINS_CORE = "eb062201826fb9b5296c980fa9d86e0663a0e127"
+PINS_IO = "8b84ddd88a6185db8da503102f89dfe00fc67c12"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
 EXPECTED = {
     "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],

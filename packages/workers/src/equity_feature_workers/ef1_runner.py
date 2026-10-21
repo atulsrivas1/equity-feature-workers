@@ -1,18 +1,21 @@
-"""Thin local anchor execution and verified readback; no numerical mathematics."""
+"""Thin local supplied EF1 execution/readback; closed producer-specific wrappers."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from types import ModuleType
+from typing import Callable
 
-from equity_feature_contracts import FeatureResult
+from equity_feature_contracts import CanonicalBatch, FeatureResult
 from equity_feature_io_contracts import ResultSink, SinkRequirements
 from equity_feature_io_sdk import Cancellation, encode_result, verify_receipt
 
 from .commands import CommandErrorCode, NeverCancelled
 from ._supplied import fail, translated
 from .equity_sessions import _admit_anchor, compute_ef1_inputs
-from .manifests import OutputManifest
+from .equity_clock import _admit_clock, compute_clock_inputs
+from .manifests import OutputManifest, TaskManifest
 from .publication import PublicationLimits, SerialPublisher
-from .supervisor import BoundedSupervisor, ResourceBudget, SupervisorOutcome, WorkItem
+from .supervisor import BoundedSupervisor, Calculation, ResourceBudget, SupervisorOutcome, WorkItem
 
 
 @dataclass(frozen=True)
@@ -36,10 +39,11 @@ class EF1RunOutcome:
     publisher: SerialPublisher = field(repr=False, compare=False)
 
 
-def run_ef1_anchors(items: tuple[WorkItem, ...], sink: ResultSink, *,
-        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
-        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
-        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+def _run_ef1(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget,
+        publication_limits: PublicationLimits, cancellation: Cancellation | None,
+        calculate: Calculation,
+        admit_inputs: Callable[[TaskManifest, tuple[CanonicalBatch, ...]], ModuleType]) -> EF1RunOutcome:
     """One bounded sequential pass using the existing serialized publication path.
 
     Source/sink creation, path qualification and lifetime belong to the caller.
@@ -57,10 +61,10 @@ def run_ef1_anchors(items: tuple[WorkItem, ...], sink: ResultSink, *,
     jobs: dict[str, str] = {}
     generations: dict[str, str] = {}
     for item in items:
-        if type(item) is not WorkItem or item.calculate is not compute_ef1_inputs:
+        if type(item) is not WorkItem or item.calculate is not calculate:
             fail()
         with translated():
-            _admit_anchor(item.task, item.batches)
+            admit_inputs(item.task, item.batches)
         digest = item.task.config.digest
         for identities, key in ((jobs, item.task.job_id), (generations, item.task.generation_id)):
             if key in identities and identities[key] != digest:
@@ -99,4 +103,24 @@ def run_ef1_anchors(items: tuple[WorkItem, ...], sink: ResultSink, *,
     return EF1RunOutcome(execution, tuple(readbacks), publisher)
 
 
-__all__ = ['EF1Readback', 'EF1RunOutcome', 'run_ef1_anchors']
+def run_ef1_anchors(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Preserve the closed anchor-only API and its existing admission behavior."""
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_ef1_inputs, admit_inputs=_admit_anchor)
+
+
+def run_ef1_clocks(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Clock-only API; reuse the unchanged bounded publication/readback path."""
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_clock_inputs, admit_inputs=_admit_clock)
+
+
+__all__ = ['EF1Readback', 'EF1RunOutcome', 'run_ef1_anchors', 'run_ef1_clocks']
