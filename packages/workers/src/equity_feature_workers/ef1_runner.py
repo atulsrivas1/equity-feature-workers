@@ -280,3 +280,17 @@ def run_ef1_gap_endpoints(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_gap_endpoints']
+
+
+def run_ef1_regular_bar_prices(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Regular completed-BAR prices through existing publication/full readback."""
+    from .equity_regular_bar_prices import _admit_regular_bar_prices, compute_regular_bar_price_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_regular_bar_price_inputs, admit_inputs=_admit_regular_bar_prices)
+
+
+__all__ += ['run_ef1_regular_bar_prices']

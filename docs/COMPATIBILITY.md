@@ -1,3 +1,7 @@
+## Regular completed-BAR prices source candidate - October 21, 2026
+
+[Additive worker API](EF1_REGULAR_BAR_PRICES_IMPLEMENTATION.md) requires the reviewed `regular_bar_prices` library producer and exact backend0.0.4a5/mathv1/evidence2 result identity. Existing manifests/contracts0.0.4a4 and SDK/sink schemas remain unchanged. This source authoring is separate from pending installed/platform/release qualification.
+
 ## EF1 cumulative workers source checkpoint - October 21, 2026
 
 [Current qualification and limits](EF1_CUMULATIVE_QUALIFICATION.md) records the exact frozen runtime cohort: all four installed forms passed on Windows and Linux, with 665 methods per form, zero skips and 200 verified-readback demos across both platforms. Coordinator artifact audit and fresh independent final review passed. Later documentation integration commits are not executed runtime source identities. Actual browser inspection, full original audit/source-version/consumer bindings, suitable N-drive input qualification and EF1 release gates remain open. Earlier source-authoring, pending and resource-hold entries below retain their original historical scope; no whole-story completion or package publication is claimed.
