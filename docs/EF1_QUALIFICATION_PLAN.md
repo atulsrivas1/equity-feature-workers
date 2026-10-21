@@ -61,3 +61,7 @@ Clock bootstrap pins now select independently source-reviewed core eb062201826fb
 ## Current-state status installed qualification
 
 Coordinator extends the existing four-form helper with exact26 library/18 I/O/19 worker status tests plus the retained anchor/clock/legacy suites. All test populations must execute exactly with zero skips. The installed-origin probe includes the status worker module. Each form adds S01/S02/S03 physical DuckDB/readback and closed HTML exports; original input bindings/event witnesses must roundtrip unchanged. Browser inspection and the original observable history/open diagnostics are separate pending gates. No local runtime was executed; source pins and actual Windows/Linux CI still require final review and qualification.
+
+## Supplied status bootstrap qualification
+
+Current foundation, supplied-input and EF1 lanes select reviewed status core b7dd36b2d523dcf5139900decaa7c62e6353dcbe and I/O22de254d6cd0ad79bbe746e9484ba4f64dc616a1. Historical companion constants remain unchanged. The core standalone lane subsequently pins this worker candidate and qualifies its actual current core checkout, preserving a finite immutable dependency graph. This selects source only; installed status numerical qualification remains pending.
