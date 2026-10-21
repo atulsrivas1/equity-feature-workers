@@ -338,7 +338,7 @@ class EF1Status(unittest.TestCase):
         self.assertEqual([row.output for row in first.readbacks], [row.output for row in replay.readbacks])
         self.assertEqual(sink.calls.count('commit'), 3)
         by_task = {item.task.task_sha256: item for item in items}
-        self.assertEqual(len(first.readbacks), len(items))
+        self.assertEqual(len(first.readbacks), len(by_task))
         self.assertEqual({row.task_sha256 for row in first.readbacks}, set(by_task))
         for row in first.readbacks:
             item = by_task[row.task_sha256]
