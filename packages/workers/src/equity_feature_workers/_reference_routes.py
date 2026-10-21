@@ -4,7 +4,7 @@ from __future__ import annotations
 from types import ModuleType
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, DataKind, EntityKey, FeatureResult, InputRequirement, IntervalSpec
 from equity_feature_io_contracts import FeatureHeader
-from ._path_routes import context, headers, requirements
+from ._path_routes import context, headers as headers, requirements as requirements
 from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode
 from .manifests import InputManifest, TaskManifest
