@@ -1,3 +1,16 @@
+## Supplied daily observations source candidate
+
+Additive explicit `equity_daily_observations` API and
+`ef1_runner.run_ef1_daily_observations` carry six original nullable REFERENCE roles
+to the pure producer through unchanged serialized publication and full readback.
+See [API, synthetic demo and actual validation limits](docs/EF1_DAILY_OBSERVATIONS_IMPLEMENTATION.md).
+After independent-review metadata closure, actual Windows source14daily methods
+pass all91fullgoldens/28real refusal codes; strict36sourcefiles pass. Earlier248
+selected regression checks retain their recorded source/scope. Four fresh CLI examples
+verify full golden/SDK/receipt readback after close/reopen, including252/366.
+Independent correction recheck and committed/installed/native/browser/release gates remain pending.
+No original source parity claim.
+
 ## EF1 cumulative workers source checkpoint - October 21, 2026
 
 Current source, completed earlier-cohort validation and pending final qualification are recorded in [EF1 cumulative workers source checkpoint - October 21, 2026](docs/EF1_CUMULATIVE_QUALIFICATION.md). Earlier source-authoring, uncommitted, pending-pins, unexecuted and resource-hold entries below are historical snapshots; they do not override the current checkpoint. Final installed/platform/browser and full original-audit release gates remain open.

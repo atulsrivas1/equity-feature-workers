@@ -1,3 +1,55 @@
+## Daily observations independent-review rework — October21,2026
+
+Fresh automated worker review identified P2 WORKER-DAILY-01: valid declared
+evidence limits27/29 could reach publication and unknown math policy escaped
+the direct route. Added exact returned mathv1/evidence_limit28 checks plus an
+explicit taskmathv1 route assertion; actual evidence-row guard and all generic
+guards retained. TaskManifest already rejects ordinary non-v1 construction.
+One new valid-DTO substitution method checks direct RESULT and runner failed
+execution/noresults/nooutput/no publication; actual focused PASS0.174s. Final
+full14methods PASS17.222s against corrected core hashes67c805ff/17f3e6d, including
+all91goldens/28realcodes and outer stages; strict36sourcefiles PASS. Four fresh
+actual CLI examples exited0 against new separate DBs with full golden/SDK/receipt
+close-reopen readbacks. Fixture47994803 unchanged. Earlier13-method/numerical/demos
+and248 selected regression methods retain their exact older source/scope.
+
+Updated exact source/log report is ready; initial reviewed snapshoteed0afe6 is
+preserved byte-exact separately. Coordinator must request independent correction
+recheck before commit/push. No commit/push or
+qualifier/pin/census change. See [review and correction](EF1_DAILY_OBSERVATIONS_IMPLEMENTATION.md).
+
+## Daily observations source checkpoint — October21,2026
+
+New isolated daily route and shared-runner wrapper are authored under original
+EQ166#506/support571, branch codex/ef1-daily-workers baseline3599689. See
+[API, real checks, failed-run accounting and remaining gates](EF1_DAILY_OBSERVATIONS_IMPLEMENTATION.md).
+Six exact declarations reconstruct six nullable pure arguments after unchanged
+present-batch admission; target-only governed task, input1MiB, result4cells and
+evidence28. Frozen public synthetic119packets remain byte-exact.
+
+Actual Windows3.12.10 first full13-method run had2failures/2setup errors; V318
+raw-None quality-fence discrepancy was resolved by coordinator-reviewed V3A1:
+four quality rows3/3, dependency slots[0,1,2], no selected rows; all119input/config
+packets and118whole packets otherwise unchanged. Exact public derivative47994803
+replaced only the new daily fixture; coordinator preserves the original6d95adc.
+X212 pure DUPLICATE and earlier actual generic RESULT are now separately asserted;
+generic row-count guard was preserved. Two author setup errors corrected. Nine
+focused worker methods PASS3.637s; strict2changedsourcefiles PASS. Eight unchanged
+legacy suites PASS124methods76.128s after correcting a private driver missing
+Parquet source (initial66pass/twoimporterrors retained). After actual stable core
+notification, full13daily methods PASS16.972s:91complete goldens,28real purecodes
+and actual outer refusals. Fullworker strict36sourcefiles PASS. Four actual
+synthetic converter->worker->newDuckDB close/reopen/fullgoldenSDK/receipt HTML
+examples exited0, including252/366; four subsequent real CLI child invocations
+also exited0 with new separate DBs and complete readbacks. Seven older EF1 suites
+plus provenance PASS124methods41.472s. Browser and installed qualification pending.
+
+Resume: coordinator reviews actual source report and full diff before commit/push.
+Fresh independent
+review and exact committed install/native four-form/browser/fullEF1 gates remain.
+No dependency pins, qualifier census, generic protocol, publication or lifecycle
+status changed. Private driver/logs stay local; older source roots remain protected.
+
 ## EF1 cumulative workers source checkpoint - October 21, 2026
 
 Current source, completed earlier-cohort validation and pending final qualification are recorded in [EF1 cumulative workers source checkpoint - October 21, 2026](EF1_CUMULATIVE_QUALIFICATION.md). Earlier source-authoring, uncommitted, pending-pins, unexecuted and resource-hold entries below are historical snapshots; they do not override the current checkpoint. Final installed/platform/browser and full original-audit release gates remain open.

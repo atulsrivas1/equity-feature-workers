@@ -252,3 +252,17 @@ def run_ef1_status_history(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_status_history']
+
+
+def run_ef1_daily_observations(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Daily-only opt-in through unchanged serialized publication/readback."""
+    from .equity_daily_observations import _admit_daily_observations, compute_daily_observations_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_daily_observations_inputs, admit_inputs=_admit_daily_observations)
+
+
+__all__ += ['run_ef1_daily_observations']
