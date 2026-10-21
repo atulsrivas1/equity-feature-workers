@@ -69,3 +69,9 @@ Current foundation, supplied-input and EF1 lanes select reviewed status core b7d
 ## Unambiguous suite receipts
 
 Downloaded clock532 receipts used test filename alone as a JSON mapping key, so core and worker clock suites collided in the summary even though logs show both actually executed. Status would have the same collision. Qualification receipts now preserve every suite as a layer/directory/pattern/expected record. Exact execution counts and zero-skip guards are unchanged. Earlier receipts remain historical with this reporting limitation; do not infer an absent execution from their overwritten summary key.
+
+## Status readback fixture identity correction
+
+Actual core70ea installed Ubuntu job119011247495 passed the preceding suites then failed one status worker test comparing supplied item order to readback order. The unchanged supervisor returns canonical task-SHA order. The corrected test asserts the exact task identity set/count and compares each full result with the original item selected by task_sha256. All full-result equality and replay assertions remain; runner/library/sink behavior and19-test population are unchanged. This is an unexecuted source correction pending independent review and applicable local validation under the protected resource hold.
+
+Current status foundation/supplied/EF1 lanes now select independently reviewed I/O29956fd6b7c753ba8e3f79e586b0a89e09aec271, whose sole fixture annotation/hash correction preserves source data. Core bootstrapb7dd36b2d523dcf5139900decaa7c62e6353dcbe and historical companion constants remain unchanged. This pin selection and task-identity fixture correction are source-only; local qualification is still unexecuted under the protected hold. Hosted Actions completion is not a merge prerequisite under current owner policy.

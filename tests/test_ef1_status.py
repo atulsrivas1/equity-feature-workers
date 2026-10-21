@@ -337,7 +337,11 @@ class EF1Status(unittest.TestCase):
         self.assertTrue(all(row.verified for row in first.readbacks + replay.readbacks))
         self.assertEqual([row.output for row in first.readbacks], [row.output for row in replay.readbacks])
         self.assertEqual(sink.calls.count('commit'), 3)
-        for item, row in zip(items, first.readbacks):
+        by_task = {item.task.task_sha256: item for item in items}
+        self.assertEqual(len(first.readbacks), len(by_task))
+        self.assertEqual({row.task_sha256 for row in first.readbacks}, set(by_task))
+        for row in first.readbacks:
+            item = by_task[row.task_sha256]
             self.assertEqual(tuple(map(encode_result, row.results)),
                 tuple(map(encode_result, compute_status_inputs(item.task, item.batches))))
         for field in ('job_id', 'generation_id'):
