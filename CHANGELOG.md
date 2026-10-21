@@ -1,3 +1,14 @@
+## EF1 sampled paths — source candidate, unexecuted
+
+Explicit `equity_path_gap`/`equity_path_drive` APIs admit the exact present-only role/kind subsequence, retain the original preceding DAILY binding and return one full unchanged four-gap/three-drive pure-library result. Closed runner wrappers reuse existing bounded publication/full SDK readback. Two synthetic DuckDB/HTML CLIs and 23 independent test methods are authored, not executed. [API, semantics, validation limits and remaining gates](docs/EF1_PATH_IMPLEMENTATION.md). No version/codec/scheduler/budget change, private parity claim or release acceptance; protected EQ142 runtime hold remains.
+## EQ165/EQ213 supplied current-state status — source authoring, unexecuted
+
+Additive status headers/discovery/callback/builder preserve exact four supplied roles, present-only wire inputs, explicit missing local slots and unchanged complete pure-library result identity. Closed status runner reuses existing bounded publication/full canonical readback. Independent S01-S03 literal goldens, missing/empty/proof/knowledge/witness/budget/replay controls and actual synthetic-I/O DuckDB/HTML example are authored, not executed. [Scope and mandatory remaining gates](docs/EF1_STATUS_IMPLEMENTATION.md). No scheduler/codec/general-budget/version change, runtime evidence or release claim. Earlier clock snapshot's unimplemented-status statement is superseded only for this source-authored subset.
+
+## EQ165/EQ213 supplied clock — source authoring, unexecuted
+
+Additive fixed-five-header clock callback/work builder invokes the public pure EF1 library with one actual calendar-provenance binding; it performs no clock math. Clock-only and unchanged anchor-only wrappers reuse one private bounded publication/readback path. Eight independent mandatory clock methods and fixed-synthetic-I/O DuckDB/HTML demo are authored, not executed. [Scope, failed prior fixture lesson and remaining gates](docs/EF1_CLOCK_IMPLEMENTATION.md). Candidate package versions, general scheduler, codecs and budgets remain unchanged; current source pins select the reviewed clock candidates. Status remains unimplemented.
+
 ## EQ213 EF1 anchors — source authoring, unexecuted
 
 Authored explicit full-producer anchor callbacks, caller-owned sealed WorkItems and a thin sequential runner using existing serialized publication/full-result readback. New workers0.1.0a15 exactly requires features0.0.4a5; canonical contracts/wire0.0.4a4, SDKa2 and intradaya3 remain unchanged. Reviewed packaging correction makes this new artifact's supplied-session backend expectation exactlya5 without changing other identity checks or prior publisheda14. Current probes track the new versions; EF1 tests fail rather than skip missing candidates. Independent synthetic numerical/admission/replay/cancellation fixtures and a fixed-factory DuckDB-to-local-HTML example are authored but unexecuted. [Exact scope, review correction and qualification gates](docs/EF1_IMPLEMENTATION.md). Historical pinned build lanes remain separate. No EF1 release, database execution or speed claim.
@@ -300,3 +311,5 @@ Validated immutable manifests, deterministic worker task/reuse identity, closed 
 ## 0.1.0a0 — EQ121, unreleased foundations
 
 Typed independently buildable foundation packages, inward metadata dependencies, canonical issue authority and repeat-build/fresh-form checks. Version markers only; no formulas, acquisition, sink publication, factory registration or worker commands. Actual delivery acceptance is linked from canonical EQ121 after publication.
+
+EF1 reviewed-subset source: opt-in supplied period/extended workers, frozen full-packet conformance and synthetic new-DuckDB/readback exports. Source checks passed; independent final-head and installed/release gates remain pending. See docs/EF1_PERIOD_PHASE_IMPLEMENTATION.md.

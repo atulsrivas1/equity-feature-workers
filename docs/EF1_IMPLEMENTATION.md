@@ -1,5 +1,7 @@
 # EQ213 EF1 supplied execution
 
+Current additive clock source work is documented separately in [EF1_CLOCK_IMPLEMENTATION.md](EF1_CLOCK_IMPLEMENTATION.md). The anchor record below retains its original scope/evidence; clock source authoring is not an anchor release or qualification claim.
+
 Status: source authoring in progress; unexecuted. Canonical story [EQ213 #571](https://github.com/atulsrivas1/equity-features/issues/571), EF1 epic569/milestone34. Owner authorized reviewed-subset parallel implementation; EQ164 full inventory audit remains an EF1 release gate.
 
 Contract: ef1-contract1, ledger SHA256 `02940da0c4663bbced050ac551e7fbafe2a1da1534e4c6fa5c87eaf90d420076`. Canonical source-authoring freeze/admission is in equity-features `docs/ef1/`. This isolated worker branch starts at accepted `231349aaf2bf1b9ec21f45807382ca9c6522520c`. Frozen EQ142 sources/jobs are unchanged.

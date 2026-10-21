@@ -18,12 +18,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-features
-          ref: 8fd697367f495c32df180107577d538e946707e2
+          ref: 37ac44a3d0406231caf481c44f4ccce70fb2aba0
           path: core
       - uses: actions/checkout@v4
         with:
           repository: atulsrivas1/equity-feature-io
-          ref: f20abd5acd74a4917fdaf087e9c92757746e7ea4
+          ref: 89bc3d0d61cda5e8b1f5056b500c1f660a051045
           path: io
       - uses: actions/setup-python@v5
         with:

@@ -1,1 +1,4 @@
 * text=auto eol=lf
+tests/ef1_reference_oracle.json text eol=lf
+tests/ef1_period_oracle.json text eol=lf
+tests/ef1_observable_oracle.json text eol=lf

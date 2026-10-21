@@ -1,4 +1,11 @@
+## EF1 sampled paths — source candidate, unexecuted
+
+Explicit `equity_path_gap`/`equity_path_drive` APIs admit the exact present-only role/kind subsequence, retain the original preceding DAILY binding and return one full unchanged four-gap/three-drive pure-library result. Closed runner wrappers reuse existing bounded publication/full SDK readback. Two synthetic DuckDB/HTML CLIs and 23 independent test methods are authored, not executed. [API, semantics, validation limits and remaining gates](../../docs/EF1_PATH_IMPLEMENTATION.md). No version/codec/scheduler/budget change, private parity claim or release acceptance; protected EQ142 runtime hold remains.
 # EF1 anchor execution — workers0.1.0a15 source candidate, unexecuted
+
+Additive [supplied current-state status source candidate](../../docs/EF1_STATUS_IMPLEMENTATION.md): explicit four-slot orchestration for one trading/quoting/SSR selection, unchanged full library results, closed bounded status runner and actual synthetic-I/O DuckDB/readback/HTML demo. Independent S01-S03 and boundary tests are authored and unexecuted. Original anchor/clock APIs and candidate versions remain unchanged. History/open diagnostics and release acceptance remain pending.
+
+Additive [supplied clock source candidate](../../docs/EF1_CLOCK_IMPLEMENTATION.md): exact public-library five-header clock callback, one actual calendar-proof binding and bounded local runner/readback. Original anchor API remains closed and shares publication logic through a private helper. Clock tests/demo are authored only, with no runtime or release acceptance.
 
 Explicit supplied anchor-trades/actual-notional-bar routes, a bounded local runner and a synthetic DuckDB/readback/HTML example are authored for [EQ213](https://github.com/atulsrivas1/equity-features/issues/571). New workera15 exactly requires features0.0.4a5/SDKa2; canonical contracts/wirea4 and intradaya3 remain unchanged. Its supplied-session backend expectation isa5, preserving other checks; published prior workera14 is unchanged. [API, reviewed packaging correction, unexecuted validation and remaining gates](../../docs/EF1_IMPLEMENTATION.md). This is not a released or install-qualified EF1 package.
 

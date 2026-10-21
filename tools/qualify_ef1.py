@@ -2,7 +2,7 @@
 
 Runs only when explicitly invoked in an admitted execution environment. Tests are
 mandatory, with no skipped EF1 tests accepted as qualification. This checks the
-first anchor slice, not the full EF1 release or its inventory/performance gates.
+anchor, supplied-clock, current-state status, sampled path supplied reference, period, extended and observable slices, not the full EF1 release or its inventory/performance gates.
 """
 from __future__ import annotations
 
@@ -66,7 +66,7 @@ def main() -> None:
     archives = sorted(artifacts.iterdir())
     if len(archives) != 2*len(projects):
         raise RuntimeError('Incomplete wheel/sdist inventory')
-    receipt = {'scope':'EF1 anchor installed artifacts and legacy numerical regression only; not full EF1 acceptance',
+    receipt = {'scope':'EF1 anchor/clock/current-state status/sampled path/reference/period/extended/observable installed artifacts and legacy numerical regression only; not full EF1 acceptance',
         'sources':sources,'python':platform.python_version(),'system':platform.system(),
         'archives':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in archives},'forms':[]}
     # Both physical forms of every package, plus two mixed boundaries. Each form
@@ -95,8 +95,9 @@ for name, version in expected.items():
     assert md.version(name)==version, (name,md.version(name),version)
 import equity_features, equity_feature_workers, equity_feature_duckdb
 from equity_features import ef1
-from equity_feature_workers import equity_sessions
-for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions):
+from equity_feature_workers import equity_sessions, equity_clock, equity_status, equity_path_gap, equity_path_drive, equity_reference_classification, equity_reference_action, equity_period, equity_extended, equity_opening_trade, equity_opening_trade_seconds, equity_status_history
+from equity_feature_duckdb import ef1 as ef1_inputs
+for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,equity_path_gap,equity_path_drive,equity_reference_classification,equity_reference_action,equity_period,equity_extended,equity_opening_trade,equity_opening_trade_seconds,equity_status_history,ef1_inputs):
     assert pathlib.Path(module.__file__).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())
 ''',encoding='utf-8')
             run([str(python),'-I','-B',str(probe)],cwd=root,env=environment)
@@ -105,27 +106,84 @@ for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,
             runner=root/'run_tests.py'
             runner.write_text('''import multiprocessing, sys, unittest
 def main():
-    start, pattern = sys.argv[1:]
+    start, pattern, expected_text = sys.argv[1:]
+    expected = int(expected_text)
     sys.path.insert(0,start)
     suite=unittest.defaultTestLoader.discover(start,pattern=pattern)
-    assert suite.countTestCases()>0, "Empty required suite"
+    assert expected>0 and suite.countTestCases()==expected, "Required suite census changed"
     result=unittest.TextTestRunner(verbosity=2).run(suite)
-    assert result.testsRun>0 and not result.skipped and result.wasSuccessful(), "Required suite failed/skipped"
+    assert result.testsRun==expected and not result.skipped and result.wasSuccessful(), "Required suite failed/skipped"
 if __name__=="__main__":
     multiprocessing.freeze_support()
     main()
 ''',encoding='utf-8')
-            for directory,pattern in [(core/'tests/unit','test_ef1_anchor.py'),
-                (io/'tests/ef1','test_anchor*.py'), (worker/'tests','test_ef1_anchors.py'),
-                (worker/'tests','test_supplied_session.py')]:
-                run([str(python),'-I','-B',str(runner),str(directory),pattern],cwd=root,env=environment)
+            suites = [(core/'tests/unit','test_ef1_anchor.py',21),
+                (core/'tests/unit','test_ef1_clock.py',13),
+                (core/'tests/unit','test_ef1_status.py',26),
+                (core/'tests/unit','test_ef1_path.py',50),
+                (io/'tests/ef1','test_anchor*.py',16), (worker/'tests','test_ef1_anchors.py',10),
+                (io/'tests/ef1','test_clock*.py',12), (worker/'tests','test_ef1_clock.py',8),
+                (io/'tests/ef1','test_status*.py',18), (worker/'tests','test_ef1_status.py',19),
+                (io/'tests/ef1','test_path*.py',26), (worker/'tests','test_ef1_paths.py',23),
+                (worker/'tests','test_supplied_session.py',13),
+                (worker/'tests','test_ef1_reference.py',22),
+                (core/'tests/unit','test_ef1_reference.py',99),
+                (io/'tests/ef1','test_reference*.py',27),
+                (worker/'tests','test_ef1_period.py',17),
+                (io/'tests/ef1','test_period_phase*.py',17),
+                (core/'tests/unit','test_ef1_period_phase.py',75),
+                (core/'tests/unit','test_ef1_observable.py',111),
+                (worker/'tests','test_ef1_observables.py',24),
+                (io/'tests/ef1','test_observable*.py',18)]
+            for directory,pattern,expected in suites:
+                run([str(python),'-I','-B',str(runner),str(directory),pattern,str(expected)],cwd=root,env=environment)
             demo=output/('demo-'+form)
             demo.mkdir()
             for mode in ('trades','bars_actual_notional'):
                 run([str(python),'-I','-B',str(worker/'examples/ef1_anchors.py'),
                     '--output-db',str(demo/(mode+'.duckdb')),'--html',str(demo/(mode+'.html')),
                     '--run-id','synthetic-'+mode,'--mode',mode],cwd=root,env=environment)
+            for cutoff,proof in ((10,'present'),(20,'present'),(30,'present'),(40,'present'),
+                                 (20,'missing'),(20,'unknown'),(20,'future')):
+                name = 'clock-C'+str(cutoff)+'-'+proof
+                run([str(python),'-I','-B',str(worker/'examples/ef1_clock.py'),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name,'--cutoff',str(cutoff),'--proof',proof],
+                    cwd=root,env=environment)
+            for case in ('S01','S02','S03'):
+                name = 'status-'+case
+                run([str(python),'-I','-B',str(worker/'examples/ef1_status.py'),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name,'--case',case],cwd=root,env=environment)
+            for script,case in (('ef1_path_gap.py','G01'),('ef1_path_gap.py','G02'),
+                                ('ef1_path_gap.py','G03'),('ef1_path_drive.py','D01')):
+                name = 'path-'+case
+                run([str(python),'-I','-B',str(worker/'examples'/script),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name,'--case',case],cwd=root,env=environment)
+            for script,case in (('ef1_reference_classification.py','R01'),
+                                ('ef1_reference_classification.py','R02'),('ef1_reference_action.py','R03')):
+                name = 'reference-'+case
+                run([str(python),'-I','-B',str(worker/'examples'/script),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name,'--case',case],cwd=root,env=environment)
+            for script in ('ef1_period.py', 'ef1_extended.py'):
+                name = script.removesuffix('.py')
+                run([str(python),'-I','-B',str(worker/'examples'/script),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name],cwd=root,env=environment)
+            for script in ('ef1_opening_trade.py','ef1_opening_trade_seconds.py','ef1_status_history.py','ef1_status_history_missing_capability.py'):
+                name = script.removesuffix('.py')
+                run([str(python),'-I','-B',str(worker/'examples'/script),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name],cwd=root,env=environment)
             receipt['forms'].append({'form':form,'status':'passed','skipped':0,
+                'suites':[
+                    {'layer':layer, 'directory':directory.relative_to(source).as_posix(),
+                     'pattern':pattern, 'expected':expected}
+                    for directory,pattern,expected in suites
+                    for layer,source in (('core',core),('io',io),('workers',worker))
+                    if directory.is_relative_to(source)],
                 'packages':{name:version for _,name,version in projects}})
             (output/'qualification.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
     receipt['status']='passed'

@@ -1,3 +1,14 @@
+## EF1 cumulative workers source checkpoint - October 21, 2026
+
+[Current qualification and limits](docs/EF1_CUMULATIVE_QUALIFICATION.md) records the exact frozen runtime cohort: all four installed forms passed on Windows and Linux, with 665 methods per form, zero skips and 200 verified-readback demos across both platforms. Coordinator artifact audit and fresh independent final review passed. Later documentation integration commits are not executed runtime source identities. Actual browser inspection, full original audit/source-version/consumer bindings, suitable N-drive input qualification and EF1 release gates remain open. Earlier source-authoring, pending and resource-hold entries below retain their original historical scope; no whole-story completion or package publication is claimed.
+
+## EF1 sampled paths — source candidate, unexecuted
+
+Explicit `equity_path_gap`/`equity_path_drive` APIs admit the exact present-only role/kind subsequence, retain the original preceding DAILY binding and return one full unchanged four-gap/three-drive pure-library result. Closed runner wrappers reuse existing bounded publication/full SDK readback. Two synthetic DuckDB/HTML CLIs and 23 independent test methods are authored, not executed. [API, semantics, validation limits and remaining gates](docs/EF1_PATH_IMPLEMENTATION.md). No version/codec/scheduler/budget change, private parity claim or release acceptance; protected EQ142 runtime hold remains.
+## EF1 supplied current-state status — source candidate, unexecuted
+
+Explicit `equity_feature_workers.equity_status` APIs bind exactly four supplied status roles and return the pure library's complete selected-dimension result unchanged. The closed `run_ef1_statuses` wrapper reuses bounded serialized publication/full readback. Independent S01-S03 fixtures/tests and an actual synthetic-I/O DuckDB/closed-HTML example are authored only. [API, semantics, budgets and remaining review/qualification gates](docs/EF1_STATUS_IMPLEMENTATION.md). Transition-history/open diagnostics and full EF1 acceptance remain pending; earlier snapshots below retain their scopes.
+
 ## EQ140 supplied-input qualification
 
 Experimental workers0.1.0a14 supplies the eight intraday outputs and explicit structure/top-K/continuous/prior-close callbacks. [API](docs/api/SUPPLIED_INPUTS.md), [example](examples/supplied_intraday.py) and [current acceptance](https://github.com/atulsrivas1/equity-features/issues/474) describe the source-independent boundary and supported inputs. The completed [486-Job study](docs/benchmarks/eq140/EQ140_RESULTS.md) has48 nonwinning alternatives under its frozen wall/resource/tail gates; sequential remains default/fallback. Final source/package/main delivery acceptance is pending. Earlier snapshots below keep their historical scopes.
@@ -382,3 +393,15 @@ Canonical scope: [EQ-121](https://github.com/atulsrivas1/equity-features/issues/
 CPython3.12 x64 Windows/Linux only. Experimental workers version0.1.0a1 pins SDK0.1.0a2 and exposes only a version marker; no unimplemented operation is advertised. See [build/install](docs/BUILD_DELIVERY.md), [compatibility](docs/COMPATIBILITY.md) and [continuity](docs/SESSION_HANDOFF.md). Code is Apache-2.0; data rights are separate. No registry release or stable tag.
 
 [Foundation source delivery evidence](docs/EQ121_DELIVERY.md) records reviewed heads/native artifact hashes; canonical issue278 records actual acceptance after main publication/readback.
+
+## EF1 supplied reference source authoring
+
+Closed classification/action routes, exact nullable3/6-slot reconstruction, source-independent admission results and synthetic output/readback examples are described in [reference implementation and limits](docs/EF1_REFERENCE_IMPLEMENTATION.md).22 authored worker methods and55 frozen canonical packets remain unexecuted under the protected resource reservation. Coordinator owns final pins/qualification; full original reference/audit/release gates remain open.
+## EF1 supplied period and extended source subset
+
+Closed period/extended orchestration, exact original present-role forwarding, full task identity and sink readback,17-method independent suite and two public synthetic demos: [implementation, actual source checks and remaining gates](docs/EF1_PERIOD_PHASE_IMPLEMENTATION.md). Original EQ166/audit/release obligations remain open. Current reviewed period source pins are documented in the implementation record; exact-commit installed qualification is pending.
+
+
+## EF1 observable source subset
+
+Closed opening_trade, separately selected opening_trade_seconds and physical status_history orchestration, exact nullable role manifests, independent packets, bounded publication/readback and synthetic demo entry points are described in [observable implementation and current limits](docs/EF1_OBSERVABLE_IMPLEMENTATION.md). Source authoring and actual source validation are distinct from installed/platform/release acceptance. Full original scope remains open.

@@ -1,5 +1,7 @@
 # EF1 current-candidate qualification plan
 
+Next authored slice: mandatory `test_ef1_clock.py` (eight methods), sibling pure/I/O clock suites and `examples/ef1_clock.py` C01/C02/knowledge full DuckDB/browser demonstration are specified in [EF1_CLOCK_IMPLEMENTATION.md](EF1_CLOCK_IMPLEMENTATION.md). Coordinator owns exact source pins and qualification-tool extension after source review. All anchor/legacy checks remain required; this is a future evidence plan, with no clock execution or candidate acceptance claimed.
+
 Source-authored only; no qualification was executed. Coordinator owns the new entry point, workflow and final reviewed source/artifact pins. This plan implements the scope of independently approved PACKAGING_AMENDMENT.md without changing historical build receipts or silently repinning old package studies.
 
 ## Current candidate
@@ -49,3 +51,40 @@ The new lane must qualify changed SDK/result serialization using the unchanged c
 Supersedes the placeholder/pin-conflict preparation snapshots above. Current foundation, supplied-input and EF1 workflows now select exact reviewed core1fa5601b74cbafdf79af4d740c0f813eebec0f4c and IOeddd0d35e9715b73c859fc68f5a00de56793dbf7. Source authoring is committed/published in their linked draft PRs; numerical and artifact acceptance remain pending. Historical companion CORE_COMMIT/IO_COMMIT constants remain unchanged. Current worker candidate is exacta15/featuresa5 with contractswirea4; the legacy supplied backend literal changes explicitly to a5 as documented, superseding the initial unmodified-source snapshot.
 
 Coordinator-authored tools/qualify_ef1.py and .github/workflows/ef1.yml build eight exact candidate packages and exercise four fresh wheel/sdist/mixed installed forms on Windows/Linux. Mandatory nonempty/nonskipped anchor+legacy suites, package-origin/version probes, dependency checks and physical DuckDB/readback/HTML examples are prospective. Independent source review caught and corrected a spawn-bootstrap recursion defect in its generated test runner. No execution success is claimed. Local tests/builds remain held during the separate official EQ142 study; remote CI is the admitted execution route for this candidate. Exact final-head review, CI, installed parity, full inventory and remaining producers stay required.
+
+## Coordinator clock successor qualification
+
+The successor keeps anchor and legacy qualification mandatory and adds exact independent suite populations: core anchors21, core clocks13, I/O anchors16, I/O clocks12, workers anchors10, workers clocks8, legacy supplied13. Every suite must execute exactly its expected population with zero skips. Fresh four-form installations probe installed clock/adapter module origins. Each form runs the original two anchor readbacks and seven clock readbacks: C10/20/30/40 present proof plus C20 missing/unknown/future original proof. Exports are generated only after physical sink readback; a generated HTML file does not count as browser inspection. The known inherited anchor fixture/demo now explicitly request completed_eod. No local runtime execution occurred; exact source pins and current Windows/Linux evidence remain required.
+
+Clock bootstrap pins now select independently source-reviewed core eb062201826fb9b5296c980fa9d86e0663a0e127 and I/O8b84ddd88a6185db8da503102f89dfe00fc67c12 in the current foundation/supplied/EF1 workflows and builders. Historical companion constants are unchanged. The standalone core workflow will subsequently select this reviewed clock worker commit to qualify its final current core; no cyclic source identity or floating branch is used. These pins establish source selection only, with fresh exact-head review/CI still required.
+
+## Current-state status installed qualification
+
+Coordinator extends the existing four-form helper with exact26 library/18 I/O/19 worker status tests plus the retained anchor/clock/legacy suites. All test populations must execute exactly with zero skips. The installed-origin probe includes the status worker module. Each form adds S01/S02/S03 physical DuckDB/readback and closed HTML exports; original input bindings/event witnesses must roundtrip unchanged. Browser inspection and the original observable history/open diagnostics are separate pending gates. No local runtime was executed; source pins and actual Windows/Linux CI still require final review and qualification.
+
+## Supplied status bootstrap qualification
+
+Current foundation, supplied-input and EF1 lanes select reviewed status core b7dd36b2d523dcf5139900decaa7c62e6353dcbe and I/O22de254d6cd0ad79bbe746e9484ba4f64dc616a1. Historical companion constants remain unchanged. The core standalone lane subsequently pins this worker candidate and qualifies its actual current core checkout, preserving a finite immutable dependency graph. This selects source only; installed status numerical qualification remains pending.
+
+## Unambiguous suite receipts
+
+Downloaded clock532 receipts used test filename alone as a JSON mapping key, so core and worker clock suites collided in the summary even though logs show both actually executed. Status would have the same collision. Qualification receipts now preserve every suite as a layer/directory/pattern/expected record. Exact execution counts and zero-skip guards are unchanged. Earlier receipts remain historical with this reporting limitation; do not infer an absent execution from their overwritten summary key.
+
+## Status readback fixture identity correction
+
+Actual core70ea installed Ubuntu job119011247495 passed the preceding suites then failed one status worker test comparing supplied item order to readback order. The unchanged supervisor returns canonical task-SHA order. The corrected test asserts the exact task identity set/count and compares each full result with the original item selected by task_sha256. All full-result equality and replay assertions remain; runner/library/sink behavior and19-test population are unchanged. This is an unexecuted source correction pending independent review and applicable local validation under the protected resource hold.
+
+Current status foundation/supplied/EF1 lanes now select independently reviewed I/O29956fd6b7c753ba8e3f79e586b0a89e09aec271, whose sole fixture annotation/hash correction preserves source data. Core bootstrapb7dd36b2d523dcf5139900decaa7c62e6353dcbe and historical companion constants remain unchanged. This pin selection and task-identity fixture correction are source-only; local qualification is still unexecuted under the protected hold. Hosted Actions completion is not a merge prerequisite under current owner policy.
+
+## Sampled path exact composition
+
+Current foundation/supplied/EF1 source lanes select reviewed core5d6ed96f04541247de7b031ca70e792a6796a150 and I/O43decded90a5a586d8310bc813595d54678d1f87. Historical companion constants remain unchanged. The installed helper additionally requires core50/I-O26/worker23 path methods, preserving every existing anchor/clock/status/legacy exact count, all four fresh forms, installed-origin/version checks, main/spawn guards and zero-skips. It executes G01/G02/G03/D01 actual synthetic worker-to-sink/full-result-readback exports under distinct paths per form. These are source-authored operations only; no local execution occurred under the protected EQ142 hold. Local checks/build evidence remains required when admitted, and hosted Actions completion is not a merge prerequisite. Full EF1 audit/browser/release gates remain open.
+
+Independent review caught that isolated Python omits the script directory from import search, so the two path CLI wrappers could not import their sibling helper under the qualifier's -I flag. Each wrapper now loads only its exact trusted sibling file with stdlib runpy under the main guard, then calls the same closed producer entrypoint. No source directory is added to sys.path; installed package-origin probes and -I remain unchanged. This is an unexecuted source correction requiring review/local validation, not evidence of a passed demo.
+
+## EF1 supplied reference source authoring
+
+Closed classification/action routes, exact nullable3/6-slot reconstruction, source-independent admission results and synthetic output/readback examples are described in [reference implementation and limits](EF1_REFERENCE_IMPLEMENTATION.md).22 authored worker methods and55 frozen canonical packets remain unexecuted under the protected resource reservation. Coordinator owns final pins/qualification; full original reference/audit/release gates remain open.
+## EF1 supplied period and extended source subset
+
+Closed period/extended orchestration, exact original present-role forwarding, full task identity and sink readback,17-method independent suite and two public synthetic demos: [implementation, actual source checks and remaining gates](EF1_PERIOD_PHASE_IMPLEMENTATION.md). Original EQ166/audit/release obligations remain open. Current reviewed period source pins are documented in the implementation record; exact-commit installed qualification is pending.

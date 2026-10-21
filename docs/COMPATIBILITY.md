@@ -1,3 +1,7 @@
+## EF1 cumulative workers source checkpoint - October 21, 2026
+
+[Current qualification and limits](EF1_CUMULATIVE_QUALIFICATION.md) records the exact frozen runtime cohort: all four installed forms passed on Windows and Linux, with 665 methods per form, zero skips and 200 verified-readback demos across both platforms. Coordinator artifact audit and fresh independent final review passed. Later documentation integration commits are not executed runtime source identities. Actual browser inspection, full original audit/source-version/consumer bindings, suitable N-drive input qualification and EF1 release gates remain open. Earlier source-authoring, pending and resource-hold entries below retain their original historical scope; no whole-story completion or package publication is claimed.
+
 ## EQ109 external examples and compatibility
 
 [Agent research](AGENT_RESEARCH.md) adds examples, not package/public protocol/schema/algorithm changes. Fixed optional dependencies remain frozen in its profile. MCP explanations stay reference-only (`content_verified=False`); outer supplied-batch consistency is separate. Existing content/receipt/event/ledger identities, native authority and no automatic replay semantics remain. No migration is required for accepted package users. [Executed source qualification](stories/EQ-109_EXECUTION.json) records fresh author/current-CI cohorts and scoped audits; current delivery/acceptance is authoritative on [story209](https://github.com/atulsrivas1/equity-features/issues/209). A source-qualified example is not a source-authenticity, production-hosting or trading certification. Earlier dated candidate entries below retain historical scope.
@@ -358,3 +362,7 @@ Actual native/fresh-form matrix and separate final-head review/current artifact 
 # Compatibility
 
 Only CPython>=3.12,<3.13 x64 on native Windows/Linux CI is qualified, with exact patch/OS in each artifact report. Initial version0.1.0a0 foundations use canonical contracts/features0.0.4a4. I/O contracts depends on canonical contracts; SDK depends on matching I/O contracts; workers depends on SDK. Backend dependencies stay optional under later stories. Other platforms/versions are unqualified. Core package/module and metadata fingerprints must remain equal before/after companion installation/import. No mathematics/input protocol changes.
+
+## EF1 supplied reference source authoring
+
+Closed classification/action routes, exact nullable3/6-slot reconstruction, source-independent admission results and synthetic output/readback examples are described in [reference implementation and limits](EF1_REFERENCE_IMPLEMENTATION.md).22 authored worker methods and55 frozen canonical packets remain unexecuted under the protected resource reservation. Coordinator owns final pins/qualification; full original reference/audit/release gates remain open.
