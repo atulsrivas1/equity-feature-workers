@@ -2,7 +2,7 @@
 
 Runs only when explicitly invoked in an admitted execution environment. Tests are
 mandatory, with no skipped EF1 tests accepted as qualification. This checks the
-anchor, supplied-clock, current-state status, sampled path supplied reference, period and extended slices, not the full EF1 release or its inventory/performance gates.
+anchor, supplied-clock, current-state status, sampled path supplied reference, period, extended and observable slices, not the full EF1 release or its inventory/performance gates.
 """
 from __future__ import annotations
 
@@ -66,7 +66,7 @@ def main() -> None:
     archives = sorted(artifacts.iterdir())
     if len(archives) != 2*len(projects):
         raise RuntimeError('Incomplete wheel/sdist inventory')
-    receipt = {'scope':'EF1 anchor/clock/current-state status/sampled path/reference/period/extended installed artifacts and legacy numerical regression only; not full EF1 acceptance',
+    receipt = {'scope':'EF1 anchor/clock/current-state status/sampled path/reference/period/extended/observable installed artifacts and legacy numerical regression only; not full EF1 acceptance',
         'sources':sources,'python':platform.python_version(),'system':platform.system(),
         'archives':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in archives},'forms':[]}
     # Both physical forms of every package, plus two mixed boundaries. Each form
@@ -95,9 +95,9 @@ for name, version in expected.items():
     assert md.version(name)==version, (name,md.version(name),version)
 import equity_features, equity_feature_workers, equity_feature_duckdb
 from equity_features import ef1
-from equity_feature_workers import equity_sessions, equity_clock, equity_status, equity_path_gap, equity_path_drive, equity_reference_classification, equity_reference_action, equity_period, equity_extended
+from equity_feature_workers import equity_sessions, equity_clock, equity_status, equity_path_gap, equity_path_drive, equity_reference_classification, equity_reference_action, equity_period, equity_extended, equity_opening_trade, equity_opening_trade_seconds, equity_status_history
 from equity_feature_duckdb import ef1 as ef1_inputs
-for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,equity_path_gap,equity_path_drive,equity_reference_classification,equity_reference_action,equity_period,equity_extended,ef1_inputs):
+for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,equity_path_gap,equity_path_drive,equity_reference_classification,equity_reference_action,equity_period,equity_extended,equity_opening_trade,equity_opening_trade_seconds,equity_status_history,ef1_inputs):
     assert pathlib.Path(module.__file__).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())
 ''',encoding='utf-8')
             run([str(python),'-I','-B',str(probe)],cwd=root,env=environment)
@@ -131,7 +131,10 @@ if __name__=="__main__":
                 (io/'tests/ef1','test_reference*.py',27),
                 (worker/'tests','test_ef1_period.py',17),
                 (io/'tests/ef1','test_period_phase*.py',17),
-                (core/'tests/unit','test_ef1_period_phase.py',75)]
+                (core/'tests/unit','test_ef1_period_phase.py',75),
+                (core/'tests/unit','test_ef1_observable.py',111),
+                (worker/'tests','test_ef1_observables.py',24),
+                (io/'tests/ef1','test_observable*.py',18)]
             for directory,pattern,expected in suites:
                 run([str(python),'-I','-B',str(runner),str(directory),pattern,str(expected)],cwd=root,env=environment)
             demo=output/('demo-'+form)
@@ -165,6 +168,11 @@ if __name__=="__main__":
                     '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
                     '--run-id','synthetic-'+name,'--case',case],cwd=root,env=environment)
             for script in ('ef1_period.py', 'ef1_extended.py'):
+                name = script.removesuffix('.py')
+                run([str(python),'-I','-B',str(worker/'examples'/script),
+                    '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),
+                    '--run-id','synthetic-'+name],cwd=root,env=environment)
+            for script in ('ef1_opening_trade.py','ef1_opening_trade_seconds.py','ef1_status_history.py','ef1_status_history_missing_capability.py'):
                 name = script.removesuffix('.py')
                 run([str(python),'-I','-B',str(worker/'examples'/script),
                     '--output-db',str(demo/(name+'.duckdb')),'--html',str(demo/(name+'.html')),

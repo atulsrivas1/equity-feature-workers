@@ -1283,3 +1283,8 @@ Read AGENTS.md, PUBLIC_DEVELOPMENT.md, SESSION_HANDOFF.md and the canonical issu
 ## EF1 path authoring lesson — October20,2026
 
 Closed sampled-path routes retain original prior DAILY session/source/scope bindings rather than applying a target-only market admission. Shared worker admission already checks actual binding, namespace and instrument without overwriting session; the pure library owns explicit preceding-calendar-slot semantics. Missing roles remain manifest absence plus omitted actual pure inputs. Source-authored evidence in docs/EF1_PATH_IMPLEMENTATION.md and tests/test_ef1_paths.py; all assertions remain unexecuted under the protected study reservation. Do not equate authoring/test census with numerical or release validation.
+
+
+## EF1 observable source subset
+
+Closed opening_trade, separately selected opening_trade_seconds and physical status_history orchestration, exact nullable role manifests, independent packets, bounded publication/readback and synthetic demo entry points are described in [observable implementation and current limits](EF1_OBSERVABLE_IMPLEMENTATION.md). Source authoring and actual source validation are distinct from installed/platform/release acceptance. Full original scope remains open.

@@ -210,3 +210,45 @@ def run_ef1_extended(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_periods', 'run_ef1_extended']
+
+
+def run_ef1_opening_trade(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Closed opening_trade callback; existing bounded full readback path."""
+    from .equity_opening_trade import _admit_opening_trade, compute_opening_trade_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_opening_trade_inputs, admit_inputs=_admit_opening_trade)
+
+
+__all__ += ['run_ef1_opening_trade']
+
+
+def run_ef1_opening_trade_seconds(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Closed opening_trade_seconds callback; existing bounded full readback path."""
+    from .equity_opening_trade_seconds import _admit_opening_trade_seconds, compute_opening_trade_seconds_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_opening_trade_seconds_inputs, admit_inputs=_admit_opening_trade_seconds)
+
+
+__all__ += ['run_ef1_opening_trade_seconds']
+
+
+def run_ef1_status_history(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Closed status_history callback; existing bounded full readback path."""
+    from .equity_status_history import _admit_status_history, compute_status_history_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_status_history_inputs, admit_inputs=_admit_status_history)
+
+
+__all__ += ['run_ef1_status_history']

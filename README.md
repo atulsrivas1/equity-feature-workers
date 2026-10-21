@@ -396,3 +396,8 @@ Closed classification/action routes, exact nullable3/6-slot reconstruction, sour
 ## EF1 supplied period and extended source subset
 
 Closed period/extended orchestration, exact original present-role forwarding, full task identity and sink readback,17-method independent suite and two public synthetic demos: [implementation, actual source checks and remaining gates](docs/EF1_PERIOD_PHASE_IMPLEMENTATION.md). Original EQ166/audit/release obligations remain open. Current reviewed period source pins are documented in the implementation record; exact-commit installed qualification is pending.
+
+
+## EF1 observable source subset
+
+Closed opening_trade, separately selected opening_trade_seconds and physical status_history orchestration, exact nullable role manifests, independent packets, bounded publication/readback and synthetic demo entry points are described in [observable implementation and current limits](docs/EF1_OBSERVABLE_IMPLEMENTATION.md). Source authoring and actual source validation are distinct from installed/platform/release acceptance. Full original scope remains open.
