@@ -389,3 +389,7 @@ Canonical scope: [EQ-121](https://github.com/atulsrivas1/equity-features/issues/
 CPython3.12 x64 Windows/Linux only. Experimental workers version0.1.0a1 pins SDK0.1.0a2 and exposes only a version marker; no unimplemented operation is advertised. See [build/install](docs/BUILD_DELIVERY.md), [compatibility](docs/COMPATIBILITY.md) and [continuity](docs/SESSION_HANDOFF.md). Code is Apache-2.0; data rights are separate. No registry release or stable tag.
 
 [Foundation source delivery evidence](docs/EQ121_DELIVERY.md) records reviewed heads/native artifact hashes; canonical issue278 records actual acceptance after main publication/readback.
+
+## EF1 supplied reference source authoring
+
+Closed classification/action routes, exact nullable3/6-slot reconstruction, source-independent admission results and synthetic output/readback examples are described in [reference implementation and limits](docs/EF1_REFERENCE_IMPLEMENTATION.md).22 authored worker methods and55 frozen canonical packets remain unexecuted under the protected resource reservation. Coordinator owns final pins/qualification; full original reference/audit/release gates remain open.

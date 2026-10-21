@@ -160,3 +160,28 @@ def run_ef1_path_drives(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_path_gaps', 'run_ef1_path_drives']
+
+
+def run_ef1_reference_classifications(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Classification-only opt-in using the existing full readback path."""
+    from .equity_reference_classification import _admit_reference_classification, compute_reference_classification_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_reference_classification_inputs, admit_inputs=_admit_reference_classification)
+
+
+def run_ef1_reference_actions(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Action-admission-only opt-in; no transformation or scheduler change."""
+    from .equity_reference_action import _admit_reference_action, compute_reference_action_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_reference_action_inputs, admit_inputs=_admit_reference_action)
+
+
+__all__ += ['run_ef1_reference_classifications', 'run_ef1_reference_actions']
