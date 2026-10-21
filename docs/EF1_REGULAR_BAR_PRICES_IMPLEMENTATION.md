@@ -1,0 +1,39 @@
+# EF1 regular completed-BAR prices: EQ213 #571
+
+This additive worker slice invokes the pure `regular_bar_prices` producer owned by [EQ166 #506](https://github.com/atulsrivas1/equity-features/issues/506), supporting [EQ213 #571](https://github.com/atulsrivas1/equity-features/issues/571). The coordinator froze the reviewed V3 contract and independent 100-request oracle, SHA256 `05d5b4815df3fd621993037c84f9d897a32ee84c833715e6ca1f6c4e1473d030`, before source authoring. Full EQ164 and EF1 release acceptance remain open.
+
+## Public API
+
+Import `equity_feature_workers.equity_regular_bar_prices`: `regular_bar_price_headers`, `required_regular_bar_price_inputs`, `make_ef1_regular_bar_price_work`, `compute_regular_bar_price_inputs`. Invoke `equity_feature_workers.ef1_runner.run_ef1_regular_bar_prices` with the caller-owned sink and explicit `SinkRequirements`.
+
+All three declarations retain fixed order `calendar_provenance`, `bars`, `population_proof`. Present batches are their original binding-preserving subsequence. The callback mechanically reconstructs three nullable slots after binding/kind admission. Two REFERENCE roles are distinguished by their declarations, never inferred from kind. Missing and present-empty remain distinct. The task uses one instrument, exactly the target governed interval, serialized destination ownership, no ordered history/warmup/initialization, three batches maximum and actual protocol-5 pickle at most 1 MiB. Task JSON, proof/context text and SDK output limits remain separate.
+
+The worker performs no price arithmetic, membership proof construction or endpoint selection. Pure calculations return the lexical `session.close.calculated_price` and `session.regular.first_completed_bar_open` FLOAT64 headers, in `currency/share`. A calculated close is a supplied prefix endpoint and does not establish an official exchange close. Availability, unknown outer membership, independent endpoint readiness, counts and selected witnesses belong to the library and remain unchanged through publication.
+
+## Result closure and compatibility
+
+Before any sink begin/write/commit/read, the callback validates full config/header/input identity, namespace/session/availability, backend `python-exact` version `0.0.4a5`, schema `1`, math `v1`, exactly two single-entity value/quality cells, exact declared evidence limit 2 and at most two actual witnesses. Unknown math and evidence declarations 1 or 3 are valid generic DTO substitutions that require these explicit producer guards. The generic comparator alone does not enforce them. R08's one-witness result supplies a valid evidence-limit-1 control, avoiding constructor bounds masking.
+
+The actual generic probe admitted N20 after only its BAR session changed S to T; the new pure producer must refuse that contradiction. Generic admission is transport evidence, not semantic conformance. Existing manifest/supervisor/publisher/codec/sink contracts, versions and scheduler defaults remain unchanged. No source/provider/prod database is accessed.
+
+## Synthetic CLI
+
+Run `python examples/ef1_regular_bar_prices.py --case R01_two_independent_endpoints --output-db ABSOLUTE_NEW_DB --html ABSOLUTE_NEW_HTML --run-id synthetic-example`; `R08_unknown_before_first` exercises an independently unavailable first-open while close remains available. Both paths must be absent, distinct, absolute and have existing parents. The CLI uses explicit synthetic adapter facts, computes through the worker/pure library, compares the complete independent literal, verifies SDK sink readback, idempotent retry and close/reopen, and exclusively creates escaped HTML. Browser inspection remains a separate gate.
+
+## Evidence and remaining gates
+
+Actual Windows 64-bit CPython 3.12.10 source-selected checks use coordinator-frozen core `5b442ee6a9ae2903810e49930f4d47d968f20eed` and the exact I/O production bytes subsequently committed as `0a201082e336c0fe4d317eb3eaa11b34312af8fd`. The final nine worker methods passed in 122.728s with all 46 full independent expected results and all 54 earliest refusal stages: three CanonicalBatch constructors, one Coverage constructor, ten canonical validation, three config-decode and 37 pure semantic/geometry refusals. Constructor and manifest refusals are not credited as callback execution. The actual generic N20 session-only contradiction refuses in pure semantic admission.
+
+All 46 successful packets also passed full SDK memory publication/readback and identical retry, and all 46 passed supplied adapter conversion -> worker -> separate DuckDB -> identical retry -> close/reopen full result parity. Instrumented valid metadata/header/entity substitutions, including R08 evidence declarations 1 and 3, unknown math and wrong backend version, refused as RESULT before any sink begin/write/commit/read. Cancellation produced no publication. All 69 selected existing gap-endpoint/daily/path/observable regression methods passed in 47.770s, including existing spawn/readback fault coverage. Strict mypy passed all 38 worker source files.
+
+Both actual R01/R08 CLI invocations exited 0 into new separate databases and exclusive HTML artifacts, matched the complete independent literal and verified SDK readback, retry and close/reopen. Core clean HEAD/tree/all 106 Python source hashes were checked before and after every phase; I/O and worker production hashes stayed identical. The I/O Git-only commit during regression checking changed no consumed bytes; no I/O HEAD guard was then present or waived. Both later CLI checks additionally pinned that exact I/O HEAD/tree. Native thread limits were 1, no driver installation occurred, and no installed-package, Linux or browser inspection is claimed.
+
+Earlier failed author attempts remain recorded: first fixture import indexed an omitted negative-packet `expected_result`; the second full run passed all numerical/database/closure checks but had a hardcoded session-end assertion inconsistent with R45's supplied session and expected a callback for invalid geometry that actually refused at the TaskManifest constructor. Only those test setup assumptions changed. No production or oracle correction, quarantine, skip or expected regeneration occurred.
+
+Worker source remains uncommitted for coordinator actual diff review before commit/push. Fresh independent actual PR review, exact-commit local build/install/platform qualification, browser inspection, original-source rights/capability/parity, full EQ164, remaining EF1 outputs and whole release gates remain open. Source-selected results do not establish those later gates.
+
+## Coordinator source review and qualification preparation - October 21, 2026
+
+The coordinator reviewed the complete three-role worker/runner, all nine tests, synthetic two-case CLI, immutable oracle and accompanying API/continuity documentation before commit/push. No production or expected-result correction was needed. A documentation census typo was corrected from eight to nine. The installed qualification tool is extended additively from 30 suites/724 methods/31 demos to a planned 34/752/33 per form, preserving all prior suites/demos and unchanged package versions. It adds installed-origin checks and retains all new I/O and worker physical test databases beside actual command receipts without deleting sink sidecars. This is preparation, not an executed or approved installed result.
+
+Core PR607 has a test/document-only aggregate purity correction above the source-selected core5b baseline; its 106 core Python runtime files remain unchanged. I/O PR27 is draft. Fresh independent actual worker PR review, final exact-source four-form Windows/Linux qualification, browser/full-EQ164/remaining-EF1 and release gates remain open. The actual source checks recorded below retain their original source identities; no whole-story completion or package publication is claimed.

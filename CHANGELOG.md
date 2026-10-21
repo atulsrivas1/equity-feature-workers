@@ -1,3 +1,7 @@
+## EF1 regular completed-BAR prices - source candidate
+
+Add the opt-in three-role route, explicit result math/evidence closure, frozen independent 100-request fixture and synthetic separate-DuckDB/HTML demonstration. Preserve existing versions, generic transport/scheduler/sink contracts and pure-library mathematical ownership. Actual9focusedmethods, strict38sourcefiles,69old regressions and both new-output CLI demos pass on Windows source-selected composition. Validation and remaining gates: [implementation record](docs/EF1_REGULAR_BAR_PRICES_IMPLEMENTATION.md).
+
 ## EF1 daily observations — source candidate
 
 Add a closed six-role daily observation worker and shared-runner wrapper with

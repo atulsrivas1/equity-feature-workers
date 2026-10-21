@@ -1,3 +1,7 @@
+## Regular completed-BAR prices source candidate
+
+Explicit three-role `equity_regular_bar_prices` and `ef1_runner.run_ef1_regular_bar_prices` invoke the pure producer through existing bounded publication. [API, synthetic CLI and validation limits](docs/EF1_REGULAR_BAR_PRICES_IMPLEMENTATION.md). Actual Windows source9methods/all46fullresults/54refusalstages and46physicalDuckDB retry/reopen pass; strict38sourcefiles and69prior regressions pass. Both synthetic CLI cases pass; installed/platform/browser/full-audit/release gates remain.
+
 ## Supplied daily observations source candidate
 
 Additive explicit `equity_daily_observations` API and

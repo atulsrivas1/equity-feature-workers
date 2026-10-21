@@ -2,7 +2,7 @@
 
 Runs only when explicitly invoked in an admitted execution environment. Tests are
 mandatory, with no skipped EF1 tests accepted as qualification. This checks the
-anchor, supplied-clock, current-state status, sampled path supplied reference, period, extended, observable daily-observation and gap-endpoint slices, not the full EF1 release or its inventory/performance gates.
+anchor, supplied-clock, current-state status, sampled path supplied reference, period, extended, observable, daily-observation, gap-endpoint and regular completed-BAR price slices, not the full EF1 release or its inventory/performance gates.
 """
 from __future__ import annotations
 
@@ -33,8 +33,24 @@ def run(args: list[str], *, cwd: Path, env: dict[str, str]) -> None:
     command_dir = _LOG_ROOT / f"{_COMMAND_INDEX:04d}"
     command_dir.mkdir(exist_ok=False)
     child_env = dict(env, EF1_SUITE_RECEIPT=str(command_dir / "suite-result.json"))
+    retained_roots = {}
+    # Preserve new composition outputs beside their native command receipts.
+    # The I/O suite has an explicit hook; the worker uses stdlib mkdtemp.
+    if 'test_regular_bar_prices_composition.py' in args:
+        retained = command_dir / "regular-bar-io-output"
+        retained.mkdir(exist_ok=False)
+        child_env['EF1_REGULAR_BAR_IO_OUTPUT_ROOT'] = str(retained)
+        retained_roots['io'] = str(retained)
+    if 'test_ef1_regular_bar_prices.py' in args:
+        # Only the worker suite has this pattern with a leaf tests directory;
+        # identify its tests directory explicitly, without changing package paths.
+        if any(Path(value).name == 'tests' for value in args):
+            retained = command_dir / "regular-bar-worker-output"
+            retained.mkdir(exist_ok=False)
+            child_env.update(TMPDIR=str(retained), TMP=str(retained), TEMP=str(retained))
+            retained_roots['workers'] = str(retained)
     started = datetime.now(timezone.utc).isoformat()
-    running = {"argv": args, "cwd": str(cwd), "started_utc": started}
+    running = {"argv": args, "cwd": str(cwd), "started_utc": started, "retained_output_roots": retained_roots}
     (command_dir / "RUNNING.json").write_text(json.dumps(running, indent=2)+"\n", encoding="utf-8")
     with (command_dir / "native-output.log").open("xb") as log:
         result = subprocess.run(args, cwd=cwd, env=child_env, stdout=log, stderr=subprocess.STDOUT)
@@ -96,7 +112,7 @@ def main() -> None:
     archives = sorted(artifacts.iterdir())
     if len(archives) != 2*len(projects):
         raise RuntimeError('Incomplete wheel/sdist inventory')
-    receipt = {'scope':'EF1 anchor/clock/current-state status/sampled path/reference/period/extended/observable/daily-observations/gap-endpoint installed artifacts and legacy numerical regression only; not full EF1 acceptance',
+    receipt = {'scope':'EF1 anchor/clock/current-state status/sampled path/reference/period/extended/observable/daily-observations/gap-endpoint/regular-bar-prices installed artifacts and legacy numerical regression only; not full EF1 acceptance',
         'sources':sources,'python':platform.python_version(),'system':platform.system(),
         'archives':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in archives},'forms':[]}
     # Both physical forms of every package, plus two mixed boundaries. Each form
@@ -127,7 +143,10 @@ import equity_features, equity_feature_workers, equity_feature_duckdb
 from equity_features import ef1
 from equity_feature_workers import equity_sessions, equity_clock, equity_status, equity_path_gap, equity_path_drive, equity_reference_classification, equity_reference_action, equity_period, equity_extended, equity_opening_trade, equity_opening_trade_seconds, equity_status_history, equity_daily_observations, equity_gap_endpoint
 from equity_feature_duckdb import ef1 as ef1_inputs
-for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,equity_path_gap,equity_path_drive,equity_reference_classification,equity_reference_action,equity_period,equity_extended,equity_opening_trade,equity_opening_trade_seconds,equity_status_history,equity_daily_observations,equity_gap_endpoint,ef1_inputs):
+from equity_features.ef1 import _regular_bar_prices
+from equity_feature_duckdb import regular_bar_prices as regular_bar_price_inputs
+from equity_feature_workers import equity_regular_bar_prices
+for module in (equity_features,equity_feature_workers,equity_feature_duckdb,ef1,equity_sessions,equity_clock,equity_status,equity_path_gap,equity_path_drive,equity_reference_classification,equity_reference_action,equity_period,equity_extended,equity_opening_trade,equity_opening_trade_seconds,equity_status_history,equity_daily_observations,equity_gap_endpoint,ef1_inputs,_regular_bar_prices,regular_bar_price_inputs,equity_regular_bar_prices):
     assert pathlib.Path(module.__file__).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())
 ''',encoding='utf-8')
             run([str(python),'-I','-B',str(probe)],cwd=root,env=environment)
@@ -182,8 +201,12 @@ if __name__=="__main__":
                 (core/'tests/unit','test_ef1_gap_endpoint.py',6),
                 (io/'tests/ef1','test_gap_endpoint_inputs.py',7),
                 (io/'tests/ef1','test_gap_endpoint_composition.py',3),
-                (worker/'tests','test_ef1_gap_endpoint.py',8)]
-            assert len(suites) == 30 and sum(row[2] for row in suites) == 724
+                (worker/'tests','test_ef1_gap_endpoint.py',8),
+                (core/'tests/unit','test_ef1_regular_bar_prices.py',9),
+                (io/'tests/ef1','test_regular_bar_prices_inputs.py',8),
+                (io/'tests/ef1','test_regular_bar_prices_composition.py',2),
+                (worker/'tests','test_ef1_regular_bar_prices.py',9)]
+            assert len(suites) == 34 and sum(row[2] for row in suites) == 752
             for directory,pattern,expected in suites:
                 run([str(python),'-I','-B',str(runner),str(directory),pattern,str(expected)],cwd=root,env=environment)
             demo=output/('demo-'+form)
@@ -240,6 +263,12 @@ if __name__=="__main__":
                     '--case',case,'--output-db',str(demo/(name+'.duckdb')),
                     '--html',str(demo/(name+'.html')),'--run-id','synthetic-'+name],
                     cwd=root,env=environment)
+            for case in ('R01_two_independent_endpoints', 'R08_unknown_before_first'):
+                name = 'regular-bar-' + case
+                run([str(python),'-I','-B',str(worker/'examples/ef1_regular_bar_prices.py'),
+                    '--case',case,'--output-db',str(demo/(name+'.duckdb')),
+                    '--html',str(demo/(name+'.html')),'--run-id','synthetic-'+name],
+                    cwd=root,env=environment)
             receipt['forms'].append({'form':form,'status':'passed','skipped':0,
                 'suites':[
                     {'layer':layer, 'directory':directory.relative_to(source).as_posix(),
@@ -252,10 +281,11 @@ if __name__=="__main__":
     for name, source in (('core', core), ('io', io), ('workers', worker)):
         assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip() == sources[name]
         assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=source,text=True).strip()
+    assert _COMMAND_INDEX == 292
     receipt['native_commands'] = _COMMAND_INDEX
-    receipt['required_suites_per_form'] = 30
-    receipt['required_methods_per_form'] = 724
-    receipt['required_demos_per_form'] = 31
+    receipt['required_suites_per_form'] = 34
+    receipt['required_methods_per_form'] = 752
+    receipt['required_demos_per_form'] = 33
     receipt['status']='passed'
     (output/'qualification.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
 
