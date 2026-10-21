@@ -16,7 +16,8 @@ def core_check():
         import equity_feature_contracts as c
         import equity_features as f
         from equity_features.session import compute_bars
-        assert c.__version__ == f.__version__ == '0.0.4a4'
+        assert c.__version__ == '0.0.4a4'
+        assert f.__version__ == '0.0.4a5'
         assert len(c.builtin_registry().list_features()) == 39
         unit=c.PriceUnit(0,'USD')
         config=c.ConfigSpec('synthetic-bars','v1',(c.Parameter('eligibility_policy','example-v1'),),c.SessionSpec('demo','S',100,200,'caller-supplied'),c.WindowSpec(1,'S',('P','S')),c.AvailabilitySpec(200,210,210),price_unit=unit)
@@ -31,11 +32,11 @@ def core_check():
     finally: sys.meta_path.remove(deny)
 
 core_check()
-expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a2'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a2','equity-features==0.0.4a4','equity-features-intraday==0.1.0a3; extra == "intraday"']}
+expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a4'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a2'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a2','equity-features==0.0.4a5','equity-features-intraday==0.1.0a3; extra == "intraday"']}
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == ('0.1.0a14' if name=='equity-feature-workers' else '0.1.0a2')
+    assert module.__version__ == ('0.1.0a15' if name=='equity-feature-workers' else '0.1.0a2')
     if name=='equity-feature-workers':
         assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task', 'SessionCommandSpec', 'run_session', 'run_registered', 'RequiredCommandSpec', 'RequiredOutcome', 'run_required', 'run_required_registered', 'BarrierLimits', 'Dependency', 'TaskNode', 'evaluate_readiness', 'inspect_barrier', 'run_assembly', 'UniverseShard', 'BreadthCommandSpec', 'run_breadth', 'PublicationLimits', 'PublicationProgress', 'SerialPublisher', 'GenerationSpec', 'GenerationOutcome', 'GenerationStore'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)
