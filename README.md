@@ -1,3 +1,7 @@
+## Regular first eligible trade price (bounded source candidate)
+
+The additive `equity_regular_first_trade_price` route and `run_ef1_regular_first_trade_price` runner preserve exact nullable calendar/trades/population roles and invoke pure calculations before serialized publication/readback. [API, synthetic CLI, evidence and open gates](docs/EF1_REGULAR_FIRST_TRADE_PRICE_IMPLEMENTATION.md). All122 independent result lifecycles,159 refusals/17 controls and two synthetic CLI examples pass on pinned Windows source; release gates remain open.
+
 ## Regular completed-BAR prices source candidate
 
 Explicit three-role `equity_regular_bar_prices` and `ef1_runner.run_ef1_regular_bar_prices` invoke the pure producer through existing bounded publication. [API, synthetic CLI and validation limits](docs/EF1_REGULAR_BAR_PRICES_IMPLEMENTATION.md). Actual Windows source9methods/all46fullresults/54refusalstages and46physicalDuckDB retry/reopen pass; strict38sourcefiles and69prior regressions pass. Both synthetic CLI cases pass; installed/platform/browser/full-audit/release gates remain.

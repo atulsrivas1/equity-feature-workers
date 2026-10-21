@@ -294,3 +294,17 @@ def run_ef1_regular_bar_prices(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_regular_bar_prices']
+
+
+def run_ef1_regular_first_trade_price(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Regular first-trade price through existing publication/full readback."""
+    from .equity_regular_first_trade_price import _admit_regular_first_trade_price, compute_regular_first_trade_price_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_regular_first_trade_price_inputs, admit_inputs=_admit_regular_first_trade_price)
+
+
+__all__ += ['run_ef1_regular_first_trade_price']

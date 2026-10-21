@@ -1,0 +1,7 @@
+# First-trade source/main documentation bridge
+
+This private-prepared source bridge reconciles reviewed first-trade `d1109d15ab859cff2e97d97773fdfaf2246f7260` with actual main `8d00d3339d0fd3e07fac7a5702aa1a96a4c324f2`. The incoming main Git tree is byte-identical to previously reviewed BAR `7e5d86e53b87242a7f95c83980fcef11676de359`; first-trade source already contains that BAR functionality. Squash ancestry caused overlapping source/document conflicts; exact frozen first-trade package/test/tool/version/oracle bytes are retained, and incoming continuity histories remain complete.
+
+This bridge changes documentation and ancestry only. Original source review and author composition evidence retain their existing identities. Bounded Windows/Linux installed qualification was launched separately at the frozen first-trade cohort and remains RUNNING at this preparation checkpoint; no completed platform/artifact/parity acceptance is claimed here. It is not a runtime run against this documentation head. Actual child/tool reaps and independent retained-artifact review remain required before installed acceptance.
+
+Fresh coordinator review, distinct independent actual-head review and appropriate local source/document checks precede ordinary delivery. Full EQ164/EF1, original-source rights/known-at/parity, actual browser and release/publication gates remain open. This record creates no production/package/tag/release publication or issue closure.

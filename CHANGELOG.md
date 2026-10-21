@@ -1,3 +1,7 @@
+## Unreleased: regular first eligible trade price worker
+
+Add bounded three-role worker/runner and synthetic R001/R019 CLI with independent whole-result/stage/control tests. Exact producer result closure precedes all sink methods; numerical firstness/price remain in the pure library. [Scope, actual checks and unfinished gates](docs/EF1_REGULAR_FIRST_TRADE_PRICE_IMPLEMENTATION.md). No package version or sink/SDK change.
+
 ## EF1 regular completed-BAR prices - source candidate
 
 Add the opt-in three-role route, explicit result math/evidence closure, frozen independent 100-request fixture and synthetic separate-DuckDB/HTML demonstration. Preserve existing versions, generic transport/scheduler/sink contracts and pure-library mathematical ownership. Actual9focusedmethods, strict38sourcefiles,69old regressions and both new-output CLI demos pass on Windows source-selected composition. Validation and remaining gates: [implementation record](docs/EF1_REGULAR_BAR_PRICES_IMPLEMENTATION.md).
