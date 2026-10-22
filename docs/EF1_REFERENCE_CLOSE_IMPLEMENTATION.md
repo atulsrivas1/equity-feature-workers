@@ -20,4 +20,10 @@ Run `python examples/ef1_reference_close.py --case C01_within_tolerance --output
 
 ## Status
 
-Authored against the frozen contract and the first-trade template. Not executed: the library and I/O sibling layers were not available when written. No tests, CI, installed-package, platform or release claim. Original-source parity, source rights and official-price authenticity remain unqualified.
+Executed on Windows Python 3.12.10 with PYTHONPATH of every `packages/*/src` of the three repositories, against core main `c754e5d` (library PR 639) and I/O main `1b46c1c` (PR 30). Imports of `equity_reference_close` and `run_ef1_reference_close` succeed.
+
+One defect was found and fixed: the first run failed worker admission (`INVALID_COMMAND`) because the selection check required `dict`, while the decoded selection is another `Mapping`; it now accepts `Mapping`.
+
+The example then ran for `C01_within_tolerance`, `C02_outside_tolerance` and `C03_absent_authoritative_close` into new scratch databases and HTML: each exited 0 with `verified_readback`, `verified_reopen` and `contract_literal_match` true (C01 within, BPS 0.0, supplied 1250; C02 outside, BPS 79.36507936507937, supplied 1260; C03 `reference_unavailable`, null/null), including idempotent replay. `tools/ef1_results_demo.py` ran all 20 cases (the 17 existing plus the 3 new) to completion. HTML generation is not browser inspection, and the demo records that each example ran, not independent review.
+
+No tests, CI, installed-package, platform or release claim. Original-source parity, source rights and official-price authenticity remain unqualified.

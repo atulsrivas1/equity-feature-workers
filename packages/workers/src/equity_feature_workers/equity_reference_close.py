@@ -1,6 +1,7 @@
 """Closed reference-close comparison orchestration; no numerical calculations."""
 from __future__ import annotations
 
+from collections.abc import Mapping
 from types import ModuleType
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, DataKind, EntityKey, FeatureResult, InputRequirement, ValueType
@@ -56,7 +57,7 @@ def _admit_reference_close(task: TaskManifest, batches: tuple[CanonicalBatch, ..
             or (task.ordered_history, task.warmup_sessions, task.initialization_sha256) != (False, (), None)):
         fail(CommandErrorCode.RESULT)
     selection = decoded.get('selection')
-    if (not isinstance(selection, dict)
+    if (not isinstance(selection, Mapping)
             or (selection.get('phase_profile'), selection.get('sampling')) != (
                 'regular_no_auctions1', 'completed_bar_close')):
         fail()
