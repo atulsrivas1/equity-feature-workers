@@ -13,10 +13,31 @@ from equity_feature_io_contracts import SinkRequirements
 from equity_feature_io_sdk import encode_result, verify_receipt
 from equity_feature_workers import InputManifest
 
-# Contract result-fixture ids (docs/ef1/CLOSE_RECONCILIATION_CONTRACT_PROPOSAL.json in the core repo).
-CASES = ('N01', 'N02', 'N03', 'N04', 'N05', 'N06', 'N07', 'N08', 'N09', 'N10', 'N11', 'N12', 'N13', 'N14', 'N15', 'N16', 'N17', 'Z01', 'Z02', 'Z03', 'Z04', 'R01', 'R02', 'R03', 'R04', 'R05', 'R06', 'R07', 'R08', 'R09', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'C01', 'C02', 'C03', 'C04', 'C05', 'C06', 'X01', 'X02', 'X03', 'D01', 'D02')
-DEFAULT_CONTRACT = Path(__file__).resolve().parents[2] / 'equity-features/docs/ef1/CLOSE_RECONCILIATION_CONTRACT_PROPOSAL.json'
-SHORT = ('absolute_difference_bps', 'comparison_state', 'supplied_price', 'within_tolerance')
+# The three I/O synthetic cases; bars close 12.50 (coefficient 1250, scale 2), tolerance 10/1 BPS.
+CASES = ('C01_within_tolerance', 'C02_outside_tolerance', 'C03_absent_authoritative_close')
+
+
+def _row(value, status='available', reasons=(), expected=2, observed=2):
+    return dict(value=value, status=status, reasons=list(reasons), expected=expected, observed=observed)
+
+
+# Hand-asserted from the frozen contract rules, never from production output.
+# C01 mirrors contract fixture N01 (equal operands). C03 mirrors contract fixture R01 (slot missing).
+# C02 has no contract twin (p_c=1250, p_s=1260): BPS = float(Fraction(10000*10, 1260)) = 79.36507936507937
+# (0x1.3d75d75d75d76p+6) > 10, so outside; supplied_price is the coefficient 1260.
+EXPECTED = {
+    'C01_within_tolerance': ('within_tolerance', dict(
+        absolute_difference_bps=_row((0.0).hex()), comparison_state=_row('within_tolerance', expected=1, observed=1),
+        supplied_price=_row(1250, expected=1, observed=1), within_tolerance=_row(True))),
+    'C02_outside_tolerance': ('outside_tolerance', dict(
+        absolute_difference_bps=_row((79.36507936507937).hex()), comparison_state=_row('outside_tolerance', expected=1, observed=1),
+        supplied_price=_row(1260, expected=1, observed=1), within_tolerance=_row(False))),
+    'C03_absent_authoritative_close': ('reference_unavailable', dict(
+        absolute_difference_bps=_row(None, 'missing_input', ('absent_input',), 2, 1),
+        comparison_state=_row('reference_unavailable', expected=1, observed=1),
+        supplied_price=_row(None, 'missing_input', ('absent_input',), None, 0),
+        within_tolerance=_row(None, 'missing_input', ('absent_input',), 2, 1))),
+}
 
 
 def project(result) -> dict:
@@ -44,9 +65,7 @@ def literal(fixture: dict) -> dict:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--case', choices=CASES, default='N02')
-    parser.add_argument('--contract', type=Path, default=DEFAULT_CONTRACT,
-        help='frozen close-reconciliation contract JSON holding the independent expected literals')
+    parser.add_argument('--case', choices=CASES, default=CASES[0])
     parser.add_argument('--output-db', type=Path, required=True)
     parser.add_argument('--html', type=Path, required=True)
     parser.add_argument('--run-id', required=True)
@@ -84,9 +103,7 @@ def main(argv: list[str] | None = None) -> int:
         partition_id='X-S', destination_scope=scope)
     limits = SinkRequirements(max_results=1, max_chunk_bytes=262144, max_total_bytes=262144,
         max_result_cells=4, max_evidence_rows=7)
-    contract = json.loads(args.contract.read_bytes())
-    fixture = next(row for row in contract['fixtures'] if row['id'] == args.case)
-    expected = literal(fixture)
+    state, expected = EXPECTED[args.case]
     output = separate_output_path(args.output_db, ())
     with DuckDBSink(output, scope, limits=limits) as sink:
         outcome = run_ef1_reference_close((item,), sink, requirements=limits)
@@ -95,8 +112,8 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps({'verified_readback': False, 'reason': row.reason}, sort_keys=True))
             return 1
         result, = row.results
-        if project(result) != expected or result.values[1].values[0] != fixture['expected']['state']:
-            raise AssertionError('Calculated result differs from the contract expected literal')
+        if project(result) != expected or result.values[1].values[0] != state:
+            raise AssertionError('Calculated result differs from the hand-asserted contract literal')
         sdk = encode_result(result)
         receipt = row.output.receipt
         replay = run_ef1_reference_close((item,), sink, requirements=limits)
