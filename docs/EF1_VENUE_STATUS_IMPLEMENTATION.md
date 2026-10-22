@@ -20,6 +20,8 @@ Run `python examples/ef1_venue_status.py --case MV05 --output-db ABSOLUTE_NEW_DB
 
 ## Status
 
-Authored, not executed: this source was written while the library and I/O layers were still being authored in parallel. Nothing in this document has been run; no import, example or demo result is claimed.
+Executed on Windows Python 3.12 with `python -I` and sys.path set in code to every `packages/*/src` of the three repositories, against core main `45daba5` (library PR 642) and I/O main `9ef41e0` (PR 31). Imports of `equity_venue_status` and `run_ef1_venue_status` succeed.
+
+The example ran for all 42 contract result fixtures (MV01 to MV37 and MV40 to MV44) into new scratch databases and HTML: 42 of 42 exited 0 with `verified_readback`, `verified_reopen` and `contract_literal_match` true, including idempotent replay and full compare of value, status, reasons, coverage and evidence order against the contract JSON. No defect was found and no fix was needed. `tools/ef1_results_demo.py` ran all 62 cases (the 20 existing plus the 42 new) to completion, 62 of 62 ran, 0 failed. HTML generation is not browser inspection, and the demo records that each example ran, not independent review.
 
 No tests, CI, installed-package, platform or release claim. Original-source parity and source rights remain unqualified.
