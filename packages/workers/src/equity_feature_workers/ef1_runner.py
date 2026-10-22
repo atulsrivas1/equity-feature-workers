@@ -322,3 +322,17 @@ def run_ef1_reference_close(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_reference_close']
+
+
+def run_ef1_venue_status(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Multi-venue status through existing publication/full readback."""
+    from .equity_venue_status import _admit_venue_status, compute_venue_status_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_venue_status_inputs, admit_inputs=_admit_venue_status)
+
+
+__all__ += ['run_ef1_venue_status']
