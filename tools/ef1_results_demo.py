@@ -18,6 +18,9 @@ WORKERS = Path(__file__).resolve().parents[1]
 _CASES = (
     ('ef1_regular_first_trade_price', 'R001', ('--case', 'R001')),
     ('ef1_regular_first_trade_price', 'R019', ('--case', 'R019')),
+    ('ef1_reference_close', 'C01', ('--case', 'C01_within_tolerance')),
+    ('ef1_reference_close', 'C02', ('--case', 'C02_outside_tolerance')),
+    ('ef1_reference_close', 'C03', ('--case', 'C03_absent_authoritative_close')),
     ('ef1_regular_bar_prices', 'R01', ('--case', 'R01_two_independent_endpoints')),
     ('ef1_regular_bar_prices', 'R08', ('--case', 'R08_unknown_before_first')),
     ('ef1_gap_endpoint', 'E01', ('--case', 'E01_up_reversal')),
