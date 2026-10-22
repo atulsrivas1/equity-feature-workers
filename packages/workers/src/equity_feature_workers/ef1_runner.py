@@ -308,3 +308,17 @@ def run_ef1_regular_first_trade_price(items: tuple[WorkItem, ...], sink: ResultS
 
 
 __all__ += ['run_ef1_regular_first_trade_price']
+
+
+def run_ef1_reference_close(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """Reference-close comparison through existing publication/full readback."""
+    from .equity_reference_close import _admit_reference_close, compute_reference_close_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_reference_close_inputs, admit_inputs=_admit_reference_close)
+
+
+__all__ += ['run_ef1_reference_close']
