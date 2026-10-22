@@ -52,16 +52,6 @@ def project(result) -> dict:
     return outputs
 
 
-def literal(fixture: dict) -> dict:
-    """Independent expected literal from the contract fixture (hand-derived, not production output)."""
-    outputs = {}
-    for name in SHORT:
-        row = fixture['expected']['outputs'][name]
-        value = row.get('value_hex', row['value']) if name == 'absolute_difference_bps' and row['value'] is not None else row['value']
-        outputs[name] = dict(value=value, status=row['status'], reasons=row['reasons'],
-            expected=row['expected'], observed=row['observed'])
-    return outputs
-
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
