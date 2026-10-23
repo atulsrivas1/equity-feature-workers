@@ -113,6 +113,11 @@ def run_labels(results: list[dict]) -> list[str]:
     seen: dict[int, int] = {}
     labels = []
     for result in results:
+        ids = sorted({row['feature'] for row in feature_rows(result)})
+        if ids and all(i.startswith(('breadth.', 'adaptive.')) for i in ids):
+            # EF3 breadth and adaptive runs select outputs, not prefixes: label by the selected output or the joint run.
+            labels.append(ids[0] if len(ids) == 1 else 'joint')
+            continue
         length = sum(int(plain(entry['fields']['metadata']['fields']['coverage']['fields']['observed'])[1])
             for entry in result['metadata']['fields']['inputs'])
         seen[length] = seen.get(length, 0) + 1

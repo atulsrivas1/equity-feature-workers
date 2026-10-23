@@ -4,8 +4,8 @@ One case is one contract result fixture: 49 declared-universe breadth fixtures (
 fixtures (ef3-obsbreadth1) and 30 adaptive-volume fixtures (ef3-adaptive1), 99 in total under their contract ids
 (AD06 prefix, AD07a to AD07c included). Each fixture is run once per selected output (one-output selection) and once
 jointly when it selects several outputs; every run goes through the I/O adapter, the worker, the pure library, a
-separate DuckDB sink, SDK readback, idempotent replay and close/reopen. The 62 typed refusal fixtures are driven
-NOT driven by this script: the contract JSON stores only their error codes and descriptions, not inputs, so they
+separate DuckDB sink, SDK readback, idempotent replay and close/reopen. The 62 typed refusal fixtures are
+not driven by this script: the contract JSON stores only their error codes and descriptions, not inputs, so they
 are not executed in this change (see docs/EF3_BREADTH_ADAPTIVE_WORKER.md).
 
 The adapter (``equity_feature_duckdb.breadth_adaptive``) maps the supplied fixture rows into REFERENCE batches and the

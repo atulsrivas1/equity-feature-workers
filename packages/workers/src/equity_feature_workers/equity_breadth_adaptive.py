@@ -102,10 +102,11 @@ def required_roles(config: ConfigSpec, features: tuple[str, ...]) -> tuple[str, 
 
     The library validates and records only these roles, so the task binds exactly these roles.
     """
-    selected = _selection(features, config)
-    _, roles = _producer(config)
-    needed = {r.role for d in _definitions(config) if d.feature_id in selected for r in d.requirements}
-    return tuple(role for role in roles if role in needed)
+    with translated():
+        selected = _selection(features, config)
+        _, roles = _producer(config)
+        needed = {r.role for d in _definitions(config) if d.feature_id in selected for r in d.requirements}
+        return tuple(role for role in roles if role in needed)
 
 
 def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) -> ModuleType:

@@ -47,14 +47,36 @@ with a CORRUPTION error because two processes wrote the same output file at once
 content hash. Each fixture takes about 25 seconds (up to 17 runs each), so the registered results demo takes roughly
 45 minutes.
 
+## Refusals (reviewer run, not the author)
+
+The reviewer ran the refusal fixtures through the worker path: 59 of 62 driven. Classification as recorded by the
+reviewer:
+
+- Build-time refusals (configuration errors, including RB18 and RB21) surface from the builder as `INVALID_COMMAND`.
+- Compute-time data refusals surface as `INVALID_COMMAND`, except `INCONSISTENT_IDENTITY` (mapped to
+  `RESULT_IDENTITY_MISMATCH`) and `OVERFLOW` (RB23, RB27, mapped to `CALCULATION_FAILED`).
+- Nothing is published on refusal.
+- Some inputs are refused by the shared validator already in the I/O adapter (duplicates, RB10, RB11, RB30), before
+  the worker sees them.
+- RB14, RB22, RO12 and RA11 are not reachable via the worker path.
+
+Not driven: the three remaining refusal fixtures (59 of 62 driven, as above).
+
+## Readable view
+
+The readable view labelled multi-run EF3 breadth and adaptive cases with the EF3-D prefix labels (prefix length and
+series), which are wrong for runs that select outputs. Fixed: those runs are now labelled by the selected output, or
+`joint` for a joint run. D's prefix labels are unchanged. Views for AD06, AD07a, OB01, DB05 and XB01 were regenerated
+and their labels checked by text.
+
 ## Executed vs not executed (honest)
 
-- **Executed:** all 99 result fixtures as described above; results demo registration of the 99 cases (not run end to
-  end in this change, which takes about 45 minutes); DuckDB and HTML output per fixture.
-- **Not executed:** the 62 refusal fixtures. The contract JSON stores only each refusal's error code and description,
-  not its inputs, so each would need a hand-built case. They are not driven through the worker path, so build-time
-  versus compute-time classification and code mapping are not recorded.
-- **Not done:** a browser inspection of the HTML pages; installed-wheel qualification (the run used source
-  `PYTHONPATH` only); any statement about the library's correctness beyond agreement with the frozen contract literal.
+- **Executed by the author:** all 99 result fixtures through the example's sink path, each matching the contract
+  literal with readback, replay and reopen verified. The reviewer ran 76 of the 99 through the sink path; the other
+  23 were not run through the example's sink path by the reviewer, so they rest on the author's run.
+- **Refusals:** 59 of 62 driven, reviewer run (classification above).
+- **Results demo:** 99 cases registered; not run end to end here (about 45 minutes).
+- **Not done:** a browser inspection of the HTML pages; installed-wheel qualification (source `PYTHONPATH` only); any
+  statement about the library's correctness beyond agreement with the frozen contract literal.
 - **Registry and grid limits:** the sink's default limits bound each fixture (at most 100 results and 10 MiB per sink).
   The breadth producers bind no grid, so there is no grid digest to register.
