@@ -113,3 +113,12 @@ both), I/O `b8e09f4`, and this branch:
 - The example runs one item per output and one joint item for each multi-output fixture instead of one item per fixture, because
   the contract defines per-output witnesses by one-output selection and the joint list truncates in lexical order.
 - No library, adapter or contract change was made. No version was bumped. No sink or SDK change was made.
+
+## Limits added at review
+
+- (a) Supervisor process (spawn) mode is unsupported for the relative and log-volatility routes. The grid registry is empty in a
+  spawned process, so those items fail with a CONFIG error. Thread mode works. Realized variance carries its context in the
+  configuration and is not affected.
+- (b) `_GRIDS` never evicts. A long-lived process keeps every registered daily grid for its lifetime.
+- (c) Refusal fixtures: 24 of 48 were driven by the reviewer. Five were built but failed at compute, and all codes collapsed to
+  INVALID_COMMAND, as in EF2, so they are not typed codes. The other 24 were not run.
