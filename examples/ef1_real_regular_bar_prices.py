@@ -30,7 +30,7 @@ def _stat(path: Path) -> list[list[object]]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source-db', type=Path, required=True, help='existing DuckDB, opened read-only')
-    parser.add_argument('--table', default='databento_prepared_1.equs_mini_ohlcv_1m')
+    parser.add_argument('--table', required=True, help='schema.table of the stored 1-minute bars')
     parser.add_argument('--symbol', required=True)
     parser.add_argument('--date', required=True, help='ISO date')
     parser.add_argument('--row-cap', type=int, default=500)
@@ -112,6 +112,7 @@ def main(argv: list[str] | None = None) -> int:
         '<p><b>Synthetic inputs</b> (not present in the source, stipulated for this demonstration): ' + escape('; '.join(source.synthetic_labels)) + '.</p>'
         '<p>Symbol ' + escape(source.instrument_id) + ', date ' + escape(args.date) + '. Source unchanged by size and modification time: '
         + ('yes' if unchanged else 'NO') + '.</p>'
+        '<p>Limit of the unchanged-source check: the catalog is view-only, so size and modification time of the .duckdb file cannot detect changes to the data behind the views. Stored rows whose timestamp has fractional seconds are refused, which narrows coverage.</p>'
         '<h2>Feature table</h2><table><tr><th>Feature</th><th>Unit</th><th>Value</th><th>Status</th><th>Reasons</th></tr>' + table + '</table>'
         '<p>Calculated close is the last completed regular-window bar close, not proof of an official exchange close. '
         'No dataset-rights claim and no original-source parity claim is made; both remain unqualified.</p>'
