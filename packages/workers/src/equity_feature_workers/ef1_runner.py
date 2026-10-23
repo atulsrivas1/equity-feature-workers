@@ -336,3 +336,28 @@ def run_ef1_venue_status(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef1_venue_status']
+
+
+def run_ef2_money_flow(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF2 money flow (OBV, A/D, CMF) through existing publication/full readback."""
+    from .equity_money_flow import _admit_money_flow, compute_money_flow_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_money_flow_inputs, admit_inputs=_admit_money_flow)
+
+
+def run_ef2_retracement(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF2 retracement level through existing publication/full readback."""
+    from .equity_retracement import _admit_retracement, compute_retracement_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_retracement_inputs, admit_inputs=_admit_retracement)
+
+
+__all__ += ['run_ef2_money_flow', 'run_ef2_retracement']
