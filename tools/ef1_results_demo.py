@@ -12,6 +12,9 @@ from pathlib import Path
 import subprocess
 import sys
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ef1_readable_view  # noqa: E402
+
 WORKERS = Path(__file__).resolve().parents[1]
 
 # (example, label, extra arguments); the label becomes part of the output file stem.
@@ -133,23 +136,23 @@ def render(rows: list[dict]) -> str:
         shown = ', '.join(key + '=' + str(flags[key]) for key in
             ('verified_readback', 'verified_reopen', 'independent_literal_match') if key in flags)
         links = ' '.join('<a href="' + escape(row[key]) + '">' + name + '</a>'
-            for key, name in (('page', 'html'), ('database', 'duckdb')) if row[key])
+            for key, name in (('view', 'readable'), ('page', 'raw json'), ('database', 'duckdb')) if row.get(key))
         body.append('<tr><td>' + escape(row['example']) + '</td><td>' + escape(row['label']) + '</td><td>'
             + str(row['code']) + '</td><td>' + escape(row['status']) + '</td><td>' + escape(shown or '-')
             + ('<br><code>' + escape(row['stderr']) + '</code>' if row['code'] else '')
-            + '</td><td>' + (links or '-') + '</td></tr>')
+            + '</td><td>' + escape(row.get('summary') or '-') + '</td><td>' + (links or '-') + '</td></tr>')
     body.append('<tr><td>ef1_daily_observations</td><td>-</td><td>-</td><td>not run</td>'
-        '<td>needs a --corpus input that is not available</td><td>-</td></tr>')
+        '<td>needs a --corpus input that is not available</td><td>-</td><td>-</td></tr>')
     failed = sum(1 for row in rows if row['code'] != 0)
-    return ('<!doctype html><html lang="en"><meta charset="utf-8"><title>EF1 local results demo</title>'
-        '<style>body{font-family:sans-serif;margin:2em}table{border-collapse:collapse}'
+    return ('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EF1 local results demo</title>'
+        '<style>body{font-family:sans-serif;margin:1em}.wrap{overflow-x:auto}table{border-collapse:collapse}'
         'td,th{border:1px solid #888;padding:4px 8px;text-align:left;vertical-align:top}</style>'
         '<h1>EF1 local results demo</h1>'
         '<p><strong>All data on this page and in the linked files is synthetic.</strong> '
         'No unit tests were run; each example was run once as a script and its printed result recorded.</p>'
         '<p>' + str(len(rows)) + ' runs, ' + str(failed) + ' failed.</p>'
-        '<table><tr><th>Example</th><th>Case</th><th>Exit</th><th>Status</th><th>Printed flags</th>'
-        '<th>Outputs</th></tr>' + ''.join(body) + '</table>'
+        '<div class="wrap"><table><tr><th>Example</th><th>Case</th><th>Exit</th><th>Status</th><th>Printed flags</th>'
+        '<th>Values</th><th>Outputs</th></tr>' + ''.join(body) + '</table></div>'
         '<h2>Remaining gaps</h2><ul>' + ''.join('<li>' + escape(gap) + '</li>' for gap in _GAPS)
         + '</ul><p>No JavaScript or remote assets.</p></html>')
 
@@ -159,6 +162,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument('output_dir', type=Path, help='absolute path of a new directory')
     parser.add_argument('--core', type=Path, default=WORKERS.parent / 'equity-features')
     parser.add_argument('--io', type=Path, default=WORKERS.parent / 'equity-feature-io')
+    parser.add_argument('--only', default='', help='run only cases whose stem contains this text (default: all)')
     args = parser.parse_args(argv)
     if not args.output_dir.is_absolute() or args.output_dir.exists() or not args.output_dir.parent.is_dir():
         parser.error('Require a new absolute output directory with an existing parent')
@@ -166,7 +170,13 @@ def main(argv: list[str] | None = None) -> int:
     args.output_dir.mkdir()
     rows = []
     for example, label, extra in _CASES:
+        if args.only not in example + '-' + label:
+            continue
         rows.append(run_case(example, label, extra, args.output_dir, paths))
+        try:  # the readable view only reads the finished page; a failure here never changes the run result
+            rows[-1].update(ef1_readable_view.write_view(rows[-1], args.output_dir, _GAPS))
+        except (OSError, ValueError, KeyError) as error:
+            rows[-1]['summary'] = 'readable view failed: ' + str(error)
         print(rows[-1]['example'], rows[-1]['label'], rows[-1]['status'], flush=True)
     with (args.output_dir / 'index.html').open('x', encoding='utf-8', newline='\n') as target:
         target.write(render(rows))
