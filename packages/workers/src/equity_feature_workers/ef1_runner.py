@@ -375,3 +375,17 @@ def run_ef2_momentum(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef2_momentum']
+
+
+def run_ef2_channels(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF2 Ichimoku and price channels (six producers) through existing publication/full readback."""
+    from .equity_channels import _admit_channels, compute_channels_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_channels_inputs, admit_inputs=_admit_channels)
+
+
+__all__ += ['run_ef2_channels']
