@@ -1,3 +1,7 @@
+## EF3 relative statistics, log volatility and realized variance worker - source candidate
+
+Add the closed three-producer worker (contract D, `ef3-rel1`, `ef3-dlv1`, `ef3-rv1`, #612): role-keyed admission of the supplied close and OHLCV batches against the reviewed configurations, local daily grid bound by SHA-256, and runners that reuse the existing bounded publication and full SDK readback. No mathematics in the worker; the library owns admission, values, quality and witnesses. Synthetic example `examples/ef3_relative_rv.py` runs the 62 contract result fixtures plus the prefix fixtures PX01 and PX02 (180 worker runs) into separate DuckDB files and HTML pages, and the results demo registers them. See [implementation record](docs/EF3_RELATIVE_RV_WORKER.md). No package version or sink/SDK change; no release claim.
+
 ## Unreleased: regular first eligible trade price worker
 
 Add bounded three-role worker/runner and synthetic R001/R019 CLI with independent whole-result/stage/control tests. Exact producer result closure precedes all sink methods; numerical firstness/price remain in the pure library. [Scope, actual checks and unfinished gates](docs/EF1_REGULAR_FIRST_TRADE_PRICE_IMPLEMENTATION.md). No package version or sink/SDK change.
