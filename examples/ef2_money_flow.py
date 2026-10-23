@@ -134,7 +134,14 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         result, = row.results
         found, identity_checked = witnesses(result, packet, expected)
-        want = expected_witnesses if identity_checked else {feature: len(slots) for feature, slots in expected_witnesses.items()}
+        # Coverage-proven empty slots without a row are omitted from witnesses; only such slots may be dropped.
+        empty = {slot['i'] for slot in fixture['slots'] if slot['state'] == 'empty'}
+        want = {}
+        for feature, slots in expected_witnesses.items():
+            kept = [slot for slot in slots if slot not in empty] if identity_checked else slots
+            # A dropped empty slot may still be cited when it has a zero-volume row, so accept either form.
+            want[feature] = (kept if found[feature] == kept else slots) if identity_checked else (
+                len(slots) if found[feature] == len(slots) else len(slots) - len([s for s in slots if s in empty]))
         if project(result) != expected or found != want:
             raise AssertionError('Calculated result differs from the contract fixture literal')
         obv = next((column.values[0] for column in result.values if column.feature_id == 'intraday.obv'), None)

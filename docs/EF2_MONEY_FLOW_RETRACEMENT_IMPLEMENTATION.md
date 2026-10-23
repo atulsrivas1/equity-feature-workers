@@ -24,7 +24,7 @@ Config identity `ef2.retracement_level`, algorithm `ef2-retracement-level-v1`, s
 
 ## Assumptions about sibling APIs (to confirm when they land)
 
-- Core: `equity_features_intraday` exposes `IntradayContext`, `describe_money_flow()`, `build_money_flow_config(context, *, cmf_period, availability, price_unit, adjustment, evidence_limit, policy_version)` and `compute_money_flow(batches_or_None, context, config, *, features)`, with backend `intraday.python` and `__version__`. `equity_features.retracement` exposes `retracement_definitions(config)` and `compute_retracement_level((prior_high, prior_low), config, *, entity)`, with backend `python-exact` and `equity_features.__version__`. Headers use the config algorithm version as their algorithm version.
+- Core (confirmed against main 364fe61): `equity_features_intraday.build_money_flow_config`, `decode_money_flow_config`, `compute_money_flow` (one FeatureResult, lexical order, backend `intraday.python`) and `equity_features.ef2` (`build_retracement_config`, `decode_retracement_config`, `ef2_definitions`, `compute_retracement_level`, backend `python-exact`). Coverage-proven empty slots without a row are omitted from money-flow witnesses.
 - I/O: `equity_feature_duckdb.money_flow` and `.retracement` as above; packets expose `.roles`, `.slots`, `.batches`.
 - Witness identity: retracement witnesses are decoded to role through each batch's `source.input_id`. Money-flow witnesses are decoded to a slot index through declared `slot:N` interval coverages when present; otherwise the example checks count only and records that in the HTML and in the printed `witness_identity_checked` flag.
 

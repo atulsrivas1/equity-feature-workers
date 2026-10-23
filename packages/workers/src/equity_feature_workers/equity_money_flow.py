@@ -20,11 +20,9 @@ IDENTITY = ('ef2.money_flow', 'ef2-money-flow-v1', '1')
 # Frozen header table (ef2-mf1); the worker only checks the library against it.
 FEATURES = {'intraday.ad_line': (ValueType.FLOAT64, 'shares'), 'intraday.cmf': (ValueType.FLOAT64, 'fraction'),
     'intraday.obv': (ValueType.INT64, 'shares')}
-_FIXED = frozenset(('policy_version', 'evidence_limit', 'context_schema', 'context_sha256', 'context_chunks'))
 
 
 def _library() -> ModuleType:
-    # Assumed sibling API (core ef2-b-library): money-flow additions to equity_features_intraday.
     import equity_features_intraday
     return equity_features_intraday
 
@@ -45,27 +43,18 @@ def _context(config: ConfigSpec, features: tuple[str, ...]):
     count = values.get('context_chunks')
     if type(count) is not int or not 1 <= count <= 16:
         fail()
-    names = set(_FIXED) | {f'context_{n:03}' for n in range(count)}
-    wants_period = 'intraday.cmf' in features
-    if wants_period:
-        names.add('cmf_period')
-    if set(values) != names:
-        fail()
-    chunks = tuple(values[f'context_{n:03}'] for n in range(count))
+    chunks = tuple(values.get(f'context_{n:03}') for n in range(count))
     if any(type(chunk) is not str or not 1 <= len(chunk) <= 4096 or (n < count - 1 and len(chunk) != 4096)
             for n, chunk in enumerate(chunks)):
         fail()
     context = library.IntradayContext.from_json(''.join(chunk for chunk in chunks if isinstance(chunk, str)))
-    period, limit, policy = values.get('cmf_period'), values['evidence_limit'], values['policy_version']
-    if (type(limit) is not int or not 0 <= limit <= 10000 or policy != 'ef2-mf1'
-            or (wants_period and (type(period) is not int or not 1 <= period <= 4096))):
-        fail()
-    expected = library.build_money_flow_config(context, cmf_period=period if wants_period else None,
-        availability=config.availability, price_unit=config.price_unit, adjustment=config.adjustment,
-        evidence_limit=limit, policy_version=policy)
-    if config != expected or (config.identity, config.algorithm_version, config.schema_version) != IDENTITY:
+    # Closed envelope, policy label and canonical rebuild are the library's decoder.
+    settings = library.decode_money_flow_config(context, config)
+    if (config.identity, config.algorithm_version, config.schema_version) != IDENTITY:
         fail(CommandErrorCode.RESULT)
-    return context, (period if wants_period else None), limit
+    if ('intraday.cmf' in features) != (settings.cmf_period is not None):
+        fail()
+    return context, settings.cmf_period, settings.evidence_limit
 
 
 def money_flow_headers(config: ConfigSpec, features: tuple[str, ...]) -> tuple[FeatureHeader, ...]:

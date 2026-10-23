@@ -14,21 +14,18 @@ from .supervisor import WorkItem
 ROLES = ('prior_high', 'prior_low')
 PRODUCER = 'retracement_level'
 IDENTITY = ('ef2.retracement_level', 'ef2-retracement-level-v1', '1')
-PARAMETERS = frozenset(('policy_version', 'direction', 'ratio_num', 'ratio_den', 'evidence_limit'))
-DIRECTIONS = frozenset(('from_high', 'from_low'))
 
 
 def _library() -> ModuleType:
-    # Assumed sibling API (core ef2-b-library): the EF2 retracement module in packages/features.
-    from equity_features import retracement
-    return retracement
+    from equity_features import ef2
+    return ef2
 
 
 def retracement_headers(config: ConfigSpec) -> tuple[FeatureHeader, ...]:
     """The single contract header; ratio and direction are config, never extra outputs."""
     with translated():
         headers = tuple(FeatureHeader(d.feature_id, d.algorithm_version, d.dtype, d.unit, d.schema_version)
-            for d in _library().retracement_definitions(config))
+            for d in _library().ef2_definitions(config))
         if headers != (FeatureHeader('retracement.level', IDENTITY[1], ValueType.FLOAT64, 'currency/share', '1'),):
             fail(CommandErrorCode.RESULT)
         return headers
@@ -37,7 +34,7 @@ def retracement_headers(config: ConfigSpec) -> tuple[FeatureHeader, ...]:
 def required_retracement_inputs(config: ConfigSpec) -> tuple[InputRequirement, ...]:
     with translated():
         result: list[InputRequirement] = []
-        for definition in _library().retracement_definitions(config):
+        for definition in _library().ef2_definitions(config):
             for requirement in definition.requirements:
                 if requirement not in result:
                     result.append(requirement)
@@ -45,10 +42,9 @@ def required_retracement_inputs(config: ConfigSpec) -> tuple[InputRequirement, .
 
 
 def _evidence_limit(config: ConfigSpec) -> int:
-    values = {p.name: p.value for p in config.parameters}
-    limit = values.get('evidence_limit')
-    if (set(values) != PARAMETERS or type(limit) is not int or not 0 <= limit <= 10000
-            or values['policy_version'] != 'ef2-retrace1' or values['direction'] not in DIRECTIONS):
+    # The closed envelope (policy, direction, exact ratio, limit) is the library's decoder.
+    limit = _library().decode_retracement_config(config).evidence_limit
+    if type(limit) is not int:
         fail()
     return limit
 
@@ -88,7 +84,8 @@ def compute_retracement_inputs(task: TaskManifest,
         result = library.compute_retracement_level(slots, task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', library.__version__)
+        import equity_features
+        result_identity(task, result, 'python-exact', equity_features.__version__)
         limit = _evidence_limit(task.config)
         # Close only structural shape; the level, status, reasons and witnesses stay the library's.
         if (result.metadata.schema_version != '1' or result.metadata.math_policy_version != 'v1'
