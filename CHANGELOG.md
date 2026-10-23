@@ -1,3 +1,7 @@
+## EF3 breadth and adaptive volume worker - source candidate
+
+Add the closed three-producer worker (contract F, `ef3-breadth1`, `ef3-obsbreadth1`, `ef3-adaptive1`, #612): role-keyed admission of the supplied REFERENCE batches against the reviewed configurations, binding exactly the roles the selected outputs declare, and a runner that reuses the bounded publication and full SDK readback. No mathematics in the worker. Synthetic example `examples/ef3_breadth_adaptive.py` runs the 99 contract result fixtures (49 declared, 20 observed, 30 adaptive) through the I/O adapter, the worker, separate DuckDB and HTML; all 99 match the contract literal. The 62 refusal fixtures are not executed.
+
 ## EF3 relative statistics, log volatility and realized variance worker - source candidate
 
 Add the closed three-producer worker (contract D, `ef3-rel1`, `ef3-dlv1`, `ef3-rv1`, #612): role-keyed admission of the supplied close and OHLCV batches against the reviewed configurations, local daily grid bound by SHA-256, and runners that reuse the existing bounded publication and full SDK readback. No mathematics in the worker; the library owns admission, values, quality and witnesses. Synthetic example `examples/ef3_relative_rv.py` runs the 62 contract result fixtures plus the prefix fixtures PX01 and PX02 (180 worker runs) into separate DuckDB files and HTML pages, and the results demo registers them. See [implementation record](docs/EF3_RELATIVE_RV_WORKER.md). No package version or sink/SDK change; no release claim.

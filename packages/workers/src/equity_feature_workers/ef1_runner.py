@@ -425,3 +425,17 @@ def run_ef3_realized_variance(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef3_relative', 'run_ef3_log_volatility', 'run_ef3_realized_variance']
+
+
+def run_ef3_breadth_adaptive(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF3 breadth and adaptive volume (ef3-breadth1, ef3-obsbreadth1, ef3-adaptive1) through existing publication/full readback."""
+    from .equity_breadth_adaptive import admit_breadth_adaptive, compute_breadth_adaptive_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_breadth_adaptive_inputs, admit_inputs=admit_breadth_adaptive)
+
+
+__all__ += ['run_ef3_breadth_adaptive']
