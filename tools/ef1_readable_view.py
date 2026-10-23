@@ -17,8 +17,8 @@ _STYLE = ('body{font:16px/1.45 system-ui,sans-serif;max-width:1100px;margin:1rem
     '.null{color:#a00;font-style:italic}.note{background:#f6f6f6;border-left:4px solid #888;padding:.3rem 1rem}')
 
 
-def load_result(page: Path) -> tuple[dict, dict]:
-    """The canonical result object and the facts printed on the example page."""
+def load_results(page: Path) -> tuple[list[dict], dict]:
+    """The canonical result objects (one per line of the page's block, one per run) and the printed facts."""
     text = page.read_text(encoding='utf-8')
     blocks = re.findall(r'<pre>(.*?)</pre>', text, re.S)
     if len(blocks) != 1:
@@ -27,7 +27,10 @@ def load_result(page: Path) -> tuple[dict, dict]:
     title = re.search(r'<h1>(.*?)</h1>', text)
     facts = dict(task=task.group(1) if task else None, content=task.group(2) if task else None,
         title=unescape(title.group(1)) if title else '')
-    return json.loads(unescape(blocks[0]))['fields'], facts
+    lines = [line for line in unescape(blocks[0]).splitlines() if line.strip()]
+    if not lines:
+        raise ValueError('empty canonical result block in ' + page.name)
+    return [json.loads(line)['fields'] for line in lines], facts
 
 
 def plain(value):
@@ -102,10 +105,23 @@ def summary(result: dict, limit: int = 4) -> str:
     return '; '.join(parts) + (' ... (%d more)' % (len(rows) - limit) if len(rows) > limit else '')
 
 
-def render_view(row: dict, result: dict, facts: dict, gaps: tuple[str, ...]) -> str:
-    """Whole readable page for one case; row is the runner's record of the run."""
-    flags = row['flags'] or {}
-    shown = ', '.join(key + '=' + str(item) for key, item in flags.items() if isinstance(item, (bool, str, int)))
+def run_labels(results: list[dict]) -> list[str]:
+    """Label per run of a multi-run case: prefix length (bars observed in the stored input coverage) and series.
+
+    The example runs series A then B at each prefix length, so the series is the order among runs of one length.
+    """
+    seen: dict[int, int] = {}
+    labels = []
+    for result in results:
+        length = sum(int(plain(entry['fields']['metadata']['fields']['coverage']['fields']['observed'])[1])
+            for entry in result['metadata']['fields']['inputs'])
+        seen[length] = seen.get(length, 0) + 1
+        labels.append('prefix length %d, series %s' % (length, 'AB'[seen[length] - 1] if seen[length] <= 2 else str(seen[length])))
+    return labels
+
+
+def run_tables(result: dict, level: int) -> str:
+    """Features and evidence sections of one stored result, headings at the given level."""
     features = []
     for item in feature_rows(result):
         quality = item['quality']
@@ -119,6 +135,23 @@ def render_view(row: dict, result: dict, facts: dict, gaps: tuple[str, ...]) -> 
             escape(count(item['event_ns'])), escape(count(item['known_at_ns'])),
             escape(count(item['effective_start_ns']) + ' to ' + count(item['effective_end_ns'])),
             escape(item['use']), escape(item['boundary']), escape(entity_text(item['entity']))])
+    return ('<h%d>Features</h%d>' % (level, level) + table(('Feature', 'Entity', 'Value', 'Unit', 'Dtype', 'Status',
+            'Reasons', 'Quality expected / observed'), features)
+        + '<h%d>Evidence (' % level + str(len(evidence)) + ')</h%d>' % level + (table(('Feature', 'Input', 'Row id',
+            'event_ns', 'known_at_ns', 'Effective start to end', 'Use', 'Boundary', 'Entity'), evidence)
+            if evidence else '<p>No evidence rows.</p>'))
+
+
+def render_view(row: dict, results: list[dict], facts: dict, gaps: tuple[str, ...]) -> str:
+    """Whole readable page for one case; row is the runner's record of the run."""
+    flags = row['flags'] or {}
+    shown = ', '.join(key + '=' + str(item) for key, item in flags.items() if isinstance(item, (bool, str, int)))
+    if len(results) == 1:
+        sections = run_tables(results[0], 2)
+    else:
+        sections = ('<p>This case produced %d runs (stored results); one section per run follows.</p>' % len(results)
+            + ''.join('<h2>Run %d of %d: %s</h2>' % (number, len(results), escape(label)) + run_tables(result, 3)
+                for number, (label, result) in enumerate(zip(run_labels(results), results), 1)))
     return ('<!doctype html><html lang="en"><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         '<title>' + escape(row['example'] + ' ' + row['label']) + ' readable view</title><style>' + _STYLE + '</style>'
@@ -134,11 +167,7 @@ def render_view(row: dict, result: dict, facts: dict, gaps: tuple[str, ...]) -> 
         'exact repr with the stored hex text below; decimals show the exact integer coefficient; a null shows its status '
         'and reasons. Quality is expected / observed count. Evidence lists the input rows the value consumed or excluded; '
         'times are integer nanoseconds as stored. Values are copied from the stored canonical result, never recomputed.</div>'
-        '<h2>Features</h2>' + table(('Feature', 'Entity', 'Value', 'Unit', 'Dtype', 'Status', 'Reasons',
-            'Quality expected / observed'), features)
-        + '<h2>Evidence (' + str(len(evidence)) + ')</h2>' + (table(('Feature', 'Input', 'Row id', 'event_ns',
-            'known_at_ns', 'Effective start to end', 'Use', 'Boundary', 'Entity'), evidence)
-            if evidence else '<p>No evidence rows.</p>')
+        + sections
         + '<h2>Remaining gaps</h2><ul>' + ''.join('<li>' + escape(gap) + '</li>' for gap in gaps)
         + '</ul><p>No JavaScript or remote assets.</p></html>')
 
@@ -147,8 +176,8 @@ def write_view(row: dict, out: Path, gaps: tuple[str, ...]) -> dict:
     """Write view/<stem>.html for a run that produced a page; returns the link and summary text."""
     if row['code'] != 0 or not row['page']:
         return dict(view=None, summary=None)
-    result, facts = load_result(out / row['page'])
+    results, facts = load_results(out / row['page'])
     name = Path(row['page']).stem + '.html'
     (out / 'view').mkdir(exist_ok=True)
-    (out / 'view' / name).write_text(render_view(row, result, facts, gaps), encoding='utf-8', newline='\n')
-    return dict(view='view/' + name, summary=summary(result))
+    (out / 'view' / name).write_text(render_view(row, results, facts, gaps), encoding='utf-8', newline='\n')
+    return dict(view='view/' + name, summary=summary(results[0]) if len(results) == 1 else '%d runs (%s)' % (len(results), '; '.join(run_labels(results))))
