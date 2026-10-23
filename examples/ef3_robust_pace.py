@@ -320,11 +320,6 @@ def _base_mean(**params):
 def build_refusal(rid: str) -> dict:
     """The refusal's violation on a valid base. Raises the adapter's refusal when the batch itself is refused."""
     p = _adapter()
-    if rid in ('RF01', 'RF02', 'RF03', 'RF04', 'RF05', 'RF06', 'RF07', 'RF08', 'RF15', 'RF16', 'RF12', 'RF14',
-               'RF13', 'RF17', 'RF18', 'RF19', 'RF20', 'RF21', 'RF22', 'RF23', 'RF24', 'RF25', 'RF29', 'RF30', 'RF47',
-               'RF36', 'RF42', 'RF43', 'RF45', 'RF46', 'RF48', 'RF35', 'RF34', 'RF32', 'RF33', 'RF09', 'RF10', 'RF11',
-               'RF31', 'RF41', 'RF44', 'RF26', 'RF27', 'RF28', 'RF37', 'RF38', 'RF39', 'RF40'):
-        pass
     sessions, series, sb, config = _base_history()
     if rid == 'RF01':  # two DAILY rows for one (instrument, session)
         rows = [(ENTITY, sessions[0], p.Cell(p.ROW, 1, 50)), (ENTITY, sessions[0], p.Cell(p.ROW, 2, 50))]

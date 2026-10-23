@@ -54,15 +54,15 @@ contract code via the library code. Nothing is published on any refusal.
 
 | Stage | Count | Worker code |
 | --- | --- | --- |
-| Adapter build (shared validators refuse the batch) | 14 | worker never reached |
+| Adapter build (batch or configuration refused while the adapter builds it) | 14 | worker never reached |
 | Worker admission (work item build) | 16 | `INVALID_COMMAND` 13 (configuration, version, feature); `RESULT_IDENTITY_MISMATCH` 3 (RF09, RF11, RF42) |
 | Compute (library) | 17 | `RESULT_IDENTITY_MISMATCH` 10 (all `INCONSISTENT_IDENTITY`); `INVALID_COMMAND` 7 |
 | Library capability call only | 1 (RF31) | not a worker path: the worker exposes no update or merge |
 
-The worker collapses library codes into its own taxonomy, so the contract code is visible in the driver's record only.
+Stage is not the same as who raises the code: RF17 is library-raised per the contract but refused at adapter build (the config builder), and RF06 is shared-validator-raised but refused at compute (the batch is valid on its own; the cutoff check runs inside the library). The worker collapses library codes into its own taxonomy, so the contract code is visible in the driver's record only.
 
 ## Not executed
 
 mypy, unit tests (policy: none), CI, an independent oracle beyond the contract literals, installed-wheel qualification,
 real or observed data, source-rights and release acceptance (EQ-157), and RF31 through the worker (no such path).
-Library and adapter mathematics were not changed. Runs are slow (about one minute per fixture).
+Library and adapter mathematics were not changed. Timing: the full results demo ran in 4 parallel shards (H, C, P, R) in roughly 50 minutes wall time, about 1.5 minutes per case per shard under that load (the reviewer saw about 10 seconds per case run alone).
