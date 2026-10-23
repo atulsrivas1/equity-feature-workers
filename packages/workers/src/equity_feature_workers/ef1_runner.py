@@ -439,3 +439,39 @@ def run_ef3_breadth_adaptive(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef3_breadth_adaptive']
+
+
+def run_ef3_robust_history(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF3 robust history and cohort (ef3-robust1) through existing publication/full readback."""
+    from .equity_robust_pace import _admit, compute_robust_history_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_robust_history_inputs, admit_inputs=lambda task, batches: _admit(task, batches, 'robust_history'))
+
+
+def run_ef3_volume_pace(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF3 robust volume pace (ef3-pace1) through existing publication/full readback."""
+    from .equity_robust_pace import _admit, compute_volume_pace_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_volume_pace_inputs, admit_inputs=lambda task, batches: _admit(task, batches, 'volume_pace_robust'))
+
+
+def run_ef3_volume_ratio_mean(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF3 volume mean-ratio companion (ef3-mean1) through existing publication/full readback."""
+    from .equity_robust_pace import _admit, compute_volume_ratio_mean_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_volume_ratio_mean_inputs, admit_inputs=lambda task, batches: _admit(task, batches, 'volume_ratio_mean'))
+
+
+__all__ += ['run_ef3_robust_history', 'run_ef3_volume_pace', 'run_ef3_volume_ratio_mean']
