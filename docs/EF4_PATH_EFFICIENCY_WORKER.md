@@ -32,7 +32,8 @@ mathematics. Source preparation does not establish story, release or acceptance 
    (dtype float64); the worker requires the `batch` capability for each selected output.
 5. **Hosting.** Per the core implementation record the producer lives in `packages/intraday`; the worker imports
    `equity_features_intraday` (same package as the EF3 realized variance worker).
-6. **No ordered history, no warm-up.** `ordered_history` is true, `warmup_sessions` is empty and
+6. **Input size limit.** The pickled supplied batches of one work item are limited to 1 MiB (`MAX_INPUT_BYTES`, the same limit as the other intraday route), and the batch count to the manifest's `max_input_batches`. An item above either limit is refused at build (and again at compute) with the worker code `RESOURCE_LIMIT` (`CommandErrorCode.LIMIT`). Very long windows (near 4095) may reach it and were not run.
+7. **No ordered history, no warm-up.** `ordered_history` is true, `warmup_sessions` is empty and
    `initialization_sha256` is the context digest (as the realized variance route).
 
 ## Refusals: where each one is raised
