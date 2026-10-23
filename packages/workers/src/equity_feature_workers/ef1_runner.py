@@ -389,3 +389,39 @@ def run_ef2_channels(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef2_channels']
+
+
+def run_ef3_relative(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF3 relative statistics (ef3-rel1, daily grid) through existing publication/full readback."""
+    from .equity_relative_rv import _admit_relative, compute_relative_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_relative_inputs, admit_inputs=_admit_relative)
+
+
+def run_ef3_log_volatility(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF3 daily log volatility (ef3-dlv1, daily grid) through existing publication/full readback."""
+    from .equity_relative_rv import _admit_log_volatility, compute_log_volatility_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_log_volatility_inputs, admit_inputs=_admit_log_volatility)
+
+
+def run_ef3_realized_variance(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF3 intraday realized variance (ef3-rv1, R17 context) through existing publication/full readback."""
+    from .equity_relative_rv import _admit_realized_variance, compute_realized_variance_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_realized_variance_inputs, admit_inputs=_admit_realized_variance)
+
+
+__all__ += ['run_ef3_relative', 'run_ef3_log_volatility', 'run_ef3_realized_variance']
