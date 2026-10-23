@@ -361,3 +361,17 @@ def run_ef2_retracement(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef2_money_flow', 'run_ef2_retracement']
+
+
+def run_ef2_momentum(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF2 momentum and trend (MACD, DMI/ADX, stochastic, Williams %R) through existing publication/full readback."""
+    from .equity_momentum import _admit_momentum, compute_momentum_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_momentum_inputs, admit_inputs=_admit_momentum)
+
+
+__all__ += ['run_ef2_momentum']
