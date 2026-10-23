@@ -489,3 +489,28 @@ def run_ef4_path_efficiency(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef4_path_efficiency']
+
+
+def run_ef4_quote_dynamics(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 quote dynamics (ef4-quote1) through existing publication/full readback."""
+    from .equity_quote_vwap import QUOTE_FAMILY, _admit, compute_quote_dynamics_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_quote_dynamics_inputs, admit_inputs=lambda task, batches: _admit(task, batches, QUOTE_FAMILY))
+
+
+def run_ef4_vwap_path(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 VWAP path (ef4-vwap1) through existing publication/full readback."""
+    from .equity_quote_vwap import VWAP_FAMILY, _admit, compute_vwap_path_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_vwap_path_inputs, admit_inputs=lambda task, batches: _admit(task, batches, VWAP_FAMILY))
+
+
+__all__ += ['run_ef4_quote_dynamics', 'run_ef4_vwap_path']
