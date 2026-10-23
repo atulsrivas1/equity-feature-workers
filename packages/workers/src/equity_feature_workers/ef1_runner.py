@@ -475,3 +475,17 @@ def run_ef3_volume_ratio_mean(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef3_robust_history', 'run_ef3_volume_pace', 'run_ef3_volume_ratio_mean']
+
+
+def run_ef4_path_efficiency(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 path efficiency and choppiness (ef4-path1, R17 context) through existing publication/full readback."""
+    from .equity_path_efficiency import _admit_path, compute_path_efficiency_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_path_efficiency_inputs, admit_inputs=_admit_path)
+
+
+__all__ += ['run_ef4_path_efficiency']
