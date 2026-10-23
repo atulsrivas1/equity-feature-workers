@@ -93,7 +93,7 @@ def main(argv: list[str] | None = None) -> int:
     if len(str(args.output_db)) + 32 >= 260:
         parser.error('Output path exceeds bounded Windows sidecar headroom')
     from equity_feature_duckdb.ef1 import separate_output_path
-    from equity_feature_duckdb.money_flow import synthetic_money_flow_fixture, synthetic_money_flow_config
+    from equity_feature_duckdb.money_flow import synthetic_money_flow_fixture, synthetic_money_flow_config, synthetic_money_flow_features
     from equity_feature_duckdb_sink import DuckDBSink
     from equity_feature_workers.equity_money_flow import make_ef2_money_flow_work
     from equity_feature_workers.ef1_runner import run_ef2_money_flow
@@ -102,23 +102,33 @@ def main(argv: list[str] | None = None) -> int:
     if tuple(sorted(row for row in fixtures if row.startswith('M'))) != CASES:
         parser.error('Contract result fixtures differ from the example case list')
     fixture = fixtures[args.case]
-    features = tuple(sorted(fixture.get('selected', ALL_FEATURES)))
+    features = tuple(sorted(synthetic_money_flow_features(args.case)))
+    if features != tuple(sorted(fixture.get('selected', ALL_FEATURES))):
+        parser.error('I/O feature selection differs from the contract fixture')
     expected, expected_witnesses = expected_projection(fixture)
     if tuple(sorted(expected)) != features:
         parser.error('Contract expected outputs differ from the selected features')
     packet = synthetic_money_flow_fixture(case_id=args.case)
     config = synthetic_money_flow_config(case_id=args.case)
+    # The I/O synthetic config carries evidence_limit 0, which would emit no witnesses; the limit is a
+    # caller parameter, so rebuild the same config through the library builder with limit 2 per output (the limit is shared by all outputs).
+    from equity_feature_workers.equity_money_flow import _context
+    from equity_features_intraday import MONEY_FLOW_POLICY, build_money_flow_config
+    features_for_context = tuple(sorted(synthetic_money_flow_features(args.case)))
+    context, period, _ = _context(config, features_for_context)
+    config = build_money_flow_config(context, policy_version=MONEY_FLOW_POLICY, cmf_period=period,
+        availability=config.availability, adjustment=config.adjustment, price_unit=config.price_unit, evidence_limit=2 * len(features_for_context))
     declarations = []
-    for role, batch in zip(packet.roles, packet.slots):
-        if batch is None:
-            declarations.append(InputManifest(role, hashlib.sha256(('synthetic-absent:' + role).encode('ascii')).hexdigest(),
-                'synthetic-absent', 'missing', None))
-        else:
-            raw = json.dumps(asdict(batch), sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False).encode('ascii')
-            coverage = batch.metadata.coverage
-            state = 'partial' if not coverage.complete else 'empty' if coverage.observed == 0 else 'complete'
-            declarations.append(InputManifest(role, hashlib.sha256(raw).hexdigest(), batch.metadata.source.snapshot_id,
-                state, InputBinding(role, batch.kind, batch.metadata)))
+    if packet.bars is None:
+        declarations.append(InputManifest('bars', hashlib.sha256(b'synthetic-absent:bars').hexdigest(),
+            'synthetic-absent', 'missing', None))
+    for number, batch in enumerate(packet.bars or ()):
+        role = 'bars:%03d' % number
+        raw = json.dumps(asdict(batch), sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False).encode('ascii')
+        coverage = batch.metadata.coverage
+        state = 'partial' if not coverage.complete else 'empty' if coverage.observed == 0 else 'complete'
+        declarations.append(InputManifest(role, hashlib.sha256(raw).hexdigest(), batch.metadata.source.snapshot_id,
+            state, InputBinding(role, batch.kind, batch.metadata)))
     scope = 'ef2-money-flow-synthetic'
     item = make_ef2_money_flow_work(config, features=features, inputs=tuple(declarations), batches=packet.batches,
         instrument_id='X', job_id='job-' + args.run_id, generation_id='generation-' + args.run_id,
@@ -143,7 +153,7 @@ def main(argv: list[str] | None = None) -> int:
             want[feature] = (kept if found[feature] == kept else slots) if identity_checked else (
                 len(slots) if found[feature] == len(slots) else len(slots) - len([s for s in slots if s in empty]))
         if project(result) != expected or found != want:
-            raise AssertionError('Calculated result differs from the contract fixture literal')
+            raise AssertionError('Calculated result differs from the contract fixture literal: ' + json.dumps([project(result), expected, found, want], default=str))
         obv = next((column.values[0] for column in result.values if column.feature_id == 'intraday.obv'), None)
         if obv is not None and type(obv) is not int:
             raise AssertionError('Stored OBV is not an exact int64')

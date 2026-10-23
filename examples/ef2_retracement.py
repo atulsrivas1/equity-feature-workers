@@ -80,7 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     from equity_feature_workers.ef1_runner import run_ef2_retracement
 
     fixtures = contract_fixtures(args.contract)
-    if tuple(sorted(row for row in fixtures if row.startswith('M'))) != CASES:
+    if tuple(sorted(row for row in fixtures if row.startswith('T'))) != CASES:
         parser.error('Contract result fixtures differ from the example case list')
     fixture = fixtures[args.case]
     expected, expected_witnesses = expected_projection(fixture)
@@ -112,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         result, = row.results
         if project(result) != expected or witnesses(result, packet) != expected_witnesses:
-            raise AssertionError('Calculated result differs from the contract fixture literal')
+            raise AssertionError('Calculated result differs from the contract fixture literal: ' + json.dumps([project(result), expected, witnesses(result, packet), expected_witnesses], default=str))
         sdk = encode_result(result)
         receipt = row.output.receipt
         replay = run_ef2_retracement((item,), sink, requirements=limits)

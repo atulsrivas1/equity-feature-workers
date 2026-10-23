@@ -30,4 +30,8 @@ Config identity `ef2.retracement_level`, algorithm `ef2-retracement-level-v1`, s
 
 ## Status
 
-Authored, not executed: the library and I/O siblings were not available when this was written, so no import, example or demo has run. No tests, CI, installed-package, platform or release claim. Original-source parity and source rights remain unqualified.
+Executed on Windows Python 3.12 with `python -I` and sys.path set in code to every `packages/*/src` of the three repositories, against core main `fda9332` (library PR 680) and I/O main `92314d0` (PR 33). Both example scripts ran for all 68 contract result fixtures (M01 to M36, T01 to T32) into new scratch databases and HTML: 68 of 68 exited 0 with `verified_readback`, `verified_reopen` and `contract_literal_match` true, including idempotent replay and full compare of value (bit-exact), status, reasons, coverage and witnesses against the contract JSON. Money-flow witness identity was checked by slot for all 36 cases (`witness_identity_checked` true), including M01 where anchor equals target. Money flow used the I/O default `empty_form="row"`; the coverage-only empty form was not run. `tools/ef1_results_demo.py` ran all 130 cases (62 existing plus 68 new) to completion, 130 of 130 ran, 0 failed.
+
+Findings and fixes during the run: the example rebuilds the I/O synthetic money-flow config with `evidence_limit = 2 * outputs` (the I/O config carries 0, which emits no witnesses; the limit is shared across all outputs of one result); the retracement example filtered contract ids by the wrong prefix; the money-flow example now declares per-chunk `bars:NNN` roles from the I/O `bars` tuple.
+
+No tests, CI, installed-package, platform or release claim. HTML generation is not browser inspection. Original-source parity and source rights remain unqualified.
