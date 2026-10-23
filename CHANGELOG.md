@@ -1,3 +1,7 @@
+## EF3 robust history, volume pace and mean-ratio worker - source candidate
+
+Add the closed three-producer worker (contract E, `ef3-robust1`, `ef3-pace1`, `ef3-mean1`, #612): role-keyed admission of the supplied batches against the reviewed configurations, binding them to the library's fixed role slots, and runners that reuse the bounded publication and full SDK readback. No mathematics in the worker, and no process-level grid registry. Synthetic example `examples/ef3_robust_pace.py` runs the 124 contract result fixtures and drives the 48 refusal fixtures; the results demo registers the 124 cases. See [implementation record](docs/EF3_ROBUST_PACE_WORKER.md). No package version or sink/SDK change; no release claim.
+
 ## EF3 breadth and adaptive volume worker - source candidate
 
 Add the closed three-producer worker (contract F, `ef3-breadth1`, `ef3-obsbreadth1`, `ef3-adaptive1`, #612): role-keyed admission of the supplied REFERENCE batches against the reviewed configurations, binding exactly the roles the selected outputs declare, and a runner that reuses the bounded publication and full SDK readback. No mathematics in the worker. Synthetic example `examples/ef3_breadth_adaptive.py` runs the 99 contract result fixtures (49 declared, 20 observed, 30 adaptive) through the I/O adapter, the worker, separate DuckDB and HTML; all 99 match the contract literal. The 62 refusal fixtures are not executed.
