@@ -114,8 +114,9 @@ def run_labels(results: list[dict]) -> list[str]:
     labels = []
     for result in results:
         ids = sorted({row['feature'] for row in feature_rows(result)})
-        if ids and all(i.startswith(('breadth.', 'adaptive.', 'robust.', 'cohort.', 'pace.', 'mean.', 'path.', 'quote.', 'vwap.')) for i in ids):
-            # EF3 breadth, adaptive, robust, cohort, pace and mean runs and EF4 path, quote and VWAP runs select outputs, not prefixes: label by the selected output or the joint run.
+        if ids and all(i.startswith(('breadth.', 'adaptive.', 'robust.', 'cohort.', 'pace.', 'mean.', 'path.', 'quote.', 'vwap.',
+            'projection.', 'relative.session.', 'core.benchmark_', 'rate.window.')) for i in ids):
+            # EF3 breadth, adaptive, robust, cohort, pace and mean runs and EF4 path, quote, VWAP and projection (projection, relative, core benchmark and rate) runs select outputs, not prefixes: label by the selected output or the joint run.
             labels.append(ids[0] if len(ids) == 1 else 'joint')
             continue
         length = sum(int(plain(entry['fields']['metadata']['fields']['coverage']['fields']['observed'])[1])

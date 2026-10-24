@@ -514,3 +514,50 @@ def run_ef4_vwap_path(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef4_quote_dynamics', 'run_ef4_vwap_path']
+
+
+def run_ef4_session_projection(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 session projection (ef4-proj1, daily grid) through existing publication/full readback."""
+    from .equity_projections import SESSION_FAMILY, _admit, compute_session_projection_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_session_projection_inputs, admit_inputs=lambda task, batches: _admit(task, batches, SESSION_FAMILY))
+
+
+def run_ef4_bar_projection(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 bar projection (ef4-proj1, epoch bar grid) through existing publication/full readback."""
+    from .equity_projections import BAR_FAMILY, _admit, compute_bar_projection_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_bar_projection_inputs, admit_inputs=lambda task, batches: _admit(task, batches, BAR_FAMILY))
+
+
+def run_ef4_relative_excess(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 relative excess (ef4-rel1) through existing publication/full readback."""
+    from .equity_projections import RELATIVE_FAMILY, _admit, compute_relative_excess_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_relative_excess_inputs, admit_inputs=lambda task, batches: _admit(task, batches, RELATIVE_FAMILY))
+
+
+def run_ef4_rate_projection(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 rate projection (ef4-rate1) through existing publication/full readback."""
+    from .equity_projections import RATE_FAMILY, _admit, compute_rate_projection_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_rate_projection_inputs, admit_inputs=lambda task, batches: _admit(task, batches, RATE_FAMILY))
+
+
+__all__ += ['run_ef4_session_projection', 'run_ef4_bar_projection', 'run_ef4_relative_excess', 'run_ef4_rate_projection']
