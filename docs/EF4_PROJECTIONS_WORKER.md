@@ -36,7 +36,7 @@ completion.
    grid is registered under its own digest when the work item is built and calculation resolves it by the digest the
    configuration binds (the library verifies it again). The manifest carries the digest as initialization digest, the
    daily warmup sessions are the `window` sessions before the target, and the bar grid has no warmup. The registry is
-   content-addressed and in-process, so the session and bar routes are for the sequential in-process runner only; relative
+   content-addressed and in-process, so the session and bar routes are for the sequential in-process runner only (process mode fails with `INVALID_COMMAND` for them because the child process has an empty grid registry; the parallel demo works because it runs one process per case); relative
    excess and rate need no registry.
 5. **Headers from the library.** Feature headers come from `ef4_path_projections_definitions(config, grid=...)`, which
    describes only the outputs the configuration can execute (parameters are present exactly when their outputs are
