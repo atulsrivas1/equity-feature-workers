@@ -51,6 +51,8 @@ def plain(value):
 
 def show_value(dtype: str, value) -> str:
     """HTML for one stored value, exact as stored."""
+    if isinstance(value, dict) and value.get('record') == 'results.TopKTrades':
+        return show_top_k(value['fields'])
     kind, raw = plain(value)
     if kind == 'null':
         return '<span class="null">null</span>'
@@ -63,6 +65,18 @@ def show_value(dtype: str, value) -> str:
     if kind == 'bool':
         return '<code>' + ('true' if raw else 'false') + '</code>'
     return '<code>' + escape(str(raw)) + '</code>'
+
+
+def show_top_k(cell: dict) -> str:
+    """A stored top-K cell: K and its rows in the stored order (rank 1 first); every field is a stored field."""
+    head = ('Rank', 'Event id', 'Price', 'Size', 'event_ns', 'order_key', 'known_at_ns', 'Input')
+    rows = []
+    for rank, entry in enumerate(cell['rows'], 1):
+        item = entry['fields']
+        rows.append([str(rank), '<code>' + escape(item['event_id']) + '</code>'] + [escape(count(item[name])) for name in
+            ('price', 'size', 'event_ns', 'order_key', 'known_at_ns')] + [escape(item['input_id'])])
+    return ('<small>K = ' + escape(count(cell['k'])) + ', ' + str(len(rows)) + ' stored rows in stored (rank) order</small>'
+        + table(head, rows))
 
 
 def entity_text(entity: dict) -> str:
@@ -99,6 +113,10 @@ def summary(result: dict, limit: int = 4) -> str:
     rows = feature_rows(result)
     parts = []
     for row in rows[:limit]:
+        if isinstance(row['value'], dict) and row['value'].get('record') == 'results.TopKTrades':
+            shown = '[' + ','.join(item['fields']['event_id'] for item in row['value']['fields']['rows']) + ']'
+            parts.append(row['feature'].rsplit('.', 1)[-1] + '=' + shown)
+            continue
         kind, raw = plain(row['value'])
         shown = 'null' if kind == 'null' else repr(float.fromhex(raw)) if kind == 'float64' else str(raw)
         parts.append(row['feature'].rsplit('.', 1)[-1] + '=' + shown)
@@ -115,9 +133,13 @@ def run_labels(results: list[dict]) -> list[str]:
     for result in results:
         ids = sorted({row['feature'] for row in feature_rows(result)})
         if ids and all(i.startswith(('breadth.', 'adaptive.', 'robust.', 'cohort.', 'pace.', 'mean.', 'path.', 'quote.', 'vwap.',
-            'projection.', 'relative.session.', 'core.benchmark_', 'rate.window.')) for i in ids):
-            # EF3 breadth, adaptive, robust, cohort, pace and mean runs and EF4 path, quote, VWAP and projection (projection, relative, core benchmark and rate) runs select outputs, not prefixes: label by the selected output or the joint run.
-            labels.append(ids[0] if len(ids) == 1 else 'joint')
+            'projection.', 'relative.session.', 'core.benchmark_', 'rate.window.', 'tape.')) for i in ids):
+            # EF3 breadth, adaptive, robust, cohort, pace and mean runs and EF4 path, quote, VWAP, projection (projection, relative, core benchmark and rate) and tape runs select outputs, not prefixes: label by the selected output or the joint run.
+            label = ids[0] if len(ids) == 1 else 'joint'
+            roles = [entry['fields']['role'] for entry in result['metadata']['fields']['inputs']]
+            if roles and all(role.startswith('p') and role[1:2].isdigit() for role in roles):
+                label += ' (merge of %d partition inputs)' % len(roles)  # a top-K merge binds its partials as p<i>.<role>
+            labels.append(label)
             continue
         length = sum(int(plain(entry['fields']['metadata']['fields']['coverage']['fields']['observed'])[1])
             for entry in result['metadata']['fields']['inputs'])
