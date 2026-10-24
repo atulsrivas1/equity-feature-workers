@@ -561,3 +561,39 @@ def run_ef4_rate_projection(items: tuple[WorkItem, ...], sink: ResultSink, *,
 
 
 __all__ += ['run_ef4_session_projection', 'run_ef4_bar_projection', 'run_ef4_relative_excess', 'run_ef4_rate_projection']
+
+
+def run_ef4_tape_window(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 tape window (ef4-tape1) through existing publication/full readback."""
+    from .equity_tape import WINDOW_FAMILY, _admit, compute_tape_window_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_tape_window_inputs, admit_inputs=lambda task, batches: _admit(task, batches, WINDOW_FAMILY))
+
+
+def run_ef4_tape_top_k(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 notional top-K (ef4-notional1) through existing publication/full readback."""
+    from .equity_tape import TOP_K_FAMILY, _admit, compute_tape_top_k_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_tape_top_k_inputs, admit_inputs=lambda task, batches: _admit(task, batches, TOP_K_FAMILY))
+
+
+def run_ef4_tape_top_k_merge(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF4 notional top-K partition merge (ef4-notional1) through existing publication/full readback."""
+    from .equity_tape import MERGE_FAMILY, _admit, compute_tape_top_k_merge_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_tape_top_k_merge_inputs, admit_inputs=lambda task, batches: _admit(task, batches, MERGE_FAMILY))
+
+
+__all__ += ['run_ef4_tape_window', 'run_ef4_tape_top_k', 'run_ef4_tape_top_k_merge']
