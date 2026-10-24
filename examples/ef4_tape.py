@@ -17,7 +17,7 @@ code, the library's own code for the same inputs and the worker code the caller 
 
 The contract's compact fixture notation is expanded and mutated by the contract fixture harness (``ef4g_fixture_expand.py``:
 ``expand_trades``, ``expand_seed``, ``absolutize``, ``apply_ops``, ``BINDINGS``, ``lcg_tape``), which lives outside this
-repository (core ``tools/contract_fixtures`` once merged). Give its path with ``--harness`` or the ``EF4G_HARNESS``
+repository (vendored in core at ``tools/contract_fixtures/ef4g_fixture_expand.py``). Give its path with ``--harness`` or the ``EF4G_HARNESS``
 environment variable. No entity, instrument, session, role, seed or grid identifier is fixed here: they come from the harness
 binding (``--binding``), the fixture, the adapter or the configuration.
 """
@@ -56,7 +56,7 @@ SEED_NOTATION = re.compile(r'^x1:B\((.*)\)$')
 
 
 def load_harness(path: Path | None):
-    """The contract fixture harness module; outside this repository."""
+    """The contract fixture harness module; vendored in core."""
     path = path or (Path(os.environ['EF4G_HARNESS']) if os.environ.get('EF4G_HARNESS') else None)
     if path is None or not path.is_file():
         raise SystemExit('Give the contract fixture harness with --harness or EF4G_HARNESS')

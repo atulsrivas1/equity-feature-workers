@@ -42,7 +42,7 @@ _PRODUCERS = {
     TOP_K_FAMILY: ('ef4.trade_top_k_notional', 'ef4-top-k-notional-v1', 'TOP_K_FEATURES', TOP_K_ROLES),
     MERGE_FAMILY: ('ef4.trade_top_k_notional', 'ef4-top-k-notional-v1', 'TOP_K_FEATURES', TOP_K_ROLES),
 }
-_LEAF = re.compile(r'^(p[0-9]+\.)+trades$')
+_LEAF = re.compile(r'^(p(0|[1-9][0-9]*)\.)+trades$')
 
 
 def _ef4() -> ModuleType:

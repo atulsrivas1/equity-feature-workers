@@ -54,9 +54,8 @@ every partition through the top-K worker (against the partition's literal partia
 the contract's acceptance rule, status, reasons, expected and observed counts, witnesses, and for the top-K the rows, K and
 evidence boundaries), then SDK readback, idempotent replay and close/reopen. `--case G01|G02|G03` runs the three generated
 differential fixtures (G01 20000 prints, G02 seeded, G03 single pass and the index-mod-4 merge for K in 1, 7, 64) through the
-same path. The fixture notation is expanded by the contract fixture harness. Core PR #711 (vendoring it at
-`tools/contract_fixtures/ef4g_fixture_expand.py`) was open when this was written, so the author copy was used unchanged:
-sha256 `5dfcf610d57f037cabc9a246c095ae99e68ab6f1ad75d7003a8505ba20f72549`. Give it with `--harness` or `EF4G_HARNESS` (the
+same path. The fixture notation is expanded by the contract fixture harness vendored in core at
+`tools/contract_fixtures/ef4g_fixture_expand.py` (core `b6c5063`, #711; sha256 `d28f551c2ea21ea4454e6c81b329a52d4edcf06e36ec3e097ee80033f940fd7f`). Give it with `--harness` or `EF4G_HARNESS` (the
 results demo inherits the variable). `contract_document()` works only from a source checkout of core; otherwise pass
 `--contract <TAPE_CONTRACT_PROPOSAL.json>`. Prefix pairs (`TK01`/`TK10c`, `PM01`/`PM03`, `W07b`/`W07d`) are separate fixtures
 with identical results.
