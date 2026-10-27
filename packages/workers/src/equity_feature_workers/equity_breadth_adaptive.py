@@ -143,8 +143,8 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) -> ModuleTyp
             if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                     or batch.metadata.coverage.observed != batch.row_count
                     or batch.metadata.namespace != task.config.session.namespace):
-                # A coverage or namespace contradiction mirrors the library's INCONSISTENT_IDENTITY; a manifest/binding
-                # mismatch has no library counterpart and carries no contract code.
+                # A coverage or namespace contradiction (binding matches the manifest) mirrors the library's INCONSISTENT_IDENTITY
+                # and carries that contract code; a manifest/binding mismatch has no library counterpart and carries none.
                 fail(CommandErrorCode.RESULT, ErrorCode.INCONSISTENT_IDENTITY.value
                      if (binding.role, binding.kind, binding.metadata) == (manifest.role, batch.kind, batch.metadata) else None)
             if manifest.role == 'observations':
