@@ -90,9 +90,9 @@ both), I/O `b8e09f4`, and this branch:
 ## Not executed
 
 - No unit tests, no CI, no installed-wheel or package-manager qualification (policy: manual runs only).
-- The 48 refusal fixtures and the full set of invalid-admission controls (role absence, instrument mismatch, benchmark
-  mismatch, mismatched coverage, wrong governed sessions, wrong headers, forged context) are not run by the example. The
-  admission code for them is present and reviewed by reading, not exercised.
+- The full set of invalid-admission controls (role absence, wrong governed sessions, wrong headers, forged context) is
+  not run by the example; the admission code for them is present and reviewed by reading, not exercised. The 48 refusal
+  fixtures are driven by `--refusals` (see Refusal coverage below).
 - PX03 is not run as a separate case: the contract states it is not constructible with later bars under the R17 context and
   verifies it through RV21, which is run.
 - The full results demo over all previously existing cases was not run in this slice; only the 64 new `ef3_relative_rv` cases
@@ -120,5 +120,25 @@ both), I/O `b8e09f4`, and this branch:
   spawned process, so those items fail with a CONFIG error. Thread mode works. Realized variance carries its context in the
   configuration and is not affected.
 - (b) `_GRIDS` never evicts. A long-lived process keeps every registered daily grid for its lifetime.
-- (c) Refusal fixtures: 24 of 48 were driven by the reviewer. Five were built but failed at compute, and all codes collapsed to
-  INVALID_COMMAND, as in EF2, so they are not typed codes. The other 24 were not run.
+- (c) Refusal fixtures: superseded by the Refusal coverage section below (48 of 48 driven, contract code asserted).
+
+## Refusal coverage (R9c)
+
+`python examples/ef3_relative_rv.py --refusals` builds each of the 48 refusal fixtures (the contract JSON stores only the
+error code and a description, so each violation is built in the example on a valid base), drives it through the I/O
+adapter and the worker (admission, then calculation) and calls the library directly with the same inputs. A fixture
+matches only when the code reported by the adapter or by the worker (`contract_code`) equals the contract error code and
+the library raises the same code. Result: **48 of 48 driven, 48 of 48 matched**.
+
+- Stages: 25 at worker admission, 10 at compute, 10 refused by the I/O adapter at build, 3 with no worker path.
+- No worker path (checked against the library capability gate): RF20, RF32, RF48 (update, restore, merge). A work item
+  carries no capability request, so the worker cannot be asked for them.
+- Adapter-build refusals (typed `ContractError` carrying the library code): RF07 (a benchmark list is not a valid
+  parameter), RF18, RF19, RF26, RF28, RF40, RF41, RF42, RF44, RF45 (shared validator).
+- Findings from the first run (6 of 48 did not match; the five identity cases are the best match for the "five failed"
+  fixtures the reviewer recorded, whose list was not kept, and they ended as `RESULT_IDENTITY_MISMATCH` with no
+  contract code): RF11, RF12, RF13, RF14 and RF31 (role
+  instrument and namespace contradictions) and RF21 (unknown feature) were refused by the worker's own admission
+  before the library ran, so `contract_code` was empty. Fixed in the worker: those checks now carry the library code
+  (`inconsistent_identity`, `unknown_feature`, `invalid_schema` for a malformed selection), and a manifest binding failure
+  carries `inconsistent_identity`. The transport category is unchanged. No defect was found in core or I/O.

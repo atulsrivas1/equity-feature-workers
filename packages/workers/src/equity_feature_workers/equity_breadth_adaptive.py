@@ -18,7 +18,8 @@ from __future__ import annotations
 import pickle
 from types import ModuleType
 
-from equity_feature_contracts import CanonicalBatch, ConfigSpec, EntityKey, FeatureResult, IntervalSpec, ValueType
+from equity_feature_contracts import (CanonicalBatch, ConfigSpec, EntityKey, ErrorCode, FeatureResult, IntervalSpec,
+    ValueType)
 from equity_feature_io_contracts import FeatureHeader
 
 from ._supplied import fail, translated
@@ -71,8 +72,16 @@ def _selection(features: tuple[str, ...], config: ConfigSpec) -> tuple[str, ...]
     """Selected outputs: non-empty, unique, strings, each an executable output of this configuration (sorted)."""
     allowed = {d.feature_id for d in _definitions(config)}
     if (type(features) is not tuple or not features or any(type(f) is not str for f in features)
-            or len(set(features)) != len(features) or any(f not in allowed for f in features)):
-        fail(CommandErrorCode.CONFIG)
+            or len(set(features)) != len(features)):
+        fail(CommandErrorCode.CONFIG, ErrorCode.INVALID_SCHEMA.value)
+    if any(f not in allowed for f in features):
+        # Same split as the library: a feature of this producer that the configuration does not expose (for example a
+        # tolerance output without its tolerance) is an INVALID_CONFIG; any other id is UNKNOWN_FEATURE.
+        library = _ef3()
+        known = {library.BREADTH_IDENTITY: library.BREADTH_FEATURES, library.OBSERVED_IDENTITY: library.OBSERVED_FEATURES,
+                 library.ADAPTIVE_IDENTITY: library.ADAPTIVE_FEATURES}.get(config.identity, ())
+        fail(CommandErrorCode.CONFIG, (ErrorCode.INVALID_CONFIG if all(f in known or f in allowed for f in features)
+                                       else ErrorCode.UNKNOWN_FEATURE).value)
     return tuple(sorted(features))
 
 
@@ -134,7 +143,10 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) -> ModuleTyp
             if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                     or batch.metadata.coverage.observed != batch.row_count
                     or batch.metadata.namespace != task.config.session.namespace):
-                fail(CommandErrorCode.RESULT)
+                # A coverage or namespace contradiction mirrors the library's INCONSISTENT_IDENTITY; a manifest/binding
+                # mismatch has no library counterpart and carries no contract code.
+                fail(CommandErrorCode.RESULT, ErrorCode.INCONSISTENT_IDENTITY.value
+                     if (binding.role, binding.kind, binding.metadata) == (manifest.role, batch.kind, batch.metadata) else None)
             if manifest.role == 'observations':
                 column = batch.column('instrument_id')
                 if column is None or any(value != task.instruments[0] for value in column.values):

@@ -60,7 +60,28 @@ reviewer:
   the worker sees them.
 - RB14, RB22, RO12 and RA11 are not reachable via the worker path.
 
-Not driven: the three remaining refusal fixtures (59 of 62 driven, as above).
+Superseded by the Refusal coverage (R9c) section below: 62 of 62 driven, `contract_code` asserted.
+
+## Refusal coverage (R9c)
+
+`python examples/ef3_breadth_adaptive.py --refusals` builds each of the 62 refusal fixtures (the contract JSON stores only
+the error code and a description, so each violation is built in the example on a valid contract fixture input: DB30,
+DB21, OB01, AD06), drives it through the I/O adapter and the worker (admission, then calculation) and calls the library
+directly with the same inputs. A fixture matches only when the code reported by the adapter or the worker
+(`contract_code`) equals the contract error code and the library raises the same code; a fixture with several
+equivalent violations runs each as a variant and matches only when every variant matches (RB15, RB18, RB26, RB28, RO05,
+RO06, RA09). Result: **62 of 62 driven, 62 of 62 matched**.
+
+- Stages (variants): 37 at compute, 21 at worker admission, 8 refused by the I/O adapter at build, 4 library only.
+- Library only, with the reason: RB22, RO12, RA11 (update, restore, merge: a work item carries no capability request)
+  and RB14 (eight or ten role slots: the worker always passes the fixed slot tuple of the producer).
+- Adapter-build refusals: RB01, RB02, RB10, RB11, RB30 (the metadata constructor refuses a batch without a unit),
+  RO01, RA01, RA06 (shared validator or constructors, typed `ContractError`).
+- Findings from the first run (2 of 62 did not match): RB18 (tolerance missing while its output is selected) and RB21
+  (unknown feature) were refused by the worker's selection check with no `contract_code`. Fixed in the worker: an
+  output of this producer that the configuration does not expose is `invalid_config`, any other id is `unknown_feature`,
+  a malformed selection is `invalid_schema`; a coverage or namespace contradiction in admission carries
+  `inconsistent_identity`. The transport category is unchanged.
 
 ## Readable view
 
@@ -74,7 +95,7 @@ and their labels checked by text.
 - **Executed by the author:** all 99 result fixtures through the example's sink path, each matching the contract
   literal with readback, replay and reopen verified. The reviewer ran 76 of the 99 through the sink path; the other
   23 were not run through the example's sink path by the reviewer, so they rest on the author's run.
-- **Refusals:** 59 of 62 driven, reviewer run (classification above).
+- **Refusals:** 62 of 62 driven by `--refusals`, 62 of 62 matched (Refusal coverage (R9c) below).
 - **Results demo:** 99 cases registered; not run end to end here (about 45 minutes).
 - **Not done:** a browser inspection of the HTML pages; installed-wheel qualification (source `PYTHONPATH` only); any
   statement about the library's correctness beyond agreement with the frozen contract literal.

@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import math
+import sys
 from dataclasses import asdict
 from html import escape
 from pathlib import Path
@@ -224,14 +225,348 @@ def fixture_family(fixture: dict) -> str:
     return prefix[fixture['id'][:2]]
 
 
+# ---- refusal fixtures RF01-RF48 through the worker path ------------------------------------------------------------
+# The contract JSON stores only the error code and a description per refusal, so each case builds its violation on a
+# valid base here. A case is driven through the I/O adapter (build), the worker (admission, then calculation) and the
+# library directly; a case matches only when the adapter or worker reports the contract code AND the library raises
+# the same code. update/restore/merge (RF20, RF32, RF48) have no worker path (a work item carries no capability
+# request), so they are checked against the library capability gate and reported with stage 'library_capability'.
+
+_RELATIVE_FEATURES = ('relative.beta', 'relative.correlation', 'relative.residual_return')
+_LOGVOL_FEATURES = ('history.log_return_volatility',)
+_PRICED = [{'state': 'priced', 'c': c, 'known_at': 50} for c in (10000, 10200, 10100, 10500, 10400, 10600)]
+_BENCH = [{'state': 'priced', 'c': c, 'known_at': 50} for c in (20000, 20100, 20300, 20200, 20400, 20500)]
+
+
+def _rel_base(**over):
+    from equity_feature_duckdb.relative_rv import (availability_for, close_batch, daily_grid, daily_sessions,
+        relative_config)
+    sessions = daily_sessions(6)
+    grid = daily_grid(sessions, target_index=5)
+    params = dict(benchmark_id='B', window=3, min_pairs=2, evidence_limit=10, scale=2)
+    params.update(over)
+    config = relative_config(grid, availability=availability_for(sessions, 100), **params)
+    batches = (close_batch('X', grid, _PRICED, input_id='instrument', scale=2),
+        close_batch('B', grid, _BENCH, input_id='benchmark', scale=2))
+    return dict(kind='relative', grid=grid, config=config, batches=batches, roles=('instrument', 'benchmark'),
+        features=_RELATIVE_FEATURES, instrument='X')
+
+
+def _vol_base(**over):
+    from equity_feature_duckdb.relative_rv import (availability_for, close_batch, daily_grid, daily_sessions,
+        log_volatility_config)
+    sessions = daily_sessions(6)
+    grid = daily_grid(sessions, target_index=5)
+    params = dict(period=3, annualization_factor=252, evidence_limit=10, scale=2)
+    params.update(over)
+    config = log_volatility_config(grid, availability=availability_for(sessions, 100), **params)
+    batches = (close_batch('X', grid, _PRICED, input_id='daily', scale=2),)
+    return dict(kind='logvol', grid=grid, config=config, batches=batches, roles=('daily',),
+        features=_LOGVOL_FEATURES, instrument='X')
+
+
+def _rv_base(*, factor=252, features=('intraday.realized_variance', 'intraday.realized_volatility'), market_cutoff=None,
+        mode='reset', **over):
+    from equity_feature_duckdb.relative_rv import (availability_for, intraday_batch, make_intraday_context,
+        realized_variance_config, synthetic_intraday_session)
+    session, runs = synthetic_intraday_session(6)
+    context = make_intraday_context('X', sessions=session, runs=runs, anchor_index=0, target_index=5, mode=mode)
+    params = dict(evidence_limit=10, scale=2)
+    params.update(over)
+    config = realized_variance_config(context, annualization_factor=factor,
+        availability=availability_for(session, 100, market_cutoff), **params)
+    batches = (intraday_batch(context, _PRICED, input_id='bars', scale=2),)
+    return dict(kind='rv', context=context, config=config, batches=batches, roles=('bars:000',), features=features,
+        instrument='X')
+
+
+def _drop(spec, name):
+    import dataclasses
+    config = spec['config']
+    return dict(spec, config=dataclasses.replace(config, parameters=tuple(p for p in config.parameters if p.name != name)))
+
+
+def _rows(batch):
+    return [tuple(column.values[i] for column in batch.columns) for i in range(batch.row_count)]
+
+
+def _rebuild(batch, rows, *, scale=2, namespace='SYN'):
+    """Same metadata (coverage entries) with explicit rows; the shared validators run inside, so this can refuse."""
+    from equity_feature_duckdb import relative_rv as r
+    names = tuple(column.name for column in batch.columns)
+    meta = batch.metadata
+    return r._bar_batch(names, rows, meta.interval_coverage, meta.scope, input_id=meta.source.input_id,
+        scale=scale, namespace=namespace, count=len(rows))
+
+
+def _with_batches(spec, *batches):
+    return dict(spec, batches=tuple(batches))
+
+
+def _adjusted(batch):
+    import dataclasses
+    from equity_feature_contracts import AdjustmentSpec
+    return dataclasses.replace(batch, metadata=dataclasses.replace(batch.metadata,
+        adjustment=AdjustmentSpec(basis='split', policy_version='adj-v1', action_snapshot='act-1', anchor='anchor-1')))
+
+
+def _relative_refusal(rid: str) -> dict:
+    from equity_feature_duckdb.relative_rv import close_batch
+    spec = _rel_base()
+    grid, (inst, bench) = spec['grid'], spec['batches']
+    if rid == 'RF01':
+        return _rel_base(window=1)
+    if rid == 'RF02':
+        return _rel_base(window=True)
+    if rid == 'RF03':
+        return _rel_base(window=3, min_pairs=4)
+    if rid == 'RF04':
+        return _rel_base(min_pairs=1)
+    if rid == 'RF05':
+        return _drop(spec, 'window')
+    if rid == 'RF06':
+        return _rel_base(benchmark_id='')
+    if rid == 'RF07':
+        return _rel_base(benchmark_id=['B', 'C'])
+    if rid == 'RF08':
+        return _rel_base(evidence_limit=10001)
+    if rid == 'RF09':
+        return _drop(spec, 'policy_version')
+    if rid == 'RF10':
+        return _rel_base(policy_version='ef3-rel2')
+    if rid == 'RF11':
+        return _with_batches(spec, inst, close_batch('Q', grid, _BENCH, input_id='benchmark', scale=2))
+    if rid == 'RF12':
+        return _with_batches(spec, close_batch('B', grid, _PRICED, input_id='instrument', scale=2), bench)
+    if rid == 'RF13':
+        rows = _rows(inst)
+        rows[1] = ('Z',) + rows[1][1:]
+        return _with_batches(spec, _rebuild(inst, rows), bench)
+    if rid == 'RF14':
+        return _with_batches(spec, inst, close_batch('B', grid, _BENCH, input_id='benchmark', scale=2, namespace='OTHER'))
+    if rid == 'RF15':
+        return _with_batches(spec, inst, close_batch('B', grid, _BENCH, input_id='benchmark', scale=3))
+    if rid == 'RF16':
+        return _with_batches(spec, inst, _adjusted(bench))
+    if rid == 'RF17':
+        return _with_batches(spec, _rebuild(inst, _rows(inst)[::-1]), bench)
+    if rid == 'RF18':
+        rows = _rows(inst)
+        return _with_batches(spec, _rebuild(inst, rows + [rows[0]]), bench)
+    if rid == 'RF19':
+        return _with_batches(spec, close_batch('X', grid, [dict(_PRICED[0], c=0)] + _PRICED[1:], input_id='instrument', scale=2), bench)
+    if rid == 'RF20':
+        return dict(spec, capability=('relative.beta', 'update'))
+    if rid == 'RF21':
+        return dict(spec, features=('history.return_volatility',))
+    raise KeyError(rid)
+
+
+def _logvol_refusal(rid: str) -> dict:
+    from equity_feature_duckdb.relative_rv import close_batch
+    spec = _vol_base()
+    grid, (daily,) = spec['grid'], spec['batches']
+    if rid == 'RF22':
+        return _vol_base(period=1)
+    if rid == 'RF23':
+        return _drop(spec, 'annualization_factor')
+    if rid == 'RF24':
+        return _vol_base(evidence_limit=10001)
+    if rid == 'RF25':
+        return _vol_base(policy_version='ef3-dlv2')
+    if rid == 'RF26':
+        return _with_batches(spec, close_batch('X', grid, [dict(_PRICED[0], c=-1)] + _PRICED[1:], input_id='daily', scale=2))
+    if rid == 'RF27':
+        return _with_batches(spec, _rebuild(daily, _rows(daily)[::-1]))
+    if rid == 'RF28':
+        rows = _rows(daily)
+        return _with_batches(spec, _rebuild(daily, rows + [rows[0]]))
+    if rid == 'RF29':
+        return _with_batches(spec, close_batch('X', grid, _PRICED, input_id='daily', scale=3))
+    if rid == 'RF30':
+        return _with_batches(spec, _adjusted(daily))
+    if rid == 'RF31':
+        rows = _rows(daily)
+        rows[1] = ('Z',) + rows[1][1:]
+        return _with_batches(spec, _rebuild(daily, rows))
+    if rid == 'RF32':
+        return dict(spec, capability=('history.log_return_volatility', 'merge'))
+    raise KeyError(rid)
+
+
+def _rv_refusal(rid: str) -> dict:
+    from equity_feature_duckdb.relative_rv import intraday_batch
+    spec = _rv_base()
+    context, (bars,) = spec['context'], spec['batches']
+
+    def edited(index, column, value):
+        rows = _rows(bars)
+        row = list(rows[index])
+        row[column] = value
+        rows[index] = tuple(row)
+        return _with_batches(spec, _rebuild(bars, rows))
+    if rid == 'RF33':
+        return _rv_base(factor=None)
+    if rid == 'RF34':
+        return _rv_base(factor=252, features=('intraday.realized_variance',))
+    if rid == 'RF35':
+        return _rv_base(factor=0)
+    if rid == 'RF36':
+        return _rv_base(mode='carry')
+    if rid == 'RF37':
+        return _rv_base(evidence_limit=10001)
+    if rid == 'RF38':
+        return _rv_base(sampling='every_other_slot')
+    if rid == 'RF39':
+        return _rv_base(policy_version='ef3-rv2')
+    if rid == 'RF40':
+        return edited(2, 7, None)  # positive volume, null close
+    if rid == 'RF41':
+        return edited(2, 8, 0)  # zero volume, non-null OHLC
+    if rid == 'RF42':
+        return edited(2, 8, -5)
+    if rid == 'RF43':
+        return _rv_base(market_cutoff=1000)
+    if rid == 'RF44':
+        return _with_batches(spec, _rebuild(bars, _rows(bars)[::-1]))
+    if rid == 'RF45':
+        rows = _rows(bars)
+        return _with_batches(spec, _rebuild(bars, rows + [rows[0]]))
+    if rid == 'RF46':
+        return _with_batches(spec, intraday_batch(context, _PRICED, input_id='bars', scale=3))
+    if rid == 'RF47':
+        return _with_batches(spec, _adjusted(bars))
+    if rid == 'RF48':
+        return dict(spec, capability=('intraday.realized_variance', 'restore'))
+    raise KeyError(rid)
+
+
+def build_refusal(rid: str) -> dict:
+    number = int(rid[2:])
+    return (_relative_refusal if number <= 21 else _logvol_refusal if number <= 32 else _rv_refusal)(rid)
+
+
+def _library_code(spec) -> str | None:
+    """The library's own refusal code for the same batches and configuration (the worker does not return it)."""
+    from equity_feature_contracts import ContractError
+    try:
+        if spec['kind'] == 'rv':
+            import equity_features_intraday as intraday
+            context = intraday.IntradayContext.from_json(spec['context'].to_json())
+            intraday.compute_realized_variance(spec['batches'] or None, context, spec['config'], features=spec['features'])
+        else:
+            from equity_features import ef3
+            grid = ef3.DailyGrid(*(getattr(spec['grid'], name) for name in
+                ('instrument_id', 'calendar_id', 'grid_id', 'revision', 'sessions', 'target_index')))
+            if spec['kind'] == 'relative':
+                ef3.compute_relative_stats(spec['batches'], grid, spec['config'], features=spec['features'])
+            else:
+                ef3.compute_log_volatility(spec['batches'], grid, spec['config'], features=spec['features'])
+        return None
+    except ContractError as error:
+        return error.code.value
+
+
+def _capability_code(spec) -> str | None:
+    from equity_feature_contracts import ContractError
+    feature, capability = spec['capability']
+    try:
+        if spec['kind'] == 'rv':
+            import equity_features_intraday as intraday
+            intraday.require_realized_variance_capability(feature, capability)
+        else:
+            from equity_features import ef3
+            ef3.require_ef3_capability(feature, capability)
+    except ContractError as error:
+        return error.code.value
+    return None
+
+
+def _make_work(spec, rid: str):
+    from equity_feature_workers import equity_relative_rv as w
+    inputs = tuple(declaration(role, batch) for role, batch in zip(spec['roles'], spec['batches']))
+    common = dict(features=spec['features'], inputs=inputs, batches=spec['batches'], instrument_id=spec['instrument'],
+        job_id='job-' + rid, generation_id='generation-' + rid, partition_id='refusal', destination_scope='ef3-refusal')
+    if spec['kind'] == 'rv':
+        return w.make_ef3_realized_variance_work(spec['config'], **common)
+    from equity_features import ef3
+    grid = spec['grid']
+    library_grid = ef3.DailyGrid(grid.instrument_id, grid.calendar_id, grid.grid_id, grid.revision, grid.sessions,
+        grid.target_index)
+    make = w.make_ef3_relative_work if spec['kind'] == 'relative' else w.make_ef3_log_volatility_work
+    return make(spec['config'], grid=library_grid, **common)
+
+
+def _run_one(rid: str, fixture: dict) -> dict:
+    """Build (adapter), admit (worker), calculate (worker) and record the library's own code beside the worker's."""
+    from equity_feature_contracts import ContractError
+    from equity_feature_workers.commands import CommandError
+    record = {'id': rid, 'contract_code': fixture['error_code'], 'stage': None, 'adapter_code': None,
+        'worker_code': None, 'worker_contract_code': None, 'library_code': None}
+    try:
+        spec = build_refusal(rid)
+    except ContractError as error:
+        record.update(stage='adapter_build', adapter_code=error.code.value)
+        return _finish(record)
+    if 'capability' in spec:
+        record.update(stage='library_capability', library_code=_capability_code(spec))
+        return _finish(record)
+    try:
+        item = _make_work(spec, rid)
+    except CommandError as error:
+        record.update(stage='worker_admission', worker_code=error.code.value, worker_contract_code=error.contract_code,
+            library_code=_library_code(spec))
+        return _finish(record)
+    except ContractError as error:
+        record.update(stage='worker_admission_untranslated', adapter_code=error.code.value)
+        return _finish(record)
+    try:
+        item.calculate(item.task, item.batches)
+        record.update(stage='no_refusal')
+    except CommandError as error:
+        record.update(stage='compute', worker_code=error.code.value, worker_contract_code=error.contract_code,
+            library_code=_library_code(spec))
+    return _finish(record)
+
+
+def _finish(record: dict) -> dict:
+    """Matched: the code the adapter or worker reports equals the fixture code, and the library raises the same code."""
+    want = record['contract_code'].lower()
+    stage = record['stage']
+    if stage == 'adapter_build':
+        record['matched'] = record['adapter_code'] == want
+    elif stage == 'library_capability':
+        record['matched'] = record['library_code'] == want
+    else:
+        record['matched'] = (stage in ('worker_admission', 'compute') and record['worker_contract_code'] == want
+            and record['library_code'] == want)
+    return record
+
+
+def run_refusals(document: dict) -> list:
+    """All 48 refusal fixtures in contract order; each row names the stage and the codes reported by each layer."""
+    fixtures = {row['id']: row for row in document['fixtures']['refusals']}
+    if len(fixtures) != 48:
+        raise ValueError('Contract refusal fixtures differ from the example case list')
+    return [_run_one(rid, fixtures[rid]) for rid in sorted(fixtures, key=lambda key: int(key[2:]))]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--case', required=True, help='contract result fixture id, e.g. RS01, DV04, RV21, PX01')
-    parser.add_argument('--output-db', type=Path, required=True)
-    parser.add_argument('--html', type=Path, required=True)
-    parser.add_argument('--run-id', required=True)
+    parser.add_argument('--case', help='contract result fixture id, e.g. RS01, DV04, RV21, PX01')
+    parser.add_argument('--refusals', action='store_true', help='drive the 48 refusal fixtures RF01-RF48 through the worker')
+    parser.add_argument('--output-db', type=Path)
+    parser.add_argument('--html', type=Path)
+    parser.add_argument('--run-id')
     parser.add_argument('--contract', type=Path, default=None, help='contract JSON; default is the core repository copy')
     args = parser.parse_args(argv)
+    if args.refusals:
+        rows = run_refusals(contract_document(args.contract))
+        print(json.dumps(rows, indent=1, sort_keys=True))
+        print('refusals driven %d, matched %d' % (len(rows), sum(row['matched'] for row in rows)), file=sys.stderr)
+        return 0 if all(row['matched'] for row in rows) else 1
+    if not (args.case and args.output_db and args.html and args.run_id):
+        parser.error('--case, --output-db, --html and --run-id are required for a result case')
     if (not args.output_db.is_absolute() or not args.html.is_absolute()
             or args.output_db.resolve() == args.html.resolve() or args.output_db.exists() or args.html.exists()
             or not args.html.parent.is_dir() or not args.output_db.parent.is_dir()
