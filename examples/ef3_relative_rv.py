@@ -35,6 +35,8 @@ def contract_document(override: Path | None) -> dict:
     if override is None:
         import equity_features
         override = Path(equity_features.__file__).resolve().parents[4] / 'docs' / 'ef3' / CONTRACT
+        if not override.is_file():  # installed core: use the sibling checkout (<parent>/equity-features)
+            override = Path(__file__).resolve().parents[1].parent / 'equity-features' / 'docs' / 'ef3' / CONTRACT
     with override.open(encoding='utf-8') as source:
         return json.load(source)
 
