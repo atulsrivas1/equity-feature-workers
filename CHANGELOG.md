@@ -1,3 +1,7 @@
+## Closed contract_code on worker refusals (R9a) - October 27, 2026
+
+Additive: `CommandError.contract_code` and `TaskDiagnostic.contract_code` (default `None`) carry the shared library `ErrorCode` value (closed set, fixed `unclassified` fallback, `None` for worker-originated refusals) beside the unchanged `CommandErrorCode` transport category, with one shared mapping for the EF3 D, E and F workers. See `docs/COMMANDS.md`.
+
 ## Provenance package moved here from core - ADR-1, October 27, 2026
 
 Adds `packages/provenance` (`equity-feature-provenance` 0.1.0a2, import `equity_feature_provenance`), moved from the core repo (`equity-features` commit `0fc675d`, plain copy) so core no longer depends on workers, io-sdk or DuckDB; distribution and import names are unchanged. Dependencies are trimmed to what the source imports: `equity-feature-diagnostics` is dropped from runtime dependencies (only the tests use it) and DuckDB / DuckDB sink stay hard dependencies because `_bind` and `_model` import them at module level. Also moved: `tests/provenance/*`, `tests/conformance/{test_pipeline,native_composition}.py` (plus a copy of `history_fixture.py`), `examples/{provenance_readback,conformance_pipeline}.py`, `docs/api/PROVENANCE.md`, and `tools/build_provenance.py` (not yet ported, see its header).

@@ -15,6 +15,7 @@ from .manifests import ManifestError, ManifestErrorCode, TaskManifest
 
 
 def fail(code: CommandErrorCode = CommandErrorCode.CONFIG, contract_code: str | None = None) -> NoReturn:
+    # Reads the exception currently being handled (sys.exc_info), so call only from inside an except block.
     raise CommandError(code, contract_code or contract_code_of(sys.exc_info()[1])) from None
 
 
