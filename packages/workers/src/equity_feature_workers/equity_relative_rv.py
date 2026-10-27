@@ -17,7 +17,7 @@ from __future__ import annotations
 import pickle
 from types import ModuleType
 
-from equity_feature_contracts import CanonicalBatch, ConfigSpec, FeatureResult, IntervalSpec, ValueType
+from equity_feature_contracts import CanonicalBatch, ConfigSpec, ErrorCode, FeatureResult, IntervalSpec, ValueType
 from equity_feature_io_contracts import FeatureHeader
 
 from ._supplied import admit, fail, result_identity, translated
@@ -54,8 +54,10 @@ def _param(config: ConfigSpec, name: str):
 
 def _selection(features: tuple[str, ...], allowed: tuple[str, ...]) -> tuple[str, ...]:
     if (type(features) is not tuple or not features or any(type(f) is not str for f in features)
-            or len(set(features)) != len(features) or any(f not in allowed for f in features)):
-        fail()
+            or len(set(features)) != len(features)):
+        fail(contract_code=ErrorCode.INVALID_SCHEMA.value)
+    if any(f not in allowed for f in features):
+        fail(contract_code=ErrorCode.UNKNOWN_FEATURE.value)
     return tuple(sorted(features))
 
 
@@ -95,10 +97,13 @@ def _admit_roles(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family
         if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                 or batch.metadata.coverage.observed != batch.row_count
                 or batch.metadata.namespace != task.config.session.namespace):
-            fail(CommandErrorCode.RESULT)
+            # These mirror library refusals (the library raises INCONSISTENT_IDENTITY for the same contradictions);
+            # a manifest/binding mismatch has no library counterpart and carries no contract code.
+            fail(CommandErrorCode.RESULT, ErrorCode.INCONSISTENT_IDENTITY.value
+                 if (binding.role, binding.kind, binding.metadata) == (manifest.role, batch.kind, batch.metadata) else None)
         column = batch.column('instrument_id')
         if column is None or any(value != instruments[manifest.role] for value in column.values):
-            fail(CommandErrorCode.RESULT)
+            fail(CommandErrorCode.RESULT, ErrorCode.INCONSISTENT_IDENTITY.value)
 
 
 def _role_batches(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) -> dict[str, CanonicalBatch]:

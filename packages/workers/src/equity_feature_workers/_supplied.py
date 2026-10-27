@@ -37,9 +37,12 @@ def translated() -> Iterator[None]:
     except ManifestError as error:
         if type(error.code) is not ManifestErrorCode:
             fail(CommandErrorCode.CALCULATION)
+        # A manifest binding failure is an identity contradiction (its own code is INCONSISTENT_IDENTITY, the shared
+        # library ErrorCode); other manifest failures carry no library code.
         fail(CommandErrorCode.LIMIT if error.code is ManifestErrorCode.LIMIT else
              CommandErrorCode.RESULT if error.code is ManifestErrorCode.BINDING else
-             CommandErrorCode.CONFIG)
+             CommandErrorCode.CONFIG,
+             ErrorCode.INCONSISTENT_IDENTITY.value if error.code is ManifestErrorCode.BINDING else None)
     except SinkError as error:
         if type(error.code) is not SinkErrorCode:
             fail(CommandErrorCode.CALCULATION)
