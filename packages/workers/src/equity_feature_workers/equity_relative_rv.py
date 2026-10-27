@@ -97,8 +97,8 @@ def _admit_roles(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family
         if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                 or batch.metadata.coverage.observed != batch.row_count
                 or batch.metadata.namespace != task.config.session.namespace):
-            # These mirror library refusals (the library raises INCONSISTENT_IDENTITY for the same contradictions);
-            # a manifest/binding mismatch has no library counterpart and carries no contract code.
+            # A coverage or namespace contradiction (binding matches the manifest) mirrors the library's INCONSISTENT_IDENTITY
+            # and carries that contract code; a manifest/binding mismatch has no library counterpart and carries none.
             fail(CommandErrorCode.RESULT, ErrorCode.INCONSISTENT_IDENTITY.value
                  if (binding.role, binding.kind, binding.metadata) == (manifest.role, batch.kind, batch.metadata) else None)
         column = batch.column('instrument_id')
