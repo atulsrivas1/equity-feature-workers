@@ -30,6 +30,14 @@ RESULT_COUNT = 124
 PRODUCER = {'H': 'robust_history', 'C': 'robust_history', 'P': 'volume_pace_robust', 'R': 'volume_ratio_mean'}
 ENTITY = 'Q9'  # the entity instrument of single-instrument runs (the adapter's reference rows use the same id)
 
+KNOWN = 50  # explicit known_at of every supplied fact (the value the former adapter default produced)
+
+
+def _session(index, **kw):
+    from equity_feature_duckdb.robust_pace import session
+    return session(index, bounds_known_at=KNOWN, exclusion_known_at=KNOWN, **kw)
+
+
 
 def contract_document(override: Path | None) -> dict:
     """The frozen contract JSON in the core repository (or an explicit copy)."""
@@ -73,12 +81,12 @@ def runs_for(fixture: dict) -> list[dict]:
 
 def _sessions_for(count: int, closes: dict | None = None):
     from equity_feature_duckdb.robust_pace import session
-    return [session(i, close=(closes or {}).get(i, 300)) for i in range(count)]
+    return [session(i, close=(closes or {}).get(i, 300), bounds_known_at=KNOWN, exclusion_known_at=KNOWN) for i in range(count)]
 
 
 def _cell(token):
     from equity_feature_duckdb.robust_pace import parse_cell
-    return parse_cell(token)
+    return parse_cell(token, known_at=KNOWN)
 
 
 def _history_inputs(fixture: dict, features: tuple[str, ...]):
@@ -98,7 +106,7 @@ def _history_inputs(fixture: dict, features: tuple[str, ...]):
     for index in range(last + 1):
         excluded = index in cells and cells[index].excluded
         sessions.append(p.Session(str(index), index * p.SESSION_STEP, index * p.SESSION_STEP + p.SESSION_SPAN_DEFAULT,
-            excluded, cells[index].exclusion_known_at if index in cells else p.KNOWN_AT_DEFAULT))
+            excluded, cells[index].exclusion_known_at if index in cells else KNOWN, KNOWN))
     entries = [(ENTITY, sessions[i], cell) for i, cell in sorted(cells.items())]
     entries += [(ENTITY, sessions[row['session']], p.Cell(p.ROW, row['value'], row['known_at'])) for row in appended]
     target = sessions[len(slots)]
@@ -118,13 +126,13 @@ def _history_inputs(fixture: dict, features: tuple[str, ...]):
 
 def _cohort_inputs(fixture: dict, features: tuple[str, ...]):
     from equity_feature_duckdb import robust_pace as p
-    target = p.session(0)
+    target = _session(0)
     members = fixture['members']
     field = 'close' if fixture.get('scale') is not None else 'volume'
     scale = fixture.get('scale') or 0
     entries = [(name, target, _cell(token)) for name, token in members.items()]
     cohort = p.daily_batch(entries, field=field, scale=scale, input_id='cohort', role='member')
-    population = p.population_batch(list(members), target, input_id='population')
+    population = p.population_batch(list(members), target, input_id='population', known_at=KNOWN)
     timing = p.availability(target.close_ns, fixture['K'])
     config = p.robust_history_config(target, timing=timing, field=field, scale=scale, window=1, min_history=1,
         min_population=fixture['params']['min_population'], evidence_limit=fixture['params']['evidence_limit'])
@@ -138,22 +146,22 @@ def _pace_inputs(fixture: dict, features: tuple[str, ...]):
     extra_target_close = 200 if fixture['id'] == 'P18' else None
     if extra_target_close is not None:
         spec['close'], spec['C'] = 200, 1500
-    sessions = [p.session(i, close=row['close'], excluded=row.get('ex', False)) for i, row in enumerate(prior)]
-    target = p.session(len(prior), close=spec['close'])
+    sessions = [_session(i, close=row['close'], excluded=row.get('ex', False)) for i, row in enumerate(prior)]
+    target = _session(len(prior), close=spec['close'])
     sessions.append(target)
     offsets = tuple(fixture['params']['grid_offsets_ns'])
     entries = []
     for session_obj, row in zip(sessions[:-1], prior):
         for c, token in enumerate(row['cells']):
-            entries.append((session_obj, c, p.parse_bucket(token)))
+            entries.append((session_obj, c, p.parse_bucket(token, known_at=KNOWN)))
     if spec['cells'] is not None:
         for c, token in enumerate(spec['cells']):
-            entries.append((target, c, p.parse_bucket(token)))
+            entries.append((target, c, p.parse_bucket(token, known_at=KNOWN)))
     if fixture['id'] == 'P18':
-        appended = p.session(len(prior) + 1, close=300)
+        appended = _session(len(prior) + 1, close=300)
         sessions.append(appended)
         entries.append((appended, 1, p.Cell(p.ROW, 12345, 150)))
-    grid = p.grid_batch(offsets, target, input_id='grid', instrument_id=ENTITY)
+    grid = p.grid_batch(offsets, target, input_id='grid', known_at=KNOWN, instrument_id=ENTITY)
     sessions_batch = p.sessions_batch(sessions, input_id='sessions', instrument_id=ENTITY)
     bars = p.bars_batch(entries, offsets, input_id='bars', instrument_id=ENTITY)
     params = fixture['params']
@@ -169,7 +177,7 @@ def _mean_inputs(fixture: dict, features: tuple[str, ...]):
     slots = list(fixture['slots'])
     appended = fixture.get('appended_rows', [])
     last = max([len(slots)] + [row['session'] for row in appended])
-    sessions = [p.session(i) for i in range(last + 1)]
+    sessions = [_session(i) for i in range(last + 1)]
     cells = {i: _cell(token) for i, token in enumerate(slots)}
     cells[len(slots)] = _cell(fixture['target'])
     entries = [(ENTITY, sessions[i], cell) for i, cell in sorted(cells.items())]
@@ -277,7 +285,7 @@ def _mean(config, series, sessions_batch, sessions, features=('mean.ratio',)):
 def _base_history(*, field='volume', scale=0, window=5, min_history=5, quantile=None, min_population=None):
     """Valid history base: prior sessions 0..4 and target session 5, volume 10..60."""
     p = _adapter()
-    sessions = [p.session(i) for i in range(6)]
+    sessions = [_session(i) for i in range(6)]
     rows = [(ENTITY, sessions[i], p.Cell(p.ROW, v, 50)) for i, v in enumerate((10, 20, 30, 40, 50, 60))]
     series = p.daily_batch(rows, field=field, scale=scale, input_id='series', role='session')
     sessions_batch = p.sessions_batch(sessions, input_id='sessions', instrument_id=ENTITY)
@@ -289,14 +297,14 @@ def _base_history(*, field='volume', scale=0, window=5, min_history=5, quantile=
 
 def _base_pace(*, grid_version=None, profile='bucket', scale_pair=None, window=5, min_history=5, cutoff=200):
     p = _adapter()
-    prior = [p.session(i) for i in range(5)]
-    target = p.session(5)
+    prior = [_session(i) for i in range(5)]
+    target = _session(5)
     sessions = prior + [target]
     offsets = (0, 100, 200, 300)
     rows = [(s, c, p.Cell(p.ROW, 100 * (i + 1) + c, 50)) for i, s in enumerate(prior) for c in range(3)]
     rows.append((target, 1, p.Cell(p.ROW, 450, 50)))
     kwargs = {} if grid_version is None else {'grid_version': grid_version}
-    grid = p.grid_batch(offsets, target, input_id='grid', instrument_id=ENTITY, **kwargs)
+    grid = p.grid_batch(offsets, target, input_id='grid', known_at=KNOWN, instrument_id=ENTITY, **kwargs)
     sessions_batch = p.sessions_batch(sessions, input_id='sessions', instrument_id=ENTITY)
     bars = p.bars_batch(rows, offsets, input_id='bars', instrument_id=ENTITY)
     config = p.volume_pace_config(target, timing=p.availability(target.open_ns + cutoff, 100), profile=profile,
@@ -306,7 +314,7 @@ def _base_pace(*, grid_version=None, profile='bucket', scale_pair=None, window=5
 
 def _base_mean(**params):
     p = _adapter()
-    sessions = [p.session(i) for i in range(5)]
+    sessions = [_session(i) for i in range(5)]
     rows = [(ENTITY, sessions[i], p.Cell(p.ROW, v, 50)) for i, v in enumerate((10, 20, 30, 40, 50))]
     series = p.daily_batch(rows, field='volume', scale=0, input_id='series', role='session')
     sessions_batch = p.sessions_batch(sessions, input_id='sessions', instrument_id=ENTITY)
@@ -325,7 +333,7 @@ def build_refusal(rid: str) -> dict:
         rows = [(ENTITY, sessions[0], p.Cell(p.ROW, 1, 50)), (ENTITY, sessions[0], p.Cell(p.ROW, 2, 50))]
         return _history(config, p.daily_batch(rows, field='volume', scale=0, input_id='series', role='session'), sb, sessions)
     if rid == 'RF02':  # DAILY rows overlapping in time for one instrument
-        rows = [(ENTITY, p.Session('0', 0, 300), p.Cell(p.ROW, 1, 50)), (ENTITY, p.Session('1', 100, 400), p.Cell(p.ROW, 2, 50))]
+        rows = [(ENTITY, p.Session('0', 0, 300, False, KNOWN, KNOWN), p.Cell(p.ROW, 1, 50)), (ENTITY, p.Session('1', 100, 400, False, KNOWN, KNOWN), p.Cell(p.ROW, 2, 50))]
         return _history(config, p.daily_batch(rows, field='volume', scale=0, input_id='series', role='session'), sb, sessions)
     if rid == 'RF03':  # negative volume
         rows = [(ENTITY, sessions[0], p.Cell(p.ROW, -1, 50))]
@@ -339,7 +347,7 @@ def build_refusal(rid: str) -> dict:
         return _history(config, _raw(DataKind.DAILY, _DAILY_PRICE, rows, unit=p.price_unit(0), input_id='series',
             bounds=(0, 300)), sb, sessions)
     if rid == 'RF06':  # a row ending after the market cutoff (forming session)
-        rows = [(ENTITY, p.Session('5', 5000, 14000), p.Cell(p.ROW, 9, 50))]
+        rows = [(ENTITY, p.Session('5', 5000, 14000, False, KNOWN, KNOWN), p.Cell(p.ROW, 9, 50))]
         return _history(config, p.daily_batch(rows, field='volume', scale=0, input_id='series', role='session'), sb, sessions)
     if rid == 'RF07':  # row start not before end
         rows = [(ENTITY, '0', 300, 300, 1, 1, 1, 1, 1, 50)]
@@ -398,11 +406,11 @@ def build_refusal(rid: str) -> dict:
         return _pace(config, grid, sbp, bars, sessions_p)
     if rid == 'RF28':  # grid with a single edge
         sessions_p, _, sbp, bars, config = _base_pace()
-        grid = p.grid_batch([0], sessions_p[5], input_id='grid', instrument_id=ENTITY)
+        grid = p.grid_batch([0], sessions_p[5], input_id='grid', known_at=KNOWN, instrument_id=ENTITY)
         return _pace(config, grid, sbp, bars, sessions_p)
     if rid == 'RF40':  # first grid edge not 0
         sessions_p, _, sbp, bars, config = _base_pace()
-        grid = p.grid_batch([10, 100, 200, 300], sessions_p[5], input_id='grid', instrument_id=ENTITY)
+        grid = p.grid_batch([10, 100, 200, 300], sessions_p[5], input_id='grid', known_at=KNOWN, instrument_id=ENTITY)
         return _pace(config, grid, sbp, bars, sessions_p)
     if rid == 'RF39':  # config grid_version differs from the grid text
         sessions_p, grid, sbp, bars, config = _base_pace(grid_version='ef3-grid2')
@@ -414,10 +422,10 @@ def build_refusal(rid: str) -> dict:
         return _pace(config, grid, sbp, bad, sessions_p)
     if rid == 'RF38':  # bar for a bucket beyond the actual session close
         sessions_p, grid, _, _, config = _base_pace()
-        short = p.session(0, close=200)
+        short = _session(0, close=200)
         sessions_p = [short] + sessions_p[1:]
         sbp = p.sessions_batch(sessions_p, input_id='sessions', instrument_id=ENTITY)
-        bars = p.bars_batch([(p.session(0), 2, p.Cell(p.ROW, 5, 50))], (0, 100, 200, 300), input_id='bars',
+        bars = p.bars_batch([(_session(0), 2, p.Cell(p.ROW, 5, 50))], (0, 100, 200, 300), input_id='bars',
             instrument_id=ENTITY)
         return _pace(config, grid, sbp, bars, sessions_p)
     if rid == 'RF31':  # update, restore or merge requested
@@ -432,7 +440,7 @@ def build_refusal(rid: str) -> dict:
     if rid == 'RF09':  # series and cohort_values with different price scale or currency
         return _cohort_with_series(scale_series=1, scale_cohort=2)
     if rid == 'RF41':  # exclusion fact supplied to the mean producer
-        ss = [p.session(i, excluded=(i == 1)) for i in range(5)]
+        ss = [_session(i, excluded=(i == 1)) for i in range(5)]
         rows = [(ENTITY, ss[i], p.Cell(p.ROW, 5, 50)) for i in range(5)]
         return _mean(_base_mean()[3], p.daily_batch(rows, field='volume', scale=0, input_id='series', role='session'),
             p.sessions_batch(ss, input_id='sessions', instrument_id=ENTITY), ss)
@@ -445,14 +453,14 @@ def build_refusal(rid: str) -> dict:
         rows = [(ENTITY, sessions[i], p.Cell(p.ROW, 5, 50)) for i in range(6)]
         return _history(cfg, p.daily_batch(rows, field='close', scale=3, input_id='series', role='session'), sb, sessions)
     if rid == 'RF45':  # exclusion fact on the target session
-        ss = sessions[:5] + [p.Session('5', sessions[5].open_ns, sessions[5].close_ns, True, 50)]
+        ss = sessions[:5] + [p.Session('5', sessions[5].open_ns, sessions[5].close_ns, True, KNOWN, KNOWN)]
         return _history(config, series, p.sessions_batch(ss, input_id='sessions', instrument_id=ENTITY), ss)
     if rid == 'RF46':  # exclusion fact with an empty reason label
         rows = [(ENTITY, '2', 'x1:' + 'ZXg', 'ef3.session.excluded', 2000, 2300, '', 50)]
         return _history(config, series, _raw(DataKind.REFERENCE, _REFERENCE_NAMES, rows, input_id='sessions',
             bounds=(2000, 2300)), sessions)
     if rid == 'RF48':  # two exclusion facts on one session with distinct reference ids
-        ss = [p.session(i, excluded=(i == 2)) for i in range(6)]
+        ss = [_session(i, excluded=(i == 2)) for i in range(6)]
         base = p.sessions_batch(ss, input_id='sessions', instrument_id=ENTITY)
         rows = [tuple(column.values[i] for column in base.columns) for i in range(base.row_count)]
         rows.append((ENTITY, '2', 'x1:' + 'YTI', 'ef3.session.excluded', 2000, 2300, 'b', 50))
@@ -468,7 +476,7 @@ def build_refusal(rid: str) -> dict:
         return _history(config, series, _raw(DataKind.REFERENCE, _REFERENCE_NAMES, rows, input_id='sessions',
             bounds=(9000, 9300)), sessions)
     if rid == 'RF36':  # series row whose session bounds differ from the bounds fact
-        rows = [(ENTITY, p.Session('5', sessions[5].open_ns, sessions[5].close_ns - 1), p.Cell(p.ROW, 60, 50))]
+        rows = [(ENTITY, p.Session('5', sessions[5].open_ns, sessions[5].close_ns - 1, False, KNOWN, KNOWN), p.Cell(p.ROW, 60, 50))]
         return _history(config, p.daily_batch(rows, field='volume', scale=0, input_id='series', role='session'), sb, sessions)
     if rid in ('RF32', 'RF33', 'RF34'):
         return _cohort_refusal(rid)
@@ -486,7 +494,7 @@ def _raw_config(target, identity, algorithm, params, window, unit):
 def _pace_with_grid(offsets):
     sessions, _, sbp, bars, config = _base_pace()
     p = _adapter()
-    grid = p.grid_batch(offsets, sessions[5], input_id='grid', instrument_id=ENTITY)
+    grid = p.grid_batch(offsets, sessions[5], input_id='grid', known_at=KNOWN, instrument_id=ENTITY)
     return config, grid, sbp, bars, sessions
 
 
@@ -504,13 +512,13 @@ def _replace_adjustment(batch):
 
 def _cohort_with_series(*, scale_series, scale_cohort):
     p = _adapter()
-    target = p.session(0)
+    target = _session(0)
     members = {'A': 10100, 'B': 9950}
     cohort = p.daily_batch([(m, target, p.Cell(p.ROW, v, 50)) for m, v in members.items()], field='close',
         scale=scale_cohort, input_id='cohort', role='member')
     series = p.daily_batch([(ENTITY, target, p.Cell(p.ROW, 10100, 50))], field='close', scale=scale_series,
         input_id='series', role='session')
-    population = p.population_batch(list(members), target, input_id='population')
+    population = p.population_batch(list(members), target, input_id='population', known_at=KNOWN)
     sessions_batch = p.sessions_batch([target], input_id='sessions', instrument_id='A')
     config = p.robust_history_config(target, timing=p.availability(target.close_ns, 100), field='close', scale=scale_cohort,
         window=1, min_history=1, min_population=1, evidence_limit=100)
@@ -520,20 +528,20 @@ def _cohort_with_series(*, scale_series, scale_cohort):
 
 def _cohort_refusal(rid):
     p = _adapter()
-    target = p.session(0)
+    target = _session(0)
     members = {'A': 10100, 'B': 9950}
     if rid == 'RF32':  # target instrument is not a declared population member
-        population = p.population_batch(['B'], target, input_id='population')
+        population = p.population_batch(['B'], target, input_id='population', known_at=KNOWN)
         cohort = p.daily_batch([('B', target, p.Cell(p.ROW, 9950, 50))], field='close', scale=2, input_id='cohort', role='member')
         instrument = 'A'
     elif rid == 'RF33':  # cohort value row for a non-member
-        population = p.population_batch(['A'], target, input_id='population')
+        population = p.population_batch(['A'], target, input_id='population', known_at=KNOWN)
         cohort = p.daily_batch([('A', target, p.Cell(p.ROW, 10100, 50)), ('Z', target, p.Cell(p.ROW, 1, 50))],
             field='close', scale=2, input_id='cohort', role='member')
         instrument = 'A'
     else:  # RF34: cohort value row whose session is not the target session
-        population = p.population_batch(['A', 'B'], target, input_id='population')
-        other = p.Session('1', 0, 300)  # same bounds window, a session id other than the target's
+        population = p.population_batch(['A', 'B'], target, input_id='population', known_at=KNOWN)
+        other = p.Session('1', 0, 300, False, KNOWN, KNOWN)  # same bounds window, a session id other than the target's
         cohort = p.daily_batch([('A', target, p.Cell(p.ROW, 10100, 50)), ('B', other, p.Cell(p.ROW, 1, 50))],
             field='close', scale=2, input_id='cohort', role='member')
         instrument = 'A'

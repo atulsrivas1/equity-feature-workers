@@ -85,8 +85,8 @@ def relative_inputs(fixture: dict, variant: int | None, scale: int, limit: int):
         bench += SUFFIX_RELATIVE[variant][1]
     sessions = daily_sessions(len(inst))
     grid = daily_grid(sessions, target_index=fixture['t'])
-    batches = (close_batch('X', grid, inst, input_id='instrument', scale=scale),
-        close_batch('B', grid, bench, input_id='benchmark', scale=scale))
+    batches = (close_batch('X', grid, inst, input_id='instrument', scale=scale, known_default=50),
+        close_batch('B', grid, bench, input_id='benchmark', scale=scale, known_default=50))
     config = relative_config(grid, benchmark_id='B', window=fixture['W'], min_pairs=fixture['minp'],
         availability=availability_for(sessions, fixture['K']), scale=scale, evidence_limit=limit)
     return grid, config, batches, ('instrument', 'benchmark')
@@ -100,7 +100,7 @@ def logvol_inputs(fixture: dict, variant: int | None, scale: int, limit: int):
         slots += SUFFIX_LOGVOL[variant]
     sessions = daily_sessions(len(slots))
     grid = daily_grid(sessions, target_index=fixture['t'])
-    batches = (close_batch('X', grid, slots, input_id='daily', scale=scale),)
+    batches = (close_batch('X', grid, slots, input_id='daily', scale=scale, known_default=50),)
     config = log_volatility_config(grid, period=fixture['N'], annualization_factor=fixture['A'],
         availability=availability_for(sessions, fixture['K']), scale=scale, evidence_limit=limit)
     return grid, config, batches, ('daily',)
@@ -113,7 +113,7 @@ def realized_inputs(fixture: dict, features: tuple[str, ...], scale: int, limit:
     session, runs = synthetic_intraday_session(len(slots))
     context = make_intraday_context('X', sessions=session, runs=runs, anchor_index=fixture['a'],
         target_index=fixture['t'])
-    batches = (intraday_batch(context, slots, input_id='bars', scale=scale),)
+    batches = (intraday_batch(context, slots, input_id='bars', scale=scale, known_default=50),)
     # The annualization factor is bound exactly when volatility is selected (library rule); variance-only runs omit it.
     factor = fixture['A'] if 'intraday.realized_volatility' in features else None
     config = realized_variance_config(context, annualization_factor=factor,
@@ -246,8 +246,8 @@ def _rel_base(**over):
     params = dict(benchmark_id='B', window=3, min_pairs=2, evidence_limit=10, scale=2)
     params.update(over)
     config = relative_config(grid, availability=availability_for(sessions, 100), **params)
-    batches = (close_batch('X', grid, _PRICED, input_id='instrument', scale=2),
-        close_batch('B', grid, _BENCH, input_id='benchmark', scale=2))
+    batches = (close_batch('X', grid, _PRICED, input_id='instrument', scale=2, known_default=50),
+        close_batch('B', grid, _BENCH, input_id='benchmark', scale=2, known_default=50))
     return dict(kind='relative', grid=grid, config=config, batches=batches, roles=('instrument', 'benchmark'),
         features=_RELATIVE_FEATURES, instrument='X')
 
@@ -260,7 +260,7 @@ def _vol_base(**over):
     params = dict(period=3, annualization_factor=252, evidence_limit=10, scale=2)
     params.update(over)
     config = log_volatility_config(grid, availability=availability_for(sessions, 100), **params)
-    batches = (close_batch('X', grid, _PRICED, input_id='daily', scale=2),)
+    batches = (close_batch('X', grid, _PRICED, input_id='daily', scale=2, known_default=50),)
     return dict(kind='logvol', grid=grid, config=config, batches=batches, roles=('daily',),
         features=_LOGVOL_FEATURES, instrument='X')
 
@@ -275,7 +275,7 @@ def _rv_base(*, factor=252, features=('intraday.realized_variance', 'intraday.re
     params.update(over)
     config = realized_variance_config(context, annualization_factor=factor,
         availability=availability_for(session, 100, market_cutoff), **params)
-    batches = (intraday_batch(context, _PRICED, input_id='bars', scale=2),)
+    batches = (intraday_batch(context, _PRICED, input_id='bars', scale=2, known_default=50),)
     return dict(kind='rv', context=context, config=config, batches=batches, roles=('bars:000',), features=features,
         instrument='X')
 
@@ -335,17 +335,17 @@ def _relative_refusal(rid: str) -> dict:
     if rid == 'RF10':
         return _rel_base(policy_version='ef3-rel2')
     if rid == 'RF11':
-        return _with_batches(spec, inst, close_batch('Q', grid, _BENCH, input_id='benchmark', scale=2))
+        return _with_batches(spec, inst, close_batch('Q', grid, _BENCH, input_id='benchmark', scale=2, known_default=50))
     if rid == 'RF12':
-        return _with_batches(spec, close_batch('B', grid, _PRICED, input_id='instrument', scale=2), bench)
+        return _with_batches(spec, close_batch('B', grid, _PRICED, input_id='instrument', scale=2, known_default=50), bench)
     if rid == 'RF13':
         rows = _rows(inst)
         rows[1] = ('Z',) + rows[1][1:]
         return _with_batches(spec, _rebuild(inst, rows), bench)
     if rid == 'RF14':
-        return _with_batches(spec, inst, close_batch('B', grid, _BENCH, input_id='benchmark', scale=2, namespace='OTHER'))
+        return _with_batches(spec, inst, close_batch('B', grid, _BENCH, input_id='benchmark', scale=2, namespace='OTHER', known_default=50))
     if rid == 'RF15':
-        return _with_batches(spec, inst, close_batch('B', grid, _BENCH, input_id='benchmark', scale=3))
+        return _with_batches(spec, inst, close_batch('B', grid, _BENCH, input_id='benchmark', scale=3, known_default=50))
     if rid == 'RF16':
         return _with_batches(spec, inst, _adjusted(bench))
     if rid == 'RF17':
@@ -354,7 +354,7 @@ def _relative_refusal(rid: str) -> dict:
         rows = _rows(inst)
         return _with_batches(spec, _rebuild(inst, rows + [rows[0]]), bench)
     if rid == 'RF19':
-        return _with_batches(spec, close_batch('X', grid, [dict(_PRICED[0], c=0)] + _PRICED[1:], input_id='instrument', scale=2), bench)
+        return _with_batches(spec, close_batch('X', grid, [dict(_PRICED[0], c=0)] + _PRICED[1:], input_id='instrument', scale=2, known_default=50), bench)
     if rid == 'RF20':
         return dict(spec, capability=('relative.beta', 'update'))
     if rid == 'RF21':
@@ -375,14 +375,14 @@ def _logvol_refusal(rid: str) -> dict:
     if rid == 'RF25':
         return _vol_base(policy_version='ef3-dlv2')
     if rid == 'RF26':
-        return _with_batches(spec, close_batch('X', grid, [dict(_PRICED[0], c=-1)] + _PRICED[1:], input_id='daily', scale=2))
+        return _with_batches(spec, close_batch('X', grid, [dict(_PRICED[0], c=-1)] + _PRICED[1:], input_id='daily', scale=2, known_default=50))
     if rid == 'RF27':
         return _with_batches(spec, _rebuild(daily, _rows(daily)[::-1]))
     if rid == 'RF28':
         rows = _rows(daily)
         return _with_batches(spec, _rebuild(daily, rows + [rows[0]]))
     if rid == 'RF29':
-        return _with_batches(spec, close_batch('X', grid, _PRICED, input_id='daily', scale=3))
+        return _with_batches(spec, close_batch('X', grid, _PRICED, input_id='daily', scale=3, known_default=50))
     if rid == 'RF30':
         return _with_batches(spec, _adjusted(daily))
     if rid == 'RF31':
@@ -433,7 +433,7 @@ def _rv_refusal(rid: str) -> dict:
         rows = _rows(bars)
         return _with_batches(spec, _rebuild(bars, rows + [rows[0]]))
     if rid == 'RF46':
-        return _with_batches(spec, intraday_batch(context, _PRICED, input_id='bars', scale=3))
+        return _with_batches(spec, intraday_batch(context, _PRICED, input_id='bars', scale=3, known_default=50))
     if rid == 'RF47':
         return _with_batches(spec, _adjusted(bars))
     if rid == 'RF48':

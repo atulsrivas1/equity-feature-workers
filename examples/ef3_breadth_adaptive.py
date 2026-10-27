@@ -95,9 +95,30 @@ def evidence_limit(fixture: dict) -> int:
     return fixture['input']['params']['evidence_limit']
 
 
+def _with_known_at(producer: str, inp: dict) -> dict:
+    """Explicit known_at on every supplied row: 60 for declared and observed roles, the event time for adaptive rows.
+
+    The adapter no longer defaults known_at; these are the values the former defaults produced, so results are unchanged."""
+    import copy
+    inp = copy.deepcopy(inp)
+    if producer == 'adaptive_volume':
+        obs = inp.get('obs')
+        for row in (obs['rows'] if obs else []):
+            row.setdefault('ka', row['t'])
+        return inp
+    for role in inp['roles'].values():
+        if role is None:
+            continue
+        rows = role['rows']
+        for row in (rows if isinstance(rows, list) else rows.values()):
+            row.setdefault('ka', 60)
+    return inp
+
+
 def case_for(fixture: dict):
     """The I/O adapter case of one contract fixture (declared, observed or adaptive)."""
     from equity_feature_duckdb import breadth_adaptive as adapter
+    fixture = dict(fixture, input=_with_known_at(fixture['producer'], fixture['input']))
     if fixture['producer'] == 'session_breadth':
         return adapter.declared_case(fixture['input'], entity_instrument='X')
     if fixture['producer'] == 'observed_breadth':
