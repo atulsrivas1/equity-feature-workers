@@ -44,7 +44,11 @@ Only a verified receipt matching envelope/results plus sink.read verification an
 
 ## Safe errors and validation
 
-Fixed codes: INVALID_COMMAND, SOURCE_FAILED, RESOURCE_LIMIT, CANCELLED, CALCULATION_FAILED, RESULT_IDENTITY_MISMATCH, PUBLICATION_FAILED, READBACK_FAILED. Adapter/factory/sink exception text is discarded; callers inspect CommandError.code. No source credentials, SQL, paths or exception payload enter public error strings.
+Fixed codes: INVALID_COMMAND, SOURCE_FAILED, RESOURCE_LIMIT, CANCELLED, CALCULATION_FAILED, RESULT_IDENTITY_MISMATCH, PUBLICATION_FAILED, READBACK_FAILED. Adapter/factory/sink exception text is discarded; a library refusal (`ContractError`) additionally sets `CommandError.contract_code` (see Contract code below); callers inspect CommandError.code. No source credentials, SQL, paths or exception payload enter public error strings.
 
 Independent development fixtures check bars500/51200/102.6, trades3/10/1011/101.1/10÷3, and normal/locked/crossed/invalid quotes mean spread1 and mean basis points10000÷101 with exact counts/evidence. Include direct/factory/CLI, all-family injected CLI, multi-chunk population/identity, missing/empty/partial/unknown/future knowledge, bounds/cancellation, bad request/inventory/entities, unsafe failures, extra final content, commit/readback failures and unsupported sink capabilities. Installed/native/form/review/actual-main evidence belongs [delivery](EQ058_DELIVERY.md); passing development checks alone is not release acceptance.
 
+
+## Contract code (additive)
+
+`CommandError.code` says where the worker failed (transport category) and is unchanged. `CommandError.contract_code` says which neutral refusal the library or adapter raised: a closed value from the shared library `ErrorCode` set (`invalid_schema`, `duplicate`, `invalid_order`, `bounds`, `overflow`, `inconsistent_identity`, `invalid_config`, ...), the fixed fallback `unclassified` when a library refusal carries a code outside that set, or `None` when the refusal is worker-originated (no library code). Exception text is never carried. One shared mapping (`commands.contract_code_of`, used by `_fail` and `_supplied.fail`/`translated`) serves the EF3 D, E and F workers; adapter-build refusals carry the code through the io layer's typed `ContractError`. `TaskDiagnostic` gains the same optional `contract_code` field (default `None`; encoded key `contract_code`), so existing consumers that ignore unknown keys are unaffected.

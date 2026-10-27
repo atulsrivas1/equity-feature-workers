@@ -56,6 +56,14 @@ def fixed_reason(value: object, fallback: str = 'UNAVAILABLE') -> str:
     return value if type(value) is str and value in _REASONS else fallback
 
 
+def fixed_contract_code(value: object) -> str | None:
+    """Closed lookup: a shared library ErrorCode value, the fixed fallback, or None. Never free text."""
+    from .commands import CONTRACT_CODES, CONTRACT_CODE_UNCLASSIFIED
+    if value is None:
+        return None
+    return value if type(value) is str and value in CONTRACT_CODES else CONTRACT_CODE_UNCLASSIFIED
+
+
 def counter() -> int | None:
     try:
         value = time.perf_counter_ns()
@@ -73,6 +81,13 @@ def _failure_reason(error: BaseException) -> str:
         if type(code) in (SinkErrorCode, CommandErrorCode):
             return fixed_reason(code.value)
     return 'UNAVAILABLE'
+
+
+def _failure_contract_code(error: BaseException) -> str | None:
+    from .commands import CommandError, contract_code_of
+    if type(error) is CommandError:
+        return fixed_contract_code(error.contract_code)
+    return contract_code_of(error)
 
 
 @dataclass(frozen=True)
@@ -110,6 +125,7 @@ class TaskDiagnostic:
     reason: str | None
     timings: tuple[StageTiming, ...]
     elapsed_ns: int | None
+    contract_code: str | None = None  # additive: library ErrorCode of the refusal, closed set
 
     def __post_init__(self) -> None:
         integer(self.attempt, 1)
@@ -119,7 +135,8 @@ class TaskDiagnostic:
             digest(self.task_sha256)
         if (type(self.family) is not str or self.family not in _FAMILIES + ('custom',) or type(self.status) is not DiagnosticStatus
                 or self.reason is not None and (type(self.reason) is not str or self.reason not in _REASONS)
-                or type(self.timings) is not tuple or any(type(t) is not StageTiming for t in self.timings)):
+                or type(self.timings) is not tuple or any(type(t) is not StageTiming for t in self.timings)
+                or self.contract_code is not None and fixed_contract_code(self.contract_code) != self.contract_code):
             raise SinkError(SinkErrorCode.INVALID_CONFIG)
         if self.elapsed_ns is not None:
             integer(self.elapsed_ns, 0)
@@ -154,6 +171,7 @@ class _Attempt:
         self._reserved = 0
         self.status = DiagnosticStatus.READY
         self.reason: str | None = None
+        self.contract_code: str | None = None
         self.start = counter()
 
     def bind(self, task: TaskManifest) -> None:
@@ -182,12 +200,13 @@ class _Attempt:
         finally:
             self.timings.append(interval(stage, start, counter(), probes=probes))
 
-    def finish(self, status: DiagnosticStatus, reason: str | None = None) -> None:
+    def finish(self, status: DiagnosticStatus, reason: str | None = None, contract_code: str | None = None) -> None:
         self.recorder._own(active=True)
         if type(status) is not DiagnosticStatus:
             raise SinkError(SinkErrorCode.INVALID_CONFIG)
         self.status = status
         self.reason = fixed_reason(reason) if reason is not None else None
+        self.contract_code = fixed_contract_code(contract_code)
 
 
 class ProgressRecorder:
@@ -234,13 +253,13 @@ class ProgressRecorder:
                 yield observation
             except BaseException as error:
                 reason = _failure_reason(error)
-                observation.finish(DiagnosticStatus.CANCELLED if reason == 'CANCELLED' else DiagnosticStatus.FAILED, reason)
+                observation.finish(DiagnosticStatus.CANCELLED if reason == 'CANCELLED' else DiagnosticStatus.FAILED, reason, _failure_contract_code(error))
                 raise
             finally:
                 elapsed = interval(DiagnosticStage.QUEUE_WAIT, observation.start, counter()).elapsed_ns
                 self._tasks.append(TaskDiagnostic(len(self._tasks) + 1, observation.intent, observation.task,
                     observation.family, observation.family_hash, observation.partition_hash,
-                    observation.status, observation.reason, tuple(observation.timings), elapsed))
+                    observation.status, observation.reason, tuple(observation.timings), elapsed, observation.contract_code))
         finally:
             self._active = False
 
@@ -304,12 +323,12 @@ class ProgressRecorder:
             except BaseException as error:
                 for observation in observations.values():
                     if observation.status is not DiagnosticStatus.VERIFIED:
-                        observation.finish(DiagnosticStatus.CANCELLED if _failure_reason(error) == 'CANCELLED' else DiagnosticStatus.FAILED, _failure_reason(error))
+                        observation.finish(DiagnosticStatus.CANCELLED if _failure_reason(error) == 'CANCELLED' else DiagnosticStatus.FAILED, _failure_reason(error), _failure_contract_code(error))
                 raise
         finally:
             for observation in observations.values():
                 elapsed = interval(DiagnosticStage.QUEUE_WAIT, observation.start, counter()).elapsed_ns
                 self._tasks.append(TaskDiagnostic(len(self._tasks) + 1, observation.intent, observation.task,
                     observation.family, observation.family_hash, observation.partition_hash,
-                    observation.status, observation.reason, tuple(observation.timings), elapsed))
+                    observation.status, observation.reason, tuple(observation.timings), elapsed, observation.contract_code))
             self._active = False
