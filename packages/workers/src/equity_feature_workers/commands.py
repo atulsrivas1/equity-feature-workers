@@ -7,9 +7,10 @@ from dataclasses import asdict, dataclass, replace
 from enum import StrEnum
 import hashlib
 import json
+import sys
 from typing import Callable, NoReturn
 
-from equity_feature_contracts import CanonicalBatch, Column, ConfigSpec, DataKind, EntityKey, FeatureResult, InputBinding
+from equity_feature_contracts import ContractError, ErrorCode, CanonicalBatch, Column, ConfigSpec, DataKind, EntityKey, FeatureResult, InputBinding
 from equity_feature_contracts.adapters import AcquisitionRequest, AdapterBatch, HistoricalAdapter, validate_delivery
 from equity_feature_contracts.specs import IntervalSpec
 from equity_feature_io_contracts import ConfigValue, CredentialProvider, FeatureHeader, PublicConfig, PublicationEnvelope, ResultSink, SinkRequirements
@@ -33,14 +34,32 @@ class CommandErrorCode(StrEnum):
     READBACK = "READBACK_FAILED"
 
 
+# Closed contract_code vocabulary: the shared library ErrorCode values plus one fixed fallback.
+# It is orthogonal to CommandErrorCode (where the worker failed); never free text.
+CONTRACT_CODE_UNCLASSIFIED = "unclassified"
+CONTRACT_CODES = frozenset(c.value for c in ErrorCode) | {CONTRACT_CODE_UNCLASSIFIED}
+
+
+def contract_code_of(error: object) -> str | None:
+    """Map a library refusal to the closed contract_code; None when it is not a library refusal."""
+    if not isinstance(error, ContractError):
+        return None
+    code = getattr(error, "code", None)
+    return code.value if type(code) is ErrorCode else CONTRACT_CODE_UNCLASSIFIED
+
+
 class CommandError(ValueError):
-    def __init__(self, code: CommandErrorCode) -> None:
+    def __init__(self, code: CommandErrorCode, contract_code: str | None = None) -> None:
+        if contract_code is not None and contract_code not in CONTRACT_CODES:
+            contract_code = CONTRACT_CODE_UNCLASSIFIED
         self.code = code
+        self.contract_code = contract_code
         super().__init__("Session command failed: " + code.value)
 
 
-def _fail(code: CommandErrorCode) -> NoReturn:
-    raise CommandError(code) from None
+def _fail(code: CommandErrorCode, contract_code: str | None = None) -> NoReturn:
+    # Inside an except block the handled library refusal supplies the contract code.
+    raise CommandError(code, contract_code or contract_code_of(sys.exc_info()[1])) from None
 
 
 class NeverCancelled:

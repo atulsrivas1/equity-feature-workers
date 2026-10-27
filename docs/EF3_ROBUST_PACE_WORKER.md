@@ -59,7 +59,7 @@ contract code via the library code. Nothing is published on any refusal.
 | Compute (library) | 17 | `RESULT_IDENTITY_MISMATCH` 10 (all `INCONSISTENT_IDENTITY`); `INVALID_COMMAND` 7 |
 | Library capability call only | 1 (RF31) | not a worker path: the worker exposes no update or merge |
 
-Stage is not the same as who raises the code: RF17 is library-raised per the contract but refused at adapter build (the config builder), and RF06 is shared-validator-raised but refused at compute (the batch is valid on its own; the cutoff check runs inside the library). The worker collapses library codes into its own taxonomy, so the contract code is visible in the driver's record only.
+Stage is not the same as who raises the code: RF17 is library-raised per the contract but refused at adapter build (the config builder), and RF06 is shared-validator-raised but refused at compute (the batch is valid on its own; the cutoff check runs inside the library). The worker keeps its transport category but also carries the library `ErrorCode` as `CommandError.contract_code` (closed set, R9a); the driver records it as `worker_contract_code`. Refusals raised by the worker itself (no library code) have `contract_code` `None`.
 
 ## Not executed
 

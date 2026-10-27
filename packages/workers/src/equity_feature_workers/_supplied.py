@@ -3,18 +3,19 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import pickle
+import sys
 from typing import Iterator, NoReturn
 
 from equity_feature_contracts import CanonicalBatch, ContractError, ErrorCode, FeatureResult
 from equity_feature_io_contracts import SinkError, SinkErrorCode
 from equity_feature_io_sdk import descriptor
 
-from .commands import CommandError, CommandErrorCode
+from .commands import CommandError, CommandErrorCode, contract_code_of
 from .manifests import ManifestError, ManifestErrorCode, TaskManifest
 
 
-def fail(code: CommandErrorCode = CommandErrorCode.CONFIG) -> NoReturn:
-    raise CommandError(code) from None
+def fail(code: CommandErrorCode = CommandErrorCode.CONFIG, contract_code: str | None = None) -> NoReturn:
+    raise CommandError(code, contract_code or contract_code_of(sys.exc_info()[1])) from None
 
 
 @contextmanager
@@ -25,7 +26,7 @@ def translated() -> Iterator[None]:
     except CommandError as error:
         if type(error.code) is not CommandErrorCode:
             fail(CommandErrorCode.CALCULATION)
-        raise CommandError(error.code) from None
+        raise CommandError(error.code, error.contract_code) from None
     except ContractError as error:
         if type(error.code) is not ErrorCode:
             fail(CommandErrorCode.CALCULATION)

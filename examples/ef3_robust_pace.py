@@ -580,7 +580,7 @@ def _run_one(rid: str, fixture: dict) -> dict:
             governed=governed, job_id='job-' + rid, generation_id='generation-' + rid, partition_id='refusal',
             destination_scope='ef3-refusal')
     except CommandError as error:
-        record.update(stage='worker_admission', worker_code=error.code.value)
+        record.update(stage='worker_admission', worker_code=error.code.value, worker_contract_code=error.contract_code)
         record['library_code'] = _library_code(ef3, spec, entity)
         return _finish(record)
     except ContractError as error:
@@ -590,7 +590,7 @@ def _run_one(rid: str, fixture: dict) -> dict:
         item.calculate(item.task, item.batches)
         record.update(stage='no_refusal')
     except CommandError as error:
-        record.update(stage='compute', worker_code=error.code.value)
+        record.update(stage='compute', worker_code=error.code.value, worker_contract_code=error.contract_code)
         record['library_code'] = _library_code(ef3, spec, entity)
     return _finish(record)
 
