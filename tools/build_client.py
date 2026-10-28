@@ -19,10 +19,10 @@ import zipfile
 from build_foundation import build, fingerprint, git, run, sha, snapshot, CORE_COMMIT, IO_COMMIT
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKER_COMMIT = '7d86deb94b6c338be9cc893c729352c59517e28f'
+WORKER_COMMIT = '2222d4325457b448aacdbb57ee4805bb8923881e'
 SERVICE_COMMIT = 'bafc86a0305621fdb0206fb89753475186954ac3'
 INPUTS = ('packages/client', 'tests/client', 'tools', 'docs/EQ081_CLIENT_FIXTURES.json',
-          'docs/EQ081_OWNED_HTTP_ENTRY.txt', 'docs/EQ081_AUTHORITY_HTTP_ENTRY.txt', '.github/workflows/client.yml')
+          'docs/EQ081_OWNED_HTTP_ENTRY.txt', 'docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 
 
 def audit_client(artifact, source):

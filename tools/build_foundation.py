@@ -24,8 +24,8 @@ IO_COMMIT = "19aa266b9debb92a6c5eb707baafeb9ae7a82942"
 # Historical companion builders import the two constants above. Preserve their
 # frozen worker/core cohorts; only this current foundation CLI uses these pins.
 # Exact reviewed clock source candidates; historical companion pins stay above.
-PINS_CORE = "37ac44a3d0406231caf481c44f4ccce70fb2aba0"
-PINS_IO = "89bc3d0d61cda5e8b1f5056b500c1f660a051045"
+PINS_CORE = "710fe05b812d4acc06d7e828c96ac1922e3203dc"
+PINS_IO = "f8894267b8f9c64fbe32d174193760ae71b95d36"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
 EXPECTED = {
     "equity-feature-io-contracts": [f"equity-feature-contracts=={VERSIONS['equity-feature-contracts']}"],
@@ -223,7 +223,7 @@ def main():
         core_source = snapshot(core, PINS_CORE, stage / "core-source", ("packages/contracts", "packages/features"))
         component_commit = git(ROOT, "rev-parse", "HEAD")
         # Optional service has its own installed/dependency/archive qualification.
-        component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages/workers", "tests", "tools/benchmark_pipeline.py", "tools/supplied_native.py", "tools/supplied_archives.py", "tools/benchmark_supplied_inputs.py"))
+        component_source = snapshot(ROOT, component_commit, stage / "component-source", ("packages/workers", "tests", "tools/_versions.py", "tools/benchmark_pipeline.py", "tools/supplied_native.py", "tools/supplied_archives.py", "tools/benchmark_supplied_inputs.py"))
         for folder in ("contracts", "features"):
             build(core_source / "packages" / folder, dependencies)
         dependency_commit = {"equity-features": PINS_CORE}

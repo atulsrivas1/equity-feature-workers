@@ -62,6 +62,9 @@ preflight = pkg / "provenance/src/equity_feature_provenance/_preflight.py"
 expect("provenance _DUCKDB_ADAPTER_VERSION", constant(preflight, "_DUCKDB_ADAPTER_VERSION"), VERSIONS["equity-feature-duckdb"])
 expect("provenance _CANONICAL_CONTRACTS_VERSION", constant(preflight, "_CANONICAL_CONTRACTS_VERSION"), CONTRACTS)
 
+# tests/supplied_memory_delegate.py is a byte copy of the io factory fixture (build_supplied_inputs asserts that), so it keeps the literal.
+expect("supplied_memory_delegate canonical literals", set(re.findall(r"0\.0\.4a\d+", (ROOT / "tests/supplied_memory_delegate.py").read_text(encoding="utf-8"))), {CONTRACTS})
+
 if errors:
     raise SystemExit("version drift:\n" + "\n".join(errors))
 print("Versions consistent across packages, in-source constants and pins.")

@@ -21,8 +21,8 @@ from _versions import VERSIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 # Current candidate pins; coordinator substitutes exact reviewed SHAs before push.
-CORE = '37ac44a3d0406231caf481c44f4ccce70fb2aba0'
-IO = '89bc3d0d61cda5e8b1f5056b500c1f660a051045'
+CORE = '710fe05b812d4acc06d7e828c96ac1922e3203dc'
+IO = 'f8894267b8f9c64fbe32d174193760ae71b95d36'
 EPOCH = '1700000000'
 PACKAGES = {
     'contracts': ('core', 'packages/contracts', 'equity_feature_contracts', VERSIONS['equity-feature-contracts']),
@@ -168,7 +168,7 @@ def main():
     inputs = {}; provenance = {}; closures = []
     for key, root, commit, paths in [
         ('worker', ROOT, head, ['packages/workers', 'tools', 'tests', 'examples', 'docs', 'AGENTS.md',
-            'requirements-dev.txt', '.github/workflows/supplied-inputs.yml']),
+            'requirements-dev.txt']),
         ('core', args.core_root.resolve(), CORE, ['packages/contracts', 'packages/features', 'packages/intraday', 'tools/continuous_legacy.py']),
         ('io', args.io_root.resolve(), IO, ['packages/io-contracts', 'packages/io-sdk', 'examples/factory_consumer/src/equity_feature_factory_fixture/publication.py'])]:
         inputs[key], provenance[key], check = freeze(root, commit, paths); closures.append(check)

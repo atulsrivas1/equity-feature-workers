@@ -15,7 +15,7 @@ from build_foundation import build, fingerprint, git, run, sha, snapshot, CORE_C
 
 ROOT = Path(__file__).resolve().parents[1]
 DEPENDENCIES = ('packages/contracts', 'packages/features', 'packages/io-contracts', 'packages/io-sdk', 'packages/duckdb')
-WORKER_COMMIT = '7d86deb94b6c338be9cc893c729352c59517e28f'
+WORKER_COMMIT = '2222d4325457b448aacdbb57ee4805bb8923881e'
 
 
 def audit(path, source):
@@ -94,7 +94,7 @@ def main():
     output.mkdir(parents=True)
     with tempfile.TemporaryDirectory(prefix='service-build-', dir=ROOT / 'work') as tmp:
         temp = Path(tmp)
-        committed = snapshot(ROOT, commit, temp / 'component', ('packages/service','tests/service','tools','examples/service_owned.py','.github/workflows/service.yml'))
+        committed = snapshot(ROOT, commit, temp / 'component', ('packages/service','tests/service','tools','examples/service_owned.py'))
         core = snapshot(args.core_root.resolve(), CORE_COMMIT, temp / 'core')
         io = snapshot(args.io_root.resolve(), IO_COMMIT, temp / 'io', ('packages','examples/third_party'))
         workers = snapshot(ROOT, WORKER_COMMIT, temp / 'workers', ('packages/workers',))

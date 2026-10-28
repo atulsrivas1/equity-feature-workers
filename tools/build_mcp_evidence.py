@@ -5,12 +5,11 @@ from build_foundation import build,fingerprint,git,run,snapshot,CORE_COMMIT,IO_C
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 from build_mcp import reference_record,CLIENT_COMMIT,CLIENT_INPUTS
 ROOT=Path(__file__).resolve().parents[1]
-OPTIONAL_CORE='e1b4ac52d748fd6b5f13b9acaf6a1358a8caea6c'
+OPTIONAL_CORE='710fe05b812d4acc06d7e828c96ac1922e3203dc'
 INPUTS=('packages/mcp','tests/mcp','tests/mcp_evidence','tests/qualification/test_mcp_records.py','tools','examples/mcp_evidence.py',
     'docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ108_LEGACY_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt',
     'docs/EQ108_EVIDENCE_REFERENCE_ENTRY.txt','docs/EQ108_EVIDENCE_REFERENCE_PROBE.txt','docs/EQ083_REFERENCE_PROCESS.txt','docs/EQ083_LINUX_REFERENCE_CHILD.txt',
-    'docs/stories/EQ-108_ORACLES.json','docs/stories/EQ-108_ADMISSION.json','docs/stories/EQ-108_TOOL_SCHEMAS.json','docs/stories/EQ-108_WIRE_BOUNDS.json',
-    '.github/workflows/mcp.yml')
+    'docs/stories/EQ-108_ORACLES.json','docs/stories/EQ-108_ADMISSION.json','docs/stories/EQ-108_TOOL_SCHEMAS.json','docs/stories/EQ-108_WIRE_BOUNDS.json')
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def generated_config(source,sdist,auditor):

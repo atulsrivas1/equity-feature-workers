@@ -19,7 +19,7 @@ from email.parser import BytesParser
 import build_explanations as common
 
 ROOT=Path(__file__).resolve().parents[1]
-PINS={'io':'f20abd5acd74a4917fdaf087e9c92757746e7ea4','workers':'b56701cc1e48920378df18a2081d0f5f9f4ad3bb'}
+PINS={'io':'f8894267b8f9c64fbe32d174193760ae71b95d36','workers':'2222d4325457b448aacdbb57ee4805bb8923881e'}
 PACKAGES={'contracts':('equity_feature_contracts',VERSIONS['equity-feature-contracts']), 'features':('equity_features',VERSIONS['equity-features']),
     'evidence':('equity_feature_evidence',VERSIONS['equity-feature-evidence']),'diagnostics':('equity_feature_diagnostics','0.1.0a1'),
     'provenance':('equity_feature_provenance',VERSIONS['equity-feature-provenance']),'io-contracts':('equity_feature_io_contracts',VERSIONS['equity-feature-io-contracts']),
@@ -82,7 +82,7 @@ def main():
         'tests/provenance','tests/diagnostics','tests/evidence','docs/stories/EQ-096_RECEIPT_ORACLE.json',
         'docs/stories/EQ-097_*','docs/stories/EQ-101_TRUTH_TABLE.json','docs/stories/EQ-103_*',
         'docs/api/PROVENANCE.md','examples/provenance_readback.py','tools/build_provenance.py',
-        'tools/build_explanations.py','tools/check_boundary.py','requirements-dev.txt','mypy.ini','.github/workflows/provenance.yml'],
+        'tools/build_explanations.py','tools/check_boundary.py','requirements-dev.txt','mypy.ini'],
         'io':['packages/'+p for p in ('io-contracts','io-sdk','duckdb','duckdb-sink')],
         'workers':['packages/workers']}
     snapshot={};materialized={};source_map={}
