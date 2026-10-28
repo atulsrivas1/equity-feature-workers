@@ -13,8 +13,8 @@ Source for EQ-171 over the io adapter (`equity_feature_duckdb.price_structures`,
 ## Gate
 
 `python tools/verify_ef5_worker.py --contract <core docs/ef5 JSON>` (installed packages): 89 result fixtures (534 runs) = direct library call = stored
-DuckDB read-back = contract literal, and 59 refusals refused with the recorded code (31 at the adapter; for the rest the worker refuses and the direct
-library call raises the recorded code). RF16 (structural context not delivered) has no worker form because the worker takes its context from the
+DuckDB read-back = contract literal, and 59 refusals: 31 are raised at the adapter with the recorded code, RF16 has no worker form, and of the 27 worker refusals 26 carry the recorded
+`contract_code` (asserted) and RF46 is a documented known difference; the direct library call raises the recorded code for every recipe. RF16 (structural context not delivered) has no worker form because the worker takes its context from the
 configuration; the direct call is checked. An unknown feature id surfaces the library's UNKNOWN_FEATURE from the worker. No new unit tests.
 
 ## Limits and follow-ups
@@ -25,3 +25,9 @@ configuration; the direct call is checked. An unknown feature id surfaces the li
   parameter containing `context` without an RF16 worker test.
 - No HTML example (the EF4 examples render one); the gate prints a summary only.
 - A coordinated bump is owed before acceptance (core intraday, io duckdb, workers); see the plan document.
+
+## Known difference (RF46)
+
+A bar for another instrument is refused by the shared worker admission as worker code `RESULT` ("Session command failed: RESULT_IDENTITY_MISMATCH") with an empty `contract_code`, before the
+library is reached; the recorded library code is INCONSISTENT_IDENTITY (the direct library call raises it). The gate pins this pair exactly, so any change
+(a contract code appearing, or the worker code changing) fails it. The refusal is fail-closed either way; only the surfaced code differs from the recorded one.

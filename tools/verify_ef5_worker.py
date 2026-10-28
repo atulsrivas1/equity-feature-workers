@@ -5,7 +5,7 @@ Every result fixture of core `docs/ef5/PRICE_STRUCTURES_CONTRACT_PROPOSAL.json` 
 once per output and jointly (534 runs). The stored result must equal the pure library result called directly (canonical
 encoding) and match the contract literal (value by the acceptance rule, status, reasons, counts, witnesses, echoed basis).
 Every refusal recipe is applied to its base fixture and must be refused with the recorded code, at the adapter or by the worker
-(work-item build or calculation) with the same `contract_code`; nothing is published on a refusal. No mathematics here.
+(work-item build or calculation) with the same `contract_code` (26 of 27 worker refusals; RF46 is a documented known difference, see docs/EF5_WORKERS.md); nothing is published on a refusal. No mathematics here.
 
     python tools/verify_ef5_worker.py [--contract PATH_TO_CORE_docs_ef5_JSON]
 
@@ -218,6 +218,10 @@ def declarations(chunks: tuple[CanonicalBatch, ...]) -> tuple[InputManifest, ...
 
 
 SCOPE = "ef5-worker-gate"
+# Documented known differences between the worker surface and the recorded library code: id -> (worker contract_code, worker code).
+# RF46 (bar for another instrument): the shared worker admission refuses it as worker code RESULT ("RESULT_IDENTITY_MISMATCH") before the library is reached
+# and carries no contract_code; the direct library call still raises the recorded INCONSISTENT_IDENTITY (checked above).
+KNOWN_DIFFERENCES = {"RF46": ("", "RESULT")}
 
 
 def build(fx: dict[str, Any], features: tuple[str, ...], label: str) -> tuple[Any, Any, Any, Any]:
@@ -346,7 +350,7 @@ def main() -> int:
                     problems.append(f"{fx['id']} {features}: stored result differs from the direct library result")
                 problems += [f"{fx['id']}: {p}" for p in compare(fx, stored, config, features)]
     codes: set[str] = set()
-    at_adapter = 0
+    at_adapter = worker = carried = 0
     for rf in doc["refusal_fixtures"]:
         mutated = apply(by_id[rf["base"]], rf["mutation"])
         try:
@@ -366,10 +370,18 @@ def main() -> int:
             item, context, chunks, config = build(mutated, tuple(mutated["outputs"]), "refusal")
             compute_ef5_inputs(item.task, chunks)
         except (ContractError, CommandError) as error:
-            codes.add(rf["error_code"])
+            worker += 1
             code = contract_code(error)
-            if code not in (rf["error_code"], "") and not isinstance(error, CommandError):
-                problems.append(f"{rf['id']}: worker refused {code} expected {rf['error_code']} ({error})")
+            if rf["id"] in KNOWN_DIFFERENCES:
+                # Documented known difference: pin it exactly so any drift (a code appearing or changing) fails the gate.
+                found = (code, error.code.name if isinstance(error, CommandError) else "")
+                if found != KNOWN_DIFFERENCES[rf["id"]]:
+                    problems.append(f"{rf['id']}: known difference changed: {found} != {KNOWN_DIFFERENCES[rf['id']]}")
+            elif code != rf["error_code"]:
+                problems.append(f"{rf['id']}: worker contract_code {code!r} != recorded {rf['error_code']}")
+            else:
+                carried += 1
+                codes.add(code)
         else:
             if rf["id"] != "RF16":
                 problems.append(f"{rf['id']}: worker did not refuse (expected {rf['error_code']})")
@@ -379,7 +391,8 @@ def main() -> int:
         print(f"{len(problems)} MISMATCH(ES)")
         return 1
     print(f"EF5 workers: {len(by_id)} result fixtures ({runs} runs) = direct library = stored read-back = contract literal; "
-          f"{len(doc['refusal_fixtures'])} refusals ({len(codes)} codes) refused with the recorded code ({at_adapter} at the adapter)")
+          f"{len(doc['refusal_fixtures'])} refusals: {at_adapter} at the adapter, {worker} worker refusals of which {carried} carry the recorded "
+          f"contract_code and {worker - carried} is a documented known difference (RF46); RF16 has no worker form, direct call checked")
     return 0
 
 
