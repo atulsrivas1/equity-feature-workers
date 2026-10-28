@@ -81,6 +81,13 @@ def main() -> int:
     ok = convert(base, (column(NOTIONAL_FEATURE, "ef4-tape-v1", r.ValueType.TOP_K_TRADES, "trades", cell),), "notional", support)
     if not ok.ok or ok.view.values[0].values[0].rows != rows(input_id):
         problems.append("notional-ranked TopKTrades column does not convert with the feature context")
+    # Positive size-ranked control: a size-ordered cell under a size-ranked feature converts (forcing notional for every column fails).
+    size_rows = tuple(reversed(rows(input_id)))
+    size_cell = r.TopKTrades(2, size_rows)
+    size_support = tuple(r.EvidenceRow(ENTITY, "session.trade.top_k", input_id, x.event_id, x.event_ns, x.known_at_ns) for x in size_rows)
+    plain = convert(base, (column("session.trade.top_k", "v1", r.ValueType.TOP_K_TRADES, "trades", size_cell),), "size", size_support)
+    if not plain.ok or plain.view.values[0].values[0].rows != size_rows:
+        problems.append("size-ranked TopKTrades column does not convert unchanged")
     # Negative control at the decoder: the same notional-ordered cell decoded without the feature context is refused.
     from equity_feature_client.native import _encode_cell
     wire = _encode_cell(cell)
