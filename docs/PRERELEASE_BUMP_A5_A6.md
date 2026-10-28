@@ -47,7 +47,8 @@ hashes derived from it change). `docs/stories/EQ-108_ORACLES.json` is a byte cop
 
 All 27 packages of the three repositories (12 core, 8 io plus 2 example packages, 5 workers) were built twice from fresh copies with `SOURCE_DATE_EPOCH=1700000000` and the pinned `build 1.2.2.post1` / `setuptools 80.9.0`: wheels are byte-equal and sdists are equal after the repository's own normalization (`tools/build_explanations.py normalize`), 27 of 27. Not a release build: no tag, no publish.
 
-## BLOCKING follow-up: re-pin the commit-pinned builders
+## Builder re-pin (PO ruling 2026-10-28, item 2)
 
-`tools/build_*.py` and `qualify_*.py` that name `CORE`/`IO`/`WORKER` commits read versions from the table but still name pre-bump commits;
-they are NOT executed end to end. Re-pin after the three PRs merge and before any release claim or end-to-end run (PO ruling 2026-10-28).
+Pins re-pinned to the post-bump main commits (core 710fe05, io f889426, workers 2222d43) in build_foundation (`PINS_*`), build_supplied_inputs, build_agent_research, build_mcp_evidence, build_client, build_service and build_mcp. `build_supplied_inputs` ran end to end and PASSES (repeat archives, selected sdist rebuilds, four fresh forms) after `tests/supplied_memory_delegate.py` was restored to a byte copy of the io factory fixture, which that builder requires. Nonexistent workflow scope entries were dropped and `tools/_versions.py` is staged for the foundation build.
+
+Not run to completion, so the blocker stays open for these: `build_foundation` (fails at its strict mypy step on the installed archives), `build_client` and `build_service` (their installed test suites fail the same way client/service fail on main in this environment), `build_mcp` (installed metadata check still expects the older mcp extra pins), `build_mcp_evidence` and `build_agent_research` (a `KeyError: 'evidence'` in the package table they borrow from core), `build_provenance` (marked NOT YET PORTED to this layout), `build_resilience` (accepted historical baseline, deliberately unchanged). No release claim until those are run or retired.
