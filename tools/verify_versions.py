@@ -52,6 +52,8 @@ for init, name in (("workers/src/equity_feature_workers/__init__.py", "equity-fe
                    ("provenance/src/equity_feature_provenance/__init__.py", "equity-feature-provenance"),
                    ("service/src/equity_feature_service/__init__.py", "equity-feature-service")):
     expect(f"{init} __version__", constant(pkg / init, "__version__"), OWN[name])
+server = (pkg / "mcp/src/equity_feature_mcp/server.py").read_text(encoding="utf-8")
+expect("mcp serverInfo version", re.search(r"serverInfo=dict\(name='equity-feature-mcp', version='([^']+)'", server).group(1), OWN["equity-feature-mcp"])  # type: ignore[union-attr]
 versions_module = pkg / "workers/src/equity_feature_workers/_versions.py"
 expect("workers FEATURES_VERSION", constant(versions_module, "FEATURES_VERSION"), FEATURES)
 expect("workers CANONICAL_CONTRACTS_VERSION", constant(versions_module, "CANONICAL_CONTRACTS_VERSION"), CONTRACTS)

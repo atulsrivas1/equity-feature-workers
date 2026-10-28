@@ -15,10 +15,11 @@ that one module, and the worker manifest protocol reads `CANONICAL_CONTRACTS_VER
 | Package | From | To | Why |
 | --- | --- | --- | --- |
 | equity-feature-workers | 0.1.0a15 | 0.1.0a16 | 27 source commits since the a15 bump; routes now assert features 0.0.4a6; manifest admits canonical contracts 0.0.4a5 |
+| equity-feature-mcp | 0.1.0a1 | 0.1.0a2 | PO ruling 2026-10-28 (3): its `evidence` extra pinned explanations 0.1.0a1, evidence 0.1.0a2 and diagnostics 0.1.0a1; now evidence 0.1.0a3, explanations 0.1.0a3, diagnostics 0.1.0a2 (pyproject changed, so the label moves; the server info version follows) |
 | equity-feature-provenance | 0.1.0a2 | 0.1.0a3 | preflight admits duckdb adapter 0.1.0a10 and canonical contracts 0.0.4a5 |
 
-client, mcp and service keep their versions; their exact pins follow (service extras `duckdb` and `jobs` pointed at 0.1.0a8 and a nonexistent
-workers 0.1.0a23 and now match the current set). The mcp `evidence` extra still pins explanations 0.1.0a1 (older than the explanations
+client and service keep their versions; their exact pins follow (service extras `duckdb` and `jobs` pointed at 0.1.0a8 and a nonexistent
+workers 0.1.0a23 and now match the current set). The mcp `evidence` extra is now in `tools/_versions.py` and checked by `tools/verify_versions.py`, so it cannot go stale again.
 line it depends on); that drift predates this bump and is left for the owner of mcp.
 
 ## Regenerated golden fixtures (version-derived fields only)
@@ -40,9 +41,13 @@ hashes derived from it change). `docs/stories/EQ-108_ORACLES.json` is a byte cop
 | `tests/ef1_regular_first_trade_price_oracle.json` | `e1835d416a09bd65fce59612323d23c241fe81dcb8493170002e2c3eadffe531` | `e4cd2ec2f97c43012884a7676d7bb6b81e3643ecbe88ebccb9ac251f9bcd6a44` |
 | `tests/manifest_golden.json` | `8d4c28a152c1884b16137fde4064cf6434b73ede9331e568c8b0aabccb6cb232` | `21a9037cf8e7bcca43c4a257a42d9a92b6cb7cb7e0fb89f9c68aac1a336b2270` |
 
-Commit-pinned builders (`tools/build_*.py` and `qualify_*.py` that name `CORE`/`IO` commits) read versions from the table but still name
-pre-bump commits; re-pin them to the merged heads before their next run.
+
 
 ## Repeat-build equality (checklist 1.3)
 
 All 27 packages of the three repositories (12 core, 8 io plus 2 example packages, 5 workers) were built twice from fresh copies with `SOURCE_DATE_EPOCH=1700000000` and the pinned `build 1.2.2.post1` / `setuptools 80.9.0`: wheels are byte-equal and sdists are equal after the repository's own normalization (`tools/build_explanations.py normalize`), 27 of 27. Not a release build: no tag, no publish.
+
+## BLOCKING follow-up: re-pin the commit-pinned builders
+
+`tools/build_*.py` and `qualify_*.py` that name `CORE`/`IO`/`WORKER` commits read versions from the table but still name pre-bump commits;
+they are NOT executed end to end. Re-pin after the three PRs merge and before any release claim or end-to-end run (PO ruling 2026-10-28).

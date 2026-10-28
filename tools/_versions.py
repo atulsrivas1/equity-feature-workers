@@ -12,7 +12,9 @@ SIBLINGS = {
     "equity-feature-contracts": "0.0.4a5",
     "equity-features": "0.0.4a6",
     "equity-features-intraday": "0.1.0a4",
-    "equity-feature-evidence": "0.1.0a2",
+    "equity-feature-evidence": "0.1.0a3",
+    "equity-feature-explanations": "0.1.0a3",
+    "equity-feature-diagnostics": "0.1.0a2",
     "equity-feature-io-contracts": "0.1.0a3",
     "equity-feature-io-sdk": "0.1.0a3",
     "equity-feature-duckdb": "0.1.0a10",
@@ -25,7 +27,7 @@ OWN = {
     "equity-feature-workers": "0.1.0a16",
     "equity-feature-provenance": "0.1.0a3",
     "equity-feature-client": "0.1.0a0",
-    "equity-feature-mcp": "0.1.0a1",
+    "equity-feature-mcp": "0.1.0a2",
     "equity-feature-service": "0.1.0a3",
 }
 VERSIONS = {**SIBLINGS, **OWN}

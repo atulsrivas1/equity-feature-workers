@@ -214,7 +214,7 @@ class StdioServer:
             if self._initialized:
                 return self._error(identifier, -32600)
             self._initialized = True
-            result: dict[str, Any] = dict(protocolVersion='2025-11-25', capabilities=dict(tools=dict(listChanged=False)), serverInfo=dict(name='equity-feature-mcp', version='0.1.0a1'))
+            result: dict[str, Any] = dict(protocolVersion='2025-11-25', capabilities=dict(tools=dict(listChanged=False)), serverInfo=dict(name='equity-feature-mcp', version='0.1.0a2'))
         elif method == 'ping':
             result = {}
         elif not self._ready:
