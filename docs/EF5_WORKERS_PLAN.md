@@ -47,3 +47,9 @@ Follow the EF4 path-efficiency worker (`_path_routes.py`, `equity_path_efficienc
   converts with the context and not without, SDK round trips equal. client/mcp suites keep their main failure counts (5 and 9).
 - Blocker 5 (DuckDB sink bool/int64): the io EF5 gate now publishes each of the 89 results to a fresh DuckDB sink and requires an equal
   read-back (io PR "EF5 gate adds DuckDB sink read-back"): all equal.
+
+## Exposure statement (PO ruling 2026-10-28)
+
+`ef5.*` outputs are NOT exposed through the service or MCP until the registration story lands. The client conversion accepts them (gate above), but
+no service or MCP catalogue lists the producers or their backend identity, and nothing in this change adds them. The duplicated
+`tape.top_k_notional` id in the client is accepted by the PO; `tools/verify_client_feature_context.py` asserts it equals the SDK id and fails on drift.
