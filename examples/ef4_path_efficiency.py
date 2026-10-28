@@ -322,7 +322,7 @@ def run_refusal(recipe: dict, base: dict) -> dict:
             instrument_id=context.instrument_id, job_id='job-' + recipe['id'], generation_id='generation-' + recipe['id'],
             partition_id='refusal', destination_scope=SCOPE)
     except CommandError as error:
-        row.update(stage='build', worker_code=error.code.value)
+        row.update(stage='build', worker_code=error.code.value, worker_contract_code=error.contract_code)
         return row
     except ContractError as error:
         row.update(stage='build', worker_code='contract:' + _code(error))
@@ -330,7 +330,7 @@ def run_refusal(recipe: dict, base: dict) -> dict:
     try:
         compute_path_efficiency_inputs(item.task, item.batches)
     except CommandError as error:
-        row.update(stage='compute', worker_code=error.code.value)
+        row.update(stage='compute', worker_code=error.code.value, worker_contract_code=error.contract_code)
         return row
     return row
 

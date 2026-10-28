@@ -359,13 +359,13 @@ def _run_refusal(H, T, fixtures: dict, entry: dict, b: dict) -> dict:
     try:
         item = make_work(case, config, selection, 'refusal-' + entry['id'], scope)
     except CommandError as error:
-        record.update(stage='worker_admission', worker_code=error.code.value, library_code=library)
+        record.update(stage='worker_admission', worker_code=error.code.value, worker_contract_code=error.contract_code, library_code=library)
         return _finish(record)
     try:
         item.calculate(item.task, item.batches)
         record.update(stage='no_refusal')
     except CommandError as error:
-        record.update(stage='compute', worker_code=error.code.value, library_code=library)
+        record.update(stage='compute', worker_code=error.code.value, worker_contract_code=error.contract_code, library_code=library)
     return _finish(record)
 
 
@@ -386,7 +386,7 @@ def _run_merge_refusal(H, T, ef4, fx, entry, b, record, scope, fixtures):
                 destination_scope=scope)
             record.update(stage='no_refusal')
         except CommandError as error:
-            record.update(stage='worker_admission', worker_code=error.code.value)
+            record.update(stage='worker_admission', worker_code=error.code.value, worker_contract_code=error.contract_code)
         return _finish(record)
     try:
         requests = partition_requests(H, T, fx, b)
@@ -408,13 +408,13 @@ def _run_merge_refusal(H, T, ef4, fx, entry, b, record, scope, fixtures):
     try:
         item = make_merge_work(cases, configs[0], tuple(range(len(cases))), 'refusal-' + entry['id'], scope)
     except CommandError as error:
-        record.update(stage='worker_admission', worker_code=error.code.value)
+        record.update(stage='worker_admission', worker_code=error.code.value, worker_contract_code=error.contract_code)
         return _finish(record)
     try:
         item.calculate(item.task, item.batches)
         record.update(stage='no_refusal')
     except CommandError as error:
-        record.update(stage='compute', worker_code=error.code.value)
+        record.update(stage='compute', worker_code=error.code.value, worker_contract_code=error.contract_code)
     return _finish(record)
 
 
