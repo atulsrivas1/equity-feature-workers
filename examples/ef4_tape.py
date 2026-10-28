@@ -95,10 +95,8 @@ def trade_supply(T, fx: dict, rows, *, input_id: str = 'trades', scale=None, adj
     columns = fx.get('columns', ['price', 'size', 'known_at_ns'])
     delivered = tuple(c for c in T.TRADE_PAYLOAD if c in columns or (c == 'condition' and any('condition' in r for r in rows)))
     coverage = fx.get('coverage')
-    cover = None
-    if coverage is not None or 'coverage_observed' in fx:
-        cover = Coverage(coverage['expected'] if coverage else len(rows), fx.get('coverage_observed', len(rows)),
-                         coverage['complete'] if coverage else True)
+    cover = Coverage(coverage['expected'] if coverage else len(rows), fx.get('coverage_observed', len(rows)),
+                     coverage['complete'] if coverage else True)  # always declared: the adapter refuses undeclared coverage
     return T.TradeSupply(rows=tuple(rows), delivered=delivered, coverage=cover,
         scale=fx.get('batch_price_scale', scale), adjustment=fx.get('batch_adjustment', adjustment),
         kind=DataKind(fx.get('batch_kind', 'trade')), scope_policy=fx.get('scope_policy', policy),
@@ -502,7 +500,7 @@ def build_plan(H, T, document: dict, fixtures: dict, case_id: str, b: dict, scop
                 'factor_den': None, 'known_at_ns': 0},), seed_set_id=SEED_NOTATION.match(H.BINDINGS[b['_index']]['seed_ref']).group(1))
         for number, w in enumerate(generator['windows']):
             case = T.window_case(**unit, window_ns=cutoff if w == 'session' else w, seed_policy=generator['seed_policy'],
-                evidence_limit=10, policy_version=POLICY['window'], trades=T.TradeSupply(rows=tuple(rows), delivered=delivered),
+                evidence_limit=10, policy_version=POLICY['window'], trades=T.TradeSupply(rows=tuple(rows), delivered=delivered, coverage=Coverage(len(rows), len(rows), True)),
                 seed=seed)
             features = tuple(sorted(H.FEAT.values()))
             item = make_work(case, case.config(), features, '%s-%s-%d' % (run_id, case_id, number), scope)
@@ -511,12 +509,13 @@ def build_plan(H, T, document: dict, fixtures: dict, case_id: str, b: dict, scop
     for number, k in enumerate(generator['ks']):
         ids = generator['expected'][str(k)]
         case = T.top_k_case(**unit, top_k=k, evidence_limit=k, policy_version=POLICY['topk'],
-            trades=T.TradeSupply(rows=tuple(rows), delivered=delivered))
+            trades=T.TradeSupply(rows=tuple(rows), delivered=delivered, coverage=Coverage(len(rows), len(rows), True)))
         plan.append(('topk', make_work(case, case.config(), (TOP_K,), '%s-%s-k%d' % (run_id, case_id, k), scope),
             (lambda r, ids=ids: compare_generated_ids(r, ids))))
         count = generator['partitions']
         cases = [T.top_k_case(**unit, top_k=k, evidence_limit=k, policy_version=POLICY['topk'],
             trades=T.TradeSupply(rows=tuple(r for j, r in enumerate(rows) if j % count == i), delivered=delivered,
+                coverage=Coverage(len([1 for j in range(len(rows)) if j % count == i]), len([1 for j in range(len(rows)) if j % count == i]), True),
                 input_id='part%d' % i)) for i in range(count)]
         item = make_merge_work(cases, cases[0].config(), tuple(range(count)), '%s-%s-m%d' % (run_id, case_id, k), scope)
         plan.append(('merge', item, (lambda r, ids=ids: compare_generated_ids(r, ids))))
