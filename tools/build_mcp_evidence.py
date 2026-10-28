@@ -9,8 +9,7 @@ OPTIONAL_CORE='710fe05b812d4acc06d7e828c96ac1922e3203dc'
 INPUTS=('packages/mcp','tests/mcp','tests/mcp_evidence','tests/qualification/test_mcp_records.py','tools','examples/mcp_evidence.py',
     'docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ108_LEGACY_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt',
     'docs/EQ108_EVIDENCE_REFERENCE_ENTRY.txt','docs/EQ108_EVIDENCE_REFERENCE_PROBE.txt','docs/EQ083_REFERENCE_PROCESS.txt','docs/EQ083_LINUX_REFERENCE_CHILD.txt',
-    'docs/stories/EQ-108_ORACLES.json','docs/stories/EQ-108_ADMISSION.json','docs/stories/EQ-108_TOOL_SCHEMAS.json','docs/stories/EQ-108_WIRE_BOUNDS.json',
-    '.github/workflows/mcp.yml')
+    'docs/stories/EQ-108_ORACLES.json','docs/stories/EQ-108_ADMISSION.json','docs/stories/EQ-108_TOOL_SCHEMAS.json','docs/stories/EQ-108_WIRE_BOUNDS.json')
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def generated_config(source,sdist,auditor):

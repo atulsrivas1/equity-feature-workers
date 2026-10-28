@@ -168,7 +168,7 @@ def main():
     inputs = {}; provenance = {}; closures = []
     for key, root, commit, paths in [
         ('worker', ROOT, head, ['packages/workers', 'tools', 'tests', 'examples', 'docs', 'AGENTS.md',
-            'requirements-dev.txt', '.github/workflows/supplied-inputs.yml']),
+            'requirements-dev.txt']),
         ('core', args.core_root.resolve(), CORE, ['packages/contracts', 'packages/features', 'packages/intraday', 'tools/continuous_legacy.py']),
         ('io', args.io_root.resolve(), IO, ['packages/io-contracts', 'packages/io-sdk', 'examples/factory_consumer/src/equity_feature_factory_fixture/publication.py'])]:
         inputs[key], provenance[key], check = freeze(root, commit, paths); closures.append(check)

@@ -24,7 +24,7 @@ CORE_APPS=('examples/agent_research.py','examples/agent_research_typed.py','test
 INPUTS=('packages/mcp','examples/agent_research_mcp.py','tests/agent_research','tools',
         'docs/EQ109_ACCEPTED_ARCHIVES.json',
         'docs/EQ109_RESEARCH_REFERENCE_ENTRY.txt','docs/EQ109_RESEARCH_REFERENCE_PROBE.txt',
-        'docs/EQ083_REFERENCE_PROCESS.txt','docs/EQ083_LINUX_REFERENCE_CHILD.txt','.github/workflows/agent-research.yml')
+        'docs/EQ083_REFERENCE_PROCESS.txt','docs/EQ083_LINUX_REFERENCE_CHILD.txt')
 LIGHT=('contracts','evidence','explanations','diagnostics','agent-evidence','agent-ledger','bundles')
 SUPPORT=('pip==25.1.1','setuptools==80.9.0','mypy==1.15.0','mypy_extensions==1.1.0','typing_extensions==4.16.0','packaging==26.3')
 

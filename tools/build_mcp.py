@@ -5,7 +5,7 @@ from build_foundation import build,fingerprint,git,run,sha,snapshot,CORE_COMMIT,
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 ROOT=Path(__file__).resolve().parents[1]
 CLIENT_COMMIT='2222d4325457b448aacdbb57ee4805bb8923881e'
-INPUTS=('packages/mcp','tests/mcp','tests/qualification/test_mcp_records.py','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt','.github/workflows/mcp.yml')
+INPUTS=('packages/mcp','tests/mcp','tests/qualification/test_mcp_records.py','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt')
 CLIENT_INPUTS=('packages/client','tests/client','docs/EQ081_CLIENT_FIXTURES.json','docs/EQ081_OWNED_HTTP_ENTRY.txt','docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 
 def reference_record(path):

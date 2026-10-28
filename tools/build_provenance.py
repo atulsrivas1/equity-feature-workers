@@ -82,7 +82,7 @@ def main():
         'tests/provenance','tests/diagnostics','tests/evidence','docs/stories/EQ-096_RECEIPT_ORACLE.json',
         'docs/stories/EQ-097_*','docs/stories/EQ-101_TRUTH_TABLE.json','docs/stories/EQ-103_*',
         'docs/api/PROVENANCE.md','examples/provenance_readback.py','tools/build_provenance.py',
-        'tools/build_explanations.py','tools/check_boundary.py','requirements-dev.txt','mypy.ini','.github/workflows/provenance.yml'],
+        'tools/build_explanations.py','tools/check_boundary.py','requirements-dev.txt','mypy.ini'],
         'io':['packages/'+p for p in ('io-contracts','io-sdk','duckdb','duckdb-sink')],
         'workers':['packages/workers']}
     snapshot={};materialized={};source_map={}
