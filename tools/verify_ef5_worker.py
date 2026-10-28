@@ -9,6 +9,9 @@ Every refusal recipe is applied to its base fixture and must be refused with the
 
     python tools/verify_ef5_worker.py [--contract PATH_TO_CORE_docs_ef5_JSON]
 
+RF16 (structural context not delivered) has no worker form because the worker takes its context from the configuration; the direct
+library call covers it (PO ruling 2026-10-28). The gate fails if the worker ever gains a context input without an RF16 worker test.
+
 Exit status 0 only if everything holds.
 """
 from __future__ import annotations
@@ -42,6 +45,7 @@ from equity_feature_workers.commands import CommandError
 from equity_feature_workers.ef1_runner import run_ef5
 from equity_feature_workers.equity_ef5 import compute_ef5_inputs, make_ef5_work
 import hashlib
+import inspect
 
 ROOT = Path(__file__).resolve().parents[1]
 LISTS = ("candle_fixtures", "structure_fixtures", "technical_fixtures", "ka_fixtures")
@@ -311,6 +315,9 @@ def main() -> int:
     by_id = {fx["id"]: fx for key in LISTS for fx in doc[key]}
     problems: list[str] = []
     runs = 0
+    for entry in (make_ef5_work, compute_ef5_inputs):
+        if any('context' in name for name in inspect.signature(entry).parameters):
+            problems.append(f"{entry.__name__} gained a context input: RF16 needs a worker test before this gate may pass")
     for fx in by_id.values():
         outputs = tuple(sorted(fx["expected"]))
         plans = [(f,) for f in outputs] + ([outputs] if len(outputs) > 1 else [])

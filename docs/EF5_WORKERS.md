@@ -19,6 +19,9 @@ configuration; the direct call is checked. An unknown feature id surfaces the li
 
 ## Limits and follow-ups
 
-- Service and MCP catalogue registration of `ef5.*` is a separate story (not included).
+- **`ef5.*` is not exposed through the service or MCP until the registration story lands.** Nothing in this change registers the producers there.
+- **Recorded gap (RF16, PO-accepted)**: the worker has no context input (it reads the context from the configuration), so the recipe "structural context not
+  delivered" cannot be run against the worker; the direct library call covers it. The gate fails if `make_ef5_work` or `compute_ef5_inputs` ever gains a
+  parameter containing `context` without an RF16 worker test.
 - No HTML example (the EF4 examples render one); the gate prints a summary only.
 - A coordinated bump is owed before acceptance (core intraday, io duckdb, workers); see the plan document.
