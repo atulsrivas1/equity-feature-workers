@@ -491,6 +491,20 @@ def run_ef4_path_efficiency(items: tuple[WorkItem, ...], sink: ResultSink, *,
 __all__ += ['run_ef4_path_efficiency']
 
 
+def run_ef5(items: tuple[WorkItem, ...], sink: ResultSink, *,
+        requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
+        publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
+        cancellation: Cancellation | None = None) -> EF1RunOutcome:
+    """EF5 price structures (candle, structure, technical; R17 context) through existing publication/full readback."""
+    from .equity_ef5 import _admit_ef5, compute_ef5_inputs
+    return _run_ef1(items, sink, requirements=requirements, budget=budget,
+        publication_limits=publication_limits, cancellation=cancellation,
+        calculate=compute_ef5_inputs, admit_inputs=_admit_ef5)
+
+
+__all__ += ['run_ef5']
+
+
 def run_ef4_quote_dynamics(items: tuple[WorkItem, ...], sink: ResultSink, *,
         requirements: SinkRequirements, budget: ResourceBudget = ResourceBudget(),
         publication_limits: PublicationLimits = PublicationLimits(max_receipt_wire_bytes=400000),
