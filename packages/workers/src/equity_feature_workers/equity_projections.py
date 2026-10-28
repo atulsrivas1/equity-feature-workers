@@ -19,9 +19,12 @@ no registry.
 from __future__ import annotations
 
 import pickle
+from collections.abc import Callable, Iterable
 from types import ModuleType
+from typing import Any, cast
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, EntityKey, FeatureResult, IntervalSpec
+from equity_feature_contracts.results import InputBinding
 from equity_feature_io_contracts import FeatureHeader
 
 from ._supplied import fail, result_identity, translated
@@ -45,7 +48,7 @@ _PRODUCERS = {
 # legs as well, so the library (not the worker) decides on its instruments.
 _TARGET_ONLY = {SESSION_FAMILY: ('daily',), BAR_FAMILY: ('bars',), RELATIVE_FAMILY: ('membership',),
                 RATE_FAMILY: ('tape', 'legs')}
-_GRIDS: dict[str, object] = {}
+_GRIDS: dict[str, Any] = {}
 
 
 def _ef4() -> ModuleType:
@@ -58,7 +61,7 @@ def _package_version() -> str:
     return equity_features.__version__
 
 
-def _param(config: ConfigSpec, name: str):
+def _param(config: ConfigSpec, name: str) -> Any:
     return {p.name: p.value for p in config.parameters}.get(name)
 
 
@@ -69,14 +72,14 @@ def _selection(features: tuple[str, ...], allowed: tuple[str, ...]) -> tuple[str
     return tuple(sorted(features))
 
 
-def _grid_type(library: ModuleType, family: str):
+def _grid_type(library: ModuleType, family: str) -> Any:
     if family == SESSION_FAMILY:
         from equity_features import ef3
         return ef3.DailyGrid
     return library.BarGrid
 
 
-def _register(grid: object, config: ConfigSpec, family: str) -> None:
+def _register(grid: Any, config: ConfigSpec, family: str) -> None:
     """Keep a grid only under its own digest, and only when the configuration binds exactly that digest."""
     if (type(config) is not ConfigSpec or type(grid) is not _grid_type(_ef4(), family)
             or grid.digest != _param(config, 'grid_sha256')):
@@ -84,7 +87,7 @@ def _register(grid: object, config: ConfigSpec, family: str) -> None:
     _GRIDS[grid.digest] = grid
 
 
-def _registered_grid(config: ConfigSpec, family: str):
+def _registered_grid(config: ConfigSpec, family: str) -> Any:
     """The grid of a grid producer (None for the fact producers, which carry no grid)."""
     if family not in (SESSION_FAMILY, BAR_FAMILY):
         return None
@@ -95,7 +98,7 @@ def _registered_grid(config: ConfigSpec, family: str):
     return grid
 
 
-def _headers(config: ConfigSpec, grid: object, selected: tuple[str, ...]) -> tuple[FeatureHeader, ...]:
+def _headers(config: ConfigSpec, grid: Any, selected: tuple[str, ...]) -> tuple[FeatureHeader, ...]:
     """Headers from the library's own discovery for the configuration (the worker owns no units or dtypes)."""
     definitions = {d.feature_id: d for d in _ef4().ef4_path_projections_definitions(config, grid=grid)}
     if set(selected) - set(definitions):
@@ -104,11 +107,11 @@ def _headers(config: ConfigSpec, grid: object, selected: tuple[str, ...]) -> tup
                  for f in selected)
 
 
-def _intervals(sessions) -> tuple[IntervalSpec, ...]:
+def _intervals(sessions: Iterable[Any]) -> tuple[IntervalSpec, ...]:
     return tuple(IntervalSpec(s.session_id, s.open_ns, s.close_ns) for s in sessions)
 
 
-def _history(family: str, grid: object, config: ConfigSpec):
+def _history(family: str, grid: Any, config: ConfigSpec) -> tuple[Any, ...]:
     """Governed sessions, ordered-history flag, warmup sessions and initialization digest for the family."""
     if family == SESSION_FAMILY:
         window = _ef4().decode_session_projection_config(grid, config).window
@@ -150,7 +153,7 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: str)
                 or len({i.role for i in bound}) != len(bound)):
             fail(CommandErrorCode.RESULT)
         for manifest, batch in zip(bound, batches):
-            binding = manifest.binding
+            binding = cast(InputBinding, manifest.binding)
             if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                     or batch.metadata.coverage.observed != batch.row_count
                     or batch.metadata.namespace != config.session.namespace or manifest.role not in roles):
@@ -166,7 +169,7 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: str)
         return library
 
 
-def _slots(task: TaskManifest, batches: tuple[CanonicalBatch, ...], roles: tuple[str, ...]) -> tuple:
+def _slots(task: TaskManifest, batches: tuple[CanonicalBatch, ...], roles: tuple[str, ...]) -> tuple[Any, ...]:
     """Bind each supplied batch to its fixed library slot by its manifest role; roles not delivered stay None."""
     by_role = {manifest.role: batch for manifest, batch in zip(
         tuple(i for i in task.inputs if i.binding is not None), batches)}
@@ -205,9 +208,10 @@ def compute_rate_projection_inputs(task: TaskManifest, batches: tuple[CanonicalB
     return _compute(task, batches, RATE_FAMILY)
 
 
-def _make(config: ConfigSpec, family: str, *, grid: object, features: tuple[str, ...],
+def _make(config: ConfigSpec, family: str, *, grid: Any, features: tuple[str, ...],
         inputs: tuple[InputManifest, ...], batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str,
-        generation_id: str, partition_id: str, destination_scope: str, max_input_bytes: int, calculate) -> WorkItem:
+        generation_id: str, partition_id: str, destination_scope: str, max_input_bytes: int,
+        calculate: Callable[[TaskManifest, tuple[CanonicalBatch, ...]], tuple[FeatureResult, ...]]) -> WorkItem:
     with translated():
         features_name = _PRODUCERS[family][2]
         if type(config) is not ConfigSpec:
@@ -228,7 +232,7 @@ def _make(config: ConfigSpec, family: str, *, grid: object, features: tuple[str,
         return WorkItem(task, batches, calculate)
 
 
-def make_session_projection_work(config: ConfigSpec, *, grid: object, features: tuple[str, ...],
+def make_session_projection_work(config: ConfigSpec, *, grid: Any, features: tuple[str, ...],
         inputs: tuple[InputManifest, ...], batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str,
         generation_id: str, partition_id: str, destination_scope: str,
         max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
@@ -238,7 +242,7 @@ def make_session_projection_work(config: ConfigSpec, *, grid: object, features: 
         destination_scope=destination_scope, max_input_bytes=max_input_bytes, calculate=compute_session_projection_inputs)
 
 
-def make_bar_projection_work(config: ConfigSpec, *, grid: object, features: tuple[str, ...],
+def make_bar_projection_work(config: ConfigSpec, *, grid: Any, features: tuple[str, ...],
         inputs: tuple[InputManifest, ...], batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str,
         generation_id: str, partition_id: str, destination_scope: str,
         max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:

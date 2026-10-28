@@ -14,9 +14,12 @@ routes no process-level registry is needed.
 from __future__ import annotations
 
 import pickle
+from collections.abc import Callable, Iterable
 from types import ModuleType
+from typing import Any, cast
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, EntityKey, FeatureResult, IntervalSpec
+from equity_feature_contracts.results import InputBinding
 from equity_feature_io_contracts import FeatureHeader
 
 from ._supplied import fail, result_identity, translated
@@ -62,7 +65,7 @@ def _headers(config: ConfigSpec, selected: tuple[str, ...]) -> tuple[FeatureHead
                  for f in selected)
 
 
-def _intervals(sessions) -> tuple[IntervalSpec, ...]:
+def _intervals(sessions: Iterable[Any]) -> tuple[IntervalSpec, ...]:
     return tuple(IntervalSpec(s.session_id, s.open_ns, s.close_ns) for s in sessions)
 
 
@@ -94,7 +97,7 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: str)
                 or len({i.role for i in bound}) != len(bound)):
             fail(CommandErrorCode.RESULT)
         for manifest, batch in zip(bound, batches):
-            binding = manifest.binding
+            binding = cast(InputBinding, manifest.binding)
             if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                     or batch.metadata.coverage.observed != batch.row_count
                     or batch.metadata.namespace != config.session.namespace or manifest.role not in roles):
@@ -107,7 +110,7 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: str)
         return library
 
 
-def _slots(task: TaskManifest, batches: tuple[CanonicalBatch, ...], roles: tuple[str, ...]) -> tuple:
+def _slots(task: TaskManifest, batches: tuple[CanonicalBatch, ...], roles: tuple[str, ...]) -> tuple[Any, ...]:
     """Bind each supplied batch to its fixed library slot by its manifest role; roles not delivered stay None."""
     by_role = {manifest.role: batch for manifest, batch in zip(
         tuple(i for i in task.inputs if i.binding is not None), batches)}
@@ -137,7 +140,8 @@ def compute_vwap_path_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, 
 
 def _make(config: ConfigSpec, family: str, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple | None, max_input_bytes: int, calculate) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...] | None, max_input_bytes: int,
+        calculate: Callable[[TaskManifest, tuple[CanonicalBatch, ...]], tuple[FeatureResult, ...]]) -> WorkItem:
     with translated():
         identity, algorithm, allowed_name, roles = _PRODUCERS[family]
         if type(config) is not ConfigSpec:
@@ -155,7 +159,7 @@ def _make(config: ConfigSpec, family: str, *, features: tuple[str, ...], inputs:
 
 def make_quote_dynamics_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...] | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     """`inputs` bind the delivered roles (`bounds`, `quotes`) to `batches` in the same order."""
     return _make(config, QUOTE_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
         job_id=job_id, generation_id=generation_id, partition_id=partition_id, destination_scope=destination_scope,
@@ -164,7 +168,7 @@ def make_quote_dynamics_work(config: ConfigSpec, *, features: tuple[str, ...], i
 
 def make_vwap_path_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...] | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     """`inputs` bind the delivered roles (`bounds`, `grid`, `trades`, `bars`, `proof`) to `batches` in the same order."""
     return _make(config, VWAP_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
         job_id=job_id, generation_id=generation_id, partition_id=partition_id, destination_scope=destination_scope,

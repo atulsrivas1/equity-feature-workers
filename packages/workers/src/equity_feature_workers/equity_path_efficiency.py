@@ -9,7 +9,9 @@ publishes nothing. There is no process-level registry: the configuration carries
 """
 from __future__ import annotations
 
+from collections.abc import Iterable
 from types import ModuleType
+from typing import Any
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, FeatureResult, IntervalSpec, ValueType
 from equity_feature_io_contracts import FeatureHeader
@@ -28,7 +30,7 @@ def _intraday() -> ModuleType:
     return equity_features_intraday
 
 
-def _param(config: ConfigSpec, name: str):
+def _param(config: ConfigSpec, name: str) -> Any:
     return {p.name: p.value for p in config.parameters}.get(name)
 
 
@@ -43,11 +45,11 @@ def _selection(features: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(sorted(features))
 
 
-def _intervals(sessions) -> tuple[IntervalSpec, ...]:
+def _intervals(sessions: Iterable[Any]) -> tuple[IntervalSpec, ...]:
     return tuple(IntervalSpec(s.session_id, s.open_ns, s.close_ns) for s in sessions)
 
 
-def _path_context(config: ConfigSpec):
+def _path_context(config: ConfigSpec) -> Any:
     """Decode the chunked R17 context and require the exact reviewed envelope (the library decoder owns every rule)."""
     if type(config) is not ConfigSpec:
         fail()
