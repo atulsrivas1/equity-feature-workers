@@ -1,4 +1,15 @@
+# PO ruling 2026-10-28: LF for all text in all repos. Specific rules below override this default (last match wins).
 * text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.gz -text
+*.whl -text
+*.parquet -text
+*.duckdb -text
+*.png -text
+*.zip -text
+
 tests/ef1_reference_oracle.json text eol=lf
 tests/ef1_period_oracle.json text eol=lf
 tests/ef1_observable_oracle.json text eol=lf
