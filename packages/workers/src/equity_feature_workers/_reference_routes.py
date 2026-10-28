@@ -9,6 +9,7 @@ from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode
 from .manifests import InputManifest, TaskManifest
 from .supervisor import Calculation, WorkItem
+from ._versions import FEATURES_VERSION
 
 CLASSIFICATION_ROLES = ('classification_facts', 'classification_history', 'classification_projection')
 ACTION_ROLES = ('market', 'action_facts', 'action_history', 'action_projection', 'source_representation', 'source_quantity_basis')
@@ -84,7 +85,7 @@ def compute(task: TaskManifest, batches: tuple[CanonicalBatch, ...], producer: s
         result = library.compute_ef1(slots(task, batches), task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         if any(column.entities != (entity,) for column in result.values):
             fail(CommandErrorCode.RESULT)
         return (result,)

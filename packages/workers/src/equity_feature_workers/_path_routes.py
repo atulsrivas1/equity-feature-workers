@@ -17,6 +17,7 @@ from .commands import CommandErrorCode
 from .equity_sessions import _library
 from .manifests import InputManifest, TaskManifest
 from .supervisor import Calculation, WorkItem
+from ._versions import FEATURES_VERSION
 
 
 def context(config: ConfigSpec, producer: str) -> tuple[ModuleType, Mapping[str, object]]:
@@ -100,7 +101,7 @@ def compute(task: TaskManifest, batches: tuple[CanonicalBatch, ...], producer: s
         result = library.compute_ef1(batches, task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         if any(column.entities != (entity,) for column in result.values):
             fail(CommandErrorCode.RESULT)
         return (result,)

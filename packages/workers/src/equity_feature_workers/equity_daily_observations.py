@@ -16,6 +16,7 @@ from .commands import CommandErrorCode
 from .equity_sessions import _library
 from .manifests import InputManifest, TaskManifest
 from .supervisor import WorkItem
+from ._versions import FEATURES_VERSION
 
 ROLES = ('calendar_manifest', 'calendar_slots', 'observation_coverage',
     'raw_observations', 'common_observations', 'basis_provenance')
@@ -91,7 +92,7 @@ def compute_daily_observations_inputs(task: TaskManifest,
         result = library.compute_ef1(slots, task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'ef1', '0.0.4a5')
+        result_identity(task, result, 'ef1', FEATURES_VERSION)
         if result.metadata.math_policy_version != 'v1' or result.metadata.evidence_limit != 28:
             fail(CommandErrorCode.RESULT)
         if (len(result.values) != 4 or len(result.quality) != 4 or len(result.evidence) > 28

@@ -3,9 +3,13 @@ from dataclasses import replace
 from decimal import Decimal, localcontext
 from fractions import Fraction
 import importlib.util
+from pathlib import Path
+import sys
 import unittest
 from unittest.mock import patch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))  # tools/_versions.py
+from _versions import VERSIONS  # noqa: E402
 import equity_feature_contracts as c
 from equity_feature_io_sdk import encode_result
 from equity_feature_workers import BoundedSupervisor, CommandError, CommandErrorCode, ResourceBudget
@@ -45,7 +49,7 @@ class SuppliedIntraday(unittest.TestCase):
             self.assertAlmostEqual(col.values[0], expected[col.feature_id], delta=1e-12)
         self.assertTrue(all(q.status == c.Status.AVAILABLE for q in result.quality))
         self.assertEqual(result.metadata.backend_id, 'intraday.python')
-        self.assertEqual(result.metadata.backend_version, '0.1.0a3')
+        self.assertEqual(result.metadata.backend_version, VERSIONS['equity-features-intraday'])
         self.assertEqual(result.metadata.config_digest, config.digest)
 
     def test_all_nonempty_subsets_full_direct_parity(self):

@@ -22,7 +22,7 @@ wire = {"record":"TaskManifest","fields":{
     "inputs":[],"governed_sessions":[{"record":"IntervalSpec","fields":{"name":"S","start_ns":{"int":"100"},"end_ns":{"int":"200"}}}],
     "destination_scope":"d","ownership":"serialized_destination","max_input_batches":{"int":"1"},"max_input_bytes":{"int":"1024"},
     "ordered_history":False,"warmup_sessions":[],"initialization_sha256":None,"merge_policy":"none",
-    "protocol_version":"efworker-task1","canonical_package_version":"0.0.4a4","canonical_schema_version":"1","math_policy_version":"v1"}}
+    "protocol_version":"efworker-task1","canonical_package_version":"0.0.4a5","canonical_schema_version":"1","math_policy_version":"v1"}}
 data=canonical(wire)
 record={"wire":data,"domain_sha256":hashlib.sha256(b'efworker-task1\0'+data.encode('ascii')).hexdigest()}
 Path(__file__).with_name('manifest_golden.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n')

@@ -12,6 +12,7 @@ from equity_features_intraday import (
 from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode
 from .manifests import TaskManifest
+from ._versions import INTRADAY_VERSION
 
 
 def _selection(features: tuple[str, ...]) -> tuple[str, ...]:
@@ -126,7 +127,7 @@ def compute_intraday_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, .
             requirements = tuple(sorted({'price_moments' if f.startswith('intraday.band_') else 'true_ranges' if f == 'intraday.atr' else 'anchored_closes' for f in selected}))
             preparation = prepare_intraday(batches, context, task.config, requirements=requirements)
             result = compute_intraday(batches, context, task.config, features=selected, preparation=preparation)
-        result_identity(task, result, 'intraday.python', '0.1.0a3')
+        result_identity(task, result, 'intraday.python', INTRADAY_VERSION)
         return (result,)
 
 

@@ -10,6 +10,10 @@ import equity_feature_duckdb as a
 import equity_feature_workers as w
 from ._model import AcquiredInput, TaskEvidence, ProvenanceError, require
 
+# Exact versions this preflight admits (pins in pyproject.toml; tools/verify_versions.py checks all of them).
+_DUCKDB_ADAPTER_VERSION = '0.1.0a10'
+_CANONICAL_CONTRACTS_VERSION = '0.0.4a5'
+
 # Static public pinned record/field closure. No caller-supplied type registry.
 _FIELDS: dict[type[object], tuple[str, ...]] = {
     i.PriceUnit: ('scale', 'currency'),
@@ -113,7 +117,7 @@ def _caps(value: object) -> None:
     if type(value) is a.AcquisitionReceipt:
         _seq(value.files, 32); _seq(value.missing_sessions, 128)
         require(type(value.schema) is str and value.schema == 'acquisition1', 'unsupported_version')
-        require(type(value.adapter_version) is str and value.adapter_version == '0.1.0a9', 'unsupported_version')
+        require(type(value.adapter_version) is str and value.adapter_version == _DUCKDB_ADAPTER_VERSION, 'unsupported_version')
         require(type(value.canonical_schema) is int and value.canonical_schema == 1, 'unsupported_version')
         for digest in (value.request_digest, value.configuration_digest, value.resolved_digest,
                 value.input_evidence_digest, value.catalog_sha256): _digest(digest)
@@ -166,7 +170,7 @@ def _caps(value: object) -> None:
         require(all(type(v) is str for v in (value.protocol_version, value.canonical_package_version,
             value.canonical_schema_version, value.math_policy_version)), 'unsupported_version')
         require((value.protocol_version, value.canonical_package_version, value.canonical_schema_version,
-            value.math_policy_version) == ('efworker-task1','0.0.4a4','1','v1'), 'unsupported_version')
+            value.math_policy_version) == ('efworker-task1',_CANONICAL_CONTRACTS_VERSION,'1','v1'), 'unsupported_version')
         _seq(value.features, 5); _seq(value.inputs, 1); _seq(value.instruments, 1)
         require(len(value.features) == 5 and len(value.inputs) == 1 and len(value.instruments) == 1, 'unsupported_version')
         _seq(value.governed_sessions, 128); _seq(value.warmup_sessions, 128)

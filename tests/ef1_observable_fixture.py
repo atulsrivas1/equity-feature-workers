@@ -8,7 +8,7 @@ import equity_feature_contracts as c
 from ef1_anchor_fixture import declaration
 
 ORACLE_BYTES = Path(__file__).with_name('ef1_observable_oracle.json').read_bytes()
-if hashlib.sha256(ORACLE_BYTES).hexdigest() != '646e402e321eb97a171a2f8f64ce3c1ee399f7bcb81906fd929be4e6477170a6':
+if hashlib.sha256(ORACLE_BYTES).hexdigest() != '8404a1871c7841abbca8551e6c6b31e52dc3c4fd0a16eefead826d38bac9c3aa':
     raise AssertionError('Frozen reference fixture bytes differ')
 ORACLE = json.loads(ORACLE_BYTES)
 CASES = {packet['id']: packet for packet in ORACLE['packets']}

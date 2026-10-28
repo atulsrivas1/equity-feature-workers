@@ -17,6 +17,7 @@ from .commands import CommandErrorCode
 from .equity_sessions import _library
 from .manifests import InputManifest, TaskManifest
 from .supervisor import WorkItem
+from ._versions import FEATURES_VERSION
 
 
 def _clock_context(config: ConfigSpec) -> tuple[ModuleType, Mapping[str, object]]:
@@ -94,7 +95,7 @@ def compute_clock_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, ...]
         result = library.compute_ef1(batches, task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         if any(column.entities != (entity,) for column in result.values):
             fail(CommandErrorCode.RESULT)
         return (result,)

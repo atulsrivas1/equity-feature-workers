@@ -9,7 +9,7 @@ from ef1_anchor_fixture import declaration
 from ef1_reference_fixture import batch as reference_batch
 
 ORACLE_BYTES = Path(__file__).with_name('ef1_period_oracle.json').read_bytes()
-if hashlib.sha256(ORACLE_BYTES).hexdigest() != 'b4c78f03b3c1ec5100740803d4b853920f9aa28cb58d73446dea6b3f403db09c':
+if hashlib.sha256(ORACLE_BYTES).hexdigest() != '298851f79f26da042fada31163c8384eb497f9769d9c3b38b1f51128ec8f93be':
     raise AssertionError('Frozen period/phase fixture bytes differ')
 ORACLE = json.loads(ORACLE_BYTES)
 CASES = {packet['id']: packet for packet in

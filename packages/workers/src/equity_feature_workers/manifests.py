@@ -13,6 +13,7 @@ from equity_feature_contracts import inputs as i, specs as s
 from equity_feature_contracts.results import InputBinding
 from equity_feature_io_contracts.publication import CompletionReceipt, FeatureHeader, PublicationEnvelope
 from equity_feature_io_sdk import decode_envelope, decode_receipt, encode_envelope, encode_receipt, verify_receipt
+from ._versions import CANONICAL_CONTRACTS_VERSION
 
 
 class ManifestErrorCode(StrEnum):
@@ -156,12 +157,12 @@ class TaskManifest:
     initialization_sha256: str | None = None
     merge_policy: str = "none"
     protocol_version: str = "efworker-task1"
-    canonical_package_version: str = "0.0.4a4"
+    canonical_package_version: str = CANONICAL_CONTRACTS_VERSION
     canonical_schema_version: str = "1"
     math_policy_version: str = "v1"
 
     def __post_init__(self) -> None:
-        if (self.protocol_version, self.canonical_package_version, self.canonical_schema_version, self.math_policy_version) != ("efworker-task1", "0.0.4a4", "1", "v1"):
+        if (self.protocol_version, self.canonical_package_version, self.canonical_schema_version, self.math_policy_version) != ("efworker-task1", CANONICAL_CONTRACTS_VERSION, "1", "v1"):
             fail(ManifestErrorCode.VERSION)
         for v in (self.job_id, self.generation_id, self.partition_id, self.family, self.destination_scope):
             label(v)

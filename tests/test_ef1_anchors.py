@@ -15,6 +15,10 @@ from equity_feature_workers.equity_sessions import compute_ef1_inputs
 from equity_feature_workers.ef1_runner import run_ef1_anchors
 from supplied_memory import SerializedMemorySink
 from ef1_anchor_fixture import work
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))  # tools/_versions.py
+from _versions import CONTRACTS, FEATURES, VERSIONS  # noqa: E402
 
 
 LIMITS = SinkRequirements(max_results=1, max_chunk_bytes=262144, max_total_bytes=262144,
@@ -27,9 +31,8 @@ class EF1Anchors(unittest.TestCase):
         import equity_feature_workers as worker
         from equity_features import ef1
 
-        if (equity_features.__version__, c.__version__, worker.__version__) != (
-                '0.0.4a5', '0.0.4a4', '0.1.0a15'):
-            raise AssertionError('EF1 requires exact features0.0.4a5/contracts0.0.4a4/workers0.1.0a15')
+        if (equity_features.__version__, c.__version__, worker.__version__) != (FEATURES, CONTRACTS, VERSIONS['equity-feature-workers']):
+            raise AssertionError(f"EF1 requires exact features{FEATURES}/contracts{CONTRACTS}/workers{VERSIONS['equity-feature-workers']}")
         if not all(callable(getattr(ef1, name, None)) for name in (
                 'build_ef1_config', 'decode_ef1_context', 'ef1_definitions', 'compute_ef1')):
             raise AssertionError('EF1 candidate public API is missing')
@@ -55,7 +58,7 @@ class EF1Anchors(unittest.TestCase):
             self.assertEqual(result.metadata.config_digest, item.task.config.digest)
             self.assertEqual(result.metadata.inputs,
                 tuple(sorted((slot.binding for slot in item.task.inputs), key=lambda b: b.role)))
-            self.assertEqual(result.metadata.backend_version, '0.0.4a5')
+            self.assertEqual(result.metadata.backend_version, FEATURES)
 
     def test_covered_empty_differs_from_missing_primary(self):
         empty = work(empty=True)
@@ -106,9 +109,9 @@ class EF1Anchors(unittest.TestCase):
                          replace(original.metadata, config_digest='0' * 64)):
             with patch.object(ef1, 'compute_ef1', return_value=replace(original, metadata=metadata)):
                 self.reject(item, CommandErrorCode.RESULT)
-        with patch.object(equity_features, '__version__', '0.0.4a6'):
+        with patch.object(equity_features, '__version__', '0.0.4a7'):
             self.reject(item, CommandErrorCode.CONFIG)
-        with patch.object(c, '__version__', '0.0.4a5'):
+        with patch.object(c, '__version__', '0.0.4a6'):
             self.reject(item, CommandErrorCode.CONFIG)
 
     def test_serialized_readback_idempotent_replay_and_distinct_scopes(self):

@@ -15,6 +15,7 @@ from equity_features.session import compute_bars, compute_structure, compute_tim
 from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode
 from .manifests import InputManifest, TaskManifest
+from ._versions import FEATURES_VERSION
 
 _BARS = tuple('session.bar.' + n for n in ('open', 'high', 'low', 'close', 'volume', 'notional', 'close_weighted_price')) + tuple(
     'session.price.' + n for n in ('open_close_return', 'range_fraction', 'close_location', 'overnight_gap', 'close_close_return'))
@@ -140,7 +141,7 @@ def compute_supplied_session_inputs(task: TaskManifest, batches: tuple[Canonical
                         or governed.end_ns > task.config.session.open_ns):
                     fail(CommandErrorCode.RESULT)
             result = compute_bars(by_role['bars'], task.config, entity=entity, prior_close=prior)
-        result_identity(task, result, 'python-exact-compensated' if family == 'continuous_quotes' else 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact-compensated' if family == 'continuous_quotes' else 'python-exact', FEATURES_VERSION)
         return (result,)
 
 

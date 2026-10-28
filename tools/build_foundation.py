@@ -14,6 +14,8 @@ import tarfile
 import tempfile
 import tomllib
 import zipfile
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py, also when loaded by path from tests
+from _versions import VERSIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 EPOCH = 1700000000
@@ -26,9 +28,10 @@ PINS_CORE = "37ac44a3d0406231caf481c44f4ccce70fb2aba0"
 PINS_IO = "89bc3d0d61cda5e8b1f5056b500c1f660a051045"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
 EXPECTED = {
-    "equity-feature-io-contracts": ["equity-feature-contracts==0.0.4a4"],
-    "equity-feature-io-sdk": ["equity-feature-io-contracts==0.1.0a2"],
-    "equity-feature-workers": ["equity-feature-io-sdk==0.1.0a2", "equity-features==0.0.4a5", 'equity-features-intraday==0.1.0a3; extra == "intraday"'],
+    "equity-feature-io-contracts": [f"equity-feature-contracts=={VERSIONS['equity-feature-contracts']}"],
+    "equity-feature-io-sdk": [f"equity-feature-io-contracts=={VERSIONS['equity-feature-io-contracts']}"],
+    "equity-feature-workers": [f"equity-feature-io-sdk=={VERSIONS['equity-feature-io-sdk']}", f"equity-features=={VERSIONS['equity-features']}",
+                               f'equity-features-intraday=={VERSIONS["equity-features-intraday"]}; extra == "intraday"'],
 }
 
 
@@ -194,10 +197,10 @@ def qualify(dependencies, artifacts, form, packages, probe, core_benchmark):
         fp = hashlib.sha256(json.dumps(before, sort_keys=True).encode()).hexdigest()
         backend_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;print(json.dumps({n:version(n) for n in ('duckdb','pyarrow','equity-feature-parquet','equity-feature-duckdb-sink')}))"], cwd=location, text=True, encoding="utf-8"))
-        assert backend_versions == {"duckdb": "1.5.6", "pyarrow": "20.0.0", "equity-feature-parquet": "0.1.0a1", "equity-feature-duckdb-sink": "0.1.0a0"}
+        assert backend_versions == {"duckdb": "1.5.6", "pyarrow": "20.0.0", "equity-feature-parquet": VERSIONS["equity-feature-parquet"], "equity-feature-duckdb-sink": VERSIONS["equity-feature-duckdb-sink"]}
         source_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",
             "import json;from importlib.metadata import version;import equity_feature_duckdb as source;from pathlib import Path;assert 'site-packages' in Path(source.__file__).resolve().parts;print(json.dumps({n:version(n) for n in ('equity-feature-duckdb','numpy')}))"], cwd=location, text=True, encoding="utf-8"))
-        assert source_versions == {"equity-feature-duckdb":"0.1.0a9", "numpy":"2.2.6"}
+        assert source_versions == {"equity-feature-duckdb": VERSIONS["equity-feature-duckdb"], "numpy": "2.2.6"}
         return {"eq088_installed_scaling_smoke_passed": True, "eq088_scaling_report_sha256": scaling_identity, "eq085_installed_profile_smoke_passed": True, "eq085_profile_report_sha256": profile_identity, "acquisition_light": light, "acquisition_full": acquisition, "acquisition_tests_sha256": sha(probe.parent / "test_acquisition.py"), "acquisition_oracle_sha256": sha(probe.parent / "acquisition_oracle.json"), "form": form, "packages": packages, "core_before_sha256": fp, "core_after_sha256": fp, "installed_typing": True, "inward_dependencies": True, "source_imports": False, "independent_bar_goldens": True, "installed_manifest_tests_passed": True, "installed_command_tests_passed": True, "installed_required_input_tests_passed": True, "installed_barrier_tests_passed": True, "installed_publication_tests_passed": True, "installed_supervisor_tests_passed": True, "installed_claim_tests_passed": True, "installed_claim_example_passed": True, "installed_catalog_tests_passed": True, "installed_catalog_example_passed": True, "installed_diagnostic_tests_passed": True, "installed_diagnostic_example_passed": True, "installed_pilot_tests_passed": True, "installed_pilot_example_passed": True, "installed_optional_source_versions": source_versions, "installed_optional_backend_versions": backend_versions, "installed_console_demo_passed": True}
 
 

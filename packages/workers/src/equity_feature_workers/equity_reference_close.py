@@ -12,6 +12,7 @@ from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode
 from .manifests import InputManifest, TaskManifest
 from .supervisor import WorkItem
+from ._versions import FEATURES_VERSION
 
 ROLES = ('calendar_provenance', 'bars', 'population_proof', 'authoritative_close')
 PRODUCER = 'reference_close'
@@ -78,7 +79,7 @@ def compute_reference_close_inputs(task: TaskManifest,
         result = library.compute_ef1(slots, task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         # Generic result identity does not close math/evidence declarations.
         if (result.metadata.schema_version != '1' or result.metadata.math_policy_version != 'v1'
                 or result.metadata.evidence_limit != 7

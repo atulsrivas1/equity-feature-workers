@@ -1,7 +1,7 @@
 """Explicit EF1 anchor routes; canonical inputs and unchanged full producer results.
 
 Import this module explicitly. Default dispatch and other identity checks are preserved.
-The EF1 route requires exactly features0.0.4a5 with canonical contracts0.0.4a4.
+The EF1 route requires exactly features0.0.4a6 with canonical contracts0.0.4a5.
 """
 from __future__ import annotations
 
@@ -20,6 +20,7 @@ from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode, _record_hash
 from .manifests import InputManifest, MAX_MANIFEST_BYTES, TaskManifest
 from .supervisor import WorkItem
+from ._versions import CANONICAL_CONTRACTS_VERSION, FEATURES_VERSION
 
 
 def _library() -> ModuleType:
@@ -28,7 +29,7 @@ def _library() -> ModuleType:
 
     # Distribution version and canonical wire version are distinct. Never relax
     # exact callback backend checks to accept arbitrary feature versions.
-    if (equity_features.__version__, contracts_version) != ('0.0.4a5', '0.0.4a4'):
+    if (equity_features.__version__, contracts_version) != (FEATURES_VERSION, CANONICAL_CONTRACTS_VERSION):
         fail()
     from equity_features import ef1
 
@@ -139,7 +140,7 @@ def compute_ef1_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) 
             entity=EntityKey(task.instruments[0], task.config.session.session_id))
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         entity = EntityKey(task.instruments[0], task.config.session.session_id)
         if any(column.entities != (entity,) for column in result.values):
             fail(CommandErrorCode.RESULT)

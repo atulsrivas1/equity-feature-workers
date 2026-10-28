@@ -12,6 +12,7 @@ from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode
 from .manifests import InputManifest, TaskManifest
 from .supervisor import WorkItem
+from ._versions import FEATURES_VERSION
 
 ROLES = ('calendar_provenance', 'path', 'prior_close', 'population_proof')
 PRODUCER = 'path_gap_endpoint'
@@ -63,7 +64,7 @@ def compute_gap_endpoint_inputs(task: TaskManifest,
         result = library.compute_ef1(slots, task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         if (result.metadata.math_policy_version != 'v1' or result.metadata.evidence_limit != 5
                 or len(result.values) != 2 or len(result.quality) != 2 or len(result.evidence) > 5
                 or any(column.entities != (entity,) for column in result.values)):
