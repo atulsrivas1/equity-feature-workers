@@ -11,7 +11,7 @@ import equity_feature_workers as w
 from ._model import AcquiredInput, TaskEvidence, ProvenanceError, require
 
 # Exact versions this preflight admits (pins in pyproject.toml; tools/verify_versions.py checks all of them).
-_DUCKDB_ADAPTER_VERSION = '0.1.0a10'
+_DUCKDB_ADAPTER_VERSION = '0.1.0a11'
 _CANONICAL_CONTRACTS_VERSION = '0.0.4a5'
 
 # Static public pinned record/field closure. No caller-supplied type registry.

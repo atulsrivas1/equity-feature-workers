@@ -17,6 +17,8 @@ import tomllib
 import zipfile
 
 from build_foundation import build, fingerprint, git, run, sha, snapshot, CORE_COMMIT, IO_COMMIT
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
+from _versions import VERSIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKER_COMMIT = '2222d4325457b448aacdbb57ee4805bb8923881e'
@@ -48,7 +50,7 @@ def audit_client(artifact, source):
         if path.is_file():
             assert files[prefix + path.relative_to(source / 'src').as_posix()] == path.read_bytes()
     assert prefix + 'equity_feature_client/py.typed' in files
-    assert b'License-Expression: Apache-2.0' in metadata and b'Version: 0.1.0a0' in metadata
+    assert b'License-Expression: Apache-2.0' in metadata and (b'Version: ' + VERSIONS['equity-feature-client'].encode()) in metadata
     project = tomllib.loads((source / 'pyproject.toml').read_text(encoding='utf-8'))['project']
     requires = sorted(line[len('Requires-Dist: '):].strip() for line in metadata.decode().splitlines() if line.startswith('Requires-Dist: '))
     expected = project['dependencies'] + [dep + '; extra == "native"' for dep in project['optional-dependencies']['native']]

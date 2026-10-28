@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-provenance"
-version = "0.1.0a3"
+version = "0.1.0a4"
 description = "Explicit outer supplied provenance and native generation readback"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{name = "Equity Features contributors"}]
-dependencies = ["equity-feature-contracts==0.0.4a5", "equity-feature-evidence==0.1.0a3", "equity-feature-workers==0.1.0a16", "equity-feature-io-contracts==0.1.0a3", "equity-feature-io-sdk==0.1.0a3", "equity-feature-duckdb==0.1.0a10", "equity-feature-duckdb-sink==0.1.0a1"]
+dependencies = ["equity-feature-contracts==0.0.4a5", "equity-feature-evidence==0.1.0a3", "equity-feature-workers==0.1.0a17", "equity-feature-io-contracts==0.1.0a3", "equity-feature-io-sdk==0.1.0a3", "equity-feature-duckdb==0.1.0a11", "equity-feature-duckdb-sink==0.1.0a1"]
 
 [project.urls]
 Repository = "https://github.com/atulsrivas1/equity-feature-workers"

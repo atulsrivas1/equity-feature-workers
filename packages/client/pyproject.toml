@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equity-feature-client"
-version = "0.1.0a0"
+version = "0.1.0a1"
 description = "Experimental explicit bounded Python remote client"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
