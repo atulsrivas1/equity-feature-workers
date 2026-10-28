@@ -37,3 +37,19 @@ Follow the EF4 path-efficiency worker (`_path_routes.py`, `equity_path_efficienc
    that registration is outside the worker and needs its own story.
 5. DuckDB sink: confirm bool and int64 value columns are stored and read back unchanged (the SDK codec round trip is verified in the io gate;
    the sink path is not yet exercised for these dtypes).
+
+## Update: prerequisites implemented (this PR)
+
+- Blocker 1 (remote client decode and feature context): `equity_feature_client.native._cell` now takes the column's feature context; a
+  `tape.top_k_notional` column rebuilds its `TopKTrades` through the constructor with `ranking="notional"`, every other column as before. A
+  notional-ordered cell decoded without the context is refused (fail-closed), so no cell type is silently mis-ranked. Regression gate
+  `tools/verify_client_feature_context.py` (no unit tests): `ef5.*` float64, bool and int64 columns convert unchanged, the notional column
+  converts with the context and not without, SDK round trips equal. client/mcp suites keep their main failure counts (5 and 9).
+- Blocker 5 (DuckDB sink bool/int64): the io EF5 gate now publishes each of the 89 results to a fresh DuckDB sink and requires an equal
+  read-back (io PR "EF5 gate adds DuckDB sink read-back"): all equal.
+
+## Exposure statement (PO ruling 2026-10-28)
+
+`ef5.*` outputs are NOT exposed through the service or MCP until the registration story lands. The client conversion accepts them (gate above), but
+no service or MCP catalogue lists the producers or their backend identity, and nothing in this change adds them. The duplicated
+`tape.top_k_notional` id in the client is accepted by the PO; `tools/verify_client_feature_context.py` asserts it equals the SDK id and fails on drift.
