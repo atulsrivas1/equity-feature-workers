@@ -43,6 +43,9 @@ def closure(py,location):
     source='''import base64,csv,hashlib,io,json,sys
 from pathlib import Path
 from importlib.metadata import distributions
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
+from _versions import VERSIONS
 base=Path(sys.prefix).resolve();out={}
 for dist in distributions():
  names=tuple(dist.files or ())
@@ -174,7 +177,7 @@ def main():
     optional=snapshot(args.core_root.resolve(),OPTIONAL_CORE,temp/'optional',('packages/evidence','packages/explanations','packages/diagnostics','tools/build_agent_ledger.py'))
     io_source=snapshot(args.io_root.resolve(),IO_COMMIT,temp/'io',('packages','examples/third_party'))
     spec=importlib.util.spec_from_file_location('accepted_archive_auditor',optional/'tools/build_agent_ledger.py');auditor=importlib.util.module_from_spec(spec);spec.loader.exec_module(auditor)
-    auditor.PACKAGES.update({'mcp':('equity_feature_mcp','0.1.0a1'),'explanations':('equity_feature_explanations','0.1.0a1'),'diagnostics':('equity_feature_diagnostics','0.1.0a1')})
+    auditor.PACKAGES.update({'mcp':('equity_feature_mcp',VERSIONS['equity-feature-mcp']),'explanations':('equity_feature_explanations',VERSIONS['equity-feature-explanations']),'diagnostics':('equity_feature_diagnostics',VERSIONS['equity-feature-diagnostics'])})
     dependencies=temp/'dependencies';extra_dir=temp/'extra'
     for repository,paths in ((core,('packages/contracts','packages/features')),(io_source,('packages/io-contracts','packages/io-sdk','packages/duckdb','examples/third_party')),(workers,('packages/workers',)),(service,('packages/service',)),(client,('packages/client',))):
         for relative in paths:build(repository/relative,dependencies)

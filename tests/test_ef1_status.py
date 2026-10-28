@@ -15,6 +15,10 @@ from equity_feature_workers.equity_status import (
 from equity_feature_workers.ef1_runner import run_ef1_anchors, run_ef1_clocks, run_ef1_statuses
 from ef1_status_fixture import GOLDENS, ROLES, batch, fixture, make, work
 from supplied_memory import SerializedMemorySink
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))  # tools/_versions.py
+from _versions import CONTRACTS, FEATURES, VERSIONS  # noqa: E402
 
 
 LIMITS = SinkRequirements(max_results=1, max_chunk_bytes=262144, max_total_bytes=262144,
@@ -32,8 +36,7 @@ class EF1Status(unittest.TestCase):
         import equity_feature_workers
         from equity_features import ef1
 
-        if (equity_features.__version__, c.__version__, equity_feature_workers.__version__) != (
-                '0.0.4a5', '0.0.4a4', '0.1.0a15'):
+        if (equity_features.__version__, c.__version__, equity_feature_workers.__version__) != (FEATURES, CONTRACTS, VERSIONS['equity-feature-workers']):
             raise AssertionError('Status requires the exact reviewed candidate cohort')
         if not all(callable(getattr(ef1, name, None)) for name in (
                 'build_ef1_config', 'decode_ef1_context', 'ef1_definitions', 'compute_ef1')):

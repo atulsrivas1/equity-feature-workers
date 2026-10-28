@@ -20,6 +20,10 @@ from equity_feature_workers.ef1_runner import (
 from ef1_path_fixture import ORACLE, CASES, case_record, fixture, replace_column, work
 from ef1_anchor_fixture import declaration
 from supplied_memory import SerializedMemorySink
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))  # tools/_versions.py
+from _versions import CONTRACTS, FEATURES, VERSIONS  # noqa: E402
 
 LIMITS = SinkRequirements(max_results=1, max_chunk_bytes=262144, max_total_bytes=262144,
     max_result_cells=4, max_evidence_rows=7)
@@ -39,8 +43,7 @@ class EF1Paths(unittest.TestCase):
     def setUpClass(cls):
         import equity_features
         import equity_feature_workers
-        if (equity_features.__version__, c.__version__, equity_feature_workers.__version__) != (
-                '0.0.4a5', '0.0.4a4', '0.1.0a15'):
+        if (equity_features.__version__, c.__version__, equity_feature_workers.__version__) != (FEATURES, CONTRACTS, VERSIONS['equity-feature-workers']):
             raise AssertionError('Path suite requires exact reviewed candidate versions')
 
     def rejects(self, operation, code=None):
@@ -85,7 +88,7 @@ class EF1Paths(unittest.TestCase):
                 self.assertEqual(result.metadata.inputs, tuple(sorted(
                     (slot.binding for slot in item.task.inputs if slot.binding is not None), key=lambda b: b.role)))
                 self.assertEqual(result.metadata.config_digest, item.task.config.digest)
-                self.assertEqual(result.metadata.backend_version, '0.0.4a5')
+                self.assertEqual(result.metadata.backend_version, FEATURES)
                 self.assertEqual(encode_result(result), encode_result(compute_ef1(item.batches,
                     item.task.config, entity=c.EntityKey('X', 'S'))))
                 self.assertEqual(decode_result(encode_result(result)), result)

@@ -19,6 +19,8 @@ import sys
 import tempfile
 import tomllib
 import venv
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py, also when loaded by path from tests
+from _versions import VERSIONS
 
 
 _LOG_ROOT: Path | None = None
@@ -85,14 +87,14 @@ def main() -> None:
     for key in ('PYTHONPATH', 'PYTHONHOME', 'PYTHONUSERBASE', 'MYPYPATH'):
         environment.pop(key, None)
     projects = [
-        (core/'packages/contracts', 'equity-feature-contracts', '0.0.4a4'),
-        (core/'packages/features', 'equity-features', '0.0.4a5'),
-        (core/'packages/intraday', 'equity-features-intraday', '0.1.0a3'),
-        (io/'packages/io-contracts', 'equity-feature-io-contracts', '0.1.0a2'),
-        (io/'packages/io-sdk', 'equity-feature-io-sdk', '0.1.0a2'),
-        (io/'packages/duckdb', 'equity-feature-duckdb', '0.1.0a9'),
-        (io/'packages/duckdb-sink', 'equity-feature-duckdb-sink', '0.1.0a0'),
-        (worker/'packages/workers', 'equity-feature-workers', '0.1.0a15'),
+        (core/'packages/contracts', 'equity-feature-contracts', VERSIONS['equity-feature-contracts']),
+        (core/'packages/features', 'equity-features', VERSIONS['equity-features']),
+        (core/'packages/intraday', 'equity-features-intraday', VERSIONS['equity-features-intraday']),
+        (io/'packages/io-contracts', 'equity-feature-io-contracts', VERSIONS['equity-feature-io-contracts']),
+        (io/'packages/io-sdk', 'equity-feature-io-sdk', VERSIONS['equity-feature-io-sdk']),
+        (io/'packages/duckdb', 'equity-feature-duckdb', VERSIONS['equity-feature-duckdb']),
+        (io/'packages/duckdb-sink', 'equity-feature-duckdb-sink', VERSIONS['equity-feature-duckdb-sink']),
+        (worker/'packages/workers', 'equity-feature-workers', VERSIONS['equity-feature-workers']),
     ]
     for path, name, version in projects:
         project = tomllib.loads((path/'pyproject.toml').read_text(encoding='utf-8'))['project']

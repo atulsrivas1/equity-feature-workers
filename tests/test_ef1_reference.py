@@ -25,6 +25,10 @@ from equity_feature_workers.ef1_runner import (
 )
 from ef1_reference_fixture import CASES, fixture, work, calculate, replace_column, spawned
 from supplied_memory import SerializedMemorySink
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))  # tools/_versions.py
+from _versions import CONTRACTS, FEATURES, VERSIONS  # noqa: E402
 
 LIMITS = SinkRequirements(max_results=1, max_chunk_bytes=262144,
     max_total_bytes=262144, max_result_cells=3, max_evidence_rows=12)
@@ -41,8 +45,7 @@ class EF1References(unittest.TestCase):
     def setUpClass(cls):
         import equity_features
         import equity_feature_workers
-        if (equity_features.__version__, c.__version__, equity_feature_workers.__version__) != (
-                '0.0.4a5', '0.0.4a4', '0.1.0a15'):
+        if (equity_features.__version__, c.__version__, equity_feature_workers.__version__) != (FEATURES, CONTRACTS, VERSIONS['equity-feature-workers']):
             raise AssertionError('Exact candidate versions required')
 
     def rejects(self, operation, code=None):
@@ -93,7 +96,7 @@ class EF1References(unittest.TestCase):
             self.assertEqual(result.metadata.inputs, tuple(sorted(
                 (slot.binding for slot in item.task.inputs if slot.binding is not None), key=lambda row: row.role)))
             self.assertEqual(result.metadata.config_digest, item.task.config.digest)
-            self.assertEqual(result.metadata.backend_version, '0.0.4a5')
+            self.assertEqual(result.metadata.backend_version, FEATURES)
 
     def test_main_and_actual_spawn_full_result_bytes_match(self):
         items = tuple(work(name) for name in ('R01-CANONICAL', 'INDUSTRY-CANONICAL', 'R03-CANONICAL',

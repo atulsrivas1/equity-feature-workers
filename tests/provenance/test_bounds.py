@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock,patch
 from equity_feature_contracts import Column
+import equity_feature_duckdb as duckdb_adapter
 from equity_feature_duckdb import AcquisitionReceipt,FileEvidence,ResolvedPartition
 from equity_feature_workers import GenerationSpec,GenerationStore,BarrierLimits,Dependency
 from equity_feature_io_contracts import SinkRequirements
@@ -17,17 +18,17 @@ class BoundsTests(unittest.TestCase):
     def test_current_adapter_identity_is_exact_and_old_future_versions_refuse(self):
         value = fixture()
         acquired = value.acquired[0]
-        self.assertEqual(acquired.receipt.adapter_version, '0.1.0a9')
+        self.assertEqual(acquired.receipt.adapter_version, duckdb_adapter.__version__)
         self.assertEqual(AcquiredInput('trades', acquired.receipt, acquired.batch).receipt,
                          acquired.receipt)
-        for version in ('0.1.0a8', '0.1.0a10', 'unknown'):
+        for version in ('0.1.0a8', '0.1.0a11', 'unknown'):
             # Deliberately forged version must fail before hashing/encoding. The
-            # immutable original remains unchanged, including its real a9 stamp.
+            # immutable original remains unchanged, including its real adapter stamp.
             candidate = replace(acquired.receipt)
             object.__setattr__(candidate, 'adapter_version', version)
             self.refusal('unsupported_version',
                          lambda: AcquiredInput('trades', candidate, acquired.batch))
-        self.assertEqual(acquired.receipt.adapter_version, '0.1.0a9')
+        self.assertEqual(acquired.receipt.adapter_version, duckdb_adapter.__version__)
 
     def refusal(self,code,call):
         with self.assertRaises(ProvenanceError) as caught:call()

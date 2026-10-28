@@ -8,6 +8,7 @@ from ._supplied import admit, fail, result_identity, translated
 from .commands import CommandErrorCode
 from .manifests import InputManifest, TaskManifest
 from .supervisor import Calculation, WorkItem
+from ._versions import FEATURES_VERSION
 
 
 def roles(producer: str) -> tuple[str, ...]:
@@ -46,7 +47,7 @@ def compute(task: TaskManifest, batches: tuple[CanonicalBatch, ...], producer: s
         result = library.compute_ef1(batches, task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         if any(column.entities != (entity,) for column in result.values):
             fail(CommandErrorCode.RESULT)
         return (result,)

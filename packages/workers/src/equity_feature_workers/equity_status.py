@@ -16,6 +16,7 @@ from .equity_clock import _clock_governed
 from .equity_sessions import _library
 from .manifests import InputManifest, TaskManifest
 from .supervisor import WorkItem
+from ._versions import FEATURES_VERSION
 
 
 _ROLES = ('calendar_provenance', 'status_states', 'status_prefix', 'status_validity')
@@ -104,7 +105,7 @@ def compute_status_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, ...
         result = library.compute_ef1(_status_slots(task, batches), task.config, entity=entity)
         if type(result) is not FeatureResult:
             fail(CommandErrorCode.RESULT)
-        result_identity(task, result, 'python-exact', '0.0.4a5')
+        result_identity(task, result, 'python-exact', FEATURES_VERSION)
         if any(column.entities != (entity,) for column in result.values):
             fail(CommandErrorCode.RESULT)
         return (result,)

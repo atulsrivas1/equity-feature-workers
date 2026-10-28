@@ -1,3 +1,7 @@
+## Coordinated pre-release bump for contracts 0.0.4a5 and features 0.0.4a6 - October 28, 2026
+
+workers 0.1.0a15 to 0.1.0a16 and provenance 0.1.0a2 to 0.1.0a3; mcp 0.1.0a2 (its `evidence` extra pinned stale versions); client and service keep their versions and follow the new exact pins. The feature routes read the expected features version from one module (`_versions.py`) instead of fifteen literals, and `tools/_versions.py` plus `tools/verify_versions.py` hold and check the versions for tools and tests. Goldens that embed versions are regenerated with version-only differences (hashes in [docs/PRERELEASE_BUMP_A5_A6.md](docs/PRERELEASE_BUMP_A5_A6.md)). No tag, no publish.
+
 ## Closed contract_code on worker refusals (R9a) - October 27, 2026
 
 Additive: `CommandError.contract_code` and `TaskDiagnostic.contract_code` (default `None`) carry the shared library `ErrorCode` value (closed set, fixed `unclassified` fallback, `None` for worker-originated refusals) beside the unchanged `CommandErrorCode` transport category, with one shared mapping for the EF3 D, E and F workers. See `docs/COMMANDS.md`.
