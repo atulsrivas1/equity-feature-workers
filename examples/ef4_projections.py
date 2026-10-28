@@ -47,6 +47,9 @@ RESULT_COUNT = 111
 REFUSAL_COUNT = 114
 ROLES = {'session_projection': ('daily',), 'bar_projection': ('bars',), 'relative_excess': ('legs', 'membership'),
          'rate_projection': ('tape', 'legs')}
+# The contract fixture notation (PATH_PROJECTIONS_CONTRACT_PROPOSAL.json fixture_notation) documents known_at 50 for a slot
+# without ka; the I/O adapter never defaults, so the driver supplies the documented token explicitly.
+FIXTURE_DEFAULT_KA = 50
 # Worker code expected for a library code (the worker collapses library codes into its own taxonomy).
 WORKER_OF = {'INCONSISTENT_IDENTITY': 'RESULT_IDENTITY_MISMATCH', 'OVERFLOW': 'CALCULATION_FAILED'}
 
@@ -257,7 +260,7 @@ def _run_refusal(H, P, ids, fixtures: dict, entry: dict) -> dict:
             H.set_path(obj, mutation['del'], delete=True)
     fixture, ctx = obj['fixture'], obj['ctx']
     try:
-        request = P.build_request(entry['producer'], fixture, ctx, ids)
+        request = P.build_request(entry['producer'], fixture, ctx, ids, default_known_at=FIXTURE_DEFAULT_KA)
     except P.ProjectionStageError as error:
         record.update(stage='adapter_build', adapter_layer=error.stage, library_code=(error.code.value if error.code else None))
         return _finish(record)
@@ -279,13 +282,13 @@ def _run_refusal(H, P, ids, fixtures: dict, entry: dict) -> dict:
     try:
         item = make_work(request, grid, request.features, 'refusal-' + entry['id'], 'ef4-refusal')
     except CommandError as error:
-        record.update(stage='worker_admission', worker_code=error.code.value, library_code=library)
+        record.update(stage='worker_admission', worker_code=error.code.value, worker_contract_code=error.contract_code, library_code=library)
         return _finish(record)
     try:
         item.calculate(item.task, item.batches)
         record.update(stage='no_refusal')
     except CommandError as error:
-        record.update(stage='compute', worker_code=error.code.value, library_code=library)
+        record.update(stage='compute', worker_code=error.code.value, worker_contract_code=error.contract_code, library_code=library)
     return _finish(record)
 
 
@@ -349,7 +352,7 @@ def main(argv: list[str] | None = None) -> int:
     fixture = fixtures[args.case]
     producer = fixture['producer']
     ids = ids_for(P, args.binding)
-    request = P.build_request(producer, fixture, H.default_ctx(fixture), ids)
+    request = P.build_request(producer, fixture, H.default_ctx(fixture), ids, default_known_at=FIXTURE_DEFAULT_KA)
     grid = core_grid(request)
     runner = runner_of(producer)
     scope = 'ef4-' + producer.replace('_', '-') + '-synthetic'

@@ -270,13 +270,13 @@ def _run_refusal(H, qv, document: dict, fixtures: dict, entry: dict) -> dict:
     try:
         item = make_work(request, features, 'refusal-' + entry['id'], 'ef4-refusal')
     except CommandError as error:
-        record.update(stage='worker_admission', worker_code=error.code.value, library_code=library)
+        record.update(stage='worker_admission', worker_code=error.code.value, worker_contract_code=error.contract_code, library_code=library)
         return _finish(record)
     try:
         item.calculate(item.task, item.batches)
         record.update(stage='no_refusal')
     except CommandError as error:
-        record.update(stage='compute', worker_code=error.code.value, library_code=library)
+        record.update(stage='compute', worker_code=error.code.value, worker_contract_code=error.contract_code, library_code=library)
     return _finish(record)
 
 
