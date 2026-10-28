@@ -26,7 +26,7 @@ IO_COMMIT = "19aa266b9debb92a6c5eb707baafeb9ae7a82942"
 # Exact reviewed clock source candidates; historical companion pins stay above.
 PINS_CORE = "710fe05b812d4acc06d7e828c96ac1922e3203dc"
 PINS_IO = "f8894267b8f9c64fbe32d174193760ae71b95d36"
-SCOPED = ("packages", "tools", "tests", "requirements-dev.txt", ".github/workflows/foundation.yml")
+SCOPED = ("packages", "tools", "tests", "requirements-dev.txt")
 EXPECTED = {
     "equity-feature-io-contracts": [f"equity-feature-contracts=={VERSIONS['equity-feature-contracts']}"],
     "equity-feature-io-sdk": [f"equity-feature-io-contracts=={VERSIONS['equity-feature-io-contracts']}"],
