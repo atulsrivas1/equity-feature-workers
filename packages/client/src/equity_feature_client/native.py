@@ -28,7 +28,12 @@ _TYPES = (
 _RECORDS = {cls.__name__: cls for cls in _TYPES}
 
 
-def _cell(value: Any) -> Any:
+# Feature context: only this feature's TopKTrades cells are ranked by notional (core results.TOP_K_RANKINGS); the rank order of the
+# rows is part of the cell's validity, so the decoder must be told which ranking the column's feature uses.
+NOTIONAL_FEATURE = 'tape.top_k_notional'
+
+
+def _cell(value: Any, notional: bool = False) -> Any:
     if value is None:
         return None
     tag = value['type']
@@ -49,13 +54,13 @@ def _cell(value: Any) -> Any:
     if tag in ('string', 'bool'):
         return value['value']
     if tag == 'list':
-        return tuple(_cell(item) for item in value['items'])
+        return tuple(_cell(item, notional) for item in value['items'])
     if tag != 'record' or value['name'] not in _RECORDS:
         raise ValueError('invalid_conversion')
     cls = _RECORDS[value['name']]
     if set(value['fields']) != {field.name for field in fields(cls)}:
         raise ValueError('invalid_conversion')
-    args = {name: _cell(cell) for name, cell in value['fields'].items()}
+    args = {name: _cell(cell, notional) for name, cell in value['fields'].items()}
     if cls is r.InputBinding:
         args['kind'] = DataKind(args['kind'])
     elif cls is r.QualityRow:
@@ -63,6 +68,8 @@ def _cell(value: Any) -> Any:
         args['reasons'] = tuple(r.Reason(reason) for reason in args['reasons'])
     elif cls is r.EvidenceRow and args['exclusion_reason'] is not None:
         args['exclusion_reason'] = r.Reason(args['exclusion_reason'])
+    if cls is r.TopKTrades and notional:
+        return cls(**args, ranking='notional')
     return cls(**args)
 
 
@@ -147,7 +154,7 @@ def convert_result(view: ResultView, expectation: ProducerExpectation, *, config
         if config is not None and (type(config) is not ConfigSpec or config.digest != expectation.context_json()['config']['digest']):
             raise ValueError('invalid_conversion')
         columns = tuple(FeatureColumn(c['feature_id'], c['algorithm_version'], r.ValueType(c['dtype']), c['unit'],
-                                      tuple(r.EntityKey(**e) for e in c['entities']), tuple(_cell(v) for v in c['values']), c['schema_version']) for c in payload['columns'])
+                                      tuple(r.EntityKey(**e) for e in c['entities']), tuple(_cell(v, c['feature_id'] == NOTIONAL_FEATURE) for v in c['values']), c['schema_version']) for c in payload['columns'])
         quality = tuple(r.QualityRow(r.EntityKey(**q['entity']), q['feature_id'], r.Status(q['status']),
                                     None if q['expected'] is None else _wire.integer(q['expected']),
                                     _wire.integer(q['observed']), tuple(r.Reason(reason) for reason in q['reasons'])) for q in payload['quality'])
