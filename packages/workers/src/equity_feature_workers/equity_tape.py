@@ -19,9 +19,12 @@ from __future__ import annotations
 
 import pickle
 import re
+from collections.abc import Callable, Iterable
 from types import ModuleType
+from typing import Any, cast
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, EntityKey, FeatureResult, IntervalSpec
+from equity_feature_contracts.results import InputBinding
 from equity_feature_io_contracts import FeatureHeader
 from equity_feature_io_sdk import descriptor
 
@@ -71,13 +74,13 @@ def _headers(config: ConfigSpec, selected: tuple[str, ...]) -> tuple[FeatureHead
                  for f in selected)
 
 
-def _intervals(sessions) -> tuple[IntervalSpec, ...]:
+def _intervals(sessions: Iterable[Any]) -> tuple[IntervalSpec, ...]:
     return tuple(IntervalSpec(s.session_id, s.open_ns, s.close_ns) for s in sessions)
 
 
-def _tree(roles: tuple[str, ...]):
+def _tree(roles: tuple[str, ...]) -> Any:
     """The merge tree spelled by leaf roles: a leaf is ``None``, a group is a tuple of children in index order."""
-    def build(paths: list[tuple[str, ...]]):
+    def build(paths: list[tuple[str, ...]]) -> Any:
         if paths == [()]:
             return None
         groups: dict[int, list[tuple[str, ...]]] = {}
@@ -93,7 +96,7 @@ def _tree(roles: tuple[str, ...]):
     return build([tuple(r.split('.')[:-1]) for r in roles])
 
 
-def _leaves(node, prefix: str = '') -> list[str]:
+def _leaves(node: Any, prefix: str = '') -> list[str]:
     """Leaf roles in the library's own result order: depth first, partition index ascending."""
     if node is None:
         return [prefix + 'trades']
@@ -131,7 +134,7 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: str)
                 or len({i.role for i in bound}) != len(bound)):
             fail(CommandErrorCode.RESULT)
         for manifest, batch in zip(bound, batches):
-            binding = manifest.binding
+            binding = cast(InputBinding, manifest.binding)
             if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                     or batch.metadata.coverage.observed != batch.row_count
                     or batch.metadata.namespace != config.session.namespace):
@@ -184,13 +187,13 @@ def _compute(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: st
 def _merge(library: ModuleType, task: TaskManifest, by_role: dict[str, CanonicalBatch], entity: EntityKey,
         selected: tuple[str, ...]) -> FeatureResult:
     """Compute one partial per leaf partition with the shared configuration and merge them along the role tree."""
-    def run(node, prefix: str) -> FeatureResult:
+    def run(node: Any, prefix: str) -> FeatureResult:
         if node is None:
             batch = by_role[prefix + 'trades']
-            return library.compute_ef4_tape((batch,), task.config, entity=entity, features=selected)
+            return cast(FeatureResult, library.compute_ef4_tape((batch,), task.config, entity=entity, features=selected))
         parts = [library.NotionalPartial(task.config, entity, run(child, prefix + 'p%d.' % i))
                  for i, child in enumerate(node)]
-        return library.merge_trade_top_k_notional(parts)
+        return cast(FeatureResult, library.merge_trade_top_k_notional(parts))
     tree = _tree(tuple(by_role))
     if tree is None:
         fail(CommandErrorCode.RESULT)
@@ -211,7 +214,8 @@ def compute_tape_top_k_merge_inputs(task: TaskManifest, batches: tuple[Canonical
 
 def _make(config: ConfigSpec, family: str, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple | None, max_input_bytes: int, calculate) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...] | None, max_input_bytes: int,
+        calculate: Callable[[TaskManifest, tuple[CanonicalBatch, ...]], tuple[FeatureResult, ...]]) -> WorkItem:
     with translated():
         identity, algorithm, allowed_name, roles = _PRODUCERS[family]
         if type(config) is not ConfigSpec:
@@ -229,7 +233,7 @@ def _make(config: ConfigSpec, family: str, *, features: tuple[str, ...], inputs:
 
 def make_tape_window_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...] | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     """`inputs` bind the delivered roles (`trades`, `seed`) to `batches` in the same order."""
     return _make(config, WINDOW_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
         job_id=job_id, generation_id=generation_id, partition_id=partition_id, destination_scope=destination_scope,
@@ -238,7 +242,7 @@ def make_tape_window_work(config: ConfigSpec, *, features: tuple[str, ...], inpu
 
 def make_tape_top_k_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...] | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     """`inputs` bind the delivered role (`trades`) to `batches` in the same order."""
     return _make(config, TOP_K_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
         job_id=job_id, generation_id=generation_id, partition_id=partition_id, destination_scope=destination_scope,
@@ -247,7 +251,7 @@ def make_tape_top_k_work(config: ConfigSpec, *, features: tuple[str, ...], input
 
 def make_tape_top_k_merge_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...] | None = None, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     """One batch per partition; `inputs` roles spell the merge tree (`p0.trades`, `p1.trades`, `p0.p1.trades`, ...)."""
     return _make(config, MERGE_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
         job_id=job_id, generation_id=generation_id, partition_id=partition_id, destination_scope=destination_scope,

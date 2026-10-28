@@ -42,6 +42,9 @@ BAR = 60 * 10 ** 9
 DAY = 86_400 * 10 ** 9
 SEC = 10 ** 9
 SCOPE = 'ef4-path-efficiency-synthetic'
+# Fixture-driver opt-in (io #50 pattern): the compact notation's default known_at token (K - 50 s) is stated by the
+# driver and passed explicitly; nothing below defaults a missing known_at on its own.
+FIXTURE_DEFAULT_KA = 50
 
 
 def contract_document(override: Path | None) -> dict:
@@ -102,7 +105,7 @@ def set_path(root, path: str, value=None, delete: bool = False) -> None:
         cur[last] = value
 
 
-def explicit_batch(context, entries, cols, price, adjustment, n, daily, dur):
+def explicit_batch(context, entries, cols, price, adjustment, n, daily, dur, *, default_known_at: int):
     """One chunk with explicit identity rows for wire-form recipes (identity from the wire override or the grid)."""
     from equity_feature_duckdb.path_efficiency import make_path_batch, make_slot_coverage
     rows, intervals = [], []
@@ -120,7 +123,7 @@ def explicit_batch(context, entries, cols, price, adjustment, n, daily, dur):
         if 'wire' in entry:
             record = {**default, **{k: v for k, v in entry['wire'].items() if k != 'row'}}
             values = tuple(entry['wire']['row'])
-            known_at = T0 + n * dur + 50 * SEC  # K - 50 s, the default known_at of the compact notation
+            known_at = T0 + n * dur + default_known_at * SEC  # K - default_known_at s (fixture compact notation)
         else:
             record, values, known_at = default, tuple(entry['values']), entry['known_at_ns']
         rows.append((record['inst'], record['ss'], record['start'], record['end'], *values, known_at))
@@ -133,7 +136,7 @@ def explicit_batch(context, entries, cols, price, adjustment, n, daily, dur):
     return make_path_batch(names, tuple(rows), metadata=metadata)
 
 
-def expand(fixture: dict, ctx: dict):
+def expand(fixture: dict, ctx: dict, *, default_known_at: int):
     """Fixture and context -> (context, chunks, config, features, capability). Adapter refusals raise ContractError."""
     from equity_feature_duckdb.path_efficiency import (
         CLOSE_COLUMNS, OHLCV_COLUMNS, make_path_chunks, make_path_config, make_path_context)
@@ -155,13 +158,13 @@ def expand(fixture: dict, ctx: dict):
 
     def entry(slot):
         if slot == 'null':  # row present, null volume and null OHLC (or null close)
-            return {'values': (None,) * width, 'known_at_ns': known(50)}
+            return {'values': (None,) * width, 'known_at_ns': known(default_known_at)}
         if isinstance(slot, str) or slot is None or (isinstance(slot, dict) and 'wire' in slot):
             return slot
         if isinstance(slot, dict) and 'row' in slot:
             row = slot['row']
             return {'values': tuple(row) if row is not None else (None,) * width, 'known_at_ns': known(slot['ka'])}
-        return {'values': tuple(slot), 'known_at_ns': known(50)}
+        return {'values': tuple(slot), 'known_at_ns': known(default_known_at)}
 
     entries = [entry(s) for s in slots]
     if daily:
@@ -176,7 +179,8 @@ def expand(fixture: dict, ctx: dict):
     batch_price = PriceUnit(batch_unit['scale'], batch_unit['currency'])
     batch_adjustment = AdjustmentSpec(basis=ctx['batch']['adjustment'])
     if any(isinstance(e, dict) and 'wire' in e for e in entries):
-        chunks = (explicit_batch(context, entries, cols, batch_price, batch_adjustment, n, daily, dur),)
+        chunks = (explicit_batch(context, entries, cols, batch_price, batch_adjustment, n, daily, dur,
+                                 default_known_at=default_known_at),)
     else:
         chunks = make_path_chunks(context, entries, input_id='bars', source_id='SYN-SRC', snapshot_id='snap1',
                                   namespace='SYN', price_unit=batch_price, adjustment=batch_adjustment, columns=cols,
@@ -210,7 +214,7 @@ def declarations(chunks) -> tuple[InputManifest, ...]:
 
 def build_item(fixture: dict, features: tuple[str, ...], label: str):
     from equity_feature_workers.equity_path_efficiency import make_ef4_path_efficiency_work
-    context, chunks, config, _, _ = expand(fixture, default_ctx(fixture))
+    context, chunks, config, _, _ = expand(fixture, default_ctx(fixture), default_known_at=FIXTURE_DEFAULT_KA)
     return make_ef4_path_efficiency_work(config, features=features, inputs=declarations(chunks), batches=chunks,
         instrument_id=context.instrument_id, job_id='job-' + label, generation_id='generation-' + label,
         partition_id='X-S', destination_scope=SCOPE)
@@ -264,7 +268,7 @@ def _direct_config(recipe: dict, base: dict):
     steps = recipe['mutation']
     if not all(step.get('set', step.get('del', '')).startswith(('fixture.params.', 'ctx.config_unit')) for step in steps):
         return None  # a batch fault: the batch cannot be constructed, so the worker is never reached
-    context, chunks, config, features, _ = expand(base, default_ctx(base))
+    context, chunks, config, features, _ = expand(base, default_ctx(base), default_known_at=FIXTURE_DEFAULT_KA)
     params = {p.name: p.value for p in config.parameters}
     unit = config.price_unit
     try:
@@ -301,7 +305,7 @@ def run_refusal(recipe: dict, base: dict) -> dict:
     row = dict(id=recipe['id'], contract_code=recipe['error_code'], stage='not_refused', worker_code=None,
                library_code=None)
     try:
-        context, chunks, config, features, capability = expand(obj['fixture'], obj['ctx'])
+        context, chunks, config, features, capability = expand(obj['fixture'], obj['ctx'], default_known_at=FIXTURE_DEFAULT_KA)
     except ContractError as error:
         row.update(stage='adapter', library_code=_code(error))  # the adapter (shared validators/builders) refused
         row['worker_direct'] = _direct_config(recipe, base)
