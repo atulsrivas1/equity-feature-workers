@@ -6,6 +6,8 @@ One config is one producer (``ef2.<producer>``); the caller selects any non-empt
 """
 from __future__ import annotations
 
+from typing import Any
+
 from types import ModuleType
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, DataKind, FeatureResult, InputRequirement, IntervalSpec, ValueType
@@ -55,7 +57,7 @@ def _selection(features: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(sorted(features))
 
 
-def _context(config: ConfigSpec, features: tuple[str, ...]):
+def _context(config: ConfigSpec, features: tuple[str, ...]) -> Any:
     """Decode the chunked R17 context and require the exact reviewed config (the library decoder)."""
     if type(config) is not ConfigSpec or config.price_unit is None:
         fail()
@@ -91,14 +93,14 @@ def channels_headers(config: ConfigSpec, features: tuple[str, ...]) -> tuple[Fea
         return tuple(headers)
 
 
-def _lookback(settings) -> int | None:
+def _lookback(settings: Any) -> int | None:
     """Slots read before the target for producers with a bounded rolling window (None: anchor through target)."""
     if settings.producer == 'donchian':
-        return settings.param('period') - 1
+        return int(settings.param('period')) - 1
     if settings.producer == 'ichimoku':
         # Widest display read: the window ending at t - displacement.
-        return settings.param('displacement') + max(settings.param(n) for n in
-            ('conversion_period', 'base_period', 'leading_b_period')) - 1
+        return int(settings.param('displacement') + max(settings.param(n) for n in
+            ('conversion_period', 'base_period', 'leading_b_period')) - 1)
     return None
 
 

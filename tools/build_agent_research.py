@@ -12,7 +12,7 @@ from packaging.specifiers import SpecifierSet
 from build_foundation import git,snapshot,normalize,CORE_COMMIT
 from build_client import WORKER_COMMIT,SERVICE_COMMIT
 from build_mcp import CLIENT_COMMIT,CLIENT_INPUTS
-from build_mcp_evidence import closure
+from build_mcp_evidence import closure,load_core_module
 
 ROOT=Path(__file__).resolve().parents[1]
 CORE_RESEARCH='98778e79f9422904bbb043d067a7ce9e77675311'
@@ -82,12 +82,7 @@ def raw_application(repository,commit,dest,scopes):
 
 
 def load_auditor(path):
-    spec=importlib.util.spec_from_file_location('eq109_archive_auditor',path)
-    value=importlib.util.module_from_spec(spec)
-    previous=sys.dont_write_bytecode;sys.dont_write_bytecode=True
-    try:spec.loader.exec_module(value)
-    finally:sys.dont_write_bytecode=previous
-    return value
+    return load_core_module('eq109_archive_auditor',path)
 
 
 def reference_archive(path,auditor):
@@ -340,7 +335,7 @@ def main():
     for path in (component/'tools').glob('*.py'):
         assert (ROOT/'tools'/path.name).read_bytes().replace(b'\r\n',b'\n')==path.read_bytes().replace(b'\r\n',b'\n')
     core=snapshot(core_repo,CORE_COMMIT,temp/'core-base',('packages/contracts','packages/features'))
-    optional=snapshot(core_repo,CORE_RESEARCH,temp/'core-optional',tuple('packages/'+n for n in LIGHT if n not in ('contracts','bundles'))+('tools/build_agent_ledger.py',))
+    optional=snapshot(core_repo,CORE_RESEARCH,temp/'core-optional',tuple('packages/'+n for n in LIGHT if n not in ('contracts','bundles'))+('tools/build_agent_ledger.py','tools/_versions.py'))
     # Agent declaration/ledger accepted builds use raw Git source, unlike older
     # foundation archive materialization. Preserve their declared source profiles.
     for name in ('agent-evidence','agent-ledger'):

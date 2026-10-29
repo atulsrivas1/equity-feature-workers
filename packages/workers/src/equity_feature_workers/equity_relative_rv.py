@@ -15,6 +15,7 @@ so the two daily routes are for the sequential in-process runner only.
 from __future__ import annotations
 
 import pickle
+from typing import Any
 from types import ModuleType
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, ErrorCode, FeatureResult, IntervalSpec, ValueType
@@ -30,7 +31,7 @@ LOG_VOL_FAMILY = 'daily_log_volatility'
 RV_FAMILY = 'intraday_realized_variance'
 LOG_VOL_ROLE = 'daily'
 MAX_INPUT_BYTES = 1048576
-_GRIDS: dict[str, object] = {}
+_GRIDS: dict[str, Any] = {}
 
 
 def _ef3() -> ModuleType:
@@ -48,7 +49,7 @@ def _intraday() -> ModuleType:
     return equity_features_intraday
 
 
-def _param(config: ConfigSpec, name: str):
+def _param(config: ConfigSpec, name: str) -> Any:
     return {p.name: p.value for p in config.parameters}.get(name)
 
 
@@ -61,14 +62,14 @@ def _selection(features: tuple[str, ...], allowed: tuple[str, ...]) -> tuple[str
     return tuple(sorted(features))
 
 
-def _register(grid: object, config: ConfigSpec) -> None:
+def _register(grid: Any, config: ConfigSpec) -> None:
     """Keep a daily grid only under its own digest, and only when the configuration binds exactly that digest."""
     if type(config) is not ConfigSpec or type(grid) is not _ef3().DailyGrid or grid.digest != _param(config, 'grid_sha256'):
         fail(CommandErrorCode.CONFIG)
     _GRIDS[grid.digest] = grid
 
 
-def _registered_grid(config: ConfigSpec):
+def _registered_grid(config: ConfigSpec) -> Any:
     digest = _param(config, 'grid_sha256')
     grid = _GRIDS.get(digest) if type(digest) is str else None
     if grid is None or grid.digest != digest:
@@ -94,6 +95,8 @@ def _admit_roles(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family
         fail(CommandErrorCode.RESULT)
     for manifest, batch in zip(bound, batches):
         binding = manifest.binding
+        if binding is None:
+            fail()
         if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                 or batch.metadata.coverage.observed != batch.row_count
                 or batch.metadata.namespace != task.config.session.namespace):
@@ -111,14 +114,14 @@ def _role_batches(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) -> di
     return {manifest.role: batch for manifest, batch in zip(bound, batches)}
 
 
-def _daily_headers(grid: object, config: ConfigSpec, selected: tuple[str, ...]) -> tuple[FeatureHeader, ...]:
+def _daily_headers(grid: Any, config: ConfigSpec, selected: tuple[str, ...]) -> tuple[FeatureHeader, ...]:
     """Headers from the library's own discovery for the bound grid and configuration (the worker owns no units)."""
     definitions = {d.feature_id: d for d in _ef3().ef3_definitions(grid, config)}
     return tuple(FeatureHeader(f, definitions[f].algorithm_version, definitions[f].dtype, definitions[f].unit, '1')
                  for f in selected)
 
 
-def _intervals(sessions) -> tuple[IntervalSpec, ...]:
+def _intervals(sessions: Any) -> tuple[IntervalSpec, ...]:
     return tuple(IntervalSpec(s.session_id, s.open_ns, s.close_ns) for s in sessions)
 
 
@@ -159,7 +162,7 @@ def compute_relative_inputs(task: TaskManifest, batches: tuple[CanonicalBatch, .
         return (result,)
 
 
-def make_ef3_relative_work(config: ConfigSpec, *, grid: object, features: tuple[str, ...],
+def make_ef3_relative_work(config: ConfigSpec, *, grid: Any, features: tuple[str, ...],
         inputs: tuple[InputManifest, ...], batches: tuple[CanonicalBatch, ...], instrument_id: str,
         job_id: str, generation_id: str, partition_id: str, destination_scope: str,
         max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
@@ -215,7 +218,7 @@ def compute_log_volatility_inputs(task: TaskManifest, batches: tuple[CanonicalBa
         return (result,)
 
 
-def make_ef3_log_volatility_work(config: ConfigSpec, *, grid: object, features: tuple[str, ...],
+def make_ef3_log_volatility_work(config: ConfigSpec, *, grid: Any, features: tuple[str, ...],
         inputs: tuple[InputManifest, ...], batches: tuple[CanonicalBatch, ...], instrument_id: str,
         job_id: str, generation_id: str, partition_id: str, destination_scope: str,
         max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
@@ -237,7 +240,7 @@ def make_ef3_log_volatility_work(config: ConfigSpec, *, grid: object, features: 
 
 # ---- ef3.intraday_realized_variance ---------------------------------------------------------------------------------
 
-def _rv_context(config: ConfigSpec):
+def _rv_context(config: ConfigSpec) -> Any:
     """Decode the chunked R17 context and require the exact reviewed configuration (the library decoder)."""
     if type(config) is not ConfigSpec or config.price_unit is None:
         fail()
