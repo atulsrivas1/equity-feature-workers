@@ -1,6 +1,6 @@
 # EF5 workers layer: plan and blockers (EQ-171)
 
-Status: plan only. No worker code in this change. Inputs: core EF5 library (merged, `equity_features_intraday.compute_ef5`), io adapter
+Status: HISTORICAL (plan as written; blockers 2 and 3 are done via #102 and #103; current state in `EF5_WORKERS.md`). Originally: plan only. No worker code in this change. Inputs: core EF5 library (merged, `equity_features_intraday.compute_ef5`), io adapter
 (`equity_feature_duckdb.price_structures`, io PR #58, not yet merged), frozen contract and library errata in core `docs/ef5/`.
 
 ## Scope
