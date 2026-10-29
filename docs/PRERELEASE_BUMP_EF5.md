@@ -35,11 +35,11 @@ parquet 0.1.0a2, bundles 0.1.0a2); the conformance and r10 archives carry duckdb
 Also in this change: `tools/verify_versions.py` now gates the version pins stated in package READMEs (`name==V`, ``name`V`` or `shortV`; sections headed by an older
 version are history and skipped). An altered README fails; stale statements in the workers README were corrected.
 
-**Ran and passed (workers):** build_supplied_inputs.
-**Ran and failed for reasons outside this change (workers), so still open:** build_foundation (its installed `mypy --strict` step reports errors in existing worker modules such as
-`equity_breadth_adaptive`), build_client and build_mcp (their installed suites fail by the same test names as on main), build_service (installed environment check), build_mcp_evidence and
-build_agent_research (`KeyError: 'evidence'` in the package table they borrow from core). build_mcp's metadata audit now includes the optional extras. **Not ported:** build_provenance (marked
-NOT YET PORTED to this layout); build_resilience keeps its accepted historical baseline.
+**Ran and passed (workers), 2026-10-29 (PR 107; Windows, Python 3.12.10, core pin 98778e7, io pin 94217cf, repeat-build equality included):** build_supplied_inputs, build_foundation, build_client,
+build_mcp, build_mcp_evidence, build_service, build_agent_research (reads core main at its merge commit 852c48a) and build_provenance, now ported to this layout (this repository canonical, core and io
+pinned companions). Causes fixed: strict typing of the worker modules, a core and io cohort older than the workers, frozen native fixtures carrying backend version 0.0.4a4 (moved to 0.0.4a6 with their hash
+references; version-only, the old hashes reproduce), the 12-tool MCP list, and this repository's `_versions` shadowing core's. The earlier statements here that these builders fail the same way as on main are
+obsolete. **Deferred, not blocking:** build_resilience (keeps its accepted historical baseline; see docs/RETIRED_BUILDERS.md).
 
 ## Known limits of the README version gate
 

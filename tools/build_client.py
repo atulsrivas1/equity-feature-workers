@@ -16,13 +16,13 @@ import tarfile
 import tomllib
 import zipfile
 
-from build_foundation import build, fingerprint, git, run, sha, snapshot, CORE_COMMIT, IO_COMMIT
+from build_foundation import build, fingerprint, git, run, sha, snapshot, PINS_CORE as CORE_COMMIT, PINS_IO as IO_COMMIT
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
 from _versions import VERSIONS
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKER_COMMIT = '99b5fed2c0153ac0697feef8c06cc919b30eac8a'
-SERVICE_COMMIT = 'bafc86a0305621fdb0206fb89753475186954ac3'
+WORKER_COMMIT = '1f779c2765d2130fe4d8b52fa3e77a264a4e9a77'
+SERVICE_COMMIT = '1f779c2765d2130fe4d8b52fa3e77a264a4e9a77'
 INPUTS = ('packages/client', 'tests/client', 'tools', 'docs/EQ081_CLIENT_FIXTURES.json',
           'docs/EQ081_OWNED_HTTP_ENTRY.txt', 'docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 

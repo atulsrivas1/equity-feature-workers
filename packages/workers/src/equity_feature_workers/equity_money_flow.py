@@ -5,6 +5,8 @@ roles on the governed grid, per-feature selection and independent readiness owne
 """
 from __future__ import annotations
 
+from typing import Any
+
 from types import ModuleType
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, DataKind, FeatureResult, InputRequirement, IntervalSpec, ValueType
@@ -34,7 +36,7 @@ def _selection(features: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(sorted(features))
 
 
-def _context(config: ConfigSpec, features: tuple[str, ...]):
+def _context(config: ConfigSpec, features: tuple[str, ...]) -> Any:
     """Decode the chunked R17 context and require the exact reviewed config (rebuild and compare)."""
     if type(config) is not ConfigSpec or config.price_unit is None:
         fail()

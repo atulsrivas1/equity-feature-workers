@@ -12,7 +12,7 @@ if not all('site-packages' in Path(v.__file__).resolve().parts for v in (equity_
 from equity_feature_client import RemoteClient,DatasetKey,ScopeKey,FeatureRef,ProducerExpectation,RawExpectation
 from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration,RawSliceRegistration
 with Path(fixture).open('rb') as stream:raw=stream.read(76772)
-if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29':raise ValueError('owned fixture')
+if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='a48ea7b9182162686662ccc6d4b2589b766b3eeaa698e009ecdeec6303f18fbd':raise ValueError('owned fixture')
 fixtures=json.loads(raw)
 index=next(n for n,v in enumerate(fixtures['native_cases']) if v['case']==case)
 producer=fixtures['native_cases'][index]['complete_producer_payload']

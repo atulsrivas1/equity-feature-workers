@@ -58,7 +58,7 @@ with patch.object(authority,'RemoteClient',side_effect=owned_client),fixture.nat
    async with stdio_client(params) as (read,write):
     async with ClientSession(read,write,read_timeout_seconds=timedelta(seconds=10)) as session:
      init=await session.initialize();assert init.protocolVersion=='2025-11-25'
-     listed=await session.list_tools();assert [v.name for v in listed.tools]==['equity_discover','equity_slice','equity_calculate','equity_job_status','equity_job_cancel','equity_result_summary','equity_artifact_reference']
+     listed=await session.list_tools();assert [v.name for v in listed.tools]==['equity_discover','equity_slice','equity_calculate','equity_job_status','equity_job_cancel','equity_result_summary','equity_artifact_reference','equity_receipt','equity_explanation','equity_diagnostics','equity_evidence_read','equity_evidence_capabilities']
      async def call(name,arguments):
       result=await session.call_tool(name,arguments)
       assert len(result.content)==1 and result.content[0].type=='text'

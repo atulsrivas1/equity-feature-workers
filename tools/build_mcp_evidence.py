@@ -1,16 +1,30 @@
 """UNEXECUTED EQ108 committed-source four-form builder; exact review before run."""
 import argparse,configparser,hashlib,importlib.util,io,json,os,platform,shutil,subprocess,sys,tempfile
 from pathlib import Path
-from build_foundation import build,fingerprint,git,run,snapshot,CORE_COMMIT,IO_COMMIT
+from build_foundation import build,fingerprint,git,run,snapshot,PINS_CORE as CORE_COMMIT, PINS_IO as IO_COMMIT
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 from build_mcp import reference_record,CLIENT_COMMIT,CLIENT_INPUTS
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/"tools"))
+from _versions import VERSIONS
 OPTIONAL_CORE='98778e79f9422904bbb043d067a7ce9e77675311'
 INPUTS=('packages/mcp','tests/mcp','tests/mcp_evidence','tests/qualification/test_mcp_records.py','tools','examples/mcp_evidence.py',
     'docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ108_LEGACY_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt',
     'docs/EQ108_EVIDENCE_REFERENCE_ENTRY.txt','docs/EQ108_EVIDENCE_REFERENCE_PROBE.txt','docs/EQ083_REFERENCE_PROCESS.txt','docs/EQ083_LINUX_REFERENCE_CHILD.txt',
     'docs/stories/EQ-108_ORACLES.json','docs/stories/EQ-108_ADMISSION.json','docs/stories/EQ-108_TOOL_SCHEMAS.json','docs/stories/EQ-108_WIRE_BOUNDS.json')
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_core_module(name,path):
+    """Load a core tool by path with core's own `_versions` (this repository's `_versions` has other keys and would shadow it)."""
+    spec=importlib.util.spec_from_file_location(name,path);value=importlib.util.module_from_spec(spec)
+    saved=sys.modules.pop('_versions',None);sys.path.insert(0,str(Path(path).resolve().parent))
+    previous=sys.dont_write_bytecode;sys.dont_write_bytecode=True
+    try:spec.loader.exec_module(value)
+    finally:
+        sys.dont_write_bytecode=previous;sys.path.remove(str(Path(path).resolve().parent));sys.modules.pop('_versions',None)
+        if saved is not None:sys.modules['_versions']=saved
+    return value
 
 def generated_config(source,sdist,auditor):
     """Bind the tracked input and complete platform-rendered generated metadata."""
@@ -42,9 +56,6 @@ def closure(py,location):
     source='''import base64,csv,hashlib,io,json,sys
 from pathlib import Path
 from importlib.metadata import distributions
-import sys
-sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
-from _versions import VERSIONS
 base=Path(sys.prefix).resolve();out={}
 for dist in distributions():
  names=tuple(dist.files or ())
@@ -173,9 +184,9 @@ def main():
     service=snapshot(ROOT,SERVICE_COMMIT,temp/'service',('packages/service','tests/service'))
     workers=snapshot(ROOT,WORKER_COMMIT,temp/'workers',('packages/workers',))
     core=snapshot(args.core_root.resolve(),CORE_COMMIT,temp/'core')
-    optional=snapshot(args.core_root.resolve(),OPTIONAL_CORE,temp/'optional',('packages/evidence','packages/explanations','packages/diagnostics','tools/build_agent_ledger.py'))
+    optional=snapshot(args.core_root.resolve(),OPTIONAL_CORE,temp/'optional',('packages/evidence','packages/explanations','packages/diagnostics','tools/build_agent_ledger.py','tools/_versions.py'))
     io_source=snapshot(args.io_root.resolve(),IO_COMMIT,temp/'io',('packages','examples/third_party'))
-    spec=importlib.util.spec_from_file_location('accepted_archive_auditor',optional/'tools/build_agent_ledger.py');auditor=importlib.util.module_from_spec(spec);spec.loader.exec_module(auditor)
+    auditor=load_core_module('accepted_archive_auditor',optional/'tools/build_agent_ledger.py')
     auditor.PACKAGES.update({'mcp':('equity_feature_mcp',VERSIONS['equity-feature-mcp']),'explanations':('equity_feature_explanations',VERSIONS['equity-feature-explanations']),'diagnostics':('equity_feature_diagnostics',VERSIONS['equity-feature-diagnostics'])})
     dependencies=temp/'dependencies';extra_dir=temp/'extra'
     for repository,paths in ((core,('packages/contracts','packages/features')),(io_source,('packages/io-contracts','packages/io-sdk','packages/duckdb','examples/third_party')),(workers,('packages/workers',)),(service,('packages/service',)),(client,('packages/client',))):

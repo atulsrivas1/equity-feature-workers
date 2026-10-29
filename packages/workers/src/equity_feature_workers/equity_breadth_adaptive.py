@@ -16,6 +16,7 @@ publishes nothing. Both are mapped by ``translated()``.
 from __future__ import annotations
 
 import pickle
+from typing import Any
 from types import ModuleType
 
 from equity_feature_contracts import (CanonicalBatch, ConfigSpec, EntityKey, ErrorCode, FeatureResult, IntervalSpec,
@@ -64,7 +65,7 @@ _ROLES_OBSERVED = ('members', 'change', 'qualifier_price', 'qualifier_volume')
 _ROLES_ADAPTIVE = ('observations',)
 
 
-def _definitions(config: ConfigSpec):
+def _definitions(config: ConfigSpec) -> Any:
     return _ef3().ef3_breadth_definitions(config)
 
 
@@ -140,6 +141,8 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...]) -> ModuleTyp
             fail(CommandErrorCode.RESULT)
         for manifest, batch in zip(bound, batches):
             binding = manifest.binding
+            if binding is None:
+                fail()
             if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                     or batch.metadata.coverage.observed != batch.row_count
                     or batch.metadata.namespace != task.config.session.namespace):

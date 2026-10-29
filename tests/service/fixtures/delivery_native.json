@@ -8,7 +8,7 @@
       "case": "trades",
       "family": "trades",
       "ns_offset_decimal": "0",
-      "native_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+      "native_sha256": "11b1fb8f433c062429f9d56195a4f8a074531b6ccce3378d5a40de494697e560",
       "native_result": {
         "fields": {
           "evidence": [],
@@ -31,7 +31,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
               "evidence_limit": {
                 "int": "0"
@@ -384,7 +384,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -571,7 +571,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",
@@ -823,7 +823,7 @@
       "case": "bars",
       "family": "bars",
       "ns_offset_decimal": "0",
-      "native_sha256": "8776f94ba6b31943da18c88a4b32eb8a0a110812030b556cff62bb4c7c358fa6",
+      "native_sha256": "a17b188d5e7a58b5bc03ac0d2a78439490cd0baf8a1c2e0b39b1326bd2df24bc",
       "native_result": {
         "fields": {
           "evidence": [],
@@ -846,7 +846,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
               "evidence_limit": {
                 "int": "0"
@@ -1562,7 +1562,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -1904,7 +1904,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",
@@ -2237,7 +2237,7 @@
       "case": "quotes",
       "family": "quotes",
       "ns_offset_decimal": "0",
-      "native_sha256": "0e585d4ee2f75e81d86af893c855afb29e4d100daf4031da5ee9e9f68abe7af4",
+      "native_sha256": "3b7f1f08d01eda69136412df6e97e010ebc712806f2ea8425fc44d3b837f8288",
       "native_result": {
         "fields": {
           "evidence": [
@@ -2365,7 +2365,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact-compensated",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "370a0bc360a6fc7af75f9c5eb5e66b3c24e154b0cf729d9a7fe3270bd84cee57",
               "evidence_limit": {
                 "int": "4"
@@ -2709,7 +2709,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact-compensated",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -3255,7 +3255,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",
@@ -3497,7 +3497,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "d911f4fbe47c7708b1ff551c5353ef2d9fc65a347675566193874224a68de690",
               "evidence_limit": {
                 "int": "0"
@@ -3850,7 +3850,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -4037,7 +4037,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",

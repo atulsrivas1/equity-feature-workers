@@ -192,7 +192,12 @@ def qualify(dependencies, artifacts, form, packages, probe, core_benchmark):
             # This historical form intentionally has no optional intraday
             # distribution. Its separate combined installed form types that
             # module against the actual extra; keep base modules strict here.
-            optional = ("--exclude", r"[/\\]intraday\.py$") if name == "equity-feature-workers" else ()
+            optional: tuple[str, ...] = ()
+            if name == "equity-feature-workers":
+                # Every module importing the optional intraday distribution is typed in the separate combined form, not here.
+                source = probe.parent.parent / "packages" / "workers" / "src" / "equity_feature_workers"
+                modules = sorted(m.stem for m in source.glob("*.py") if "equity_features_intraday" in m.read_text(encoding="utf-8"))
+                optional = ("--exclude", r"/(" + "|".join(["intraday", *modules]) + r")\.py$")
             run(py, "-I", "-m", "mypy", "--strict", *optional, "-p", name.replace("-", "_"), cwd=location)
         fp = hashlib.sha256(json.dumps(before, sort_keys=True).encode()).hexdigest()
         backend_versions = json.loads(subprocess.check_output([str(py), "-I", "-c",

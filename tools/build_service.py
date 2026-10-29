@@ -11,11 +11,11 @@ import tempfile
 import zipfile
 import tarfile
 
-from build_foundation import build, fingerprint, git, run, sha, snapshot, CORE_COMMIT, IO_COMMIT
+from build_foundation import build, fingerprint, git, run, sha, snapshot, PINS_CORE as CORE_COMMIT, PINS_IO as IO_COMMIT
 
 ROOT = Path(__file__).resolve().parents[1]
 DEPENDENCIES = ('packages/contracts', 'packages/features', 'packages/io-contracts', 'packages/io-sdk', 'packages/duckdb')
-WORKER_COMMIT = '99b5fed2c0153ac0697feef8c06cc919b30eac8a'
+WORKER_COMMIT = '1f779c2765d2130fe4d8b52fa3e77a264a4e9a77'
 
 
 def audit(path, source):

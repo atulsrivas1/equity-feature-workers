@@ -69,7 +69,7 @@ def _cell(value: Any, notional: bool = False) -> Any:
     elif cls is r.EvidenceRow and args['exclusion_reason'] is not None:
         args['exclusion_reason'] = r.Reason(args['exclusion_reason'])
     if cls is r.TopKTrades and notional:
-        return cls(**args, ranking='notional')
+        args['ranking'] = 'notional'
     return cls(**args)
 
 

@@ -78,6 +78,9 @@ def literal_count_owner_fixture():
     raw['context']['features']=[feature]
     raw['executed_features']=[feature]
     raw['metadata']['fields']['config_digest']['value']=cfg.digest
+    # The accepted receipt oracle was frozen at its own producer version; the transport data declares that same version.
+    raw['backend_version']=result.metadata.backend_version
+    raw['metadata']['fields']['backend_version']['value']=result.metadata.backend_version
     raw['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['source']['fields']['input_id']['value']='trades1'
     raw['columns']=[dict(feature_id='session.trade.count',algorithm_version='v1',schema_version='1',dtype='int64',unit='trades',
         entities=[dict(instrument_id='A',session_id='S')],values=[dict(type='int64',value='3')])]

@@ -14,6 +14,8 @@ nothing outlives a work item.
 from __future__ import annotations
 
 import pickle
+from typing import Any
+from collections.abc import Callable
 from types import ModuleType
 
 from equity_feature_contracts import CanonicalBatch, ConfigSpec, EntityKey, FeatureResult, IntervalSpec
@@ -66,7 +68,7 @@ def _headers(config: ConfigSpec, selected: tuple[str, ...]) -> tuple[FeatureHead
                  for f in selected)
 
 
-def _intervals(sessions) -> tuple[IntervalSpec, ...]:
+def _intervals(sessions: Any) -> tuple[IntervalSpec, ...]:
     return tuple(IntervalSpec(s.session_id, s.open_ns, s.close_ns) for s in sessions)
 
 
@@ -98,6 +100,8 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: str)
             fail(CommandErrorCode.RESULT)
         for manifest, batch in zip(bound, batches):
             binding = manifest.binding
+            if binding is None:
+                fail()
             if ((binding.role, binding.kind, binding.metadata) != (manifest.role, batch.kind, batch.metadata)
                     or batch.metadata.coverage.observed != batch.row_count
                     or batch.metadata.namespace != config.session.namespace or manifest.role not in roles):
@@ -114,7 +118,7 @@ def _admit(task: TaskManifest, batches: tuple[CanonicalBatch, ...], family: str)
         return library
 
 
-def _slots(task: TaskManifest, batches: tuple[CanonicalBatch, ...], roles: tuple[str, ...]) -> tuple:
+def _slots(task: TaskManifest, batches: tuple[CanonicalBatch, ...], roles: tuple[str, ...]) -> tuple[Any, ...]:
     """Bind each supplied batch to its fixed library slot by its manifest role; absent roles stay None."""
     by_role = {manifest.role: batch for manifest, batch in zip(
         tuple(i for i in task.inputs if i.binding is not None), batches)}
@@ -148,7 +152,7 @@ def compute_volume_ratio_mean_inputs(task: TaskManifest, batches: tuple[Canonica
 
 def _make(config: ConfigSpec, family: str, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
         batches: tuple[CanonicalBatch, ...], instrument_id: str, job_id: str, generation_id: str, partition_id: str,
-        destination_scope: str, governed: tuple, max_input_bytes: int, calculate) -> WorkItem:
+        destination_scope: str, governed: tuple[Any, ...], max_input_bytes: int, calculate: Callable[[TaskManifest, tuple[CanonicalBatch, ...]], tuple[FeatureResult, ...]]) -> WorkItem:
     with translated():
         identity, algorithm, allowed_name, roles = _PRODUCERS[family]
         if type(config) is not ConfigSpec:
@@ -163,7 +167,7 @@ def _make(config: ConfigSpec, family: str, *, features: tuple[str, ...], inputs:
 
 
 def make_robust_history_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
-        batches: tuple[CanonicalBatch, ...], instrument_id: str, governed: tuple, job_id: str, generation_id: str,
+        batches: tuple[CanonicalBatch, ...], instrument_id: str, governed: tuple[Any, ...], job_id: str, generation_id: str,
         partition_id: str, destination_scope: str, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     """`governed` is the supplied sessions (session_id, open_ns, close_ns) declared for this item, in grid order."""
     return _make(config, HISTORY_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
@@ -172,7 +176,7 @@ def make_robust_history_work(config: ConfigSpec, *, features: tuple[str, ...], i
 
 
 def make_volume_pace_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
-        batches: tuple[CanonicalBatch, ...], instrument_id: str, governed: tuple, job_id: str, generation_id: str,
+        batches: tuple[CanonicalBatch, ...], instrument_id: str, governed: tuple[Any, ...], job_id: str, generation_id: str,
         partition_id: str, destination_scope: str, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     return _make(config, PACE_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
         job_id=job_id, generation_id=generation_id, partition_id=partition_id, destination_scope=destination_scope,
@@ -180,7 +184,7 @@ def make_volume_pace_work(config: ConfigSpec, *, features: tuple[str, ...], inpu
 
 
 def make_volume_ratio_mean_work(config: ConfigSpec, *, features: tuple[str, ...], inputs: tuple[InputManifest, ...],
-        batches: tuple[CanonicalBatch, ...], instrument_id: str, governed: tuple, job_id: str, generation_id: str,
+        batches: tuple[CanonicalBatch, ...], instrument_id: str, governed: tuple[Any, ...], job_id: str, generation_id: str,
         partition_id: str, destination_scope: str, max_input_bytes: int = MAX_INPUT_BYTES) -> WorkItem:
     return _make(config, MEAN_FAMILY, features=features, inputs=inputs, batches=batches, instrument_id=instrument_id,
         job_id=job_id, generation_id=generation_id, partition_id=partition_id, destination_scope=destination_scope,
