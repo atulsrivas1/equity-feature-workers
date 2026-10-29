@@ -117,9 +117,14 @@ def main():
     with tempfile.TemporaryDirectory(prefix='provenance-',dir=work) as temporary:
         owned=Path(temporary).resolve();assert owned.is_relative_to(work.resolve())
         verification=owned/'verification'
+        # Core and this repository overlay one verification tree: no path may be supplied by two repositories.
+        placed={}
+        for key in snapshot:
+            repo,relative=key.split('/',1);target=('io' if repo=='io' else 'canonical')+'/'+relative
+            assert target not in placed,'path collision across repositories: '+target+' from '+placed.get(target,'')+' and '+key
+            placed[target]=key
         for key,data in snapshot.items():
             repo,relative=key.split('/',1);target=verification/('io' if repo=='io' else 'canonical')/relative
-            assert repo=='canonical' or not target.exists() or repo=='core'
             target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
         env=dict(os.environ,SOURCE_DATE_EPOCH='1700000000',PYTHONHASHSEED='0')
         for repeat in (0,1):
