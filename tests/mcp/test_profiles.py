@@ -15,7 +15,7 @@ from equity_feature_mcp import CommandRegistration, FeatureSliceRegistration, MC
 class Profiles(unittest.TestCase):
     def test_all_original_native_contexts_and_order_survive_profile(self):
         raw = (ROOT / 'docs/EQ081_CLIENT_FIXTURES.json').read_bytes()
-        self.assertEqual(hashlib.sha256(raw).hexdigest(), '9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29')
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), '1fa01533832bb3fbe70058ceee6e4004e4ee072dbd20aa536f9f4f23faf01b09')
         for case in json.loads(raw)['native_cases']:
             original = case['complete_producer_payload']
             features = tuple(FeatureRef(**v) for v in original['executed_features'])

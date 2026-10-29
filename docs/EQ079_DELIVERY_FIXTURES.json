@@ -31,7 +31,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
               "evidence_limit": {
                 "int": "0"
@@ -384,7 +384,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -571,7 +571,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",
@@ -846,7 +846,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
               "evidence_limit": {
                 "int": "0"
@@ -1562,7 +1562,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -1904,7 +1904,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",
@@ -2365,7 +2365,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact-compensated",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "370a0bc360a6fc7af75f9c5eb5e66b3c24e154b0cf729d9a7fe3270bd84cee57",
               "evidence_limit": {
                 "int": "4"
@@ -2709,7 +2709,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact-compensated",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -3255,7 +3255,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",
@@ -3497,7 +3497,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a4",
+              "backend_version": "0.0.4a6",
               "config_digest": "d911f4fbe47c7708b1ff551c5353ef2d9fc65a347675566193874224a68de690",
               "evidence_limit": {
                 "int": "0"
@@ -3850,7 +3850,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a4",
+        "backend_version": "0.0.4a6",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -4037,7 +4037,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a4"
+              "value": "0.0.4a6"
             },
             "config_digest": {
               "type": "string",
