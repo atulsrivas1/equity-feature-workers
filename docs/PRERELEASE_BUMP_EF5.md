@@ -22,3 +22,5 @@ packages are unchanged. No tag, no publish, no release claim. Single source: eac
 - DuckDB: the receipt `adapter_version` default is now 0.1.0a11, so acquisition receipt identity digests differ from a10 by construction.
 
 mcp (client pin) and service (extras) are pin-only and keep their versions, as in the previous bump. Goldens: none embed these labels (the gates and tests derive them).
+
+**Still blocking any release claim:** the commit-pinned builders (`tools/build_*.py`, `qualify_*.py` with commit constants) still name pre-bump commits and need a re-pin after this bump merges (follow-up PR set); they are not executed end to end until then.
