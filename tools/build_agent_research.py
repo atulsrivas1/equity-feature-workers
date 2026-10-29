@@ -9,7 +9,7 @@ import argparse,base64,configparser,csv,hashlib,importlib.util,io,json,os,platfo
 from email.parser import BytesParser
 from packaging.requirements import Requirement
 from packaging.specifiers import SpecifierSet
-from build_foundation import git,snapshot,normalize,CORE_COMMIT
+from build_foundation import git,snapshot,normalize,PINS_CORE as CORE_COMMIT,PINS_IO
 from build_client import WORKER_COMMIT,SERVICE_COMMIT
 from build_mcp import CLIENT_COMMIT,CLIENT_INPUTS
 from build_mcp_evidence import closure,load_core_module
@@ -17,7 +17,7 @@ from build_mcp_evidence import closure,load_core_module
 ROOT=Path(__file__).resolve().parents[1]
 CORE_RESEARCH='98778e79f9422904bbb043d067a7ce9e77675311'
 IO_RESEARCH='94217cfafe5e54461c8dc9efdf4848809e04082a'
-IO_BASE='19aa266b9debb92a6c5eb707baafeb9ae7a82942'
+IO_BASE=PINS_IO
 EPOCH='1700000000'
 CORE_APPS=('examples/agent_research.py','examples/agent_research_typed.py','tests/agent_research',
            'docs/stories/EQ-109_ORACLES.json','docs/stories/EQ-109_PROFILE.json','docs/stories/EQ-109_CASES.json')
