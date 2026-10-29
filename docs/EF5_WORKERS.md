@@ -24,10 +24,13 @@ configuration; the direct call is checked. An unknown feature id surfaces the li
   delivered" cannot be run against the worker; the direct library call covers it. The gate fails if `make_ef5_work` or `compute_ef5_inputs` ever gains a
   parameter containing `context` without an RF16 worker test.
 - No HTML example (the EF4 examples render one); the gate prints a summary only.
-- A coordinated bump is owed before acceptance (core intraday, io duckdb, workers); see the plan document.
+- The coordinated bump is done (#103: intraday a5, duckdb a11, workers a17, client a1, provenance a4); builders are only partly run, see core `docs/PRERELEASE_BUMP_EF5.md`.
+- **Remote client decode status (#101, `tools/verify_client_feature_context.py`)**: the gate shows that bool, int64 and float64 `ef5.*` columns convert to the native `FeatureResult` unchanged (values, dtype, unit) and equal their SDK codec round trip. Not verified: conversion of a real remote service response (the gate uses fixtures, and the service does not expose `ef5.*`), and any non-scalar EF5 cell type (none are defined). The client and mcp suites keep their pre-existing main failures (5 and 9).
 
 ## Known difference (RF46)
 
 A bar for another instrument is refused by the shared worker admission as worker code `RESULT` ("Session command failed: RESULT_IDENTITY_MISMATCH") with an empty `contract_code`, before the
 library is reached; the recorded library code is INCONSISTENT_IDENTITY (the direct library call raises it). The gate pins this pair exactly, so any change
 (a contract code appearing, or the worker code changing) fails it. The refusal is fail-closed either way; only the surfaced code differs from the recorded one.
+
+Posture: internal synthetic data only, not releasable. `ef5.*` is not exposed via the service or MCP. Builders are not all run (see the EF5 bump record `docs/PRERELEASE_BUMP_EF5.md` in core).
