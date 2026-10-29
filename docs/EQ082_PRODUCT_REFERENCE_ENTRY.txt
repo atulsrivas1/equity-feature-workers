@@ -10,7 +10,7 @@ sys.path.insert(0,str(root/'packages/mcp/src'))
 from equity_feature_client import RemoteClient,ScopeKey,FeatureRef,ProducerExpectation
 from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration
 with Path(fixture).open('rb') as stream:raw=stream.read(76772)
-if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29':raise ValueError('owned fixture')
+if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='a48ea7b9182162686662ccc6d4b2589b766b3eeaa698e009ecdeec6303f18fbd':raise ValueError('owned fixture')
 producer=json.loads(raw)['native_cases'][0]['complete_producer_payload']
 fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
 expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])

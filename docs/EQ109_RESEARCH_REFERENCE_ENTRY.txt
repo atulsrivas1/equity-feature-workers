@@ -12,7 +12,7 @@ def fixed(path,limit,digest):
  with Path(path).open('rb') as stream:raw=stream.read(limit+1)
  if len(raw)>limit or hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('owned fixture digest')
  return json.loads(raw)
-raw=fixed(fixture,76771,'9c9572de93acae9d31a3f09b64d69f9f6f09f226210d68b589eebff080919a29')['native_cases'][0]
+raw=fixed(fixture,76771,'a48ea7b9182162686662ccc6d4b2589b766b3eeaa698e009ecdeec6303f18fbd')['native_cases'][0]
 if not re.fullmatch('[0-9a-f]{64}',config_sha):raise ValueError('owned config pin')
 config_value=next(v for v in fixed(config_file,262144,config_sha)['fixtures'] if v['family']=='trades')['native_spec']['config']
 from equity_feature_client import RemoteClient,ProducerExpectation,ScopeKey,FeatureRef,JobExpectation
