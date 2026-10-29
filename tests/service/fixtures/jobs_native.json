@@ -641,7 +641,7 @@
         "session.trade.mean_size"
       ],
       "family": "trades",
-      "native_result_sha256": "22a0b51a916e90b2d5894eca0dc342f5914f236bccc02306c5c6241f6d787aca",
+      "native_result_sha256": "11b1fb8f433c062429f9d56195a4f8a074531b6ccce3378d5a40de494697e560",
       "plan_sha256": "93f625f280d89ab3cd2d387f3d5bba167ffbf91e7b831666aa5cdb6ae683abf6",
       "requested_feature": "session.trade.volume",
       "task_sha256": "8b29a0d1aef58598467138645d14fba26a1b1cd9a4e00448e18879145bfda4cb"
@@ -665,7 +665,7 @@
         "session.price.close_close_return"
       ],
       "family": "bars",
-      "native_result_sha256": "8776f94ba6b31943da18c88a4b32eb8a0a110812030b556cff62bb4c7c358fa6",
+      "native_result_sha256": "a17b188d5e7a58b5bc03ac0d2a78439490cd0baf8a1c2e0b39b1326bd2df24bc",
       "plan_sha256": "91267b56dde1e944ffc374f2f730a35caaf389bb23ab56e0d242ec4c7113b4a1",
       "requested_feature": "session.bar.volume",
       "task_sha256": "e19b5af0b0f655cfada5d103c49ca1fe24b8577b653962ccf38cd026586d721e"
@@ -679,7 +679,7 @@
         "session.quote.state_counts"
       ],
       "family": "quotes",
-      "native_result_sha256": "0e585d4ee2f75e81d86af893c855afb29e4d100daf4031da5ee9e9f68abe7af4",
+      "native_result_sha256": "3b7f1f08d01eda69136412df6e97e010ebc712806f2ea8425fc44d3b837f8288",
       "plan_sha256": "f047ea542d2d86f7dac144121278af7362f7331eac2ec05601d06b2ea9b5da0a",
       "requested_feature": "session.quote.sampled_spread",
       "task_sha256": "c056c103aca8ab92ac44bed4989ef3f0d8e1519bf6a723e185c92b59b43c0bd0"
