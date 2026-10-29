@@ -40,3 +40,10 @@ version are history and skipped). An altered README fails; stale statements in t
 `equity_breadth_adaptive`), build_client and build_mcp (their installed suites fail by the same test names as on main), build_service (installed environment check), build_mcp_evidence and
 build_agent_research (`KeyError: 'evidence'` in the package table they borrow from core). build_mcp's metadata audit now includes the optional extras. **Not ported:** build_provenance (marked
 NOT YET PORTED to this layout); build_resilience keeps its accepted historical baseline.
+
+## Known limits of the README version gate
+
+`tools/verify_versions.py` checks version statements of the forms `name==V`, ``name`V`` and `shortV` (for example `contracts0.0.4a5`) in package READMEs. It does not cover: a wrong version in a
+heading (a heading that names an older version opens a section treated as history and skipped); names glued to a version without a separator that the patterns do not know (for example
+`workers0.1.0a12`, `workera17`, `MCP0.1.0a1`); versions in prose without the distribution name; and README text outside `packages/*/README.md`. Treat the gate as a net for the common current-pin
+statements, not as proof that every README is current. One stale pin of this kind in the io acquisition README was corrected by hand.
