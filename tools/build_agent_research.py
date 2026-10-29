@@ -380,10 +380,15 @@ def main():
         report['projects'][name]={k:v for k,v in result.items() if k not in ('wheel','sdist')};save()
     baseline=json.loads((component/'docs/EQ109_ACCEPTED_ARCHIVES.json').read_bytes())['systems'][platform.system()]
     produced={n:record for project in projects.values() for n,record in project['archives'].items()}
-    assert set(baseline).issubset(produced)
-    for name,expected in baseline.items():
+    # Accepted archives of packages whose version was bumped since acceptance are superseded (a produced archive of the same
+    # distribution exists with another version); every still-produced accepted archive must keep its exact identity.
+    distribution=lambda archive:archive.split('-')[0]
+    superseded=sorted(n for n in baseline if n not in produced)
+    assert all(any(distribution(m)==distribution(n) for m in produced) for n in superseded),'accepted archive dropped without a successor'
+    baseline_present={n:e for n,e in baseline.items() if n in produced}
+    for name,expected in baseline_present.items():
         assert all(produced[name][k]==expected[k] for k in ('sha256','bytes')),'accepted project archive identity changed: '+name
-    report['accepted_project_archive_identity']={n:produced[n]['sha256'] for n in baseline};save()
+    report['accepted_project_archive_identity']={n:produced[n]['sha256'] for n in baseline_present};report['accepted_archives_superseded_by_version_bump']=superseded;save()
     refdir=temp/'reference';refdir.mkdir();supportdir=temp/'support';supportdir.mkdir()
     run(sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','-r',component/'tools/requirements-mcp-reference.txt','-d',refdir)
     run(sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps',*SUPPORT,'-d',supportdir)
