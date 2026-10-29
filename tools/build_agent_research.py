@@ -15,8 +15,8 @@ from build_mcp import CLIENT_COMMIT,CLIENT_INPUTS
 from build_mcp_evidence import closure
 
 ROOT=Path(__file__).resolve().parents[1]
-CORE_RESEARCH='710fe05b812d4acc06d7e828c96ac1922e3203dc'
-IO_RESEARCH='f8894267b8f9c64fbe32d174193760ae71b95d36'
+CORE_RESEARCH='98778e79f9422904bbb043d067a7ce9e77675311'
+IO_RESEARCH='94217cfafe5e54461c8dc9efdf4848809e04082a'
 IO_BASE='19aa266b9debb92a6c5eb707baafeb9ae7a82942'
 EPOCH='1700000000'
 CORE_APPS=('examples/agent_research.py','examples/agent_research_typed.py','tests/agent_research',
