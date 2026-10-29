@@ -21,8 +21,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
 from _versions import VERSIONS
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKER_COMMIT = 'ff1157829d0078e7bc87c2c6ecea5144b17d3baf'
-SERVICE_COMMIT = 'ff1157829d0078e7bc87c2c6ecea5144b17d3baf'
+WORKER_COMMIT = '1c92776c3c6ad0fe670a8688e0a5f5ff91fa8095'
+SERVICE_COMMIT = '1c92776c3c6ad0fe670a8688e0a5f5ff91fa8095'
 INPUTS = ('packages/client', 'tests/client', 'tools', 'docs/EQ081_CLIENT_FIXTURES.json',
           'docs/EQ081_OWNED_HTTP_ENTRY.txt', 'docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 

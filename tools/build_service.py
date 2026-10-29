@@ -15,7 +15,7 @@ from build_foundation import build, fingerprint, git, run, sha, snapshot, PINS_C
 
 ROOT = Path(__file__).resolve().parents[1]
 DEPENDENCIES = ('packages/contracts', 'packages/features', 'packages/io-contracts', 'packages/io-sdk', 'packages/duckdb')
-WORKER_COMMIT = 'ff1157829d0078e7bc87c2c6ecea5144b17d3baf'
+WORKER_COMMIT = '1c92776c3c6ad0fe670a8688e0a5f5ff91fa8095'
 
 
 def audit(path, source):

@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
 from _versions import VERSIONS
 ROOT=Path(__file__).resolve().parents[1]
-CLIENT_COMMIT='ff1157829d0078e7bc87c2c6ecea5144b17d3baf'
+CLIENT_COMMIT='1c92776c3c6ad0fe670a8688e0a5f5ff91fa8095'
 INPUTS=('packages/mcp','tests/mcp','tests/qualification/test_mcp_records.py','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt')
 CLIENT_INPUTS=('packages/client','tests/client','docs/EQ081_CLIENT_FIXTURES.json','docs/EQ081_OWNED_HTTP_ENTRY.txt','docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 
