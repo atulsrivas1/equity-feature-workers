@@ -24,8 +24,8 @@ IO_COMMIT = "19aa266b9debb92a6c5eb707baafeb9ae7a82942"
 # Historical companion builders import the two constants above. Preserve their
 # frozen worker/core cohorts; only this current foundation CLI uses these pins.
 # Exact reviewed clock source candidates; historical companion pins stay above.
-PINS_CORE = "710fe05b812d4acc06d7e828c96ac1922e3203dc"
-PINS_IO = "f8894267b8f9c64fbe32d174193760ae71b95d36"
+PINS_CORE = "98778e79f9422904bbb043d067a7ce9e77675311"
+PINS_IO = "94217cfafe5e54461c8dc9efdf4848809e04082a"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt")
 EXPECTED = {
     "equity-feature-io-contracts": [f"equity-feature-contracts=={VERSIONS['equity-feature-contracts']}"],

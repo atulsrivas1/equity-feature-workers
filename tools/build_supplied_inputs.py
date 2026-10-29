@@ -21,8 +21,8 @@ from _versions import VERSIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 # Current candidate pins; coordinator substitutes exact reviewed SHAs before push.
-CORE = '710fe05b812d4acc06d7e828c96ac1922e3203dc'
-IO = 'f8894267b8f9c64fbe32d174193760ae71b95d36'
+CORE = '98778e79f9422904bbb043d067a7ce9e77675311'
+IO = '94217cfafe5e54461c8dc9efdf4848809e04082a'
 EPOCH = '1700000000'
 PACKAGES = {
     'contracts': ('core', 'packages/contracts', 'equity_feature_contracts', VERSIONS['equity-feature-contracts']),

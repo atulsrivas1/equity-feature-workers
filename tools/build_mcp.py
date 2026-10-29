@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
 from _versions import VERSIONS
 ROOT=Path(__file__).resolve().parents[1]
-CLIENT_COMMIT='2222d4325457b448aacdbb57ee4805bb8923881e'
+CLIENT_COMMIT='99b5fed2c0153ac0697feef8c06cc919b30eac8a'
 INPUTS=('packages/mcp','tests/mcp','tests/qualification/test_mcp_records.py','tools','docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ082_PRODUCT_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt')
 CLIENT_INPUTS=('packages/client','tests/client','docs/EQ081_CLIENT_FIXTURES.json','docs/EQ081_OWNED_HTTP_ENTRY.txt','docs/EQ081_AUTHORITY_HTTP_ENTRY.txt')
 
@@ -59,7 +59,7 @@ def audit_mcp(artifact, source):
     assert b'License-Expression: Apache-2.0' in metadata and (b'Version: ' + VERSIONS['equity-feature-mcp'].encode()) in metadata
     project = tomllib.loads((source / 'pyproject.toml').read_text(encoding='utf-8'))['project']
     requires = sorted(line[len('Requires-Dist: '):].strip() for line in metadata.decode().splitlines() if line.startswith('Requires-Dist: '))
-    expected = project['dependencies']
+    expected = list(project['dependencies']) + [f'{req}; extra == "{group}"' for group, reqs in project.get('optional-dependencies', {}).items() for req in reqs]
     assert requires == sorted(expected), requires
     assert any(n.endswith('/licenses/LICENSE') if artifact.suffix == '.whl' else n.endswith('/LICENSE') for n in files)
     for name, data in files.items():
