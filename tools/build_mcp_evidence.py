@@ -1,7 +1,7 @@
 """UNEXECUTED EQ108 committed-source four-form builder; exact review before run."""
 import argparse,configparser,hashlib,importlib.util,io,json,os,platform,shutil,subprocess,sys,tempfile
 from pathlib import Path
-from build_foundation import build,fingerprint,git,run,snapshot,CORE_COMMIT,IO_COMMIT
+from build_foundation import build,fingerprint,git,run,snapshot,PINS_CORE as CORE_COMMIT, PINS_IO as IO_COMMIT
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 from build_mcp import reference_record,CLIENT_COMMIT,CLIENT_INPUTS
 ROOT=Path(__file__).resolve().parents[1]

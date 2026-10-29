@@ -1,7 +1,7 @@
 """Committed bounded MCP archives and fresh isolated reference/native qualification."""
 import argparse,base64,csv,hashlib,io,json,os,platform,shutil,subprocess,sys,tempfile,tarfile,tomllib,zipfile
 from pathlib import Path,PurePosixPath,PureWindowsPath
-from build_foundation import build,fingerprint,git,run,sha,snapshot,CORE_COMMIT,IO_COMMIT
+from build_foundation import build,fingerprint,git,run,sha,snapshot,PINS_CORE as CORE_COMMIT, PINS_IO as IO_COMMIT
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py

@@ -11,7 +11,7 @@ import tempfile
 import zipfile
 import tarfile
 
-from build_foundation import build, fingerprint, git, run, sha, snapshot, CORE_COMMIT, IO_COMMIT
+from build_foundation import build, fingerprint, git, run, sha, snapshot, PINS_CORE as CORE_COMMIT, PINS_IO as IO_COMMIT
 
 ROOT = Path(__file__).resolve().parents[1]
 DEPENDENCIES = ('packages/contracts', 'packages/features', 'packages/io-contracts', 'packages/io-sdk', 'packages/duckdb')
