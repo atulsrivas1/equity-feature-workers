@@ -11,13 +11,13 @@ requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{name = "Equity Features contributors"}]
-dependencies = ["equity-feature-client==0.1.0a0", "jsonschema==4.26.0"]
+dependencies = ["equity-feature-client==0.1.0a1", "jsonschema==4.26.0"]
 
 [project.urls]
 Repository = "https://github.com/atulsrivas1/equity-feature-workers"
 
 [project.optional-dependencies]
-evidence = ["equity-feature-client[native]==0.1.0a0", "equity-feature-evidence==0.1.0a3", "equity-feature-explanations==0.1.0a3", "equity-feature-diagnostics==0.1.0a2"]
+evidence = ["equity-feature-client[native]==0.1.0a1", "equity-feature-evidence==0.1.0a3", "equity-feature-explanations==0.1.0a3", "equity-feature-diagnostics==0.1.0a2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

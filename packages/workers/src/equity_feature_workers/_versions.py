@@ -5,4 +5,4 @@ manifest protocol admits. The matching pins live in ``pyproject.toml``; ``tools/
 """
 FEATURES_VERSION = '0.0.4a6'
 CANONICAL_CONTRACTS_VERSION = '0.0.4a5'
-INTRADAY_VERSION = '0.1.0a4'
+INTRADAY_VERSION = '0.1.0a5'

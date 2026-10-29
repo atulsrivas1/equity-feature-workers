@@ -32,11 +32,11 @@ def core_check():
     finally: sys.meta_path.remove(deny)
 
 core_check()
-expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a5'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a3'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a3','equity-features==0.0.4a6','equity-features-intraday==0.1.0a4; extra == "intraday"']}
+expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a5'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a3'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a3','equity-features==0.0.4a6','equity-features-intraday==0.1.0a5; extra == "intraday"']}
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
-    assert module.__version__ == ('0.1.0a16' if name=='equity-feature-workers' else '0.1.0a3')
+    assert module.__version__ == ('0.1.0a17' if name=='equity-feature-workers' else '0.1.0a3')
     if name=='equity-feature-workers':
         assert {'TaskManifest', 'InputManifest', 'OutputManifest', 'ClaimIdentity', 'encode_task', 'decode_task', 'SessionCommandSpec', 'run_session', 'run_registered', 'RequiredCommandSpec', 'RequiredOutcome', 'run_required', 'run_required_registered', 'BarrierLimits', 'Dependency', 'TaskNode', 'evaluate_readiness', 'inspect_barrier', 'run_assembly', 'UniverseShard', 'BreadthCommandSpec', 'run_breadth', 'PublicationLimits', 'PublicationProgress', 'SerialPublisher', 'GenerationSpec', 'GenerationOutcome', 'GenerationStore'} <= set(module.__all__)
         assert all(hasattr(module, item) for item in module.__all__)
