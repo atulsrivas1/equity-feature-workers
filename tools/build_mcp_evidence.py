@@ -5,6 +5,8 @@ from build_foundation import build,fingerprint,git,run,snapshot,PINS_CORE as COR
 from build_client import wheel_record,provenance,WORKER_COMMIT,SERVICE_COMMIT
 from build_mcp import reference_record,CLIENT_COMMIT,CLIENT_INPUTS
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/"tools"))
+from _versions import VERSIONS
 OPTIONAL_CORE='98778e79f9422904bbb043d067a7ce9e77675311'
 INPUTS=('packages/mcp','tests/mcp','tests/mcp_evidence','tests/qualification/test_mcp_records.py','tools','examples/mcp_evidence.py',
     'docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ108_LEGACY_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt',
