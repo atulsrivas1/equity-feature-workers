@@ -15,7 +15,7 @@ from build_mcp import CLIENT_COMMIT,CLIENT_INPUTS
 from build_mcp_evidence import closure,load_core_module
 
 ROOT=Path(__file__).resolve().parents[1]
-CORE_RESEARCH='226eb18d177d27f689d8c522c1926458eff3cc47'
+CORE_RESEARCH='852c48ab9a0a6a59eeb5104613422791d618cebf'
 IO_RESEARCH='94217cfafe5e54461c8dc9efdf4848809e04082a'
 IO_BASE=PINS_IO
 EPOCH='1700000000'
