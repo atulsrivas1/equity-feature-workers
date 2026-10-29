@@ -59,7 +59,7 @@ def audit_mcp(artifact, source):
     assert b'License-Expression: Apache-2.0' in metadata and (b'Version: ' + VERSIONS['equity-feature-mcp'].encode()) in metadata
     project = tomllib.loads((source / 'pyproject.toml').read_text(encoding='utf-8'))['project']
     requires = sorted(line[len('Requires-Dist: '):].strip() for line in metadata.decode().splitlines() if line.startswith('Requires-Dist: '))
-    expected = project['dependencies']
+    expected = list(project['dependencies']) + [f'{req}; extra == "{group}"' for group, reqs in project.get('optional-dependencies', {}).items() for req in reqs]
     assert requires == sorted(expected), requires
     assert any(n.endswith('/licenses/LICENSE') if artifact.suffix == '.whl' else n.endswith('/LICENSE') for n in files)
     for name, data in files.items():
