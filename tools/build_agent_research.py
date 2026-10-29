@@ -355,7 +355,7 @@ def main():
     source_closure={
         'component':source_record(ROOT,head,component,INPUTS),
         'core_base':source_record(core_repo,CORE_COMMIT,core,('packages/contracts','packages/features')),
-        'optional':source_record(core_repo,CORE_RESEARCH,optional,tuple('packages/'+n for n in LIGHT if n not in ('contracts','bundles'))+('tools/build_agent_ledger.py',)),
+        'optional':source_record(core_repo,CORE_RESEARCH,optional,tuple('packages/'+n for n in LIGHT if n not in ('contracts','bundles'))+('tools/build_agent_ledger.py','tools/_versions.py')),
         'io_base':source_record(io_repo,IO_BASE,io_base,('packages/io-contracts','packages/io-sdk','packages/duckdb','examples/third_party')),
         'bundles':source_record(io_repo,IO_RESEARCH,bundles,('packages/bundles',)),
         'workers':source_record(ROOT,WORKER_COMMIT,workers,('packages/workers',)),

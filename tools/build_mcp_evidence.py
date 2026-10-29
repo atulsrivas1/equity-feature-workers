@@ -56,9 +56,6 @@ def closure(py,location):
     source='''import base64,csv,hashlib,io,json,sys
 from pathlib import Path
 from importlib.metadata import distributions
-import sys
-sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py
-from _versions import VERSIONS
 base=Path(sys.prefix).resolve();out={}
 for dist in distributions():
  names=tuple(dist.files or ())
