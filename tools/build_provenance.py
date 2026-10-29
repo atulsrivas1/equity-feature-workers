@@ -1,7 +1,7 @@
 # RELOCATED from the core repo by ADR-1 (core commit 0fc675d), byte-for-byte except this note.
-# NOT YET PORTED: it still assumes the old layout (canonical checkout = core with packages/provenance,
-# `import build_explanations`, pinned io/workers commits). Porting to a workers-rooted layout
-# (canonical = this repo; core and io as pinned companions) is follow-up work and has not been run here.
+# Ported to the workers-rooted layout: the canonical checkout is this repository (packages/provenance, packages/workers,
+# tests/provenance); core (contracts, features, evidence, diagnostics and their tests/oracles) and io are read at exact
+# pinned commits from --core and --io checkouts. Core build_explanations is loaded in isolation for archive inspection.
 """Pinned three-repository archives and fresh installed outer/native consumers."""
 from __future__ import annotations
 import argparse
@@ -16,19 +16,25 @@ import sys
 import tempfile
 import tomllib
 from email.parser import BytesParser
-import build_explanations as common
+from build_foundation import PINS_CORE, PINS_IO
+from build_mcp_evidence import load_core_module
+from _versions import VERSIONS
 
 ROOT=Path(__file__).resolve().parents[1]
-PINS={'io':'94217cfafe5e54461c8dc9efdf4848809e04082a','workers':'99b5fed2c0153ac0697feef8c06cc919b30eac8a'}
+PINS={'core':PINS_CORE,'io':PINS_IO}
 PACKAGES={'contracts':('equity_feature_contracts',VERSIONS['equity-feature-contracts']), 'features':('equity_features',VERSIONS['equity-features']),
-    'evidence':('equity_feature_evidence',VERSIONS['equity-feature-evidence']),'diagnostics':('equity_feature_diagnostics','0.1.0a1'),
+    'evidence':('equity_feature_evidence',VERSIONS['equity-feature-evidence']),'diagnostics':('equity_feature_diagnostics',VERSIONS['equity-feature-diagnostics']),
     'provenance':('equity_feature_provenance',VERSIONS['equity-feature-provenance']),'io-contracts':('equity_feature_io_contracts',VERSIONS['equity-feature-io-contracts']),
     'io-sdk':('equity_feature_io_sdk',VERSIONS['equity-feature-io-sdk']),'duckdb':('equity_feature_duckdb',VERSIONS['equity-feature-duckdb']),
     'duckdb-sink':('equity_feature_duckdb_sink',VERSIONS['equity-feature-duckdb-sink']),'workers':('equity_feature_workers',VERSIONS['equity-feature-workers'])}
-common.PACKAGES=PACKAGES
-run=common.run
-sha=common.sha
+common=None  # core's build_explanations, loaded in main() from the pinned --core checkout
+def run(*args,cwd=ROOT,env=None):
+    return common.run(*args,cwd=cwd,env=env)
+def sha(data):
+    return common.sha(data)
 NATIVE=('duckdb==1.5.6','numpy==2.2.6')
+CORE_PACKAGES=('contracts','features','evidence','diagnostics')
+IO_PACKAGES=('io-contracts','io-sdk','duckdb','duckdb-sink')
 
 
 def git(root,*args):return subprocess.check_output(['git',*args],cwd=root)
@@ -39,8 +45,6 @@ def installed(py,names):
     script='''import base64,hashlib,json,sys
 from pathlib import Path
 from importlib.metadata import distribution
-sys.path.insert(0, str(Path(__file__).resolve().parent))  # tools/_versions.py, also when loaded by path from tests
-from _versions import VERSIONS
 root=Path(sys.prefix).resolve();result={}
 for name in sys.argv[1:]:
  d=distribution(name);files={}
@@ -73,18 +77,19 @@ def verify_payload(mapping,archives):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--io',type=Path,required=True);parser.add_argument('--workers',type=Path,required=True)
+    parser=argparse.ArgumentParser();parser.add_argument('--core',type=Path,required=True);parser.add_argument('--io',type=Path,required=True)
     parser.add_argument('--out',type=Path,default=ROOT/'dist/provenance');args=parser.parse_args()
+    global common
+    assert git(args.core,'rev-parse','HEAD').decode().strip()==PINS['core'],'core checkout must be at the pinned commit'
+    common=load_core_module('build_explanations',args.core.resolve()/'tools/build_explanations.py');common.PACKAGES=PACKAGES
     out=args.out.resolve();out.mkdir(parents=True,exist_ok=True);assert not list(out.iterdir()),'fresh output required'
-    roots={'canonical':ROOT,'io':args.io.resolve(),'workers':args.workers.resolve()}
+    roots={'core':args.core.resolve(),'io':args.io.resolve(),'canonical':ROOT}
     heads={'canonical':git(ROOT,'rev-parse','HEAD').decode().strip(),**PINS}
-    scopes={'canonical':['packages/'+p for p in ('contracts','features','evidence','diagnostics','provenance')]+[
-        'tests/provenance','tests/diagnostics','tests/evidence','docs/stories/EQ-096_RECEIPT_ORACLE.json',
-        'docs/stories/EQ-097_*','docs/stories/EQ-101_TRUTH_TABLE.json','docs/stories/EQ-103_*',
-        'docs/api/PROVENANCE.md','examples/provenance_readback.py','tools/build_provenance.py',
-        'tools/build_explanations.py','tools/check_boundary.py','requirements-dev.txt','mypy.ini'],
-        'io':['packages/'+p for p in ('io-contracts','io-sdk','duckdb','duckdb-sink')],
-        'workers':['packages/workers']}
+    scopes={'core':['packages/'+p for p in CORE_PACKAGES]+['tests/diagnostics','tests/evidence','docs/stories/EQ-096_RECEIPT_ORACLE.json',
+        'docs/stories/EQ-097_*','docs/stories/EQ-101_TRUTH_TABLE.json','docs/stories/EQ-103_*','tools/build_explanations.py'],
+        'io':['packages/'+p for p in IO_PACKAGES],
+        'canonical':['packages/provenance','packages/workers','tests/provenance','docs/api/PROVENANCE.md','examples/provenance_readback.py',
+        'tools/build_provenance.py','tools/build_foundation.py','tools/build_mcp_evidence.py','tools/_versions.py','requirements-dev.txt']}
     snapshot={};materialized={};source_map={}
     for repo,root in roots.items():
         # Companions are read at exact immutable refs, never reset or modified.
@@ -113,12 +118,14 @@ def main():
         owned=Path(temporary).resolve();assert owned.is_relative_to(work.resolve())
         verification=owned/'verification'
         for key,data in snapshot.items():
-            target=verification/key;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
+            repo,relative=key.split('/',1);target=verification/('io' if repo=='io' else 'canonical')/relative
+            assert repo=='canonical' or not target.exists() or repo=='core'
+            target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
         env=dict(os.environ,SOURCE_DATE_EPOCH='1700000000',PYTHONHASHSEED='0')
         for repeat in (0,1):
             dest=owned/f'build-{repeat}';dest.mkdir()
             for name,(module,version) in PACKAGES.items():
-                repo='workers' if name=='workers' else 'io' if name in ('io-contracts','io-sdk','duckdb','duckdb-sink') else 'canonical'
+                repo='core' if name in CORE_PACKAGES else 'io' if name in IO_PACKAGES else 'canonical'
                 source=owned/f'source-{repeat}-{name}';prefix=repo+'/packages/'+name+'/'
                 for key,data in snapshot.items():
                     if key.startswith(prefix):
