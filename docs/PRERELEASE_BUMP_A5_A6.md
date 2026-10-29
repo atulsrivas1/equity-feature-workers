@@ -1,7 +1,7 @@
 # Coordinated pre-release bump: contracts a5, features a6 - October 28, 2026
 
 Paired with the core and io PRs (`docs/PRERELEASE_BUMP_A5_A6.md` there). Pre-release label move only: no tag, no publish, no
-release claim (PO ruling `work/po-rulings-e1e2-followups-2026-10-28.md` item 1).
+release claim (PO ruling (recorded in DECISIONS.md) item 1).
 
 ## Single source
 
