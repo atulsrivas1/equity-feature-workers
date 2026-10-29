@@ -29,7 +29,7 @@ class MCPConsumerTests(unittest.TestCase):
         self.profile=MCPProfile('synthetic-owner',(),(CommandRegistration('cmd',expected),),60)
         def view(cls,kind,payload):return Outcome(view=cls(canonical(dict(schema='equity.remote',version='1.1',kind=kind,request_id='synthetic',payload=payload))))
         self.producer=view(ResultView,'result',self.original)
-        self.receipt=make_content_receipt(self.result,self.cfg,(('trades',self.batch),),EnvironmentDeclaration('CPython','3.12','synthetic-qualification',(PackageVersion('equity-feature-contracts','0.0.4a4'),PackageVersion('equity-features','0.0.4a4'))),ExecutionClaim(),EvidenceDisclosure('not_supplied',0))
+        self.receipt=make_content_receipt(self.result,self.cfg,(('trades',self.batch),),EnvironmentDeclaration('CPython','3.12','synthetic-qualification',(PackageVersion('equity-feature-contracts','0.0.4a5'),PackageVersion('equity-features','0.0.4a6'))),ExecutionClaim(),EvidenceDisclosure('not_supplied',0))
         explanation=explain_result(self.result,self.receipt,self.cfg,entity=EntityKey('A','S'),feature_id='session.trade.count',evidence_limit=16)
         diagnostics=DiagnosticReport(DecisionContext('demo',EntityKey('A','S'),self.cfg.availability),DiagnosticPolicy('synthetic-advisory','advisory','deny'),(CheckFinding('observation','synthetic-output','freshness',self.receipt.output,'unknown','warning',('missing_observation',),False,1,None),))
         entry=EvidenceRegistration('cmd','job','result',self.producer.view,self.cfg,receipt=self.receipt,explanation=explanation,diagnostics=diagnostics,associations=(DiagnosticAssociation('observation','output'),),report_sharing_authorized=True)
