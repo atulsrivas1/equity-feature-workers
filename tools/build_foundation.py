@@ -25,7 +25,7 @@ IO_COMMIT = "19aa266b9debb92a6c5eb707baafeb9ae7a82942"
 # frozen worker/core cohorts; only this current foundation CLI uses these pins.
 # Exact reviewed clock source candidates; historical companion pins stay above.
 PINS_CORE = "f43434b094b15abbd100dc080a44689871ca94e7"
-PINS_IO = "3409c7ac91e1673be56b0c01492f382a8cfd55c8"
+PINS_IO = "0dbe5f5ca39e9906ba6c30ecdf0579e3ebae93d3"
 SCOPED = ("packages", "tools", "tests", "requirements-dev.txt")
 EXPECTED = {
     "equity-feature-io-contracts": [f"equity-feature-contracts=={VERSIONS['equity-feature-contracts']}"],
