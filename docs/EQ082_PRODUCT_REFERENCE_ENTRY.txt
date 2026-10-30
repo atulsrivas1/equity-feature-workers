@@ -9,7 +9,7 @@ root=Path(source_root).resolve()
 sys.path.insert(0,str(root/'packages/mcp/src'))
 from equity_feature_client import RemoteClient,ScopeKey,FeatureRef,ProducerExpectation
 from equity_feature_mcp import StdioServer,MCPProfile,CommandRegistration
-with Path(fixture).open('rb') as stream:raw=stream.read(76772)
+with Path(fixture).open('rb') as stream:raw=stream.read(77878)
 if len(raw)!=77877 or hashlib.sha256(raw).hexdigest()!='bf6ee4b00abb99685fa69c09a68072223da15a336fb4cf764afd90fdba8e858f':raise ValueError('owned fixture')
 producer=json.loads(raw)['native_cases'][0]['complete_producer_payload']
 fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
