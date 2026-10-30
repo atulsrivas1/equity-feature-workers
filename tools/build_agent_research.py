@@ -16,7 +16,7 @@ from build_mcp_evidence import closure,load_core_module
 
 ROOT=Path(__file__).resolve().parents[1]
 CORE_RESEARCH='f43434b094b15abbd100dc080a44689871ca94e7'
-IO_RESEARCH='0dbe5f5ca39e9906ba6c30ecdf0579e3ebae93d3'
+IO_RESEARCH='e47b0c5759ba58eed6afd0ec889b4f8d9cb813a0'
 IO_BASE=PINS_IO
 EPOCH='1700000000'
 CORE_APPS=('examples/agent_research.py','examples/agent_research_typed.py','tests/agent_research',
