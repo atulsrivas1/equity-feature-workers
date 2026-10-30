@@ -28,6 +28,8 @@ def main() -> int:
     parser.add_argument("--core-root", type=Path, default=Path(os.environ.get("EF_CORE_ROOT", ROOT.parent / "equity-features")))
     parser.add_argument("--core-ref", default="origin/main")
     args = parser.parse_args()
+    # The io gate runs with cwd=io root, so both roots must be absolute before any path is built.
+    args.io_root, args.core_root = args.io_root.resolve(), args.core_root.resolve()
     script = args.io_root / GATE
     if not script.is_file():
         print(f"FAIL: io gate script not found: {script} (pass --io-root or set EF_IO_ROOT)")
