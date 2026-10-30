@@ -12,7 +12,7 @@ def fixed(path,limit,digest):
  with Path(path).open('rb') as stream:raw=stream.read(limit+1)
  if len(raw)>limit or hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('owned fixture digest')
  return json.loads(raw)
-raw=fixed(fixture,76771,'a48ea7b9182162686662ccc6d4b2589b766b3eeaa698e009ecdeec6303f18fbd')['native_cases'][0]
+raw=fixed(fixture,77877,'bf6ee4b00abb99685fa69c09a68072223da15a336fb4cf764afd90fdba8e858f')['native_cases'][0]
 if not re.fullmatch('[0-9a-f]{64}',config_sha):raise ValueError('owned config pin')
 config_value=next(v for v in fixed(config_file,262144,config_sha)['fixtures'] if v['family']=='trades')['native_spec']['config']
 from equity_feature_client import RemoteClient,ProducerExpectation,ScopeKey,FeatureRef,JobExpectation
@@ -48,7 +48,7 @@ try:
   from equity_feature_diagnostics import DiagnosticReport,DiagnosticPolicy,DecisionContext,CheckFinding
   from equity_feature_mcp.evidence import EvidenceCatalog,EvidenceRegistration,DiagnosticAssociation
   helper=root/'examples/agent_research.py'
-  if hashlib.sha256(helper.read_bytes()).hexdigest()!='0d502109fbf7e06dca8b2677ebdfc6a7b00c2869693b4d2869620bd238cb1714':raise ValueError('owned consumer source pin')
+  if hashlib.sha256(helper.read_bytes()).hexdigest()!='6819edc15c503f983bb6cb156413f93ee1346abba892b3eac9b815f1b823b2d7':raise ValueError('owned consumer source pin')
   sys.path.insert(0,str(root/'examples'))
   from agent_research import fixture as retained_fixture
   cfg=ConfigSpec.from_json(json.dumps(config_value))

@@ -18,7 +18,7 @@ from .manifests import InputManifest, TaskManifest
 from ._versions import FEATURES_VERSION
 
 _BARS = tuple('session.bar.' + n for n in ('open', 'high', 'low', 'close', 'volume', 'notional', 'close_weighted_price')) + tuple(
-    'session.price.' + n for n in ('open_close_return', 'range_fraction', 'close_location', 'overnight_gap', 'close_close_return'))
+    'session.price.' + n for n in ('open_close_return', 'range_fraction', 'range_over_open', 'close_location', 'overnight_gap', 'close_close_return'))
 _FEATURES = {'structure': ('session.structure.interval_ohlcv', 'session.structure.interval_volume_share'),
     'top_k': ('session.trade.top_k',), 'continuous_quotes': ('session.quote.time_weighted_spread',), 'bars_prior_close': _BARS}
 

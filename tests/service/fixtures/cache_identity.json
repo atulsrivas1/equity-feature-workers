@@ -1,6 +1,6 @@
 {
   "status": "pre-code independent expected requirements; no runtime enforcement evidence",
-  "accepted_native_fixture_sha256": "570871596094612d998a730b6433457409637efb502622f041f9f45076114256",
+  "accepted_native_fixture_sha256": "566eead3c858427933e7125e5c33e4c7d1776133d489fd2bd7e221c7f0feaa3f",
   "arithmetic": [
     {
       "case": "principal-inclusive",

@@ -8,7 +8,7 @@
       "case": "trades",
       "family": "trades",
       "ns_offset_decimal": "0",
-      "native_sha256": "11b1fb8f433c062429f9d56195a4f8a074531b6ccce3378d5a40de494697e560",
+      "native_sha256": "f5fe1ac76c256acfed1c6c71149d6e859e8ad6c8ae0684acdd1852c316657e4c",
       "native_result": {
         "fields": {
           "evidence": [],
@@ -31,7 +31,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a6",
+              "backend_version": "0.0.4a7",
               "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
               "evidence_limit": {
                 "int": "0"
@@ -384,7 +384,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a6",
+        "backend_version": "0.0.4a7",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -571,7 +571,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a6"
+              "value": "0.0.4a7"
             },
             "config_digest": {
               "type": "string",
@@ -823,7 +823,7 @@
       "case": "bars",
       "family": "bars",
       "ns_offset_decimal": "0",
-      "native_sha256": "a17b188d5e7a58b5bc03ac0d2a78439490cd0baf8a1c2e0b39b1326bd2df24bc",
+      "native_sha256": "cf050c0d86fdaa108caeca236de08ca76f4c137a6dccd21058c6ed56366e8793",
       "native_result": {
         "fields": {
           "evidence": [],
@@ -846,7 +846,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a6",
+              "backend_version": "0.0.4a7",
               "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
               "evidence_limit": {
                 "int": "0"
@@ -1141,6 +1141,30 @@
                   "int": "2"
                 },
                 "feature_id": "session.price.range_fraction",
+                "observed": {
+                  "int": "2"
+                },
+                "reasons": [],
+                "status": {
+                  "enum": "results.Status",
+                  "value": "available"
+                }
+              },
+              "record": "results.QualityRow"
+            },
+            {
+              "fields": {
+                "entity": {
+                  "fields": {
+                    "instrument_id": "A",
+                    "session_id": "S"
+                  },
+                  "record": "results.EntityKey"
+                },
+                "expected": {
+                  "int": "2"
+                },
+                "feature_id": "session.price.range_over_open",
                 "observed": {
                   "int": "2"
                 },
@@ -1495,6 +1519,33 @@
                     "record": "results.EntityKey"
                   }
                 ],
+                "feature_id": "session.price.range_over_open",
+                "schema_version": "1",
+                "unit": "fraction",
+                "values": [
+                  {
+                    "float64": "0x1.999999999999ap-5"
+                  }
+                ]
+              },
+              "record": "results.FeatureColumn"
+            },
+            {
+              "fields": {
+                "algorithm_version": "v1",
+                "dtype": {
+                  "enum": "results.ValueType",
+                  "value": "float64"
+                },
+                "entities": [
+                  {
+                    "fields": {
+                      "instrument_id": "A",
+                      "session_id": "S"
+                    },
+                    "record": "results.EntityKey"
+                  }
+                ],
                 "feature_id": "session.price.close_location",
                 "schema_version": "1",
                 "unit": "fraction",
@@ -1562,7 +1613,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a6",
+        "backend_version": "0.0.4a7",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -1745,6 +1796,25 @@
                 "session_id": "S"
               }
             ],
+            "feature_id": "session.price.range_over_open",
+            "schema_version": "1",
+            "unit": "fraction",
+            "values": [
+              {
+                "bits": "3fa999999999999a",
+                "type": "float64"
+              }
+            ]
+          },
+          {
+            "algorithm_version": "v1",
+            "dtype": "float64",
+            "entities": [
+              {
+                "instrument_id": "A",
+                "session_id": "S"
+              }
+            ],
             "feature_id": "session.price.close_location",
             "schema_version": "1",
             "unit": "fraction",
@@ -1862,6 +1932,10 @@
           },
           {
             "algorithm_version": "v1",
+            "feature_id": "session.price.range_over_open"
+          },
+          {
+            "algorithm_version": "v1",
             "feature_id": "session.price.close_location"
           },
           {
@@ -1904,7 +1978,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a6"
+              "value": "0.0.4a7"
             },
             "config_digest": {
               "type": "string",
@@ -2196,6 +2270,17 @@
               "session_id": "S"
             },
             "expected": "2",
+            "feature_id": "session.price.range_over_open",
+            "observed": "2",
+            "reasons": [],
+            "status": "available"
+          },
+          {
+            "entity": {
+              "instrument_id": "A",
+              "session_id": "S"
+            },
+            "expected": "2",
             "feature_id": "session.price.close_location",
             "observed": "2",
             "reasons": [],
@@ -2237,7 +2322,7 @@
       "case": "quotes",
       "family": "quotes",
       "ns_offset_decimal": "0",
-      "native_sha256": "3b7f1f08d01eda69136412df6e97e010ebc712806f2ea8425fc44d3b837f8288",
+      "native_sha256": "9588b3738d08d55e02a9dc3eb92d3929d1719c8f6474587300c53e5e3fe530bd",
       "native_result": {
         "fields": {
           "evidence": [
@@ -2365,7 +2450,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact-compensated",
-              "backend_version": "0.0.4a6",
+              "backend_version": "0.0.4a7",
               "config_digest": "370a0bc360a6fc7af75f9c5eb5e66b3c24e154b0cf729d9a7fe3270bd84cee57",
               "evidence_limit": {
                 "int": "4"
@@ -2709,7 +2794,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact-compensated",
-        "backend_version": "0.0.4a6",
+        "backend_version": "0.0.4a7",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -3255,7 +3340,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a6"
+              "value": "0.0.4a7"
             },
             "config_digest": {
               "type": "string",
@@ -3497,7 +3582,7 @@
                 "record": "specs.AvailabilitySpec"
               },
               "backend_id": "python-exact",
-              "backend_version": "0.0.4a6",
+              "backend_version": "0.0.4a7",
               "config_digest": "d911f4fbe47c7708b1ff551c5353ef2d9fc65a347675566193874224a68de690",
               "evidence_limit": {
                 "int": "0"
@@ -3850,7 +3935,7 @@
       },
       "complete_producer_payload": {
         "backend_id": "python-exact",
-        "backend_version": "0.0.4a6",
+        "backend_version": "0.0.4a7",
         "columns": [
           {
             "algorithm_version": "v1",
@@ -4037,7 +4122,7 @@
             },
             "backend_version": {
               "type": "string",
-              "value": "0.0.4a6"
+              "value": "0.0.4a7"
             },
             "config_digest": {
               "type": "string",

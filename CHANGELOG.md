@@ -1,3 +1,7 @@
+## Coordinated pre-release bump DV1-4 (K3) - October 30, 2026
+
+workers 0.1.0a17 to 0.1.0a18 (supplied bars family gains `session.price.range_over_open`), provenance 0.1.0a4 to 0.1.0a5; client, mcp and service follow the new exact pins (contracts a6, features a7, evidence a4, explanations a4, diagnostics a3, io-contracts a5, duckdb a12). Version labels moved and digests changed by construction; numeric results unchanged. Record: [docs/PRERELEASE_BUMP_DV1.md](docs/PRERELEASE_BUMP_DV1.md). Internal, synthetic, pre-release.
+
 ## Coordinated pre-release bump for the EF5 layers - October 28, 2026
 
 workers 0.1.0a17, client 0.1.0a1, provenance 0.1.0a4; mcp and service follow the pins. Record: [docs/PRERELEASE_BUMP_EF5.md](docs/PRERELEASE_BUMP_EF5.md).

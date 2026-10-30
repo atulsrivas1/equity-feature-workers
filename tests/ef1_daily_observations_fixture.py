@@ -9,7 +9,7 @@ from ef1_anchor_fixture import declaration
 from ef1_reference_fixture import batch
 
 ORACLE_BYTES = Path(__file__).with_name('ef1_daily_observations_oracle.json').read_bytes()
-if hashlib.sha256(ORACLE_BYTES).hexdigest() != 'eab22b6e2f5adf82e0437f1d3aaf845d4d4dcd66e5a561600a2ccb9172573ff2':
+if hashlib.sha256(ORACLE_BYTES).hexdigest() != '50257a0d648809c7987ce49d710812afdd5f1ff6dd4ddf1c65c0fafb8c121f15':
     raise AssertionError('Frozen daily observation bytes differ')
 ORACLE = json.loads(ORACLE_BYTES)
 CASES = {packet['id']: packet for packet in ORACLE['packets']}

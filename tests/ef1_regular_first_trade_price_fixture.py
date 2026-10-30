@@ -8,7 +8,7 @@ from ef1_anchor_fixture import declaration
 from ef1_reference_fixture import batch
 
 ORACLE_BYTES = Path(__file__).with_name('ef1_regular_first_trade_price_oracle.json').read_bytes()
-assert hashlib.sha256(ORACLE_BYTES).hexdigest() == 'e4cd2ec2f97c43012884a7676d7bb6b81e3643ecbe88ebccb9ac251f9bcd6a44'
+assert hashlib.sha256(ORACLE_BYTES).hexdigest() == 'b57ac7221508310cdc812f718b19287c9e23604fddcab6a676cb4407bfdd9997'
 ORACLE = json.loads(ORACLE_BYTES)
 CASES = {packet['id']: packet for packet in ORACLE['outcome_cases'] + ORACLE['refusal_cases']}
 CONTROLS = {packet['id']: packet for packet in ORACLE['worker_result_cases']}

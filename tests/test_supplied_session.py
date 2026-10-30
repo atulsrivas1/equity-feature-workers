@@ -60,7 +60,7 @@ def original_work():
          patch.object(original, 'compute_top_k', wrapper('top_k', original.compute_top_k)), \
          patch.object(original, 'compute_time_weighted', wrapper('continuous_quotes', original.compute_time_weighted)):
         original.main()
-    assert len(original.CHECKS) == 83 and len(items) == 8
+    assert len(original.CHECKS) == 85 and len(items) == 8
     return tuple(items), tuple(pure)
 
 
@@ -79,7 +79,7 @@ class SuppliedSession(unittest.TestCase):
             actual = compute_supplied_session_inputs(item.task, item.batches)[0]
             self.assertEqual(actual, expected)
             self.assertEqual(encode_result(actual), encode_result(expected))
-        self.assertEqual([(q.expected, q.observed) for q in self.expected[0].quality], [(3, 3)] * 12)
+        self.assertEqual([(q.expected, q.observed) for q in self.expected[0].quality], [(3, 3)] * 13)
         partial = self.expected[3]
         self.assertEqual([(q.expected, q.observed) for q in partial.quality], [(2, 1), (2, 0)])
         self.assertEqual([e.row_id for e in self.expected[4].evidence], ['C', 'A'])

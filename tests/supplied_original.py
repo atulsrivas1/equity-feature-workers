@@ -69,12 +69,12 @@ def main():
     full = compute_bars(bars, cfg, entity=entity, prior_close=prior)
     expected = {'open': 100, 'high': 108, 'low': 99, 'close': 105, 'volume': 60,
         'notional': 6290, 'close_weighted_price': Fraction(631, 6), 'open_close_return': Fraction(1, 20),
-        'range_fraction': Fraction(3, 35), 'close_location': Fraction(2, 3),
+        'range_fraction': Fraction(3, 35), 'range_over_open': Fraction(9, 100), 'close_location': Fraction(2, 3),
         'overnight_gap': Fraction(1, 49), 'close_close_return': Fraction(1, 14)}
     for col in full.values:
         name = col.feature_id.rsplit('.', 1)[1]
         check('bars: independent ' + name, col.values == (float(expected[name]),) if name not in ('volume', 'notional') else col.values == (expected[name],))
-    check('bars: all twelve available', len(full.quality) == 12 and all(q.status == c.Status.AVAILABLE and q.reasons == () for q in full.quality))
+    check('bars: all thirteen available', len(full.quality) == 13 and all(q.status == c.Status.AVAILABLE and q.reasons == () for q in full.quality))
     bindings = (c.InputBinding('bars', c.DataKind.BAR, bars.metadata), c.InputBinding('prior_close', c.DataKind.DAILY, prior.metadata))
     record('bars_prior_and_structure:bars', full, cfg, bindings)
     absent = compute_bars(bars, cfg, entity=entity)
