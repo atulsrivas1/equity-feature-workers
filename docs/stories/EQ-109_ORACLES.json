@@ -11,7 +11,7 @@
     "value": {
       "algorithm": "sha256",
       "canonicalization": "typed-json-v1",
-      "contracts_version": "0.0.4a4",
+      "contracts_version": "0.0.4a6",
       "domain": "configuration",
       "project": "equity-features",
       "schema_version": "1",
@@ -87,7 +87,7 @@
       }
     },
     "bytes": 1186,
-    "sha256": "84623ae5ac7b5d30f2683822b11db487d37c3166f00265c09aa61c30ff8c2a67",
+    "sha256": "0ff0458e4d944d7a02f892811ab0f873d695a7bee19722ea30ae61b2a9401d65",
     "public_ConfigSpec_JSON": {
       "adjustment": {
         "action_snapshot": "none",
@@ -142,7 +142,7 @@
     "value": {
       "algorithm": "sha256",
       "canonicalization": "typed-json-v1",
-      "contracts_version": "0.0.4a4",
+      "contracts_version": "0.0.4a6",
       "domain": "canonical_batch",
       "project": "equity-features",
       "schema_version": "1",
@@ -309,13 +309,13 @@
       }
     },
     "bytes": 1751,
-    "sha256": "aa3697b5c4c1d5939570dda4396344b8fad7b9eef499eb7c65716d6858fa78bb"
+    "sha256": "0cec0e20605411be2a0d28f1b53c8d46963186eae7a99e32a88be0e9574d3d31"
   },
   "producer": {
     "case": "trades",
     "complete_producer_payload": {
       "backend_id": "python-exact",
-      "backend_version": "0.0.4a4",
+      "backend_version": "0.0.4a7",
       "columns": [
         {
           "algorithm_version": "v1",
@@ -502,7 +502,7 @@
           },
           "backend_version": {
             "type": "string",
-            "value": "0.0.4a4"
+            "value": "0.0.4a7"
           },
           "config_digest": {
             "type": "string",
@@ -770,7 +770,7 @@
               "record": "specs.AvailabilitySpec"
             },
             "backend_id": "python-exact",
-            "backend_version": "0.0.4a4",
+            "backend_version": "0.0.4a7",
             "config_digest": "ddc1b3b90e8d3333f31c268228e472aa440029f3f6ba7d72745d2f0096c3c931",
             "evidence_limit": {
               "int": "0"

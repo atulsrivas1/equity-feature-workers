@@ -11,7 +11,7 @@ if len(sys.argv)!=5:raise ValueError('owned arguments')
 origin,fixture,principal,pid_marker=sys.argv[1:]
 if not re.fullmatch(r'http://127\.0\.0\.1:[1-9][0-9]{0,4}',origin) or int(origin.rsplit(':',1)[1])>65535 or principal not in ('A','B'):raise ValueError('owned origin')
 with Path(fixture).open('rb') as stream:raw=stream.read(76772)
-if len(raw)!=76771 or hashlib.sha256(raw).hexdigest()!='a48ea7b9182162686662ccc6d4b2589b766b3eeaa698e009ecdeec6303f18fbd':raise ValueError('owned fixture')
+if len(raw)!=77877 or hashlib.sha256(raw).hexdigest()!='bf6ee4b00abb99685fa69c09a68072223da15a336fb4cf764afd90fdba8e858f':raise ValueError('owned fixture')
 producer=json.loads(raw)['native_cases'][0]['complete_producer_payload']
 fields=producer['metadata']['fields']['inputs']['items'][0]['fields']['metadata']['fields']['scope']['fields']
 expected=ProducerExpectation(producer['context'],ScopeKey('A','S',int(fields['start_ns']['value']),int(fields['end_ns']['value'])),tuple(FeatureRef(**v) for v in producer['executed_features']),producer['backend_id'],producer['backend_version'])

@@ -21,7 +21,7 @@ class BoundsTests(unittest.TestCase):
         self.assertEqual(acquired.receipt.adapter_version, duckdb_adapter.__version__)
         self.assertEqual(AcquiredInput('trades', acquired.receipt, acquired.batch).receipt,
                          acquired.receipt)
-        for version in ('0.1.0a8', '0.1.0a12', 'unknown'):
+        for version in ('0.1.0a8', '0.1.0a13', 'unknown'):
             # Deliberately forged version must fail before hashing/encoding. The
             # immutable original remains unchanged, including its real adapter stamp.
             candidate = replace(acquired.receipt)

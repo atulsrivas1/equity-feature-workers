@@ -1,7 +1,7 @@
 """Explicit EF1 anchor routes; canonical inputs and unchanged full producer results.
 
 Import this module explicitly. Default dispatch and other identity checks are preserved.
-The EF1 route requires exactly features0.0.4a6 with canonical contracts0.0.4a5.
+The EF1 route requires exactly features0.0.4a7 with canonical contracts0.0.4a6.
 """
 from __future__ import annotations
 

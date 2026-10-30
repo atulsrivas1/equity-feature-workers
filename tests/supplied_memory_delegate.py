@@ -43,14 +43,14 @@ class MemorySink:
 
     def capabilities(self) -> SinkCapabilities:
         return SinkCapabilities(("1",), ("efio-json1",), ("efio-key1",), ("efio-content1",),
-                                ("0.0.4a5",), ("1",), ("v1",), "transactional", "single_writer",
+                                ("0.0.4a6",), ("1",), ("v1",), "transactional", "single_writer",
                                 True, True, True, 1, 100, 1048576, 10485760, 100000, 100000)
 
     def begin(self, envelope: PublicationEnvelope) -> Session | CompletionReceipt:
         if type(envelope) is not PublicationEnvelope:
             raise SinkError(SinkErrorCode.INVALID_CONFIG)
         if (envelope.protocol_version, envelope.codec_version, envelope.identity_version, envelope.digest_version,
-            envelope.canonical_package_version, envelope.canonical_schema_version, envelope.math_policy_version) != ("1", "efio-json1", "efio-key1", "efio-content1", "0.0.4a5", "1", "v1"):
+            envelope.canonical_package_version, envelope.canonical_schema_version, envelope.math_policy_version) != ("1", "efio-json1", "efio-key1", "efio-content1", "0.0.4a6", "1", "v1"):
             raise SinkError(SinkErrorCode.INCOMPATIBLE_VERSION)
         caps = self.capabilities()
         if any(d.metadata.schema_version != envelope.canonical_schema_version or d.metadata.math_policy_version != envelope.math_policy_version or

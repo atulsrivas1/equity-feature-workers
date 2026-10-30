@@ -14,8 +14,8 @@ authors = [{name = "Equity Features contributors"}]
 dependencies = ["equity-feature-io-sdk==0.1.0a3", "jsonschema==4.26.0", "attrs==26.1.0", "jsonschema-specifications==2025.9.1", "referencing==0.37.0", "rpds-py==2026.9.1", "typing-extensions==4.16.0"]
 
 [project.optional-dependencies]
-duckdb = ["equity-feature-duckdb==0.1.0a11"]
-jobs = ["equity-feature-workers==0.1.0a17"]
+duckdb = ["equity-feature-duckdb==0.1.0a12"]
+jobs = ["equity-feature-workers==0.1.0a18"]
 
 [project.urls]
 Repository = "https://github.com/atulsrivas1/equity-feature-workers"

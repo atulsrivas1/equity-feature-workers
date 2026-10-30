@@ -109,9 +109,9 @@ class EF1Anchors(unittest.TestCase):
                          replace(original.metadata, config_digest='0' * 64)):
             with patch.object(ef1, 'compute_ef1', return_value=replace(original, metadata=metadata)):
                 self.reject(item, CommandErrorCode.RESULT)
-        with patch.object(equity_features, '__version__', '0.0.4a7'):
+        with patch.object(equity_features, '__version__', '0.0.4a8'):
             self.reject(item, CommandErrorCode.CONFIG)
-        with patch.object(c, '__version__', '0.0.4a6'):
+        with patch.object(c, '__version__', '0.0.4a7'):
             self.reject(item, CommandErrorCode.CONFIG)
 
     def test_serialized_readback_idempotent_replay_and_distinct_scopes(self):

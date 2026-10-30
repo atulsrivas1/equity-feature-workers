@@ -8,9 +8,9 @@ from ef1_anchor_fixture import declaration
 from ef1_reference_fixture import batch
 
 ORIGINAL_ORACLE_BYTES = Path(__file__).with_name('ef1_gap_endpoint_oracle.json').read_bytes()
-assert hashlib.sha256(ORIGINAL_ORACLE_BYTES).hexdigest() == 'ca32e6c890697a09d1ba6450748085a4b03d2bff2eb8e711d8c79371289aede3'
+assert hashlib.sha256(ORIGINAL_ORACLE_BYTES).hexdigest() == '22d23e4c57fe1382c25b30aba50bde70eff002d85a9a4dc27f96b13df6b210b2'
 ORACLE_BYTES = Path(__file__).with_name('ef1_gap_endpoint_oracle_causal_v4.json').read_bytes()
-assert hashlib.sha256(ORACLE_BYTES).hexdigest() == 'ded050dc98f29a45d9f4bcbb47a3b3c0e415e93f381282500b3f1f8c72a1a0b5'
+assert hashlib.sha256(ORACLE_BYTES).hexdigest() == '8ff3cce116c71dbe50c8e3e8d455dd4203acddfcc9604bbc092aa85e2ca2b781'
 ORACLE = json.loads(ORACLE_BYTES)
 CASES = {packet['id']: packet for packet in ORACLE['packets']}
 SUCCESS = {name: packet for name, packet in CASES.items() if packet['expected_result'] is not None}
