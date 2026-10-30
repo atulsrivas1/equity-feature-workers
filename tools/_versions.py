@@ -15,7 +15,7 @@ SIBLINGS = {
     "equity-feature-evidence": "0.1.0a4",
     "equity-feature-explanations": "0.1.0a4",
     "equity-feature-diagnostics": "0.1.0a3",
-    "equity-feature-io-contracts": "0.1.0a5",
+    "equity-feature-io-contracts": "0.1.0a6",
     "equity-feature-io-sdk": "0.1.0a3",
     "equity-feature-duckdb": "0.1.0a12",
     "equity-feature-duckdb-sink": "0.1.0a1",
