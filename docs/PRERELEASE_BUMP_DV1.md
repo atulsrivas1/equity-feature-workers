@@ -61,7 +61,20 @@ Unit suites pass: top-level 464, client 47, mcp 45, mcp_evidence 34, service 190
 
 Core pin 967d13d (the bump commit; core main ddc3c81 is docs only), io pin 3c94be6. Results are listed below.
 
-BUILDER_RESULTS
+Run 2026-10-30 (Windows, CPython 3.12.10, core 967d13d, io 3c94be6) as tracked tasks, each waited to its exit code; each builds its archives twice and asserts equality, and wheel names carry the target versions (workers 0.1.0a18, provenance 0.1.0a5, contracts 0.0.4a6, features 0.0.4a7, evidence 0.1.0a4, explanations 0.1.0a4, diagnostics 0.1.0a3, io-contracts 0.1.0a5, duckdb 0.1.0a12, bundles 0.1.0a3; client, mcp, service unchanged).
+
+| Builder | Exit |
+| --- | --- |
+| build_foundation | 0 |
+| build_client | 0 |
+| build_mcp | 0 (second run) |
+| build_mcp_evidence | 0 (second run) |
+| build_service | 0 |
+| build_agent_research | 0 (fourth run) |
+| build_provenance | 0 |
+| build_supplied_inputs | 0 (second run) |
+
+Failures on the way, all fixed in this PR: the `stream.read(76772)` limit in seven EQ082/EQ083 reference entries (old fixture length plus one; now 77878) failed build_mcp, build_mcp_evidence and the first agent_research run; the EQ109 entry pinned the SHA-256 of core's pre-bump `examples/agent_research.py` (now the 967d13d file). One intermediate attempt that changed the declared environment was reverted (see above). The first four builders ran at an earlier head of this branch; later commits changed only docs and the EQ109 entry, which those builders do not read, and the tools and tests they read are byte-identical (the consumer test change was reverted). `check_compatibility` is not part of this repository's set.
 
 `build_resilience` stays deferred (docs/RETIRED_BUILDERS.md).
 
