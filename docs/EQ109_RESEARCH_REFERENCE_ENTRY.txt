@@ -48,7 +48,7 @@ try:
   from equity_feature_diagnostics import DiagnosticReport,DiagnosticPolicy,DecisionContext,CheckFinding
   from equity_feature_mcp.evidence import EvidenceCatalog,EvidenceRegistration,DiagnosticAssociation
   helper=root/'examples/agent_research.py'
-  if hashlib.sha256(helper.read_bytes()).hexdigest()!='0d502109fbf7e06dca8b2677ebdfc6a7b00c2869693b4d2869620bd238cb1714':raise ValueError('owned consumer source pin')
+  if hashlib.sha256(helper.read_bytes()).hexdigest()!='6819edc15c503f983bb6cb156413f93ee1346abba892b3eac9b815f1b823b2d7':raise ValueError('owned consumer source pin')
   sys.path.insert(0,str(root/'examples'))
   from agent_research import fixture as retained_fixture
   cfg=ConfigSpec.from_json(json.dumps(config_value))
