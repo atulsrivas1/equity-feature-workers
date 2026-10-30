@@ -70,7 +70,7 @@ try:
   if not converted.ok:raise ValueError('owned conversion')
   result=converted.view
   if canonical_content(result)!=canonical_content(retained_result):raise ValueError('owned full retained producer parity')
-  receipt=make_content_receipt(result,cfg,(('trades',batch),),EnvironmentDeclaration('CPython','3.12','synthetic-qualification',(PackageVersion('equity-feature-contracts','0.0.4a6'),PackageVersion('equity-features','0.0.4a7'))),ExecutionClaim(),EvidenceDisclosure('not_supplied',0))
+  receipt=make_content_receipt(result,cfg,(('trades',batch),),EnvironmentDeclaration('CPython','3.12','synthetic-qualification',(PackageVersion('equity-feature-contracts','0.0.4a5'),PackageVersion('equity-features','0.0.4a6'))),ExecutionClaim(),EvidenceDisclosure('not_supplied',0))
   explanation=explain_result(result,receipt,cfg,entity=EntityKey('A','S'),feature_id='session.trade.count',evidence_limit=16)
   report=DiagnosticReport(DecisionContext('demo',EntityKey('A','S'),result.metadata.availability),DiagnosticPolicy('synthetic-advisory','advisory','deny'),(CheckFinding('observation','synthetic-output','freshness',receipt.output,'unknown','warning',('missing_observation',),False,1,None),))
   entry=EvidenceRegistration('cmd',job['job_id'],job['result_id'],original.view,cfg,receipt=receipt,explanation=explanation,diagnostics=report,associations=(DiagnosticAssociation('observation','output'),),report_sharing_authorized=True)
