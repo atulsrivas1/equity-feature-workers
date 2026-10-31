@@ -82,3 +82,9 @@ Failures on the way, all fixed in this PR: the `stream.read(76772)` limit in sev
 
 - Workers: `WORKER_COMMIT`, `SERVICE_COMMIT` (build_client, build_service) and `CLIENT_COMMIT` (build_mcp) name the bump commit f095ac9 on the PR branch; after the squash they must name the workers merge commit. Core and io pins are final.
 - Core `tools/_versions.py`: SIBLINGS io-contracts a5 (was a3), duckdb a12, workers a18; SIBLING_COMMITS io 3c94be6 and the workers merge commit; then build_conformance, build_r10, build_r9, build_evidence_pilot (unrun).
+
+## Bars job spec: the closed 13-id set (RL-01-14 workers part)
+
+A native `bars` job spec (`SessionCommandSpec` with family `bars`) must list all 13 ids of core's `BAR_IDS`, in core's order: the seven `session.bar.*` ids (open, high, low, close, volume, notional, close_weighted_price) and the six `session.price.*` ids (open_close_return, range_fraction, range_over_open, close_location, overnight_gap, close_close_return). The workers no longer retype the list: `supplied_session` imports `BAR_IDS` from `equity_feature_contracts` (public since core #773, e646fe7; ADR-1 allows workers to import core) and the spec is checked against the library descriptor, so a 12-id spec (any one id dropped), a reordered spec or an empty spec is refused with `INVALID_COMMAND`. The 39 per-job cap is unchanged.
+
+Refusal recipe (internal, synthetic, pre-release; no unit test): `python tools/verify_bars_job_spec.py` with core, io and workers sources on `PYTHONPATH` plus the io tutorial package `examples/third_party/src`. It exits 1 when the workers set is a retyped copy instead of core's `BAR_IDS` object, and when any 12-id, reordered or empty spec is admitted.

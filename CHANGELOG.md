@@ -1,3 +1,7 @@
+## Bars job spec uses core's BAR_IDS (RL-01-14 workers part) - October 30, 2026
+
+The supplied bars header set is core's public `BAR_IDS` (13 ids, imported, no longer retyped); no value or id changed. New refusal recipe `tools/verify_bars_job_spec.py`; a 12-id native `bars` job spec is refused with INVALID_COMMAND. Record: [docs/PRERELEASE_BUMP_DV1.md](docs/PRERELEASE_BUMP_DV1.md). No package version change. Internal, synthetic, pre-release.
+
 ## Unreleased - catalogue link layer in the workers docs (S4 workers lane, RL-01-10)
 
 Internal, synthetic, pre-release. Each of the 13 producer docs (EF1 to EF5) gains a "Contract catalogue" section linking every producer it covers (32 producers) to the generated input and output catalogue pages in the io repository, plus the catalogue INDEX and CATALOGUE.md. New link check `tools/check_catalogue_links.py` (every link resolves in the io checkout; every producer is linked from a workers doc). Docs and one read-only tool: no package code, no catalogue file, no version change.
