@@ -1,6 +1,10 @@
+## Re-pin to core f43434b and io e47b0c5 (io-contracts 0.1.0a6) - October 30, 2026
+
+Pin move only, no package version change except the io-contracts pin (a5 to a6) in the sibling table, the provenance dependency and the foundation probe. Builder source pins now name core f43434b and io e47b0c5; the client, service and mcp cohort commits name the workers merge commit 6c3123c (were the pre-squash branch commit f095ac9). `build_foundation.py` CORE_COMMIT/IO_COMMIT (20c08c7, 19aa266) and `qualify_scaling.py` stay on their historical cohort on purpose. Internal, synthetic, pre-release.
+
 ## Coordinated pre-release bump DV1-4 (K3) - October 30, 2026
 
-workers 0.1.0a17 to 0.1.0a18 (supplied bars family gains `session.price.range_over_open`), provenance 0.1.0a4 to 0.1.0a5; client, mcp and service follow the new exact pins (contracts a6, features a7, evidence a4, explanations a4, diagnostics a3, io-contracts a5, duckdb a12). Version labels moved and digests changed by construction; numeric results unchanged. Record: [docs/PRERELEASE_BUMP_DV1.md](docs/PRERELEASE_BUMP_DV1.md). Internal, synthetic, pre-release.
+workers 0.1.0a17 to 0.1.0a18 (supplied bars family gains `session.price.range_over_open`), provenance 0.1.0a4 to 0.1.0a5; client, mcp and service follow the new exact pins (contracts a6, features a7, evidence a4, explanations a4, diagnostics a3, io-contracts a5, duckdb a12). Version labels moved and digests changed by construction; existing numeric results unchanged. Record: [docs/PRERELEASE_BUMP_DV1.md](docs/PRERELEASE_BUMP_DV1.md). Internal, synthetic, pre-release.
 
 ## Coordinated pre-release bump for the EF5 layers - October 28, 2026
 
