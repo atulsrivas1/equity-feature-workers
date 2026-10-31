@@ -101,3 +101,11 @@ and their labels checked by text.
   statement about the library's correctness beyond agreement with the frozen contract literal.
 - **Registry and grid limits:** the sink's default limits bound each fixture (at most 100 results and 10 MiB per sink).
   The breadth producers bind no grid, so there is no grid digest to register.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef3.adaptive_volume`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.adaptive_volume/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.adaptive_volume/output.md)
+- `ef3.observed_breadth`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.observed_breadth/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.observed_breadth/output.md)
+- `ef3.session_breadth`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.session_breadth/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.session_breadth/output.md)

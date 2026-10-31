@@ -119,3 +119,12 @@ or observed data, source rights and release acceptance, performance claims, the 
 such path), and a separate-process runner for the grid routes (the registry is in-process). Library and adapter mathematics
 were not changed. The full 111-case results demo is left to qualification; nine cases were produced through the demo for
 the display check (`SP01`, `SP17`, `BP01`, `BP16`, `RX01`, `RX28`, `RX29`, `RP01`, `RP31`).
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef4.bar_projection`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.bar_projection/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.bar_projection/output.md)
+- `ef4.rate_projection`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.rate_projection/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.rate_projection/output.md)
+- `ef4.relative_excess`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.relative_excess/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.relative_excess/output.md)
+- `ef4.session_projection`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.session_projection/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.session_projection/output.md)

@@ -35,3 +35,10 @@ Executed on Windows Python 3.12 with `python -I` and sys.path set in code to eve
 Findings and fixes during the run: the example rebuilds the I/O synthetic money-flow config with `evidence_limit = 2 * outputs` (the I/O config carries 0, which emits no witnesses; the limit is shared across all outputs of one result); the retracement example filtered contract ids by the wrong prefix; the money-flow example now declares per-chunk `bars:NNN` roles from the I/O `bars` tuple.
 
 No tests, CI, installed-package, platform or release claim. HTML generation is not browser inspection. Original-source parity and source rights remain unqualified.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef2.money_flow`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.money_flow/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.money_flow/output.md)
+- `ef2.retracement_level`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.retracement_level/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.retracement_level/output.md)
