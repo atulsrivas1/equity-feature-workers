@@ -6,7 +6,7 @@ import hashlib
 import json
 
 from equity_feature_contracts import (
-    CanonicalBatch, ConfigSpec, DataKind, EntityKey, FeatureResult, InputRequirement,
+    BAR_IDS, CanonicalBatch, ConfigSpec, DataKind, EntityKey, FeatureResult, InputRequirement,
     IntervalSpec, ValueType, builtin_registry,
 )
 from equity_feature_io_contracts import FeatureHeader
@@ -17,8 +17,8 @@ from .commands import CommandErrorCode
 from .manifests import InputManifest, TaskManifest
 from ._versions import FEATURES_VERSION
 
-_BARS = tuple('session.bar.' + n for n in ('open', 'high', 'low', 'close', 'volume', 'notional', 'close_weighted_price')) + tuple(
-    'session.price.' + n for n in ('open_close_return', 'range_fraction', 'range_over_open', 'close_location', 'overnight_gap', 'close_close_return'))
+# The closed 13-id bars header set is core's BAR_IDS, imported and never retyped (RL-01-14; ADR-1 allows workers to import core).
+_BARS = BAR_IDS
 _FEATURES = {'structure': ('session.structure.interval_ohlcv', 'session.structure.interval_volume_share'),
     'top_k': ('session.trade.top_k',), 'continuous_quotes': ('session.quote.time_weighted_spread',), 'bars_prior_close': _BARS}
 
