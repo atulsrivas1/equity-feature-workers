@@ -66,3 +66,11 @@ Stage is not the same as who raises the code: RF17 is library-raised per the con
 mypy, unit tests (policy: none), CI, an independent oracle beyond the contract literals, installed-wheel qualification,
 real or observed data, source-rights and release acceptance (EQ-157), and RF31 through the worker (no such path).
 Library and adapter mathematics were not changed. Timing: the full results demo ran in 4 parallel shards (H, C, P, R) in roughly 50 minutes wall time, about 1.5 minutes per case per shard under that load (the reviewer saw about 10 seconds per case run alone).
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef3.robust_history`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.robust_history/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.robust_history/output.md)
+- `ef3.volume_pace_robust`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.volume_pace_robust/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.volume_pace_robust/output.md)
+- `ef3.volume_ratio_mean`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.volume_ratio_mean/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.volume_ratio_mean/output.md)

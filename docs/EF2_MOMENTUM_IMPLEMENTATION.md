@@ -30,3 +30,9 @@ Executed on Windows Python 3.12 with `python -I` and sys.path set in code to eve
 Findings and fixes during the run: the runner returns readbacks in a different order from the items, so multi-run (prefix) cases paired results with the wrong packets until readbacks were matched by task digest; prefix cases state no witnesses, so witnesses are compared only where the contract gives `evidence_rows`. No contract defects found.
 
 No tests, CI, installed-package, platform or release claim. HTML generation is not browser inspection. Original-source parity and source rights remain unqualified.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `intraday.momentum.v1`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/intraday.momentum.v1/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/intraday.momentum.v1/output.md)

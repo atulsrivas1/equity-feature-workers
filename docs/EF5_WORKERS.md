@@ -34,3 +34,11 @@ library is reached; the recorded library code is INCONSISTENT_IDENTITY (the dire
 (a contract code appearing, or the worker code changing) fails it. The refusal is fail-closed either way; only the surfaced code differs from the recorded one.
 
 Posture: internal synthetic data only, not releasable. `ef5.*` is not exposed via the service or MCP. Builders are not all run (see the EF5 bump record `docs/PRERELEASE_BUMP_EF5.md` in core).
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef5.candle`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef5.candle/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef5.candle/output.md)
+- `ef5.structure`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef5.structure/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef5.structure/output.md)
+- `ef5.technical`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef5.technical/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef5.technical/output.md)

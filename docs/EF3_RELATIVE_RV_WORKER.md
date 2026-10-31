@@ -142,3 +142,11 @@ the library raises the same code. Result: **48 of 48 driven, 48 of 48 matched**.
   before the library ran, so `contract_code` was empty. Fixed in the worker: those checks now carry the library code
   (`inconsistent_identity`, `unknown_feature`, `invalid_schema` for a malformed selection), and a manifest binding failure
   carries `inconsistent_identity`. The transport category is unchanged. No defect was found in core or I/O.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef3.daily_log_volatility`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.daily_log_volatility/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.daily_log_volatility/output.md)
+- `ef3.intraday_realized_variance`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.intraday_realized_variance/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.intraday_realized_variance/output.md)
+- `ef3.relative_stats`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.relative_stats/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef3.relative_stats/output.md)
