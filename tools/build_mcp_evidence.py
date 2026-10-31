@@ -7,7 +7,7 @@ from build_mcp import reference_record,CLIENT_COMMIT,CLIENT_INPUTS
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"tools"))
 from _versions import VERSIONS
-OPTIONAL_CORE='f43434b094b15abbd100dc080a44689871ca94e7'
+OPTIONAL_CORE='73848a9d9e99aba98a495eacb2d0bee0a86e870e'
 INPUTS=('packages/mcp','tests/mcp','tests/mcp_evidence','tests/qualification/test_mcp_records.py','tools','examples/mcp_evidence.py',
     'docs/EQ082_PRODUCT_REFERENCE_ENTRY.txt','docs/EQ108_LEGACY_REFERENCE_PROBE.txt','docs/EQ082_NATIVE_FAMILY_ENTRY.txt','docs/EQ082_NATIVE_STATE_ENTRY.txt',
     'docs/EQ108_EVIDENCE_REFERENCE_ENTRY.txt','docs/EQ108_EVIDENCE_REFERENCE_PROBE.txt','docs/EQ083_REFERENCE_PROCESS.txt','docs/EQ083_LINUX_REFERENCE_CHILD.txt',
