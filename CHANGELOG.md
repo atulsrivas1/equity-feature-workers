@@ -1,3 +1,7 @@
+## Re-pin to core 73848a9 and io 9197514 (io-contracts 0.1.0a7) - October 31, 2026
+
+Pin move only, no package version change except the io-contracts pin (a6 to a7) in the sibling table, the provenance dependency and the foundation probe. Builder source pins now name core 73848a9 and io 9197514; the client, service and mcp cohort commits name the workers main commit e9e5f5b (#113 changed workers source after the previous cohort commit 6c3123c). `build_foundation.py` CORE_COMMIT/IO_COMMIT and `qualify_scaling.py` stay on their historical cohort on purpose. Internal, synthetic, pre-release.
+
 ## Bars job spec uses core's BAR_IDS (RL-01-14 workers part) - October 30, 2026
 
 The supplied bars header set is core's public `BAR_IDS` (13 ids, imported, no longer retyped); no value or id changed. New refusal recipe `tools/verify_bars_job_spec.py`; a 12-id native `bars` job spec is refused with INVALID_COMMAND. Record: [docs/PRERELEASE_BUMP_DV1.md](docs/PRERELEASE_BUMP_DV1.md). No package version change. Internal, synthetic, pre-release.

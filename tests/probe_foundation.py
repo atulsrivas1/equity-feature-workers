@@ -32,7 +32,7 @@ def core_check():
     finally: sys.meta_path.remove(deny)
 
 core_check()
-expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a6'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a6'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a3','equity-features==0.0.4a7','equity-features-intraday==0.1.0a5; extra == "intraday"']}
+expected={'equity-feature-io-contracts':['equity-feature-contracts==0.0.4a6'],'equity-feature-io-sdk':['equity-feature-io-contracts==0.1.0a7'],'equity-feature-workers':['equity-feature-io-sdk==0.1.0a3','equity-features==0.0.4a7','equity-features-intraday==0.1.0a5; extra == "intraday"']}
 for name in sys.argv[1:]:
     if name=='core':continue
     module=importlib.import_module(name.replace('-','_'))
