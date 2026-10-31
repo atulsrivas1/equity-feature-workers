@@ -27,3 +27,9 @@ One defect was found and fixed: the first run failed worker admission (`INVALID_
 The example then ran for `C01_within_tolerance`, `C02_outside_tolerance` and `C03_absent_authoritative_close` into new scratch databases and HTML: each exited 0 with `verified_readback`, `verified_reopen` and `contract_literal_match` true (C01 within, BPS 0.0, supplied 1250; C02 outside, BPS 79.36507936507937, supplied 1260; C03 `reference_unavailable`, null/null), including idempotent replay. `tools/ef1_results_demo.py` ran all 20 cases (the 17 existing plus the 3 new) to completion. HTML generation is not browser inspection, and the demo records that each example ran, not independent review.
 
 No tests, CI, installed-package, platform or release claim. Original-source parity, source rights and official-price authenticity remain unqualified.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef1.reference_close`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef1.reference_close/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef1.reference_close/output.md)

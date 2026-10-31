@@ -1,3 +1,7 @@
+## Unreleased - catalogue link layer in the workers docs (S4 workers lane, RL-01-10)
+
+Internal, synthetic, pre-release. Each of the 13 producer docs (EF1 to EF5) gains a "Contract catalogue" section linking every producer it covers (32 producers) to the generated input and output catalogue pages in the io repository, plus the catalogue INDEX and CATALOGUE.md. New link check `tools/check_catalogue_links.py` (every link resolves in the io checkout; every producer is linked from a workers doc). Docs and one read-only tool: no package code, no catalogue file, no version change.
+
 ## Re-pin to core f43434b and io e47b0c5 (io-contracts 0.1.0a6) - October 30, 2026
 
 Pin move only, no package version change except the io-contracts pin (a5 to a6) in the sibling table, the provenance dependency and the foundation probe. Builder source pins now name core f43434b and io e47b0c5; the client, service and mcp cohort commits name the workers merge commit 6c3123c (were the pre-squash branch commit f095ac9). `build_foundation.py` CORE_COMMIT/IO_COMMIT (20c08c7, 19aa266) and `qualify_scaling.py` stay on their historical cohort on purpose. Internal, synthetic, pre-release.

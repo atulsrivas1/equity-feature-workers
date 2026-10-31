@@ -25,3 +25,9 @@ Executed on Windows Python 3.12 with `python -I` and sys.path set in code to eve
 The example ran for all 42 contract result fixtures (MV01 to MV37 and MV40 to MV44) into new scratch databases and HTML: 42 of 42 exited 0 with `verified_readback`, `verified_reopen` and `contract_literal_match` true, including idempotent replay and full compare of value, status, reasons, coverage and evidence order against the contract JSON. No defect was found and no fix was needed. `tools/ef1_results_demo.py` ran all 62 cases (the 20 existing plus the 42 new) to completion, 62 of 62 ran, 0 failed. HTML generation is not browser inspection, and the demo records that each example ran, not independent review.
 
 No tests, CI, installed-package, platform or release claim. Original-source parity and source rights remain unqualified.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef1.multivenue_status`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef1.multivenue_status/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef1.multivenue_status/output.md)

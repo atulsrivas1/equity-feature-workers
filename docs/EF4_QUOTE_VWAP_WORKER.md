@@ -74,3 +74,10 @@ refusal.
 mypy, unit tests (policy: none), CI, an independent oracle beyond the contract literals, installed-wheel qualification, real
 or observed data, source rights and release acceptance, performance claims, and RQ36 and RV41 through the worker (no such
 path). Library and adapter mathematics were not changed. The full 69-fixture results demo is left to qualification.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef4.quote_dynamics`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.quote_dynamics/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.quote_dynamics/output.md)
+- `ef4.vwap_path`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.vwap_path/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.vwap_path/output.md)

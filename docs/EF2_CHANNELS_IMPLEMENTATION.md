@@ -30,3 +30,14 @@ Executed on Windows Python 3.12 with `python -I` and sys.path set in code to eve
 Findings and fixes during the run: none needed; the lessons of the momentum slice (pair readbacks with items by task digest, per-chunk `bars:NNN` roles) were applied from the start. Witnesses are compared in full because every contract fixture states `evidence`. No contract defects found. The library's documented exact-zero limit (non-terminating EMA/ATR squeeze gaps) does not affect the 74 fixtures and remains a release-acceptance item.
 
 No tests, CI, installed-package, platform or release claim. HTML generation is not browser inspection. Original-source parity and source rights remain unqualified.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef2.band_width_percentile`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.band_width_percentile/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.band_width_percentile/output.md)
+- `ef2.bollinger_keltner_squeeze`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.bollinger_keltner_squeeze/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.bollinger_keltner_squeeze/output.md)
+- `ef2.donchian`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.donchian/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.donchian/output.md)
+- `ef2.ichimoku`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.ichimoku/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.ichimoku/output.md)
+- `ef2.keltner`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.keltner/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.keltner/output.md)
+- `ef2.pivot_levels`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.pivot_levels/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef2.pivot_levels/output.md)

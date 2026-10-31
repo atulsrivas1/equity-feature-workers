@@ -168,3 +168,10 @@ or observed data, source rights and release acceptance, performance claims, RF41
 through the worker (no such path), the `bundles` package decoder (it rebuilds `TopKTrades` through the constructor and refuses
 notional-ordered cells, so a Parquet or bundles round trip is not covered), and the full results demo (left to qualification).
 Library and adapter mathematics were not changed.
+
+## Contract catalogue
+
+Internal, synthetic, pre-release. Generated input and output contract pages (in the io repository) for the producers this page covers; core wins on conflict, and the catalogue computes nothing and names no data supplier. Overview: [catalogue INDEX](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/INDEX.md); use: [CATALOGUE.md](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/CATALOGUE.md).
+
+- `ef4.tape_window_sign`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.tape_window_sign/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.tape_window_sign/output.md)
+- `ef4.trade_top_k_notional`: [input](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.trade_top_k_notional/input.md), [output](https://github.com/atulsrivas1/equity-feature-io/blob/main/docs/contracts/catalogue/ef4.trade_top_k_notional/output.md)
